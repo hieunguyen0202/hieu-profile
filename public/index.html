@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hieu Nguyen — System / DevOps Engineer</title>
+  <meta name="description" content="Nguyen Xuan Hieu — System/DevOps Engineer. Linux, Kubernetes, Azure & AWS. CI/CD, GitOps, and cloud-native infrastructure.">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+
+  <div id="boot-screen">
+    <div class="boot-container" id="boot-content"></div>
+  </div>
+
+  <nav>
+    <a href="#hero" class="nav-brand">i'm<span>.hiu</span></a>
+    <button class="nav-toggle" id="navToggle" type="button" aria-label="Menu">menu</button>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#hero">home</a></li>
+      <li><a href="#about">about</a></li>
+      <li><a href="#certs">certs</a></li>
+      <li><a href="#experience">experience</a></li>
+      <li><a href="#stack">stack</a></li>
+      <li><a href="#projects">projects</a></li>
+      <li><a href="#contact">contact</a></li>
+    </ul>
+  </nav>
+
+  <main>
+    <section id="hero">
+      <div style="width:100%">
+        <div class="hero-grid">
+          <div class="hero-info reveal">
+            <div class="section-label"># 01. HOME</div>
+            <h1 class="hero-title">
+              Hieu<br><span class="accent">Nguyen</span>
+            </h1>
+            <p class="hero-role">System / DevOps Engineer</p>
+            <p class="hero-desc">
+              2+ years building Linux, Kubernetes, and Azure/AWS infrastructure.
+              I streamline CI/CD, cut downtime, and keep production boring — in a good way.
+            </p>
+            <div class="hero-tags">
+              <span class="tag highlight">Kubernetes</span>
+              <span class="tag highlight">Azure · AKS</span>
+              <span class="tag highlight">AWS</span>
+              <span class="tag">Terraform</span>
+              <span class="tag">Jenkins</span>
+              <span class="tag">Helm</span>
+              <span class="tag">ArgoCD</span>
+              <span class="tag">GitOps</span>
+              <span class="tag">Docker</span>
+              <span class="tag">DevSecOps</span>
+            </div>
+            <div class="hero-actions">
+              <a href="https://www.linkedin.com/feed/" class="btn" target="_blank" rel="noopener noreferrer">linkedin</a>
+              <a href="/cv/NguyenXuanHieu-CV-DevOpsEngineer.pdf" class="btn secondary" download>↓ resume.pdf</a>
+            </div>
+          </div>
+
+          <div class="hero-terminal reveal">
+            <div class="terminal-header">
+              <div class="dot red"></div>
+              <div class="dot yellow"></div>
+              <div class="dot green-d"></div>
+              <span class="terminal-title">~</span>
+            </div>
+            <div class="terminal-body" id="hero-terminal-body"></div>
+          </div>
+        </div>
+
+        <div class="stats-bar reveal">
+          <div class="stat-item">
+            <span class="stat-num" data-count="2" data-suffix="+">0</span>
+            <span class="stat-label">yrs experience</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-num" data-count="99.95" data-suffix="%" data-decimals="2">0</span>
+            <span class="stat-label">uptime</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-num" data-count="4" data-suffix="×">0</span>
+            <span class="stat-label">faster deploys</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-num" data-count="70" data-suffix="%">0</span>
+            <span class="stat-label">vulns reduced</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="about">
+      <div class="section-label"># 02. ABOUT</div>
+      <div class="about-grid">
+        <div class="profile-block reveal">
+          <div class="profile-img-wrap">
+            <img class="profile-img" src="/images/profile.jpg" alt="Nguyen Xuan Hieu">
+          </div>
+          <div class="profile-meta">
+            <div class="meta-item"><span class="meta-key">name:</span><span class="meta-val">Nguyen Xuan Hieu</span></div>
+            <div class="meta-item"><span class="meta-key">location:</span><span class="meta-val">HCMC, Vietnam</span></div>
+            <div class="meta-item"><span class="meta-key">languages:</span><span class="meta-val">VI / EN · TOEIC 855</span></div>
+            <div class="meta-item"><span class="meta-key">education:</span><span class="meta-val">HCMUT — VNU HCMC</span></div>
+            <div class="meta-item"><span class="meta-key">gpa:</span><span class="meta-val">8.38 / 10</span></div>
+            <div class="meta-item"><span class="meta-key">email:</span><span class="meta-val">samelnguyen08@gmail.com</span></div>
+          </div>
+        </div>
+
+        <div class="about-content reveal">
+          <h2><em>DevOps Engineer</em> &amp;<br>Kubestronaut</h2>
+          <p>
+            With <strong>2 years</strong> as a System/DevOps Engineer, I specialize in
+            <strong>Linux administration</strong>, <strong>Kubernetes</strong>, and
+            <strong>Azure / AWS</strong>. I focus on streamlining CI/CD, reducing downtime,
+            and cutting operational cost through infrastructure that is observable and repeatable.
+          </p>
+          <p>
+            At <strong>Upskills Vietnam</strong> I delivered Klaara product solutions for
+            <strong>CIMB Bank</strong> — Jenkins/Helm pipelines that dropped deploy time from
+            <strong>1 hour to 15 minutes</strong>, a monorepo migration that cut builds from
+            <strong>30 minutes to 15 seconds</strong>, and image sizes from
+            <strong>~1.2GB to ~250MB</strong>.
+          </p>
+          <p>
+            Security is part of the pipeline, not a ticket at the end.
+            SonarQube, Trivy, and Snyk integration mitigated vulnerabilities by
+            <strong>over 70%</strong>. HPA plus MySQL group replication held
+            <strong>99.95% uptime</strong>.
+          </p>
+
+          <div class="skills-section">
+            <p class="skills-title">core competencies</p>
+            <div class="skill-bars">
+              <div class="skill-bar">
+                <div class="skill-info"><span class="skill-name">Kubernetes / Helm</span><span class="skill-pct">90%</span></div>
+                <div class="skill-track"><div class="skill-fill" data-width="90"></div></div>
+              </div>
+              <div class="skill-bar">
+                <div class="skill-info"><span class="skill-name">CI/CD · Jenkins</span><span class="skill-pct">90%</span></div>
+                <div class="skill-track"><div class="skill-fill" data-width="90"></div></div>
+              </div>
+              <div class="skill-bar">
+                <div class="skill-info"><span class="skill-name">Azure / AKS</span><span class="skill-pct">88%</span></div>
+                <div class="skill-track"><div class="skill-fill" data-width="88"></div></div>
+              </div>
+              <div class="skill-bar">
+                <div class="skill-info"><span class="skill-name">DevSecOps</span><span class="skill-pct">85%</span></div>
+                <div class="skill-track"><div class="skill-fill" data-width="85"></div></div>
+              </div>
+              <div class="skill-bar">
+                <div class="skill-info"><span class="skill-name">Terraform / IaC</span><span class="skill-pct">85%</span></div>
+                <div class="skill-track"><div class="skill-fill" data-width="85"></div></div>
+              </div>
+              <div class="skill-bar">
+                <div class="skill-info"><span class="skill-name">AWS / GCP</span><span class="skill-pct">80%</span></div>
+                <div class="skill-track"><div class="skill-fill" data-width="80"></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="certs">
+      <div class="section-label"># 03. CERTS</div>
+      <div class="reveal">
+        <p class="hero-desc" style="max-width:640px;margin-bottom:0">
+          Verified Credly badges — click any badge to open the public credential.
+        </p>
+        <div class="badge-grid">
+          <a class="badge-card" href="https://www.credly.com/earner/earned/badge/c86fc0c1-b3bf-4688-b7f5-821689b805c2" target="_blank" rel="noopener">
+            <img src="/badges/cka.png" alt="Certified Kubernetes Administrator">
+            <div class="badge-name">CKA — Kubernetes Administrator</div>
+            <div class="badge-org">The Linux Foundation</div>
+          </a>
+          <a class="badge-card" href="https://www.credly.com/badges/da4c8a13-f9e1-4d80-b55d-f60cef9a643a/linked_in_profile" target="_blank" rel="noopener">
+            <img src="/badges/ckad.png" alt="Certified Kubernetes Application Developer">
+            <div class="badge-name">CKAD — Application Developer</div>
+            <div class="badge-org">The Linux Foundation</div>
+          </a>
+          <a class="badge-card" href="https://www.credly.com/badges/cf38554f-7252-40be-be1f-47acdda548e8" target="_blank" rel="noopener">
+            <img src="/badges/cks.png" alt="Certified Kubernetes Security Specialist">
+            <div class="badge-name">CKS — Security Specialist</div>
+            <div class="badge-org">The Linux Foundation</div>
+          </a>
+          <a class="badge-card" href="https://www.credly.com/earner/earned/badge/7f962f8b-54f8-4274-886d-d7ed73bf1e5c" target="_blank" rel="noopener">
+            <img src="/badges/kcsa.png" alt="Kubernetes and Cloud Native Security Associate">
+            <div class="badge-name">KCSA — Cloud Native Security</div>
+            <div class="badge-org">The Linux Foundation</div>
+          </a>
+          <a class="badge-card" href="https://www.credly.com/earner/earned/badge/eea25258-d46c-44b4-82bd-343047f686a0" target="_blank" rel="noopener">
+            <img src="/badges/kcna.png" alt="Kubernetes and Cloud Native Associate">
+            <div class="badge-name">KCNA — Cloud Native Associate</div>
+            <div class="badge-org">The Linux Foundation</div>
+          </a>
+          <a class="badge-card" href="https://learn.microsoft.com/en-us/credentials/certifications/azure-administrator/" target="_blank" rel="noopener">
+            <img src="/badges/azure-admin.svg" alt="Microsoft Certified Azure Administrator Associate">
+            <div class="badge-name">Azure Administrator Associate</div>
+            <div class="badge-org">Microsoft</div>
+          </a>
+          <div class="badge-card">
+            <div class="profile-avatar" style="aspect-ratio:1;width:120px;height:120px;font-size:1.4rem;letter-spacing:0.04em">GCP</div>
+            <div class="badge-name">Professional Cloud Architect</div>
+            <div class="badge-org">Google Cloud</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="experience">
+      <div class="section-label"># 04. EXPERIENCE</div>
+      <div class="exp-timeline">
+        <div class="exp-item exp-current reveal">
+          <div class="exp-header">
+            <div>
+              <div class="exp-role">System / DevOps Engineer</div>
+              <div class="exp-company">Upskills Viet Nam · Financial Services</div>
+            </div>
+            <div class="exp-period">Jul 2024 — Aug 2025</div>
+          </div>
+          <p class="exp-desc">
+            Delivered Klaara product solutions for CIMB Bank. Maintained core systems with
+            monitoring, alerts, and recovery to minimize downtime. Built Jenkins/Helm pipelines
+            that cut deployment time from 1 hour to 15 minutes (2 releases/week). Migrated CI/CD
+            to a monorepo (Git submodules), reducing build time from 30 minutes to 15 seconds.
+            Shrunk Docker images from ~1.2GB to ~250MB. Integrated SonarQube, Trivy, and Snyk
+            and mitigated vulnerabilities by over 70%. Designed Helm charts, HPA autoscaling,
+            and MySQL group replication for 99.95% uptime — plus RBAC, secure ingress, and password rotation.
+          </p>
+          <div class="exp-techs">
+            <span>Azure AKS</span><span>Terraform</span><span>Jenkins</span><span>Kubernetes</span>
+            <span>Helm</span><span>OpenShift</span><span>Prometheus</span><span>Grafana</span>
+          </div>
+        </div>
+
+        <div class="exp-item reveal">
+          <div class="exp-header">
+            <div>
+              <div class="exp-role">Cloud Engineer Intern</div>
+              <div class="exp-company">CloudAce VietNam · Cloud Solutions</div>
+            </div>
+            <div class="exp-period">Feb 2024 — May 2024</div>
+          </div>
+          <p class="exp-desc">
+            Assisted with GCP infrastructure (VPC, IAM, Compute Engine, GKE) for scalable
+            application deployments. Supported Terraform modules with reusable, version-controlled
+            provisioning. Deployed AI microservices on GKE with Cloud Storage datasets, and
+            practiced GitOps with ArgoCD plus GitLab CI.
+          </p>
+          <div class="exp-techs">
+            <span>GCP</span><span>GKE</span><span>Terraform</span><span>ArgoCD</span><span>GitLab CI</span>
+          </div>
+        </div>
+
+        <div class="exp-item reveal">
+          <div class="exp-header">
+            <div>
+              <div class="exp-role">DevOps / C++ Intern</div>
+              <div class="exp-company">Bosch Global Software Technologies · Automotive</div>
+            </div>
+            <div class="exp-period">Aug 2023 — Jan 2024</div>
+          </div>
+          <p class="exp-desc">
+            Configured and troubleshot Linux systems across the software development lifecycle.
+            Containerized automotive applications with Docker for consistent build and test
+            environments. Tracked toolchain resource usage with Linux utilities and AWS CloudWatch.
+            Contributed to CI/CT pipelines using Jenkins, Git, and Docker.
+          </p>
+          <div class="exp-techs">
+            <span>Linux</span><span>Jenkins</span><span>Docker</span><span>AWS</span><span>CloudWatch</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="stack">
+      <div class="section-label"># 05. STACK</div>
+      <div class="stack-grid">
+        <div class="stack-card reveal">
+          <h3><span class="dot-acc"></span>Orchestration</h3>
+          <div class="stack-tags"><span>Kubernetes</span><span>AKS</span><span>GKE</span><span>EKS</span><span>OpenShift</span><span>Helm</span><span>Docker</span></div>
+        </div>
+        <div class="stack-card reveal">
+          <h3><span class="dot-acc"></span>CI/CD &amp; GitOps</h3>
+          <div class="stack-tags"><span>Jenkins</span><span>GitHub Actions</span><span>GitLab CI</span><span>ArgoCD</span><span>Git</span></div>
+        </div>
+        <div class="stack-card reveal">
+          <h3><span class="dot-acc"></span>Infrastructure as Code</h3>
+          <div class="stack-tags"><span>Terraform</span><span>Ansible</span><span>Helm Charts</span></div>
+        </div>
+        <div class="stack-card reveal">
+          <h3><span class="dot-acc"></span>Cloud Platforms</h3>
+          <div class="stack-tags"><span>Azure</span><span>AWS</span><span>GCP</span><span>IAM</span><span>VPC</span><span>Key Vault</span></div>
+        </div>
+        <div class="stack-card reveal">
+          <h3><span class="dot-acc"></span>Observability &amp; Security</h3>
+          <div class="stack-tags"><span>Prometheus</span><span>Grafana</span><span>Loki</span><span>Trivy</span><span>Snyk</span><span>SonarQube</span></div>
+        </div>
+        <div class="stack-card reveal">
+          <h3><span class="dot-acc"></span>Systems</h3>
+          <div class="stack-tags"><span>Linux</span><span>Bash</span><span>Python</span><span>Nginx</span><span>MySQL</span><span>Networking</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="projects">
+      <div class="section-label"># 06. PROJECTS</div>
+      <div class="projects-grid">
+        <div class="project-card reveal">
+          <div class="project-num">01</div>
+          <div class="project-name">CIMB Bank — Klaara CI/CD on AKS</div>
+          <p class="project-desc">
+            Production delivery for a financial product: Jenkins + Helm, monorepo migration,
+            image slimming, and DevSecOps gates. Deployment time 1h → 15m; builds 30m → 15s.
+          </p>
+          <div class="project-tech">
+            <span class="tech-chip primary">Azure AKS</span>
+            <span class="tech-chip primary">Jenkins</span>
+            <span class="tech-chip">Helm</span>
+            <span class="tech-chip">SonarQube</span>
+            <span class="tech-chip">Trivy</span>
+          </div>
+        </div>
+        <div class="project-card reveal">
+          <div class="project-num">02</div>
+          <div class="project-name">AWS Landing Zone &amp; CI/CD Automation</div>
+          <p class="project-desc">
+            Side project (May–Aug 2025). Isolated Dev/UAT accounts, modular Terraform, GitHub Actions
+            to ECS Fargate with blue/green releases, multi-AZ RDS, and centralized CloudWatch / CloudTrail.
+          </p>
+          <div class="project-tech">
+            <span class="tech-chip primary">AWS</span>
+            <span class="tech-chip primary">Terraform</span>
+            <span class="tech-chip">GitHub Actions</span>
+            <span class="tech-chip">ECS Fargate</span>
+            <span class="tech-chip">SonarQube</span>
+          </div>
+        </div>
+        <div class="project-card reveal">
+          <div class="project-num">03</div>
+          <div class="project-name">GKE GitOps for AI microservices</div>
+          <p class="project-desc">
+            At CloudAce: Terraform-provisioned GCP, GKE workloads with Cloud Storage datasets,
+            and ArgoCD GitOps so cluster state followed git — not click-ops.
+          </p>
+          <div class="project-tech">
+            <span class="tech-chip primary">GKE</span>
+            <span class="tech-chip primary">ArgoCD</span>
+            <span class="tech-chip">Terraform</span>
+            <span class="tech-chip">GitLab CI</span>
+          </div>
+        </div>
+        <div class="project-card reveal">
+          <div class="project-num">04</div>
+          <div class="project-name">Automotive toolchain containerization</div>
+          <p class="project-desc">
+            Bosch internship: Dockerized automotive tooling, Jenkins CI/CT, and CloudWatch plus
+            Linux profiling (htop, iostat, perf) for consistent, measurable builds.
+          </p>
+          <div class="project-tech">
+            <span class="tech-chip primary">Docker</span>
+            <span class="tech-chip primary">Jenkins</span>
+            <span class="tech-chip">Linux</span>
+            <span class="tech-chip">AWS</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact">
+      <div class="section-label"># 07. CONTACT</div>
+      <div class="contact-grid">
+        <div class="contact-info reveal">
+          <h3>Let's build something<br><em>production-grade</em> together.</h3>
+          <p>
+            Open to DevOps / platform / SRE roles and infrastructure work.
+            If your pipeline is slow, your cluster is noisy, or your images are still 1GB — let's talk.
+          </p>
+          <div class="contact-links">
+            <a class="contact-link" href="mailto:samelnguyen08@gmail.com"><span>✉</span> samelnguyen08@gmail.com</a>
+            <a class="contact-link" href="tel:+84799230769"><span>☎</span> +84 799 230 769</a>
+            <a class="contact-link" href="#hero"><span>📍</span> Tan Phu, Ho Chi Minh City</a>
+          </div>
+        </div>
+
+        <div class="contact-terminal reveal">
+          <div class="terminal-header">
+            <div class="dot red"></div>
+            <div class="dot yellow"></div>
+            <div class="dot green-d"></div>
+            <span class="terminal-title">send_message.sh</span>
+          </div>
+          <form class="form-body" id="contactForm">
+            <div class="form-field">
+              <span class="form-prompt">your name</span>
+              <input class="form-input" name="name" type="text" placeholder="Jane Doe" required>
+            </div>
+            <div class="form-field">
+              <span class="form-prompt">your email</span>
+              <input class="form-input" name="email" type="email" placeholder="jane@company.com" required>
+            </div>
+            <div class="form-field">
+              <span class="form-prompt">message</span>
+              <textarea class="form-input" name="message" placeholder="Our Jenkinsfile is 2,000 lines and nobody wants to touch it..." required></textarea>
+            </div>
+            <button class="btn" type="submit" style="width:100%">./send_message.sh ↵</button>
+            <div class="form-status" id="formStatus"></div>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div>© 2026 <span>Nguyen Xuan Hieu</span>. All rights reserved.</div>
+    <div>exit 0 <span>✓</span></div>
+  </footer>
+
+  <script src="/js/main.js"></script>
+</body>
+</html>
