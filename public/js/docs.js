@@ -56,7 +56,28 @@
   const root = sidebar?.dataset.docsRoot || "./";
   const active = sidebar?.dataset.active || "overview";
 
-  const published = new Set(["overview", "01-gioi-thieu", "02-http", "03-burp"]);
+  const published = new Set([
+    "overview", "01-gioi-thieu", "02-http", "03-burp",
+    "04", "05", "06", "07", "08",
+    "09", "10", "11", "22",
+    "12", "13", "14", "16", "25",
+    "15", "17", "18", "19", "20", "21", "26",
+    "23", "24",
+    "27", "28",
+    "29", "30", "31", "32", "33", "34", "35",
+    "appendix",
+  ]);
+
+  const PARTS = {
+    I: ["overview", "01-gioi-thieu", "02-http", "03-burp"],
+    II: ["04", "05", "06", "07", "08"],
+    III: ["09", "10", "11", "22"],
+    IV: ["12", "13", "14", "16", "25"],
+    V: ["15", "17", "18", "19", "20", "21", "26"],
+    VI: ["23", "24"],
+    VII: ["27", "28"],
+    VIII: ["29", "30", "31", "32", "33", "34", "35"],
+  };
 
   const item = (id, label) => {
     if (id === active) return `<li><a class="active" href="${root}${id === "overview" ? "" : `${id}/`}">${label}</a></li>`;
@@ -81,35 +102,34 @@
       `<li><a href="#study">How I study</a></li>`,
     ].join("");
   } else if (navEl) {
-    const partIOpen = ["overview", "01-gioi-thieu", "02-http", "03-burp"].includes(active);
     navEl.innerHTML = [
       item("overview", "Overview"),
-      group("Part I: Fundamentals", partIOpen, [
+      group("Part I: Fundamentals", PARTS.I.includes(active), [
         item("01-gioi-thieu", "01. Giới thiệu"),
         item("02-http", "02. HTTP Fundamentals"),
         item("03-burp", "03. Burp Suite"),
       ].join("")),
-      group("Part II: Auth &amp; Authorization", false, [
+      group("Part II: Auth &amp; Authorization", PARTS.II.includes(active), [
         item("04", "04. Authentication"),
         item("05", "05. Session Management"),
         item("06", "06. Access Control"),
         item("07", "07. OAuth 2.0"),
         item("08", "08. JWT"),
       ].join("")),
-      group("Part III: Client-Side", false, [
+      group("Part III: Client-Side", PARTS.III.includes(active), [
         item("09", "09. CORS"),
         item("10", "10. CSRF"),
         item("11", "11. XSS"),
         item("22", "22. Clickjacking"),
       ].join("")),
-      group("Part IV: Injection", false, [
+      group("Part IV: Injection", PARTS.IV.includes(active), [
         item("12", "12. SQL Injection"),
         item("13", "13. NoSQL Injection"),
         item("14", "14. Command Injection"),
         item("16", "16. XXE"),
         item("25", "25. SSTI"),
       ].join("")),
-      group("Part V: Server-Side", false, [
+      group("Part V: Server-Side", PARTS.V.includes(active), [
         item("15", "15. SSRF"),
         item("17", "17. File Upload"),
         item("18", "18. Path Traversal"),
@@ -118,15 +138,15 @@
         item("21", "21. Business Logic"),
         item("26", "26. Insecure Deserialization"),
       ].join("")),
-      group("Part VI: Infra &amp; Protocols", false, [
+      group("Part VI: Infra &amp; Protocols", PARTS.VI.includes(active), [
         item("23", "23. Web Cache Poisoning"),
         item("24", "24. HTTP Request Smuggling"),
       ].join("")),
-      group("Part VII: API &amp; Architecture", false, [
+      group("Part VII: API &amp; Architecture", PARTS.VII.includes(active), [
         item("27", "27. GraphQL Security"),
         item("28", "28. API Security"),
       ].join("")),
-      group("Part VIII: DevOps Security", false, [
+      group("Part VIII: DevOps Security", PARTS.VIII.includes(active), [
         item("29", "29. Kubernetes Security"),
         item("30", "30. CI/CD Security"),
         item("31", "31. Secrets Management"),
@@ -135,7 +155,7 @@
         item("34", "34. Incident Response"),
         item("35", "35. Checklist cho DevOps"),
       ].join("")),
-      `<li><span class="soon">Appendix</span></li>`,
+      item("appendix", "Appendix"),
     ].join("");
   }
 

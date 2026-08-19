@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chương 16: XXE — Hieu Nguyen</title>
+  <meta name="description" content="XML External Entity, disable DTD, Content-Type confusion.">
+  <link rel="icon" href="../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../">i'm<span>.hiu</span></a>
+    <nav class="docs-series">
+      <a class="active" href="../">Web Security</a>
+      <a href="../../cks-exam/">CKS exam</a>
+    </nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-docs-root="../" data-active="16">
+      <div class="docs-nav-label">Web Security</div>
+      <ul class="docs-nav" id="docsNav"></ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../">Home</a>
+        <span>›</span>
+        <a href="../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../">Overview</a>
+        <span>›</span>
+        <span>16. XXE</span>
+      </div>
+      <h1>Chương 16: XXE</h1>
+      <p class="lede">Parser XML mặc định hay tải entity ngoài. Đó là SSRF/file read núp sau SOAP/upload.</p>
+      <div class="docs-meta">
+        <span><strong>Tác giả:</strong> Hieu Nguyen (Ryan)</span>
+        <span><strong>Phần:</strong> IV — Injection</span>
+        <span><strong>Cập nhật:</strong> Aug 2026</span>
+      </div>
+      <h2 id="khai-niem">Khái niệm</h2>
+<p>XXE: XML khai entity trỏ file local hoặc URL. Parser resolve → đọc file hoặc gọi nội bộ (SSRF). Hay gặp SOAP, Office XML, SAML, upload “document”.</p>
+<h2 id="phong">Phòng chống</h2>
+<ul>
+        <li>Tắt DTD / external entity trên parser.</li>
+        <li>Không parse XML nếu API nhận JSON.</li>
+        <li>Limit size; không follow HTTP entity.</li>
+        <li>Content-Type: đừng parse XML khi client gửi nhầm.</li>
+      </ul>
+<h2 id="devops">Góc nhìn DevOps</h2>
+<p>WAF có rule XXE — phụ. Image libxml phiên bản còn hỗ trợ. NetworkPolicy chặn Pod app gọi metadata/IMDS.</p>
+<h2 id="tom-tat">Tóm tắt</h2>
+<ul>
+        <li>Disable external entity.</li>
+        <li>Prefer JSON.</li>
+        <li>Giới hạn parser.</li>
+        <li>Egress siết.</li>
+      </ul>
+<h2 id="on-tap">Câu hỏi ôn tập</h2>
+<ol>
+        <li>XXE dẫn tới class lỗ nào khác?</li>
+        <li>SAML/SOAP vì sao hay dính?</li>
+        <li>Tắt DTD ở đâu?</li>
+        <li>Upload docx liên quan gì?</li>
+        <li>Parser default-safe hay default-mở?</li>
+      </ol>
+
+      <div class="docs-tags">
+        <span class="docs-tag">xxe</span>
+        <span class="docs-tag">xml</span>
+        <span class="docs-tag">ssrf</span>
+      </div>
+      <div class="docs-pager">
+        <a href="../15/">Previous · 15. SSRF</a>
+        <a href="../17/">Next · 17. File Upload</a>
+      </div>
+    </article>
+    <aside class="docs-toc">
+      <div class="docs-toc-title">On this page</div>
+      <nav>
+        <a href="#khai-niem">Khái niệm</a>
+        <a href="#phong">Phòng chống</a>
+        <a href="#devops">Góc nhìn DevOps</a>
+        <a href="#tom-tat">Tóm tắt</a>
+        <a href="#on-tap">Câu hỏi ôn tập</a>
+      </nav>
+    </aside>
+  </div>
+  <script src="../../../js/docs.js"></script>
+</body>
+</html>

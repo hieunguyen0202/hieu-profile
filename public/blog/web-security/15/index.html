@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chương 15: SSRF — Hieu Nguyen</title>
+  <meta name="description" content="SSRF, IMDS, allowlist, egress, metadata hop limit.">
+  <link rel="icon" href="../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../">i'm<span>.hiu</span></a>
+    <nav class="docs-series">
+      <a class="active" href="../">Web Security</a>
+      <a href="../../cks-exam/">CKS exam</a>
+    </nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-docs-root="../" data-active="15">
+      <div class="docs-nav-label">Web Security</div>
+      <ul class="docs-nav" id="docsNav"></ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../">Home</a>
+        <span>›</span>
+        <a href="../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../">Overview</a>
+        <span>›</span>
+        <span>15. SSRF</span>
+      </div>
+      <h1>Chương 15: SSRF</h1>
+      <p class="lede">Server đi fetch URL hộ user. Cloud metadata và Kubernetes API ở ngay góc mạng đó.</p>
+      <div class="docs-meta">
+        <span><strong>Tác giả:</strong> Hieu Nguyen (Ryan)</span>
+        <span><strong>Phần:</strong> V — Server-side</span>
+        <span><strong>Cập nhật:</strong> Aug 2026</span>
+      </div>
+      <h2 id="khai-niem">Khái niệm</h2>
+<p>SSRF: app mở kết nối tới URL attacker chỉ định (webhook, preview, import). Mục tiêu: localhost, RFC1918, IMDS <code>169.254.169.254</code>, kube API.</p>
+<h2 id="phong">Phòng chống</h2>
+<ul>
+        <li>Allowlist scheme + host; DNS rebinding: resolve rồi khóa IP, cấm redirect lệch.</li>
+        <li>Không tin URL user cho file://.</li>
+        <li>IMDS v2 / hop-limit; NetworkPolicy deny metadata.</li>
+        <li>Webhook: IP allowlist customer, không server-side fetch tùy ý.</li>
+      </ul>
+<h2 id="devops">Góc nhìn DevOps</h2>
+<p>Đây là chương DevOps. Egress mặc định deny. ServiceAccount token không automount. Split webhook worker ra network riêng.</p>
+<h2 id="tom-tat">Tóm tắt</h2>
+<ul>
+        <li>Allowlist URL.</li>
+        <li>Chặn IMDS.</li>
+        <li>Egress deny.</li>
+        <li>Không automount SA.</li>
+      </ul>
+<h2 id="on-tap">Câu hỏi ôn tập</h2>
+<ol>
+        <li>IMDS liên quan SSRF thế nào?</li>
+        <li>DNS rebinding phá allowlist host ra sao?</li>
+        <li>Hop-limit IMDS giúp gì?</li>
+        <li>Webhook nên validate gì?</li>
+        <li>Kube API từ Pod app: control nào?</li>
+      </ol>
+
+      <div class="docs-tags">
+        <span class="docs-tag">ssrf</span>
+        <span class="docs-tag">imds</span>
+        <span class="docs-tag">owasp</span>
+      </div>
+      <div class="docs-pager">
+        <a href="../14/">Previous · 14. Command Injection</a>
+        <a href="../16/">Next · 16. XXE</a>
+      </div>
+    </article>
+    <aside class="docs-toc">
+      <div class="docs-toc-title">On this page</div>
+      <nav>
+        <a href="#khai-niem">Khái niệm</a>
+        <a href="#phong">Phòng chống</a>
+        <a href="#devops">Góc nhìn DevOps</a>
+        <a href="#tom-tat">Tóm tắt</a>
+        <a href="#on-tap">Câu hỏi ôn tập</a>
+      </nav>
+    </aside>
+  </div>
+  <script src="../../../js/docs.js"></script>
+</body>
+</html>

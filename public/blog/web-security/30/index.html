@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chương 30: CI/CD Security — Hieu Nguyen</title>
+  <meta name="description" content="Pipeline injection, dependency confusion, secrets CI, SAST DAST SCA.">
+  <link rel="icon" href="../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../">i'm<span>.hiu</span></a>
+    <nav class="docs-series">
+      <a class="active" href="../">Web Security</a>
+      <a href="../../cks-exam/">CKS exam</a>
+    </nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-docs-root="../" data-active="30">
+      <div class="docs-nav-label">Web Security</div>
+      <ul class="docs-nav" id="docsNav"></ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../">Home</a>
+        <span>›</span>
+        <a href="../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../">Overview</a>
+        <span>›</span>
+        <span>30. CI/CD</span>
+      </div>
+      <h1>Chương 30: CI/CD Security</h1>
+      <p class="lede">Pipeline là production. Ai push YAML là ai ship code lên cluster.</p>
+      <div class="docs-meta">
+        <span><strong>Tác giả:</strong> Hieu Nguyen (Ryan)</span>
+        <span><strong>Phần:</strong> VIII — DevOps</span>
+        <span><strong>Cập nhật:</strong> Aug 2026</span>
+      </div>
+      <h2 id="khai-niem">Khái niệm</h2>
+<p>CI/CD đọc PR, secret cloud, deploy. Lỗ pipeline = lỗ prod.</p>
+<h2 id="rui-ro">Rủi ro</h2>
+<ul>
+        <li>Script inj từ tên nhánh / PR untrusted (script injection).</li>
+        <li>Dependency confusion: package nội bộ bị cướp tên public.</li>
+        <li>Secret trong log / variable unmasked.</li>
+        <li>Supply chain: action/tag GitHub không pin hash.</li>
+        <li>Self-hosted runner không isolate.</li>
+      </ul>
+<h2 id="scan">SAST / DAST / SCA</h2>
+<p>SCA sớm (Trivy/Snyk). SAST PR. DAST staging. Fail build mức critical có SLA.</p>
+<h2 id="phong">Phòng chống</h2>
+<ul>
+        <li>Least privilege OIDC to cloud, không long-lived key.</li>
+        <li>Pin actions SHA.</li>
+        <li>Tách privileged pipeline.</li>
+        <li>Signed artifact + admission verify.</li>
+      </ul>
+<h2 id="tom-tat">Tóm tắt</h2>
+<ul>
+        <li>Pin dependencies/actions.</li>
+        <li>OIDC ngắn hạn.</li>
+        <li>Không secret log.</li>
+        <li>Gate scan.</li>
+      </ul>
+<h2 id="on-tap">Câu hỏi ôn tập</h2>
+<ol>
+        <li>Dependency confusion?</li>
+        <li>Vì sao pin SHA action?</li>
+        <li>OIDC hơn static key?</li>
+        <li>DAST chạy đâu?</li>
+        <li>PR từ fork chạy privileged job sai chỗ nào?</li>
+      </ol>
+
+      <div class="docs-tags">
+        <span class="docs-tag">cicd</span>
+        <span class="docs-tag">supply-chain</span>
+      </div>
+      <div class="docs-pager">
+        <a href="../29/">Previous · 29. Kubernetes</a>
+        <a href="../31/">Next · 31. Secrets</a>
+      </div>
+    </article>
+    <aside class="docs-toc">
+      <div class="docs-toc-title">On this page</div>
+      <nav>
+        <a href="#khai-niem">Khái niệm</a>
+        <a href="#rui-ro">Rủi ro</a>
+        <a href="#scan">SAST / DAST / SCA</a>
+        <a href="#phong">Phòng chống</a>
+        <a href="#tom-tat">Tóm tắt</a>
+        <a href="#on-tap">Câu hỏi ôn tập</a>
+      </nav>
+    </aside>
+  </div>
+  <script src="../../../js/docs.js"></script>
+</body>
+</html>

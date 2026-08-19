@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chương 9: CORS — Hieu Nguyen</title>
+  <meta name="description" content="SOP, CORS misconfig, ACAO, credentials, Ingress.">
+  <link rel="icon" href="../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../">i'm<span>.hiu</span></a>
+    <nav class="docs-series">
+      <a class="active" href="../">Web Security</a>
+      <a href="../../cks-exam/">CKS exam</a>
+    </nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-docs-root="../" data-active="09">
+      <div class="docs-nav-label">Web Security</div>
+      <ul class="docs-nav" id="docsNav"></ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../">Home</a>
+        <span>›</span>
+        <a href="../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../">Overview</a>
+        <span>›</span>
+        <span>09. CORS</span>
+      </div>
+      <h1>Chương 9: CORS</h1>
+      <p class="lede">CORS không phải firewall. Nó là ngoại lệ có kiểm soát của Same-Origin Policy.</p>
+      <div class="docs-meta">
+        <span><strong>Tác giả:</strong> Hieu Nguyen (Ryan)</span>
+        <span><strong>Phần:</strong> III — Client-side</span>
+        <span><strong>Cập nhật:</strong> Aug 2026</span>
+      </div>
+      <h2 id="khai-niem">Khái niệm</h2>
+<p><strong>Same-Origin Policy</strong>: origin = scheme + host + port. JS origin A không đọc response origin B trừ khi B gửi CORS header cho phép.</p>
+<h2 id="misconfig">Misconfiguration</h2>
+<ul>
+        <li>Phản chiếu mọi <code>Origin</code> kèm <code>Access-Control-Allow-Credentials: true</code>.</li>
+        <li>Whitelist regex sai (<code>evilcompany.com</code> khớp <code>company.com</code>).</li>
+        <li>Cho <code>null</code> origin (sandbox iframe).</li>
+        <li>Wildcard <code>*</code> với credential — browser từ chối; đừng “sửa” bằng reflect origin.</li>
+      </ul>
+<h2 id="phong">Phòng chống</h2>
+<ul>
+        <li>Allowlist origin chính xác.</li>
+        <li>API cookie: SameSite + CORS chặt, hoặc tốt hơn: bearer token không dựa cookie cross-origin.</li>
+        <li>Preflight: method/header tối thiểu.</li>
+      </ul>
+<h2 id="devops">Góc nhìn DevOps</h2>
+<p>Header CORS ở Ingress hay app — một nguồn. Đừng <code>add_header ACAO $http_origin</code> vô điều kiện. Review Helm values <code>cors.origin: '*'</code>.</p>
+<h2 id="tom-tat">Tóm tắt</h2>
+<ul>
+        <li>SOP mặc định chặn đọc cross-origin.</li>
+        <li>Reflect Origin + credential = hỏng.</li>
+        <li>Allowlist exact.</li>
+        <li>Ingress đừng copy Origin mù.</li>
+      </ul>
+<h2 id="on-tap">Câu hỏi ôn tập</h2>
+<ol>
+        <li>Origin gồm gì?</li>
+        <li>Vì sao * + credentials không “mở cho tiện”?</li>
+        <li>null origin đến từ đâu?</li>
+        <li>Preflight OPTIONS lộ gì?</li>
+        <li>CORS có chặn request server-side (curl) không?</li>
+      </ol>
+
+      <div class="docs-tags">
+        <span class="docs-tag">cors</span>
+        <span class="docs-tag">sop</span>
+        <span class="docs-tag">headers</span>
+      </div>
+      <div class="docs-pager">
+        <a href="../08/">Previous · 08. JWT</a>
+        <a href="../10/">Next · 10. CSRF</a>
+      </div>
+    </article>
+    <aside class="docs-toc">
+      <div class="docs-toc-title">On this page</div>
+      <nav>
+        <a href="#khai-niem">Khái niệm</a>
+        <a href="#misconfig">Misconfiguration</a>
+        <a href="#phong">Phòng chống</a>
+        <a href="#devops">Góc nhìn DevOps</a>
+        <a href="#tom-tat">Tóm tắt</a>
+        <a href="#on-tap">Câu hỏi ôn tập</a>
+      </nav>
+    </aside>
+  </div>
+  <script src="../../../js/docs.js"></script>
+</body>
+</html>

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chương 6: Access Control — Hieu Nguyen</title>
+  <meta name="description" content="IDOR, vertical/horizontal privilege, deny-by-default, RBAC.">
+  <link rel="icon" href="../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../">i'm<span>.hiu</span></a>
+    <nav class="docs-series">
+      <a class="active" href="../">Web Security</a>
+      <a href="../../cks-exam/">CKS exam</a>
+    </nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-docs-root="../" data-active="06">
+      <div class="docs-nav-label">Web Security</div>
+      <ul class="docs-nav" id="docsNav"></ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../">Home</a>
+        <span>›</span>
+        <a href="../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../">Overview</a>
+        <span>›</span>
+        <span>06. Access Control</span>
+      </div>
+      <h1>Chương 6: Access Control</h1>
+      <p class="lede">OWASP A01: user làm việc không thuộc quyền. DevOps hay mở nhầm admin Service.</p>
+      <div class="docs-meta">
+        <span><strong>Tác giả:</strong> Hieu Nguyen (Ryan)</span>
+        <span><strong>Phần:</strong> II — Auth</span>
+        <span><strong>Cập nhật:</strong> Aug 2026</span>
+      </div>
+      <h2 id="khai-niem">Khái niệm</h2>
+<p>Mỗi request phải hỏi: principal này có được object/action này không — <em>trên server</em>, không phải ẩn nút trên UI.</p>
+<h2 id="phan-loai">Phân loại</h2>
+<ul>
+        <li><strong>Vertical:</strong> user → admin function.</li>
+        <li><strong>Horizontal:</strong> user A xem object của B (IDOR).</li>
+        <li><strong>Context:</strong> đúng role nhưng sai trạng thái (sửa đơn đã thanh toán).</li>
+      </ul>
+<h2 id="idor">IDOR</h2>
+<p>Object ID do client chọn (<code>/invoices/318</code>) mà server không kiểm tra sở hữu. UUID không phải control — chỉ làm enumeration chậm hơn. Mass assignment / filter trên query cũng cùng lớp.</p>
+<h2 id="vertical">Leo quyền dọc</h2>
+<p>Admin path không authz, parameter <code>role=admin</code> tin từ client, method override (<code>X-HTTP-Method-Override</code>) đi nhánh khác policy. Ingress mở <code>/admin</code> ra internet là misconfig vận hành.</p>
+<h2 id="phat-hien">Cách phát hiện</h2>
+<ul>
+        <li>Hai tài khoản lab: gọi object của nhau.</li>
+        <li>Bỏ cookie admin, gọi lại path admin.</li>
+        <li>Kiểm tra Service/Ingress không expose dashboard.</li>
+      </ul>
+<h2 id="phong">Phòng chống</h2>
+<ol>
+        <li>Deny by default.</li>
+        <li>Authz trung tâm (policy library), không copy if role rải controller.</li>
+        <li>RBAC/ABAC server-side; ID nội bộ, không tin ID client nếu có thể.</li>
+        <li>Test tự động: user A không đọc resource B.</li>
+      </ol>
+<h2 id="devops">Góc nhìn DevOps</h2>
+<p>NetworkPolicy không thay authz app. Nhưng không expose admin UI; IP allowlist / VPN / mesh mTLS cho service nội bộ. Audit log: ai đọc object nào.</p>
+<h2 id="tom-tat">Tóm tắt</h2>
+<ul>
+        <li>UI ẩn không phải authz.</li>
+        <li>IDOR = thiếu check sở hữu.</li>
+        <li>Deny by default.</li>
+        <li>Đừng public admin Ingress.</li>
+      </ul>
+<h2 id="on-tap">Câu hỏi ôn tập</h2>
+<ol>
+        <li>Horizontal khác vertical?</li>
+        <li>UUID hết IDOR không?</li>
+        <li>Vì sao tin role trên JSON body sai?</li>
+        <li>Test tối thiểu cho IDOR trong CI?</li>
+        <li>NetworkPolicy đủ thay access control app?</li>
+      </ol>
+
+      <div class="docs-tags">
+        <span class="docs-tag">access-control</span>
+        <span class="docs-tag">idor</span>
+        <span class="docs-tag">rbac</span>
+      </div>
+      <div class="docs-pager">
+        <a href="../05/">Previous · 05. Session</a>
+        <a href="../07/">Next · 07. OAuth</a>
+      </div>
+    </article>
+    <aside class="docs-toc">
+      <div class="docs-toc-title">On this page</div>
+      <nav>
+        <a href="#khai-niem">Khái niệm</a>
+        <a href="#phan-loai">Phân loại</a>
+        <a href="#idor">IDOR</a>
+        <a href="#vertical">Leo quyền dọc</a>
+        <a href="#phat-hien">Cách phát hiện</a>
+        <a href="#phong">Phòng chống</a>
+        <a href="#devops">Góc nhìn DevOps</a>
+        <a href="#tom-tat">Tóm tắt</a>
+        <a href="#on-tap">Câu hỏi ôn tập</a>
+      </nav>
+    </aside>
+  </div>
+  <script src="../../../js/docs.js"></script>
+</body>
+</html>

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chương 24: HTTP Request Smuggling — Hieu Nguyen</title>
+  <meta name="description" content="HTTP request smuggling, Content-Length vs Transfer-Encoding, HTTP/2.">
+  <link rel="icon" href="../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../">i'm<span>.hiu</span></a>
+    <nav class="docs-series">
+      <a class="active" href="../">Web Security</a>
+      <a href="../../cks-exam/">CKS exam</a>
+    </nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-docs-root="../" data-active="24">
+      <div class="docs-nav-label">Web Security</div>
+      <ul class="docs-nav" id="docsNav"></ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../">Home</a>
+        <span>›</span>
+        <a href="../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../">Overview</a>
+        <span>›</span>
+        <span>24. Request Smuggling</span>
+      </div>
+      <h1>Chương 24: HTTP Request Smuggling</h1>
+      <p class="lede">Front-end và back-end bất đồng CL vs TE. Request của bạn dính request người sau.</p>
+      <div class="docs-meta">
+        <span><strong>Tác giả:</strong> Hieu Nguyen (Ryan)</span>
+        <span><strong>Phần:</strong> VI — Infra</span>
+        <span><strong>Cập nhật:</strong> Aug 2026</span>
+      </div>
+      <h2 id="khai-niem">Khái niệm</h2>
+<p>Smuggling khi proxy và origin parse ranh giới request khác nhau (Content-Length vs Transfer-Encoding, HTTP/2 downgrade). Hậu quả: cache poison, bypass WAF, bắt request khác. Khai thác cụ thể chỉ trên lab được phép.</p>
+<h2 id="phong">Phòng chống</h2>
+<ul>
+        <li>Cùng HTTP version end-to-end khi được (h2c cẩn thận).</li>
+        <li>Tắt TE trên hop không cần; normalize request ở một chỗ.</li>
+        <li>Cập nhật Nginx/Envoy/Ingress — bug parser là CVE.</li>
+        <li>WAF và origin cùng cách đếm body.</li>
+      </ul>
+<h2 id="devops">Góc nhìn DevOps</h2>
+<p>Đây là lỗ hạ tầng. Patch Ingress. Không mix custom proxy tự viết. HTTP/2 chỉ terminate một lớp rồi h2 hoặc h1 thống nhất phía sau.</p>
+<h2 id="tom-tat">Tóm tắt</h2>
+<ul>
+        <li>Một parser chuẩn.</li>
+        <li>Patch proxy.</li>
+        <li>Đừng tự ghép CL+TE.</li>
+        <li>Lab, không production probing mù.</li>
+      </ul>
+<h2 id="on-tap">Câu hỏi ôn tập</h2>
+<ol>
+        <li>CL vs TE bất đồng gây gì?</li>
+        <li>Vì sao HTTP/2 downgrade liên quan?</li>
+        <li>Ai chịu patch?</li>
+        <li>WAF bypass ý tưởng (không PoC)?</li>
+        <li>Normalize request nghĩa là gì?</li>
+      </ol>
+
+      <div class="docs-tags">
+        <span class="docs-tag">smuggling</span>
+        <span class="docs-tag">http</span>
+        <span class="docs-tag">proxy</span>
+      </div>
+      <div class="docs-pager">
+        <a href="../23/">Previous · 23. Cache Poisoning</a>
+        <a href="../25/">Next · 25. SSTI</a>
+      </div>
+    </article>
+    <aside class="docs-toc">
+      <div class="docs-toc-title">On this page</div>
+      <nav>
+        <a href="#khai-niem">Khái niệm</a>
+        <a href="#phong">Phòng chống</a>
+        <a href="#devops">Góc nhìn DevOps</a>
+        <a href="#tom-tat">Tóm tắt</a>
+        <a href="#on-tap">Câu hỏi ôn tập</a>
+      </nav>
+    </aside>
+  </div>
+  <script src="../../../js/docs.js"></script>
+</body>
+</html>

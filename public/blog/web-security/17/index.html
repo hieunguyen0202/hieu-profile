@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chương 17: File Upload — Hieu Nguyen</title>
+  <meta name="description" content="Upload: type, size, storage, không execute, virus scan.">
+  <link rel="icon" href="../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../">i'm<span>.hiu</span></a>
+    <nav class="docs-series">
+      <a class="active" href="../">Web Security</a>
+      <a href="../../cks-exam/">CKS exam</a>
+    </nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-docs-root="../" data-active="17">
+      <div class="docs-nav-label">Web Security</div>
+      <ul class="docs-nav" id="docsNav"></ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../">Home</a>
+        <span>›</span>
+        <a href="../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../">Overview</a>
+        <span>›</span>
+        <span>17. File Upload</span>
+      </div>
+      <h1>Chương 17: File Upload</h1>
+      <p class="lede">Upload không phải “lưu file”. Đó là parser, thumbnail, và chỗ execute nếu nhầm path.</p>
+      <div class="docs-meta">
+        <span><strong>Tác giả:</strong> Hieu Nguyen (Ryan)</span>
+        <span><strong>Phần:</strong> V — Server-side</span>
+        <span><strong>Cập nhật:</strong> Aug 2026</span>
+      </div>
+      <h2 id="khai-niem">Khái niệm</h2>
+<p>Rủi ro: extension kép, MIME do client, file polyglot, path traversal tên file, store trên origin executable (PHP trong webroot), XXE/image magick.</p>
+<h2 id="phong">Phòng chống</h2>
+<ul>
+        <li>Allowlist MIME + magic bytes server-side.</li>
+        <li>Tên file random; không dùng tên user làm path.</li>
+        <li>Store object storage, không webroot.</li>
+        <li>Serve với Content-Disposition attachment + nosniff.</li>
+        <li>Giới hạn size; quét malware trên async worker.</li>
+        <li>Resize ảnh bằng lib an toàn, patch ImageMagick.</li>
+      </ul>
+<h2 id="devops">Góc nhìn DevOps</h2>
+<p>Bucket private + signed URL. CDN không execute. Pod upload không quyền write trừ volume dedicated.</p>
+<h2 id="tom-tat">Tóm tắt</h2>
+<ul>
+        <li>Đừng tin extension client.</li>
+        <li>Object storage.</li>
+        <li>Không execute upload.</li>
+        <li>Signed URL.</li>
+      </ul>
+<h2 id="on-tap">Câu hỏi ôn tập</h2>
+<ol>
+        <li>Content-Type từ browser đủ không?</li>
+        <li>Vì sao cấm lưu dưới /static user?</li>
+        <li>Polyglot là gì?</li>
+        <li>nosniff giúp gì?</li>
+        <li>Lambda/worker scan virus đặt đâu?</li>
+      </ol>
+
+      <div class="docs-tags">
+        <span class="docs-tag">upload</span>
+        <span class="docs-tag">content-type</span>
+      </div>
+      <div class="docs-pager">
+        <a href="../16/">Previous · 16. XXE</a>
+        <a href="../18/">Next · 18. Path Traversal</a>
+      </div>
+    </article>
+    <aside class="docs-toc">
+      <div class="docs-toc-title">On this page</div>
+      <nav>
+        <a href="#khai-niem">Khái niệm</a>
+        <a href="#phong">Phòng chống</a>
+        <a href="#devops">Góc nhìn DevOps</a>
+        <a href="#tom-tat">Tóm tắt</a>
+        <a href="#on-tap">Câu hỏi ôn tập</a>
+      </nav>
+    </aside>
+  </div>
+  <script src="../../../js/docs.js"></script>
+</body>
+</html>

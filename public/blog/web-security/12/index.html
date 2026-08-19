@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chương 12: SQL Injection — Hieu Nguyen</title>
+  <meta name="description" content="SQLi khái niệm, parameterized queries, least privilege, WAF phụ.">
+  <link rel="icon" href="../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../">i'm<span>.hiu</span></a>
+    <nav class="docs-series">
+      <a class="active" href="../">Web Security</a>
+      <a href="../../cks-exam/">CKS exam</a>
+    </nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-docs-root="../" data-active="12">
+      <div class="docs-nav-label">Web Security</div>
+      <ul class="docs-nav" id="docsNav"></ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../">Home</a>
+        <span>›</span>
+        <a href="../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../">Overview</a>
+        <span>›</span>
+        <span>12. SQLi</span>
+      </div>
+      <h1>Chương 12: SQL Injection</h1>
+      <p class="lede">String SQL cộng với input user. Database làm đúng những gì bạn vô tình viết.</p>
+      <div class="docs-meta">
+        <span><strong>Tác giả:</strong> Hieu Nguyen (Ryan)</span>
+        <span><strong>Phần:</strong> IV — Injection</span>
+        <span><strong>Cập nhật:</strong> Aug 2026</span>
+      </div>
+      <h2 id="khai-niem">Khái niệm</h2>
+<p>SQL injection: input trở thành câu lệnh. Lớp: error-based, UNION, boolean/time blind, second-order (lưu rồi query sau). Chi tiết kỹ thuật khai thác để học trên lab được phép (PortSwigger), không đem ra hệ thống thật.</p>
+<h2 id="phong">Phòng chống</h2>
+<ol>
+        <li>Parameterized queries / bind variables — control chính.</li>
+        <li>ORM đúng cách (không raw concat).</li>
+        <li>DB user least privilege: app không cần FILE / DBA.</li>
+        <li>Input allowlist khi dynamic identifier (ORDER BY cột) — không nhét raw vào identifier.</li>
+        <li>WAF: lớp phụ.</li>
+      </ol>
+<h2 id="phat-hien">Cách phát hiện</h2>
+<p>SAST, code review concat SQL, error DB lộ trên staging, DAST trên lab. Production: không hiện SQL error cho client.</p>
+<h2 id="devops">Góc nhìn DevOps</h2>
+<p>Secret DB không admin. NetworkPolicy: chỉ app subnet tới 5432. Log slow query, không log full bound params nếu có PII. Image không ship CLI dump lung tung.</p>
+<h2 id="tom-tat">Tóm tắt</h2>
+<ul>
+        <li>Bind parameters.</li>
+        <li>Ít quyền DB.</li>
+        <li>Ẩn lỗi SQL.</li>
+        <li>WAF không thay code.</li>
+      </ul>
+<h2 id="on-tap">Câu hỏi ôn tập</h2>
+<ol>
+        <li>Vì sao escape tay kém prepared statement?</li>
+        <li>Second-order là gì?</li>
+        <li>App role DB nên thiếu quyền nào?</li>
+        <li>ORM vẫn SQLi khi nào?</li>
+        <li>Hiện stack SQL trên 500 page hại gì?</li>
+      </ol>
+
+      <div class="docs-tags">
+        <span class="docs-tag">sqli</span>
+        <span class="docs-tag">injection</span>
+        <span class="docs-tag">owasp</span>
+      </div>
+      <div class="docs-pager">
+        <a href="../11/">Previous · 11. XSS</a>
+        <a href="../13/">Next · 13. NoSQLi</a>
+      </div>
+    </article>
+    <aside class="docs-toc">
+      <div class="docs-toc-title">On this page</div>
+      <nav>
+        <a href="#khai-niem">Khái niệm</a>
+        <a href="#phong">Phòng chống</a>
+        <a href="#phat-hien">Cách phát hiện</a>
+        <a href="#devops">Góc nhìn DevOps</a>
+        <a href="#tom-tat">Tóm tắt</a>
+        <a href="#on-tap">Câu hỏi ôn tập</a>
+      </nav>
+    </aside>
+  </div>
+  <script src="../../../js/docs.js"></script>
+</body>
+</html>

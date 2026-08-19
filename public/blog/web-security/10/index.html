@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chương 10: CSRF — Hieu Nguyen</title>
+  <meta name="description" content="CSRF điều kiện, SameSite, synchronizer token, API headers.">
+  <link rel="icon" href="../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../">i'm<span>.hiu</span></a>
+    <nav class="docs-series">
+      <a class="active" href="../">Web Security</a>
+      <a href="../../cks-exam/">CKS exam</a>
+    </nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-docs-root="../" data-active="10">
+      <div class="docs-nav-label">Web Security</div>
+      <ul class="docs-nav" id="docsNav"></ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../">Home</a>
+        <span>›</span>
+        <a href="../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../">Overview</a>
+        <span>›</span>
+        <span>10. CSRF</span>
+      </div>
+      <h1>Chương 10: CSRF</h1>
+      <p class="lede">Trình duyệt tự gửi cookie. Site khác có thể “ký tên bạn” nếu bạn không có token chống giả.</p>
+      <div class="docs-meta">
+        <span><strong>Tác giả:</strong> Hieu Nguyen (Ryan)</span>
+        <span><strong>Phần:</strong> III — Client-side</span>
+        <span><strong>Cập nhật:</strong> Aug 2026</span>
+      </div>
+      <h2 id="khai-niem">Khái niệm</h2>
+<p>CSRF: user đã login, cookie session tự đi theo request do trang khác khởi tạo. Server thấy phiên hợp lệ, thực hiện hành động user không cố ý.</p>
+<h2 id="dieu-kien">Điều kiện</h2>
+<ul>
+        <li>Hành động quan trọng dựa cookie (không thêm secret request).</li>
+        <li>Không token/SameSite đủ chặt.</li>
+        <li>User đang có phiên.</li>
+      </ul>
+<p>GET có side effect (unsubscribe, transfer) đặc biệt dễ. JSON thuần từ form cross-site khó hơn — đừng coi là đủ.</p>
+<h2 id="phong">Phòng chống</h2>
+<ol>
+        <li>Synchronizer CSRF token (per-session hoặc per-form), kiểm tra server.</li>
+        <li>SameSite=Lax tối thiểu; Strict cho cookie nhạy.</li>
+        <li>API: custom header (framework set) + SameSite; không tin Origin/Referer một mình.</li>
+        <li>Re-auth cho hành động tiền / đổi email.</li>
+      </ol>
+<h2 id="devops">Góc nhìn DevOps</h2>
+<p>Cookie session thiếu SameSite trên Ingress. WAF rule CSRF không thay token app. Tách site thao tác (app) và site marketing origin.</p>
+<h2 id="tom-tat">Tóm tắt</h2>
+<ul>
+        <li>Cookie tự gửi là gốc CSRF.</li>
+        <li>Token + SameSite.</li>
+        <li>Không side effect trên GET.</li>
+        <li>Hành động nhạy cần re-auth.</li>
+      </ul>
+<h2 id="on-tap">Câu hỏi ôn tập</h2>
+<ol>
+        <li>CSRF khác XSS chỗ nào?</li>
+        <li>SameSite=Lax còn khe nào?</li>
+        <li>Vì sao GET transfer nguy hiểm?</li>
+        <li>Custom header giúp API thế nào?</li>
+        <li>Logout CSRF có đáng lo?</li>
+      </ol>
+
+      <div class="docs-tags">
+        <span class="docs-tag">csrf</span>
+        <span class="docs-tag">samesite</span>
+        <span class="docs-tag">cookies</span>
+      </div>
+      <div class="docs-pager">
+        <a href="../09/">Previous · 09. CORS</a>
+        <a href="../11/">Next · 11. XSS</a>
+      </div>
+    </article>
+    <aside class="docs-toc">
+      <div class="docs-toc-title">On this page</div>
+      <nav>
+        <a href="#khai-niem">Khái niệm</a>
+        <a href="#dieu-kien">Điều kiện</a>
+        <a href="#phong">Phòng chống</a>
+        <a href="#devops">Góc nhìn DevOps</a>
+        <a href="#tom-tat">Tóm tắt</a>
+        <a href="#on-tap">Câu hỏi ôn tập</a>
+      </nav>
+    </aside>
+  </div>
+  <script src="../../../js/docs.js"></script>
+</body>
+</html>

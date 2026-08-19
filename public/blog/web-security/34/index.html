@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chương 34: Incident Response cơ bản — Hieu Nguyen</title>
+  <meta name="description" content="IR lifecycle, contain, forensics nhẹ, comms, post-mortem.">
+  <link rel="icon" href="../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../">i'm<span>.hiu</span></a>
+    <nav class="docs-series">
+      <a class="active" href="../">Web Security</a>
+      <a href="../../cks-exam/">CKS exam</a>
+    </nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-docs-root="../" data-active="34">
+      <div class="docs-nav-label">Web Security</div>
+      <ul class="docs-nav" id="docsNav"></ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../">Home</a>
+        <span>›</span>
+        <a href="../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../">Overview</a>
+        <span>›</span>
+        <span>34. Incident Response</span>
+      </div>
+      <h1>Chương 34: Incident Response cơ bản</h1>
+      <p class="lede">Runbook trước 3 giờ sáng. Không improvisation trên prod đang chảy máu.</p>
+      <div class="docs-meta">
+        <span><strong>Tác giả:</strong> Hieu Nguyen (Ryan)</span>
+        <span><strong>Phần:</strong> VIII — DevOps</span>
+        <span><strong>Cập nhật:</strong> Aug 2026</span>
+      </div>
+      <h2 id="lifecycle">Lifecycle</h2>
+<p>Prepare → Detect → Contain → Eradicate → Recover → Lessons. Prepare là exercise + quyền break-glass.</p>
+<h2 id="detect">Detection</h2>
+<p>Alert Chương 33. On-call biết dashboard. Severity: data leak / RCE / deface khác SLA.</p>
+<h2 id="contain">Containment</h2>
+<ul>
+        <li>Cắt Ingress / scale 0 / NP deny.</li>
+        <li>Rotate secret + session invalidate.</li>
+        <li>Isolate namespace.</li>
+        <li>Không xóa log/pod trước khi snapshot.</li>
+      </ul>
+<h2 id="forensics">Forensics tối thiểu</h2>
+<p>Timeline log, kubectl describe/events, image digest đang chạy, audit API. Snapshot volume nếu cần. Chuỗi custody nội bộ.</p>
+<h2 id="comms">Communication</h2>
+<p>Kênh riêng, pháp chế nếu PII. Không tweet root cause sớm. Status page sự thật.</p>
+<h2 id="pm">Post-mortem</h2>
+<p>Blameless: timeline, gap control, ticket vá, game-day.</p>
+<h2 id="tom-tat">Tóm tắt</h2>
+<ul>
+        <li>Prepare.</li>
+        <li>Contain trước forensics đầy đủ.</li>
+        <li>Rotate.</li>
+        <li>Học ra ticket.</li>
+      </ul>
+<h2 id="on-tap">Câu hỏi ôn tập</h2>
+<ol>
+        <li>Contain khác eradicate?</li>
+        <li>Vì sao không xóa Pod ngay?</li>
+        <li>Break-glass account?</li>
+        <li>Ai nói với khách?</li>
+        <li>Metric thành công IR?</li>
+      </ol>
+
+      <div class="docs-tags">
+        <span class="docs-tag">ir</span>
+        <span class="docs-tag">incident</span>
+      </div>
+      <div class="docs-pager">
+        <a href="../33/">Previous · 33. Logging</a>
+        <a href="../35/">Next · 35. Checklist</a>
+      </div>
+    </article>
+    <aside class="docs-toc">
+      <div class="docs-toc-title">On this page</div>
+      <nav>
+        <a href="#lifecycle">Lifecycle</a>
+        <a href="#detect">Detection</a>
+        <a href="#contain">Containment</a>
+        <a href="#forensics">Forensics tối thiểu</a>
+        <a href="#comms">Communication</a>
+        <a href="#pm">Post-mortem</a>
+        <a href="#tom-tat">Tóm tắt</a>
+        <a href="#on-tap">Câu hỏi ôn tập</a>
+      </nav>
+    </aside>
+  </div>
+  <script src="../../../js/docs.js"></script>
+</body>
+</html>

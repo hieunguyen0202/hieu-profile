@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chương 19: Open Redirect — Hieu Nguyen</title>
+  <meta name="description" content="Open redirect, allowlist, OAuth redirect.">
+  <link rel="icon" href="../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../">i'm<span>.hiu</span></a>
+    <nav class="docs-series">
+      <a class="active" href="../">Web Security</a>
+      <a href="../../cks-exam/">CKS exam</a>
+    </nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-docs-root="../" data-active="19">
+      <div class="docs-nav-label">Web Security</div>
+      <ul class="docs-nav" id="docsNav"></ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../">Home</a>
+        <span>›</span>
+        <a href="../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../">Overview</a>
+        <span>›</span>
+        <span>19. Open Redirect</span>
+      </div>
+      <h1>Chương 19: Open Redirect</h1>
+      <p class="lede">redirect=https://… nghe hiền. Phishing và token trên URL thì không.</p>
+      <div class="docs-meta">
+        <span><strong>Tác giả:</strong> Hieu Nguyen (Ryan)</span>
+        <span><strong>Phần:</strong> V — Server-side</span>
+        <span><strong>Cập nhật:</strong> Aug 2026</span>
+      </div>
+      <h2 id="khai-niem">Khái niệm</h2>
+<p>Param redirect đưa user sang host attacker. Dùng trong phishing và đôi khi chuỗi OAuth/token.</p>
+<h2 id="phong">Phòng chống</h2>
+<ul>
+        <li>Allowlist path nội bộ (relative) hoặc host cố định.</li>
+        <li>Cấm scheme lạ (javascript:, //evil).</li>
+        <li>OAuth: exact redirect_uri.</li>
+      </ul>
+<h2 id="devops">Góc nhìn DevOps</h2>
+<p>WAF rule mở; control chính là code/IdP config. Không log full URL có token.</p>
+<h2 id="tom-tat">Tóm tắt</h2>
+<ul>
+        <li>Allowlist đích.</li>
+        <li>Relative path an toàn hơn URL đầy đủ.</li>
+        <li>OAuth URI chặt.</li>
+      </ul>
+<h2 id="on-tap">Câu hỏi ôn tập</h2>
+<ol>
+        <li>Open redirect thành phishing thế nào?</li>
+        <li>//host khác https://host chỗ nào?</li>
+        <li>Vì sao next=/dashboard ổn hơn next=https://…?</li>
+        <li>Liên quan OAuth?</li>
+        <li>Header Location có cần allowlist?</li>
+      </ol>
+
+      <div class="docs-tags">
+        <span class="docs-tag">open-redirect</span>
+        <span class="docs-tag">oauth</span>
+      </div>
+      <div class="docs-pager">
+        <a href="../18/">Previous · 18. Path Traversal</a>
+        <a href="../20/">Next · 20. Race Condition</a>
+      </div>
+    </article>
+    <aside class="docs-toc">
+      <div class="docs-toc-title">On this page</div>
+      <nav>
+        <a href="#khai-niem">Khái niệm</a>
+        <a href="#phong">Phòng chống</a>
+        <a href="#devops">Góc nhìn DevOps</a>
+        <a href="#tom-tat">Tóm tắt</a>
+        <a href="#on-tap">Câu hỏi ôn tập</a>
+      </nav>
+    </aside>
+  </div>
+  <script src="../../../js/docs.js"></script>
+</body>
+</html>

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chương 20: Race Condition — Hieu Nguyen</title>
+  <meta name="description" content="TOCTOU, idempotency, locking, unique constraints.">
+  <link rel="icon" href="../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../">i'm<span>.hiu</span></a>
+    <nav class="docs-series">
+      <a class="active" href="../">Web Security</a>
+      <a href="../../cks-exam/">CKS exam</a>
+    </nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-docs-root="../" data-active="20">
+      <div class="docs-nav-label">Web Security</div>
+      <ul class="docs-nav" id="docsNav"></ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../">Home</a>
+        <span>›</span>
+        <a href="../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../">Overview</a>
+        <span>›</span>
+        <span>20. Race Condition</span>
+      </div>
+      <h1>Chương 20: Race Condition</h1>
+      <p class="lede">Hai request cùng lúc. Số dư, coupon, unique constraint — ai commit trước.</p>
+      <div class="docs-meta">
+        <span><strong>Tác giả:</strong> Hieu Nguyen (Ryan)</span>
+        <span><strong>Phần:</strong> V — Server-side</span>
+        <span><strong>Cập nhật:</strong> Aug 2026</span>
+      </div>
+      <h2 id="khai-niem">Khái niệm</h2>
+<p>Time-of-check vs time-of-use: kiểm tra còn 1 coupon rồi hai request đều redeem. Cần atomicity trên DB, không “if” trên app đơn luồng.</p>
+<h2 id="phong">Phòng chống</h2>
+<ul>
+        <li>Transaction + constraint unique.</li>
+        <li>Idempotency-Key trên API thanh toán.</li>
+        <li>Lock pessimistic/optimistic version.</li>
+        <li>Hàng đợi một consumer cho nghiệp vụ tiền.</li>
+      </ul>
+<h2 id="devops">Góc nhìn DevOps</h2>
+<p>N replica không tạo race — DB mới là chỗ arbitrate. Rate-limit không thay unique constraint. Test load lab trên endpoint tiền.</p>
+<h2 id="tom-tat">Tóm tắt</h2>
+<ul>
+        <li>Atomic DB.</li>
+        <li>Idempotency key.</li>
+        <li>Đừng tin check-then-act.</li>
+        <li>Scale-out làm race dễ lộ hơn.</li>
+      </ul>
+<h2 id="on-tap">Câu hỏi ôn tập</h2>
+<ol>
+        <li>TOCTOU nghĩa là gì?</li>
+        <li>Unique constraint cứu coupon thế nào?</li>
+        <li>Idempotency-Key dùng khi nào?</li>
+        <li>Vì sao 1 replica app vẫn race?</li>
+        <li>Queue giúp gì?</li>
+      </ol>
+
+      <div class="docs-tags">
+        <span class="docs-tag">race</span>
+        <span class="docs-tag">idempotency</span>
+      </div>
+      <div class="docs-pager">
+        <a href="../19/">Previous · 19. Open Redirect</a>
+        <a href="../21/">Next · 21. Business Logic</a>
+      </div>
+    </article>
+    <aside class="docs-toc">
+      <div class="docs-toc-title">On this page</div>
+      <nav>
+        <a href="#khai-niem">Khái niệm</a>
+        <a href="#phong">Phòng chống</a>
+        <a href="#devops">Góc nhìn DevOps</a>
+        <a href="#tom-tat">Tóm tắt</a>
+        <a href="#on-tap">Câu hỏi ôn tập</a>
+      </nav>
+    </aside>
+  </div>
+  <script src="../../../js/docs.js"></script>
+</body>
+</html>

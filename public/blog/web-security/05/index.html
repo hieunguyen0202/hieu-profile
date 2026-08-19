@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chương 5: Session Management — Hieu Nguyen</title>
+  <meta name="description" content="Session token, fixation, timeout, cookie flags, JWT vs server session.">
+  <link rel="icon" href="../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../">i'm<span>.hiu</span></a>
+    <nav class="docs-series">
+      <a class="active" href="../">Web Security</a>
+      <a href="../../cks-exam/">CKS exam</a>
+    </nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-docs-root="../" data-active="05">
+      <div class="docs-nav-label">Web Security</div>
+      <ul class="docs-nav" id="docsNav"></ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../">Home</a>
+        <span>›</span>
+        <a href="../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../">Overview</a>
+        <span>›</span>
+        <span>05. Session</span>
+      </div>
+      <h1>Chương 5: Session Management</h1>
+      <p class="lede">Session là chìa sau khi đã chứng minh danh tính. Làm mất chìa thì MFA cũng vô nghĩa.</p>
+      <div class="docs-meta">
+        <span><strong>Tác giả:</strong> Hieu Nguyen (Ryan)</span>
+        <span><strong>Phần:</strong> II — Auth</span>
+        <span><strong>Cập nhật:</strong> Aug 2026</span>
+      </div>
+      <h2 id="khai-niem">Khái niệm</h2>
+<p>Sau login, server nhớ bạn bằng <strong>session token</strong> (cookie hoặc header). Token phải khó đoán, gắn user, và chết đúng lúc.</p>
+<h2 id="token">Yêu cầu bảo mật cho token</h2>
+<ul>
+        <li>Entropy đủ (CSPRNG), không phải user-id encode.</li>
+        <li>Rotate lúc login (chống session fixation).</li>
+        <li>Invalidate lúc logout, đổi password, MFA xong.</li>
+        <li>Không nhét trong URL / Referer / log.</li>
+      </ul>
+<h2 id="tan-cong">Lớp sự cố thường gặp</h2>
+<h3 id="hijack">Session hijacking</h3>
+<p>Token lộ: XSS đọc cookie thiếu HttpOnly, HTTP không Secure, log access, XSS stored. Phòng: flag cookie + CSP + HTTPS.</p>
+<h3 id="fix">Session fixation</h3>
+<p>Attacker gài token trước login; nếu app không đổi token khi authenticate thì phiên đó thành của victim. Fix: luôn phát token mới sau login.</p>
+<h3 id="weak">Token yếu</h3>
+<p>Tăng dần, timestamp, MD5(email). Scanner và log là đủ để nhận ra — không cần “bẻ”.</p>
+<h2 id="cookie">Cookie attributes</h2>
+<p>HttpOnly, Secure, SameSite, Domain/Path hẹp, Max-Age hợp lý — xem Chương 2. Session cookie Domain=<code>.company.com</code> quá rộng thì mọi subdomain chia phiên.</p>
+<h2 id="timeout">Timeout</h2>
+<ul>
+        <li>Idle timeout: không hoạt động thì chết.</li>
+        <li>Absolute timeout: dù đang dùng cũng phải re-auth (admin).</li>
+        <li>Logout server-side: xóa store, không chỉ xóa cookie client.</li>
+      </ul>
+<h2 id="jwt-vs">JWT vs session server-side</h2>
+<p>Session store (Redis) revoke được ngay. JWT stateless khó revoke trừ denylist/short TTL. Hybrid: access ngắn + refresh rotate.</p>
+<h2 id="phat-hien">Cách phát hiện</h2>
+<ul>
+        <li>Set-Cookie lúc login có đủ flag không.</li>
+        <li>Login có Set-Cookie mới hay giữ cookie cũ.</li>
+        <li>Logout còn dùng lại token được không (lab của bạn).</li>
+      </ul>
+<h2 id="devops">Góc nhìn DevOps</h2>
+<p>Sticky session vs Redis shared. TLS terminate ở Ingress thì cookie Secure vẫn set được nếu app tin <code>X-Forwarded-Proto</code> từ proxy tin cậy. Session store không public Service.</p>
+<h2 id="tom-tat">Tóm tắt</h2>
+<ul>
+        <li>Rotate session khi login.</li>
+        <li>Revoke lúc logout/đổi mật khẩu.</li>
+        <li>Cookie flags là lớp rẻ.</li>
+        <li>JWT ngắn hạn hoặc có cửa revoke.</li>
+      </ul>
+<h2 id="on-tap">Câu hỏi ôn tập</h2>
+<ol>
+        <li>Fixation khác hijacking chỗ nào?</li>
+        <li>Vì sao Domain cookie quá rộng nguy hiểm?</li>
+        <li>Idle vs absolute timeout?</li>
+        <li>Khi nào Redis session hơn JWT thuần?</li>
+        <li>Logout chỉ xóa cookie client thì còn gì?</li>
+      </ol>
+
+      <div class="docs-tags">
+        <span class="docs-tag">session</span>
+        <span class="docs-tag">cookies</span>
+        <span class="docs-tag">jwt</span>
+      </div>
+      <div class="docs-pager">
+        <a href="../04/">Previous · 04. Authentication</a>
+        <a href="../06/">Next · 06. Access Control</a>
+      </div>
+    </article>
+    <aside class="docs-toc">
+      <div class="docs-toc-title">On this page</div>
+      <nav>
+        <a href="#khai-niem">Khái niệm</a>
+        <a href="#token">Yêu cầu bảo mật cho token</a>
+        <a href="#tan-cong">Lớp sự cố thường gặp</a>
+        <a class="depth-3" href="#hijack">Session hijacking</a>
+        <a class="depth-3" href="#fix">Session fixation</a>
+        <a class="depth-3" href="#weak">Token yếu</a>
+        <a href="#cookie">Cookie attributes</a>
+        <a href="#timeout">Timeout</a>
+        <a href="#jwt-vs">JWT vs session server-side</a>
+        <a href="#phat-hien">Cách phát hiện</a>
+        <a href="#devops">Góc nhìn DevOps</a>
+        <a href="#tom-tat">Tóm tắt</a>
+        <a href="#on-tap">Câu hỏi ôn tập</a>
+      </nav>
+    </aside>
+  </div>
+  <script src="../../../js/docs.js"></script>
+</body>
+</html>

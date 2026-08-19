@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chương 29: Kubernetes Security liên quan web — Hieu Nguyen</title>
+  <meta name="description" content="Ingress, SSRF to kube API, PSS, NetworkPolicy, image, secrets.">
+  <link rel="icon" href="../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../">i'm<span>.hiu</span></a>
+    <nav class="docs-series">
+      <a class="active" href="../">Web Security</a>
+      <a href="../../cks-exam/">CKS exam</a>
+    </nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-docs-root="../" data-active="29">
+      <div class="docs-nav-label">Web Security</div>
+      <ul class="docs-nav" id="docsNav"></ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../">Home</a>
+        <span>›</span>
+        <a href="../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../">Overview</a>
+        <span>›</span>
+        <span>29. Kubernetes</span>
+      </div>
+      <h1>Chương 29: Kubernetes Security liên quan web</h1>
+      <p class="lede">Ingress, SA token, secret env, NetworkPolicy — web bug đội cánh cluster.</p>
+      <div class="docs-meta">
+        <span><strong>Tác giả:</strong> Hieu Nguyen (Ryan)</span>
+        <span><strong>Phần:</strong> VIII — DevOps</span>
+        <span><strong>Cập nhật:</strong> Aug 2026</span>
+      </div>
+      <h2 id="khai-niem">Khái niệm</h2>
+<p>Web app trên K8s thừa attack surface: API server, etcd, IMDS, sidecar. Control cluster là hàng rào khi app lỗi.</p>
+<h2 id="ingress">Ingress</h2>
+<ul>
+        <li>TLS, security headers (Chương 2).</li>
+        <li>Không expose dashboard / admin.</li>
+        <li>snippet annotation cẩn thận (inject config).</li>
+      </ul>
+<h2 id="ssrf-k8s">SSRF tới Kubernetes API</h2>
+<p>Pod có SA token mặc định + SSRF = gọi API. Tắt automount; RBAC hẹp; egress deny API.</p>
+<h2 id="secrets-k8s">Secrets</h2>
+<p>Không env nếu có thể (còn dump /proc). Volume file + KMS encryption etcd. Không secret trong image/Helm default.</p>
+<h2 id="pss">Pod Security</h2>
+<p>restricted PSS: non-root, drop caps, no priv-esc, seccomp. Policy namespace.</p>
+<h2 id="np">NetworkPolicy</h2>
+<p>Default deny ingress/egress; allow DNS + DB + IdP.</p>
+<h2 id="image">Image</h2>
+<p>Digest pin, scan CI, distroless, không latest.</p>
+<h2 id="tom-tat">Tóm tắt</h2>
+<ul>
+        <li>Không automount SA.</li>
+        <li>PSS restricted.</li>
+        <li>NP default deny.</li>
+        <li>Secret không plaintext Git.</li>
+      </ul>
+<h2 id="on-tap">Câu hỏi ôn tập</h2>
+<ol>
+        <li>Automount SA + SSRF?</li>
+        <li>PSS restricted cấm gì?</li>
+        <li>Env secret lộ đường nào?</li>
+        <li>Ingress snippet rủi ro?</li>
+        <li>Pin digest khác tag?</li>
+      </ol>
+
+      <div class="docs-tags">
+        <span class="docs-tag">kubernetes</span>
+        <span class="docs-tag">ingress</span>
+        <span class="docs-tag">pss</span>
+      </div>
+      <div class="docs-pager">
+        <a href="../28/">Previous · 28. API Security</a>
+        <a href="../30/">Next · 30. CI/CD</a>
+      </div>
+    </article>
+    <aside class="docs-toc">
+      <div class="docs-toc-title">On this page</div>
+      <nav>
+        <a href="#khai-niem">Khái niệm</a>
+        <a href="#ingress">Ingress</a>
+        <a href="#ssrf-k8s">SSRF tới Kubernetes API</a>
+        <a href="#secrets-k8s">Secrets</a>
+        <a href="#pss">Pod Security</a>
+        <a href="#np">NetworkPolicy</a>
+        <a href="#image">Image</a>
+        <a href="#tom-tat">Tóm tắt</a>
+        <a href="#on-tap">Câu hỏi ôn tập</a>
+      </nav>
+    </aside>
+  </div>
+  <script src="../../../js/docs.js"></script>
+</body>
+</html>

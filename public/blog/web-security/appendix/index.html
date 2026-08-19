@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Phụ lục: Lộ trình 30 ngày — Hieu Nguyen</title>
+  <meta name="description" content="Lộ trình 30 ngày Web Security cho DevOps: lab PortSwigger, không test hệ thống ngoài scope.">
+  <link rel="icon" href="../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../">i'm<span>.hiu</span></a>
+    <nav class="docs-series">
+      <a class="active" href="../">Web Security</a>
+      <a href="../../cks-exam/">CKS exam</a>
+    </nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-docs-root="../" data-active="appendix">
+      <div class="docs-nav-label">Web Security</div>
+      <ul class="docs-nav" id="docsNav"></ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../">Home</a>
+        <span>›</span>
+        <a href="../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../">Overview</a>
+        <span>›</span>
+        <span>Appendix</span>
+      </div>
+      <h1>Phụ lục: Lộ trình 30 ngày</h1>
+      <p class="lede">Một tháng để đọc series và làm lab được phép — không phải trở thành pentester.</p>
+      <div class="docs-meta">
+        <span><strong>Tác giả:</strong> Hieu Nguyen (Ryan)</span>
+        <span><strong>Phần:</strong> Appendix</span>
+        <span><strong>Cập nhật:</strong> Aug 2026</span>
+      </div>
+      <h2 id="tong-quan">Tổng quan</h2>
+<p>Mỗi ngày: đọc chương + lab PortSwigger/Juice Shop local. Không test prod người khác.</p>
+<h2 id="w1">Tuần 1 — Nền tảng</h2>
+<ul>
+        <li>Ngày 1: lab DVWA/Juice Shop local, Burp CA.</li>
+        <li>Ngày 2–3: HTTP + Burp History/Repeater.</li>
+        <li>Ngày 4–5: Authentication.</li>
+        <li>Ngày 6–7: Session + Access Control.</li>
+      </ul>
+<h2 id="w2">Tuần 2 — Injection & XSS</h2>
+<ul>
+        <li>8–9: SQLi lab Academy.</li>
+        <li>10: NoSQL + command injection khái niệm + lab.</li>
+        <li>11–12: XSS + CSP trên app bạn.</li>
+        <li>13–14: SSRF/XXE — chú IMDS trên cloud lab của bạn.</li>
+      </ul>
+<h2 id="w3">Tuần 3 — Protocol & client</h2>
+<ul>
+        <li>15–16: OAuth/JWT config IdP.</li>
+        <li>17–18: CORS/CSRF trên SPA.</li>
+        <li>19–20: Upload + path.</li>
+        <li>21: Race + logic — test tiền trên staging.</li>
+      </ul>
+<h2 id="w4">Tuần 4 — Infra & DevOps</h2>
+<ul>
+        <li>22–23: Clickjacking, cache, smuggling (đọc + patch Ingress).</li>
+        <li>24–25: SSTI/deserialize — review code.</li>
+        <li>26–27: GraphQL/API gateway.</li>
+        <li>28–29: K8s/CI/secrets/cloud checklist.</li>
+        <li>30: IR tabletop + ghi gap.</li>
+      </ul>
+<h2 id="res">Tài nguyên</h2>
+<ul>
+        <li>PortSwigger Academy, OWASP WSTG, k8s.io security.</li>
+        <li>Trivy, gitleaks, kube-score, Falco.</li>
+        <li>CKS notes nếu bạn thi CNCF.</li>
+      </ul>
+<blockquote>Mindset: vá control, không sưu tầm payload. Tracking: checklist Chương 35.</blockquote>
+<h2 id="tom-tat">Tóm tắt</h2>
+<ul>
+        <li>Lab hợp pháp.</li>
+        <li>Đọc + làm.</li>
+        <li>Tuần 4 mang vào cluster thật của bạn.</li>
+        <li>Gap → ticket.</li>
+      </ul>
+<h2 id="on-tap">Câu hỏi ôn tập</h2>
+<ol>
+        <li>Vì sao tuần 1 trước injection?</li>
+        <li>Lab SSRF trên cloud công ty khi nào được?</li>
+        <li>Ngày 30 nên ra artifact gì?</li>
+        <li>Academy thay production scan?</li>
+        <li>Làm song song CKS thế nào?</li>
+      </ol>
+
+      <div class="docs-tags">
+        <span class="docs-tag">roadmap</span>
+        <span class="docs-tag">learning</span>
+      </div>
+      <div class="docs-pager">
+        <a href="../35/">Previous · 35. Checklist</a>
+        <a href="../">Overview</a>
+      </div>
+    </article>
+    <aside class="docs-toc">
+      <div class="docs-toc-title">On this page</div>
+      <nav>
+        <a href="#tong-quan">Tổng quan</a>
+        <a href="#w1">Tuần 1 — Nền tảng</a>
+        <a href="#w2">Tuần 2 — Injection & XSS</a>
+        <a href="#w3">Tuần 3 — Protocol & client</a>
+        <a href="#w4">Tuần 4 — Infra & DevOps</a>
+        <a href="#res">Tài nguyên</a>
+        <a href="#tom-tat">Tóm tắt</a>
+        <a href="#on-tap">Câu hỏi ôn tập</a>
+      </nav>
+    </aside>
+  </div>
+  <script src="../../../js/docs.js"></script>
+</body>
+</html>

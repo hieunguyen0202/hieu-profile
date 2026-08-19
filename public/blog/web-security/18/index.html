@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chương 18: Path Traversal — Hieu Nguyen</title>
+  <meta name="description" content="Path traversal, canonicalize, chroot, object key.">
+  <link rel="icon" href="../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../">i'm<span>.hiu</span></a>
+    <nav class="docs-series">
+      <a class="active" href="../">Web Security</a>
+      <a href="../../cks-exam/">CKS exam</a>
+    </nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-docs-root="../" data-active="18">
+      <div class="docs-nav-label">Web Security</div>
+      <ul class="docs-nav" id="docsNav"></ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../">Home</a>
+        <span>›</span>
+        <a href="../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../">Overview</a>
+        <span>›</span>
+        <span>18. Path Traversal</span>
+      </div>
+      <h1>Chương 18: Path Traversal</h1>
+      <p class="lede">Ghép path từ user rồi đọc file. Dấu chấm chấm vẫn là bug 30 năm.</p>
+      <div class="docs-meta">
+        <span><strong>Tác giả:</strong> Hieu Nguyen (Ryan)</span>
+        <span><strong>Phần:</strong> V — Server-side</span>
+        <span><strong>Cập nhật:</strong> Aug 2026</span>
+      </div>
+      <h2 id="khai-niem">Khái niệm</h2>
+<p>Input <code>../</code> hoặc encoding đi ra ngoài thư mục cho phép. Ảnh hưởng read file config, key, hoặc ghi đè.</p>
+<h2 id="phong">Phòng chống</h2>
+<ul>
+        <li>Không ghép path user; dùng ID → object key map.</li>
+        <li>Canonicalize rồi kiểm tra prefix nằm trong root.</li>
+        <li>OS allowlist filename charset.</li>
+        <li>Least privilege FS; không chạy root.</li>
+      </ul>
+<h2 id="devops">Góc nhìn DevOps</h2>
+<p>readOnlyRootFilesystem; volume chỉ data dir. Secret không mount vào chỗ app “download template”.</p>
+<h2 id="tom-tat">Tóm tắt</h2>
+<ul>
+        <li>Map ID → file.</li>
+        <li>Canonical path check.</li>
+        <li>FS hẹp.</li>
+        <li>Không tin encoding một lần.</li>
+      </ul>
+<h2 id="on-tap">Câu hỏi ôn tập</h2>
+<ol>
+        <li>Canonicalize giải quyết gì?</li>
+        <li>URL encoding traversal né filter thế nào (ý tưởng)?</li>
+        <li>Object storage key user-controlled rủi ro?</li>
+        <li>readOnlyRootFS đủ không?</li>
+        <li>Log path đã resolve để làm gì?</li>
+      </ol>
+
+      <div class="docs-tags">
+        <span class="docs-tag">path-traversal</span>
+        <span class="docs-tag">lfi</span>
+      </div>
+      <div class="docs-pager">
+        <a href="../17/">Previous · 17. File Upload</a>
+        <a href="../19/">Next · 19. Open Redirect</a>
+      </div>
+    </article>
+    <aside class="docs-toc">
+      <div class="docs-toc-title">On this page</div>
+      <nav>
+        <a href="#khai-niem">Khái niệm</a>
+        <a href="#phong">Phòng chống</a>
+        <a href="#devops">Góc nhìn DevOps</a>
+        <a href="#tom-tat">Tóm tắt</a>
+        <a href="#on-tap">Câu hỏi ôn tập</a>
+      </nav>
+    </aside>
+  </div>
+  <script src="../../../js/docs.js"></script>
+</body>
+</html>

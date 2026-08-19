@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chương 33: Logging và Detection — Hieu Nguyen</title>
+  <meta name="description" content="What to log, what not, SIEM, detection rules.">
+  <link rel="icon" href="../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../">i'm<span>.hiu</span></a>
+    <nav class="docs-series">
+      <a class="active" href="../">Web Security</a>
+      <a href="../../cks-exam/">CKS exam</a>
+    </nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-docs-root="../" data-active="33">
+      <div class="docs-nav-label">Web Security</div>
+      <ul class="docs-nav" id="docsNav"></ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../">Home</a>
+        <span>›</span>
+        <a href="../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../">Overview</a>
+        <span>›</span>
+        <span>33. Logging</span>
+      </div>
+      <h1>Chương 33: Logging và Detection</h1>
+      <p class="lede">A09: không log thì không incident — chỉ có tin đồn.</p>
+      <div class="docs-meta">
+        <span><strong>Tác giả:</strong> Hieu Nguyen (Ryan)</span>
+        <span><strong>Phần:</strong> VIII — DevOps</span>
+        <span><strong>Cập nhật:</strong> Aug 2026</span>
+      </div>
+      <h2 id="what">What to log</h2>
+<ul>
+        <li>Authn: success/fail/MFA/reset, id, IP, UA.</li>
+        <li>Authz deny (403) với object id.</li>
+        <li>Admin / money actions.</li>
+        <li>4xx/5xx spike, WAF block.</li>
+        <li>K8s audit: secret get, rbac bind.</li>
+      </ul>
+<h2 id="not">Không log</h2>
+<p>Password, cookie, Authorization, card, token query. Mask. Retention và mã hóa at rest.</p>
+<h2 id="detect">Detection</h2>
+<ul>
+        <li>Spray: fail login nhiều user một IP.</li>
+        <li>IDOR: 403/200 xen kẽ cùng user khác id.</li>
+        <li>SSRF: app gọi 169.254.</li>
+        <li>Privilege: RoleBinding cluster-admin.</li>
+      </ul>
+<h2 id="stack">Stack</h2>
+<p>OTLP/Loki/ELK + alert. Pipeline parse JSON structured. Time sync NTP.</p>
+<h2 id="tom-tat">Tóm tắt</h2>
+<ul>
+        <li>Structured log.</li>
+        <li>Không secret.</li>
+        <li>Alert abuse.</li>
+        <li>K8s audit song song app.</li>
+      </ul>
+<h2 id="on-tap">Câu hỏi ôn tập</h2>
+<ol>
+        <li>Field auth nên có?</li>
+        <li>Vì sao không log Authorization?</li>
+        <li>Spray vs brute một user?</li>
+        <li>Audit Secret get?</li>
+        <li>Retention vs forensic?</li>
+      </ol>
+
+      <div class="docs-tags">
+        <span class="docs-tag">logging</span>
+        <span class="docs-tag">detection</span>
+        <span class="docs-tag">siem</span>
+      </div>
+      <div class="docs-pager">
+        <a href="../32/">Previous · 32. Cloud</a>
+        <a href="../34/">Next · 34. Incident Response</a>
+      </div>
+    </article>
+    <aside class="docs-toc">
+      <div class="docs-toc-title">On this page</div>
+      <nav>
+        <a href="#what">What to log</a>
+        <a href="#not">Không log</a>
+        <a href="#detect">Detection</a>
+        <a href="#stack">Stack</a>
+        <a href="#tom-tat">Tóm tắt</a>
+        <a href="#on-tap">Câu hỏi ôn tập</a>
+      </nav>
+    </aside>
+  </div>
+  <script src="../../../js/docs.js"></script>
+</body>
+</html>
