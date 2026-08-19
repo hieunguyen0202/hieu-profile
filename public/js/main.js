@@ -235,8 +235,14 @@
       status.textContent = "exit 0  —  message queued. I'll get back to you.";
       form.reset();
     } catch (err) {
-      status.className = "form-status err";
-      status.textContent = "send failed — try email instead: samelnguyen08@gmail.com";
+      const to = "nguyenxxuanhieu.bd@gmail.com";
+      const subject = encodeURIComponent(`Portfolio contact from ${payload.name || "visitor"}`);
+      const body = encodeURIComponent(
+        `${payload.message || ""}\n\n— ${payload.name || ""} <${payload.email || ""}>`
+      );
+      window.location.href = `mailto:${to}?subject=${subject}&body=${body}`;
+      status.className = "form-status ok";
+      status.textContent = "opening mail client → nguyenxxuanhieu.bd@gmail.com";
     }
   });
 })();

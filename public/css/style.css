@@ -297,7 +297,7 @@ section {
 .contact-terminal {
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: 4px;
+  border-radius: 14px;
   overflow: hidden;
   box-shadow: 0 0 60px rgba(34, 211, 238, 0.05), 0 20px 80px rgba(0, 0, 0, 0.5);
 }
@@ -444,7 +444,7 @@ section {
   font-size: 11px;
   padding: 4px 10px;
   border: 1px solid var(--border);
-  border-radius: 2px;
+  border-radius: 8px;
   color: var(--muted);
   letter-spacing: 1px;
 }
@@ -466,6 +466,7 @@ section {
   font-size: 12px;
   padding: 10px 24px;
   border: 1px solid var(--accent);
+  border-radius: 10px;
   background: transparent;
   color: var(--accent);
   letter-spacing: 2px;
@@ -554,6 +555,7 @@ section {
   margin-bottom: 24px;
   overflow: hidden;
   border: 1px solid var(--accent);
+  border-radius: 14px;
 }
 
 .profile-img-wrap::before {
@@ -561,6 +563,7 @@ section {
   position: absolute;
   inset: -4px;
   border: 1px solid var(--accent);
+  border-radius: 16px;
   opacity: 0.35;
   transform: translate(6px, 6px);
   pointer-events: none;
