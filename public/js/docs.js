@@ -153,6 +153,7 @@
       ].join("")),
       cksItem("solved-questions", "CKS: Solved Questions"),
       cksItem("tips", "CKS Tips"),
+      cksItem("real-world-exam", "CKS Real World exam"),
     ].join("");
   } else if (navEl) {
     navEl.innerHTML = [

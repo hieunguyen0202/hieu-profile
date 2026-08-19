@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CKS Real World exam — practice tasks — Hieu Nguyen</title>
+  <meta name="description" content="13 CKS-style practice tasks: kube-bench, API server, ImagePolicyWebhook, Dockerfile, Falco, immutability, SA tokens, SBOM, Docker daemon, TLS, audit, NetworkPolicy, Ingress.">
+  <link rel="icon" href="../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../">i'm<span>.hieu</span></a>
+    <nav class="docs-series">
+      <a href="../../../blog/web-security/">Web Security</a>
+      <a class="active" href="../">CKS exam</a>
+    </nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-nav="cks" data-docs-root="../" data-active="real-world-exam">
+      <div class="docs-nav-label">CKS</div>
+      <ul class="docs-nav" id="docsNav"></ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../">Home</a>
+        <span>›</span>
+        <a href="../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../">CKS</a>
+        <span>›</span>
+        <span>Real World exam</span>
+      </div>
+
+      <h1>CKS Real World exam — 13 practice tasks</h1>
+      <p class="lede">Luyện trên <strong>cluster lab của bạn</strong>. Đọc đề → làm với kubernetes.io/docs → rồi mới xem pass criteria.</p>
+
+      <div class="docs-meta">
+        <span><strong>Format:</strong> 13 tasks · ~CKS pace</span>
+        <span><strong>Rule:</strong> your lab only</span>
+        <span><strong>Docs:</strong> kubernetes.io/docs</span>
+      </div>
+
+      <blockquote>
+        Outline 13 chủ đề lấy từ file PDF ôn (CIS kubelet/etcd, API server, ImagePolicyWebhook, Dockerfile, runtime, SA, SBOM, Docker daemon, TLS, audit, NetPol, Ingress TLS).
+        Đây là <strong>đề luyện</strong> viết lại — không phải đề thi CNCF chính thức, không copy đáp án dump.
+      </blockquote>
+
+      <h2 id="strategy">Clock strategy</h2>
+      <ul>
+        <li>~16 task / 120 phút → 7–8 phút/task; vài task ăn 15–20 phút.</li>
+        <li>60 giây: quick win hay time sink? Bookmark sink, lấy điểm dễ trước.</li>
+        <li>Static pod / restart API server: làm gần cuối, verify cluster còn sống.</li>
+        <li>Chỉ sửa đúng chỗ đề yêu cầu (Dockerfile: một instruction; manifest: một field).</li>
+      </ul>
+
+      <h2 id="q1">Task 1 — CIS: kubelet + etcd</h2>
+      <p><strong>Domain:</strong> Cluster setup / CIS. <strong>Docs:</strong> kubelet config, etcd.</p>
+      <p><strong>Question.</strong> Scanner CIS (kube-bench kiểu) FAIL trên cluster kubeadm:</p>
+      <ul>
+        <li>kubelet: anonymous auth đang bật; authorization mode không được là AlwaysAllow — dùng webhook nếu được.</li>
+        <li>etcd: client cert auth phải bật.</li>
+      </ul>
+      <p>Sửa bằng config, restart component cho setting có hiệu lực. Runtime có thể là Docker — dùng <code>docker</code> nếu cần xem container control-plane.</p>
+      <p><strong>Pass when:</strong> kubelet không nhận anonymous; authz không AlwaysAllow; etcd <code>--client-cert-auth=true</code> (hoặc tương đương trong file config); process đã restart.</p>
+      <p><strong>Where:</strong> thường <code>/var/lib/kubelet/config.yaml</code>; etcd flags trong static pod <code>/etc/kubernetes/manifests/etcd.yaml</code>.</p>
+
+      <h2 id="q2">Task 2 — API server: anonymous, RBAC, NodeRestriction</h2>
+      <p><strong>Domain:</strong> Cluster hardening. <strong>Docs:</strong> kube-apiserver, admission controllers.</p>
+      <p><strong>Question.</strong> Siết kube-apiserver trên node control-plane:</p>
+      <ul>
+        <li>Tắt anonymous authentication.</li>
+        <li>Authorization mode phải gồm RBAC (và Node nếu đề yêu cầu), không AlwaysAllow.</li>
+        <li>Bật admission <code>NodeRestriction</code>.</li>
+      </ul>
+      <p><strong>Pass when:</strong> flags trên static pod apiserver đúng; API server Ready sau khi manifest đổi.</p>
+      <p><strong>Where:</strong> <code>/etc/kubernetes/manifests/kube-apiserver.yaml</code>.</p>
+
+      <h2 id="q3">Task 3 — ImagePolicyWebhook (fail closed)</h2>
+      <p><strong>Domain:</strong> Supply chain / admission. <strong>Docs:</strong> admission controllers, ImagePolicyWebhook.</p>
+      <p><strong>Question.</strong> Cluster đã có scanner HTTPS. Config admission còn dở:</p>
+      <ol>
+        <li>Enable plugin ImagePolicyWebhook trên API server + trỏ <code>--admission-control-config-file</code>.</li>
+        <li>Khi backend scanner lỗi: <strong>deny</strong> image (fail closed — không default-allow).</li>
+        <li>Kubeconfig webhook trỏ đúng URL scanner.</li>
+        <li>Mount hostPath thư mục config vào static pod apiserver nếu file nằm trên host.</li>
+        <li>Apply manifest test image xấu — phải bị reject. Xem log scanner nếu đề cho path log.</li>
+      </ol>
+      <p><strong>Pass when:</strong> deploy image bị cấm fail; log scanner có request (nếu có log).</p>
+
+      <h2 id="q4">Task 4 — Dockerfile + Deployment (đúng một chỗ)</h2>
+      <p><strong>Domain:</strong> Microservices / supply chain. <strong>Docs:</strong> Pods, securityContext.</p>
+      <p><strong>Question.</strong></p>
+      <ul>
+        <li>Dockerfile: sửa <em>một</em> instruction security (thường USER root → user không privileged). Không thêm/xóa dòng. <strong>Không docker build</strong>.</li>
+        <li>Deployment YAML: sửa <em>một</em> field (privileged / runAsUser / allowPrivilegeEscalation). Không thêm/xóa field.</li>
+        <li>Nếu đề cho UID unprivileged — dùng đúng UID đó (hay gặp 65535 / nobody).</li>
+      </ul>
+      <p><strong>Pass when:</strong> file trên disk đúng một chỗ; image không cần build.</p>
+
+      <h2 id="q5">Task 5 — Tìm workload đọc /dev/mem (hoặc syscall lạ)</h2>
+      <p><strong>Domain:</strong> Runtime / Falco. <strong>Docs:</strong> Falco, pods.</p>
+      <p><strong>Question.</strong> Có process/pod đang đụng device nhạy (<code>/dev/mem</code>, privileged, hostPath nguy hiểm). Dùng Falco / <code>crictl</code> / <code>kubectl</code> tìm namespace + pod + container. Ghi tên vào file đề yêu cầu. Có thể phải xóa hoặc siết workload.</p>
+      <p><strong>Pass when:</strong> đúng pod; evidence (Falco rule hit hoặc mounts).</p>
+
+      <h2 id="q6">Task 6 — Immutable container filesystem</h2>
+      <p><strong>Domain:</strong> Runtime immutability. <strong>Docs:</strong> securityContext.</p>
+      <p><strong>Question.</strong> Deployment cho sẵn: bật <code>readOnlyRootFilesystem: true</code>. Nếu app cần ghi, thêm volume (emptyDir) + volumeMount đúng path — không privileged.</p>
+      <p><strong>Pass when:</strong> pod Running; rootfs read-only; app không CrashLoop vì không ghi được.</p>
+
+      <h2 id="q7">Task 7 — Tắt automount ServiceAccount token</h2>
+      <p><strong>Domain:</strong> Service accounts. <strong>Docs:</strong> ServiceAccount, pods.</p>
+      <p><strong>Question.</strong> Namespace X: pod/deployment đang mount token SA mặc định. Tắt automount ở Pod spec và/hoặc SA <code>automountServiceAccountToken: false</code> đúng phạm vi đề (default SA vs named SA). Restart workload.</p>
+      <p><strong>Pass when:</strong> pod mới không còn volume token; app không cần API thì không mount.</p>
+
+      <h2 id="q8">Task 8 — Package vuln + SBOM</h2>
+      <p><strong>Domain:</strong> Supply chain. <strong>Docs:</strong> (tool trên node: trivy / syft — theo đề).</p>
+      <p><strong>Question.</strong> Image hoặc filesystem cho sẵn: tìm package version dễ tổn thương (CVE critical). Xuất SBOM SPDX (hoặc CycloneDX) vào path đề cho. Không bịa CVE — dùng scanner.</p>
+      <p><strong>Pass when:</strong> file SBOM tồn tại, format đúng; câu trả lời version khớp scan.</p>
+
+      <h2 id="q9">Task 9 — Hardening Docker daemon trên node</h2>
+      <p><strong>Domain:</strong> System hardening. <strong>Docs:</strong> dockerd, CIS docker.</p>
+      <p><strong>Question.</strong> Trên worker: siết <code>daemon.json</code> / systemd drop-in theo đề (userland-proxy, live-restore, no-new-privileges, userns, logging). Restart docker. Không phá kubelet.</p>
+      <p><strong>Pass when:</strong> <code>docker info</code> / file config khớp; node Ready.</p>
+
+      <h2 id="q10">Task 10 — TLS Secret cho Deployment/Ingress</h2>
+      <p><strong>Domain:</strong> Ingress / secrets. <strong>Docs:</strong> Secrets, Ingress TLS.</p>
+      <p><strong>Question.</strong> Có cert/key trên disk. Tạo Secret kiểu TLS trong đúng namespace. Gắn vào Ingress hoặc Deployment theo đề (tls.crt / tls.key). Không commit private key vào ConfigMap.</p>
+      <p><strong>Pass when:</strong> Secret type kubernetes.io/tls; Ingress <code>spec.tls</code> trỏ secretName đúng.</p>
+
+      <h2 id="q11">Task 11 — Audit policy: tạo + mở rộng</h2>
+      <p><strong>Domain:</strong> Logging. <strong>Docs:</strong> Auditing.</p>
+      <p><strong>Question.</strong></p>
+      <ol>
+        <li>Policy audit YAML: log RequestResponse cho secrets (hoặc group đề cho); Metadata cho phần còn lại; không log RequestReceived ồn.</li>
+        <li>API server: <code>--audit-policy-file</code>, <code>--audit-log-path</code>, volume mount.</li>
+        <li>Extend: thêm rule cho một resource khác (configmaps / exec).</li>
+      </ol>
+      <p><strong>Pass when:</strong> file log có event sau khi get secret; apiserver healthy.</p>
+
+      <h2 id="q12">Task 12 — NetworkPolicy cô lập namespace</h2>
+      <p><strong>Domain:</strong> Cluster setup. <strong>Docs:</strong> NetworkPolicy.</p>
+      <p><strong>Question.</strong> Default deny ingress (và egress nếu đề bảo). Allow: cùng namespace / namespace label / port cụ thể tới một app. DNS (53) nếu egress deny. Không mở 0.0.0.0/0 trừ khi đề bắt.</p>
+      <p><strong>Pass when:</strong> probe từ namespace lạ fail; probe được allow pass.</p>
+
+      <h2 id="q13">Task 13 — Ingress TLS + redirect HTTP→HTTPS</h2>
+      <p><strong>Domain:</strong> Ingress. <strong>Docs:</strong> Ingress, certs.</p>
+      <p><strong>Question.</strong> Ingress (nginx hoặc Cilium tùy lab): TLS secret, host đúng, backend Service. Bật redirect HTTP sang HTTPS (annotation hoặc HTTPRoute tùy controller trên cluster).</p>
+      <p><strong>Pass when:</strong> :443 TLS ok; :80 redirect; không terminate nhầm.</p>
+
+      <h2 id="checklist">Self-check trước khi nộp (lab)</h2>
+      <ul>
+        <li>Đúng context / namespace.</li>
+        <li>Static pod: đợi Ready, không để apiserver CrashLoop.</li>
+        <li>Đề nói “do not build” / “do not add fields” thì tuân thủ.</li>
+        <li>Ghi answer file đúng path nếu có.</li>
+      </ul>
+
+      <div class="docs-tags">
+        <span class="docs-tag">cks</span>
+        <span class="docs-tag">practice</span>
+        <span class="docs-tag">kube-bench</span>
+        <span class="docs-tag">admission</span>
+        <span class="docs-tag">networkpolicy</span>
+      </div>
+      <div class="docs-pager">
+        <a href="../tips/">Previous · CKS Tips</a>
+        <a href="../../../#blogs">All blogs</a>
+      </div>
+    </article>
+    <aside class="docs-toc">
+      <div class="docs-toc-title">On this page</div>
+      <nav>
+        <a href="#strategy">Clock strategy</a>
+        <a href="#q1">1. CIS kubelet/etcd</a>
+        <a href="#q2">2. API server</a>
+        <a href="#q3">3. ImagePolicyWebhook</a>
+        <a href="#q4">4. Dockerfile + deploy</a>
+        <a href="#q5">5. /dev/mem</a>
+        <a href="#q6">6. Immutability</a>
+        <a href="#q7">7. SA automount</a>
+        <a href="#q8">8. SBOM</a>
+        <a href="#q9">9. Docker daemon</a>
+        <a href="#q10">10. TLS secret</a>
+        <a href="#q11">11. Audit</a>
+        <a href="#q12">12. NetworkPolicy</a>
+        <a href="#q13">13. Ingress TLS</a>
+        <a href="#checklist">Self-check</a>
+      </nav>
+    </aside>
+  </div>
+  <script src="../../../js/docs.js"></script>
+</body>
+</html>

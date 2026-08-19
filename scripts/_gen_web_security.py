@@ -110,7 +110,7 @@ def wrap(cid, crumb, title, lede, part, desc, body, tags):
   <div class="grid-bg"></div>
   <header class="docs-topbar">
     <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
-    <a class="docs-brand" href="../../../">i'm<span>.hiu</span></a>
+    <a class="docs-brand" href="../../../">i'm<span>.hieu</span></a>
     <nav class="docs-series">
       <a class="active" href="../">Web Security</a>
       <a href="../../cks-exam/">CKS exam</a>

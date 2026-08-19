@@ -167,7 +167,7 @@ def wrap(slug: str, title: str, body: str) -> str:
   <div class="grid-bg"></div>
   <header class="docs-topbar">
     <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
-    <a class="docs-brand" href="{home}">i'm<span>.hiu</span></a>
+    <a class="docs-brand" href="{home}">i'm<span>.hieu</span></a>
     <nav class="docs-series">
       <a href="{home}blog/web-security/">Web Security</a>
       <a class="active" href="{href("exam")}">CKS exam</a>
