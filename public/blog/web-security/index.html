@@ -25,87 +25,9 @@
   </header>
 
   <div class="docs-shell">
-    <aside class="docs-sidebar" id="docsSidebar">
+    <aside class="docs-sidebar" id="docsSidebar" data-docs-root="./" data-active="overview">
       <div class="docs-nav-label">Web Security</div>
-      <ul class="docs-nav">
-        <li><a class="active" href="./">Overview</a></li>
-        <li class="group open">
-          <button type="button">Part I: Fundamentals <span class="chevron">▸</span></button>
-          <ul class="nested">
-            <li><span class="soon">01. Giới thiệu</span></li>
-            <li><span class="soon">02. HTTP Fundamentals</span></li>
-            <li><span class="soon">03. Burp Suite</span></li>
-          </ul>
-        </li>
-        <li class="group">
-          <button type="button">Part II: Auth &amp; Authorization <span class="chevron">▸</span></button>
-          <ul class="nested">
-            <li><span class="soon">04. Authentication</span></li>
-            <li><span class="soon">05. Session Management</span></li>
-            <li><span class="soon">06. Access Control</span></li>
-            <li><span class="soon">07. OAuth 2.0</span></li>
-            <li><span class="soon">08. JWT</span></li>
-          </ul>
-        </li>
-        <li class="group">
-          <button type="button">Part III: Client-Side <span class="chevron">▸</span></button>
-          <ul class="nested">
-            <li><span class="soon">09. CORS</span></li>
-            <li><span class="soon">10. CSRF</span></li>
-            <li><span class="soon">11. XSS</span></li>
-            <li><span class="soon">22. Clickjacking</span></li>
-          </ul>
-        </li>
-        <li class="group">
-          <button type="button">Part IV: Injection <span class="chevron">▸</span></button>
-          <ul class="nested">
-            <li><span class="soon">12. SQL Injection</span></li>
-            <li><span class="soon">13. NoSQL Injection</span></li>
-            <li><span class="soon">14. Command Injection</span></li>
-            <li><span class="soon">16. XXE</span></li>
-            <li><span class="soon">25. SSTI</span></li>
-          </ul>
-        </li>
-        <li class="group">
-          <button type="button">Part V: Server-Side <span class="chevron">▸</span></button>
-          <ul class="nested">
-            <li><span class="soon">15. SSRF</span></li>
-            <li><span class="soon">17. File Upload</span></li>
-            <li><span class="soon">18. Path Traversal</span></li>
-            <li><span class="soon">19. Open Redirect</span></li>
-            <li><span class="soon">20. Race Condition</span></li>
-            <li><span class="soon">21. Business Logic</span></li>
-            <li><span class="soon">26. Insecure Deserialization</span></li>
-          </ul>
-        </li>
-        <li class="group">
-          <button type="button">Part VI: Infra &amp; Protocols <span class="chevron">▸</span></button>
-          <ul class="nested">
-            <li><span class="soon">23. Web Cache Poisoning</span></li>
-            <li><span class="soon">24. HTTP Request Smuggling</span></li>
-          </ul>
-        </li>
-        <li class="group">
-          <button type="button">Part VII: API &amp; Architecture <span class="chevron">▸</span></button>
-          <ul class="nested">
-            <li><span class="soon">27. GraphQL Security</span></li>
-            <li><span class="soon">28. API Security</span></li>
-          </ul>
-        </li>
-        <li class="group">
-          <button type="button">Part VIII: DevOps Security <span class="chevron">▸</span></button>
-          <ul class="nested">
-            <li><span class="soon">29. Kubernetes Security</span></li>
-            <li><span class="soon">30. CI/CD Security</span></li>
-            <li><span class="soon">31. Secrets Management</span></li>
-            <li><span class="soon">32. Cloud Security</span></li>
-            <li><span class="soon">33. Logging &amp; Detection</span></li>
-            <li><span class="soon">34. Incident Response</span></li>
-            <li><span class="soon">35. Checklist cho DevOps</span></li>
-          </ul>
-        </li>
-        <li><span class="soon">Appendix</span></li>
-      </ul>
+      <ul class="docs-nav" id="docsNav"></ul>
     </aside>
 
     <article class="docs-main">
@@ -191,7 +113,7 @@
 
       <h3 id="phan-i">Phần I: Nền tảng</h3>
       <ul>
-        <li>Chương 1: Giới thiệu Web Security</li>
+        <li>Chương 1: <a href="01-gioi-thieu/">Giới thiệu Web Security</a></li>
         <li>Chương 2: HTTP Fundamentals</li>
         <li>Chương 3: Burp Suite — công cụ đọc request</li>
       </ul>
@@ -269,7 +191,7 @@
       </div>
 
       <div class="docs-pager">
-        <span class="docs-pager-muted">Next · 01. Giới thiệu — coming soon</span>
+        <a href="01-gioi-thieu/">Next · 01. Giới thiệu</a>
       </div>
     </article>
 

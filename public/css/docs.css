@@ -450,10 +450,36 @@ body.docs::before {
 
 .docs-pager {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
+  gap: 16px;
   margin-top: 40px;
   padding-top: 20px;
   border-top: 1px solid var(--border);
+  font-weight: 600;
+}
+
+.docs-pager a:only-child,
+.docs-pager .docs-pager-muted:only-child {
+  margin-left: auto;
+}
+
+.docs-main pre {
+  margin: 16px 0 20px;
+  padding: 16px 18px;
+  overflow-x: auto;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-family: var(--mono);
+  font-size: 12.5px;
+  line-height: 1.55;
+  color: var(--text);
+}
+
+.docs-main pre code {
+  background: none;
+  padding: 0;
+  color: inherit;
 }
 
 .docs-pager-muted {

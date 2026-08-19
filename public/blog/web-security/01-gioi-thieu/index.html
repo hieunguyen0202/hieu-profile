@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chương 1: Giới thiệu Web Security — Hieu Nguyen</title>
+  <meta name="description" content="Vì sao DevOps cần học web security: CIA triad, OWASP Top 10, attack surface, shift-left, và defense in depth.">
+  <link rel="icon" href="../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../">i'm<span>.hiu</span></a>
+    <span class="docs-crumb">~/blogs/web-security/01</span>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../#blogs">blogs</a>
+  </header>
+
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-docs-root="../" data-active="01-gioi-thieu">
+      <div class="docs-nav-label">Web Security</div>
+      <ul class="docs-nav" id="docsNav"></ul>
+    </aside>
+
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../">Home</a>
+        <span>›</span>
+        <a href="../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../">Overview</a>
+        <span>›</span>
+        <span>01. Giới thiệu</span>
+      </div>
+
+      <h1>Chương 1: Giới thiệu Web Security</h1>
+      <p class="lede">Hạ tầng bạn mở ra internet cũng là cửa mà attacker nhìn thấy đầu tiên.</p>
+
+      <div class="docs-meta">
+        <span><strong>Tác giả:</strong> Hieu Nguyen (Ryan)</span>
+        <span><strong>Phần:</strong> I — Fundamentals</span>
+        <span><strong>Cập nhật:</strong> Aug 2026</span>
+      </div>
+
+      <h2 id="tai-sao">Tại sao DevOps cần học Web Security?</h2>
+      <p>
+        Một bucket object storage public nhầm, một Ingress không TLS, một secret nhét trong
+        <code>env</code> của Pod — không dòng nào trong đó là “bug ứng dụng”. Đó là quyết định vận hành.
+        DevOps / platform engineer là người chọn cách deploy, traffic đi đâu, secret nằm ở đâu,
+        và network policy siết thế nào. Mỗi lựa chọn đó tạo ra hoặc khép một lỗ.
+      </p>
+      <blockquote>
+        Developer viết endpoint. Bạn quyết định endpoint đó có bị phơi ra internet, log có đủ để điều tra,
+        và dependency có bị quét trước khi lên production hay không.
+      </blockquote>
+      <p>Nói ngắn: bạn không cần thành pentester. Bạn cần đọc được attack surface của stack mình đang giữ.</p>
+
+      <h2 id="khai-niem">Khái niệm — CIA Triad</h2>
+      <p>
+        <strong>Web security</strong> là tập kỹ thuật, quy trình và control để bảo vệ ứng dụng web
+        khỏi lạm dụng từ ngoài và từ trong. Ba trụ cột (CIA):
+      </p>
+      <ul>
+        <li><strong>Confidentiality:</strong> chỉ người được phép đọc được dữ liệu. Token session không nằm trên CDN public.</li>
+        <li><strong>Integrity:</strong> dữ liệu không bị sửa lén. Số tiền giao dịch không bị đổi giữa client và ledger.</li>
+        <li><strong>Availability:</strong> dịch vụ còn mở khi cần. Rate-limit, autoscaling, và runbook khi bị flood.</li>
+      </ul>
+
+      <h2 id="threat-landscape">Threat landscape</h2>
+      <h3 id="ai-tan-cong">Ai đang ở phía bên kia?</h3>
+      <ul>
+        <li><strong>Script kiddies</strong> — tool có sẵn, volume cao, kỹ năng nông.</li>
+        <li><strong>Cybercrime</strong> — ransomware, trộm dữ liệu, fraud; động cơ là tiền.</li>
+        <li><strong>Hacktivist / nation-state</strong> — mục tiêu chính trị hoặc tình báo, tài nguyên lớn.</li>
+        <li><strong>Insider</strong> — nhân viên cố ý hoặc vô ý (secret dán Slack, IAM rộng quá).</li>
+        <li><strong>Bug bounty hunter</strong> — test trong scope, báo cáo có trách nhiệm. Đây là đồng minh.</li>
+      </ul>
+      <h3 id="vi-sao-web">Vì sao web hay bị nhắm?</h3>
+      <ul>
+        <li>Phơi internet 24/7 — không cần physical access.</li>
+        <li>Nhiều tầng: CDN, gateway, app, DB, cloud API, dependency.</li>
+        <li>Cấu hình mặc định thường “chạy được” hơn là “chặt”.</li>
+      </ul>
+
+      <h2 id="owasp">OWASP Top 10</h2>
+      <p>
+        <a href="https://owasp.org/www-project-top-ten/" target="_blank" rel="noopener">OWASP Top 10</a>
+        là danh sách lỗ hổng web phổ biến, cập nhật theo chu kỳ. Bản 2021:
+      </p>
+      <ol>
+        <li><strong>A01 Broken Access Control</strong> — người dùng làm được việc không thuộc quyền.</li>
+        <li><strong>A02 Cryptographic Failures</strong> — dữ liệu nhạy cảm không được bảo vệ đúng.</li>
+        <li><strong>A03 Injection</strong> — input thành lệnh (SQL, OS, LDAP, …).</li>
+        <li><strong>A04 Insecure Design</strong> — threat model thiếu từ đầu.</li>
+        <li><strong>A05 Security Misconfiguration</strong> — default password, debug, bucket public. <em>DevOps hay dính.</em></li>
+        <li><strong>A06 Vulnerable and Outdated Components</strong> — image / library lỗi thời.</li>
+        <li><strong>A07 Identification and Authentication Failures</strong> — login, session, MFA yếu.</li>
+        <li><strong>A08 Software and Data Integrity Failures</strong> — supply chain, artifact không ký.</li>
+        <li><strong>A09 Security Logging and Monitoring Failures</strong> — không thấy, không alert. <em>DevOps hay dính.</em></li>
+        <li><strong>A10 SSRF</strong> — server bị lôi đi gọi URL nội bộ / metadata.</li>
+      </ol>
+      <blockquote>
+        Hai mục DevOps “sở hữu” rõ nhất: <strong>A05 misconfig</strong> và <strong>A09 logging</strong>.
+        Pipeline không scan dependency thì A06 cũng về tay bạn.
+      </blockquote>
+
+      <h2 id="attack-surface">Attack surface</h2>
+      <p>
+        Attack surface là mọi điểm hệ thống nhận tương tác: header, route, file upload, metadata API, IAM.
+        Một request điển hình đi qua nhiều lớp — mỗi lớp là một bề mặt:
+      </p>
+<pre><code>Internet
+   │
+   ▼
+CDN / WAF
+   │
+   ▼
+Load balancer
+   │
+   ▼
+Ingress / API gateway (Nginx, Kong, …)
+   │  ← TLS, header, routing, rate-limit
+   ▼
+Application
+   │  ← authz, input validation
+   ▼
+Datastore / cache / queue
+   │
+   ▼
+Cloud API / object storage / IAM</code></pre>
+      <p>
+        DevOps kiểm soát hầu hết các tầng trừ business logic. Cách bạn deploy (privileged Pod, wide NetworkPolicy,
+        secret trong env) vẫn đổi risk của tầng app.
+      </p>
+
+      <h2 id="attacker-mindset">Tư duy đối phương (mức quy trình)</h2>
+      <p>
+        Pentest có trách nhiệm thường đi theo các pha: thu thập thông tin công khai → liệt kê dịch vụ
+        được phép trong scope → xác nhận lỗ hổng → báo cáo và vá. Mục đích của chương này không phải
+        dạy khai thác, mà để bạn thiết kế control đúng chỗ: giảm thông tin lộ trên header,
+        đóng port không cần, log đủ để phát hiện, vá nhanh khi scanner báo.
+      </p>
+
+      <h2 id="bug-bounty">Bug bounty — dùng kiến thức đúng chỗ</h2>
+      <p>
+        Công ty trả thưởng khi bạn tìm lỗ hổng <strong>trong scope, có ủy quyền</strong>.
+        Platform phổ biến: <a href="https://www.hackerone.com" target="_blank" rel="noopener">HackerOne</a>,
+        <a href="https://www.bugcrowd.com" target="_blank" rel="noopener">Bugcrowd</a>,
+        <a href="https://www.intigriti.com" target="_blank" rel="noopener">Intigriti</a>.
+      </p>
+      <p>
+        Quy tắc vàng: không test hệ thống không mời. Production của khách / công ty nếu không nằm trong
+        program thì không phải lab.
+      </p>
+
+      <h2 id="thuc-hanh">Môi trường thực hành hợp pháp</h2>
+      <ul>
+        <li>
+          <a href="https://portswigger.net/web-security" target="_blank" rel="noopener">PortSwigger Web Security Academy</a>
+          — lab có hướng dẫn, miễn phí, đúng scope.
+        </li>
+        <li>OWASP Juice Shop / DVWA — app cố ý lỗi, chỉ chạy <strong>local / lab của bạn</strong>.</li>
+        <li>TryHackMe / Hack The Box — CTF có phòng, không phải internet thật của người khác.</li>
+      </ul>
+
+      <h2 id="goc-devops">Góc nhìn DevOps</h2>
+      <p>Bốn thói quen mang vào pipeline và cluster:</p>
+      <ul>
+        <li>
+          <strong>WAF</strong> (Cloudflare, AWS WAF, ModSecurity) — một lớp, không phải viên đạn bạc.
+        </li>
+        <li>
+          <strong>Shift left:</strong> SAST (scan code), SCA (dependency, Trivy/Snyk), DAST (app đang chạy) trong CI.
+          SCA chạy sớm; DAST sau khi có môi trường test.
+        </li>
+        <li>
+          <strong>Defense in depth:</strong> WAF + validation + query parameterized + least privilege + monitoring.
+          Một lớp gãy thì lớp sau còn giữ.
+        </li>
+        <li>
+          <strong>Least privilege:</strong> container, service account, DB user — chỉ quyền việc đó cần.
+        </li>
+      </ul>
+
+      <h2 id="tom-tat">Tóm tắt</h2>
+      <ul>
+        <li>CIA: Confidentiality, Integrity, Availability.</li>
+        <li>Bạn đang giữ nhiều tầng attack surface, không chỉ “cài Jenkins”.</li>
+        <li>Thuộc OWASP Top 10; ưu tiên A05 và A09 trên đường đi của DevOps.</li>
+        <li>Học trên lab được phép. Vá bằng defense in depth + least privilege.</li>
+      </ul>
+
+      <h2 id="on-tap">Câu hỏi ôn tập</h2>
+      <ol>
+        <li>Ba trụ cột CIA là gì? Cho một ví dụ web cho mỗi trụ.</li>
+        <li>OWASP mục nào DevOps chịu trách nhiệm trực tiếp nhất?</li>
+        <li>Kể các tầng attack surface từ internet tới datastore.</li>
+        <li>SAST khác DAST chỗ nào? Cái nào nên có trong CI sớm?</li>
+        <li>Vì sao bug bounty có lợi cho cả công ty lẫn researcher — và điều kiện tiên quyết là gì?</li>
+      </ol>
+
+      <p class="docs-credit">
+        Cấu trúc chương bám
+        <a href="https://docs.huynhthientung.com/web-security/part1-fundamentals/01-intro" target="_blank" rel="noopener">Chương 1 — Giới thiệu Web Security</a>
+        (Huynh Thien Tung). Nội dung viết lại theo góc vận hành; không sao chép nguyên văn.
+      </p>
+
+      <div class="docs-tags">
+        <span class="docs-tag">web-security</span>
+        <span class="docs-tag">introduction</span>
+        <span class="docs-tag">owasp</span>
+        <span class="docs-tag">devops</span>
+      </div>
+
+      <div class="docs-pager">
+        <a href="../">Previous · Overview</a>
+        <span class="docs-pager-muted">Next · 02. HTTP Fundamentals — coming soon</span>
+      </div>
+    </article>
+
+    <aside class="docs-toc">
+      <div class="docs-toc-title">On this page</div>
+      <nav>
+        <a href="#tai-sao">Tại sao DevOps cần học</a>
+        <a href="#khai-niem">CIA Triad</a>
+        <a href="#threat-landscape">Threat landscape</a>
+        <a class="depth-3" href="#ai-tan-cong">Ai đang tấn công</a>
+        <a class="depth-3" href="#vi-sao-web">Vì sao web là mục tiêu</a>
+        <a href="#owasp">OWASP Top 10</a>
+        <a href="#attack-surface">Attack surface</a>
+        <a href="#attacker-mindset">Tư duy đối phương</a>
+        <a href="#bug-bounty">Bug bounty</a>
+        <a href="#thuc-hanh">Môi trường thực hành</a>
+        <a href="#goc-devops">Góc nhìn DevOps</a>
+        <a href="#tom-tat">Tóm tắt</a>
+        <a href="#on-tap">Câu hỏi ôn tập</a>
+      </nav>
+    </aside>
+  </div>
+
+  <script src="../../../js/docs.js"></script>
+</body>
+</html>

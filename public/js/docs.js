@@ -52,6 +52,82 @@
   }
 
   const sidebar = document.getElementById("docsSidebar");
+  const navEl = document.getElementById("docsNav");
+  const root = sidebar?.dataset.docsRoot || "./";
+  const active = sidebar?.dataset.active || "overview";
+
+  const item = (id, label) => {
+    if (id === active) return `<li><a class="active" href="${root}${id === "overview" ? "" : `${id}/`}">${label}</a></li>`;
+    if (id === "overview") return `<li><a href="${root}">${label}</a></li>`;
+    if (id === "01-gioi-thieu") return `<li><a href="${root}${id}/">${label}</a></li>`;
+    return `<li><span class="soon">${label}</span></li>`;
+  };
+
+  const group = (title, open, children) => `
+    <li class="group${open ? " open" : ""}">
+      <button type="button">${title} <span class="chevron">▸</span></button>
+      <ul class="nested">${children}</ul>
+    </li>`;
+
+  if (navEl) {
+    const partIOpen = active === "overview" || active === "01-gioi-thieu";
+    navEl.innerHTML = [
+      item("overview", "Overview"),
+      group("Part I: Fundamentals", partIOpen, [
+        item("01-gioi-thieu", "01. Giới thiệu"),
+        item("02-http", "02. HTTP Fundamentals"),
+        item("03-burp", "03. Burp Suite"),
+      ].join("")),
+      group("Part II: Auth &amp; Authorization", false, [
+        item("04", "04. Authentication"),
+        item("05", "05. Session Management"),
+        item("06", "06. Access Control"),
+        item("07", "07. OAuth 2.0"),
+        item("08", "08. JWT"),
+      ].join("")),
+      group("Part III: Client-Side", false, [
+        item("09", "09. CORS"),
+        item("10", "10. CSRF"),
+        item("11", "11. XSS"),
+        item("22", "22. Clickjacking"),
+      ].join("")),
+      group("Part IV: Injection", false, [
+        item("12", "12. SQL Injection"),
+        item("13", "13. NoSQL Injection"),
+        item("14", "14. Command Injection"),
+        item("16", "16. XXE"),
+        item("25", "25. SSTI"),
+      ].join("")),
+      group("Part V: Server-Side", false, [
+        item("15", "15. SSRF"),
+        item("17", "17. File Upload"),
+        item("18", "18. Path Traversal"),
+        item("19", "19. Open Redirect"),
+        item("20", "20. Race Condition"),
+        item("21", "21. Business Logic"),
+        item("26", "26. Insecure Deserialization"),
+      ].join("")),
+      group("Part VI: Infra &amp; Protocols", false, [
+        item("23", "23. Web Cache Poisoning"),
+        item("24", "24. HTTP Request Smuggling"),
+      ].join("")),
+      group("Part VII: API &amp; Architecture", false, [
+        item("27", "27. GraphQL Security"),
+        item("28", "28. API Security"),
+      ].join("")),
+      group("Part VIII: DevOps Security", false, [
+        item("29", "29. Kubernetes Security"),
+        item("30", "30. CI/CD Security"),
+        item("31", "31. Secrets Management"),
+        item("32", "32. Cloud Security"),
+        item("33", "33. Logging &amp; Detection"),
+        item("34", "34. Incident Response"),
+        item("35", "35. Checklist cho DevOps"),
+      ].join("")),
+      `<li><span class="soon">Appendix</span></li>`,
+    ].join("");
+  }
+
   const menuBtn = document.getElementById("docsMenuBtn");
   if (menuBtn && sidebar) {
     menuBtn.addEventListener("click", () => {
