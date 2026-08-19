@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CKS Exam — Certified Kubernetes Security Specialist — Hieu Nguyen</title>
+  <meta name="description" content="Ghi chú thi CKS: domains, format 2 giờ, allowed docs kubernetes.io, môi trường PSI, và cách ôn cho DevOps đã có CKA.">
+  <link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../">i'm<span>.hiu</span></a>
+    <nav class="docs-series">
+      <a href="../web-security/">Web Security</a>
+      <a class="active" href="./">CKS exam</a>
+    </nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../#blogs">blogs</a>
+  </header>
+
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-nav="cks" data-docs-root="./" data-active="overview">
+      <div class="docs-nav-label">CKS</div>
+      <ul class="docs-nav" id="docsNav"></ul>
+    </aside>
+
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../">Home</a>
+        <span>›</span>
+        <a href="../../#blogs">Blogs</a>
+        <span>›</span>
+        <span>CKS Exam</span>
+      </div>
+
+      <h1 id="cks">CKS Exam — Certified Kubernetes Security Specialist</h1>
+      <p class="lede">CKA chứng minh bạn chạy được cluster. CKS chứng minh bạn siết được nó khi có người cố ý phá.</p>
+
+      <div class="docs-meta">
+        <span><strong>Tác giả:</strong> Hieu Nguyen (Ryan)</span>
+        <span><strong>Kỳ:</strong> CNCF / Linux Foundation</span>
+        <span><strong>Cập nhật:</strong> Aug 2026</span>
+      </div>
+
+      <p>
+        <strong>CKS</strong> là kỳ thi thực hành: bảo mật ứng dụng container và nền Kubernetes
+        từ lúc build, lúc deploy, đến lúc runtime. Điều kiện: đã có
+        <strong>CKA</strong> còn hạn. Chứng chỉ CKS thường <strong>có hiệu lực 2 năm</strong> —
+        luôn đối chiếu trang
+        <a href="https://www.cncf.io/training/certification/cks/" target="_blank" rel="noopener">CNCF CKS</a>
+        trước khi đăng ký.
+      </p>
+      <blockquote>
+        Lệ phí quanh mức vài trăm USD; Black Friday / cuối năm hay có giảm.
+        Curriculum và trọng số domain CNCF cập nhật theo năm — PDF hiện hành trên site CNCF mới là nguồn sự thật.
+      </blockquote>
+
+      <h2 id="domains">What's on the exam?</h2>
+      <p>
+        Thi hands-on, không trắc nghiệm. Các nhóm kiến thức dưới đây bám curriculum phổ biến
+        (trọng số có thể đổi — check PDF mới nhất):
+      </p>
+
+      <h3 id="cluster-setup">Cluster Setup (~10%)</h3>
+      <ul>
+        <li>NetworkPolicy siết north-south / east-west.</li>
+        <li>Rà Kubernetes components theo CIS benchmark.</li>
+        <li>Ingress có TLS, không phơi dashboard / GUI không cần.</li>
+        <li>Che metadata endpoint (cloud IMDS) khỏi Pod không tin.</li>
+      </ul>
+
+      <h3 id="cluster-hardening">Cluster Hardening (~15%)</h3>
+      <ul>
+        <li>Khóa Kubernetes API: anonymous, insecure port, bind address.</li>
+        <li>RBAC tối thiểu; không cluster-admin “cho tiện”.</li>
+        <li>ServiceAccount: tắt automount mặc định, token ngắn hạn, quyền đúng việc.</li>
+      </ul>
+
+      <h3 id="system-hardening">System Hardening (~15%)</h3>
+      <ul>
+        <li>Thu hẹp OS trên node (package, user, ssh).</li>
+        <li>IAM / cloud identity cho node nhỏ nhất có thể.</li>
+        <li>Egress ra internet có chủ đích.</li>
+        <li>AppArmor / seccomp trên workload.</li>
+      </ul>
+
+      <h3 id="microservices">Minimize Microservice Vulnerabilities (~20%)</h3>
+      <ul>
+        <li>Security context: non-root, drop capabilities, read-only rootfs, no privilege escalation.</li>
+        <li>Secrets: không nhét env nếu không bắt buộc; mã hóa etcd; RBAC đọc secret hẹp.</li>
+        <li>Runtime sandbox (gVisor / Kata) khi multi-tenant.</li>
+      </ul>
+
+      <h3 id="supply-chain">Supply Chain Security (~20%)</h3>
+      <ul>
+        <li>Image nhỏ, distroless / distro tối giản.</li>
+        <li>Chỉ chạy image đã scan, ký, allowlist (admission).</li>
+        <li>Static analysis manifest (PSS, Kyverno/OPA, kube-score kiểu lab).</li>
+        <li>CVE trên image — Trivy / Grype trong pipeline, không chỉ “trên laptop”.</li>
+      </ul>
+
+      <h3 id="runtime">Monitoring, Logging &amp; Runtime Security (~20%)</h3>
+      <ul>
+        <li>Audit log API server: ai gọi gì, lúc nào.</li>
+        <li>Container immutability: không exec lung tung, không ghi filesystem nếu policy cấm.</li>
+        <li>Hành vi syscall / file (Falco hoặc tương đương) — detect, không phải “cài xong quên”.</li>
+        <li>Điều tra: logs, events, forensic tối thiểu khi Pod lạ.</li>
+      </ul>
+
+      <h2 id="exam-day">Exam day</h2>
+      <ul>
+        <li>Online, proctor theo thời gian thực (PSI Bridge).</li>
+        <li><strong>2 giờ</strong>, toàn thực hành. Pause không dừng đồng hồ.</li>
+        <li>Kết quả thường trong ~24 giờ qua email.</li>
+        <li>Fail lần 1 thường còn một retake trong voucher; hết hai lần thì mua lại. Policy cụ thể nằm trên Linux Foundation.</li>
+        <li>Đổi lịch / hủy: cần báo trước (thường 24 giờ) — trễ coi như mất lượt.</li>
+      </ul>
+      <p><strong>Phòng thi:</strong> yên, riêng, sáng; không cửa sổ / đèn mạnh sau lưng; một mình;
+      bàn trống. Webcam phải quay được phòng. Không VM để thi dù syscheck “pass”.
+      Chrome mới, mạng ổn, tắt VPN/torrent/stream. Một màn phụ thường được phép — xem hướng dẫn PSI hiện hành.</p>
+      <p>
+        Kiểm tra máy:
+        <a href="https://syscheck.bridge.psiexams.com/" target="_blank" rel="noopener">PSI syscheck</a>
+        và
+        <a href="https://docs.linuxfoundation.org/tc-docs/certification/tips-cka-and-ckad" target="_blank" rel="noopener">tips CKA/CKAD/CKS</a>.
+      </p>
+      <blockquote>
+        Proctor: không nói chuyện với người khác, không đọc đề to, không tai nghe (trừ y tế),
+        không giấy nháp ngoài notepad trên exam UI, không che mặt, nước trong suốt không nhãn.
+        Code of conduct đầy đủ nằm trên trang LF — đọc trước ngày thi.
+      </blockquote>
+
+      <h2 id="allowed">Allowed tools &amp; docs</h2>
+      <p>Trong VM thi bạn được:</p>
+      <ul>
+        <li>Terminal, man, file distro dưới <code>/usr/share/*</code>, package có sẵn.</li>
+        <li>Browser <strong>chỉ</strong> tài liệu được phép — điển hình:</li>
+      </ul>
+      <ul>
+        <li><a href="https://kubernetes.io/docs/" target="_blank" rel="noopener">https://kubernetes.io/docs/</a> (kể cả search trên docs)</li>
+        <li><a href="https://kubernetes.io/blog/" target="_blank" rel="noopener">https://kubernetes.io/blog/</a></li>
+      </ul>
+      <p>
+        Không bookmark blog cá nhân, không ChatGPT, không repo GitHub ngoài phạm vi đề cho.
+        Domain phụ chỉ khi nằm trong danh sách LF công bố cho kỳ đó.
+      </p>
+      <blockquote>
+        <code>kubectl</code> autocomplete nên bật ngay phút đầu (giống CKA). Làm lệnh, đừng copy-paste mù từ tab docs.
+      </blockquote>
+
+      <h2 id="study">How I study</h2>
+      <ol>
+        <li><strong>CKA còn nóng.</strong> YAML, context, jsonpath, NetworkPolicy cơ bản phải gõ được không nghĩ.</li>
+        <li><strong>Một lab một domain.</strong> Ví dụ tối: chỉ NetworkPolicy + PSS; tối khác: Trivy + admission.</li>
+        <li><strong>Đồng hồ 2 giờ.</strong> Killer.sh (đi kèm nhiều voucher) hoặc lab tương đương — flag đề, skip, quay lại.</li>
+        <li><strong>Docs map.</strong> Biết URL NetworkPolicy, Pod Security, RBAC, Secrets, Audit — không search từ “kubernetes” mỗi lần.</li>
+        <li><strong>Không học exploit.</strong> CKS hỏi control: policy, flag kube-apiserver, seccomp profile, image digest.</li>
+      </ol>
+      <p>Checklist gõ thuộc trước giờ thi:</p>
+<pre><code># context + ns
+kubectl config get-contexts
+kubectl config use-context ...
+kubectl -n &lt;ns&gt; get po,ing,netpol,sa,role,rolebinding
+
+# dry-run khi sửa YAML
+kubectl apply --dry-run=client -f . -o yaml
+
+# image / security context
+kubectl get po &lt;name&gt; -o jsonpath='{.spec.containers[*].image}'</code></pre>
+
+      <h2 id="tom-tat">Tóm tắt</h2>
+      <ul>
+        <li>CKS = CKA + security trên build / deploy / runtime.</li>
+        <li>Sáu domain; supply chain và runtime thường nặng điểm.</li>
+        <li>2 giờ, proctor, docs chỉ kubernetes.io.</li>
+        <li>Luyện tốc độ YAML và đường dẫn docs, không luyện “hacker cluster người khác”.</li>
+      </ul>
+
+      <div class="docs-tags">
+        <span class="docs-tag">cks</span>
+        <span class="docs-tag">kubernetes</span>
+        <span class="docs-tag">cncf</span>
+        <span class="docs-tag">exam</span>
+      </div>
+
+      <div class="docs-pager">
+        <a href="../web-security/">Web Security series</a>
+        <a href="../../#blogs">All blogs</a>
+      </div>
+    </article>
+
+    <aside class="docs-toc">
+      <div class="docs-toc-title">On this page</div>
+      <nav>
+        <a href="#cks">CKS Exam</a>
+        <a href="#domains">What's on the exam</a>
+        <a class="depth-3" href="#cluster-setup">Cluster Setup</a>
+        <a class="depth-3" href="#cluster-hardening">Cluster Hardening</a>
+        <a class="depth-3" href="#system-hardening">System Hardening</a>
+        <a class="depth-3" href="#microservices">Microservices</a>
+        <a class="depth-3" href="#supply-chain">Supply chain</a>
+        <a class="depth-3" href="#runtime">Runtime</a>
+        <a href="#exam-day">Exam day</a>
+        <a href="#allowed">Allowed docs</a>
+        <a href="#study">How I study</a>
+        <a href="#tom-tat">Tóm tắt</a>
+      </nav>
+    </aside>
+  </div>
+
+  <script src="../../js/docs.js"></script>
+</body>
+</html>

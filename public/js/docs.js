@@ -72,7 +72,15 @@
       <ul class="nested">${children}</ul>
     </li>`;
 
-  if (navEl) {
+  if (navEl && sidebar?.dataset.nav === "cks") {
+    navEl.innerHTML = [
+      `<li><a href="#cks">CKS Exam</a></li>`,
+      `<li><a href="#domains">What's on the exam</a></li>`,
+      `<li><a href="#exam-day">Exam day</a></li>`,
+      `<li><a href="#allowed">Allowed docs</a></li>`,
+      `<li><a href="#study">How I study</a></li>`,
+    ].join("");
+  } else if (navEl) {
     const partIOpen = ["overview", "01-gioi-thieu", "02-http", "03-burp"].includes(active);
     navEl.innerHTML = [
       item("overview", "Overview"),

@@ -203,6 +203,31 @@ body.docs::before {
   letter-spacing: 0.02em;
 }
 
+.docs-series {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.docs-series a {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  padding: 4px 10px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+}
+
+.docs-series a:hover,
+.docs-series a.active {
+  color: var(--accent);
+  border-color: rgba(34, 211, 238, 0.35);
+  background: var(--accent-faint);
+}
+
 .docs-topbar-spacer {
   flex: 1;
 }
