@@ -11,17 +11,28 @@
   <link rel="stylesheet" href="../../css/docs.css">
 </head>
 <body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+
   <header class="docs-topbar">
     <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
     <a class="docs-brand" href="../../">i'm<span>.hiu</span></a>
-    <span class="docs-crumb">/ blogs / web-security</span>
+    <span class="docs-crumb">~/blogs/web-security</span>
     <span class="docs-topbar-spacer"></span>
-    <a class="docs-top-link" href="../../#blogs">All blogs</a>
+    <a class="docs-top-link" href="../../#blogs">blogs</a>
   </header>
 
   <div class="docs-shell">
     <aside class="docs-sidebar" id="docsSidebar">
-      <div class="docs-nav-label">Web Security</div>
+      <div class="docs-side-bar">
+        <span class="dot red"></span>
+        <span class="dot yellow"></span>
+        <span class="dot green-d"></span>
+        <span class="docs-term-title">tree web-security</span>
+      </div>
+      <div class="docs-nav-label"># web-security</div>
       <ul class="docs-nav">
         <li><a class="active" href="./">Overview</a></li>
         <li class="group open">
@@ -103,13 +114,21 @@
       </ul>
     </aside>
 
+    <div class="docs-term">
+      <div class="docs-term-bar">
+        <span class="dot red"></span>
+        <span class="dot yellow"></span>
+        <span class="dot green-d"></span>
+        <span class="docs-term-title">cat overview.md</span>
+      </div>
     <article class="docs-main">
+      <div class="docs-section-label"># 06. blogs / overview</div>
       <div class="docs-breadcrumb">
-        <a href="../../">Home</a>
-        <span>›</span>
-        <a href="../../#blogs">Blogs</a>
-        <span>›</span>
-        <span>Overview</span>
+        <a href="../../">home</a>
+        <span>/</span>
+        <a href="../../#blogs">blogs</a>
+        <span>/</span>
+        <span>overview</span>
       </div>
 
       <h1>Web Security cho DevOps Engineer</h1>
@@ -264,12 +283,20 @@
       </div>
 
       <div class="docs-pager">
-        <span class="docs-pager-muted">Next · 01. Giới thiệu — sắp viết</span>
+        <span class="docs-pager-muted">$ next → 01. Giới thiệu — coming soon</span>
       </div>
     </article>
+    </div>
 
     <aside class="docs-toc">
-      <div class="docs-toc-title">On this page</div>
+      <div class="docs-side-bar">
+        <span class="dot red"></span>
+        <span class="dot yellow"></span>
+        <span class="dot green-d"></span>
+        <span class="docs-term-title">on this page</span>
+      </div>
+      <div class="docs-toc-inner">
+      <div class="docs-toc-title"># toc</div>
       <nav>
         <a href="#nguon-tham-khao">Nguồn tham khảo chính</a>
         <a href="#loi-mo-dau">Lời mở đầu</a>
@@ -285,6 +312,7 @@
         <a class="depth-3" href="#phan-viii">Phần VIII: DevOps</a>
         <a class="depth-3" href="#phu-luc">Phụ lục</a>
       </nav>
+      </div>
     </aside>
   </div>
 
