@@ -482,6 +482,32 @@ body.docs::before {
   color: inherit;
 }
 
+.docs-main .table-wrap {
+  overflow-x: auto;
+  margin: 8px 0 20px;
+}
+
+.docs-main table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.docs-main th,
+.docs-main td {
+  text-align: left;
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+
+.docs-main th {
+  color: var(--accent);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
 .docs-pager-muted {
   color: var(--muted);
   font-size: 14px;

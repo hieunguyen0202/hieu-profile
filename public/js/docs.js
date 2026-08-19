@@ -56,10 +56,13 @@
   const root = sidebar?.dataset.docsRoot || "./";
   const active = sidebar?.dataset.active || "overview";
 
+  const published = new Set(["overview", "01-gioi-thieu", "02-http", "03-burp"]);
+
   const item = (id, label) => {
     if (id === active) return `<li><a class="active" href="${root}${id === "overview" ? "" : `${id}/`}">${label}</a></li>`;
-    if (id === "overview") return `<li><a href="${root}">${label}</a></li>`;
-    if (id === "01-gioi-thieu") return `<li><a href="${root}${id}/">${label}</a></li>`;
+    if (published.has(id)) {
+      return `<li><a href="${root}${id === "overview" ? "" : `${id}/`}">${label}</a></li>`;
+    }
     return `<li><span class="soon">${label}</span></li>`;
   };
 
@@ -70,7 +73,7 @@
     </li>`;
 
   if (navEl) {
-    const partIOpen = active === "overview" || active === "01-gioi-thieu";
+    const partIOpen = ["overview", "01-gioi-thieu", "02-http", "03-burp"].includes(active);
     navEl.innerHTML = [
       item("overview", "Overview"),
       group("Part I: Fundamentals", partIOpen, [

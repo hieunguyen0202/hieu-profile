@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chương 2: HTTP Fundamentals — Hieu Nguyen</title>
+  <meta name="description" content="HTTP cho DevOps: request/response, methods, status codes, security headers, cookie flags, TLS, HTTP/2–3, Host header, Nginx và Traefik.">
+  <link rel="icon" href="../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../">i'm<span>.hiu</span></a>
+    <span class="docs-crumb">~/blogs/web-security/02</span>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../#blogs">blogs</a>
+  </header>
+
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-docs-root="../" data-active="02-http">
+      <div class="docs-nav-label">Web Security</div>
+      <ul class="docs-nav" id="docsNav"></ul>
+    </aside>
+
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../">Home</a>
+        <span>›</span>
+        <a href="../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../">Overview</a>
+        <span>›</span>
+        <span>02. HTTP Fundamentals</span>
+      </div>
+
+      <h1>Chương 2: HTTP Fundamentals</h1>
+      <p class="lede">Mọi lỗ hổng web đều đi qua một request. Đọc được request thì mới siết được Ingress.</p>
+
+      <div class="docs-meta">
+        <span><strong>Tác giả:</strong> Hieu Nguyen (Ryan)</span>
+        <span><strong>Phần:</strong> I — Fundamentals</span>
+        <span><strong>Cập nhật:</strong> Aug 2026</span>
+      </div>
+
+      <h2 id="khai-niem">Khái niệm</h2>
+      <p>
+        <strong>HTTP</strong> (HyperText Transfer Protocol) là ngôn ngữ trình duyệt và server nói với nhau.
+        Ingress, Nginx, ALB, API gateway — tất cả chỉ là người chuyển bức thư đó.
+      </p>
+      <p>Với security, HTTP quan trọng vì:</p>
+      <ul>
+        <li>Hầu hết tấn công web là HTTP (hoặc HTTPS) đã bị chỉnh header / query / body.</li>
+        <li>Lỗ hổng thường nằm ở <em>cách app tin</em> header, cookie, và parameter — không phải “protocol hỏng”.</li>
+        <li>Khi incident, access log và capture traffic chỉ có nghĩa nếu bạn đọc được cấu trúc.</li>
+      </ul>
+
+      <h2 id="cach-hoat-dong">Cách hoạt động</h2>
+      <p>Mô hình <strong>request–response</strong>:</p>
+<pre><code>Client (browser / curl / service)
+        │
+        │  HTTP request
+        ▼
+Gateway / Ingress / Nginx
+        │
+        ▼
+App
+        │
+        │  HTTP response
+        ▼
+Client</code></pre>
+      <p>
+        HTTP là <strong>stateless</strong>: request sau không “nhớ” request trước trừ khi bạn gắn trạng thái
+        bằng cookie, session store, hoặc token. Đó là lý do session và JWT tồn tại — và là chỗ
+        dễ cấu hình sai.
+      </p>
+
+      <h2 id="request">Cấu trúc HTTP Request</h2>
+<pre><code>POST /api/login HTTP/1.1
+Host: example.com
+Content-Type: application/json
+Authorization: Bearer eyJhbGc...
+Cookie: session=abc123
+User-Agent: Mozilla/5.0 ...
+Content-Length: 45
+
+{"username": "admin", "password": "secret"}</code></pre>
+      <ul>
+        <li><strong>Request line:</strong> method + path + phiên bản — <code>POST /api/login HTTP/1.1</code></li>
+        <li><strong>Headers:</strong> metadata (Host, auth, cookie, content-type)</li>
+        <li><strong>Dòng trống:</strong> tách header và body</li>
+        <li><strong>Body:</strong> thường có với POST / PUT / PATCH; GET không nên mang side effect</li>
+      </ul>
+      <blockquote>
+        Trên Kubernetes, client không nói chuyện trực tiếp với Pod. Client nói với Ingress.
+        Header <code>Host</code>, <code>X-Forwarded-For</code>, <code>X-Forwarded-Proto</code> thường bị
+        gateway ghi đè — app phải tin đúng nguồn.
+      </blockquote>
+
+      <h2 id="response">Cấu trúc HTTP Response</h2>
+<pre><code>HTTP/1.1 200 OK
+Content-Type: application/json
+Set-Cookie: session=xyz789; HttpOnly; Secure; SameSite=Strict
+X-Content-Type-Options: nosniff
+X-Frame-Options: DENY
+Content-Security-Policy: default-src 'self'
+Content-Length: 89
+
+{"status": "success", "token": "eyJhbGc..."}</code></pre>
+      <ul>
+        <li><strong>Status line:</strong> phiên bản + mã + reason — <code>HTTP/1.1 200 OK</code></li>
+        <li><strong>Headers:</strong> gồm cả security headers (CSP, HSTS, cookie flags)</li>
+        <li><strong>Body:</strong> JSON, HTML, file — tuỳ <code>Content-Type</code></li>
+      </ul>
+
+      <h2 id="methods">HTTP Methods</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Method</th>
+              <th>Mục đích</th>
+              <th>Safe?</th>
+              <th>Idempotent?</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>GET</td><td>Đọc</td><td>Có</td><td>Có</td></tr>
+            <tr><td>POST</td><td>Tạo / hành động</td><td>Không</td><td>Không</td></tr>
+            <tr><td>PUT</td><td>Thay toàn bộ resource</td><td>Không</td><td>Có</td></tr>
+            <tr><td>PATCH</td><td>Sửa một phần</td><td>Không</td><td>Không</td></tr>
+            <tr><td>DELETE</td><td>Xóa</td><td>Không</td><td>Có</td></tr>
+            <tr><td>HEAD</td><td>Như GET, không body</td><td>Có</td><td>Có</td></tr>
+            <tr><td>OPTIONS</td><td>Hỏi method / CORS</td><td>Có</td><td>Có</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p><strong>Ghi nhớ vận hành:</strong></p>
+      <ul>
+        <li>GET có side effect (xóa user qua query) → CSRF dễ hơn vì trình duyệt “đi” URL.</li>
+        <li><code>OPTIONS</code> lộ CORS preflight — đừng mở <code>Access-Control-Allow-Origin: *</code> kèm credential.</li>
+        <li>PUT / DELETE trên Ingress phải đi kèm authz; không “mở method vì app cần lúc debug”.</li>
+      </ul>
+
+      <h2 id="status">HTTP Status Codes</h2>
+<pre><code>2xx  thành công     200 OK · 201 Created · 204 No Content
+3xx  chuyển hướng   301 Permanent · 302 Found · 304 Not Modified
+4xx  lỗi client     400 · 401 · 403 · 404 · 429
+5xx  lỗi server     500 · 502 · 503</code></pre>
+      <p><strong>401 vs 403</strong> — hay nhầm, và nhầm thì audit sai:</p>
+      <ul>
+        <li><code>401 Unauthorized</code>: chưa chứng minh được danh tính (thiếu / sai token).</li>
+        <li><code>403 Forbidden</code>: đã biết bạn là ai, nhưng không đủ quyền.</li>
+      </ul>
+      <p>
+        Trả <code>404</code> thay <code>403</code> để “giấu” resource là security through obscurity.
+        Có thể giảm enumeration một chút; không thay access control.
+      </p>
+      <blockquote>
+        502 / 503 trên Ingress thường là Pod chết, probe fail, hoặc upstream timeout —
+        đừng nhầm với “attacker đã vào”. Đọc access log + kube event trước khi nghĩ exploit.
+      </blockquote>
+
+      <h2 id="headers">HTTP Headers quan trọng về Security</h2>
+
+      <h3 id="req-headers">Request headers</h3>
+      <p><strong>Authorization</strong></p>
+<pre><code>Authorization: Bearer &lt;jwt&gt;
+Authorization: Basic &lt;base64(user:pass)&gt;</code></pre>
+      <p>
+        Rủi ro: token sống quá lâu, log nhét nguyên header, Basic auth trên HTTP.
+        Gateway nên strip và không ghi <code>Authorization</code> ra access log.
+      </p>
+      <p><strong>Cookie</strong> — session hijacking / CSRF nếu thiếu flag (mục cookie bên dưới).</p>
+      <p><strong>Host</strong></p>
+<pre><code>Host: example.com</code></pre>
+      <p>
+        App hoặc template email nếu lấy Host từ request để ghép URL reset password →
+        <a href="#host-header">Host header injection</a>. Ingress phải chỉ nhận server_name đã khai báo.
+      </p>
+      <p><strong>X-Forwarded-For</strong></p>
+<pre><code>X-Forwarded-For: 1.2.3.4</code></pre>
+      <p>
+        Chỉ tin khi request đến từ proxy bạn kiểm soát (Ingress, Cloudflare).
+        App tự parse XFF từ internet → IP spoof, bypass rate-limit / geo allowlist.
+      </p>
+      <p><strong>Content-Type</strong> — parser phải khớp body. Expect JSON mà nuốt XML thì mở cửa XXE (Part IV).</p>
+
+      <h3 id="sec-headers">Response — security headers</h3>
+      <p><strong>Content-Security-Policy (CSP)</strong> — hạn chế nguồn script / frame; lớp chống XSS mạnh nhất phía browser.</p>
+<pre><code>Content-Security-Policy: default-src 'self'; script-src 'self' https://cdn.example.com; object-src 'none'</code></pre>
+      <p><strong>X-Frame-Options</strong> — <code>DENY</code> hoặc <code>SAMEORIGIN</code>: giảm clickjacking. CSP <code>frame-ancestors</code> là bản hiện đại hơn.</p>
+      <p><strong>Strict-Transport-Security (HSTS)</strong> — bắt browser chỉ HTTPS sau lần đầu; chống SSL stripping.</p>
+<pre><code>Strict-Transport-Security: max-age=31536000; includeSubDomains; preload</code></pre>
+      <p><strong>X-Content-Type-Options: nosniff</strong> — không cho browser đoán MIME.</p>
+      <p><strong>Referrer-Policy</strong> — ví dụ <code>strict-origin-when-cross-origin</code>: bớt leak token trong query khi nhảy site khác.</p>
+      <p><strong>Permissions-Policy</strong> — tắt camera / mic / geolocation nếu app không cần.</p>
+
+      <h2 id="cookies">Cookies — chi tiết</h2>
+<pre><code>Set-Cookie: session=abc123;
+            Path=/;
+            Domain=example.com;
+            Max-Age=3600;
+            HttpOnly;
+            Secure;
+            SameSite=Strict</code></pre>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Attribute</th>
+              <th>Ý nghĩa</th>
+              <th>Nếu thiếu</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>HttpOnly</td>
+              <td>JavaScript không đọc cookie</td>
+              <td>XSS đọc được session</td>
+            </tr>
+            <tr>
+              <td>Secure</td>
+              <td>Chỉ gửi trên HTTPS</td>
+              <td>Dễ lộ trên HTTP / mixed content</td>
+            </tr>
+            <tr>
+              <td>SameSite=Strict</td>
+              <td>Không gửi khi request cross-site</td>
+              <td>CSRF dễ hơn</td>
+            </tr>
+            <tr>
+              <td>SameSite=Lax</td>
+              <td>Gửi khi navigate top-level, không khi fetch cross-site</td>
+              <td>Cân UX / CSRF</td>
+            </tr>
+            <tr>
+              <td>SameSite=None</td>
+              <td>Luôn gửi — bắt buộc kèm Secure</td>
+              <td>Cần cho một số iframe / SSO; CSRF dễ hơn</td>
+            </tr>
+            <tr>
+              <td>Domain / Path</td>
+              <td>Phạm vi cookie</td>
+              <td>Quá rộng thì subdomain chia session</td>
+            </tr>
+            <tr>
+              <td>Expires / Max-Age</td>
+              <td>TTL</td>
+              <td>Session cookie: mất khi đóng browser (không phải “an toàn hơn” nếu máy dùng chung)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2 id="tls">HTTPS và TLS</h2>
+      <p><strong>HTTPS = HTTP trên TLS.</strong> Handshake rút gọn:</p>
+<pre><code>ClientHello  →  phiên bản, cipher
+ServerHello  ←  cipher đã chọn
+Certificate  ←  cert server
+Key exchange
+Finished     ↔  rồi mới tới HTTP đã mã hóa</code></pre>
+      <p>Vấn đề hay gặp trên cluster:</p>
+      <ul>
+        <li>Cert hết hạn (cert-manager / ACME fail im lặng).</li>
+        <li>Self-signed trên môi trường “gần prod” → user click through, mất tín hiệu MITM.</li>
+        <li>TLS 1.0 / cipher yếu trên load balancer cũ.</li>
+        <li>Mixed content: trang HTTPS nhúng script HTTP.</li>
+      </ul>
+      <p>Kiểm tra cấu hình (lab / hệ thống của bạn):</p>
+<pre><code># testssl.sh trên host bạn được phép test
+./testssl.sh https://example.com
+
+# hoặc SSL Labs (public site): ssllabs.com/ssltest/</code></pre>
+
+      <h2 id="http2">HTTP/2 và HTTP/3</h2>
+      <ul>
+        <li><strong>HTTP/2:</strong> binary, multiplexing nhiều stream trên một TCP, nén header (HPACK).</li>
+        <li><strong>HTTP/3:</strong> QUIC trên UDP, mã hóa gắn với transport (TLS 1.3).</li>
+      </ul>
+      <p>
+        Hệ quả bảo mật: request smuggling giữa HTTP/1.1 và HTTP/2 khác bản “cổ điển”;
+        WAF / Ingress chưa parse HTTP/3 thì rule có thể không chạy trên path đó.
+        Bật protocol mới trên LB thì phải biết layer inspect phía sau còn hiểu không.
+      </p>
+
+      <h2 id="url">Cấu trúc URL</h2>
+<pre><code>https://user:pass@example.com:8443/api/v2/users?id=123&amp;role=admin#section
+ scheme   creds      host      port     path            query         fragment</code></pre>
+      <ul>
+        <li>User:pass trong URL vào access log, history, Referer.</li>
+        <li>Query thường bị log — token reset, PII không đặt trên query.</li>
+        <li>Fragment (<code>#</code>) không gửi lên server; JS trên trang đọc được.</li>
+      </ul>
+
+      <h2 id="devops">HTTP trong ngữ cảnh DevOps</h2>
+
+      <h3 id="nginx">Nginx — security headers</h3>
+<pre><code>server {
+    server_tokens off;
+
+    add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
+    add_header X-Frame-Options "DENY" always;
+    add_header X-Content-Type-Options "nosniff" always;
+    add_header Referrer-Policy "strict-origin-when-cross-origin" always;
+    add_header Content-Security-Policy "default-src 'self'" always;
+    add_header Permissions-Policy "camera=(), microphone=()" always;
+}</code></pre>
+      <blockquote>
+        Trên Ingress-Nginx, dùng annotation / snippet tương đương. Header trùng giữa Ingress và app
+        dễ bị ghi đè — chọn một nơi làm nguồn sự thật.
+      </blockquote>
+
+      <h3 id="traefik">Traefik (Kubernetes Middleware)</h3>
+<pre><code>apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: security-headers
+spec:
+  headers:
+    stsSeconds: 31536000
+    stsIncludeSubdomains: true
+    frameDeny: true
+    contentTypeNosniff: true
+    referrerPolicy: strict-origin-when-cross-origin
+    customResponseHeaders:
+      Server: ""</code></pre>
+
+      <h3 id="logging">Log HTTP đúng cách</h3>
+<pre><code>log_format security '$remote_addr - $remote_user [$time_local] '
+                    '"$request" $status $body_bytes_sent '
+                    '"$http_referer" "$http_user_agent" '
+                    '$request_time';</code></pre>
+      <p>Không log query có <code>password</code> / <code>token</code>. Mask <code>Authorization</code> và cookie session.</p>
+
+      <h2 id="doc-traffic">Đọc một request như người vận hành</h2>
+<pre><code>GET /api/users/profile?userId=1337 HTTP/1.1
+Host: api.example.com
+Authorization: Bearer eyJhbGciOiJI...
+Cookie: _ga=GA1.2.123; _session=xyz</code></pre>
+      <p>Khi review (staging, pentest được phép, hoặc code review):</p>
+      <ol>
+        <li><code>userId</code> trên query — object ID do client chọn thường là dấu hiệu IDOR (access control, Part II).</li>
+        <li>JWT trên Authorization — payload decode được; đừng nhét secret vào claim.</li>
+        <li>Cookie session không có flag trên <code>Set-Cookie</code> tương ứng → sửa ở app hoặc gateway.</li>
+        <li>State-changing API không có CSRF token / SameSite → ghi vào backlog.</li>
+      </ol>
+
+      <h2 id="host-header">Kịch bản: Host Header Injection</h2>
+      <p>
+        Server tin <code>Host</code> khi ghép link “quên mật khẩu”. Attacker gửi request (trên hệ thống
+        được phép test) với Host không thuộc domain của bạn. Email chứa link trỏ sang host đó,
+        token đi theo.
+      </p>
+      <p><strong>Phòng:</strong></p>
+      <ul>
+        <li>Hardcode canonical URL trong config (<code>BASE_URL</code>, <code>PUBLIC_HOST</code>) — không lấy từ request.</li>
+        <li>Ingress chỉ <code>server_name</code> / host rule đã biết; default backend trả 404.</li>
+        <li>Không cache response theo Host chưa được allowlist (cache poisoning, Part VI).</li>
+      </ul>
+<pre><code># Sai: tin Host từ client
+reset = f"https://{request.headers['Host']}/reset?token={token}"
+
+# Đúng: origin cố định
+reset = f"https://{settings.PUBLIC_HOST}/reset?token={token}"</code></pre>
+
+      <h2 id="tom-tat">Tóm tắt</h2>
+      <ul>
+        <li>HTTP: text (1.1) hoặc binary (2/3), request–response, stateless.</li>
+        <li>Siết method, status 401/403, và đừng log secret trên URL.</li>
+        <li>Security headers + cookie flags là lớp rẻ, làm ở Ingress được ngay.</li>
+        <li>Không tin Host / X-Forwarded-* trừ proxy tin cậy.</li>
+        <li>TLS 1.2+ (nên 1.3); theo dõi cert hết hạn.</li>
+      </ul>
+
+      <h2 id="on-tap">Câu hỏi ôn tập</h2>
+      <ol>
+        <li>401 khác 403 chỗ nào? Vì sao log SIEM cần phân biệt?</li>
+        <li>Flag cookie nào chặn JavaScript đọc session? Thiếu thì gắn với lớp tấn công nào?</li>
+        <li>HSTS làm gì, và tấn công nào nó nhằm giảm?</li>
+        <li>Vì sao token không đặt trên query string?</li>
+        <li>CSP chặn XSS theo cơ chế nào (một câu, đúng ý)?</li>
+      </ol>
+
+      <p class="docs-credit">
+        Cấu trúc chương bám
+        <a href="https://docs.huynhthientung.com/web-security/part1-fundamentals/02-http" target="_blank" rel="noopener">Chương 2 — HTTP Fundamentals</a>
+        (Huynh Thien Tung). Nội dung viết lại theo góc Ingress / TLS / log; không sao chép nguyên văn.
+      </p>
+
+      <div class="docs-tags">
+        <span class="docs-tag">web-security</span>
+        <span class="docs-tag">http</span>
+        <span class="docs-tag">headers</span>
+        <span class="docs-tag">tls</span>
+        <span class="docs-tag">cookies</span>
+      </div>
+
+      <div class="docs-pager">
+        <a href="../01-gioi-thieu/">Previous · 01. Giới thiệu</a>
+        <a href="../03-burp/">Next · 03. Burp Suite</a>
+      </div>
+    </article>
+
+    <aside class="docs-toc">
+      <div class="docs-toc-title">On this page</div>
+      <nav>
+        <a href="#khai-niem">Khái niệm</a>
+        <a href="#cach-hoat-dong">Cách hoạt động</a>
+        <a href="#request">HTTP Request</a>
+        <a href="#response">HTTP Response</a>
+        <a href="#methods">Methods</a>
+        <a href="#status">Status codes</a>
+        <a href="#headers">Security headers</a>
+        <a class="depth-3" href="#req-headers">Request headers</a>
+        <a class="depth-3" href="#sec-headers">Response headers</a>
+        <a href="#cookies">Cookies</a>
+        <a href="#tls">HTTPS / TLS</a>
+        <a href="#http2">HTTP/2 và HTTP/3</a>
+        <a href="#url">URL</a>
+        <a href="#devops">DevOps</a>
+        <a class="depth-3" href="#nginx">Nginx</a>
+        <a class="depth-3" href="#traefik">Traefik</a>
+        <a class="depth-3" href="#logging">Logging</a>
+        <a href="#doc-traffic">Đọc traffic</a>
+        <a href="#host-header">Host header</a>
+        <a href="#tom-tat">Tóm tắt</a>
+        <a href="#on-tap">Câu hỏi ôn tập</a>
+      </nav>
+    </aside>
+  </div>
+
+  <script src="../../../js/docs.js"></script>
+</body>
+</html>
