@@ -971,15 +971,22 @@ section {
 }
 
 .project-card {
+  display: block;
   background: var(--surface);
   border: 1px solid var(--border);
   padding: 28px;
+  color: inherit;
   transition: border-color 0.25s, transform 0.25s;
 }
 
-.project-card:hover {
+a.project-card:hover {
   border-color: rgba(34, 211, 238, 0.28);
   transform: translateY(-3px);
+}
+
+.project-card.is-soon {
+  opacity: 0.55;
+  pointer-events: none;
 }
 
 .project-num {

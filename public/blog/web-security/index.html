@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Web Security cho DevOps Engineer — Hieu Nguyen</title>
+  <meta name="description" content="Từ hạ tầng Kubernetes đến bảo mật ứng dụng web. Series notes cho DevOps: OWASP, HTTP, CI/CD, secrets, và attack surface trên cluster.">
+  <link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../css/docs.css">
+</head>
+<body class="docs">
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../">i'm<span>.hiu</span></a>
+    <span class="docs-crumb">/ blogs / web-security</span>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../#blogs">All blogs</a>
+  </header>
+
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar">
+      <div class="docs-nav-label">Web Security</div>
+      <ul class="docs-nav">
+        <li><a class="active" href="./">Overview</a></li>
+        <li class="group open">
+          <button type="button">Part I: Fundamentals <span class="chevron">▸</span></button>
+          <ul class="nested">
+            <li><span class="soon">01. Giới thiệu</span></li>
+            <li><span class="soon">02. HTTP Fundamentals</span></li>
+            <li><span class="soon">03. Burp Suite</span></li>
+          </ul>
+        </li>
+        <li class="group">
+          <button type="button">Part II: Auth &amp; Authorization <span class="chevron">▸</span></button>
+          <ul class="nested">
+            <li><span class="soon">04. Authentication</span></li>
+            <li><span class="soon">05. Session Management</span></li>
+            <li><span class="soon">06. Access Control</span></li>
+            <li><span class="soon">07. OAuth 2.0</span></li>
+            <li><span class="soon">08. JWT</span></li>
+          </ul>
+        </li>
+        <li class="group">
+          <button type="button">Part III: Client-Side <span class="chevron">▸</span></button>
+          <ul class="nested">
+            <li><span class="soon">09. CORS</span></li>
+            <li><span class="soon">10. CSRF</span></li>
+            <li><span class="soon">11. XSS</span></li>
+            <li><span class="soon">22. Clickjacking</span></li>
+          </ul>
+        </li>
+        <li class="group">
+          <button type="button">Part IV: Injection <span class="chevron">▸</span></button>
+          <ul class="nested">
+            <li><span class="soon">12. SQL Injection</span></li>
+            <li><span class="soon">13. NoSQL Injection</span></li>
+            <li><span class="soon">14. Command Injection</span></li>
+            <li><span class="soon">16. XXE</span></li>
+            <li><span class="soon">25. SSTI</span></li>
+          </ul>
+        </li>
+        <li class="group">
+          <button type="button">Part V: Server-Side <span class="chevron">▸</span></button>
+          <ul class="nested">
+            <li><span class="soon">15. SSRF</span></li>
+            <li><span class="soon">17. File Upload</span></li>
+            <li><span class="soon">18. Path Traversal</span></li>
+            <li><span class="soon">19. Open Redirect</span></li>
+            <li><span class="soon">20. Race Condition</span></li>
+            <li><span class="soon">21. Business Logic</span></li>
+            <li><span class="soon">26. Insecure Deserialization</span></li>
+          </ul>
+        </li>
+        <li class="group">
+          <button type="button">Part VI: Infra &amp; Protocols <span class="chevron">▸</span></button>
+          <ul class="nested">
+            <li><span class="soon">23. Web Cache Poisoning</span></li>
+            <li><span class="soon">24. HTTP Request Smuggling</span></li>
+          </ul>
+        </li>
+        <li class="group">
+          <button type="button">Part VII: API &amp; Architecture <span class="chevron">▸</span></button>
+          <ul class="nested">
+            <li><span class="soon">27. GraphQL Security</span></li>
+            <li><span class="soon">28. API Security</span></li>
+          </ul>
+        </li>
+        <li class="group">
+          <button type="button">Part VIII: DevOps Security <span class="chevron">▸</span></button>
+          <ul class="nested">
+            <li><span class="soon">29. Kubernetes Security</span></li>
+            <li><span class="soon">30. CI/CD Security</span></li>
+            <li><span class="soon">31. Secrets Management</span></li>
+            <li><span class="soon">32. Cloud Security</span></li>
+            <li><span class="soon">33. Logging &amp; Detection</span></li>
+            <li><span class="soon">34. Incident Response</span></li>
+            <li><span class="soon">35. Checklist cho DevOps</span></li>
+          </ul>
+        </li>
+        <li><span class="soon">Appendix</span></li>
+      </ul>
+    </aside>
+
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../">Home</a>
+        <span>›</span>
+        <a href="../../#blogs">Blogs</a>
+        <span>›</span>
+        <span>Overview</span>
+      </div>
+
+      <h1>Web Security cho DevOps Engineer</h1>
+      <p class="lede">Từ hạ tầng đến bảo mật ứng dụng web</p>
+
+      <div class="docs-meta">
+        <span><strong>Tác giả:</strong> Hieu Nguyen (Ryan)</span>
+        <span><strong>Phiên bản:</strong> 1.0</span>
+        <span><strong>Cập nhật:</strong> Aug 2026</span>
+      </div>
+
+      <p>
+        Bạn đang vận hành Kubernetes, viết pipeline CI/CD, chỉnh Nginx / Ingress, xoay secrets trên Vault —
+        nhưng đã bao giờ dừng lại hỏi: <strong>ứng dụng chạy trên hạ tầng đó có thực sự an toàn không?</strong>
+      </p>
+      <p>
+        DevOps và Security không phải hai ticket riêng. Ingress sai là attack surface. Secret nhét trong
+        environment variable của Pod là cánh cửa. Pipeline không quét dependency là khoảng trống cho
+        supply-chain. Series này ghi lại những gì một DevOps / platform engineer cần biết về bảo mật
+        web — không để thành pentester trong 30 ngày, mà để nhìn ra lỗ hổng trước khi nó thành incident.
+      </p>
+
+      <h2 id="nguon-tham-khao">Nguồn tham khảo chính</h2>
+      <ul>
+        <li><a href="https://portswigger.net/web-security" target="_blank" rel="noopener">PortSwigger Web Security Academy</a></li>
+        <li><a href="https://owasp.org" target="_blank" rel="noopener">OWASP</a></li>
+        <li>RFC 7230, RFC 7231, RFC 6265, RFC 6749</li>
+        <li>CWE / CVE database</li>
+        <li>Tài liệu chính thức AWS, GCP, Azure, Kubernetes</li>
+      </ul>
+      <p class="docs-credit">
+        Cấu trúc series bám theo lộ trình
+        <a href="https://docs.huynhthientung.com/web-security/intro" target="_blank" rel="noopener">Web Security cho DevOps Engineer</a>
+        của Huynh Thien Tung — mình viết lại theo góc nhìn vận hành (Ingress, CI/CD, secrets, cluster).
+      </p>
+
+      <h2 id="loi-mo-dau">Lời mở đầu</h2>
+      <p>
+        Hầu hết DevOps giỏi Linux, Docker, networking, và GitOps. Phần còn thiếu thường là
+        <strong>cách ứng dụng web bị tấn công</strong> — XSS không phải “chuyện frontend”, SSRF không phải
+        “chuyện backend”. Cả hai đều đi qua Ingress, Service, DNS nội bộ, và metadata API của cloud.
+      </p>
+      <blockquote>
+        Mục tiêu: hiểu hacker tư duy thế nào → nhận ra lỗ hổng trên đường đi của request → nhét kiểm soát
+        vào workflow hàng ngày (review Helm, pipeline gate, secret rotation, log).
+      </blockquote>
+      <p>Mỗi chương (khi viết) đi theo một công thức cố định:</p>
+      <ol>
+        <li><strong>Nó là gì</strong> — khái niệm, không lý thuyết thừa.</li>
+        <li><strong>Tại sao xảy ra</strong> — assumption sai trong code hoặc hạ tầng.</li>
+        <li><strong>Hacker khai thác thế nào</strong> — mô hình tấn công, không phải playbook exploit.</li>
+        <li><strong>Cách phòng chống</strong> — control ở app và ở platform.</li>
+        <li><strong>DevOps cần làm gì</strong> — Ingress, NetworkPolicy, scanner, alert, runbook.</li>
+      </ol>
+      <p>
+        Đọc tuần tự nếu mới bắt đầu. Đã quen cluster thì nhảy Part VIII (DevOps Security) song song với
+        các chương auth / injection.
+      </p>
+
+      <h2 id="huong-dan-doc">Hướng dẫn đọc</h2>
+      <ul>
+        <li><strong>Người mới:</strong> Overview → Chương 1–3 (HTTP, công cụ) rồi đọc tuần tự.</li>
+        <li><strong>DevOps đã có kinh nghiệm:</strong> có thể bắt đầu từ Authentication, rồi các chương 29–35.</li>
+        <li><strong>Thực hành:</strong> mỗi chương sẽ trỏ lab trên PortSwigger Academy — đọc xong thì làm lab, đừng chỉ highlight.</li>
+      </ul>
+      <p>Ký hiệu trong series:</p>
+      <ul>
+        <li><code>code block</code> — lệnh, header, hoặc ví dụ cấu hình</li>
+        <li><strong>In đậm</strong> — khái niệm cần nhớ</li>
+        <li>Blockquote — lưu ý / cảnh báo khi vận hành production</li>
+      </ul>
+
+      <h2 id="muc-luc">Mục lục</h2>
+
+      <h3 id="phan-i">Phần I: Nền tảng</h3>
+      <ul>
+        <li>Chương 1: Giới thiệu Web Security</li>
+        <li>Chương 2: HTTP Fundamentals</li>
+        <li>Chương 3: Burp Suite — công cụ đọc request</li>
+      </ul>
+
+      <h3 id="phan-ii">Phần II: Xác thực và phân quyền</h3>
+      <ul>
+        <li>Chương 4: Authentication</li>
+        <li>Chương 5: Session Management</li>
+        <li>Chương 6: Access Control</li>
+        <li>Chương 7: OAuth 2.0</li>
+        <li>Chương 8: JWT</li>
+      </ul>
+
+      <h3 id="phan-iii">Phần III: Tấn công phía client</h3>
+      <ul>
+        <li>Chương 9: CORS</li>
+        <li>Chương 10: CSRF</li>
+        <li>Chương 11: XSS</li>
+        <li>Chương 22: Clickjacking</li>
+      </ul>
+
+      <h3 id="phan-iv">Phần IV: Injection</h3>
+      <ul>
+        <li>Chương 12: SQL Injection</li>
+        <li>Chương 13: NoSQL Injection</li>
+        <li>Chương 14: Command Injection</li>
+        <li>Chương 16: XXE</li>
+        <li>Chương 25: SSTI</li>
+      </ul>
+
+      <h3 id="phan-v">Phần V: Tấn công phía server</h3>
+      <ul>
+        <li>Chương 15: SSRF</li>
+        <li>Chương 17: File Upload</li>
+        <li>Chương 18: Path Traversal</li>
+        <li>Chương 19: Open Redirect</li>
+        <li>Chương 20: Race Condition</li>
+        <li>Chương 21: Business Logic</li>
+        <li>Chương 26: Insecure Deserialization</li>
+      </ul>
+
+      <h3 id="phan-vi">Phần VI: Hạ tầng và giao thức</h3>
+      <ul>
+        <li>Chương 23: Web Cache Poisoning</li>
+        <li>Chương 24: HTTP Request Smuggling</li>
+      </ul>
+
+      <h3 id="phan-vii">Phần VII: API và kiến trúc hiện đại</h3>
+      <ul>
+        <li>Chương 27: GraphQL Security</li>
+        <li>Chương 28: API Security</li>
+      </ul>
+
+      <h3 id="phan-viii">Phần VIII: DevOps Security</h3>
+      <ul>
+        <li>Chương 29: Kubernetes Security liên quan web</li>
+        <li>Chương 30: CI/CD Security</li>
+        <li>Chương 31: Secrets Management</li>
+        <li>Chương 32: Cloud Security liên quan ứng dụng web</li>
+        <li>Chương 33: Logging và Detection</li>
+        <li>Chương 34: Incident Response cơ bản</li>
+        <li>Chương 35: Checklist bảo mật cho DevOps</li>
+      </ul>
+
+      <h3 id="phu-luc">Phụ lục</h3>
+      <ul>
+        <li>Lộ trình 30 ngày cho DevOps Engineer</li>
+      </ul>
+
+      <div class="docs-tags">
+        <span class="docs-tag">web-security</span>
+        <span class="docs-tag">overview</span>
+        <span class="docs-tag">devops</span>
+        <span class="docs-tag">owasp</span>
+      </div>
+
+      <div class="docs-pager">
+        <span class="docs-pager-muted">Next · 01. Giới thiệu — sắp viết</span>
+      </div>
+    </article>
+
+    <aside class="docs-toc">
+      <div class="docs-toc-title">On this page</div>
+      <nav>
+        <a href="#nguon-tham-khao">Nguồn tham khảo chính</a>
+        <a href="#loi-mo-dau">Lời mở đầu</a>
+        <a href="#huong-dan-doc">Hướng dẫn đọc</a>
+        <a href="#muc-luc">Mục lục</a>
+        <a class="depth-3" href="#phan-i">Phần I: Nền tảng</a>
+        <a class="depth-3" href="#phan-ii">Phần II: Auth</a>
+        <a class="depth-3" href="#phan-iii">Phần III: Client-side</a>
+        <a class="depth-3" href="#phan-iv">Phần IV: Injection</a>
+        <a class="depth-3" href="#phan-v">Phần V: Server-side</a>
+        <a class="depth-3" href="#phan-vi">Phần VI: Hạ tầng</a>
+        <a class="depth-3" href="#phan-vii">Phần VII: API</a>
+        <a class="depth-3" href="#phan-viii">Phần VIII: DevOps</a>
+        <a class="depth-3" href="#phu-luc">Phụ lục</a>
+      </nav>
+    </aside>
+  </div>
+
+  <script src="../../js/docs.js"></script>
+</body>
+</html>

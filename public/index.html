@@ -29,7 +29,7 @@
       <li><a href="#certs">certs</a></li>
       <li><a href="#experience">experience</a></li>
       <li><a href="#stack">stack</a></li>
-      <li><a href="#projects">projects</a></li>
+      <li><a href="#blogs">blogs</a></li>
       <li><a href="#contact">contact</a></li>
     </ul>
   </nav>
@@ -312,67 +312,62 @@
       </div>
     </section>
 
-    <section id="projects">
-      <div class="section-label"># 06. PROJECTS</div>
+    <section id="blogs">
+      <div class="section-label"># 06. BLOGS</div>
+      <p class="hero-desc" style="max-width:640px;margin-bottom:0">
+        Notes I actually use on the job — Kubernetes, DevSecOps, and the web attack surface that sits on top of the cluster.
+      </p>
       <div class="projects-grid">
-        <div class="project-card reveal">
+        <a class="project-card reveal" href="blog/web-security/">
           <div class="project-num">01</div>
-          <div class="project-name">CIMB Bank — Klaara CI/CD on AKS</div>
+          <div class="project-name">Web Security cho DevOps Engineer</div>
           <p class="project-desc">
-            Production delivery for a financial product: Jenkins + Helm, monorepo migration,
-            image slimming, and DevSecOps gates. Deployment time 1h → 15m; builds 30m → 15s.
+            Từ hạ tầng Kubernetes đến bảo mật ứng dụng web. Series notes: HTTP, auth, injection,
+            API, và những việc DevOps phải làm trước khi lỗ hổng thành incident.
           </p>
           <div class="project-tech">
-            <span class="tech-chip primary">Azure AKS</span>
-            <span class="tech-chip primary">Jenkins</span>
-            <span class="tech-chip">Helm</span>
-            <span class="tech-chip">SonarQube</span>
-            <span class="tech-chip">Trivy</span>
+            <span class="tech-chip primary">OWASP</span>
+            <span class="tech-chip primary">Kubernetes</span>
+            <span class="tech-chip">DevSecOps</span>
+            <span class="tech-chip">CI/CD</span>
           </div>
-        </div>
-        <div class="project-card reveal">
+        </a>
+        <article class="project-card reveal is-soon">
           <div class="project-num">02</div>
-          <div class="project-name">AWS Landing Zone &amp; CI/CD Automation</div>
+          <div class="project-name">CI/CD Security checklist</div>
           <p class="project-desc">
-            Side project (May–Aug 2025). Isolated Dev/UAT accounts, modular Terraform, GitHub Actions
-            to ECS Fargate with blue/green releases, multi-AZ RDS, and centralized CloudWatch / CloudTrail.
+            Pipeline gates, dependency scanning, and supply-chain controls — coming next.
           </p>
           <div class="project-tech">
-            <span class="tech-chip primary">AWS</span>
-            <span class="tech-chip primary">Terraform</span>
-            <span class="tech-chip">GitHub Actions</span>
-            <span class="tech-chip">ECS Fargate</span>
+            <span class="tech-chip">Jenkins</span>
+            <span class="tech-chip">Trivy</span>
             <span class="tech-chip">SonarQube</span>
           </div>
-        </div>
-        <div class="project-card reveal">
+        </article>
+        <article class="project-card reveal is-soon">
           <div class="project-num">03</div>
-          <div class="project-name">GKE GitOps for AI microservices</div>
+          <div class="project-name">Secrets management on Kubernetes</div>
           <p class="project-desc">
-            At CloudAce: Terraform-provisioned GCP, GKE workloads with Cloud Storage datasets,
-            and ArgoCD GitOps so cluster state followed git — not click-ops.
+            Why env vars are a trap, and how to rotate credentials without waking the pager.
           </p>
           <div class="project-tech">
-            <span class="tech-chip primary">GKE</span>
-            <span class="tech-chip primary">ArgoCD</span>
-            <span class="tech-chip">Terraform</span>
-            <span class="tech-chip">GitLab CI</span>
+            <span class="tech-chip">Vault</span>
+            <span class="tech-chip">K8s</span>
+            <span class="tech-chip">RBAC</span>
           </div>
-        </div>
-        <div class="project-card reveal">
+        </article>
+        <article class="project-card reveal is-soon">
           <div class="project-num">04</div>
-          <div class="project-name">Automotive toolchain containerization</div>
+          <div class="project-name">Observability: logs to traces</div>
           <p class="project-desc">
-            Bosch internship: Dockerized automotive tooling, Jenkins CI/CT, and CloudWatch plus
-            Linux profiling (htop, iostat, perf) for consistent, measurable builds.
+            Filelog, OTel, and making production explain itself — draft in progress.
           </p>
           <div class="project-tech">
-            <span class="tech-chip primary">Docker</span>
-            <span class="tech-chip primary">Jenkins</span>
-            <span class="tech-chip">Linux</span>
-            <span class="tech-chip">AWS</span>
+            <span class="tech-chip">OpenTelemetry</span>
+            <span class="tech-chip">Prometheus</span>
+            <span class="tech-chip">Grafana</span>
           </div>
-        </div>
+        </article>
       </div>
     </section>
 
