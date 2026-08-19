@@ -96,15 +96,20 @@
   const promptHtml = '<span class="prompt">$ </span>';
 
   const termLines = [
+    {
+      type: "cmd",
+      html: 'kubectl get engineer <span class="term-flag">--namespace</span><span class="term-val">=production</span>',
+    },
+    { type: "out", text: "NAME          ROLE     UPTIME   STATUS", color: "hdr" },
+    {
+      type: "html",
+      html: 'hieu-nguyen   devops   2y+      <span class="term-status">Running</span>',
+    },
     { type: "cmd", text: "kubectl get certificates" },
-    { type: "out", text: "NAME   CERTIFICATE                                EXPIRES", color: "cyan" },
+    { type: "out", text: "NAME   CERTIFICATE                                EXPIRES", color: "hdr" },
     { type: "out", text: "cks    Certified Kubernetes Security Specialist   Aug-2028", color: "ok" },
     { type: "out", text: "ckad   Certified Kubernetes Application Developer Jun-2028", color: "ok" },
     { type: "out", text: "cka    Certified Kubernetes Administrator         Mar-2028", color: "ok" },
-    { type: "cmd", text: "helm list -A | grep -v pending" },
-    { type: "out", text: "argocd    Deployed ✓   synced", color: "ok" },
-    { type: "out", text: "jenkins   Deployed ✓   2 releases/week", color: "ok" },
-    { type: "out", text: "ingress   Deployed ✓   nginx", color: "ok" },
     { type: "cmd", text: "cat .identity" },
     { type: "out", text: "role:       System / DevOps Engineer", color: "" },
     { type: "out", text: "education:  HCMUT — VNU HCMC", color: "" },
@@ -115,7 +120,11 @@
     const el = document.createElement("div");
     if (line.type === "cmd") {
       el.className = "term-line";
-      el.innerHTML = `${promptHtml}<span style="color:var(--white)">${line.text}</span>`;
+      const cmd = line.html || line.text;
+      el.innerHTML = `${promptHtml}<span style="color:var(--white)">${cmd}</span>`;
+    } else if (line.type === "html") {
+      el.className = "term-output";
+      el.innerHTML = line.html;
     } else {
       el.className = `term-output ${line.color || ""}`;
       el.textContent = line.text;

@@ -378,9 +378,26 @@ section {
   opacity: 1;
 }
 
+.term-output.hdr {
+  color: var(--muted);
+  opacity: 1;
+}
+
 .term-output.ok {
   color: var(--ok);
   opacity: 1;
+}
+
+.term-flag {
+  color: var(--amber);
+}
+
+.term-val {
+  color: var(--muted);
+}
+
+.term-status {
+  color: var(--ok);
 }
 
 .blink {
