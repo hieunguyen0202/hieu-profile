@@ -417,12 +417,18 @@ body.docs::before {
   scroll-margin-top: 76px;
 }
 
-.docs-main h3 {
-  font-size: 1.05rem;
+.docs-main img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin: 12px 0;
+}
+
+.docs-main h4 {
+  font-size: 0.98rem;
   font-weight: 600;
   color: var(--white);
-  margin: 22px 0 8px;
-  scroll-margin-top: 76px;
+  margin: 16px 0 8px;
 }
 
 .docs-main p {

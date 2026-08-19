@@ -94,12 +94,65 @@
     </li>`;
 
   if (navEl && sidebar?.dataset.nav === "cks") {
+    const r = root;
+    const cksItem = (id, label) => {
+      const href = id === "exam" ? r : `${r}${id}/`;
+      const cls = id === active || (id === "exam" && (active === "exam" || active === "overview")) ? "active" : "";
+      return `<li><a class="${cls}" href="${href}">${label}</a></li>`;
+    };
+    const open = (ids) => ids.includes(active);
     navEl.innerHTML = [
-      `<li><a href="#cks">CKS Exam</a></li>`,
-      `<li><a href="#domains">What's on the exam</a></li>`,
-      `<li><a href="#exam-day">Exam day</a></li>`,
-      `<li><a href="#allowed">Allowed docs</a></li>`,
-      `<li><a href="#study">How I study</a></li>`,
+      cksItem("exam", "CKS Exam"),
+      group("Introduction", open(["introduction", "study-environment", "review-kubernetes", "review-containers"]), [
+        cksItem("introduction", "Introduction"),
+        cksItem("study-environment", "Study Environment"),
+        cksItem("review-kubernetes", "Review Kubernetes"),
+        cksItem("review-containers", "Review Containers"),
+      ].join("")),
+      group("Network", open(["network-security-policies", "ingress", "mtls", "cloud-platform-node-metadata", "control-access-gui-elements"]), [
+        cksItem("network-security-policies", "Network Policies"),
+        cksItem("ingress", "Ingress"),
+        cksItem("mtls", "mTLS"),
+        cksItem("cloud-platform-node-metadata", "Node metadata"),
+        cksItem("control-access-gui-elements", "GUI access"),
+      ].join("")),
+      group("Hardening &amp; Security", open(["cis-benchmark", "attack-surface-reduction", "hash-verification"]), [
+        cksItem("cis-benchmark", "CIS Benchmark"),
+        cksItem("attack-surface-reduction", "Attack surface"),
+        cksItem("hash-verification", "Hash verification"),
+      ].join("")),
+      group("RBAC", open(["rbac", "rbac-users", "service-accounts"]), [
+        cksItem("rbac", "RBAC"),
+        cksItem("rbac-users", "Users"),
+        cksItem("service-accounts", "Service accounts"),
+      ].join("")),
+      group("API", open(["restrict-access", "secrets", "update-process"]), [
+        cksItem("restrict-access", "Restrict API access"),
+        cksItem("secrets", "Secrets"),
+        cksItem("update-process", "Update process"),
+      ].join("")),
+      group("Container Runtime", open(["runtime-classes", "sandboxes", "security-context"]), [
+        cksItem("runtime-classes", "RuntimeClasses"),
+        cksItem("sandboxes", "Sandboxes"),
+        cksItem("security-context", "Security context"),
+      ].join("")),
+      group("Supply Chain", open(["container-registries", "images-vulnerabilities", "security-images", "static-analysis-conftest", "static-analysis-kubesec", "pod-security-standards", "open-policy-agent"]), [
+        cksItem("container-registries", "Registries"),
+        cksItem("images-vulnerabilities", "Image vulnerabilities"),
+        cksItem("security-images", "Secure images"),
+        cksItem("static-analysis-conftest", "Conftest"),
+        cksItem("static-analysis-kubesec", "Kubesec"),
+        cksItem("pod-security-standards", "Pod Security Standards"),
+        cksItem("open-policy-agent", "OPA"),
+      ].join("")),
+      group("Behavioral Analysis", open(["kernel-space-security", "falco-runtime-security", "container-immutability", "kubernetes-auditing"]), [
+        cksItem("kernel-space-security", "Kernel space security"),
+        cksItem("falco-runtime-security", "Falco runtime security"),
+        cksItem("container-immutability", "Container immutability"),
+        cksItem("kubernetes-auditing", "Kubernetes auditing"),
+      ].join("")),
+      cksItem("solved-questions", "CKS: Solved Questions"),
+      cksItem("tips", "CKS Tips"),
     ].join("");
   } else if (navEl) {
     navEl.innerHTML = [

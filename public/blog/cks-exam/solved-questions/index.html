@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CKS: Solved Questions — Hieu Nguyen</title>
+  <meta name="description" content="CKS: Solved Questions — CKS study notes.">
+  <link rel="icon" href="../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../">i'm<span>.hiu</span></a>
+    <nav class="docs-series">
+      <a href="../../../blog/web-security/">Web Security</a>
+      <a class="active" href="../">CKS exam</a>
+    </nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-nav="cks" data-docs-root="../" data-active="solved-questions">
+      <div class="docs-nav-label">CKS</div>
+      <ul class="docs-nav" id="docsNav"></ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../">Home</a>
+        <span>›</span>
+        <a href="../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../">CKS</a>
+        <span>›</span>
+        <span>Solved questions</span>
+      </div>
+      <div id="top"></div>
+<h1>CKS: Solved Questions</h1>
+<p>Practice tasks from the same CKS track (Killer Shell–style labs). Work them on <strong>your</strong> lab cluster — not on production.</p>
+<p>Full write-ups live on the source pages (open in a new tab):</p>
+<ul>
+<li><a href="https://devsecops.puziol.com.br/en/kubernetes/cks/solved-questions/question-1-contexts/" target="_blank" rel="noopener">Q1 — Contexts</a></li>
+<li><a href="https://devsecops.puziol.com.br/en/kubernetes/cks/solved-questions/question-2-runtime-security-falco/" target="_blank" rel="noopener">Q2 — Falco</a></li>
+<li><a href="https://devsecops.puziol.com.br/en/kubernetes/cks/solved-questions/question-3-apiserver-security/" target="_blank" rel="noopener">Q3 — API server</a></li>
+<li><a href="https://devsecops.puziol.com.br/en/kubernetes/cks/solved-questions/question-4-pod-security-standard/" target="_blank" rel="noopener">Q4 — Pod Security Standard</a></li>
+<li><a href="https://devsecops.puziol.com.br/en/kubernetes/cks/solved-questions/question-5-cis-benchmark/" target="_blank" rel="noopener">Q5 — CIS benchmark</a></li>
+<li><a href="https://devsecops.puziol.com.br/en/kubernetes/cks/solved-questions/question-6-verify-platform-binaries/" target="_blank" rel="noopener">Q6 — Verify binaries</a></li>
+<li><a href="https://devsecops.puziol.com.br/en/kubernetes/cks/solved-questions/question-7-open-policy-agent/" target="_blank" rel="noopener">Q7 — OPA</a></li>
+<li><a href="https://devsecops.puziol.com.br/en/kubernetes/cks/solved-questions/question-8-secure-kubernetes-dashboard/" target="_blank" rel="noopener">Q8 — Dashboard</a></li>
+<li><a href="https://devsecops.puziol.com.br/en/kubernetes/cks/solved-questions/question-9-apparmor-profile/" target="_blank" rel="noopener">Q9 — AppArmor</a></li>
+<li><a href="https://devsecops.puziol.com.br/en/kubernetes/cks/solved-questions/question-10-gvisor-runtime-sandbox/" target="_blank" rel="noopener">Q10 — gVisor</a></li>
+<li><a href="https://devsecops.puziol.com.br/en/kubernetes/cks/solved-questions/question-11-secrets-in-etcd/" target="_blank" rel="noopener">Q11 — Secrets in etcd</a></li>
+<li><a href="https://devsecops.puziol.com.br/en/kubernetes/cks/solved-questions/question-12-hack-secrets/" target="_blank" rel="noopener">Q12 — Secret access</a></li>
+<li><a href="https://devsecops.puziol.com.br/en/kubernetes/cks/solved-questions/question-13-restrict-access-metadata-server/" target="_blank" rel="noopener">Q13 — Metadata server</a></li>
+<li><a href="https://devsecops.puziol.com.br/en/kubernetes/cks/solved-questions/question-14-syscall-activity/" target="_blank" rel="noopener">Q14 — Syscall activity</a></li>
+<li><a href="https://devsecops.puziol.com.br/en/kubernetes/cks/solved-questions/question-15-configure-tls-ingress/" target="_blank" rel="noopener">Q15 — TLS Ingress</a></li>
+<li><a href="https://devsecops.puziol.com.br/en/kubernetes/cks/solved-questions/question-16-docker-image-attack-surface/" target="_blank" rel="noopener">Q16 — Image attack surface</a></li>
+<li><a href="https://devsecops.puziol.com.br/en/kubernetes/cks/solved-questions/question-17-audit-log-policy/" target="_blank" rel="noopener">Q17 — Audit policy</a></li>
+<li><a href="https://devsecops.puziol.com.br/en/kubernetes/cks/solved-questions/question-18-investigate-break-in-audit-log/" target="_blank" rel="noopener">Q18 — Investigate audit log</a></li>
+<li><a href="https://devsecops.puziol.com.br/en/kubernetes/cks/solved-questions/question-19-immutable-root-filesystem/" target="_blank" rel="noopener">Q19 — Immutable rootfs</a></li>
+<li><a href="https://devsecops.puziol.com.br/en/kubernetes/cks/solved-questions/question-20-update-kubernetes/" target="_blank" rel="noopener">Q20 — Update Kubernetes</a></li>
+<li><a href="https://devsecops.puziol.com.br/en/kubernetes/cks/solved-questions/question-21-image-vulnerability-scanning/" target="_blank" rel="noopener">Q21 — Image scanning</a></li>
+<li><a href="https://devsecops.puziol.com.br/en/kubernetes/cks/solved-questions/question-22-manual-static-security-analysis/" target="_blank" rel="noopener">Q22 — Static analysis</a></li>
+<li><a href="https://devsecops.puziol.com.br/en/kubernetes/cks/solved-questions/question-23-rbac-security-configuration/" target="_blank" rel="noopener">Q23 — RBAC</a></li>
+<li><a href="https://devsecops.puziol.com.br/en/kubernetes/cks/solved-questions/question-24-opa-gatekeeper-policy-extension/" target="_blank" rel="noopener">Q24 — Gatekeeper</a></li>
+<li><a href="https://devsecops.puziol.com.br/en/kubernetes/cks/solved-questions/question-25-malicious-process-investigation/" target="_blank" rel="noopener">Q25 — Malicious process</a></li>
+<li><a href="https://devsecops.puziol.com.br/en/kubernetes/cks/solved-questions/question-31-critical-vulnerabilities-trivy/" target="_blank" rel="noopener">Q31 — Trivy</a></li>
+<li><a href="https://devsecops.puziol.com.br/en/kubernetes/cks/solved-questions/question-32-rbac-serviceaccount-configuration/" target="_blank" rel="noopener">Q32 — ServiceAccount RBAC</a></li>
+<li><a href="https://devsecops.puziol.com.br/en/kubernetes/cks/solved-questions/question-33-secret-volume-mount-configuration/" target="_blank" rel="noopener">Q33 — Secret volume</a></li>
+<li><a href="https://devsecops.puziol.com.br/en/kubernetes/cks/solved-questions/question-34-seccomp-profile-configuration/" target="_blank" rel="noopener">Q34 — seccomp</a></li>
+<li><a href="https://devsecops.puziol.com.br/en/kubernetes/cks/solved-questions/question-35-kube-bench-security-hardening/" target="_blank" rel="noopener">Q35 — kube-bench</a></li>
+<li><a href="https://devsecops.puziol.com.br/en/kubernetes/cks/solved-questions/question-36-kubernetes-audit-configuration/" target="_blank" rel="noopener">Q36 — Audit config</a></li>
+<li><a href="https://devsecops.puziol.com.br/en/kubernetes/cks/solved-questions/question-37-imagepolicywebhook-admission-controller/" target="_blank" rel="noopener">Q37 — ImagePolicyWebhook</a></li>
+<li><a href="https://devsecops.puziol.com.br/en/kubernetes/cks/solved-questions/question-38-pod-security-policy-configuration/" target="_blank" rel="noopener">Q38 — PSS/PSP</a></li>
+<li><a href="https://devsecops.puziol.com.br/en/kubernetes/cks/solved-questions/question-41-cks-challenge-1-complete-security-setup/" target="_blank" rel="noopener">Challenge 1</a></li>
+<li><a href="https://devsecops.puziol.com.br/en/kubernetes/cks/solved-questions/question-42-cks-challenge-2-multi-environment-security/" target="_blank" rel="noopener">Challenge 2</a></li>
+<li><a href="https://devsecops.puziol.com.br/en/kubernetes/cks/solved-questions/question-43-cks-challenge-3-kube-bench-cluster-hardening/" target="_blank" rel="noopener">Challenge 3</a></li>
+<li><a href="https://devsecops.puziol.com.br/en/kubernetes/cks/solved-questions/question-44-cks-challenge-4-security-monitoring-incident-response/" target="_blank" rel="noopener">Challenge 4</a></li>
+</ul>
+<p>Map each task back to the notes in this series (NetworkPolicy, Falco, audit, Trivy, PSS, OPA, AppArmor, gVisor, Ingress TLS).</p>
+
+      <div class="docs-pager">
+        <a href="../kubernetes-auditing/">Previous · Auditing</a>
+        <a href="../tips/">Next · CKS Tips</a>
+      </div>
+    </article>
+    <aside class="docs-toc">
+      <div class="docs-toc-title">On this page</div>
+      <nav>
+        <a href="#top">On this page</a>
+      </nav>
+    </aside>
+  </div>
+  <script src="../../../js/docs.js"></script>
+</body>
+</html>

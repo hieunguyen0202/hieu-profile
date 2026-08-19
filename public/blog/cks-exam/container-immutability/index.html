@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Container Immutability — Hieu Nguyen</title>
+  <meta name="description" content="Container Immutability — CKS study notes.">
+  <link rel="icon" href="../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../">i'm<span>.hiu</span></a>
+    <nav class="docs-series">
+      <a href="../../../blog/web-security/">Web Security</a>
+      <a class="active" href="../">CKS exam</a>
+    </nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-nav="cks" data-docs-root="../" data-active="container-immutability">
+      <div class="docs-nav-label">CKS</div>
+      <ul class="docs-nav" id="docsNav"></ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../">Home</a>
+        <span>›</span>
+        <a href="../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../">CKS</a>
+        <span>›</span>
+        <span>Immutability</span>
+      </div>
+      <div id="top"></div>
+<h1>Container Immutability</h1><p>What does this mean?</p>
+<p>The container will not be modified during its lifetime. Nothing will be added or removed from the container. If changes are necessary, another image will be created with the appropriate modification and a new instance will be created.</p>
+<p>The advantage of this approach is that we always know the state in which the container is. Entering an application and changing a configuration won&#x27;t be replicable again.</p>
+<p>Immutable containers allow us to:</p>
+<ul>
+<li>Use advanced deployment methods</li>
+<li>Easy rollback</li>
+<li>Greater reliability</li>
+<li>Better security (at the container level), because we can always create a new one, certain that there are no malicious processes running</li>
+</ul>
+<p>Immutability and the ease of burning new images are some of the reasons that made containers so popular.</p>
+<p>What can we do to ensure containers are immutable:</p>
+<ul>
+<li>Remove bash/shell so it&#x27;s not possible to interact with the container</li>
+<li>Make the filesystem read-only so it&#x27;s not possible to write</li>
+<li>Run with a non-root user</li>
+</ul>
+<p>This is what best practices mandate and how to harden a container.</p>
+<p>But what if we don&#x27;t have control over container images? In this case, it&#x27;s always possible to use the image as a base and modify it to generate a new one.</p>
+<p>If that&#x27;s still not possible, there are some things we can do.</p>
+<p>We can change the command and pass all the commands we want and lastly call the command that will run the container.</p>
+<div class="language-yaml codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#F8F8F2;--prism-background-color:#282A36"><div><pre tabindex="0" class="prism-code language-yaml codeBlock_bY9V thin-scrollbar" style="color:#F8F8F2;background-color:#282A36"><code><span class="token-line" style="color:#F8F8F2"><span class="token plain">  </span><span class="token key atrule">containers</span><span class="token punctuation" style="color:rgb(248, 248, 242)">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">  </span><span class="token punctuation" style="color:rgb(248, 248, 242)">-</span><span class="token plain"> </span><span class="token key atrule">image</span><span class="token punctuation" style="color:rgb(248, 248, 242)">:</span><span class="token plain"> nginx</span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">    </span><span class="token key atrule">name</span><span class="token punctuation" style="color:rgb(248, 248, 242)">:</span><span class="token plain"> nginx</span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">    </span><span class="token comment" style="color:rgb(98, 114, 164)"># Remove all write permissions recursively before calling the nginx executable</span><span class="token plain"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">    </span><span class="token key atrule">command</span><span class="token punctuation" style="color:rgb(248, 248, 242)">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">    </span><span class="token punctuation" style="color:rgb(248, 248, 242)">-</span><span class="token plain"> </span><span class="token string" style="color:rgb(255, 121, 198)">&quot;chmod a-w -R / &amp;&amp; nginx&quot;</span><span class="token plain"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">    </span><span class="token key atrule">resources</span><span class="token punctuation" style="color:rgb(248, 248, 242)">:</span><span class="token plain"> </span><span class="token punctuation" style="color:rgb(248, 248, 242)">{</span><span class="token punctuation" style="color:rgb(248, 248, 242)">}</span><br></span></code></pre></div></div>
+<p>We can still solve this using the startup probe, which is very similar to readiness or liveness probes, however these last two will only be executed after the startup probe succeeds, otherwise the container will keep restarting. This way we won&#x27;t even need to know the container&#x27;s entrypoint.</p>
+<div class="language-yaml codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#F8F8F2;--prism-background-color:#282A36"><div><pre tabindex="0" class="prism-code language-yaml codeBlock_bY9V thin-scrollbar" style="color:#F8F8F2;background-color:#282A36"><code><span class="token-line" style="color:#F8F8F2"><span class="token plain">  </span><span class="token key atrule">containers</span><span class="token punctuation" style="color:rgb(248, 248, 242)">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">  </span><span class="token punctuation" style="color:rgb(248, 248, 242)">-</span><span class="token plain"> </span><span class="token key atrule">image</span><span class="token punctuation" style="color:rgb(248, 248, 242)">:</span><span class="token plain"> nginx</span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">    </span><span class="token key atrule">name</span><span class="token punctuation" style="color:rgb(248, 248, 242)">:</span><span class="token plain"> nginx</span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">    </span><span class="token key atrule">startupProbe</span><span class="token punctuation" style="color:rgb(248, 248, 242)">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">      </span><span class="token key atrule">exec</span><span class="token punctuation" style="color:rgb(248, 248, 242)">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">        </span><span class="token key atrule">command</span><span class="token punctuation" style="color:rgb(248, 248, 242)">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">        </span><span class="token punctuation" style="color:rgb(248, 248, 242)">-</span><span class="token plain"> chmod</span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">        </span><span class="token punctuation" style="color:rgb(248, 248, 242)">-</span><span class="token plain"> a</span><span class="token punctuation" style="color:rgb(248, 248, 242)">-</span><span class="token plain">w </span><span class="token punctuation" style="color:rgb(248, 248, 242)">-</span><span class="token plain">R /</span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">      </span><span class="token key atrule">initialDelaySeconds</span><span class="token punctuation" style="color:rgb(248, 248, 242)">:</span><span class="token plain"> </span><span class="token number">1</span><span class="token plain"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">      </span><span class="token key atrule">periodSeconds</span><span class="token punctuation" style="color:rgb(248, 248, 242)">:</span><span class="token plain"> </span><span class="token number">5</span><br></span></code></pre></div></div>
+<p>The methods above are possible, but just because something is possible doesn&#x27;t mean we should do it.</p>
+<p>The best way would be to enforce read-only on /root using <code>SecurityContext</code> and/or <code>PodSecurityPolicies</code>.</p>
+<div class="language-yaml codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#F8F8F2;--prism-background-color:#282A36"><div><pre tabindex="0" class="prism-code language-yaml codeBlock_bY9V thin-scrollbar" style="color:#F8F8F2;background-color:#282A36"><code><span class="token-line" style="color:#F8F8F2"><span class="token plain">  </span><span class="token key atrule">containers</span><span class="token punctuation" style="color:rgb(248, 248, 242)">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">  </span><span class="token punctuation" style="color:rgb(248, 248, 242)">-</span><span class="token plain"> </span><span class="token key atrule">image</span><span class="token punctuation" style="color:rgb(248, 248, 242)">:</span><span class="token plain"> httpd</span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">    </span><span class="token key atrule">name</span><span class="token punctuation" style="color:rgb(248, 248, 242)">:</span><span class="token plain"> httpd</span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">    </span><span class="token key atrule">securityContext</span><span class="token punctuation" style="color:rgb(248, 248, 242)">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">      </span><span class="token key atrule">readOnlyRootFilesystem</span><span class="token punctuation" style="color:rgb(248, 248, 242)">:</span><span class="token plain"> </span><span class="token boolean important">true</span><br></span></code></pre></div></div>
+<p>However, this pod will need to write to <em>/usr/local/apache2/logs</em>. When this happens, we can mount an emptyDir.</p>
+<div class="language-yaml codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#F8F8F2;--prism-background-color:#282A36"><div><pre tabindex="0" class="prism-code language-yaml codeBlock_bY9V thin-scrollbar" style="color:#F8F8F2;background-color:#282A36"><code><span class="token-line" style="color:#F8F8F2"><span class="token plain">  </span><span class="token key atrule">containers</span><span class="token punctuation" style="color:rgb(248, 248, 242)">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">  </span><span class="token punctuation" style="color:rgb(248, 248, 242)">-</span><span class="token plain"> </span><span class="token key atrule">image</span><span class="token punctuation" style="color:rgb(248, 248, 242)">:</span><span class="token plain"> httpd</span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">    </span><span class="token key atrule">name</span><span class="token punctuation" style="color:rgb(248, 248, 242)">:</span><span class="token plain"> httpd</span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">    </span><span class="token key atrule">securityContext</span><span class="token punctuation" style="color:rgb(248, 248, 242)">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">      </span><span class="token key atrule">readOnlyRootFilesystem</span><span class="token punctuation" style="color:rgb(248, 248, 242)">:</span><span class="token plain"> </span><span class="token boolean important">true</span><span class="token plain"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">    </span><span class="token key atrule">volumeMounts</span><span class="token punctuation" style="color:rgb(248, 248, 242)">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">    </span><span class="token punctuation" style="color:rgb(248, 248, 242)">-</span><span class="token plain"> </span><span class="token key atrule">mountPath</span><span class="token punctuation" style="color:rgb(248, 248, 242)">:</span><span class="token plain"> /usr/local/apache2/logs</span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">      </span><span class="token key atrule">name</span><span class="token punctuation" style="color:rgb(248, 248, 242)">:</span><span class="token plain"> logs</span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">  </span><span class="token key atrule">volumes</span><span class="token punctuation" style="color:rgb(248, 248, 242)">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">  </span><span class="token punctuation" style="color:rgb(248, 248, 242)">-</span><span class="token plain"> </span><span class="token key atrule">name</span><span class="token punctuation" style="color:rgb(248, 248, 242)">:</span><span class="token plain"> logs</span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">    </span><span class="token key atrule">emptyDir</span><span class="token punctuation" style="color:rgb(248, 248, 242)">:</span><span class="token plain"> </span><span class="token punctuation" style="color:rgb(248, 248, 242)">{</span><span class="token punctuation" style="color:rgb(248, 248, 242)">}</span><br></span></code></pre></div></div>
+<p>If we translate this to the Docker world, it would be like executing the command below.</p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#F8F8F2;--prism-background-color:#282A36"><div><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#F8F8F2;background-color:#282A36"><code><span class="token-line" style="color:#F8F8F2"><span class="token function" style="color:rgb(80, 250, 123)">docker</span><span class="token plain"> run --read-only </span><span class="token parameter variable" style="color:rgb(189, 147, 249);font-style:italic">--tmpfs</span><span class="token plain"> /run my-container</span><br></span></code></pre></div></div>
+<p>We could still use the <code>init container</code> resource which starts before the application, prepares the ground, and only after it finishes will the application container be launched. If the init container prepares the volume that will be used by the application, giving it only read resources, it can be a good scenario.</p>
+<p><img decoding="async" loading="lazy" alt="alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-2-dfdfedaec78ee282f54a098db77116c8.png" width="1637" height="605"></p>
+<p>Obviously, it&#x27;s necessary to protect users from changing the pod spec using RBAC.</p>
+      <div class="docs-pager">
+        <a href="../falco-runtime-security/">Previous · Falco</a>
+        <a href="../kubernetes-auditing/">Next · Auditing</a>
+      </div>
+    </article>
+    <aside class="docs-toc">
+      <div class="docs-toc-title">On this page</div>
+      <nav>
+        <a href="#top">On this page</a>
+      </nav>
+    </aside>
+  </div>
+  <script src="../../../js/docs.js"></script>
+</body>
+</html>
