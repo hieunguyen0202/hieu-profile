@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Chương 21: Business Logic — Hieu Nguyen</title>
-  <meta name="description" content="Business logic flaws, workflow, negative tests.">
+  <title>Chương 21: Business Logic Vulnerabilities — Hieu Nguyen</title>
+  <meta name="description" content="Chương 21: Business Logic Vulnerabilities — Web Security notes.">
   <link rel="icon" href="../../../favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -40,57 +40,175 @@
         <span>›</span>
         <span>21. Business Logic</span>
       </div>
-      <h1>Chương 21: Business Logic</h1>
-      <p class="lede">Mọi scanner xanh. Workflow vẫn sai: giá âm, bước nhảy, hoàn tiền kép.</p>
-      <div class="docs-meta">
-        <span><strong>Tác giả:</strong> Hieu Nguyen (Ryan)</span>
-        <span><strong>Phần:</strong> V — Server-side</span>
-        <span><strong>Cập nhật:</strong> Aug 2026</span>
-      </div>
-      <h2 id="khai-niem">Khái niệm</h2>
-<p>Lỗ logic: đúng auth nhưng sai luật nghiệp vụ — đổi giá client-side, skip bước verify, voucher stack. Không có CVE chung; cần threat model.</p>
-<h2 id="phong">Phòng chống</h2>
-<ul>
-        <li>Giá / role / hạn mức chỉ tin server.</li>
-        <li>State machine đơn hàng: transition hợp lệ.</li>
-        <li>Giới hạn abuse (số lần trial).</li>
-        <li>Test negative: bước 3 không gọi khi chưa bước 2.</li>
-      </ul>
-<h2 id="devops">Góc nhìn DevOps</h2>
-<p>Feature flag không thay validation. Log business event (refund, role change). Rate-limit API tiền.</p>
-<h2 id="tom-tat">Tóm tắt</h2>
-<ul>
-        <li>Server là nguồn sự thật.</li>
-        <li>State machine.</li>
-        <li>Test abuse.</li>
-        <li>Log nghiệp vụ.</li>
-      </ul>
-<h2 id="on-tap">Câu hỏi ôn tập</h2>
-<ol>
-        <li>Vì sao DAST bỏ sót logic?</li>
-        <li>Giá trên JSON client sai chỗ nào?</li>
-        <li>Voucher stacking là lớp gì?</li>
-        <li>Event refund nên log field nào?</li>
-        <li>Rate-limit khác authz?</li>
-      </ol>
+      <div id="top"></div>
+<header><h1>Chương 21: Business Logic Vulnerabilities</h1></header>
+<h2 id="khái-niệm">Khái niệm</h2>
+<p><strong>Business Logic Vulnerabilities</strong> là lỗi trong business rules của ứng dụng — không phải lỗi kỹ thuật như injection hay XSS, mà là logic lỗi: ứng dụng làm điều gì đó không đúng với business intent.</p>
+<p><strong>Mức độ nguy hiểm:</strong> Biến thiên — Từ fraud nhỏ đến financial loss lớn.</p>
+<p><strong>Đặc điểm:</strong> Khó detect bằng automated tools. Đòi hỏi hiểu business context.</p>
+<hr>
+<h2 id="các-loại-business-logic-vulnerabilities">Các loại Business Logic Vulnerabilities</h2>
+<h3 id="1-price-manipulation">1. Price Manipulation</h3>
+<pre><code class="language-text">Scenario: Mua hàng với giá âm
 
-      <div class="docs-tags">
-        <span class="docs-tag">business-logic</span>
-        <span class="docs-tag">abuse</span>
-      </div>
+POST /api/cart/add
+{&quot;product_id&quot;: 1, &quot;quantity&quot;: -5}
+
+→ Giá = unit_price × quantity = $10 × (-5) = -$50
+→ Total giảm $50 → hacker được tiền!
+</code></pre>
+<h3 id="2-workflow-bypass">2. Workflow Bypass</h3>
+<pre><code class="language-text">Bình thường:
+Step 1: Add to cart → Step 2: Enter address → Step 3: Payment → Step 4: Confirm
+
+Bypass:
+Step 1 → Step 4 (nhảy trực tiếp → không cần thanh toán)
+
+Nếu server không check &quot;user đã qua payment step chưa&quot;
+→ Order được tạo mà không thu tiền
+</code></pre>
+<h3 id="3-trust-assumption-lỗi">3. Trust Assumption Lỗi</h3>
+<pre><code class="language-python"># Vulnerable: Tin vào client-supplied discount
+POST /api/checkout
+{
+    &quot;items&quot;: [...],
+    &quot;discount_code&quot;: &quot;ADMIN50&quot;,
+    &quot;discount_percent&quot;: 99  # ← Client chỉ định discount %!
+}
+
+# Server nhận discount_percent từ client → apply 99% discount
+</code></pre>
+<h3 id="4-integer-overflow--underflow">4. Integer Overflow / Underflow</h3>
+<pre><code class="language-text">Max quantity per order: 1000
+Hacker order: quantity = 2147483648 (max int32)
+→ Overflow → quantity becomes negative → price negative
+</code></pre>
+<h3 id="5-email-case-sensitivity">5. Email Case Sensitivity</h3>
+<pre><code class="language-text">Đăng ký với: Admin@example.com
+Login với: admin@example.com
+
+Nếu app store email as-is nhưng lookup case-insensitive:
+→ Có thể tạo nhiều accounts cho cùng email
+→ Bypass &quot;1 account per email&quot; restriction
+</code></pre>
+<hr>
+<h2 id="kịch-bản-tấn-công-refund-fraud">Kịch bản tấn công: Refund Fraud</h2>
+<pre><code class="language-text">Target: E-commerce app với refund policy
+
+1. Mua product A ($100)
+2. Nhận product A
+3. Request refund → $100 được trả lại
+4. (Trong một số app) Order status không update correct
+5. Return window vẫn open → request another refund
+→ Nhận tiền 2 lần, giữ product
+</code></pre>
+<hr>
+<h2 id="cách-phát-hiện">Cách phát hiện</h2>
+<pre><code class="language-text">□ Thử negative quantities, prices, quantities
+□ Bypass multi-step workflows bằng cách nhảy steps
+□ Test integer extremes (0, -1, MAX_INT, MIN_INT)
+□ Modify hidden fields / client-supplied parameters
+□ Test với điều kiện &quot;impossible&quot; (trả hàng nhiều lần)
+□ Test timing: actions trong wrong order
+□ Test boundary conditions (exact limit)
+</code></pre>
+<hr>
+<h2 id="phòng-chống">Phòng chống</h2>
+<pre><code class="language-python"># Validate tất cả business rules server-side
+def add_to_cart(product_id: int, quantity: int, user_id: int):
+    # Validate không tin client
+    if quantity &lt;= 0:
+        raise ValueError(&quot;Quantity must be positive&quot;)
+    
+    if quantity &gt; 100:  # Business rule: max 100 per order
+        raise ValueError(&quot;Maximum 100 items per order&quot;)
+    
+    product = db.get_product(product_id)
+    if not product or not product.is_available:
+        raise ValueError(&quot;Product not available&quot;)
+    
+    # Calculate price server-side, không nhận từ client
+    price = product.price * quantity
+    # Apply discounts server-side với verified discount code
+    
+    # State machine cho workflow
+    cart = db.get_cart(user_id)
+    if cart.status != &#x27;OPEN&#x27;:
+        raise ValueError(&quot;Cart is not in OPEN state&quot;)
+
+# State machine cho order workflow
+class OrderStateMachine:
+    VALID_TRANSITIONS = {
+        &#x27;PENDING&#x27;: [&#x27;PAID&#x27;, &#x27;CANCELLED&#x27;],
+        &#x27;PAID&#x27;: [&#x27;SHIPPED&#x27;, &#x27;REFUNDED&#x27;],
+        &#x27;SHIPPED&#x27;: [&#x27;DELIVERED&#x27;, &#x27;RETURNED&#x27;],
+        &#x27;DELIVERED&#x27;: [&#x27;COMPLETED&#x27;],
+        &#x27;COMPLETED&#x27;: [],
+    }
+    
+    def transition(self, order, new_status):
+        current = order.status
+        if new_status not in self.VALID_TRANSITIONS.get(current, []):
+            raise ValueError(f&quot;Cannot transition from {current} to {new_status}&quot;)
+        order.status = new_status
+</code></pre>
+<hr>
+<h2 id="góc-nhìn-devops">Góc nhìn DevOps</h2>
+<p><strong>Business Logic Testing trong CI/CD:</strong></p>
+<pre><code class="language-python"># Automated business logic tests
+def test_negative_quantity_rejected():
+    response = client.post(&#x27;/api/cart/add&#x27;, json={&#x27;product_id&#x27;: 1, &#x27;quantity&#x27;: -1})
+    assert response.status_code == 400
+
+def test_price_is_server_calculated():
+    # Order với giá từ client bị ignore
+    response = client.post(&#x27;/api/checkout&#x27;, json={&#x27;price&#x27;: 0.01})
+    order = response.json()
+    assert order[&#x27;total&#x27;] == expected_price  # Server price, không client price
+
+def test_workflow_sequence_enforced():
+    # Cannot skip to confirmation without payment
+    response = client.post(&#x27;/api/orders/confirm/ORD-001&#x27;)
+    assert response.status_code == 403  # Chưa thanh toán
+</code></pre>
+<hr>
+<h2 id="tóm-tắt">Tóm tắt</h2>
+<ul>
+<li>Business logic bugs là lỗi về business rules, không phải kỹ thuật.</li>
+<li>Khó detect bằng tools — cần hiểu business intent.</li>
+<li>Phổ biến: price manipulation, workflow bypass, trust in client input, integer issues.</li>
+<li>Phòng chống: validate tất cả business rules server-side, state machines, không tin client-supplied values.</li>
+</ul>
+<hr>
+<h2 id="câu-hỏi-ôn-tập">Câu hỏi ôn tập</h2>
+<ol>
+<li>Business logic vulnerability khác với technical vulnerability như SQLi ở điểm nào?</li>
+<li>Tại sao negative quantity attack hoạt động? Cần validate gì?</li>
+<li>State machine pattern giúp phòng chống workflow bypass như thế nào?</li>
+<li>Tại sao automated scanners khó phát hiện business logic bugs?</li>
+<li>Mô tả một business logic vulnerability trong hệ thống banking.</li>
+</ol>
       <div class="docs-pager">
         <a href="../20/">Previous · 20. Race Condition</a>
-        <a href="../22/">Next · 22. Clickjacking</a>
+        <a href="../26/">Next · 26. Deserialization</a>
       </div>
     </article>
     <aside class="docs-toc">
       <div class="docs-toc-title">On this page</div>
       <nav>
-        <a href="#khai-niem">Khái niệm</a>
-        <a href="#phong">Phòng chống</a>
-        <a href="#devops">Góc nhìn DevOps</a>
-        <a href="#tom-tat">Tóm tắt</a>
-        <a href="#on-tap">Câu hỏi ôn tập</a>
+        <a href="#khái-niệm">Khái niệm</a>
+        <a href="#các-loại-business-logic-vulnerabilities">Các loại Business Logic Vulnerabilities</a>
+        <a class="depth-3" href="#1-price-manipulation">1. Price Manipulation</a>
+        <a class="depth-3" href="#2-workflow-bypass">2. Workflow Bypass</a>
+        <a class="depth-3" href="#3-trust-assumption-lỗi">3. Trust Assumption Lỗi</a>
+        <a class="depth-3" href="#4-integer-overflow--underflow">4. Integer Overflow / Underflow</a>
+        <a class="depth-3" href="#5-email-case-sensitivity">5. Email Case Sensitivity</a>
+        <a href="#kịch-bản-tấn-công-refund-fraud">Kịch bản tấn công: Refund Fraud</a>
+        <a href="#cách-phát-hiện">Cách phát hiện</a>
+        <a href="#phòng-chống">Phòng chống</a>
+        <a href="#góc-nhìn-devops">Góc nhìn DevOps</a>
+        <a href="#tóm-tắt">Tóm tắt</a>
+        <a href="#câu-hỏi-ôn-tập">Câu hỏi ôn tập</a>
       </nav>
     </aside>
   </div>

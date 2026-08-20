@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Chương 20: Race Condition — Hieu Nguyen</title>
-  <meta name="description" content="TOCTOU, idempotency, locking, unique constraints.">
+  <meta name="description" content="Chương 20: Race Condition — Web Security notes.">
   <link rel="icon" href="../../../favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -40,44 +40,122 @@
         <span>›</span>
         <span>20. Race Condition</span>
       </div>
-      <h1>Chương 20: Race Condition</h1>
-      <p class="lede">Hai request cùng lúc. Số dư, coupon, unique constraint — ai commit trước.</p>
-      <div class="docs-meta">
-        <span><strong>Tác giả:</strong> Hieu Nguyen (Ryan)</span>
-        <span><strong>Phần:</strong> V — Server-side</span>
-        <span><strong>Cập nhật:</strong> Aug 2026</span>
-      </div>
-      <h2 id="khai-niem">Khái niệm</h2>
-<p>Time-of-check vs time-of-use: kiểm tra còn 1 coupon rồi hai request đều redeem. Cần atomicity trên DB, không “if” trên app đơn luồng.</p>
-<h2 id="phong">Phòng chống</h2>
-<ul>
-        <li>Transaction + constraint unique.</li>
-        <li>Idempotency-Key trên API thanh toán.</li>
-        <li>Lock pessimistic/optimistic version.</li>
-        <li>Hàng đợi một consumer cho nghiệp vụ tiền.</li>
-      </ul>
-<h2 id="devops">Góc nhìn DevOps</h2>
-<p>N replica không tạo race — DB mới là chỗ arbitrate. Rate-limit không thay unique constraint. Test load lab trên endpoint tiền.</p>
-<h2 id="tom-tat">Tóm tắt</h2>
-<ul>
-        <li>Atomic DB.</li>
-        <li>Idempotency key.</li>
-        <li>Đừng tin check-then-act.</li>
-        <li>Scale-out làm race dễ lộ hơn.</li>
-      </ul>
-<h2 id="on-tap">Câu hỏi ôn tập</h2>
-<ol>
-        <li>TOCTOU nghĩa là gì?</li>
-        <li>Unique constraint cứu coupon thế nào?</li>
-        <li>Idempotency-Key dùng khi nào?</li>
-        <li>Vì sao 1 replica app vẫn race?</li>
-        <li>Queue giúp gì?</li>
-      </ol>
+      <div id="top"></div>
+<header><h1>Chương 20: Race Condition</h1></header>
+<h2 id="khái-niệm">Khái niệm</h2>
+<p><strong>Race Condition</strong> (Điều kiện đua tranh) xảy ra khi outcome của một operation phụ thuộc vào timing của các concurrent requests. Hacker khai thác bằng cách gửi nhiều requests đồng thời để bypass business logic.</p>
+<p><strong>Mức độ nguy hiểm:</strong> Trung bình-Cao — Race conditions có thể bypass rate limiting, sử dụng coupon nhiều lần, overdraft tài khoản.</p>
+<hr>
+<h2 id="toctou--time-of-check-to-time-of-use">TOCTOU — Time-of-Check to Time-of-Use</h2>
+<pre><code class="language-text">Check → ... (time gap) ... → Use
 
-      <div class="docs-tags">
-        <span class="docs-tag">race</span>
-        <span class="docs-tag">idempotency</span>
-      </div>
+Thread 1: Check balance (100$) → OK → (waiting) → Withdraw 100$
+Thread 2:                         → Check balance (100$) → OK → Withdraw 100$
+→ Cả hai withdraw 100$ mặc dù chỉ có 100$ trong tài khoản!
+</code></pre>
+<hr>
+<h2 id="các-loại-race-condition">Các loại Race Condition</h2>
+<h3 id="1-limit-overrun">1. Limit Overrun</h3>
+<pre><code class="language-python"># Vulnerable: Coupon chỉ dùng 1 lần
+def apply_coupon(user_id, coupon_code):
+    coupon = db.get_coupon(coupon_code)
+    
+    if coupon.is_used:
+        return &quot;Already used&quot;
+    
+    # Race condition: hai requests đều check và thấy coupon chưa dùng
+    db.apply_discount(user_id, coupon.discount)
+    coupon.is_used = True
+    db.save(coupon)
+</code></pre>
+<pre><code class="language-text">Request 1: Check is_used=False → OK
+Request 2: Check is_used=False → OK  (cùng lúc với Request 1)
+Request 1: Apply discount → Save is_used=True
+Request 2: Apply discount → Save is_used=True
+→ Discount áp dụng 2 lần!
+</code></pre>
+<h3 id="2-multi-endpoint-race-condition">2. Multi-Endpoint Race Condition</h3>
+<pre><code class="language-text">Deposit + Withdraw đồng thời:
+1. Deposit $100 → balance: $0 → $100
+2. Simultaneously: Withdraw $100 → check $100 OK
+
+Nếu race condition:
+Check: $100 available (before deposit committed)
+→ Cả hai operations commit → balance âm!
+</code></pre>
+<hr>
+<h2 id="single-packet-attack-burp-turbo-intruder">Single-Packet Attack (Burp Turbo Intruder)</h2>
+<p>HTTP/2 cho phép gửi nhiều requests trong cùng một TCP packet → giảm timing uncertainty → race condition dễ trigger hơn.</p>
+<pre><code class="language-python"># Burp Turbo Intruder script cho race condition
+def queueRequests(target, wordlists):
+    engine = RequestEngine(
+        endpoint=target.endpoint,
+        concurrentConnections=1,
+        requestsPerConnection=20,  # Nhiều requests trong 1 connection
+        pipeline=True,             # HTTP pipelining
+    )
+    
+    for i in range(20):
+        engine.queue(target.req)
+
+def handleResponse(req, interesting):
+    table.add(req)
+</code></pre>
+<hr>
+<h2 id="kịch-bản-tấn-công-gift-card-abuse">Kịch bản tấn công: Gift Card Abuse</h2>
+<pre><code class="language-text">Target: Áp dụng gift card (chỉ 1 lần)
+
+1. Intercept request: POST /apply-gift-card
+2. Send to Turbo Intruder với 50 concurrent requests
+3. Tất cả requests check card chưa used → tất cả apply discount
+4. 1 gift card → 50x discount
+</code></pre>
+<hr>
+<h2 id="phòng-chống">Phòng chống</h2>
+<pre><code class="language-python"># Database transaction với SERIALIZABLE isolation
+def apply_coupon_safe(user_id, coupon_code):
+    with db.transaction(isolation=&#x27;SERIALIZABLE&#x27;):
+        coupon = db.get_coupon_for_update(coupon_code)  # SELECT FOR UPDATE
+        
+        if coupon.is_used:
+            return &quot;Already used&quot;
+        
+        db.apply_discount(user_id, coupon.discount)
+        coupon.is_used = True
+        db.save(coupon)
+    # Transaction commit → atomic
+
+# Redis atomic operations cho counter/lock
+import redis
+
+def check_and_use_coupon(coupon_code):
+    r = redis.Redis()
+    
+    # SETNX: SET if Not eXists → atomic
+    key = f&quot;coupon:{coupon_code}:used&quot;
+    if not r.setnx(key, &quot;1&quot;):
+        return False  # Đã used
+    
+    r.expire(key, 86400)  # 24h TTL
+    return True  # First use
+</code></pre>
+<hr>
+<h2 id="tóm-tắt">Tóm tắt</h2>
+<ul>
+<li>Race condition: concurrent requests trong timing gap → bypass business logic.</li>
+<li>TOCTOU: thay đổi state giữa check và use.</li>
+<li>Khai thác: Turbo Intruder, single-packet attack (HTTP/2).</li>
+<li>Phòng chống: database transactions (SERIALIZABLE), atomic operations (Redis SETNX), database-level locking (SELECT FOR UPDATE).</li>
+</ul>
+<hr>
+<h2 id="câu-hỏi-ôn-tập">Câu hỏi ôn tập</h2>
+<ol>
+<li>TOCTOU là gì? Cho ví dụ cụ thể trong web application.</li>
+<li>Tại sao single-packet attack với HTTP/2 dễ trigger race condition hơn?</li>
+<li>Làm thế nào <code>SELECT FOR UPDATE</code> ngăn race condition?</li>
+<li>Redis <code>SETNX</code> giải quyết race condition như thế nào?</li>
+<li>Race condition khác application logic bug ở điểm nào?</li>
+</ol>
       <div class="docs-pager">
         <a href="../19/">Previous · 19. Open Redirect</a>
         <a href="../21/">Next · 21. Business Logic</a>
@@ -86,11 +164,16 @@
     <aside class="docs-toc">
       <div class="docs-toc-title">On this page</div>
       <nav>
-        <a href="#khai-niem">Khái niệm</a>
-        <a href="#phong">Phòng chống</a>
-        <a href="#devops">Góc nhìn DevOps</a>
-        <a href="#tom-tat">Tóm tắt</a>
-        <a href="#on-tap">Câu hỏi ôn tập</a>
+        <a href="#khái-niệm">Khái niệm</a>
+        <a href="#toctou--time-of-check-to-time-of-use">TOCTOU — Time-of-Check to Time-of-Use</a>
+        <a href="#các-loại-race-condition">Các loại Race Condition</a>
+        <a class="depth-3" href="#1-limit-overrun">1. Limit Overrun</a>
+        <a class="depth-3" href="#2-multi-endpoint-race-condition">2. Multi-Endpoint Race Condition</a>
+        <a href="#single-packet-attack-burp-turbo-intruder">Single-Packet Attack (Burp Turbo Intruder)</a>
+        <a href="#kịch-bản-tấn-công-gift-card-abuse">Kịch bản tấn công: Gift Card Abuse</a>
+        <a href="#phòng-chống">Phòng chống</a>
+        <a href="#tóm-tắt">Tóm tắt</a>
+        <a href="#câu-hỏi-ôn-tập">Câu hỏi ôn tập</a>
       </nav>
     </aside>
   </div>

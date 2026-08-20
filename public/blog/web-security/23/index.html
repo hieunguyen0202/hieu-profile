@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Chương 23: Web Cache Poisoning — Hieu Nguyen</title>
-  <meta name="description" content="Web cache poisoning, cache key, unkeyed headers, CDN.">
+  <meta name="description" content="Chương 23: Web Cache Poisoning — Web Security notes.">
   <link rel="icon" href="../../../favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -40,58 +40,104 @@
         <span>›</span>
         <span>23. Cache Poisoning</span>
       </div>
-      <h1>Chương 23: Web Cache Poisoning</h1>
-      <p class="lede">Cache nhớ response theo key sai. Một header độc hại thành trang của mọi user.</p>
-      <div class="docs-meta">
-        <span><strong>Tác giả:</strong> Hieu Nguyen (Ryan)</span>
-        <span><strong>Phần:</strong> VI — Infra</span>
-        <span><strong>Cập nhật:</strong> Aug 2026</span>
-      </div>
-      <h2 id="khai-niem">Khái niệm</h2>
-<p>CDN/Varnish key thường Host + path. Header/query không nằm trong key nhưng làm đổi body → poison. Unkeyed header (X-Forwarded-Host, malformed Accept) hay gặp.</p>
-<h2 id="phong">Phòng chống</h2>
+      <div id="top"></div>
+<header><h1>Chương 23: Web Cache Poisoning</h1></header>
+<h2 id="khái-niệm">Khái niệm</h2>
+<p><strong>Web Cache Poisoning</strong> là tấn công khiến cache (CDN, Varnish, Nginx cache) lưu trữ và phục vụ response độc hại đến nhiều người dùng.</p>
+<p><strong>Mức độ nguy hiểm:</strong> Cao — Một attack ảnh hưởng tất cả users nhận cached response.</p>
+<hr>
+<h2 id="cache-keys-và-unkeyed-inputs">Cache Keys và Unkeyed Inputs</h2>
+<p><strong>Cache key</strong> là tập hợp các components xác định &quot;request này có giống request trước không&quot;:</p>
 <ul>
-        <li>Cache key gồm mọi input ảnh hưởng response.</li>
-        <li>Không tin Host/XFH chưa allowlist (Chương 2).</li>
-        <li>Tách cache cookie-personalized vs static.</li>
-        <li>Normalize URL; không cache response lỗi lạ.</li>
-      </ul>
-<h2 id="devops">Góc nhìn DevOps</h2>
-<p>Cloudflare/Fastly cache rules là production. Review “cache everything”. Purge khi incident. Vary header đúng.</p>
-<h2 id="tom-tat">Tóm tắt</h2>
-<ul>
-        <li>Key = mọi input ảnh hưởng body.</li>
-        <li>Allowlist Host.</li>
-        <li>Đừng cache HTML cá nhân hóa như static.</li>
-        <li>Purge playbook.</li>
-      </ul>
-<h2 id="on-tap">Câu hỏi ôn tập</h2>
-<ol>
-        <li>Unkeyed header là gì?</li>
-        <li>X-Forwarded-Host liên quan poison?</li>
-        <li>Vary dùng để làm gì?</li>
-        <li>Cache everything trên HTML login?</li>
-        <li>Poison khác XSS stored chỗ nào?</li>
-      </ol>
+<li>Thường: URL + Host header</li>
+<li>Không bao gồm: nhiều headers, cookies (trừ khi configured)</li>
+</ul>
+<p><strong>Unkeyed inputs</strong> = headers/parameters mà server xử lý nhưng cache không tính vào key.</p>
+<hr>
+<h2 id="cách-hoạt-động">Cách hoạt động</h2>
+<pre><code class="language-text">1. Tìm unkeyed input ảnh hưởng đến response:
+   X-Forwarded-Host: attacker.com
+   → Server dùng để tạo links trong response
+   
+2. Poison cache:
+GET /path HTTP/1.1
+Host: example.com
+X-Forwarded-Host: attacker.com
 
-      <div class="docs-tags">
-        <span class="docs-tag">cache</span>
-        <span class="docs-tag">cdn</span>
-        <span class="docs-tag">http</span>
-      </div>
+Response (cached):
+&lt;script src=&quot;https://attacker.com/evil.js&quot;&gt;&lt;/script&gt;
+
+3. Nếu response được cache:
+→ Mọi user request /path → nhận response với attacker.com script
+→ XSS cho tất cả users!
+</code></pre>
+<hr>
+<h2 id="attack-vectors">Attack Vectors</h2>
+<h3 id="host-header-injection">Host Header Injection</h3>
+<pre><code class="language-http">GET / HTTP/1.1
+Host: example.com
+X-Forwarded-Host: &quot;&gt;&lt;script&gt;alert(1)&lt;/script&gt;
+X-Host: &quot;&gt;&lt;script&gt;alert(1)&lt;/script&gt;
+</code></pre>
+<h3 id="fat-get-request">Fat GET Request</h3>
+<pre><code class="language-http">GET /?utm_source=test HTTP/1.1
+Host: example.com
+
+search=INJECTED_PAYLOAD
+# GET request với body → một số servers xử lý body
+# Một số caches không include body trong key → poisoned cache
+</code></pre>
+<h3 id="cache-deception-vs-cache-poisoning">Cache Deception vs. Cache Poisoning</h3>
+<pre><code class="language-text">Cache Deception (ngược lại):
+Lừa server cache sensitive data (của victim)
+
+1. Hacker tạo URL: /account/profile/nonexistent.css
+2. Server: trả profile HTML (ignore invalid path)
+3. Cache: thấy .css → cache aggressive (dựa vào extension)
+4. Hacker request: /account/profile/nonexistent.css
+5. Nhận cached profile của... victim nếu victim đã request trước
+</code></pre>
+<hr>
+<h2 id="phòng-chống">Phòng chống</h2>
+<pre><code class="language-text">1. Disable caching cho sensitive endpoints
+2. Validate unkeyed inputs (X-Forwarded-Host, etc.)
+3. Add unkeyed inputs vào Vary header hoặc cache key
+4. Dùng Param Miner để phát hiện unkeyed inputs
+5. Cache-Control: no-store cho responses nhạy cảm
+</code></pre>
+<pre><code class="language-nginx"># Cache configuration an toàn
+proxy_cache_key &quot;$scheme$proxy_host$request_uri$http_x_requested_with&quot;;
+# Thêm important headers vào cache key
+
+location /api/ {
+    add_header Cache-Control &quot;no-store, no-cache&quot; always;
+    proxy_no_cache 1;
+}
+</code></pre>
+<hr>
+<h2 id="tóm-tắt">Tóm tắt</h2>
+<ul>
+<li>Cache poisoning: inject vào unkeyed input → cached response độc hại → ảnh hưởng nhiều users.</li>
+<li>Phát hiện: Param Miner extension.</li>
+<li>Phòng chống: validate inputs, không cache dựa vào unkeyed params, no-store cho sensitive endpoints.</li>
+</ul>
       <div class="docs-pager">
-        <a href="../22/">Previous · 22. Clickjacking</a>
-        <a href="../24/">Next · 24. Request Smuggling</a>
+        <a href="../26/">Previous · 26. Deserialization</a>
+        <a href="../24/">Next · 24. HTTP Smuggling</a>
       </div>
     </article>
     <aside class="docs-toc">
       <div class="docs-toc-title">On this page</div>
       <nav>
-        <a href="#khai-niem">Khái niệm</a>
-        <a href="#phong">Phòng chống</a>
-        <a href="#devops">Góc nhìn DevOps</a>
-        <a href="#tom-tat">Tóm tắt</a>
-        <a href="#on-tap">Câu hỏi ôn tập</a>
+        <a href="#khái-niệm">Khái niệm</a>
+        <a href="#cache-keys-và-unkeyed-inputs">Cache Keys và Unkeyed Inputs</a>
+        <a href="#cách-hoạt-động">Cách hoạt động</a>
+        <a href="#attack-vectors">Attack Vectors</a>
+        <a class="depth-3" href="#host-header-injection">Host Header Injection</a>
+        <a class="depth-3" href="#fat-get-request">Fat GET Request</a>
+        <a class="depth-3" href="#cache-deception-vs-cache-poisoning">Cache Deception vs. Cache Poisoning</a>
+        <a href="#phòng-chống">Phòng chống</a>
+        <a href="#tóm-tắt">Tóm tắt</a>
       </nav>
     </aside>
   </div>

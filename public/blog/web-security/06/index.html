@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Chương 6: Access Control — Hieu Nguyen</title>
-  <meta name="description" content="IDOR, vertical/horizontal privilege, deny-by-default, RBAC.">
+  <title>Chương 6: Access Control — Kiểm soát truy cập — Hieu Nguyen</title>
+  <meta name="description" content="Chương 6: Access Control — Kiểm soát truy cập — Web Security notes.">
   <link rel="icon" href="../../../favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -40,61 +40,312 @@
         <span>›</span>
         <span>06. Access Control</span>
       </div>
-      <h1>Chương 6: Access Control</h1>
-      <p class="lede">OWASP A01: user làm việc không thuộc quyền. DevOps hay mở nhầm admin Service.</p>
-      <div class="docs-meta">
-        <span><strong>Tác giả:</strong> Hieu Nguyen (Ryan)</span>
-        <span><strong>Phần:</strong> II — Auth</span>
-        <span><strong>Cập nhật:</strong> Aug 2026</span>
-      </div>
-      <h2 id="khai-niem">Khái niệm</h2>
-<p>Mỗi request phải hỏi: principal này có được object/action này không — <em>trên server</em>, không phải ẩn nút trên UI.</p>
-<h2 id="phan-loai">Phân loại</h2>
+      <div id="top"></div>
+<header><h1>Chương 6: Access Control — Kiểm soát truy cập</h1></header>
+<h2 id="khái-niệm">Khái niệm</h2>
+<p><strong>Access Control</strong> (Kiểm soát truy cập) là cơ chế quyết định ai được làm gì trong hệ thống. Đây là lỗ hổng số 1 trong OWASP Top 10 2021 (A01: Broken Access Control).</p>
+<p><strong>Mức độ nguy hiểm:</strong> Rất cao — Broken access control cho phép hacker truy cập dữ liệu/chức năng không thuộc về họ.</p>
+<p>Ba thành phần liên kết:</p>
 <ul>
-        <li><strong>Vertical:</strong> user → admin function.</li>
-        <li><strong>Horizontal:</strong> user A xem object của B (IDOR).</li>
-        <li><strong>Context:</strong> đúng role nhưng sai trạng thái (sửa đơn đã thanh toán).</li>
-      </ul>
-<h2 id="idor">IDOR</h2>
-<p>Object ID do client chọn (<code>/invoices/318</code>) mà server không kiểm tra sở hữu. UUID không phải control — chỉ làm enumeration chậm hơn. Mass assignment / filter trên query cũng cùng lớp.</p>
-<h2 id="vertical">Leo quyền dọc</h2>
-<p>Admin path không authz, parameter <code>role=admin</code> tin từ client, method override (<code>X-HTTP-Method-Override</code>) đi nhánh khác policy. Ingress mở <code>/admin</code> ra internet là misconfig vận hành.</p>
-<h2 id="phat-hien">Cách phát hiện</h2>
-<ul>
-        <li>Hai tài khoản lab: gọi object của nhau.</li>
-        <li>Bỏ cookie admin, gọi lại path admin.</li>
-        <li>Kiểm tra Service/Ingress không expose dashboard.</li>
-      </ul>
-<h2 id="phong">Phòng chống</h2>
-<ol>
-        <li>Deny by default.</li>
-        <li>Authz trung tâm (policy library), không copy if role rải controller.</li>
-        <li>RBAC/ABAC server-side; ID nội bộ, không tin ID client nếu có thể.</li>
-        <li>Test tự động: user A không đọc resource B.</li>
-      </ol>
-<h2 id="devops">Góc nhìn DevOps</h2>
-<p>NetworkPolicy không thay authz app. Nhưng không expose admin UI; IP allowlist / VPN / mesh mTLS cho service nội bộ. Audit log: ai đọc object nào.</p>
-<h2 id="tom-tat">Tóm tắt</h2>
-<ul>
-        <li>UI ẩn không phải authz.</li>
-        <li>IDOR = thiếu check sở hữu.</li>
-        <li>Deny by default.</li>
-        <li>Đừng public admin Ingress.</li>
-      </ul>
-<h2 id="on-tap">Câu hỏi ôn tập</h2>
-<ol>
-        <li>Horizontal khác vertical?</li>
-        <li>UUID hết IDOR không?</li>
-        <li>Vì sao tin role trên JSON body sai?</li>
-        <li>Test tối thiểu cho IDOR trong CI?</li>
-        <li>NetworkPolicy đủ thay access control app?</li>
-      </ol>
+<li><strong>Authentication:</strong> Bạn là ai?</li>
+<li><strong>Session Management:</strong> Theo dõi bạn qua các requests</li>
+<li><strong>Access Control:</strong> Bạn được phép làm gì?</li>
+</ul>
+<hr>
+<h2 id="phân-loại-access-control">Phân loại Access Control</h2>
+<h3 id="vertical-access-control-phân-quyền-dọc">Vertical Access Control (Phân quyền dọc)</h3>
+<p>Giới hạn chức năng theo role (vai trò):</p>
+<pre><code class="language-text">Admin    → tất cả chức năng
+Manager  → quản lý user, xem reports
+User     → chỉ profile của mình
+Guest    → xem public content
+</code></pre>
+<p><strong>Lỗ hổng:</strong> Vertical Privilege Escalation — user thường truy cập được chức năng admin.</p>
+<h3 id="horizontal-access-control-phân-quyền-ngang">Horizontal Access Control (Phân quyền ngang)</h3>
+<p>Giới hạn truy cập vào dữ liệu theo owner:</p>
+<pre><code class="language-text">User A → chỉ xem account của User A
+User B → chỉ xem account của User B
+</code></pre>
+<p><strong>Lỗ hổng:</strong> Horizontal Privilege Escalation (IDOR) — User A xem được dữ liệu của User B.</p>
+<h3 id="context-dependent-access-control">Context-Dependent Access Control</h3>
+<p>Giới hạn theo trạng thái/ngữ cảnh:</p>
+<pre><code class="language-text">Không cho phép sửa cart sau khi đã thanh toán
+Không cho phép hủy order sau khi đã ship
+</code></pre>
+<hr>
+<h2 id="idor--insecure-direct-object-reference">IDOR — Insecure Direct Object Reference</h2>
+<p><strong>IDOR</strong> (Insecure Direct Object Reference — Tham chiếu Đối tượng trực tiếp không an toàn) là lỗ hổng phổ biến nhất trong access control.</p>
+<p>Xảy ra khi app dùng user-supplied input để truy cập object trực tiếp mà không kiểm tra quyền.</p>
+<h3 id="ví-dụ-idor-cơ-bản">Ví dụ IDOR cơ bản</h3>
+<pre><code class="language-http">GET /api/users/profile?userId=1337 HTTP/1.1
+Authorization: Bearer &lt;token_of_user_1337&gt;
 
-      <div class="docs-tags">
-        <span class="docs-tag">access-control</span>
-        <span class="docs-tag">idor</span>
-        <span class="docs-tag">rbac</span>
-      </div>
+Response: {&quot;id&quot;: 1337, &quot;name&quot;: &quot;Alice&quot;, &quot;email&quot;: &quot;alice@example.com&quot;}
+</code></pre>
+<p>Hacker thay đổi userId:</p>
+<pre><code class="language-http">GET /api/users/profile?userId=1 HTTP/1.1
+Authorization: Bearer &lt;token_of_user_1337&gt;
+
+Response: {&quot;id&quot;: 1, &quot;name&quot;: &quot;Admin&quot;, &quot;email&quot;: &quot;admin@example.com&quot;}
+</code></pre>
+<p>Không có kiểm tra &quot;user 1337 có quyền xem profile của user 1 không?&quot; → IDOR.</p>
+<h3 id="idor-trong-các-dạng-khác">IDOR trong các dạng khác</h3>
+<p><strong>IDOR trong path:</strong></p>
+<pre><code class="language-text">GET /api/orders/ORD-001234
+→ thử: GET /api/orders/ORD-000001
+</code></pre>
+<p><strong>IDOR trong POST body:</strong></p>
+<pre><code class="language-json">POST /api/update-profile
+{&quot;userId&quot;: 1337, &quot;email&quot;: &quot;new@email.com&quot;}
+→ thay: {&quot;userId&quot;: 1, &quot;email&quot;: &quot;hacked@email.com&quot;}
+</code></pre>
+<p><strong>IDOR trong file download:</strong></p>
+<pre><code class="language-text">GET /download?file=invoice_1337.pdf
+→ thử: GET /download?file=invoice_1.pdf
+</code></pre>
+<p><strong>IDOR qua Indirect Reference:</strong></p>
+<pre><code class="language-text">GET /api/messages?thread=abc123
+→ Nếu thread ID predictable hoặc enumerable
+</code></pre>
+<h3 id="idor-với-uuid--không-phải-silver-bullet">IDOR với UUID — Không phải silver bullet</h3>
+<pre><code class="language-text">UUID: 550e8400-e29b-41d4-a716-446655440000
+→ Random, không đoán được
+→ Nhưng nếu server vẫn không check ownership → vẫn IDOR!
+
+Test: Chia sẻ UUID của resource của bạn với account khác
+→ Nếu account khác truy cập được → IDOR dù dùng UUID
+</code></pre>
+<hr>
+<h2 id="vertical-privilege-escalation">Vertical Privilege Escalation</h2>
+<h3 id="unprotected-admin-functions">Unprotected Admin Functions</h3>
+<pre><code class="language-text">Admin panel tại: /admin
+→ Không có authentication check
+→ Chỉ &quot;ẩn&quot; khỏi navigation menu
+→ Hacker biết URL → access ngay
+</code></pre>
+<p><strong>Tìm hidden endpoints:</strong></p>
+<pre><code class="language-bash"># Dùng feroxbuster/ffuf để brute force paths
+ffuf -w /usr/share/wordlists/dirb/common.txt \
+     -u https://example.com/FUZZ \
+     -mc 200,301,302,403
+
+# Xem robots.txt - thường tiết lộ admin paths
+curl https://example.com/robots.txt
+
+# Xem JavaScript source - thường chứa API endpoints
+grep -r &quot;admin\|dashboard\|internal&quot; static/js/
+</code></pre>
+<h3 id="parameter-tampering">Parameter Tampering</h3>
+<pre><code class="language-http">GET /account?role=user HTTP/1.1
+
+→ Thử: GET /account?role=admin HTTP/1.1
+</code></pre>
+<pre><code class="language-http">POST /login HTTP/1.1
+{&quot;username&quot;: &quot;alice&quot;, &quot;password&quot;: &quot;pass123&quot;}
+
+Response: {&quot;userId&quot;: 1337, &quot;role&quot;: &quot;user&quot;, &quot;token&quot;: &quot;...&quot;}
+
+→ Nếu app tin vào role trong response mà không verify server-side
+→ Sửa role=admin trong subsequent requests
+</code></pre>
+<h3 id="platform-misconfiguration">Platform Misconfiguration</h3>
+<p>Một số framework cho phép restrict theo HTTP method:</p>
+<pre><code class="language-java">// Sai: restrict GET nhưng không restrict POST
+@GetMapping(&quot;/admin/users&quot;)
+@PreAuthorize(&quot;hasRole(&#x27;ADMIN&#x27;)&quot;)
+public List&lt;User&gt; getUsers() { ... }
+
+// Admin function cũng accessible qua:
+POST /admin/users    ← không có annotation → kh ông bị restrict!
+</code></pre>
+<p><strong>URL path override:</strong></p>
+<pre><code class="language-http">GET /admin/users HTTP/1.1
+→ 403 Forbidden
+
+GET /users HTTP/1.1
+X-Original-URL: /admin/users    ← một số framework override path
+
+→ 200 OK → access bypassed!
+</code></pre>
+<h3 id="broken-access-control-qua-http-method-override">Broken Access Control qua HTTP Method Override</h3>
+<pre><code class="language-http">POST /api/delete-user HTTP/1.1
+X-HTTP-Method-Override: DELETE
+
+→ Một số servers map POST + X-HTTP-Method-Override → DELETE
+→ Bypass firewall rules chỉ block DELETE
+</code></pre>
+<hr>
+<h2 id="kịch-bản-tấn-công-idor-mass-account-takeover">Kịch bản tấn công: IDOR Mass Account Takeover</h2>
+<pre><code class="language-text">Target: e-commerce site với 100,000 accounts
+
+1. Login với account hacker (ID: 50000)
+2. Request profile: GET /api/profile?id=50000
+3. Thay id: GET /api/profile?id=50001 → thành công!
+4. Viết script:
+
+for id in range(1, 100001):
+    response = requests.get(f&quot;/api/profile?id={id}&quot;,
+                           cookies={&quot;session&quot;: hacker_session})
+    save_profile_data(response.json())
+
+5. Dump toàn bộ 100,000 profiles bao gồm email, phone, address
+6. Bán data breach hoặc dùng để phishing
+</code></pre>
+<hr>
+<h2 id="cách-phát-hiện">Cách phát hiện</h2>
+<pre><code class="language-text">□ Thay đổi ID trong URL/parameters → truy cập được resource người khác?
+□ Xóa/thay đổi Authorization header → vẫn có response?
+□ Thay đổi role/admin parameter → có thay đổi quyền không?
+□ Access admin URL trực tiếp khi logged in với user thường
+□ Thử methods khác (POST/PUT/DELETE) trên endpoint chỉ allow GET
+□ Thêm X-Original-URL, X-Rewrite-URL, X-Forwarded-For headers
+□ Thử path với trailing slash, uppercase, encoded chars
+□ Robots.txt, sitemap.xml có tiết lộ hidden paths không?
+□ JavaScript source có chứa admin endpoints không?
+</code></pre>
+<p><strong>Tool hữu ích:</strong></p>
+<ul>
+<li><strong>Autorize</strong> (Burp extension): Tự động replay mọi request với session của user khác để detect IDOR</li>
+<li><strong>403 Bypasser</strong> (Burp extension): Tự động thử bypass 403</li>
+</ul>
+<hr>
+<h2 id="phòng-chống">Phòng chống</h2>
+<h3 id="1-server-side-authorization-check">1. Server-Side Authorization Check</h3>
+<pre><code class="language-python"># SAI: tin vào user-supplied ID
+@app.route(&#x27;/api/profile&#x27;)
+def get_profile():
+    user_id = request.args.get(&#x27;userId&#x27;)  # Từ client
+    return db.get_user(user_id)
+
+# ĐÚNG: dùng ID từ session (server-controlled)
+@app.route(&#x27;/api/profile&#x27;)
+@login_required
+def get_profile():
+    user_id = g.current_user.id  # Từ server-side session
+    return db.get_user(user_id)
+
+# ĐÚNG: nếu cần user specify ID, luôn check ownership
+@app.route(&#x27;/api/orders/&lt;int:order_id&gt;&#x27;)
+@login_required
+def get_order(order_id):
+    order = db.get_order(order_id)
+    if order.user_id != g.current_user.id:
+        abort(403)  # Forbidden
+    return order
+</code></pre>
+<h3 id="2-deny-by-default">2. Deny by Default</h3>
+<pre><code class="language-python"># Middleware check access cho mọi request
+def check_access(resource_type, resource_id, action):
+    user = g.current_user
+    
+    # Default: deny
+    if not has_permission(user, resource_type, resource_id, action):
+        abort(403)
+
+# Áp dụng cho tất cả routes
+@app.before_request
+def enforce_access_control():
+    if is_protected_endpoint(request.endpoint):
+        resource = get_resource_from_request()
+        check_access(resource.type, resource.id, request.method)
+</code></pre>
+<h3 id="3-rbac-role-based-access-control">3. RBAC (Role-Based Access Control)</h3>
+<pre><code class="language-python">PERMISSIONS = {
+    &#x27;admin&#x27;: [&#x27;users:read&#x27;, &#x27;users:write&#x27;, &#x27;orders:read&#x27;, &#x27;orders:write&#x27;],
+    &#x27;manager&#x27;: [&#x27;orders:read&#x27;, &#x27;orders:write&#x27;],
+    &#x27;user&#x27;: [&#x27;profile:read&#x27;, &#x27;profile:write&#x27;, &#x27;orders:read&#x27;],
+}
+
+def has_permission(user, permission):
+    return permission in PERMISSIONS.get(user.role, [])
+
+@app.route(&#x27;/api/users&#x27;)
+@require_permission(&#x27;users:read&#x27;)
+def list_users():
+    return db.get_all_users()
+</code></pre>
+<h3 id="4-indirect-reference-maps">4. Indirect Reference Maps</h3>
+<p>Thay vì expose database ID trực tiếp, dùng một mapping:</p>
+<pre><code class="language-python"># Mỗi user có mapping riêng của họ
+user_resource_map = {
+    &#x27;order_1&#x27;: &#x27;db_order_id_1337&#x27;,
+    &#x27;order_2&#x27;: &#x27;db_order_id_1338&#x27;,
+}
+
+# User chỉ thấy reference key của riêng họ
+GET /api/orders/order_1  → mapped to actual order 1337 của user đó
+</code></pre>
+<hr>
+<h2 id="góc-nhìn-devops">Góc nhìn DevOps</h2>
+<p><strong>Kubernetes RBAC — không liên quan đến Web RBAC nhưng tư duy tương tự:</strong></p>
+<pre><code class="language-yaml"># Least privilege: chỉ đọc pods trong namespace cụ thể
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: pod-reader
+  namespace: production
+rules:
+  - apiGroups: [&quot;&quot;]
+    resources: [&quot;pods&quot;]
+    verbs: [&quot;get&quot;, &quot;list&quot;]
+    # Không có &quot;create&quot;, &quot;delete&quot;, &quot;update&quot;
+</code></pre>
+<p><strong>API Gateway — Enforce access control ở gateway level:</strong></p>
+<pre><code class="language-yaml"># Kong Gateway: restrict endpoint theo role
+plugins:
+  - name: acl
+    config:
+      allow:
+        - admin-group
+      hide_groups_header: true
+</code></pre>
+<p><strong>Audit Logging — Ghi lại ai truy cập gì:</strong></p>
+<pre><code class="language-python"># Mọi access vào sensitive resource đều cần log
+def audit_log(user, action, resource, status):
+    logger.info({
+        &quot;timestamp&quot;: datetime.utcnow().isoformat(),
+        &quot;user_id&quot;: user.id,
+        &quot;username&quot;: user.email,
+        &quot;action&quot;: action,
+        &quot;resource&quot;: resource,
+        &quot;status&quot;: status,
+        &quot;ip&quot;: request.remote_addr,
+        &quot;user_agent&quot;: request.user_agent.string
+    })
+
+# Alert khi có access pattern bất thường
+# VD: 1 user request 1000 profiles trong 60 giây → IDOR attempt
+</code></pre>
+<p><strong>CI/CD Security Gate:</strong></p>
+<pre><code class="language-yaml"># GitHub Actions: chạy DAST test để detect IDOR
+- name: Run IDOR Tests
+  run: |
+    # Test với hai accounts khác nhau
+    python tests/security/test_access_control.py \
+      --user1-token $USER1_TOKEN \
+      --user2-token $USER2_TOKEN
+</code></pre>
+<hr>
+<h2 id="tóm-tắt">Tóm tắt</h2>
+<ul>
+<li>Broken Access Control là lỗ hổng #1 OWASP — phổ biến và nguy hiểm.</li>
+<li>IDOR: user truy cập resource của user khác bằng cách thay ID — kiểm tra ownership mọi lúc.</li>
+<li>Vertical escalation: user thường truy cập chức năng admin.</li>
+<li>Luôn implement access control ở server-side, không tin client.</li>
+<li>Deny by default: nếu không có permission explicit → từ chối.</li>
+<li>Dùng RBAC để quản lý quyền có hệ thống.</li>
+<li>Audit log mọi access vào sensitive resources.</li>
+<li>Dùng Autorize extension để test access control tự động.</li>
+</ul>
+<hr>
+<h2 id="câu-hỏi-ôn-tập">Câu hỏi ôn tập</h2>
+<ol>
+<li>IDOR là gì và tại sao dùng UUID thay vì integer ID không tự động phòng chống IDOR?</li>
+<li>Sự khác biệt giữa horizontal và vertical privilege escalation là gì?</li>
+<li>Tại sao &quot;deny by default&quot; là nguyên tắc quan trọng hơn &quot;allow by default&quot;?</li>
+<li>Làm thế nào để dùng Burp Suite Autorize để test access control tự động?</li>
+<li>Mô tả cách implement RBAC đơn giản trong một REST API.</li>
+</ol>
       <div class="docs-pager">
         <a href="../05/">Previous · 05. Session</a>
         <a href="../07/">Next · 07. OAuth</a>
@@ -103,15 +354,30 @@
     <aside class="docs-toc">
       <div class="docs-toc-title">On this page</div>
       <nav>
-        <a href="#khai-niem">Khái niệm</a>
-        <a href="#phan-loai">Phân loại</a>
-        <a href="#idor">IDOR</a>
-        <a href="#vertical">Leo quyền dọc</a>
-        <a href="#phat-hien">Cách phát hiện</a>
-        <a href="#phong">Phòng chống</a>
-        <a href="#devops">Góc nhìn DevOps</a>
-        <a href="#tom-tat">Tóm tắt</a>
-        <a href="#on-tap">Câu hỏi ôn tập</a>
+        <a href="#khái-niệm">Khái niệm</a>
+        <a href="#phân-loại-access-control">Phân loại Access Control</a>
+        <a class="depth-3" href="#vertical-access-control-phân-quyền-dọc">Vertical Access Control (Phân quyền dọc)</a>
+        <a class="depth-3" href="#horizontal-access-control-phân-quyền-ngang">Horizontal Access Control (Phân quyền ngang)</a>
+        <a class="depth-3" href="#context-dependent-access-control">Context-Dependent Access Control</a>
+        <a href="#idor--insecure-direct-object-reference">IDOR — Insecure Direct Object Reference</a>
+        <a class="depth-3" href="#ví-dụ-idor-cơ-bản">Ví dụ IDOR cơ bản</a>
+        <a class="depth-3" href="#idor-trong-các-dạng-khác">IDOR trong các dạng khác</a>
+        <a class="depth-3" href="#idor-với-uuid--không-phải-silver-bullet">IDOR với UUID — Không phải silver bullet</a>
+        <a href="#vertical-privilege-escalation">Vertical Privilege Escalation</a>
+        <a class="depth-3" href="#unprotected-admin-functions">Unprotected Admin Functions</a>
+        <a class="depth-3" href="#parameter-tampering">Parameter Tampering</a>
+        <a class="depth-3" href="#platform-misconfiguration">Platform Misconfiguration</a>
+        <a class="depth-3" href="#broken-access-control-qua-http-method-override">Broken Access Control qua HTTP Method Override</a>
+        <a href="#kịch-bản-tấn-công-idor-mass-account-takeover">Kịch bản tấn công: IDOR Mass Account Takeover</a>
+        <a href="#cách-phát-hiện">Cách phát hiện</a>
+        <a href="#phòng-chống">Phòng chống</a>
+        <a class="depth-3" href="#1-server-side-authorization-check">1. Server-Side Authorization Check</a>
+        <a class="depth-3" href="#2-deny-by-default">2. Deny by Default</a>
+        <a class="depth-3" href="#3-rbac-role-based-access-control">3. RBAC (Role-Based Access Control)</a>
+        <a class="depth-3" href="#4-indirect-reference-maps">4. Indirect Reference Maps</a>
+        <a href="#góc-nhìn-devops">Góc nhìn DevOps</a>
+        <a href="#tóm-tắt">Tóm tắt</a>
+        <a href="#câu-hỏi-ôn-tập">Câu hỏi ôn tập</a>
       </nav>
     </aside>
   </div>

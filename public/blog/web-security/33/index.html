@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Chương 33: Logging và Detection — Hieu Nguyen</title>
-  <meta name="description" content="What to log, what not, SIEM, detection rules.">
+  <meta name="description" content="Chương 33: Logging và Detection — Web Security notes.">
   <link rel="icon" href="../../../favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -40,53 +40,161 @@
         <span>›</span>
         <span>33. Logging</span>
       </div>
-      <h1>Chương 33: Logging và Detection</h1>
-      <p class="lede">A09: không log thì không incident — chỉ có tin đồn.</p>
-      <div class="docs-meta">
-        <span><strong>Tác giả:</strong> Hieu Nguyen (Ryan)</span>
-        <span><strong>Phần:</strong> VIII — DevOps</span>
-        <span><strong>Cập nhật:</strong> Aug 2026</span>
-      </div>
-      <h2 id="what">What to log</h2>
-<ul>
-        <li>Authn: success/fail/MFA/reset, id, IP, UA.</li>
-        <li>Authz deny (403) với object id.</li>
-        <li>Admin / money actions.</li>
-        <li>4xx/5xx spike, WAF block.</li>
-        <li>K8s audit: secret get, rbac bind.</li>
-      </ul>
-<h2 id="not">Không log</h2>
-<p>Password, cookie, Authorization, card, token query. Mask. Retention và mã hóa at rest.</p>
-<h2 id="detect">Detection</h2>
-<ul>
-        <li>Spray: fail login nhiều user một IP.</li>
-        <li>IDOR: 403/200 xen kẽ cùng user khác id.</li>
-        <li>SSRF: app gọi 169.254.</li>
-        <li>Privilege: RoleBinding cluster-admin.</li>
-      </ul>
-<h2 id="stack">Stack</h2>
-<p>OTLP/Loki/ELK + alert. Pipeline parse JSON structured. Time sync NTP.</p>
-<h2 id="tom-tat">Tóm tắt</h2>
-<ul>
-        <li>Structured log.</li>
-        <li>Không secret.</li>
-        <li>Alert abuse.</li>
-        <li>K8s audit song song app.</li>
-      </ul>
-<h2 id="on-tap">Câu hỏi ôn tập</h2>
-<ol>
-        <li>Field auth nên có?</li>
-        <li>Vì sao không log Authorization?</li>
-        <li>Spray vs brute một user?</li>
-        <li>Audit Secret get?</li>
-        <li>Retention vs forensic?</li>
-      </ol>
+      <div id="top"></div>
+<header><h1>Chương 33: Logging và Detection</h1></header>
+<h2 id="what-to-log">What to Log</h2>
+<pre><code class="language-python">import logging
+import json
+from datetime import datetime
 
-      <div class="docs-tags">
-        <span class="docs-tag">logging</span>
-        <span class="docs-tag">detection</span>
-        <span class="docs-tag">siem</span>
-      </div>
+class SecurityLogger:
+    def __init__(self):
+        self.logger = logging.getLogger(&#x27;security&#x27;)
+    
+    def log_auth_event(self, event_type: str, user_id: str, 
+                       ip: str, success: bool, extra: dict = None):
+        event = {
+            &#x27;timestamp&#x27;: datetime.utcnow().isoformat(),
+            &#x27;event_type&#x27;: event_type,  # &#x27;login&#x27;, &#x27;logout&#x27;, &#x27;password_change&#x27;
+            &#x27;user_id&#x27;: user_id,
+            &#x27;ip_address&#x27;: ip,
+            &#x27;success&#x27;: success,
+            &#x27;user_agent&#x27;: extra.get(&#x27;user_agent&#x27;) if extra else None,
+        }
+        self.logger.info(json.dumps(event))
+    
+    def log_access(self, user_id: str, resource: str, 
+                   action: str, allowed: bool):
+        event = {
+            &#x27;timestamp&#x27;: datetime.utcnow().isoformat(),
+            &#x27;event_type&#x27;: &#x27;access_control&#x27;,
+            &#x27;user_id&#x27;: user_id,
+            &#x27;resource&#x27;: resource,
+            &#x27;action&#x27;: action,
+            &#x27;allowed&#x27;: allowed,
+        }
+        self.logger.info(json.dumps(event))
+    
+    def log_suspicious(self, event_type: str, details: dict):
+        &quot;&quot;&quot;Log suspicious activity&quot;&quot;&quot;
+        event = {
+            &#x27;timestamp&#x27;: datetime.utcnow().isoformat(),
+            &#x27;event_type&#x27;: f&#x27;suspicious_{event_type}&#x27;,
+            &#x27;severity&#x27;: &#x27;high&#x27;,
+            **details
+        }
+        self.logger.warning(json.dumps(event))
+</code></pre>
+<h2 id="security-events-phải-log">Security Events phải Log</h2>
+<pre><code class="language-text">Authentication:
+- Login success/failure (với username, IP, user-agent)
+- Logout
+- Password change/reset
+- MFA events
+
+Authorization:
+- Access denied events
+- Privilege escalation attempts
+- Admin actions
+
+Application:
+- Input validation failures (potential injection attempts)
+- Rate limit exceeded
+- Large data exports
+- Unusual patterns (1 user request 1000 profiles)
+
+Infrastructure:
+- Deployment events
+- Configuration changes
+- Certificate expiry warnings
+</code></pre>
+<h2 id="không-log">Không Log</h2>
+<pre><code class="language-python"># KHÔNG bao giờ log:
+logger.info(f&quot;User {username} logged in with password {password}&quot;)  # ← LOG PASSWORD!
+logger.debug(f&quot;JWT token: {token}&quot;)  # ← LOG TOKEN!
+logger.info(f&quot;Credit card: {card_number}&quot;)  # ← LOG PII!
+
+# Mask sensitive data
+logger.info(f&quot;User {username} logged in&quot;)  # OK
+logger.info(f&quot;Payment processed for card ending in {card_number[-4:]}&quot;)  # OK
+logger.info(f&quot;Token: {token[:8]}...&quot;)  # OK nếu debug
+</code></pre>
+<h2 id="elk-stack-cho-security-monitoring">ELK Stack cho Security Monitoring</h2>
+<pre><code class="language-yaml"># Elasticsearch + Logstash + Kibana
+
+# Logstash pipeline
+input {
+  beats {
+    port =&gt; 5044
+  }
+}
+
+filter {
+  # Parse JSON security events
+  json {
+    source =&gt; &quot;message&quot;
+  }
+  
+  # Tag suspicious events
+  if [event_type] =~ /suspicious_/ {
+    mutate {
+      add_tag =&gt; [&quot;alert&quot;]
+    }
+  }
+}
+
+output {
+  elasticsearch {
+    hosts =&gt; [&quot;elasticsearch:9200&quot;]
+    index =&gt; &quot;security-%{+YYYY.MM.dd}&quot;
+  }
+  
+  # Send alerts
+  if &quot;alert&quot; in [tags] {
+    http {
+      url =&gt; &quot;https://hooks.slack.com/...&quot;
+      method =&gt; &quot;POST&quot;
+      mapping =&gt; {
+        &quot;text&quot; =&gt; &quot;Security Alert: %{event_type} - %{message}&quot;
+      }
+    }
+  }
+}
+</code></pre>
+<h2 id="detection-rules">Detection Rules</h2>
+<pre><code class="language-yaml"># Alertmanager rules cho security events
+groups:
+  - name: security
+    rules:
+      - alert: BruteForceDetected
+        expr: |
+          sum(rate(auth_failures_total[5m])) by (ip_address) &gt; 10
+        for: 2m
+        annotations:
+          summary: &quot;Brute force: {{ $labels.ip_address }}&quot;
+      
+      - alert: UnusualDataAccess
+        expr: |
+          sum(rate(api_requests_total{endpoint=&quot;/api/users&quot;}[1m])) &gt; 100
+        for: 1m
+        annotations:
+          summary: &quot;Mass user data access detected&quot;
+      
+      - alert: SuspiciousAdminAction
+        expr: |
+          rate(admin_actions_total{action=&quot;delete&quot;}[5m]) &gt; 5
+        annotations:
+          summary: &quot;High rate of admin delete actions&quot;
+</code></pre>
+<hr>
+<h2 id="tóm-tắt">Tóm tắt</h2>
+<ul>
+<li>Log đủ để reconstruct attack: timestamp, user, IP, action, resource, success/fail.</li>
+<li>Không log: passwords, tokens, credit cards, PII.</li>
+<li>Centralized logging với ELK/Loki.</li>
+<li>Alerting cho brute force, mass data access, suspicious admin actions.</li>
+<li>SIEM correlate events từ nhiều nguồn.</li>
+</ul>
       <div class="docs-pager">
         <a href="../32/">Previous · 32. Cloud</a>
         <a href="../34/">Next · 34. Incident Response</a>
@@ -95,12 +203,12 @@
     <aside class="docs-toc">
       <div class="docs-toc-title">On this page</div>
       <nav>
-        <a href="#what">What to log</a>
-        <a href="#not">Không log</a>
-        <a href="#detect">Detection</a>
-        <a href="#stack">Stack</a>
-        <a href="#tom-tat">Tóm tắt</a>
-        <a href="#on-tap">Câu hỏi ôn tập</a>
+        <a href="#what-to-log">What to Log</a>
+        <a href="#security-events-phải-log">Security Events phải Log</a>
+        <a href="#không-log">Không Log</a>
+        <a href="#elk-stack-cho-security-monitoring">ELK Stack cho Security Monitoring</a>
+        <a href="#detection-rules">Detection Rules</a>
+        <a href="#tóm-tắt">Tóm tắt</a>
       </nav>
     </aside>
   </div>

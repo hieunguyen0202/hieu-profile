@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Phụ lục: Lộ trình 30 ngày — Hieu Nguyen</title>
-  <meta name="description" content="Lộ trình 30 ngày Web Security cho DevOps: lab PortSwigger, không test hệ thống ngoài scope.">
+  <title>Lộ trình học 30 ngày cho DevOps Engineer — Hieu Nguyen</title>
+  <meta name="description" content="Lộ trình học 30 ngày cho DevOps Engineer — Web Security notes.">
   <link rel="icon" href="../../../favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -40,87 +40,407 @@
         <span>›</span>
         <span>Appendix</span>
       </div>
-      <h1>Phụ lục: Lộ trình 30 ngày</h1>
-      <p class="lede">Một tháng để đọc series và làm lab được phép — không phải trở thành pentester.</p>
-      <div class="docs-meta">
-        <span><strong>Tác giả:</strong> Hieu Nguyen (Ryan)</span>
-        <span><strong>Phần:</strong> Appendix</span>
-        <span><strong>Cập nhật:</strong> Aug 2026</span>
-      </div>
-      <h2 id="tong-quan">Tổng quan</h2>
-<p>Mỗi ngày: đọc chương + lab PortSwigger/Juice Shop local. Không test prod người khác.</p>
-<h2 id="w1">Tuần 1 — Nền tảng</h2>
+      <div id="top"></div>
+<header><h1>Lộ trình học 30 ngày cho DevOps Engineer</h1></header>
+<h2 id="tổng-quan">Tổng quan</h2>
+<p>Lộ trình này được thiết kế cho DevOps/Cloud/Platform Engineer muốn bắt đầu từ con số không về web security và đạt được nền tảng đủ vững để:</p>
 <ul>
-        <li>Ngày 1: lab DVWA/Juice Shop local, Burp CA.</li>
-        <li>Ngày 2–3: HTTP + Burp History/Repeater.</li>
-        <li>Ngày 4–5: Authentication.</li>
-        <li>Ngày 6–7: Session + Access Control.</li>
-      </ul>
-<h2 id="w2">Tuần 2 — Injection & XSS</h2>
+<li>Hiểu và phòng chống các lỗ hổng phổ biến trong hệ thống mình quản lý</li>
+<li>Bắt đầu Bug Bounty ở mức cơ bản</li>
+<li>Tích hợp security vào workflow DevOps hàng ngày</li>
+</ul>
+<p><strong>Commit time:</strong> 1-2 giờ/ngày</p>
+<hr>
+<h2 id="tuần-1-nền-tảng-ngày-1-7">Tuần 1: Nền tảng (Ngày 1-7)</h2>
+<h3 id="ngày-1-setup-môi-trường">Ngày 1: Setup môi trường</h3>
+<p><strong>Mục tiêu:</strong> Sẵn sàng lab environment</p>
+<pre><code class="language-text">Công việc:
+□ Cài Burp Suite Community Edition
+□ Cài FoxyProxy Firefox extension
+□ Import Burp CA certificate
+□ Tạo account PortSwigger Web Security Academy
+□ Chạy DVWA hoặc Juice Shop bằng Docker:
+  docker run -d -p 3000:3000 bkimminich/juice-shop
+□ Đọc lại Chương 1 (Giới thiệu) và Chương 2 (HTTP)
+</code></pre>
+<p><strong>Lab:</strong></p>
 <ul>
-        <li>8–9: SQLi lab Academy.</li>
-        <li>10: NoSQL + command injection khái niệm + lab.</li>
-        <li>11–12: XSS + CSP trên app bạn.</li>
-        <li>13–14: SSRF/XXE — chú IMDS trên cloud lab của bạn.</li>
-      </ul>
-<h2 id="w3">Tuần 3 — Protocol & client</h2>
-<ul>
-        <li>15–16: OAuth/JWT config IdP.</li>
-        <li>17–18: CORS/CSRF trên SPA.</li>
-        <li>19–20: Upload + path.</li>
-        <li>21: Race + logic — test tiền trên staging.</li>
-      </ul>
-<h2 id="w4">Tuần 4 — Infra & DevOps</h2>
-<ul>
-        <li>22–23: Clickjacking, cache, smuggling (đọc + patch Ingress).</li>
-        <li>24–25: SSTI/deserialize — review code.</li>
-        <li>26–27: GraphQL/API gateway.</li>
-        <li>28–29: K8s/CI/secrets/cloud checklist.</li>
-        <li>30: IR tabletop + ghi gap.</li>
-      </ul>
-<h2 id="res">Tài nguyên</h2>
-<ul>
-        <li>PortSwigger Academy, OWASP WSTG, k8s.io security.</li>
-        <li>Trivy, gitleaks, kube-score, Falco.</li>
-        <li>CKS notes nếu bạn thi CNCF.</li>
-      </ul>
-<blockquote>Mindset: vá control, không sưu tầm payload. Tracking: checklist Chương 35.</blockquote>
-<h2 id="tom-tat">Tóm tắt</h2>
-<ul>
-        <li>Lab hợp pháp.</li>
-        <li>Đọc + làm.</li>
-        <li>Tuần 4 mang vào cluster thật của bạn.</li>
-        <li>Gap → ticket.</li>
-      </ul>
-<h2 id="on-tap">Câu hỏi ôn tập</h2>
-<ol>
-        <li>Vì sao tuần 1 trước injection?</li>
-        <li>Lab SSRF trên cloud công ty khi nào được?</li>
-        <li>Ngày 30 nên ra artifact gì?</li>
-        <li>Academy thay production scan?</li>
-        <li>Làm song song CKS thế nào?</li>
-      </ol>
+<li>Dùng Burp để intercept traffic đến Juice Shop</li>
+<li>Xem HTTP history, thử Repeater với 1 request</li>
+</ul>
+<hr>
+<h3 id="ngày-2-3-http-và-burp-suite">Ngày 2-3: HTTP và Burp Suite</h3>
+<pre><code class="language-text">Đọc: Chương 2 (HTTP Fundamentals) + Chương 3 (Burp Suite)
 
-      <div class="docs-tags">
-        <span class="docs-tag">roadmap</span>
-        <span class="docs-tag">learning</span>
-      </div>
+Thực hành:
+□ Intercept và inspect toàn bộ các loại HTTP requests từ Juice Shop
+□ Thử Burp Decoder: decode base64, URL encode/decode
+□ Thử Burp Repeater: modify headers, parameters
+□ Inspect cookies: có HttpOnly/Secure/SameSite không?
+□ Inspect response headers: có security headers không?
+
+PortSwigger Labs (không cần): Đọc lý thuyết HTTP từ portswigger.net/web-security
+</code></pre>
+<hr>
+<h3 id="ngày-4-5-authentication">Ngày 4-5: Authentication</h3>
+<pre><code class="language-text">Đọc: Chương 4 (Authentication)
+
+PortSwigger Labs:
+□ Lab: Username enumeration via different responses
+□ Lab: Username enumeration via subtly different responses
+□ Lab: Username enumeration via response timing
+□ Lab: Broken brute-force protection (IP block)
+□ Lab: 2FA bypass
+
+Thực hành với Juice Shop:
+□ Tìm username enumeration trong login flow
+□ Thử brute force với Intruder
+□ Tìm weak default credentials
+</code></pre>
+<hr>
+<h3 id="ngày-6-7-session-và-access-control">Ngày 6-7: Session và Access Control</h3>
+<pre><code class="language-text">Đọc: Chương 5 (Session Management) + Chương 6 (Access Control)
+
+PortSwigger Labs:
+□ Lab: User role controlled by request parameter
+□ Lab: URL-based access control can be circumvented
+□ Lab: Method-based access control can be circumvented
+□ Lab: User ID controlled by request parameter
+□ Lab: Insecure direct object references
+
+Thực hành với Juice Shop:
+□ Inspect session cookie attributes
+□ Tìm IDOR: truy cập order/profile của user khác
+□ Tìm admin endpoint bằng ffuf/gobuster
+
+ffuf -w /usr/share/wordlists/dirb/common.txt -u http://localhost:3000/FUZZ -mc 200
+</code></pre>
+<hr>
+<h2 id="tuần-2-injection-attacks-ngày-8-14">Tuần 2: Injection Attacks (Ngày 8-14)</h2>
+<h3 id="ngày-8-9-sql-injection">Ngày 8-9: SQL Injection</h3>
+<pre><code class="language-text">Đọc: Chương 12 (SQL Injection)
+
+PortSwigger Labs (theo thứ tự):
+□ Lab: SQL injection vulnerability in WHERE clause
+□ Lab: UNION attack, determining columns
+□ Lab: UNION attack, finding a column with text
+□ Lab: UNION attack, retrieving data
+□ Lab: Blind SQL injection with conditional responses
+□ Lab: Blind SQL injection with time delays
+
+Công cụ:
+□ Thực hành sqlmap với DVWA:
+  docker run -d -p 80:80 vulnerables/web-dvwa
+  sqlmap -u &quot;http://localhost/vulnerabilities/sqli/?id=1&amp;Submit=Submit&quot; \
+         --cookie=&quot;PHPSESSID=xxx;security=low&quot; --dbs
+</code></pre>
+<hr>
+<h3 id="ngày-10-nosql-và-command-injection">Ngày 10: NoSQL và Command Injection</h3>
+<pre><code class="language-text">Đọc: Chương 13 (NoSQL) + Chương 14 (Command Injection)
+
+PortSwigger Labs:
+□ Lab: OS command injection, simple case
+□ Lab: Blind OS command injection with time delays
+□ Lab: Blind OS command injection with out-of-band interaction
+
+Thực hành:
+□ Setup MongoDB locally và thử operator injection
+□ Tìm command injection trong Juice Shop (có 1 challenge)
+</code></pre>
+<hr>
+<h3 id="ngày-11-12-xss">Ngày 11-12: XSS</h3>
+<pre><code class="language-text">Đọc: Chương 11 (XSS)
+
+PortSwigger Labs:
+□ Lab: Reflected XSS into HTML context with nothing encoded
+□ Lab: Stored XSS into HTML context with nothing encoded
+□ Lab: DOM XSS in document.write sink
+□ Lab: DOM XSS in innerHTML sink
+□ Lab: Reflected XSS into attribute with angle brackets HTML-encoded
+
+Thực hành với Juice Shop:
+□ Tìm và exploit reflected XSS
+□ Tìm stored XSS trong comment/product review
+□ Test CSP bypass
+</code></pre>
+<hr>
+<h3 id="ngày-13-14-ssrf-và-xxe">Ngày 13-14: SSRF và XXE</h3>
+<pre><code class="language-text">Đọc: Chương 15 (SSRF) + Chương 16 (XXE)
+
+PortSwigger Labs:
+□ Lab: Basic SSRF against the local server
+□ Lab: Basic SSRF against another back-end system
+□ Lab: SSRF with filter bypass via open redirection
+□ Lab: Exploiting XXE using external entities
+□ Lab: Blind XXE with out-of-band interaction
+
+Thực hành:
+□ Dùng Burp Collaborator (nếu có Pro) hoặc interactsh
+  docker run -it -p 80:80 ghcr.io/projectdiscovery/interactsh-server
+□ Test SSRF đến localhost services
+</code></pre>
+<hr>
+<h2 id="tuần-3-authentication-protocols--advanced-ngày-15-21">Tuần 3: Authentication Protocols &amp; Advanced (Ngày 15-21)</h2>
+<h3 id="ngày-15-16-oauth-và-jwt">Ngày 15-16: OAuth và JWT</h3>
+<pre><code class="language-text">Đọc: Chương 7 (OAuth) + Chương 8 (JWT)
+
+PortSwigger Labs:
+□ Lab: JWT authentication bypass via unverified signature
+□ Lab: JWT authentication bypass via flawed signature verification (alg:none)
+□ Lab: JWT authentication bypass via weak signing secret
+□ Lab: Authentication bypass via OAuth implicit flow
+
+Thực hành:
+□ Setup Burp JWT Editor extension
+□ Decode JWT từ Juice Shop, thử modify payload
+□ Brute force JWT secret:
+  hashcat -a 0 -m 16500 &lt;jwt&gt; /usr/share/wordlists/rockyou.txt
+</code></pre>
+<hr>
+<h3 id="ngày-17-18-cors-và-csrf">Ngày 17-18: CORS và CSRF</h3>
+<pre><code class="language-text">Đọc: Chương 9 (CORS) + Chương 10 (CSRF)
+
+PortSwigger Labs:
+□ Lab: CORS vulnerability with basic origin reflection
+□ Lab: CORS vulnerability with trusted null origin
+□ Lab: CSRF vulnerability with no defenses
+□ Lab: CSRF where token validation depends on request method
+□ Lab: CSRF where Referer validation depends on header being present
+
+Thực hành:
+□ Test CORS mis-configuration bằng curl
+□ Tạo CSRF PoC HTML page
+</code></pre>
+<hr>
+<h3 id="ngày-19-20-file-upload-và-path-traversal">Ngày 19-20: File Upload và Path Traversal</h3>
+<pre><code class="language-text">Đọc: Chương 17 (File Upload) + Chương 18 (Path Traversal)
+
+PortSwigger Labs:
+□ Lab: Remote code execution via web shell upload
+□ Lab: Web shell upload via Content-Type restriction bypass
+□ Lab: Web shell upload via path traversal
+□ Lab: File path traversal, simple case
+□ Lab: File path traversal, traversal sequences stripped non-recursively
+
+Thực hành:
+□ Upload web shell vào DVWA với security=low
+□ Test path traversal trên local app
+</code></pre>
+<hr>
+<h3 id="ngày-21-race-condition-và-business-logic">Ngày 21: Race Condition và Business Logic</h3>
+<pre><code class="language-text">Đọc: Chương 20 (Race Condition) + Chương 21 (Business Logic)
+
+PortSwigger Labs:
+□ Lab: Limit overrun race conditions
+□ Lab: Bypassing rate limits via race conditions
+
+Thực hành với Juice Shop:
+□ Tìm business logic bugs (coupon reuse, negative quantity)
+□ Thử race condition với Burp Turbo Intruder
+</code></pre>
+<hr>
+<h2 id="tuần-4-devops-security--practice-ngày-22-30">Tuần 4: DevOps Security + Practice (Ngày 22-30)</h2>
+<h3 id="ngày-22-23-advanced-web-attacks">Ngày 22-23: Advanced Web Attacks</h3>
+<pre><code class="language-text">Đọc: Chương 22 (Clickjacking) + Chương 23 (Cache Poisoning) + Chương 24 (Request Smuggling)
+
+PortSwigger Labs (nếu có Pro):
+□ Lab: Basic clickjacking with CSRF token protection
+□ Lab: Exploiting HTTP request smuggling to bypass front-end security
+
+Thực hành:
+□ Implement X-Frame-Options và frame-ancestors CSP
+□ Test cache headers trên Nginx config
+</code></pre>
+<hr>
+<h3 id="ngày-24-25-ssti-và-deserialization">Ngày 24-25: SSTI và Deserialization</h3>
+<pre><code class="language-text">Đọc: Chương 25 (SSTI) + Chương 26 (Deserialization)
+
+PortSwigger Labs:
+□ Lab: Basic server-side template injection (SSTI)
+□ Lab: Server-side template injection using documentation
+
+Thực hành:
+□ Setup Flask app với vulnerable Jinja2 template
+□ Test {{7*7}} injection
+□ Thử sandbox escape trong Jinja2
+</code></pre>
+<hr>
+<h3 id="ngày-26-27-api-và-graphql-security">Ngày 26-27: API và GraphQL Security</h3>
+<pre><code class="language-text">Đọc: Chương 27 (GraphQL) + Chương 28 (API Security)
+
+PortSwigger Labs:
+□ Lab: Accessing private GraphQL posts
+□ Lab: Bypassing GraphQL brute force protections
+
+Thực hành:
+□ Setup GraphQL endpoint và test introspection
+□ Implement rate limiting với Flask-Limiter
+□ Test mass assignment vulnerability
+</code></pre>
+<hr>
+<h3 id="ngày-28-29-devops-security-trong-thực-tế">Ngày 28-29: DevOps Security trong thực tế</h3>
+<pre><code class="language-text">Đọc: Chương 29-33 (K8s, CI/CD, Secrets, Cloud, Logging)
+
+Thực hành:
+□ Scan repo với gitleaks:
+  gitleaks detect --source . --verbose
+
+□ SAST với Semgrep:
+  pip install semgrep
+  semgrep --config=p/owasp-top-ten src/
+
+□ Scan Docker image với Trivy:
+  trivy image myapp:latest
+
+□ Implement security headers trong Nginx:
+  add_header Strict-Transport-Security &quot;max-age=31536000&quot; always;
+  add_header X-Frame-Options &quot;DENY&quot; always;
+  add_header Content-Security-Policy &quot;default-src &#x27;self&#x27;&quot; always;
+
+□ Test IAM permissions:
+  aws iam simulate-principal-policy \
+    --policy-source-arn arn:aws:iam::123:role/my-role \
+    --action-names s3:GetObject \
+    --resource-arns arn:aws:s3:::my-bucket/*
+</code></pre>
+<hr>
+<h3 id="ngày-30-review-ctf-và-bug-bounty-planning">Ngày 30: Review, CTF, và Bug Bounty Planning</h3>
+<pre><code class="language-text">Ngày cuối cùng:
+
+1. Review toàn bộ
+   □ Làm lại câu hỏi ôn tập các chương đã học
+   □ Test Juice Shop: hoàn thành tất cả challenges có thể
+
+2. CTF Practice
+   □ TryHackMe: OWASP Top 10 room (https://tryhackme.com)
+   □ HackTheBox Starting Point machines
+   
+3. Bug Bounty Planning
+   □ Tạo account HackerOne: https://hackerone.com
+   □ Tìm program phù hợp:
+     - Public programs với broad scope
+     - &quot;Accepts all vulnerabilities&quot; programs
+     - Programs với good response rate
+
+4. Lập kế hoạch tiếp theo
+   □ Chọn 1 vulnerability type để deep-dive (SQLi, SSRF, etc.)
+   □ Join communities:
+     - Reddit: r/netsec, r/bugbounty
+     - Twitter: theo dõi security researchers
+     - Discord: Bug Bounty Hunter Community
+</code></pre>
+<hr>
+<h2 id="tài-nguyên-bổ-sung">Tài nguyên bổ sung</h2>
+<h3 id="platforms-thực-hành">Platforms thực hành</h3>
+<table><thead><tr><th>Platform</th><th>Mô tả</th><th>Miễn phí</th></tr></thead><tbody><tr><td>PortSwigger Web Security Academy</td><td>Labs chính thức, tốt nhất</td><td>Có</td></tr><tr><td>TryHackMe</td><td>Học theo rooms, guided</td><td>Có (basic)</td></tr><tr><td>HackTheBox</td><td>Machines thực tế hơn</td><td>Có (basic)</td></tr><tr><td>DVWA</td><td>Vulnerable web app tự host</td><td>Có</td></tr><tr><td>Juice Shop</td><td>OWASP challenge app</td><td>Có</td></tr><tr><td>VulnHub</td><td>VMs cho download</td><td>Có</td></tr></tbody></table>
+<h3 id="tools-quan-trọng">Tools quan trọng</h3>
+<table><thead><tr><th>Tool</th><th>Mục đích</th></tr></thead><tbody><tr><td>Burp Suite Community</td><td>Intercepting proxy, main tool</td></tr><tr><td>Burp JWT Editor</td><td>JWT testing</td></tr><tr><td>ffuf</td><td>Directory/endpoint fuzzing</td></tr><tr><td>sqlmap</td><td>SQL injection automation</td></tr><tr><td>gitleaks</td><td>Secret scanning</td></tr><tr><td>semgrep</td><td>SAST</td></tr><tr><td>trivy</td><td>Container scanning</td></tr><tr><td>nmap</td><td>Port scanning</td></tr><tr><td>interactsh</td><td>Out-of-band testing (Burp Collaborator alternative)</td></tr></tbody></table>
+<h3 id="tài-liệu-tiếp-tục-học">Tài liệu tiếp tục học</h3>
+<ul>
+<li><strong>PortSwigger Blog:</strong> <a href="https://portswigger.net/research" target="_blank" rel="noopener noreferrer">https://portswigger.net/research</a> — nghiên cứu mới nhất</li>
+<li><strong>OWASP Cheat Sheet Series:</strong> Tổng hợp best practices</li>
+<li><strong>HackerOne Hacktivity:</strong> Xem real bug bounty reports</li>
+<li><strong>Intigriti Writeups:</strong> Bug bounty writeups</li>
+<li><strong>The Web Application Hacker&#x27;s Handbook</strong> (sách)</li>
+<li><strong>Bug Bounty Bootcamp</strong> của Vickie Li (sách)</li>
+</ul>
+<h3 id="certification-nếu-muốn">Certification (Nếu muốn)</h3>
+<table><thead><tr><th>Cert</th><th>Level</th><th>Phù hợp</th></tr></thead><tbody><tr><td>PortSwigger BSCP</td><td>Intermediate</td><td>Tốt nhất cho web pentester</td></tr><tr><td>CompTIA Security+</td><td>Beginner</td><td>Foundational</td></tr><tr><td>OSCP (Offensive Security)</td><td>Advanced</td><td>Full pentester</td></tr><tr><td>eWPT (eLearnSecurity)</td><td>Intermediate</td><td>Web pentesting</td></tr></tbody></table>
+<hr>
+<h2 id="mindset-quan-trọng">Mindset quan trọng</h2>
+<p><strong>&quot;Think like an attacker&quot;</strong></p>
+<p>Khi nhìn vào bất kỳ feature nào của ứng dụng, hỏi:</p>
+<ul>
+<li>Tôi có thể cung cấp input không mong đợi không?</li>
+<li>Tôi có thể bỏ qua bước này không?</li>
+<li>Tôi có thể thay đổi parameter này không?</li>
+<li>App đang tin tưởng điều gì mà không nên tin?</li>
+</ul>
+<p><strong>&quot;Defense in depth&quot;</strong></p>
+<p>Không phụ thuộc vào 1 lớp bảo mật. Mỗi lớp phải assume các lớp khác đã bị bypass.</p>
+<p><strong>&quot;Continuous learning&quot;</strong></p>
+<p>Web security thay đổi liên tục. Theo dõi:</p>
+<ul>
+<li>New CVEs và vulnerabilities</li>
+<li>Writeups từ bug bounty hunters</li>
+<li>Research papers từ security conferences (Black Hat, DEF CON)</li>
+</ul>
+<hr>
+<h2 id="tracking-progress">Tracking Progress</h2>
+<pre><code class="language-text">Tuần 1 - Foundation:
+□ Môi trường setup hoàn chỉnh
+□ Hoàn thành ít nhất 10 PortSwigger labs
+□ Có thể dùng Burp để inspect và modify HTTP traffic
+
+Tuần 2 - Injection:
+□ Hoàn thành ít nhất 15 PortSwigger labs
+□ Có thể manually detect và exploit SQLi, XSS cơ bản
+□ Hiểu cách phòng chống từng loại
+
+Tuần 3 - Auth &amp; Advanced:
+□ Hoàn thành 10 labs về JWT/OAuth/CSRF/CORS
+□ Có thể decode và modify JWT
+□ Có thể exploit SSRF đến internal services
+
+Tuần 4 - DevOps Integration:
+□ Implement security headers trong 1 real project
+□ Setup gitleaks trong pre-commit hooks
+□ Thêm Semgrep vào CI pipeline
+□ Submit ít nhất 1 vulnerability report (dù Low severity)
+</code></pre>
+<hr>
+<p><strong>Chúc mừng! Sau 30 ngày, bạn đã có foundation đủ vững để:</strong></p>
+<ul>
+<li>Nhận ra và phòng chống các lỗ hổng phổ biến trong hệ thống của mình</li>
+<li>Bắt đầu Bug Bounty với confidence</li>
+<li>Nói chuyện security với developers và security teams như peers</li>
+<li>Tiếp tục tự học sâu hơn vào các chủ đề chuyên biệt</li>
+</ul>
+<p><strong>Con đường phía trước:</strong></p>
+<ul>
+<li>3 tháng: Chuyên sâu 2-3 vulnerability types</li>
+<li>6 tháng: Active Bug Bounty hunter</li>
+<li>1 năm: Có thể pass BSCP hoặc eWPT</li>
+<li>2 năm: Pentest junior hoặc AppSec engineer</li>
+</ul>
+<p><em>Security là journey, không phải destination. Bắt đầu từ hôm nay.</em></p>
       <div class="docs-pager">
         <a href="../35/">Previous · 35. Checklist</a>
-        <a href="../">Overview</a>
+        <a href="../../../#blogs">All blogs</a>
       </div>
     </article>
     <aside class="docs-toc">
       <div class="docs-toc-title">On this page</div>
       <nav>
-        <a href="#tong-quan">Tổng quan</a>
-        <a href="#w1">Tuần 1 — Nền tảng</a>
-        <a href="#w2">Tuần 2 — Injection & XSS</a>
-        <a href="#w3">Tuần 3 — Protocol & client</a>
-        <a href="#w4">Tuần 4 — Infra & DevOps</a>
-        <a href="#res">Tài nguyên</a>
-        <a href="#tom-tat">Tóm tắt</a>
-        <a href="#on-tap">Câu hỏi ôn tập</a>
+        <a href="#tổng-quan">Tổng quan</a>
+        <a href="#tuần-1-nền-tảng-ngày-1-7">Tuần 1: Nền tảng (Ngày 1-7)</a>
+        <a class="depth-3" href="#ngày-1-setup-môi-trường">Ngày 1: Setup môi trường</a>
+        <a class="depth-3" href="#ngày-2-3-http-và-burp-suite">Ngày 2-3: HTTP và Burp Suite</a>
+        <a class="depth-3" href="#ngày-4-5-authentication">Ngày 4-5: Authentication</a>
+        <a class="depth-3" href="#ngày-6-7-session-và-access-control">Ngày 6-7: Session và Access Control</a>
+        <a href="#tuần-2-injection-attacks-ngày-8-14">Tuần 2: Injection Attacks (Ngày 8-14)</a>
+        <a class="depth-3" href="#ngày-8-9-sql-injection">Ngày 8-9: SQL Injection</a>
+        <a class="depth-3" href="#ngày-10-nosql-và-command-injection">Ngày 10: NoSQL và Command Injection</a>
+        <a class="depth-3" href="#ngày-11-12-xss">Ngày 11-12: XSS</a>
+        <a class="depth-3" href="#ngày-13-14-ssrf-và-xxe">Ngày 13-14: SSRF và XXE</a>
+        <a href="#tuần-3-authentication-protocols--advanced-ngày-15-21">Tuần 3: Authentication Protocols &amp; Advanced (Ngày 15-21)</a>
+        <a class="depth-3" href="#ngày-15-16-oauth-và-jwt">Ngày 15-16: OAuth và JWT</a>
+        <a class="depth-3" href="#ngày-17-18-cors-và-csrf">Ngày 17-18: CORS và CSRF</a>
+        <a class="depth-3" href="#ngày-19-20-file-upload-và-path-traversal">Ngày 19-20: File Upload và Path Traversal</a>
+        <a class="depth-3" href="#ngày-21-race-condition-và-business-logic">Ngày 21: Race Condition và Business Logic</a>
+        <a href="#tuần-4-devops-security--practice-ngày-22-30">Tuần 4: DevOps Security + Practice (Ngày 22-30)</a>
+        <a class="depth-3" href="#ngày-22-23-advanced-web-attacks">Ngày 22-23: Advanced Web Attacks</a>
+        <a class="depth-3" href="#ngày-24-25-ssti-và-deserialization">Ngày 24-25: SSTI và Deserialization</a>
+        <a class="depth-3" href="#ngày-26-27-api-và-graphql-security">Ngày 26-27: API và GraphQL Security</a>
+        <a class="depth-3" href="#ngày-28-29-devops-security-trong-thực-tế">Ngày 28-29: DevOps Security trong thực tế</a>
+        <a class="depth-3" href="#ngày-30-review-ctf-và-bug-bounty-planning">Ngày 30: Review, CTF, và Bug Bounty Planning</a>
+        <a href="#tài-nguyên-bổ-sung">Tài nguyên bổ sung</a>
+        <a class="depth-3" href="#platforms-thực-hành">Platforms thực hành</a>
+        <a class="depth-3" href="#tools-quan-trọng">Tools quan trọng</a>
+        <a class="depth-3" href="#tài-liệu-tiếp-tục-học">Tài liệu tiếp tục học</a>
+        <a class="depth-3" href="#certification-nếu-muốn">Certification (Nếu muốn)</a>
+        <a href="#mindset-quan-trọng">Mindset quan trọng</a>
+        <a href="#tracking-progress">Tracking Progress</a>
       </nav>
     </aside>
   </div>

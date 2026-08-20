@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Chương 19: Open Redirect — Hieu Nguyen</title>
-  <meta name="description" content="Open redirect, allowlist, OAuth redirect.">
+  <meta name="description" content="Chương 19: Open Redirect — Web Security notes.">
   <link rel="icon" href="../../../favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -40,42 +40,95 @@
         <span>›</span>
         <span>19. Open Redirect</span>
       </div>
-      <h1>Chương 19: Open Redirect</h1>
-      <p class="lede">redirect=https://… nghe hiền. Phishing và token trên URL thì không.</p>
-      <div class="docs-meta">
-        <span><strong>Tác giả:</strong> Hieu Nguyen (Ryan)</span>
-        <span><strong>Phần:</strong> V — Server-side</span>
-        <span><strong>Cập nhật:</strong> Aug 2026</span>
-      </div>
-      <h2 id="khai-niem">Khái niệm</h2>
-<p>Param redirect đưa user sang host attacker. Dùng trong phishing và đôi khi chuỗi OAuth/token.</p>
-<h2 id="phong">Phòng chống</h2>
+      <div id="top"></div>
+<header><h1>Chương 19: Open Redirect</h1></header>
+<h2 id="khái-niệm">Khái niệm</h2>
+<p><strong>Open Redirect</strong> là lỗ hổng cho phép hacker redirect người dùng từ trang web tin cậy đến trang web tùy ý. Thường dùng để:</p>
 <ul>
-        <li>Allowlist path nội bộ (relative) hoặc host cố định.</li>
-        <li>Cấm scheme lạ (javascript:, //evil).</li>
-        <li>OAuth: exact redirect_uri.</li>
-      </ul>
-<h2 id="devops">Góc nhìn DevOps</h2>
-<p>WAF rule mở; control chính là code/IdP config. Không log full URL có token.</p>
-<h2 id="tom-tat">Tóm tắt</h2>
-<ul>
-        <li>Allowlist đích.</li>
-        <li>Relative path an toàn hơn URL đầy đủ.</li>
-        <li>OAuth URI chặt.</li>
-      </ul>
-<h2 id="on-tap">Câu hỏi ôn tập</h2>
-<ol>
-        <li>Open redirect thành phishing thế nào?</li>
-        <li>//host khác https://host chỗ nào?</li>
-        <li>Vì sao next=/dashboard ổn hơn next=https://…?</li>
-        <li>Liên quan OAuth?</li>
-        <li>Header Location có cần allowlist?</li>
-      </ol>
+<li>Phishing: redirect đến clone site</li>
+<li>SSRF bypass (chương 15)</li>
+<li>OAuth redirect bypass (chương 7)</li>
+</ul>
+<p><strong>Mức độ nguy hiểm:</strong> Thấp-Trung bình (standalone) nhưng cao khi kết hợp với các lỗ hổng khác.</p>
+<hr>
+<h2 id="cách-hoạt-động">Cách hoạt động</h2>
+<pre><code class="language-python"># Vulnerable code: redirect sau login
+@app.route(&#x27;/login&#x27;)
+def login():
+    next_url = request.args.get(&#x27;next&#x27;)  # Từ user input
+    if authenticate(request.form):
+        return redirect(next_url)  # Redirect đến URL do user chỉ định
 
-      <div class="docs-tags">
-        <span class="docs-tag">open-redirect</span>
-        <span class="docs-tag">oauth</span>
-      </div>
+# Normal: /login?next=/dashboard → redirect đến /dashboard
+# Attack: /login?next=https://phishing.com → redirect đến phishing site
+</code></pre>
+<hr>
+<h2 id="bypass-validation">Bypass Validation</h2>
+<pre><code class="language-python"># Nếu server check &quot;next phải chứa example.com&quot;:
+# /login?next=https://example.com.evil.com  → có &quot;example.com&quot;!
+
+# Nếu server check &quot;next phải bắt đầu bằng /&quot;:
+# /login?next=//evil.com  → // là protocol-relative URL!
+# → Browser redirect đến: https://evil.com (hoặc http://)
+
+# Encode:
+/login?next=%2F%2Fevil.com
+/login?next=https:%2F%2Fevil.com
+
+# CRLF injection trong redirect
+/login?next=/dashboard%0d%0aLocation:%20https://evil.com
+</code></pre>
+<hr>
+<h2 id="kịch-bản-tấn-công-ssrf-via-open-redirect">Kịch bản tấn công: SSRF via Open Redirect</h2>
+<pre><code class="language-text">SSRF payload bị block trực tiếp:
+{&quot;url&quot;: &quot;http://169.254.169.254/&quot;}  → BLOCKED (IP blocklist)
+
+Bypass qua open redirect:
+1. example.com có open redirect: /redirect?url=...
+2. SSRF payload: {&quot;url&quot;: &quot;https://example.com/redirect?url=http://169.254.169.254/&quot;}
+3. App fetch example.com → 302 redirect → 169.254.169.254
+4. Nếu app follow redirects → SSRF bypass!
+</code></pre>
+<hr>
+<h2 id="phòng-chống">Phòng chống</h2>
+<pre><code class="language-python">from urllib.parse import urlparse
+
+def safe_redirect(next_url: str, default: str = &#x27;/dashboard&#x27;) -&gt; str:
+    if not next_url:
+        return default
+    
+    parsed = urlparse(next_url)
+    
+    # Chỉ cho phép relative paths hoặc same origin
+    if parsed.scheme or parsed.netloc:
+        # External URL → không redirect
+        return default
+    
+    # Chỉ cho phép paths bắt đầu bằng /
+    if not next_url.startswith(&#x27;/&#x27;):
+        return default
+    
+    # Chặn //evil.com
+    if next_url.startswith(&#x27;//&#x27;):
+        return default
+    
+    return next_url
+
+# Hoặc: Dùng whitelist
+ALLOWED_REDIRECTS = {&#x27;/dashboard&#x27;, &#x27;/profile&#x27;, &#x27;/settings&#x27;}
+
+def validate_redirect(next_url: str) -&gt; str:
+    if next_url in ALLOWED_REDIRECTS:
+        return next_url
+    return &#x27;/dashboard&#x27;
+</code></pre>
+<hr>
+<h2 id="tóm-tắt">Tóm tắt</h2>
+<ul>
+<li>Open redirect: redirect user đến URL tùy ý → phishing, SSRF bypass, OAuth bypass.</li>
+<li><code>//evil.com</code> là URL hợp lệ (protocol-relative).</li>
+<li>Phòng chống: chỉ allow relative paths, reject external URLs, dùng whitelist.</li>
+</ul>
       <div class="docs-pager">
         <a href="../18/">Previous · 18. Path Traversal</a>
         <a href="../20/">Next · 20. Race Condition</a>
@@ -84,11 +137,12 @@
     <aside class="docs-toc">
       <div class="docs-toc-title">On this page</div>
       <nav>
-        <a href="#khai-niem">Khái niệm</a>
-        <a href="#phong">Phòng chống</a>
-        <a href="#devops">Góc nhìn DevOps</a>
-        <a href="#tom-tat">Tóm tắt</a>
-        <a href="#on-tap">Câu hỏi ôn tập</a>
+        <a href="#khái-niệm">Khái niệm</a>
+        <a href="#cách-hoạt-động">Cách hoạt động</a>
+        <a href="#bypass-validation">Bypass Validation</a>
+        <a href="#kịch-bản-tấn-công-ssrf-via-open-redirect">Kịch bản tấn công: SSRF via Open Redirect</a>
+        <a href="#phòng-chống">Phòng chống</a>
+        <a href="#tóm-tắt">Tóm tắt</a>
       </nav>
     </aside>
   </div>

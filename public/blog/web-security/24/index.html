@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Chương 24: HTTP Request Smuggling — Hieu Nguyen</title>
-  <meta name="description" content="HTTP request smuggling, Content-Length vs Transfer-Encoding, HTTP/2.">
+  <meta name="description" content="Chương 24: HTTP Request Smuggling — Web Security notes.">
   <link rel="icon" href="../../../favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -38,60 +38,102 @@
         <span>›</span>
         <a href="../">Overview</a>
         <span>›</span>
-        <span>24. Request Smuggling</span>
+        <span>24. HTTP Smuggling</span>
       </div>
-      <h1>Chương 24: HTTP Request Smuggling</h1>
-      <p class="lede">Front-end và back-end bất đồng CL vs TE. Request của bạn dính request người sau.</p>
-      <div class="docs-meta">
-        <span><strong>Tác giả:</strong> Hieu Nguyen (Ryan)</span>
-        <span><strong>Phần:</strong> VI — Infra</span>
-        <span><strong>Cập nhật:</strong> Aug 2026</span>
-      </div>
-      <h2 id="khai-niem">Khái niệm</h2>
-<p>Smuggling khi proxy và origin parse ranh giới request khác nhau (Content-Length vs Transfer-Encoding, HTTP/2 downgrade). Hậu quả: cache poison, bypass WAF, bắt request khác. Khai thác cụ thể chỉ trên lab được phép.</p>
-<h2 id="phong">Phòng chống</h2>
+      <div id="top"></div>
+<header><h1>Chương 24: HTTP Request Smuggling</h1></header>
+<h2 id="khái-niệm">Khái niệm</h2>
+<p><strong>HTTP Request Smuggling</strong> là tấn công khai thác sự không đồng nhất giữa front-end server (load balancer/WAF) và back-end server về cách xác định ranh giới giữa các HTTP requests.</p>
+<p><strong>Mức độ nguy hiểm:</strong> Rất cao — Bypass WAF, poison cache, hijack user requests.</p>
+<hr>
+<h2 id="clte-tecl-tete">CL.TE, TE.CL, TE.TE</h2>
+<p>HTTP/1.1 có hai headers xác định message length:</p>
 <ul>
-        <li>Cùng HTTP version end-to-end khi được (h2c cẩn thận).</li>
-        <li>Tắt TE trên hop không cần; normalize request ở một chỗ.</li>
-        <li>Cập nhật Nginx/Envoy/Ingress — bug parser là CVE.</li>
-        <li>WAF và origin cùng cách đếm body.</li>
-      </ul>
-<h2 id="devops">Góc nhìn DevOps</h2>
-<p>Đây là lỗ hạ tầng. Patch Ingress. Không mix custom proxy tự viết. HTTP/2 chỉ terminate một lớp rồi h2 hoặc h1 thống nhất phía sau.</p>
-<h2 id="tom-tat">Tóm tắt</h2>
-<ul>
-        <li>Một parser chuẩn.</li>
-        <li>Patch proxy.</li>
-        <li>Đừng tự ghép CL+TE.</li>
-        <li>Lab, không production probing mù.</li>
-      </ul>
-<h2 id="on-tap">Câu hỏi ôn tập</h2>
-<ol>
-        <li>CL vs TE bất đồng gây gì?</li>
-        <li>Vì sao HTTP/2 downgrade liên quan?</li>
-        <li>Ai chịu patch?</li>
-        <li>WAF bypass ý tưởng (không PoC)?</li>
-        <li>Normalize request nghĩa là gì?</li>
-      </ol>
+<li><code>Content-Length</code>: Độ dài của body tính bằng bytes</li>
+<li><code>Transfer-Encoding: chunked</code>: Body được gửi theo chunks</li>
+</ul>
+<h3 id="clte--front-end-dùng-content-length-back-end-dùng-transfer-encoding">CL.TE — Front-end dùng Content-Length, Back-end dùng Transfer-Encoding</h3>
+<pre><code class="language-http">POST / HTTP/1.1
+Content-Length: 13
+Transfer-Encoding: chunked
 
-      <div class="docs-tags">
-        <span class="docs-tag">smuggling</span>
-        <span class="docs-tag">http</span>
-        <span class="docs-tag">proxy</span>
-      </div>
+0
+
+SMUGGLED
+</code></pre>
+<ul>
+<li>Front-end (CL): thấy body = 13 bytes → gửi toàn bộ đến back-end</li>
+<li>Back-end (TE): thấy <code>0\r\n\r\n</code> → request kết thúc tại đó</li>
+<li><code>SMUGGLED</code> → được prepend vào request tiếp theo!</li>
+</ul>
+<h3 id="tecl--front-end-dùng-transfer-encoding-back-end-dùng-content-length">TE.CL — Front-end dùng Transfer-Encoding, Back-end dùng Content-Length</h3>
+<pre><code class="language-http">POST / HTTP/1.1
+Content-Length: 3
+Transfer-Encoding: chunked
+
+8
+SMUGGLED
+0
+</code></pre>
+<ul>
+<li>Front-end (TE): xử lý chunked → forward toàn bộ đến back-end</li>
+<li>Back-end (CL): thấy body = 3 bytes (<code>8\r\n</code>) → phần còn lại là prefix của request kế tiếp</li>
+</ul>
+<hr>
+<h2 id="khai-thác">Khai thác</h2>
+<h3 id="bypass-waf">Bypass WAF</h3>
+<pre><code class="language-text">WAF nằm ở front-end → block malicious requests
+Smuggling: append payload vào request của user khác
+→ Payload đến back-end mà không qua WAF check
+</code></pre>
+<h3 id="capture-other-users-requests">Capture Other Users&#x27; Requests</h3>
+<pre><code class="language-text">Smuggle partial request header của hacker:
+POST /search HTTP/1.1
+Content-Length: 166
+Transfer-Encoding: chunked
+
+0
+
+GET /capture HTTP/1.1
+X-Ignore: X
+</code></pre>
+<p>→ Request của victim bị prepend vào <code>GET /capture</code>, attacker nhận victim&#x27;s cookies/tokens.</p>
+<hr>
+<h2 id="phòng-chống">Phòng chống</h2>
+<pre><code class="language-text">1. Dùng HTTP/2 end-to-end (không bị smuggling theo cách này)
+2. Normalize ambiguous requests ở front-end
+3. Reject requests với cả CL và TE headers
+4. Enable &quot;Reuse backend connections&quot; = false
+
+Nginx:
+proxy_http_version 1.1;
+proxy_set_header Connection &quot;&quot;;
+</code></pre>
+<hr>
+<h2 id="tóm-tắt">Tóm tắt</h2>
+<ul>
+<li>Request smuggling: front-end và back-end disagree về request boundaries.</li>
+<li>Ba variant: CL.TE, TE.CL, TE.TE (obfuscated header).</li>
+<li>Impact: WAF bypass, cache poisoning, session hijacking.</li>
+<li>Phòng chống: HTTP/2 end-to-end, reject ambiguous requests.</li>
+</ul>
       <div class="docs-pager">
         <a href="../23/">Previous · 23. Cache Poisoning</a>
-        <a href="../25/">Next · 25. SSTI</a>
+        <a href="../27/">Next · 27. GraphQL</a>
       </div>
     </article>
     <aside class="docs-toc">
       <div class="docs-toc-title">On this page</div>
       <nav>
-        <a href="#khai-niem">Khái niệm</a>
-        <a href="#phong">Phòng chống</a>
-        <a href="#devops">Góc nhìn DevOps</a>
-        <a href="#tom-tat">Tóm tắt</a>
-        <a href="#on-tap">Câu hỏi ôn tập</a>
+        <a href="#khái-niệm">Khái niệm</a>
+        <a href="#clte-tecl-tete">CL.TE, TE.CL, TE.TE</a>
+        <a class="depth-3" href="#clte--front-end-dùng-content-length-back-end-dùng-transfer-encoding">CL.TE — Front-end dùng Content-Length, Back-end dùng Transfer-Encoding</a>
+        <a class="depth-3" href="#tecl--front-end-dùng-transfer-encoding-back-end-dùng-content-length">TE.CL — Front-end dùng Transfer-Encoding, Back-end dùng Content-Length</a>
+        <a href="#khai-thác">Khai thác</a>
+        <a class="depth-3" href="#bypass-waf">Bypass WAF</a>
+        <a class="depth-3" href="#capture-other-users-requests">Capture Other Users&#x27; Requests</a>
+        <a href="#phòng-chống">Phòng chống</a>
+        <a href="#tóm-tắt">Tóm tắt</a>
       </nav>
     </aside>
   </div>

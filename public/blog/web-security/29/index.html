@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Chương 29: Kubernetes Security liên quan web — Hieu Nguyen</title>
-  <meta name="description" content="Ingress, SSRF to kube API, PSS, NetworkPolicy, image, secrets.">
+  <title>Chương 29: Kubernetes Security liên quan Web — Hieu Nguyen</title>
+  <meta name="description" content="Chương 29: Kubernetes Security liên quan Web — Web Security notes.">
   <link rel="icon" href="../../../favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -40,52 +40,214 @@
         <span>›</span>
         <span>29. Kubernetes</span>
       </div>
-      <h1>Chương 29: Kubernetes Security liên quan web</h1>
-      <p class="lede">Ingress, SA token, secret env, NetworkPolicy — web bug đội cánh cluster.</p>
-      <div class="docs-meta">
-        <span><strong>Tác giả:</strong> Hieu Nguyen (Ryan)</span>
-        <span><strong>Phần:</strong> VIII — DevOps</span>
-        <span><strong>Cập nhật:</strong> Aug 2026</span>
-      </div>
-      <h2 id="khai-niem">Khái niệm</h2>
-<p>Web app trên K8s thừa attack surface: API server, etcd, IMDS, sidecar. Control cluster là hàng rào khi app lỗi.</p>
-<h2 id="ingress">Ingress</h2>
-<ul>
-        <li>TLS, security headers (Chương 2).</li>
-        <li>Không expose dashboard / admin.</li>
-        <li>snippet annotation cẩn thận (inject config).</li>
-      </ul>
-<h2 id="ssrf-k8s">SSRF tới Kubernetes API</h2>
-<p>Pod có SA token mặc định + SSRF = gọi API. Tắt automount; RBAC hẹp; egress deny API.</p>
-<h2 id="secrets-k8s">Secrets</h2>
-<p>Không env nếu có thể (còn dump /proc). Volume file + KMS encryption etcd. Không secret trong image/Helm default.</p>
-<h2 id="pss">Pod Security</h2>
-<p>restricted PSS: non-root, drop caps, no priv-esc, seccomp. Policy namespace.</p>
-<h2 id="np">NetworkPolicy</h2>
-<p>Default deny ingress/egress; allow DNS + DB + IdP.</p>
-<h2 id="image">Image</h2>
-<p>Digest pin, scan CI, distroless, không latest.</p>
-<h2 id="tom-tat">Tóm tắt</h2>
-<ul>
-        <li>Không automount SA.</li>
-        <li>PSS restricted.</li>
-        <li>NP default deny.</li>
-        <li>Secret không plaintext Git.</li>
-      </ul>
-<h2 id="on-tap">Câu hỏi ôn tập</h2>
-<ol>
-        <li>Automount SA + SSRF?</li>
-        <li>PSS restricted cấm gì?</li>
-        <li>Env secret lộ đường nào?</li>
-        <li>Ingress snippet rủi ro?</li>
-        <li>Pin digest khác tag?</li>
-      </ol>
+      <div id="top"></div>
+<header><h1>Chương 29: Kubernetes Security liên quan Web</h1></header>
+<h2 id="khái-niệm">Khái niệm</h2>
+<p>Kubernetes orchestrates containers nhưng cũng có attack surface riêng. Lỗi cấu hình K8s có thể expose internal services, allow privilege escalation, và amplify web security vulnerabilities.</p>
+<hr>
+<h2 id="ingress-misconfiguration">Ingress Misconfiguration</h2>
+<h3 id="expose-internal-services">Expose Internal Services</h3>
+<pre><code class="language-yaml"># SAI: Expose admin service ra internet
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: admin-ingress
+spec:
+  rules:
+    - host: admin.example.com  # ← Public DNS!
+      http:
+        paths:
+          - path: /
+            backend:
+              service:
+                name: admin-service
+                port:
+                  number: 8080
+</code></pre>
+<pre><code class="language-yaml"># ĐÚNG: Admin chỉ accessible từ VPN IP
+metadata:
+  annotations:
+    nginx.ingress.kubernetes.io/whitelist-source-range: &quot;10.0.0.0/8,192.168.0.0/16&quot;
+</code></pre>
+<h3 id="ssrf-đến-kubernetes-api">SSRF đến Kubernetes API</h3>
+<pre><code class="language-text">Nếu app bị SSRF:
+http://kubernetes.default.svc.cluster.local/api/v1/pods
+http://10.96.0.1/api/v1/secrets   ← Kubernetes API server
 
-      <div class="docs-tags">
-        <span class="docs-tag">kubernetes</span>
-        <span class="docs-tag">ingress</span>
-        <span class="docs-tag">pss</span>
-      </div>
+Nếu Pod không mount ServiceAccount token
+→ Không có authentication → List semua pods, secrets!
+</code></pre>
+<pre><code class="language-yaml"># Disable ServiceAccount token auto-mount
+spec:
+  automountServiceAccountToken: false  # Nếu không cần K8s API access
+
+# Hoặc dùng minimal permissions:
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+rules:
+  - apiGroups: [&quot;&quot;]
+    resources: [&quot;configmaps&quot;]
+    verbs: [&quot;get&quot;]  # Chỉ đọc configmap cụ thể
+</code></pre>
+<hr>
+<h2 id="secrets-trong-kubernetes">Secrets trong Kubernetes</h2>
+<pre><code class="language-yaml"># SAI: Hardcode secret trong manifest
+env:
+  - name: DB_PASSWORD
+    value: &quot;SuperSecret123&quot;
+
+# ĐÚNG: Dùng K8s Secret
+apiVersion: v1
+kind: Secret
+metadata:
+  name: db-credentials
+type: Opaque
+stringData:
+  password: &quot;SuperSecret123&quot;
+
+# Reference trong Pod:
+env:
+  - name: DB_PASSWORD
+    valueFrom:
+      secretKeyRef:
+        name: db-credentials
+        key: password
+</code></pre>
+<p><strong>Vấn đề với K8s Secrets:</strong></p>
+<ul>
+<li>Chỉ base64 encoded, không encrypted by default</li>
+<li>Accessible bởi bất kỳ ai có quyền read trong namespace</li>
+</ul>
+<p><strong>Giải pháp:</strong></p>
+<pre><code class="language-bash"># 1. Encrypt etcd at rest
+# /etc/kubernetes/encryption-config.yaml
+
+# 2. Dùng External Secrets Operator
+# Sync secrets từ AWS Secrets Manager/Vault vào K8s
+
+# 3. Sealed Secrets (Bitnami)
+kubeseal --format yaml &lt; secret.yaml &gt; sealed-secret.yaml
+# Sealed secrets safe để commit vào git
+</code></pre>
+<hr>
+<h2 id="pod-security">Pod Security</h2>
+<pre><code class="language-yaml">apiVersion: v1
+kind: Pod
+spec:
+  securityContext:
+    runAsNonRoot: true
+    runAsUser: 1000
+    fsGroup: 2000
+    seccompProfile:
+      type: RuntimeDefault
+  containers:
+    - name: app
+      image: myapp:latest
+      securityContext:
+        allowPrivilegeEscalation: false
+        readOnlyRootFilesystem: true
+        capabilities:
+          drop:
+            - ALL
+          add:
+            - NET_BIND_SERVICE  # Chỉ nếu cần port &lt;1024
+      resources:
+        limits:
+          cpu: &quot;500m&quot;
+          memory: &quot;256Mi&quot;
+        requests:
+          cpu: &quot;100m&quot;
+          memory: &quot;128Mi&quot;
+</code></pre>
+<hr>
+<h2 id="network-policy">Network Policy</h2>
+<pre><code class="language-yaml"># Default deny all ingress/egress
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: default-deny
+spec:
+  podSelector: {}
+  policyTypes:
+    - Ingress
+    - Egress
+
+---
+# Allow only necessary traffic
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: webapp-policy
+spec:
+  podSelector:
+    matchLabels:
+      app: webapp
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              app: nginx-ingress
+      ports:
+        - port: 8080
+  egress:
+    - to:
+        - podSelector:
+            matchLabels:
+              app: database
+      ports:
+        - port: 5432
+    - to:
+        - namespaceSelector: {}
+      ports:
+        - port: 53  # DNS
+</code></pre>
+<hr>
+<h2 id="container-image-security">Container Image Security</h2>
+<pre><code class="language-bash"># Scan images cho vulnerabilities
+trivy image myapp:latest --severity HIGH,CRITICAL
+
+# Sign images với cosign
+cosign sign --key cosign.key myapp:latest
+
+# Verify trước khi deploy
+cosign verify --key cosign.pub myapp:latest
+
+# Admission controller: chỉ allow signed images
+# Kyverno or OPA Gatekeeper
+</code></pre>
+<pre><code class="language-dockerfile"># Secure Dockerfile
+FROM python:3.11-slim
+
+# Non-root user
+RUN groupadd -r app &amp;&amp; useradd --no-create-home -r -g app app
+
+WORKDIR /app
+
+# Copy only necessary files
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY src/ .
+
+# Drop to non-root
+USER app
+
+EXPOSE 8080
+CMD [&quot;python&quot;, &quot;app.py&quot;]
+</code></pre>
+<hr>
+<h2 id="tóm-tắt">Tóm tắt</h2>
+<ul>
+<li>Ingress misconfiguration → expose internal services → SSRF/direct access.</li>
+<li>Kubernetes API accessible từ pods nếu có ServiceAccount token.</li>
+<li>K8s Secrets chỉ base64 encoded — dùng External Secrets với real encryption.</li>
+<li>Pod security: non-root, read-only filesystem, drop capabilities.</li>
+<li>Network Policy: default deny, allow minimum necessary.</li>
+<li>Scan container images trong CI/CD.</li>
+</ul>
       <div class="docs-pager">
         <a href="../28/">Previous · 28. API Security</a>
         <a href="../30/">Next · 30. CI/CD</a>
@@ -94,15 +256,15 @@
     <aside class="docs-toc">
       <div class="docs-toc-title">On this page</div>
       <nav>
-        <a href="#khai-niem">Khái niệm</a>
-        <a href="#ingress">Ingress</a>
-        <a href="#ssrf-k8s">SSRF tới Kubernetes API</a>
-        <a href="#secrets-k8s">Secrets</a>
-        <a href="#pss">Pod Security</a>
-        <a href="#np">NetworkPolicy</a>
-        <a href="#image">Image</a>
-        <a href="#tom-tat">Tóm tắt</a>
-        <a href="#on-tap">Câu hỏi ôn tập</a>
+        <a href="#khái-niệm">Khái niệm</a>
+        <a href="#ingress-misconfiguration">Ingress Misconfiguration</a>
+        <a class="depth-3" href="#expose-internal-services">Expose Internal Services</a>
+        <a class="depth-3" href="#ssrf-đến-kubernetes-api">SSRF đến Kubernetes API</a>
+        <a href="#secrets-trong-kubernetes">Secrets trong Kubernetes</a>
+        <a href="#pod-security">Pod Security</a>
+        <a href="#network-policy">Network Policy</a>
+        <a href="#container-image-security">Container Image Security</a>
+        <a href="#tóm-tắt">Tóm tắt</a>
       </nav>
     </aside>
   </div>

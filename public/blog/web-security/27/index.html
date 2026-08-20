@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Chương 27: GraphQL Security — Hieu Nguyen</title>
-  <meta name="description" content="GraphQL introspection, depth limit, IDOR resolvers, batching.">
+  <meta name="description" content="Chương 27: GraphQL Security — Web Security notes.">
   <link rel="icon" href="../../../favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -40,65 +40,174 @@
         <span>›</span>
         <span>27. GraphQL</span>
       </div>
-      <h1>Chương 27: GraphQL Security</h1>
-      <p class="lede">Một endpoint, nhiều field. Introspection, IDOR, và query sâu là DoS miễn phí.</p>
-      <div class="docs-meta">
-        <span><strong>Tác giả:</strong> Hieu Nguyen (Ryan)</span>
-        <span><strong>Phần:</strong> VII — API</span>
-        <span><strong>Cập nhật:</strong> Aug 2026</span>
-      </div>
-      <h2 id="khai-niem">Khái niệm</h2>
-<p>GraphQL: client chọn shape dữ liệu. Authz phải nằm từng resolver, không chỉ “đã login”.</p>
-<h2 id="rui-ro">Rủi ro</h2>
-<ul>
-        <li>Introspection production → lộ schema.</li>
-        <li>IDOR: query node(id) thiếu check.</li>
-        <li>Batching / alias phá rate-limit.</li>
-        <li>Query sâu / circular → CPU DoS.</li>
-      </ul>
-<h2 id="phong">Phòng chống</h2>
-<ul>
-        <li>Tắt introspection prod; persist queries nếu được.</li>
-        <li>Authz per field.</li>
-        <li>Depth/complexity limit; timeout.</li>
-        <li>Rate-limit theo cost không theo request count.</li>
-      </ul>
-<h2 id="devops">Góc nhìn DevOps</h2>
-<p>Timeout Envoy. Không cache GraphQL POST mù. Schema file không public bucket.</p>
-<h2 id="tom-tat">Tóm tắt</h2>
-<ul>
-        <li>Resolver authz.</li>
-        <li>Limit depth/cost.</li>
-        <li>Tắt introspection prod.</li>
-        <li>Rate-limit theo cost.</li>
-      </ul>
-<h2 id="on-tap">Câu hỏi ôn tập</h2>
-<ol>
-        <li>Introspection hại gì?</li>
-        <li>IDOR GraphQL khác REST?</li>
-        <li>Vì sao rate-limit theo request fail?</li>
-        <li>Persisted query giúp gì?</li>
-        <li>Timeout đặt ở đâu?</li>
-      </ol>
+      <div id="top"></div>
+<header><h1>Chương 27: GraphQL Security</h1></header>
+<h2 id="khái-niệm">Khái niệm</h2>
+<p><strong>GraphQL</strong> là query language cho APIs, cho phép client specify exactly data nào muốn nhận. GraphQL có attack surface riêng biệt so với REST APIs.</p>
+<p><strong>Mức độ nguy hiểm:</strong> Trung bình-Cao — Phụ thuộc vào implementation.</p>
+<hr>
+<h2 id="graphql-vs-rest">GraphQL vs REST</h2>
+<pre><code class="language-text">REST: Nhiều endpoints, server quyết định response format
+/api/users → {id, name, email, orders, ...}
 
-      <div class="docs-tags">
-        <span class="docs-tag">graphql</span>
-        <span class="docs-tag">api</span>
-      </div>
+GraphQL: 1 endpoint, client quyết định
+POST /graphql
+{
+  query: &quot;{ user(id: 1) { name email } }&quot;
+}
+→ Chỉ trả name và email
+</code></pre>
+<hr>
+<h2 id="introspection--information-disclosure">Introspection — Information Disclosure</h2>
+<p>Introspection cho phép query schema của API:</p>
+<pre><code class="language-graphql"># Lấy toàn bộ schema
+query IntrospectionQuery {
+    __schema {
+        types {
+            name
+            fields {
+                name
+                type { name }
+            }
+        }
+    }
+}
+
+# Response:
+{
+  &quot;types&quot;: [
+    {&quot;name&quot;: &quot;User&quot;, &quot;fields&quot;: [
+      {&quot;name&quot;: &quot;id&quot;}, {&quot;name&quot;: &quot;email&quot;}, 
+      {&quot;name&quot;: &quot;password&quot;}, {&quot;name&quot;: &quot;creditCard&quot;}  # ← Nhạy cảm!
+    ]},
+    {&quot;name&quot;: &quot;AdminDashboard&quot;, &quot;fields&quot;: [...]}  # ← Hidden endpoint lộ!
+  ]
+}
+</code></pre>
+<p><strong>Tắt introspection trong production:</strong></p>
+<pre><code class="language-javascript">// Apollo Server
+const server = new ApolloServer({
+    typeDefs,
+    resolvers,
+    introspection: process.env.NODE_ENV !== &#x27;production&#x27;,
+});
+</code></pre>
+<hr>
+<h2 id="idor-qua-graphql">IDOR qua GraphQL</h2>
+<pre><code class="language-graphql"># Tấn công IDOR
+query {
+    user(id: 1) {  # Thay đổi ID
+        name
+        email
+        creditCard { number }
+    }
+}
+</code></pre>
+<p>Nếu resolver không check authorization → IDOR.</p>
+<hr>
+<h2 id="batching-attack--bypass-rate-limiting">Batching Attack — Bypass Rate Limiting</h2>
+<pre><code class="language-graphql"># Gửi nhiều queries trong 1 request
+[
+    {&quot;query&quot;: &quot;mutation { login(username: &#x27;admin&#x27;, password: &#x27;pass1&#x27;) }&quot;},
+    {&quot;query&quot;: &quot;mutation { login(username: &#x27;admin&#x27;, password: &#x27;pass2&#x27;) }&quot;},
+    {&quot;query&quot;: &quot;mutation { login(username: &#x27;admin&#x27;, password: &#x27;pass3&#x27;) }&quot;},
+    ... (1000 queries)
+]
+
+# Nếu rate limiting per-request (không per-query):
+# 1 request với 1000 queries → bypass rate limit
+</code></pre>
+<hr>
+<h2 id="dos-qua-deep-query">DoS qua Deep Query</h2>
+<pre><code class="language-graphql"># Deeply nested query → exponential resources
+query {
+    users {
+        friends {
+            friends {
+                friends {
+                    friends {
+                        # ... nested 10+ levels
+                        name
+                    }
+                }
+            }
+        }
+    }
+}
+</code></pre>
+<hr>
+<h2 id="phòng-chống">Phòng chống</h2>
+<pre><code class="language-javascript">// 1. Disable introspection
+introspection: process.env.NODE_ENV === &#x27;production&#x27; ? false : true
+
+// 2. Query depth limiting
+const depthLimitPlugin = createComplexityLimitRule(1000, {
+    scalarCost: 1,
+    objectCost: 2,
+    listFactor: 10
+});
+
+// 3. Query complexity analysis
+const { createComplexityLimitRule } = require(&#x27;graphql-validation-complexity&#x27;);
+const rules = [createComplexityLimitRule(1000)];
+
+// 4. Authorization trong resolvers
+const resolvers = {
+    Query: {
+        user: async (_, { id }, context) =&gt; {
+            // Check authorization
+            if (context.user.id !== id &amp;&amp; !context.user.isAdmin) {
+                throw new ForbiddenError(&#x27;Not authorized&#x27;);
+            }
+            return db.getUser(id);
+        }
+    }
+};
+
+// 5. Disable batching hoặc limit batch size
+const server = new ApolloServer({
+    typeDefs,
+    resolvers,
+    plugins: [ApolloServerPluginLandingPageDisabled()],
+    allowBatchedHttpRequests: false  // Disable batching
+});
+</code></pre>
+<hr>
+<h2 id="tóm-tắt">Tóm tắt</h2>
+<ul>
+<li>GraphQL: 1 endpoint flexible → larger attack surface.</li>
+<li>Introspection lộ schema → disable in production.</li>
+<li>IDOR trong resolvers nếu không check ownership.</li>
+<li>Batching bypass rate limiting.</li>
+<li>Deep queries → DoS.</li>
+<li>Phòng chống: disable introspection, depth/complexity limits, auth trong resolvers.</li>
+</ul>
+<hr>
+<h2 id="câu-hỏi-ôn-tập">Câu hỏi ôn tập</h2>
+<ol>
+<li>Clickjacking có thể bypass SameSite cookie như thế nào?</li>
+<li>Cache poisoning với &quot;unkeyed inputs&quot; nghĩa là gì?</li>
+<li>Trong HTTP request smuggling, CL.TE và TE.CL khác nhau như thế nào?</li>
+<li>SSTI khác SQL injection ở điểm nào? Cả hai đều là injection attacks.</li>
+<li>Tại sao GraphQL introspection nên disabled trong production?</li>
+</ol>
       <div class="docs-pager">
-        <a href="../26/">Previous · 26. Deserialization</a>
+        <a href="../24/">Previous · 24. HTTP Smuggling</a>
         <a href="../28/">Next · 28. API Security</a>
       </div>
     </article>
     <aside class="docs-toc">
       <div class="docs-toc-title">On this page</div>
       <nav>
-        <a href="#khai-niem">Khái niệm</a>
-        <a href="#rui-ro">Rủi ro</a>
-        <a href="#phong">Phòng chống</a>
-        <a href="#devops">Góc nhìn DevOps</a>
-        <a href="#tom-tat">Tóm tắt</a>
-        <a href="#on-tap">Câu hỏi ôn tập</a>
+        <a href="#khái-niệm">Khái niệm</a>
+        <a href="#graphql-vs-rest">GraphQL vs REST</a>
+        <a href="#introspection--information-disclosure">Introspection — Information Disclosure</a>
+        <a href="#idor-qua-graphql">IDOR qua GraphQL</a>
+        <a href="#batching-attack--bypass-rate-limiting">Batching Attack — Bypass Rate Limiting</a>
+        <a href="#dos-qua-deep-query">DoS qua Deep Query</a>
+        <a href="#phòng-chống">Phòng chống</a>
+        <a href="#tóm-tắt">Tóm tắt</a>
+        <a href="#câu-hỏi-ôn-tập">Câu hỏi ôn tập</a>
       </nav>
     </aside>
   </div>

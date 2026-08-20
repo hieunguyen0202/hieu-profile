@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Chương 3: Burp Suite — Hieu Nguyen</title>
-  <meta name="description" content="Burp Suite cho DevOps: intercepting proxy, Repeater, History, Decoder, CA cert, và thay ZAP trong CI. Chỉ dùng trên lab / scope được phép.">
+  <meta name="description" content="Chương 3: Burp Suite — Web Security notes.">
   <link rel="icon" href="../../../favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -15,7 +15,6 @@
   <div class="cursor-ring" id="cursorRing"></div>
   <canvas id="matrix-canvas"></canvas>
   <div class="grid-bg"></div>
-
   <header class="docs-topbar">
     <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
     <a class="docs-brand" href="../../../">i'm<span>.hieu</span></a>
@@ -26,13 +25,11 @@
     <span class="docs-topbar-spacer"></span>
     <a class="docs-top-link" href="../../../#blogs">blogs</a>
   </header>
-
   <div class="docs-shell">
     <aside class="docs-sidebar" id="docsSidebar" data-docs-root="../" data-active="03-burp">
       <div class="docs-nav-label">Web Security</div>
       <ul class="docs-nav" id="docsNav"></ul>
     </aside>
-
     <article class="docs-main">
       <div class="docs-breadcrumb">
         <a href="../../../">Home</a>
@@ -43,217 +40,306 @@
         <span>›</span>
         <span>03. Burp Suite</span>
       </div>
+      <div id="top"></div>
+<header><h1>Chương 3: Burp Suite</h1></header>
+<h2 id="khái-niệm">Khái niệm</h2>
+<p><strong>Burp Suite</strong> là công cụ kiểm thử bảo mật ứng dụng web phổ biến nhất thế giới, được phát triển bởi PortSwigger. Nó hoạt động như một <strong>intercepting proxy</strong> (proxy chặn bắt) — đặt giữa browser và server để bắt, đọc, sửa đổi toàn bộ HTTP traffic.</p>
+<p>Với DevOps Engineer, Burp Suite giúp:</p>
+<ul>
+<li>Quan sát chính xác ứng dụng đang gửi/nhận gì</li>
+<li>Replay và modify requests để test lỗ hổng</li>
+<li>Tự động scan một số loại vulnerability</li>
+<li>Phân tích authentication flow, API calls</li>
+</ul>
+<p><strong>Hai phiên bản:</strong></p>
+<ul>
+<li><strong>Burp Suite Community:</strong> Miễn phí, đủ dùng cho học tập và bug bounty cơ bản</li>
+<li><strong>Burp Suite Professional:</strong> Trả phí (~449 USD/năm), có scanner, Collaborator, nhiều tính năng nâng cao</li>
+</ul>
+<hr>
+<h2 id="cài-đặt">Cài đặt</h2>
+<p><strong>Yêu cầu:</strong> Java 17+</p>
+<pre><code class="language-bash"># Ubuntu/Debian
+sudo apt update &amp;&amp; sudo apt install default-jdk
 
-      <h1>Chương 3: Burp Suite — đọc request cho đúng</h1>
-      <p class="lede">Không cần thành pentester. Cần thấy app thực sự gửi gì qua Ingress.</p>
+# Download Burp Suite Community từ portswigger.net/burp/communitydownload
+# Sau đó chạy:
+java -jar burpsuite_community_v*.jar
+</code></pre>
+<p><strong>Hoặc dùng Docker (không khuyến khích vì cần GUI):</strong></p>
+<pre><code class="language-bash"># Dùng Kali Linux với Burp sẵn có
+docker run -it --rm kalilinux/kali-rolling /bin/bash
+apt install burpsuite
+</code></pre>
+<hr>
+<h2 id="cấu-hình-ban-đầu">Cấu hình ban đầu</h2>
+<h3 id="bước-1-tạo-proxy-listener">Bước 1: Tạo Proxy Listener</h3>
+<p>Mặc định Burp Suite lắng nghe ở <code>127.0.0.1:8080</code>.</p>
+<pre><code class="language-text">Burp Suite → Proxy → Options → Proxy Listeners
+└── 127.0.0.1:8080 (mặc định)
+</code></pre>
+<h3 id="bước-2-cấu-hình-browser">Bước 2: Cấu hình Browser</h3>
+<p><strong>Cách 1: Cấu hình thủ công</strong></p>
+<ul>
+<li>Firefox: Settings → Network Settings → Manual proxy</li>
+<li>HTTP Proxy: <code>127.0.0.1</code>, Port: <code>8080</code></li>
+<li>Cũng dùng cho HTTPS</li>
+</ul>
+<p><strong>Cách 2: Dùng FoxyProxy (khuyến nghị)</strong></p>
+<pre><code class="language-bash"># Cài extension FoxyProxy Standard cho Firefox
+# Add proxy: 127.0.0.1:8080
+# Toggle on/off khi cần
+</code></pre>
+<h3 id="bước-3-cài-ca-certificate">Bước 3: Cài CA Certificate</h3>
+<p>Để intercept HTTPS, cần cài Burp CA certificate vào browser:</p>
+<pre><code class="language-text">1. Truy cập http://burpsuite (khi proxy đang bật)
+2. Download CA Certificate
+3. Firefox: Settings → Privacy &amp; Security → Certificates → Import
+4. Trust for &quot;Identify websites&quot;
+</code></pre>
+<hr>
+<h2 id="các-module-chính">Các module chính</h2>
+<h3 id="1-proxy--trái-tim-của-burp">1. Proxy — Trái tim của Burp</h3>
+<p><strong>Intercept tab:</strong></p>
+<pre><code class="language-text">Proxy → Intercept → Intercept is ON
+</code></pre>
+<p>Khi bật intercept, mọi request từ browser đều bị &quot;hold&quot; lại. Bạn có thể:</p>
+<ul>
+<li><strong>Forward:</strong> Cho request đi qua</li>
+<li><strong>Drop:</strong> Hủy request</li>
+<li><strong>Edit:</strong> Sửa request trước khi forward</li>
+</ul>
+<pre><code class="language-http">GET /api/users?id=1 HTTP/1.1
+Host: example.com
+Cookie: session=abc123
+                        ↑
+            Sửa id=1 thành id=2 ngay đây
+</code></pre>
+<p><strong>HTTP History tab:</strong>
+Xem toàn bộ traffic đã qua Proxy, dù intercept tắt hay bật.</p>
+<p>Chuột phải vào request → <strong>Send to Repeater</strong> / <strong>Send to Intruder</strong> / <strong>Send to Scanner</strong></p>
+<h3 id="2-repeater--replay-và-modify-requests">2. Repeater — Replay và Modify Requests</h3>
+<p>Repeater cho phép gửi lại request nhiều lần với các thay đổi khác nhau. Đây là tool dùng nhiều nhất khi test thủ công.</p>
+<pre><code class="language-text">Proxy → HTTP History → [chọn request] → chuột phải → Send to Repeater
+</code></pre>
+<p><strong>Workflow điển hình:</strong></p>
+<pre><code class="language-text">Request gốc:
+GET /api/user?id=1337 HTTP/1.1
 
-      <div class="docs-meta">
-        <span><strong>Tác giả:</strong> Hieu Nguyen (Ryan)</span>
-        <span><strong>Phần:</strong> I — Fundamentals</span>
-        <span><strong>Cập nhật:</strong> Aug 2026</span>
-      </div>
+Thử 1: id=1337&#x27;        → SQL error? → SQL injection
+Thử 2: id=1            → Xem user khác → IDOR
+Thử 3: id=0x539        → Hex encoding bypass
+Thử 4: id=../../../etc/passwd → Path traversal
+</code></pre>
+<p><strong>Keyboard shortcuts:</strong></p>
+<ul>
+<li><code>Ctrl+R</code>: Send request</li>
+<li><code>Ctrl+Z</code>: Undo</li>
+<li><code>Ctrl+Shift+[/]</code>: Navigate giữa các tabs</li>
+</ul>
+<h3 id="3-intruder--tấn-công-tự-động-hóa">3. Intruder — Tấn công tự động hóa</h3>
+<p>Intruder tự động hóa việc gửi nhiều request với payload khác nhau. Dùng để:</p>
+<ul>
+<li>Brute force password</li>
+<li>Fuzzing parameters</li>
+<li>Enumerate IDs (IDOR testing)</li>
+<li>Bypass rate limiting</li>
+</ul>
+<p><strong>Các Attack Type:</strong></p>
+<pre><code class="language-text">Sniper:      [payload] cùng một vị trí, từng giá trị một
+Battering Ram: [payload] tất cả vị trí cùng lúc, cùng giá trị
+Pitchfork:   [payload1][payload2] nhiều vị trí, đồng bộ theo hàng
+Cluster Bomb: [payload1][payload2] mọi tổ hợp có thể
+</code></pre>
+<p><strong>Ví dụ brute force login:</strong></p>
+<pre><code class="language-http">POST /login HTTP/1.1
+Content-Type: application/json
 
-      <blockquote>
-        Chỉ trỏ Burp vào lab của bạn, PortSwigger Academy, hoặc program có scope rõ.
-        Production khách / công ty không nằm trong ủy quyền thì không phải “thực hành”.
-      </blockquote>
+{&quot;username&quot;:&quot;admin&quot;,&quot;password&quot;:&quot;§password§&quot;}
+                                ↑
+                    Đánh dấu vị trí inject payload
+</code></pre>
+<pre><code class="language-text">Payloads → Simple list → Load wordlist (rockyou.txt)
+→ Start attack
+→ Filter by response length hoặc status code khác nhau
+</code></pre>
+<blockquote>
+<p><strong>Community Edition bị rate limit</strong> ở Intruder. Dùng Turbo Intruder extension cho tốc độ cao hơn.</p>
+</blockquote>
+<h3 id="4-scanner-pro-only--tự-động-tìm-lỗ-hổng">4. Scanner (Pro only) — Tự động tìm lỗ hổng</h3>
+<pre><code class="language-text">Chuột phải vào request → Scan → Active Scan
+</code></pre>
+<p>Scanner tự động phát hiện:</p>
+<ul>
+<li>SQL Injection</li>
+<li>XSS</li>
+<li>Path Traversal</li>
+<li>XXE</li>
+<li>Command Injection</li>
+<li>...và nhiều hơn nữa</li>
+</ul>
+<blockquote>
+<p>Chỉ d ùng trên hệ thống được phép. Active scan sẽ gửi payloads có thể gây hại.</p>
+</blockquote>
+<h3 id="5-decoder--encodedecode-dữ-liệu">5. Decoder — Encode/Decode dữ liệu</h3>
+<pre><code class="language-text">Burp → Decoder
+</code></pre>
+<p>Hỗ trợ:</p>
+<ul>
+<li>Base64 encode/decode</li>
+<li>URL encode/decode</li>
+<li>HTML encode/decode</li>
+<li>Hex</li>
+<li>Gzip</li>
+<li>Hashing (MD5, SHA1, SHA256)</li>
+</ul>
+<p><strong>Ví dụ:</strong> Decode JWT token:</p>
+<pre><code class="language-text">eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9
+→ Decode as Base64 →
+{&quot;alg&quot;:&quot;HS256&quot;,&quot;typ&quot;:&quot;JWT&quot;}
+</code></pre>
+<h3 id="6-comparer--so-sánh-responses">6. Comparer — So sánh responses</h3>
+<p>Dùng để so sánh hai responses để tìm sự khác biệt nhỏ — hữu ích trong blind injection testing.</p>
+<pre><code class="language-text">HTTP History → chọn 2 responses → chuột phải → Send to Comparer
+</code></pre>
+<h3 id="7-logger--ghi-log-toàn-bộ-traffic">7. Logger — Ghi log toàn bộ traffic</h3>
+<p>Khác với HTTP History của Proxy, Logger ghi lại traffic từ tất cả modules. Hữu ích khi debug.</p>
+<h3 id="8-collaborator-pro-only--out-of-band-testing">8. Collaborator (Pro only) — Out-of-band testing</h3>
+<p>Burp Collaborator là server public của PortSwigger dùng để detect out-of-band interactions — khi payload trigger DNS lookup hoặc HTTP request ra ngoài.</p>
+<pre><code class="language-text">Dùng trong:
+- Blind SSRF
+- Blind Command Injection
+- Blind XXE
+- Blind SQL Injection (DNS-based)
+</code></pre>
+<hr>
+<h2 id="extensions-quan-trọng">Extensions quan trọng</h2>
+<p>Cài qua <strong>BApp Store</strong> (Burp → Extensions → BApp Store):</p>
+<table><thead><tr><th>Extension</th><th>Mục đích</th></tr></thead><tbody><tr><td><strong>Param Miner</strong></td><td>Tìm hidden parameters, unkeyed cache inputs</td></tr><tr><td><strong>Turbo Intruder</strong></td><td>Brute force tốc độ cao, race condition testing</td></tr><tr><td><strong>Active Scan++</strong></td><td>Nâng cao scanner (Pro)</td></tr><tr><td><strong>JWT Editor</strong></td><td>Edit và resign JWT tokens</td></tr><tr><td><strong>Logger++</strong></td><td>Advanced logging</td></tr><tr><td><strong>Autorize</strong></td><td>Test access control (mỗi request chạy với nhiều user)</td></tr><tr><td><strong>Hackvertor</strong></td><td>Transform payloads để bypass WAF</td></tr><tr><td><strong>403 Bypasser</strong></td><td>Bypass 403 Forbidden</td></tr></tbody></table>
+<hr>
+<h2 id="workflow-thực-tế-test-một-api-endpoint">Workflow thực tế: Test một API endpoint</h2>
+<pre><code class="language-text">1. Cấu hình Burp proxy
+2. Bật intercept
+3. Thực hiện thao tác trên app (login, browse, etc.)
+4. HTTP History → xem các request
+5. Tìm request thú vị (có parameters, auth headers, v.v.)
+6. Send to Repeater
+7. Thử các modifications:
+   - Thay đổi ID values (IDOR test)
+   - Remove auth header (access control test)
+   - Inject SQL/XSS payloads
+   - Thêm/sửa headers
+8. Phân tích response (status code, length, content)
+9. Nếu tìm ra pattern → Send to Intruder để automate
+</code></pre>
+<hr>
+<h2 id="burp-với-dockerkubernetes">Burp với Docker/Kubernetes</h2>
+<p>Khi test ứng dụng trong Docker/K8s, cần cấu hình network:</p>
+<pre><code class="language-bash"># Test app chạy trong Docker
+# Tìm IP của container
+docker inspect &lt;container&gt; | grep IPAddress
 
-      <h2 id="khai-niem">Khái niệm</h2>
-      <p>
-        <strong>Burp Suite</strong> (PortSwigger) là <strong>intercepting proxy</strong>: ngồi giữa trình duyệt và server,
-        ghi lại HTTP(S), cho phép xem và (trên hệ thống được phép) gửi lại request đã chỉnh.
-      </p>
-      <p>DevOps dùng nó để:</p>
-      <ul>
-        <li>Xác nhận login / cookie / header thực tế — khác với “trên giấy kiến trúc”.</li>
-        <li>Nhìn API call SPA (browser không hiện trên thanh địa chỉ).</li>
-        <li>So response khi thiếu auth header, khi đổi host, khi cookie thiếu flag.</li>
-      </ul>
-      <p>Hai bản: <strong>Community</strong> (học, đủ Repeater / Proxy) và <strong>Professional</strong> (scanner, Collaborator — bản trả phí).</p>
+# Cấu hình Burp target scope
+# Proxy → Options → Add scope: 172.17.0.0/16
 
-      <h2 id="cai-dat">Cài đặt</h2>
-      <p>Cần JDK hiện đại. Tải Community từ trang PortSwigger, rồi:</p>
-<pre><code>java -jar burpsuite_community_*.jar</code></pre>
-      <p>GUI trong Docker thường khổ — học trên máy local. Kali có package sẵn nếu bạn đã dùng distro đó.</p>
+# Hoặc expose app ra localhost
+docker run -p 8000:8000 myapp
+# → Burp intercept traffic đến localhost:8000
+</code></pre>
+<p><strong>Lưu ý:</strong> Với HTTPS trong container, cần cài Burp CA vào container hoặc tắt TLS verification khi test nội bộ.</p>
+<hr>
+<h2 id="kịch-bản-tấn-công-brute-force-login-với-intruder">Kịch bản tấn công: Brute force login với Intruder</h2>
+<pre><code class="language-text">1. Intercept POST /login request
+2. Send to Intruder
+3. Clear tất cả auto-marked positions
+4. Mark §password§:
+   {&quot;username&quot;:&quot;admin&quot;,&quot;password&quot;:&quot;§password§&quot;}
+5. Payloads → Load: /usr/share/wordlists/rockyou.txt
+6. Options → Grep Match: &quot;Invalid password&quot; 
+   (để phân biệt success/failure)
+7. Start Attack
+8. Sort by Response Length — request thành công có length khác
+</code></pre>
+<hr>
+<h2 id="cách-phát-hiện-burp-giúp-nhận-biết-gì">Cách phát hiện: Burp giúp nhận biết gì</h2>
+<p>Dùng Burp để phát hiện dấu hiệu lỗ hổng:</p>
+<pre><code class="language-text">✓ Response có stack trace/error message → thông tin lộ
+✓ Response time khác nhau khi thay payload → blind injection
+✓ Response length thay đổi khi modify parameter → IDOR/access control
+✓ Set-Cookie thiếu HttpOnly/Secure → session security issue
+✓ Thiếu security headers trong response → misconfiguration
+✓ Content-Type: text/html nhưng trả về JSON → MIME confusion
+</code></pre>
+<hr>
+<h2 id="góc-nhìn-devops">Góc nhìn DevOps</h2>
+<p><strong>Testing trong staging environment:</strong></p>
+<pre><code class="language-bash"># Dùng Burp như một proxy chạy headless với Burp REST API (Pro)
+# Hoặc dùng ZAP (miễn phí) trong CI/CD pipeline
 
-      <h2 id="cau-hinh">Cấu hình ban đầu</h2>
-      <h3 id="listener">1. Proxy listener</h3>
-      <p>Mặc định <code>127.0.0.1:8080</code> (Proxy → Options / Settings → Proxy listeners).</p>
-      <h3 id="browser">2. Trình duyệt</h3>
-      <p>
-        Firefox: Settings → Network → Manual proxy → HTTP/HTTPS <code>127.0.0.1:8080</code>.
-        Extension kiểu FoxyProxy để bật/tắt nhanh, khỏi kẹt mọi tab qua Burp.
-      </p>
-      <h3 id="ca">3. CA certificate (HTTPS)</h3>
-      <p>
-        TLS mã hóa end-to-end. Burp muốn đọc HTTPS thì browser phải tin CA của Burp.
-        Khi proxy bật, mở <code>http://burpsuite</code> (hoặc help trong app) → tải CA → Import vào Firefox
-        (Privacy → Certificates) và tin “identify websites”.
-      </p>
-      <p>Không cài CA: HTTPS fail hoặc bạn chỉ thấy CONNECT tunnel, không thấy path/header.</p>
-
-      <h2 id="modules">Các module chính</h2>
-      <h3 id="proxy">Proxy</h3>
-      <p>
-        <strong>Intercept on:</strong> request dừng lại — Forward / Drop / sửa rồi Forward.
-        Tắt intercept khi chỉ muốn ghi: dùng <strong>HTTP History</strong>.
-      </p>
-      <p>History là chỗ DevOps sống: filter host, status, MIME; chuột phải gửi Repeater.</p>
-
-      <h3 id="repeater">Repeater</h3>
-      <p>
-        Gửi lại <em>một</em> request, đổi từng field, xem status / body / header.
-        Dùng để kiểm tra giả định: bỏ <code>Authorization</code>, đổi <code>Host</code> sang giá trị
-        không nằm allowlist, xem cookie có <code>HttpOnly</code> trên <code>Set-Cookie</code> không.
-      </p>
-      <p>Phím hay dùng (tùy keymap): gửi request, undo, chuyển tab Repeater.</p>
-
-      <h3 id="intruder">Intruder</h3>
-      <p>
-        Lặp nhiều payload trên vị trí đánh dấu. Trên lab được phép: fuzz parameter, kiểm tra
-        rate-limit login, liệt kê ID trong scope.
-      </p>
-      <p>Các <em>attack type</em> (khái niệm, không phải playbook):</p>
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr><th>Type</th><th>Ý tưởng</th></tr>
-          </thead>
-          <tbody>
-            <tr><td>Sniper</td><td>Một vị trí, lần lượt từng payload</td></tr>
-            <tr><td>Battering ram</td><td>Mọi vị trí cùng một giá trị</td></tr>
-            <tr><td>Pitchfork</td><td>Nhiều vị trí, hàng payload khớp nhau</td></tr>
-            <tr><td>Cluster bomb</td><td>Tổ hợp — tốn request, dễ đập lab</td></tr>
-          </tbody>
-        </table>
-      </div>
-      <p>Community giới hạn tốc độ Intruder. Không dùng để đoán mật khẩu hệ thống thật.</p>
-
-      <h3 id="scanner">Scanner (Pro)</h3>
-      <p>
-        Active scan tự bắn payload. Chỉ trên target ủy quyền — có thể làm đầy log, làm hỏng dữ liệu test.
-        DevOps thường thay bằng DAST trong CI (ZAP baseline) thay vì scan tay production.
-      </p>
-
-      <h3 id="decoder">Decoder</h3>
-      <p>Base64, URL, HTML, hex, hash. JWT: phần header/payload là Base64URL — decode để đọc claim, không phải “bẻ” chữ ký.</p>
-
-      <h3 id="comparer">Comparer</h3>
-      <p>So hai response (độ dài, diff). Hữu ích khi hai lần gọi chỉ khác một header.</p>
-
-      <h3 id="logger">Logger</h3>
-      <p>Traffic từ mọi module, rộng hơn HTTP History của Proxy — debug khi Repeater “biến mất” khỏi History.</p>
-
-      <h3 id="collaborator">Collaborator (Pro)</h3>
-      <p>
-        Kênh out-of-band: payload trên lab khiến app gọi DNS/HTTP ra server Collaborator.
-        Dùng trong bài học SSRF / XXE mù — không nhắm hạ tầng người khác.
-      </p>
-
-      <h2 id="extensions">Extensions (BApp Store)</h2>
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr><th>Extension</th><th>Khi nào mở</th></tr>
-          </thead>
-          <tbody>
-            <tr><td>Param Miner</td><td>Tìm tên parameter / header ẩn (cache, app)</td></tr>
-            <tr><td>JWT Editor</td><td>Xem / sửa JWT trên lab</td></tr>
-            <tr><td>Logger++</td><td>Log lọc tốt hơn</td></tr>
-            <tr><td>Autorize</td><td>So request với session user khác — access control</td></tr>
-          </tbody>
-        </table>
-      </div>
-
-      <h2 id="workflow">Workflow: xem một API</h2>
-      <ol>
-        <li>Bật proxy + CA; scope chỉ host lab.</li>
-        <li>Dùng app như user: login, mở trang, gọi API.</li>
-        <li>HTTP History: lọc path <code>/api</code>, method POST, status 401/403.</li>
-        <li>Repeater: kiểm tra thiếu token, cookie flag, Host lạ.</li>
-        <li>Ghi finding dạng misconfig (header, TLS, log) — đưa ticket platform, không “giữ PoC im”.</li>
-      </ol>
-
-      <h2 id="k8s">Burp với Docker / Kubernetes</h2>
-      <p>
-        Expose app lab ra localhost (<code>-p 8000:8000</code>) rồi proxy vào <code>127.0.0.1:8000</code>.
-        Cluster remote: kubectl port-forward Service — đừng mở NodePort ra internet “cho tiện test”.
-      </p>
-      <p>HTTPS trong container: cài CA vào trust store của image lab, hoặc chỉ test HTTP nội bộ.</p>
-
-      <h2 id="phat-hien">Burp giúp nhận ra misconfig nào</h2>
-      <ul>
-        <li>Response HTML chứa stack trace / version → giảm info leak.</li>
-        <li><code>Set-Cookie</code> thiếu HttpOnly / Secure / SameSite.</li>
-        <li>Thiếu CSP, HSTS, nosniff trên response từ Ingress.</li>
-        <li>API state-changing bằng GET.</li>
-        <li>Cùng resource, user A vs user B khác body — tín hiệu access control (xem Part II).</li>
-      </ul>
-
-      <h2 id="devops">Góc nhìn DevOps</h2>
-      <p>Burp là tool tay. Pipeline cần DAST không GUI:</p>
-<pre><code>docker run --rm -t ghcr.io/zaproxy/zaproxy:stable zap-baseline.py \
+# OWASP ZAP thay thế miễn phí cho CI/CD:
+docker run -t owasp/zap2docker-stable zap-baseline.py \
   -t https://staging.example.com \
-  -r zap-report.html</code></pre>
-      <p>Staging phải isolat, credential test, rate-limit nhẹ để scan không thành DoS. Kết quả ZAP ≠ “sạch production”.</p>
-      <p>Export History (lab) có thể đưa vào SIEM để luyện detection — không export session cookie production.</p>
-
-      <h2 id="tom-tat">Tóm tắt</h2>
-      <ul>
-        <li>Proxy + History: thấy traffic thật. Repeater: kiểm tra giả định từng request.</li>
-        <li>HTTPS cần CA Burp trong browser.</li>
-        <li>Intruder / Scanner chỉ trên scope; CI dùng ZAP/SAST/SCA.</li>
-        <li>Autorize / JWT Editor hỗ trợ đọc authz — không thay pentest ủy quyền.</li>
-      </ul>
-
-      <h2 id="on-tap">Câu hỏi ôn tập</h2>
-      <ol>
-        <li>Vì sao HTTPS không hiện path trên History nếu chưa tin CA Burp?</li>
-        <li>Intercept khác HTTP History chỗ nào?</li>
-        <li>Sniper khác Cluster bomb ở chỗ nào? Cái nào dễ làm đầy quota lab?</li>
-        <li>Autorize nhằm lớp lỗ hổng nào (một từ khóa OWASP)?</li>
-        <li>App trong Docker: cách an toàn để Burp trên máy host thấy được traffic?</li>
-      </ol>
-
-      <div class="docs-tags">
-        <span class="docs-tag">web-security</span>
-        <span class="docs-tag">burp</span>
-        <span class="docs-tag">proxy</span>
-        <span class="docs-tag">devops</span>
-      </div>
-
+  -r zap-report.html
+</code></pre>
+<p><strong>Ghi log traffic cho audit:</strong></p>
+<pre><code class="language-text">Burp → Logger → Enable logging → Export logs
+→ Phân tích với ELK Stack để detect attack patterns
+</code></pre>
+<hr>
+<h2 id="tóm-tắt">Tóm tắt</h2>
+<ul>
+<li>Burp Suite là intercepting proxy — đặt giữa browser và server để bắt và sửa HTTP traffic.</li>
+<li>Proxy: bắt và forward/drop/edit request.</li>
+<li>Repeater: replay request với sửa đổi — dùng nhiều nhất khi test thủ công.</li>
+<li>Intruder: tự động hóa với nhiều payloads — brute force, fuzzing, enumeration.</li>
+<li>Decoder: encode/decode base64, URL, HTML, hex.</li>
+<li>Cần cài CA certificate để intercept HTTPS.</li>
+<li>Extensions như Param Miner, JWT Editor, Autorize rất hữu ích.</li>
+<li>Community Edition miễn phí đủ dùng cho learning và bug bounty.</li>
+</ul>
+<hr>
+<h2 id="câu-hỏi-ôn-tập">Câu hỏi ôn tập</h2>
+<ol>
+<li>Tại sao cần cài CA certificate của Burp Suite vào browser? Điều gì xảy ra nếu không cài?</li>
+<li>Sự khác nhau giữa Proxy Intercept và HTTP History là gì?</li>
+<li>Intruder Attack Type &quot;Sniper&quot; khác &quot;Cluster Bomb&quot; như thế nào? Khi nào dùng loại nào?</li>
+<li>Extension &quot;Autorize&quot; trong Burp Suite dùng để test loại lỗ hổng nào?</li>
+<li>Làm thế nào để dùng Burp Suite để test API của ứng dụng chạy trong Docker container?</li>
+</ol>
       <div class="docs-pager">
         <a href="../02-http/">Previous · 02. HTTP</a>
         <a href="../04/">Next · 04. Authentication</a>
       </div>
     </article>
-
     <aside class="docs-toc">
       <div class="docs-toc-title">On this page</div>
       <nav>
-        <a href="#khai-niem">Khái niệm</a>
-        <a href="#cai-dat">Cài đặt</a>
-        <a href="#cau-hinh">Cấu hình</a>
-        <a class="depth-3" href="#listener">Listener</a>
-        <a class="depth-3" href="#browser">Browser</a>
-        <a class="depth-3" href="#ca">CA cert</a>
-        <a href="#modules">Modules</a>
-        <a class="depth-3" href="#proxy">Proxy</a>
-        <a class="depth-3" href="#repeater">Repeater</a>
-        <a class="depth-3" href="#intruder">Intruder</a>
-        <a class="depth-3" href="#scanner">Scanner</a>
-        <a class="depth-3" href="#decoder">Decoder</a>
-        <a href="#extensions">Extensions</a>
-        <a href="#workflow">Workflow</a>
-        <a href="#k8s">Docker / K8s</a>
-        <a href="#phat-hien">Nhận misconfig</a>
-        <a href="#devops">DevOps / CI</a>
-        <a href="#tom-tat">Tóm tắt</a>
-        <a href="#on-tap">Câu hỏi ôn tập</a>
+        <a href="#khái-niệm">Khái niệm</a>
+        <a href="#cài-đặt">Cài đặt</a>
+        <a href="#cấu-hình-ban-đầu">Cấu hình ban đầu</a>
+        <a class="depth-3" href="#bước-1-tạo-proxy-listener">Bước 1: Tạo Proxy Listener</a>
+        <a class="depth-3" href="#bước-2-cấu-hình-browser">Bước 2: Cấu hình Browser</a>
+        <a class="depth-3" href="#bước-3-cài-ca-certificate">Bước 3: Cài CA Certificate</a>
+        <a href="#các-module-chính">Các module chính</a>
+        <a class="depth-3" href="#1-proxy--trái-tim-của-burp">1. Proxy — Trái tim của Burp</a>
+        <a class="depth-3" href="#2-repeater--replay-và-modify-requests">2. Repeater — Replay và Modify Requests</a>
+        <a class="depth-3" href="#3-intruder--tấn-công-tự-động-hóa">3. Intruder — Tấn công tự động hóa</a>
+        <a class="depth-3" href="#4-scanner-pro-only--tự-động-tìm-lỗ-hổng">4. Scanner (Pro only) — Tự động tìm lỗ hổng</a>
+        <a class="depth-3" href="#5-decoder--encodedecode-dữ-liệu">5. Decoder — Encode/Decode dữ liệu</a>
+        <a class="depth-3" href="#6-comparer--so-sánh-responses">6. Comparer — So sánh responses</a>
+        <a class="depth-3" href="#7-logger--ghi-log-toàn-bộ-traffic">7. Logger — Ghi log toàn bộ traffic</a>
+        <a class="depth-3" href="#8-collaborator-pro-only--out-of-band-testing">8. Collaborator (Pro only) — Out-of-band testing</a>
+        <a href="#extensions-quan-trọng">Extensions quan trọng</a>
+        <a href="#workflow-thực-tế-test-một-api-endpoint">Workflow thực tế: Test một API endpoint</a>
+        <a href="#burp-với-dockerkubernetes">Burp với Docker/Kubernetes</a>
+        <a href="#kịch-bản-tấn-công-brute-force-login-với-intruder">Kịch bản tấn công: Brute force login với Intruder</a>
+        <a href="#cách-phát-hiện-burp-giúp-nhận-biết-gì">Cách phát hiện: Burp giúp nhận biết gì</a>
+        <a href="#góc-nhìn-devops">Góc nhìn DevOps</a>
+        <a href="#tóm-tắt">Tóm tắt</a>
+        <a href="#câu-hỏi-ôn-tập">Câu hỏi ôn tập</a>
       </nav>
     </aside>
   </div>
-
   <script src="../../../js/docs.js"></script>
 </body>
 </html>

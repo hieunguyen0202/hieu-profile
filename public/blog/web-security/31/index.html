@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Chương 31: Secrets Management — Hieu Nguyen</title>
-  <meta name="description" content="Secret scan, Vault, cloud managers, External Secrets, rotation.">
+  <meta name="description" content="Chương 31: Secrets Management — Web Security notes.">
   <link rel="icon" href="../../../favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -40,51 +40,139 @@
         <span>›</span>
         <span>31. Secrets</span>
       </div>
-      <h1>Chương 31: Secrets Management</h1>
-      <p class="lede">Secret trong Git là incident đã xảy ra, chưa bị khai thác thôi.</p>
-      <div class="docs-meta">
-        <span><strong>Tác giả:</strong> Hieu Nguyen (Ryan)</span>
-        <span><strong>Phần:</strong> VIII — DevOps</span>
-        <span><strong>Cập nhật:</strong> Aug 2026</span>
-      </div>
-      <h2 id="khai-niem">Khái niệm</h2>
-<p>Secret: key, token, cert, mật khẩu. Vòng đời: tạo, phân phối, rotate, revoke, audit.</p>
-<h2 id="scan">Scanning</h2>
-<p>gitleaks/trufflehog trên pre-commit + CI + lịch sử. Rotate ngay khi lộ.</p>
-<h2 id="tools">Công cụ</h2>
+      <div id="top"></div>
+<header><h1>Chương 31: Secrets Management</h1></header>
+<h2 id="khái-niệm">Khái niệm</h2>
+<p><strong>Secrets</strong> là credentials, API keys, private keys, database passwords — bất cứ thứ gì nếu bị lộ sẽ cho phép unauthorized access.</p>
+<p><strong>Vấn đề phổ biến:</strong></p>
 <ul>
-        <li>Vault / cloud secret manager: dynamic DB creds.</li>
-        <li>External Secrets Operator: sync vào K8s Secret đã mã hóa rest.</li>
-        <li>Sealed Secrets: chỉ nếu hiểu model giải mã.</li>
-      </ul>
-<h2 id="bp">Best practices</h2>
-<ul>
-        <li>Không env trên frontend.</li>
-        <li>Rotate + dual-run.</li>
-        <li>Audit who read.</li>
-        <li>Tách secret per env.</li>
-      </ul>
-<h2 id="tom-tat">Tóm tắt</h2>
-<ul>
-        <li>Scan Git.</li>
-        <li>Central manager.</li>
-        <li>Rotate.</li>
-        <li>Audit access.</li>
-      </ul>
-<h2 id="on-tap">Câu hỏi ôn tập</h2>
-<ol>
-        <li>Phát hiện secret Git lúc nào là trễ?</li>
-        <li>Dynamic secret hơn static?</li>
-        <li>ESO giải quyết gì?</li>
-        <li>K8s Secret etcd plaintext khi nào?</li>
-        <li>Frontend env NEXT_PUBLIC_ chứa gì thì sai?</li>
-      </ol>
+<li>Hardcode trong source code</li>
+<li>Commit vào Git</li>
+<li>In ra logs</li>
+<li>Expose qua environment variables</li>
+<li>Lưu trong container images</li>
+</ul>
+<hr>
+<h2 id="secrets-scanning">Secrets Scanning</h2>
+<pre><code class="language-bash"># truffleHog: scan Git history cho secrets
+trufflehog git file://./myrepo --only-verified
 
-      <div class="docs-tags">
-        <span class="docs-tag">secrets</span>
-        <span class="docs-tag">vault</span>
-        <span class="docs-tag">eso</span>
-      </div>
+# gitleaks: scan current repo
+gitleaks detect --source . --verbose
+
+# Tìm patterns phổ biến:
+grep -rn &quot;password\s*=\s*[&#x27;\&quot;][^&#x27;\&quot;]\+&quot; src/
+grep -rn &quot;api_key\s*=\s*[&#x27;\&quot;][^&#x27;\&quot;]\+&quot; src/
+grep -rn &quot;BEGIN.*PRIVATE KEY&quot; .
+grep -rn &quot;AKIA[0-9A-Z]{16}&quot; .  # AWS Access Key pattern
+
+# Pre-commit hook
+cat .pre-commit-config.yaml
+repos:
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.18.0
+    hooks:
+      - id: gitleaks
+</code></pre>
+<hr>
+<h2 id="hashicorp-vault">HashiCorp Vault</h2>
+<pre><code class="language-bash"># Vault: secrets engine cho enterprise
+
+# Start Vault
+vault server -dev
+
+# Store secret
+vault kv put secret/myapp \
+  db_password=&quot;SuperSecret123&quot; \
+  api_key=&quot;sk-abc123&quot;
+
+# Read secret
+vault kv get secret/myapp
+
+# Dynamic secrets: Vault tạo credentials tạm thời
+vault secrets enable database
+vault write database/config/my-db \
+    plugin_name=mysql-database-plugin \
+    connection_url=&quot;{{username}}:{{password}}@tcp(localhost:3306)/&quot; \
+    allowed_roles=&quot;my-role&quot;
+
+# Vault tạo DB credentials tạm thời (expire sau 1h)
+vault read database/creds/my-role
+# → username: v-root-abc123 | password: random_strong_password | lease: 1h
+</code></pre>
+<p><strong>App đọc từ Vault:</strong></p>
+<pre><code class="language-python">import hvac
+
+client = hvac.Client(url=&#x27;https://vault.internal:8200&#x27;)
+client.auth.kubernetes.login(role=&#x27;my-app&#x27;, jwt=get_k8s_service_account_jwt())
+
+# Đọc secret
+secret = client.secrets.kv.v2.read_secret_version(path=&#x27;myapp&#x27;)
+db_password = secret[&#x27;data&#x27;][&#x27;data&#x27;][&#x27;db_password&#x27;]
+</code></pre>
+<hr>
+<h2 id="aws-secrets-manager">AWS Secrets Manager</h2>
+<pre><code class="language-python">import boto3
+import json
+
+def get_secret(secret_name: str, region: str = &#x27;us-east-1&#x27;) -&gt; dict:
+    client = boto3.client(&#x27;secretsmanager&#x27;, region_name=region)
+    
+    response = client.get_secret_value(SecretId=secret_name)
+    
+    if &#x27;SecretString&#x27; in response:
+        return json.loads(response[&#x27;SecretString&#x27;])
+    else:
+        return json.loads(base64.b64decode(response[&#x27;SecretBinary&#x27;]))
+
+# Sử dụng
+secrets = get_secret(&#x27;prod/myapp/database&#x27;)
+db_password = secrets[&#x27;password&#x27;]
+</code></pre>
+<p><strong>Secret Rotation:</strong></p>
+<pre><code class="language-python"># AWS Secrets Manager tự động rotate với Lambda
+# Không cần hardcode password — Secrets Manager handle rotation
+</code></pre>
+<hr>
+<h2 id="kubernetes-external-secrets">Kubernetes External Secrets</h2>
+<pre><code class="language-yaml"># External Secrets Operator: sync từ AWS SM sang K8s Secret
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: db-credentials
+spec:
+  refreshInterval: 1h
+  secretStoreRef:
+    name: aws-secretsmanager
+    kind: ClusterSecretStore
+  target:
+    name: db-credentials  # Tên K8s Secret được tạo
+  data:
+    - secretKey: password
+      remoteRef:
+        key: prod/myapp/database
+        property: password
+</code></pre>
+<hr>
+<h2 id="best-practices">Best Practices</h2>
+<pre><code class="language-text">1. Never commit secrets to Git (dùng pre-commit hooks)
+2. Không log secrets (log sanitization)
+3. Use short-lived credentials (dynamic secrets, session tokens)
+4. Rotate secrets regularly
+5. Principle of least privilege: mỗi app chỉ có secrets cần thiết
+6. Encrypt secrets at rest và in transit
+7. Audit access: ai, khi nào, secret nào
+8. Revoke immediately nếu suspect compromise
+</code></pre>
+<hr>
+<h2 id="tóm-tắt">Tóm tắt</h2>
+<ul>
+<li>Secrets trong source code hoặc logs = immediate breach risk.</li>
+<li>Scan code và Git history thường xuyên (gitleaks, truffleHog).</li>
+<li>Vault cho enterprise secrets management với dynamic credentials.</li>
+<li>AWS Secrets Manager/GCP Secret Manager cho cloud-native.</li>
+<li>Kubernetes: External Secrets Operator thay vì K8s Secrets cơ bản.</li>
+</ul>
       <div class="docs-pager">
         <a href="../30/">Previous · 30. CI/CD</a>
         <a href="../32/">Next · 32. Cloud</a>
@@ -93,12 +181,13 @@
     <aside class="docs-toc">
       <div class="docs-toc-title">On this page</div>
       <nav>
-        <a href="#khai-niem">Khái niệm</a>
-        <a href="#scan">Scanning</a>
-        <a href="#tools">Công cụ</a>
-        <a href="#bp">Best practices</a>
-        <a href="#tom-tat">Tóm tắt</a>
-        <a href="#on-tap">Câu hỏi ôn tập</a>
+        <a href="#khái-niệm">Khái niệm</a>
+        <a href="#secrets-scanning">Secrets Scanning</a>
+        <a href="#hashicorp-vault">HashiCorp Vault</a>
+        <a href="#aws-secrets-manager">AWS Secrets Manager</a>
+        <a href="#kubernetes-external-secrets">Kubernetes External Secrets</a>
+        <a href="#best-practices">Best Practices</a>
+        <a href="#tóm-tắt">Tóm tắt</a>
       </nav>
     </aside>
   </div>
