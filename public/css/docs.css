@@ -370,10 +370,11 @@ body.docs::before {
 }
 
 .cert-step__card {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  padding: 22px 22px 18px;
+  display: grid;
+  grid-template-columns: 88px minmax(0, 1fr);
+  align-items: center;
+  gap: 16px;
+  padding: 18px 20px;
   border-radius: 16px;
   border: 1px solid rgba(34, 211, 238, 0.28);
   background:
@@ -398,16 +399,38 @@ body.docs::before {
 
 .cert-step--left .cert-step__card {
   grid-column: 1;
+  grid-template-columns: minmax(0, 1fr) 88px;
   text-align: right;
 }
 
+.cert-step--left .cert-step__logo {
+  order: 2;
+}
+
 .cert-step--left .cert-step__card .cert-step__meta,
-.cert-step--left .cert-step__card .cert-step__cta {
+.cert-step--left .cert-step__card .cert-step__cta,
+.cert-step--left .cert-step__body {
   justify-content: flex-end;
+  align-items: flex-end;
+}
+
+.cert-step__logo {
+  width: 88px;
+  height: 88px;
+  object-fit: contain;
+  flex-shrink: 0;
+  filter: drop-shadow(0 0 12px rgba(34, 211, 238, 0.22));
+}
+
+.cert-step__body {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
 }
 
 .cert-step__card.is-soon {
-  opacity: 0.72;
+  opacity: 0.78;
   cursor: default;
   border-style: dashed;
   border-color: rgba(113, 113, 122, 0.45);
@@ -419,6 +442,11 @@ body.docs::before {
   transform: none;
   border-color: rgba(113, 113, 122, 0.45);
   box-shadow: none;
+}
+
+.cert-step__card.is-soon .cert-step__logo {
+  filter: grayscale(0.35) drop-shadow(0 0 8px rgba(113, 113, 122, 0.2));
+  opacity: 0.9;
 }
 
 .cert-step__badge {
@@ -454,7 +482,7 @@ body.docs::before {
   display: flex;
   align-items: center;
   gap: 10px;
-  margin-top: 4px;
+  margin-top: 2px;
   font-family: var(--mono);
   font-size: 11px;
   color: var(--muted);
@@ -464,7 +492,7 @@ body.docs::before {
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-top: 6px;
+  margin-top: 4px;
   font-family: var(--mono);
   font-size: 12px;
   color: var(--accent);
@@ -867,12 +895,24 @@ body.docs::before {
   .cert-step--right .cert-step__card,
   .cert-step--left .cert-step__card {
     grid-column: 2;
+    grid-template-columns: 72px minmax(0, 1fr);
     text-align: left;
   }
 
+  .cert-step--left .cert-step__logo {
+    order: 0;
+  }
+
   .cert-step--left .cert-step__card .cert-step__meta,
-  .cert-step--left .cert-step__card .cert-step__cta {
+  .cert-step--left .cert-step__card .cert-step__cta,
+  .cert-step--left .cert-step__body {
     justify-content: flex-start;
+    align-items: flex-start;
+  }
+
+  .cert-step__logo {
+    width: 72px;
+    height: 72px;
   }
 }
 
