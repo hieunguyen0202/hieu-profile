@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Custom Resources — Hieu Nguyen</title>
+  <meta name="description" content="Custom Resources — Kubestronaut roadmap.">
+  <link rel="icon" href="../../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../../">i'm<span>.hieu</span></a>
+    <nav class="docs-series">
+      <a href="../../../../blog/web-security/">Web Security</a>
+      <a class="active" href="../../">Kubestronaut roadmap</a>
+    </nav>
+    <nav class="docs-cert-tabs"><a href="../../cka/" class="">CKA</a><a href="../../ckad/" class="active">CKAD</a><a href="../../cks/" class="">CKS</a></nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-nav="kubestronaut" data-cert="ckad" data-docs-root="../" data-active="custom-resources">
+      <div class="docs-nav-label">CKAD</div>
+      <ul class="docs-nav" id="docsNav"></ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../../">Home</a>
+        <span>›</span>
+        <a href="../../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../../">Kubestronaut</a>
+        <span>›</span>
+        <a href="../">CKAD</a>
+        <span>›</span>
+        <span>Custom Resources</span>
+      </div>
+      <div id="top"></div>
+<header><h1>Custom Resources</h1></header><p>Several resources in Kubernetes have already been used during learning, but they were all Kubernetes built-in.</p>
+<ul>
+<li>Deployments</li>
+<li>Replicaset</li>
+<li>Pods</li>
+<li>Ingress</li>
+<li>PersistentVolume</li>
+<li>etc</li>
+</ul>
+<p>We create a resource pointing to the correct API and a controller will act on each of these resources to manage what&#x27;s requested.</p>
+<p>What we do is nothing more than requests to the controllers. If there were no controller to act on them, it would have no effect on the cluster.</p>
+<p>The Custom Resource Definition does nothing more than extend the Kubernetes API to store requests that controllers will act on.</p>
+<p>We can have a new API without any controller using it.</p>
+<p>Let&#x27;s create one using the example below:</p>
+<pre><code class="language-yaml">apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: flighttickets.flights.com
+spec:
+  group: flights.com
+  scope: Namespaced
+  names:
+    plural: flighttickets
+    singular: flightticket
+    kind: FlightTicket
+    shortNames:
+    - ft
+  versions:
+  - name: v1
+    served: true
+    storage: true
+    schema:
+      openAPIV3Schema:
+        type: object
+        properties:
+          spec:
+            type: object
+            properties:
+              from:
+                type: string
+              to:
+                type: string
+              number:
+                type: integer
+                minimum: 1
+                maximum: 10
+</code></pre>
+<p>Let&#x27;s apply and observe what happens:</p>
+<pre><code class="language-bash">kubectl apply -f crd.yaml
+customresourcedefinition.apiextensions.k8s.io/flighttickets.flights.com created
+
+kubectl api-resources | grep flight
+flighttickets                     ft                                 flights.com/v1                    true         FlightTicket
+
+kubectl proxy
+Starting to serve on 127.0.0.1:8001
+
+❯ curl localhost:8001/apis/flights.com
+{
+  &quot;kind&quot;: &quot;APIGroup&quot;,
+  &quot;apiVersion&quot;: &quot;v1&quot;,
+  &quot;name&quot;: &quot;flights.com&quot;,
+  &quot;versions&quot;: [
+    {
+      &quot;groupVersion&quot;: &quot;flights.com/v1&quot;,
+      &quot;version&quot;: &quot;v1&quot;
+    }
+  ],
+  &quot;preferredVersion&quot;: {
+    &quot;groupVersion&quot;: &quot;flights.com/v1&quot;,
+    &quot;version&quot;: &quot;v1&quot;
+  }
+}
+</code></pre>
+<p>We can simply create a resource now:</p>
+<pre><code class="language-yaml">apiVersion: flights.com/v1
+kind: FlightTicket
+metadata:
+  name: my-flight-ticket
+spec:
+  from: Brasilia
+  to: Atlanta
+  number: 3 # we defined that it needs to be between 1 and 10. If we put a different number we&#x27;ll get an error
+</code></pre>
+<p>Let&#x27;s create:</p>
+<pre><code class="language-bash">kubectl apply -f flight.yaml
+flightticket.flights.com/my-flight-ticket created
+
+kubectl get ft
+NAME               AGE
+my-flight-ticket   7s
+
+kubectl describe ft my-flight-ticket
+Name:         my-flight-ticket
+Namespace:    default
+Labels:       &lt;none&gt;
+Annotations:  &lt;none&gt;
+API Version:  flights.com/v1
+Kind:         FlightTicket
+Metadata:
+  Creation Timestamp:  2024-05-14T14:19:50Z
+  Generation:          1
+  Resource Version:    2883446
+  UID:                 3e7afbf6-0608-4fcd-90a6-090f44b8be39
+Spec:
+  From:    Brasilia
+  Number:  3
+  To:      Atlanta
+Events:    &lt;none&gt;
+</code></pre>
+<p>It has the description of a Kubernetes resource that we want, but we don&#x27;t have a controller acting on it.</p>
+<p>To create a controller, we can use the project <a href="https://github.com/kubernetes/sample-controller" target="_blank" rel="noopener noreferrer">https://github.com/kubernetes/sample-controller</a> as a guide, but it&#x27;s necessary to develop logic for this which doesn&#x27;t make sense at the moment.</p>
+<p>If you want to go deeper, it&#x27;s good, but not for the CKAD exam.</p>
+<p>The ideal is to create an image for this controller so that it can be distributed functionally.</p>
+<h2 id="operators-framework">Operators Framework</h2>
+<p>We can find several operators at <a href="https://operatorhub.io/" target="_blank" rel="noopener noreferrer">https://operatorhub.io/</a>. Operators work to deploy applications in Kubernetes just like Helm, but with some differences. While Helm seeks to deploy, operators go a bit beyond, creating custom resources to interact directly with the application and controlling the lifecycle. It&#x27;s not something that&#x27;s being asked for in the exam yet, but it&#x27;s believed it will be asked for in the future.</p>
+      <div class="docs-pager">
+        <a href="../../../../#blogs">All blogs</a>
+        <a href="../">Back to CKAD</a>
+      </div>
+    </article>
+    <aside class="docs-toc">
+      <div class="docs-toc-title">On this page</div>
+      <nav>
+        <a href="#operators-framework">Operators Framework</a>
+      </nav>
+    </aside>
+  </div>
+  <script src="../../../../js/docs.js"></script>
+</body>
+</html>

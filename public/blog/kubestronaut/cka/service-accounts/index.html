@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Service Accounts — Hieu Nguyen</title>
+  <meta name="description" content="Service Accounts — Kubestronaut roadmap.">
+  <link rel="icon" href="../../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../../">i'm<span>.hieu</span></a>
+    <nav class="docs-series">
+      <a href="../../../../blog/web-security/">Web Security</a>
+      <a class="active" href="../../">Kubestronaut roadmap</a>
+    </nav>
+    <nav class="docs-cert-tabs"><a href="../../cka/" class="active">CKA</a><a href="../../ckad/" class="">CKAD</a><a href="../../cks/" class="">CKS</a></nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-nav="kubestronaut" data-cert="cka" data-docs-root="../" data-active="service-accounts">
+      <div class="docs-nav-label">CKA</div>
+      <ul class="docs-nav" id="docsNav"></ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../../">Home</a>
+        <span>›</span>
+        <a href="../../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../../">Kubestronaut</a>
+        <span>›</span>
+        <a href="../">CKA</a>
+        <span>›</span>
+        <span>Service Accounts</span>
+      </div>
+      <div id="top"></div>
+<header><h1>Service Accounts</h1></header><p>There are two types of accounts in Kubernetes.</p>
+<ul>
+<li>User Accounts: These accounts are used by humans.</li>
+<li>Service Accounts: Used by applications.</li>
+</ul>
+<p>In any namespace created, a default service account is created by default. Let&#x27;s check it out.</p>
+<pre><code class="language-bash">kubectl create namespace demo
+namespace/demo created
+
+kubectl get serviceaccounts -n demo
+NAME      SECRETS   AGE
+default   0         16s
+
+# But nothing prevents us from creating a specific service account.
+create sa -n default demo-sa
+serviceaccount/demo-sa created
+
+kubectl get serviceaccounts -n demo
+NAME      SECRETS   AGE
+default   0         2m20s
+demo-sa   0         4s
+
+# To delete
+kubectl delete sa -n demo demo-sa
+serviceaccount &quot;demo-sa&quot; deleted
+</code></pre>
+<p>Notice that there is no secret linked to this service account yet, which is why we have 0. The secret there is the name of the secret that will store a token used by the application as a bearer token for access to the Kubernetes API.</p>
+<blockquote>
+<p>Before version 1.24, the secret was automatically generated and the token was placed inside the secret.</p>
+</blockquote>
+<p>Let&#x27;s understand a bit of the history.</p>
+<p>Every time a pod is created, the default service account of the namespace is automatically mounted inside the pod as a volumeMount.</p>
+<pre><code class="language-bash">kubectl create deployment nginx --image nginx
+
+kubectl describe pods nginx-7854ff8877-8r7hs
+
+Name:             nginx-7854ff8877-8r7hs
+Namespace:        default
+Priority:         0
+Service Account:  default #&lt;&lt;&lt;&lt; WE DIDN&#x27;T EVEN PASS THIS
+...
+Containers:
+  nginx:
+    Container ID:   containerd://c7c95a9dda456e6da5ad14e17f8d5ab496991d177b1cadbc69ca28614a903a8a
+    Image:          nginx
+    Image ID:       docker.io/library/nginx@sha256:84c52dfd55c467e12ef85cad6a252c0990564f03c4850799bf41dd738738691f
+    ...
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-c9f7j (ro) #&lt;&lt;&lt;&lt;The kube-api-access-c9f7j resource is not directly accessible for inspection or viewing at the user level. It is created and managed internally by Kubernetes as part of the pod creation and execution process to generate the token automatically.
+...
+Volumes:
+  kube-api-access-c9f7j:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    ConfigMapOptional:       &lt;nil&gt;
+    DownwardAPI:             true
+...
+</code></pre>
+<p>Of course, we could use another service account if we want by passing it inside the pod spec.</p>
+<pre><code class="language-yaml">apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: nginx
+  name: nginx
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - image: nginx
+        name: nginx
+        resources: {}
+      serviceAccountName: my-service-account #&lt;&lt;&lt;
+      automountServiceAccountToken: true #&lt;&lt;&lt; THIS IS THE DEFAULT VALUE
+status: {}
+</code></pre>
+<p>By default, Kubernetes automounts the service account token, but it is possible to disable it if needed.</p>
+<p>What do we have there?</p>
+<pre><code class="language-bash">kubectl exec -it nginx-7854ff8877-8r7hs -- ls /var/run/secrets/kubernetes.io/serviceaccount
+ca.crt  namespace  token
+
+# Cluster CA
+kubectl exec -it nginx-7854ff8877-8r7hs -- cat /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+-----BEGIN CERTIFICATE-----
+MIIDBTCCAe2gAwIBAgIIeL8dKSH2rh8wDQYJKoZIhvcNAQELBQAwFTETMBEGA1UE
+AxMKa3ViZXJuZXRlczAeFw0yNDAyMDgyMjU3MThaFw0zNDAyMDUyMzAyMThaMBUx
+EzARBgNVBAMTCmt1YmVybmV0ZXMwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEK
+AoIBAQDRCy18tHA4HJbSDtOZo2yp4yzyJ7QnAirXImfoqjjjOe0uF8Jo4GjbCb61
+GhBiWt3+A4rfJ3yGdx75PuOcnhN6siOR5oOWUHx2zDbJwSDA9pdvXJa0GdU0LTUY
+mvSkUOn7DtZtLZ8q/lElIHphnSX4uqQTTL87NPL9ComFTHZAXqR8WjSQTFcYle4b
+hiu6coMUq/1BKCTeN84omVqnLxuDdkdjoxnXm+Q3Jj4iQujFJ5NrxFOfCR2g4OTY
+x92p1K5krnXS+z26NrzR1Up9k/2fQs129Rsn4+oAPkgs4s1CXfs9mS/5rJhqemRo
+IghxaAKP+0hmSWSyKbZgqxDs3dAPAgMBAAGjWTBXMA4GA1UdDwEB/wQEAwICpDAP
+BgNVHRMBAf8EBTADAQH/MB0GA1UdDgQWBBQaEQhPwBz2wWOm66FEI7HiE+V1JjAV
+BgNVHREEDjAMggprdWJlcm5ldGVzMA0GCSqGSIb3DQEBCwUAA4IBAQCRkBml9DKD
+iX7Qfc/jguqr+K5FRtvraanbl4v6/fP2duGzU6fvRMv0Qs4yKnPSg0QsvXyItHXZ
+4P+AgPLTYnzAuK8uqUoCLF3q/DCuH7plWn7HmXGL/JQ0KBIxwgk3pYPCO0Y53ROJ
+vxiXPvFgGovtZWYj5RKn9T4F+dir6gQufXctKHel2o0OP8KfzNqz5L2pbXE58vMO
+Jk6Fvd82mH1N7SpWBJgW6d3Co4FW+Zp527sjmu+IHzyctLUfK/hSSDhLDC1MWmP4
+99DV0sgY1mRXTz7AIzjXyDTy0z0Rdgy9ibPSwDRbVqiZ+v2mfszkPunazohlHv8J
+5w63PiNNZBeA
+-----END CERTIFICATE-----
+# The namespace
+
+kubectl exec -it nginx-7854ff8877-8r7hs -- cat /var/run/secrets/kubernetes.io/serviceaccount/namespace
+default
+
+# And the token created automagically by kube-api-access
+kubectl exec -it nginx-7854ff8877-8r7hs -- cat /var/run/secrets/kubernetes.io/serviceaccount/token
+eyJhbGciOiJSUzI1NiIsImtpZCI6Img5U19OUGN0WnNicWk2Z0hrZmk4VkpjSUpQRWV3c1QyRHZEdU9HOVZsa0UifQ.eyJhdWQiOlsiaHR0cHM6Ly9rdWJlcm5ldGVzLmRlZmF1bHQuc3ZjLmNsdXN0ZXIubG9jYWwiXSwiZXhwIjoxNzM5Mjc3NDY0LCJpYXQiOjE3MDc3NDE0NjQsImlzcyI6Imh0dHBzOi8va3ViZXJuZXRlcy5kZWZhdWx0LnN2Yy5jbHVzdGVyLmxvY2FsIiwia3ViZXJuZXRlcy5pbyI6eyJuYW1lc3BhY2UiOiJkZWZhdWx0IiwicG9kIjp7Im5hbWUiOiJuZ2lueC03ODU0ZmY4ODc3LThyN2hzIiwidWlkIjoiMTk3Y2E2YjctZTEyMC00OTgxLWFmOGEtZTllOTllMmIxZjBiIn0sInNlcnZpY2VhY2NvdW50Ijp7Im5hbWUiOiJkZWZhdWx0IiwidWlkIjoiYjRlZDJhMGUtNDBmMC00Yjc0LWEzNzgtZjgwYmJkOTEzNzNiIn0sIndhcm5hZnRlciI6MTcwNzc0NTA3MX0sIm5iZiI6MTcwNzc0MTQ2NCwic3ViIjoic3lzdGVtOnNlcnZpY2VhY2NvdW50OmRlZmF1bHQ6ZGVmYXVsdCJ9.KvlOcSuG_W3YqOKUKC9nIEI8ksITGwUoKboubyGcozHRg9v_OycyG-5O6EAOdmYKE5Hd1u-b9Bl8n4NhYDF_ygf8gzu406nEf-BpBgWjogOaGylD0dIopaeC3rK7G47S9nMD1cFDGTz07hygxIQSezUfZd1EkmaSq3nK1g0yk3lcKv9fKZpFHcBsZAOEUMJyQ2cLeE_Rdaf9i4w1XTtWL-5fcbWuOjHq96rBjIejP-myjE971bvCyN3WE39vRUYZMq8aO1XIVt9_bsOd-GaTVXgN1r0LNeCz1ye743J2JYWin2_ic5fkc5vUxeNObgg03WXvUAAkcvOaetSp5yLLIQ
+</code></pre>
+<p>The <a href="https://jwt.io" target="_blank" rel="noopener noreferrer">jwt.io</a> site decodes it visually for us.</p>
+<p><img decoding="async" loading="lazy" alt="alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-24-16de5aa341f5c37a201a22ee782ae332.png" width="1024" height="955" class="img_ev3q"></p>
+<p>Previously, we didn&#x27;t have an expiration date and the token for a service account was always the same and valid as long as the service account existed.</p>
+<p>All pods in the same namespace that didn&#x27;t define a service account used the same token. With this modification, all pods can use the same service account, but with different tokens, which improves security and ensures token rotation (every time a pod is recreated, new tokens are generated).</p>
+<p>Another situation is that a service account left in the cluster <em>could</em> give access to that entire namespace if it had permission.</p>
+<p>That&#x27;s why a TokenRequestAPI was proposed that would automatically provision tokens with greater security and also solved some scalability issues that existed.</p>
+<p>Besides jwt.io, the command below also verifies using jq or the jwt cli.</p>
+<pre><code class="language-bash">jq -R &#x27;split(&quot;.&quot;) | select(length &gt; 0) | .[0],.[1] | @base64d | fromjson&#x27; &lt;&lt;&lt; eyJhbGciOiJSUzI1NiIsImtpZCI6Img5U19OUGN0WnNicWk2Z0hrZmk4VkpjSUpQRWV3c1QyRHZEdU9HOVZsa0UifQ.eyJhdWQiOlsiaHR0cHM6Ly9rdWJlcm5ldGVzLmRlZmF1bHQuc3ZjLmNsdXN0ZXIubG9jYWwiXSwiZXhwIjoxNzM5Mjc3NDY0LCJpYXQiOjE3MDc3NDE0NjQsImlzcyI6Imh0dHBzOi8va3ViZXJuZXRlcy5kZWZhdWx0LnN2Yy5jbHVzdGVyLmxvY2FsIiwia3ViZXJuZXRlcy5pbyI6eyJuYW1lc3BhY2UiOiJkZWZhdWx0IiwicG9kIjp7Im5hbWUiOiJuZ2lueC03ODU0ZmY4ODc3LThyN2hzIiwidWlkIjoiMTk3Y2E2YjctZTEyMC00OTgxLWFmOGEtZTllOTllMmIxZjBiIn0sInNlcnZpY2VhY2NvdW50Ijp7Im5hbWUiOiJkZWZhdWx0IiwidWlkIjoiYjRlZDJhMGUtNDBmMC00Yjc0LWEzNzgtZjgwYmJkOTEzNzNiIn0sIndhcm5hZnRlciI6MTcwNzc0NTA3MX0sIm5iZiI6MTcwNzc0MTQ2NCwic3ViIjoic3lzdGVtOnNlcnZpY2VhY2NvdW50OmRlZmF1bHQ6ZGVmYXVsdCJ9.KvlOcSuG_W3YqOKUKC9nIEI8ksITGwUoKboubyGcozHRg9v_OycyG-5O6EAOdmYKE5Hd1u-b9Bl8n4NhYDF_ygf8gzu406nEf-BpBgWjogOaGylD0dIopaeC3rK7G47S9nMD1cFDGTz07hygxIQSezUfZd1EkmaSq3nK1g0yk3lcKv9fKZpFHcBsZAOEUMJyQ2cLeE_Rdaf9i4w1XTtWL-5fcbWuOjHq96rBjIejP-myjE971bvCyN3WE39vRUYZMq8aO1XIVt9_bsOd-GaTVXgN1r0LNeCz1ye743J2JYWin2_ic5fkc5vUxeNObgg03WXvUAAkcvOaetSp5yLLIQ
+
+## Using jwt-cli which will verify on jwt.io
+npm install -g jwt-cli
+
+jwt eyJhbGciOiJSUzI1NiIsImtpZCI6Img5U19OUGN0WnNicWk2Z0hrZmk4VkpjSUpQRWV3c1QyRHZEdU9HOVZsa0UifQ.eyJhdWQiOlsiaHR0cHM6Ly9rdWJlcm5ldGVzLmRlZmF1bHQuc3ZjLmNsdXN0ZXIubG9jYWwiXSwiZXhwIjoxNzM5Mjc3NDY0LCJpYXQiOjE3MDc3NDE0NjQsImlzcyI6Imh0dHBzOi8va3ViZXJuZXRlcy5kZWZhdWx0LnN2Yy5jbHVzdGVyLmxvY2FsIiwia3ViZXJuZXRlcy5pbyI6eyJuYW1lc3BhY2UiOiJkZWZhdWx0IiwicG9kIjp7Im5hbWUiOiJuZ2lueC03ODU0ZmY4ODc3LThyN2hzIiwidWlkIjoiMTk3Y2E2YjctZTEyMC00OTgxLWFmOGEtZTllOTllMmIxZjBiIn0sInNlcnZpY2VhY2NvdW50Ijp7Im5hbWUiOiJkZWZhdWx0IiwidWlkIjoiYjRlZDJhMGUtNDBmMC00Yjc0LWEzNzgtZjgwYmJkOTEzNzNiIn0sIndhcm5hZnRlciI6MTcwNzc0NTA3MX0sIm5iZiI6MTcwNzc0MTQ2NCwic3ViIjoic3lzdGVtOnNlcnZpY2VhY2NvdW50OmRlZmF1bHQ6ZGVmYXVsdCJ9.KvlOcSuG_W3YqOKUKC9nIEI8ksITGwUoKboubyGcozHRg9v_OycyG-5O6EAOdmYKE5Hd1u-b9Bl8n4NhYDF_ygf8gzu406nEf-BpBgWjogOaGylD0dIopaeC3rK7G47S9nMD1cFDGTz07hygxIQSezUfZd1EkmaSq3nK1g0yk3lcKv9fKZpFHcBsZAOEUMJyQ2cLeE_Rdaf9i4w1XTtWL-5fcbWuOjHq96rBjIejP-myjE971bvCyN3WE39vRUYZMq8aO1XIVt9_bsOd-GaTVXgN1r0LNeCz1ye743J2JYWin2_ic5fkc5vUxeNObgg03WXvUAAkcvOaetSp5yLLIQ
+...
+✻ Header
+{
+  &quot;alg&quot;: &quot;RS256&quot;,
+  &quot;kid&quot;: &quot;h9S_NPctZsbqi6gHkfi8VJcIJPEewsT2DvDuOG9VlkE&quot;
+}
+
+✻ Payload
+{
+  &quot;aud&quot;: [
+    &quot;https://kubernetes.default.svc.cluster.local&quot;
+  ],
+  &quot;exp&quot;: 1739277464, # This expiration date is an epoch, meaning the number of seconds since 1970
+  &quot;iat&quot;: 1707741464,
+  &quot;iss&quot;: &quot;https://kubernetes.default.svc.cluster.local&quot;,
+  &quot;kubernetes.io&quot;: {
+    &quot;namespace&quot;: &quot;default&quot;,
+    &quot;pod&quot;: {
+      &quot;name&quot;: &quot;nginx-7854ff8877-8r7hs&quot;,
+      &quot;uid&quot;: &quot;197ca6b7-e120-4981-af8a-e9e99e2b1f0b&quot;
+    },
+    &quot;serviceaccount&quot;: {
+      &quot;name&quot;: &quot;default&quot;,
+      &quot;uid&quot;: &quot;b4ed2a0e-40f0-4b74-a378-f80bbd91373b&quot;
+    },
+    &quot;warnafter&quot;: 1707745071
+  },
+  &quot;nbf&quot;: 1707741464,
+  &quot;sub&quot;: &quot;system:serviceaccount:default:default&quot;
+}
+   iat: 1707741464 2/12/2024, 9:37:44 AM
+   nbf: 1707741464 2/12/2024, 9:37:44 AM
+   exp: 1739277464 2/11/2025, 9:37:44 AM
+
+✻ Signature KvlOcSuG_W3YqOKUKC9nIEI8ksITGwUoKboubyGcozHRg9v_OycyG-5O6EAOdmYKE5Hd1u-b9Bl8n4NhYDF_ygf8gzu406nEf-BpBgWjogOaGylD0dIopaeC3rK7G47S9nMD1cFDGTz07hygxIQSezUfZd1EkmaSq3nK1g0yk3lcKv9fKZpFHcBsZAOEUMJyQ2cLeE_Rdaf9i4w1XTtWL-5fcbWuOjHq96rBjIejP-myjE971bvCyN3WE39vRUYZMq8aO1XIVt9_bsOd-GaTVXgN1r0LNeCz1ye743J2JYWin2_ic5fkc5vUxeNObgg03WXvUAAkcvOaetSp5yLLIQ
+
+# Converting the date to something we can read, just out of curiosity
+date -d @1739277464
+Tue Feb 11 2025 09:37:44 -03 # 1 YEAR
+</code></pre>
+<blockquote>
+<p>It is not possible to edit the service account of a pod; you need to delete and recreate a new one. In the case of a deployment, you can edit the deployment because it creates a new replicaset with new pod configurations.</p>
+</blockquote>
+<p>If needed, we can create a token for a service account that is not used in any pod, but for third-party access we can do this.</p>
+<pre><code class="language-bash">kubectl get sa
+NAME                 SECRETS   AGE
+default              0         3d15h
+my-service-account   0         157m #&lt;&lt;&lt; let&#x27;s use this one
+
+kubectl create token my-service-account --duration 87600h
+eyJhbGciOiJSUzI1NiIsImtpZCI6Img5U19OUGN0WnNicWk2Z0hrZmk4VkpjSUpQRWV3c1QyRHZEdU9HOVZsa0UifQ.eyJhdWQiOlsiaHR0cHM6Ly9rdWJlcm5ldGVzLmRlZmF1bHQuc3ZjLmNsdXN0ZXIubG9jYWwiXSwiZXhwIjoyMDIzMTA4NjU1LCJpYXQiOjE3MDc3NDg2NTUsImlzcyI6Imh0dHBzOi8va3ViZXJuZXRlcy5kZWZhdWx0LnN2Yy5jbHVzdGVyLmxvY2FsIiwia3ViZXJuZXRlcy5pbyI6eyJuYW1lc3BhY2UiOiJkZWZhdWx0Iiwic2VydmljZWFjY291bnQiOnsibmFtZSI6Im15LXNlcnZpY2UtYWNjb3VudCIsInVpZCI6IjExMDcwMmZmLTkwNjAtNDAyNy1hMTlmLWNjMDQyOGE2NzBiZiJ9fSwibmJmIjoxNzA3NzQ4NjU1LCJzdWIiOiJzeXN0ZW06c2VydmljZWFjY291bnQ6ZGVmYXVsdDpteS1zZXJ2aWNlLWFjY291bnQifQ.BzVKg4oVTCKScv76zb-507q3EenpaQF-0XbcmqDmEK7t23GY1euIMQdolgAriu8KzYet9TY_1SCKRn3vsR4a6qjl89BmWO9yxUuuaLLy1TmGRKr3KC854XaldlhZ7aT4hqg20Ut9V7lnPjUKBvIZ8xzILHkhv_ZlZUS9C7BzBeaR9IJY-qnQ5PUnxb5WqyThmdLWWwyUPQtve7YJuOEGSpvXo3AoXad9OjNXAkjPuxqWtxyIus8BIzTWxn0loQ1L47mHfMY_AAfBhblwNLx15GZr6Mjh1wzR0uNmzh2stcANYudcagz9bGtkMqel-rF-9ingoSm2cHEFeHdBbFY3EQ
+</code></pre>
+<blockquote>
+<p>Can I actually use this token? And if I want to delete it? Where can I see the tokens created to delete them?</p>
+</blockquote>
+<p>To replicate the old scenario and have a non-expiring token linked to a service account, we first need to have the service account and then create a secret with a specific type and through annotations link the secret to the serviceaccount.</p>
+<pre><code class="language-bash">cat &lt;&lt;EOF | kubectl apply -f -
+apiVersion: v1
+kind: Secret
+type: kubernetes.io/service-account-token # Specific token type
+metadata:
+  name: my-service-account-token # name
+  annotations:
+    kubernetes.io/service-account.name: my-service-account # Service Account that will use it
+EOF
+</code></pre>
+<pre><code class="language-bash">kubectl describe secrets my-service-account-token
+Name:         my-service-account-token
+Namespace:    default
+Labels:       &lt;none&gt;
+Annotations:  kubernetes.io/service-account.name: my-service-account
+              kubernetes.io/service-account.uid: 110702ff-9060-4027-a19f-cc0428a670bf
+
+Type:  kubernetes.io/service-account-token
+
+Data
+====
+ca.crt:     1107 bytes
+namespace:  7 bytes
+## Let&#x27;s verify this token here
+token:      eyJhbGciOiJSUzI1NiIsImtpZCI6Img5U19OUGN0WnNicWk2Z0hrZmk4VkpjSUpQRWV3c1QyRHZEdU9HOVZsa0UifQ.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJkZWZhdWx0Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZWNyZXQubmFtZSI6Im15LXNlcnZpY2UtYWNjb3VudC10b2tlbiIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VydmljZS1hY2NvdW50Lm5hbWUiOiJteS1zZXJ2aWNlLWFjY291bnQiLCJrdWJlcm5ldGVzLmlvL3NlcnZpY2VhY2NvdW50L3NlcnZpY2UtYWNjb3VudC51aWQiOiIxMTA3MDJmZi05MDYwLTQwMjctYTE5Zi1jYzA0MjhhNjcwYmYiLCJzdWIiOiJzeXN0ZW06c2VydmljZWFjY291bnQ6ZGVmYXVsdDpteS1zZXJ2aWNlLWFjY291bnQifQ.frN4SSbI-SgoGLNjyapdOaUlc_WmTTFmWBO9hejdCnCkf5NfjiFVNkxSGht-cKNvlI2ADLz1-gVB3vIRbxFw-hXmxsZeH5heK5OeyMctpcRZrj-BRpwo1ubZ14VH94VH-nF8q7MwaA84uuuK0CiBOdSLITXkKRzVUkxR3qPa7MBNUs-0HIlMZQBzxkgQ24lu3cvPRX1rP9HX3UmxZaemARBBrqki03t1udJzDWwPkc48H_r3I0zSjdqxoIJ0NtDXj_fJdv8rjaeJC8TiXJvOmtvhpkleU0NC51BsjRi7ennWZ2MYO_9XjX4NDUkBcsovEAOOo4T7olJpv9lC3zSlwg
+
+# VERIFYING
+jwt eyJhbGciOiJSUzI1NiIsImtpZCI6Img5U19OUGN0WnNicWk2Z0hrZmk4VkpjSUpQRWV3c1QyRHZEdU9HOVZsa0UifQ.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJkZWZhdWx0Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZWNyZXQubmFtZSI6Im15LXNlcnZpY2UtYWNjb3VudC10b2tlbiIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VydmljZS1hY2NvdW50Lm5hbWUiOiJteS1zZXJ2aWNlLWFjY291bnQiLCJrdWJlcm5ldGVzLmlvL3NlcnZpY2VhY2NvdW50L3NlcnZpY2UtYWNjb3VudC51aWQiOiIxMTA3MDJmZi05MDYwLTQwMjctYTE5Zi1jYzA0MjhhNjcwYmYiLCJzdWIiOiJzeXN0ZW06c2VydmljZWFjY291bnQ6ZGVmYXVsdDpteS1zZXJ2aWNlLWFjY291bnQifQ.frN4SSbI-SgoGLNjyapdOaUlc_WmTTFmWBO9hejdCnCkf5NfjiFVNkxSGht-cKNvlI2ADLz1-gVB3vIRbxFw-hXmxsZeH5heK5OeyMctpcRZrj-BRpwo1ubZ14VH94VH-nF8q7MwaA84uuuK0CiBOdSLITXkKRzVUkxR3qPa7MBNUs-0HIlMZQBzxkgQ24lu3cvPRX1rP9HX3UmxZaemARBBrqki03t1udJzDWwPkc48H_r3I0zSjdqxoIJ0NtDXj_fJdv8rjaeJC8TiXJvOmtvhpkleU0NC51BsjRi7ennWZ2MYO_9XjX4NDUkBcsovEAOOo4T7olJpv9lC3zSlwg
+
+...
+## WE DON&#x27;T HAVE AN EXPIRATION TIME
+✻ Header
+{
+  &quot;alg&quot;: &quot;RS256&quot;,
+  &quot;kid&quot;: &quot;h9S_NPctZsbqi6gHkfi8VJcIJPEewsT2DvDuOG9VlkE&quot;
+}
+
+✻ Payload
+{
+  &quot;iss&quot;: &quot;kubernetes/serviceaccount&quot;,
+  &quot;kubernetes.io/serviceaccount/namespace&quot;: &quot;default&quot;,
+  &quot;kubernetes.io/serviceaccount/secret.name&quot;: &quot;my-service-account-token&quot;,
+  &quot;kubernetes.io/serviceaccount/service-account.name&quot;: &quot;my-service-account&quot;,
+  &quot;kubernetes.io/serviceaccount/service-account.uid&quot;: &quot;110702ff-9060-4027-a19f-cc0428a670bf&quot;,
+  &quot;sub&quot;: &quot;system:serviceaccount:default:my-service-account&quot;
+}
+
+✻ Signature frN4SSbI-SgoGLNjyapdOaUlc_WmTTFmWBO9hejdCnCkf5NfjiFVNkxSGht-cKNvlI2ADLz1-gVB3vIRbxFw-hXmxsZeH5heK5OeyMctpcRZrj-BRpwo1ubZ14VH94VH-nF8q7MwaA84uuuK0CiBOdSLITXkKRzVUkxR3qPa7MBNUs-0HIlMZQBzxkgQ24lu3cvPRX1rP9HX3UmxZaemARBBrqki03t1udJzDWwPkc48H_r3I0zSjdqxoIJ0NtDXj_fJdv8rjaeJC8TiXJvOmtvhpkleU0NC51BsjRi7ennWZ2MYO_9XjX4NDUkBcsovEAOOo4T7olJpv9lC3zSlwg
+</code></pre>
+<p>Now some curiosities I found along the way.</p>
+<pre><code class="language-bash">## If we look at the service account, we have the token linked there
+kubectl describe sa my-service-account
+Name:                my-service-account
+Namespace:           default
+Labels:              &lt;none&gt;
+Annotations:         &lt;none&gt;
+Image pull secrets:  &lt;none&gt;
+Mountable secrets:   &lt;none&gt;
+Tokens:              my-service-account-token #&lt;&lt;&lt;&lt;
+Events:              &lt;none&gt;
+
+## We have the secret
+kubectl get secret
+NAME                       TYPE                                  DATA   AGE
+my-service-account-token   kubernetes.io/service-account-token   3      4m54s
+
+## But the Service Account doesn&#x27;t actually show that it has a secret. CRAZY?
+kubectl get serviceaccounts
+NAME                 SECRETS   AGE
+default              0         3d15h
+my-service-account   0         3h2m #&lt;&lt;&lt;&lt; ????
+</code></pre>
+<p>We can create roles and do rolebinding with service accounts normally. Instead of User, it&#x27;s ServiceAccount.</p>
+      <div class="docs-pager">
+        <a href="../../../../#blogs">All blogs</a>
+        <a href="../">Back to CKA</a>
+      </div>
+    </article>
+    <aside class="docs-toc">
+      <div class="docs-toc-title">On this page</div>
+      <nav>
+        <a href="#top">On this page</a>
+      </nav>
+    </aside>
+  </div>
+  <script src="../../../../js/docs.js"></script>
+</body>
+</html>

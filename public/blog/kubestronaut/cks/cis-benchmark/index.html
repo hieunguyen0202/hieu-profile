@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CIS Benchmark — Hieu Nguyen</title>
+  <meta name="description" content="CIS Benchmark — Kubestronaut roadmap.">
+  <link rel="icon" href="../../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../../">i'm<span>.hieu</span></a>
+    <nav class="docs-series">
+      <a href="../../../../blog/web-security/">Web Security</a>
+      <a class="active" href="../../">Kubestronaut roadmap</a>
+    </nav>
+    <nav class="docs-cert-tabs"><a href="../../cka/" class="">CKA</a><a href="../../ckad/" class="">CKAD</a><a href="../../cks/" class="active">CKS</a></nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-nav="kubestronaut" data-cert="cks" data-docs-root="../" data-active="cis-benchmark">
+      <div class="docs-nav-label">CKS</div>
+      <ul class="docs-nav" id="docsNav"></ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../../">Home</a>
+        <span>›</span>
+        <a href="../../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../../">Kubestronaut</a>
+        <span>›</span>
+        <a href="../">CKS</a>
+        <span>›</span>
+        <span>CIS Benchmark</span>
+      </div>
+      <div id="top"></div>
+<header><h1>CIS Benchmark</h1></header><p><a href="https://www.cisecurity.org/" target="_blank" rel="noopener noreferrer" class="">CIS - Center for Internet Security</a> is a non-profit organization dedicated to improving cybersecurity and resilience for organizations worldwide. Founded in 2000, CIS is widely recognized for its security best practices, frameworks, and benchmarks that help organizations protect their systems and data.</p>
+<p>CIS is widely used by organizations of all sizes and sectors, including governments, businesses, and academic institutions, as a trusted source of guidelines and tools to improve cybersecurity. CIS recommended practices and benchmarks help organizations protect themselves against cyber threats, comply with regulatory requirements, and improve their overall security posture.</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="main-cis-activities-and-products">Main CIS Activities and Products</h2>
+<p>Developed through a unique consensus-based process, composed of cybersecurity professionals and subject matter experts worldwide.</p>
+<ul>
+<li class="">
+<p><strong>CIS Controls</strong>:
+A set of recommended cybersecurity practices, organized in a list of priority actions that help mitigate the most common threats. These practices are frequently used as a guide for implementing effective security policies.</p>
+</li>
+<li class="">
+<p><strong>CIS Benchmarks</strong>:
+Globally recognized configuration standards for operating systems, software, and networks. The benchmarks provide detailed guidelines on how to configure systems securely, helping reduce vulnerabilities and increase system resilience against attacks.</p>
+</li>
+<li class="">
+<p><strong>CIS Hardened Images</strong>:
+Pre-configured virtual machine images, based on CIS Benchmarks, that are available on public cloud platforms such as AWS, Azure, and Google Cloud. These images are used to ensure VMs are configured with recommended security standards from the start.</p>
+</li>
+<li class="">
+<p><strong>CIS SecureSuite</strong>:
+A set of tools and resources that provides members access to benchmarks, security automation, and other tools that assist in implementing and maintaining security standards recommended by CIS.</p>
+</li>
+<li class="">
+<p>Others...</p>
+</li>
+</ul>
+<p>What interests us is the <a href="https://www.cisecurity.org/benchmark/kubernetes" target="_blank" rel="noopener noreferrer" class="">CIS Benchmarks for Kubernetes</a>. Following all CIS guidance to have a secure cluster.</p>
+<ul>
+<li class="">They define standard security rules for Kubernetes. As administrators we can apply these rules, giving us a good security baseline. Kubernetes services offered by cloud providers already apply these rules, but make customizations.</li>
+</ul>
+<p>If you don&#x27;t want to register with CIS to download, I&#x27;ll make the PDF available <a href="/en/assets/files/CIS_Kubernetes_Benchmark_v1.9.0 PDF-954f996f3ba48a44a42adb591f2a6af5.pdf" target="_blank" class="">here</a> to make it easier.</p>
+<p>Note that we could download recommendations for major cloud providers, but since it&#x27;s the CKS exam we&#x27;ll use standard Kubernetes.</p>
+<p><img decoding="async" loading="lazy" alt="alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-bce28ffb1a371435bd716021f6d2b82b.png" width="1256" height="778" class="img_ev3q"></p>
+<p>This is the latest version we have available for download, <code>1.9.0</code>, and on page number 8 in Overview we see this document is valid for Kubernetes 1.27 to 1.29. Although we&#x27;re on version 1.30, we don&#x27;t have a better document to follow, so we&#x27;ll use this one.</p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#F8F8F2;--prism-background-color:#282A36"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#F8F8F2;background-color:#282A36"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#F8F8F2"><span class="token plain">root@cks-master:~/default</span><span class="token comment" style="color:rgb(98, 114, 164)"># k get nodes</span><span class="token plain"></span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">NAME         STATUS   ROLES           AGE    VERSION</span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">cks-master   Ready    control-plane   3d4h   v1.30.3</span><br></span><span class="token-line" style="color:#F8F8F2"><span class="token plain">cks-worker   Ready    </span><span class="token operator">&lt;</span><span class="token plain">none</span><span class="token operator">&gt;</span><span class="token plain">          3d4h   v1.30.3</span><br></span></code></pre></div></div>
+<p><img decoding="async" loading="lazy" alt="alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-1-6e66e7918ee8aff09177be82abfac50b.png" width="1134" height="154" class="img_ev3q"></p>
+<p>This document provides all the rules we need to make a cluster more secure, but it&#x27;s not necessary for us to check the rules one by one. There certainly is some automation for this and that&#x27;s what we&#x27;ll do using kube-bench.</p>
+<p>Get an overview of <a class="" href="/en/security/kube-bench">kube-bench</a>.</p></div></article><nav class="docusaurus-mt-lg pagination-nav" aria-label="Docs pages"><a class="pagination-nav__link pagination-nav__link--prev" href="/en/category/hardening--security"><div class="pagination-nav__sublabel">Previous</div><div class="pagination-nav__label">Hardening &amp; Security</div></a><a class="pagination-nav__link pagination-nav__link--next" href="../hash-verification/"><div class="pagination-nav__sublabel">Next</div><div class="pagination-nav__label">Hashes</div></a></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#main-cis-activities-and-products" class="table-of-contents__link toc-highlight">Main CIS Activities and Products</a></li></ul></div></div></div></div></main></div></div>
+      <div class="docs-pager">
+        <a href="../control-access-gui-elements/">Previous · GUI access</a>
+        <a href="../attack-surface-reduction/">Next · Attack surface</a>
+      </div>
+    </article>
+    <aside class="docs-toc">
+      <div class="docs-toc-title">On this page</div>
+      <nav>
+        <a href="#main-cis-activities-and-products">Main CIS Activities and Products</a>
+      </nav>
+    </aside>
+  </div>
+  <script src="../../../../js/docs.js"></script>
+</body>
+</html>

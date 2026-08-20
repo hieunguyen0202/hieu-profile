@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Exam — Hieu Nguyen</title>
+  <meta name="description" content="Exam — Kubestronaut roadmap.">
+  <link rel="icon" href="../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../">i'm<span>.hieu</span></a>
+    <nav class="docs-series">
+      <a href="../../../blog/web-security/">Web Security</a>
+      <a class="active" href="../">Kubestronaut roadmap</a>
+    </nav>
+    <nav class="docs-cert-tabs"><a href="../cka/" class="active">CKA</a><a href="../ckad/" class="">CKAD</a><a href="../cks/" class="">CKS</a></nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-nav="kubestronaut" data-cert="cka" data-docs-root="./" data-active="exam">
+      <div class="docs-nav-label">CKA</div>
+      <ul class="docs-nav" id="docsNav"></ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../">Home</a>
+        <span>›</span>
+        <a href="../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../">Kubestronaut</a>
+        <span>›</span>
+        <a href="./">CKA</a>
+        <span>›</span>
+        <span>Exam</span>
+      </div>
+      <div id="top"></div>
+<header><h1>Exam</h1></header><p><img decoding="async" loading="lazy" alt="CKA" src="https://devsecops.puziol.com.br/en/assets/images/CKA-logo-e0356a19c26c25c7a14e5c63795f7522.svg" width="200" height="200" class="img_ev3q"></p>
+<p><a href="https://www.cncf.io/training/certification/cka/" target="_blank" rel="noopener noreferrer">Certified Kubernetes Administrator (CKA)</a> provides assurance that CKAs have the skills, knowledge, and competency to perform the responsibilities of Kubernetes administrators. This certification is for Kubernetes administrators, cloud administrators, and other IT professionals who manage Kubernetes instances. The certificate is valid for 3 years.</p>
+<blockquote>
+<p>Tip! The exam costs on average 300 dollars, but it is possible during Black Friday and end-of-year periods to get discounts between 35% and 50%</p>
+</blockquote>
+<h2 id="what-is-covered-in-the-exam">What is covered in the exam?</h2>
+<p><a href="https://github.com/cncf/curriculum/blob/master/old-versions/CKA_Curriculum_v1.27.pdf" target="_blank" rel="noopener noreferrer">pdf</a></p>
+<p><strong>Storage (10%)</strong>:</p>
+<ul>
+<li>Understand storage classes, persistent volumes</li>
+<li>Understand volume mode, access modes and reclaim policies for volumes</li>
+<li>Understand persistent volume claims primitive</li>
+<li>Know how to configure applications with persistent storage</li>
+</ul>
+<p><strong>Troubleshooting (30%)</strong>:</p>
+<ul>
+<li>Evaluate cluster and node logs</li>
+<li>Understand how to monitor applications</li>
+<li>Manage container stdout and stderr logs</li>
+<li>Troubleshoot application failures</li>
+<li>Troubleshoot cluster component failures</li>
+<li>Troubleshoot networking</li>
+</ul>
+<p><strong>Workloads &amp; Scheduling (15%)</strong>:</p>
+<ul>
+<li>Understand deployments and how to perform rolling updates and rollbacks</li>
+<li>Use ConfigMaps and Secrets to configure applications</li>
+<li>Know how to scale applications</li>
+<li>The primitives used to create robust and self-healing application deployments</li>
+<li>Understand how resource limits can affect pod scheduling</li>
+<li>Awareness of manifest management and common templating tools</li>
+</ul>
+<p><strong>Cluster Architecture, Installation &amp; Configuration (25%)</strong>:</p>
+<ul>
+<li>Manage role-based access control (RBAC)</li>
+<li>Use Kubeadm to install a basic cluster</li>
+<li>Manage a highly available Kubernetes cluster</li>
+<li>Provision underlying infrastructure to deploy a Kubernetes cluster</li>
+<li>Perform a version upgrade on a Kubernetes cluster using Kubeadm</li>
+<li>Implement etcd backup and restore</li>
+</ul>
+<p><strong>Services &amp; Networking (20%)</strong>:</p>
+<ul>
+<li>Understand host networking configuration on cluster nodes</li>
+<li>Understand pod-to-pod connectivity</li>
+<li>Understand ClusterIP, NodePort, LoadBalancer service types and endpoints</li>
+<li>Know how to use Ingress controllers and resources</li>
+<li>Know how to configure and use CoreDNS</li>
+<li>Choose an appropriate container network interface plugin</li>
+</ul>
+<h2 id="retake-policy">Retake Policy</h2>
+<p>A second attempt is possible if the candidate fails the first time. If you don&#x27;t pass either attempt, a new purchase will allow a new retake.</p>
+<h2 id="rescheduling-or-cancellation-policy">Rescheduling or Cancellation Policy</h2>
+<p>If you need to reschedule or cancel, it must be done 24 hours in advance, otherwise it is considered a TOTAL failure without the right to retake.</p>
+<h2 id="about-the-exam">About the Exam</h2>
+<ul>
+<li>Online and monitored by a proctor in real-time</li>
+<li>Fully hands-on</li>
+<li>Not a multiple-choice exam</li>
+<li><code>2 Hours</code></li>
+<li>Requesting a pause via the pause function does not stop the timer</li>
+<li>Results within 24 hours via email</li>
+</ul>
+<h2 id="about-the-exam-environment">About the Exam Environment</h2>
+<ul>
+<li>The location must be quiet, private and well-lit. It cannot be in public spaces</li>
+<li>Cannot have a window behind the candidate</li>
+<li>Cannot have bright lights behind the candidate</li>
+<li>Only the candidate can be in the room</li>
+<li>The desk must be clean and free of notes and electronics</li>
+</ul>
+<h2 id="code-of-conduct">Code of Conduct</h2>
+<ul>
+<li>The candidate cannot communicate with anyone other than the proctor during the exam</li>
+<li>Cannot read questions aloud</li>
+<li>Cannot leave the webcam view and desk unless the proctor allows</li>
+<li>Cannot eat during the exam and can only drink clear liquids. The bottle and cup used to contain the liquid must be transparent and without labels</li>
+<li>Cannot use headphones or any electronic device on the body or head unless clinically necessary. Therefore, headphones will not be allowed</li>
+<li>Do not make repetitive and excessive noise. If there is construction near your home, take the exam in another environment</li>
+<li>Cannot cover mouth or face</li>
+<li>Cannot write any information on paper or any electronic device. Only on the console screen</li>
+<li>Do not have inappropriate or questionable behavior</li>
+</ul>
+<h2 id="allowed-tools">Allowed Tools</h2>
+<p>A VM will be provided for the exam and within this VM we can use:</p>
+<ul>
+<li>Command line usage</li>
+<li>Review documents installed by the Linux distribution, i.e. /usr/share/*</li>
+<li>Use packages that are part of the distribution</li>
+<li>Access to documentation pages using the VM&#x27;s own browser. Allowed pages including subdomains are:
+<ul>
+<li><a href="https://kubernetes.io/docs/" target="_blank" rel="noopener noreferrer">https://kubernetes.io/docs/</a></li>
+<li><a href="https://kubernetes.io/blog/" target="_blank" rel="noopener noreferrer">https://kubernetes.io/blog/</a></li>
+</ul>
+</li>
+<li>The search tool from <a href="https://kubernetes.io/docs/" target="_blank" rel="noopener noreferrer">https://kubernetes.io/docs/</a> can be used but only access subdomains of the links above</li>
+</ul>
+<blockquote>
+<p>I recommend using only the command line for everything throughout the course</p>
+</blockquote>
+<h2 id="system-requirements">System Requirements</h2>
+<p><a href="https://docs.linuxfoundation.org/tc-docs/certification/tips-cka-and-ckad" target="_blank" rel="noopener noreferrer">https://docs.linuxfoundation.org/tc-docs/certification/tips-cka-and-ckad</a></p>
+<p>To check if your environment is suitable to run the test, go to <a href="https://syscheck.bridge.psiexams.com/" target="_blank" rel="noopener noreferrer">https://syscheck.bridge.psiexams.com/</a></p>
+<p>Using the latest version of Chrome is recommended.
+One extra monitor can be used and 1080p resolution is recommended to support the ExamUI.</p>
+<p>Reliable internet connection:</p>
+<ul>
+<li>Disable services that consume a lot of bandwidth
+<ul>
+<li>Streaming</li>
+<li>Video calls</li>
+<li>Torrents and downloads</li>
+<li>Disable firewalls and VPNs</li>
+<li>Use a network cable if possible</li>
+</ul>
+</li>
+</ul>
+<p>You cannot use a virtual machine to take the exam even if the compatibility check shows no problems.</p>
+<p>Working webcam and microphone. The webcam must be movable to show the environment to the proctor.</p>
+<p>No other applications or browser windows can be running during the exam.</p>
+<p><img decoding="async" loading="lazy" alt="System Check" src="https://devsecops.puziol.com.br/en/assets/images/systemcheck-a3c7f21c45497cac89bac57a772e9fcd.png" width="1908" height="486" class="img_ev3q"></p>
+<p>Check the requirements at <a href="https://helpdesk.psionline.com/hc/en-gb/articles/4409608794260-PSI-Bridge-Platform-System-Requirements" target="_blank" rel="noopener noreferrer">https://helpdesk.psionline.com/hc/en-gb/articles/4409608794260-PSI-Bridge-Platform-System-Requirements</a></p>
+<h2 id="questions">Questions?</h2>
+<ul>
+<li>Can I enable kubectl auto-complete?</li>
+</ul>
+<h2 id="how-to-study">How to Study?</h2>
+<p>The material used as a basis was the Mumshad Mannambeth course on UDEMY, which is very good by the way.</p>
+      <div class="docs-pager">
+        <a href="../../../#blogs">All blogs</a>
+        <a href="./">Back to CKA</a>
+      </div>
+    </article>
+    <aside class="docs-toc">
+      <div class="docs-toc-title">On this page</div>
+      <nav>
+        <a href="#what-is-covered-in-the-exam">What is covered in the exam?</a>
+        <a href="#retake-policy">Retake Policy</a>
+        <a href="#rescheduling-or-cancellation-policy">Rescheduling or Cancellation Policy</a>
+        <a href="#about-the-exam">About the Exam</a>
+        <a href="#about-the-exam-environment">About the Exam Environment</a>
+        <a href="#code-of-conduct">Code of Conduct</a>
+        <a href="#allowed-tools">Allowed Tools</a>
+        <a href="#system-requirements">System Requirements</a>
+        <a href="#questions">Questions?</a>
+        <a href="#how-to-study">How to Study?</a>
+      </nav>
+    </aside>
+  </div>
+  <script src="../../../js/docs.js"></script>
+</body>
+</html>

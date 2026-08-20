@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Containers and Images — Hieu Nguyen</title>
+  <meta name="description" content="Containers and Images — Kubestronaut roadmap.">
+  <link rel="icon" href="../../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../../">i'm<span>.hieu</span></a>
+    <nav class="docs-series">
+      <a href="../../../../blog/web-security/">Web Security</a>
+      <a class="active" href="../../">Kubestronaut roadmap</a>
+    </nav>
+    <nav class="docs-cert-tabs"><a href="../../cka/" class="">CKA</a><a href="../../ckad/" class="active">CKAD</a><a href="../../cks/" class="">CKS</a></nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-nav="kubestronaut" data-cert="ckad" data-docs-root="../" data-active="containers-images">
+      <div class="docs-nav-label">CKAD</div>
+      <ul class="docs-nav" id="docsNav"></ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../../">Home</a>
+        <span>›</span>
+        <a href="../../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../../">Kubestronaut</a>
+        <span>›</span>
+        <a href="../">CKAD</a>
+        <span>›</span>
+        <span>Containers and Images</span>
+      </div>
+      <div id="top"></div>
+<header><h1>Containers and Images</h1></header><p>If you&#x27;re starting your journey with containers, it&#x27;s a good idea to start by studying Docker. We have <a href="https://devsecops.puziol.com.br/en/kubernetes/docker/uncomplicating-docker/chapter_01">complete material</a> available here on our site that covers this subject in detail.</p>
+<p>This study will help you become familiar with creating images and understanding how containers work.</p>
+<p>The main objective of this material is to teach how to containerize an application, which involves creating an image for it.</p>
+<p>Although containers existed in Linux long before Docker, this tool revolutionized the way we work with them, establishing a standard for image creation. When building a Dockerfile, we&#x27;re actually creating an image that will run in a container runtime.</p>
+<p>To maintain these standards, <a href="https://opencontainers.org/" target="_blank" rel="noopener noreferrer">opencontainers.org</a> was created. A Dockerfile is simply a file that adheres to these standards.</p>
+<p>It&#x27;s not the developer&#x27;s job to worry about which container runtime is installed on the cluster nodes where the application runs. They just need to create images following conventions and best practices.</p>
+<p>As long as we use the <code>opencontainers.org</code> standards, we can run the image in several different runtimes. It could be containerd, or CRI-O, Podman, Rkt, and so on.</p>
+<p>Although not mandatory, it&#x27;s recommended that the file we&#x27;ll use to declare the steps for image creation be named Dockerfile. The main advantage is that this eliminates the need to specify the file name as a parameter, as this is the standard used.</p>
+<p>We can create images using several different tools:</p>
+<ul>
+<li><a href="https://github.com/containerd/nerdctl" target="_blank" rel="noopener noreferrer">Nerdctl</a></li>
+<li><a href="https://podman.io/" target="_blank" rel="noopener noreferrer">Podman</a></li>
+<li><a href="https://github.com/containers/buildah" target="_blank" rel="noopener noreferrer">Buildah</a></li>
+</ul>
+<p>The only requirement is to have a container runtime installed on the machine. These tools simply interact with the runtime.</p>
+<p>Installing Docker provides us with all these tools in a single installation, which is ideal for development environments. However, to run containers in a cluster, it&#x27;s better to avoid installing all these tools and opt only for what&#x27;s necessary, i.e., a container runtime. For this reason, containerd is currently the most recommended option.</p>
+<p>So for study purposes, install Docker for your operating system.</p>
+<h2 id="images">Images</h2>
+<p>If you&#x27;re running an application on your machine, what did you need to do?</p>
+<ol>
+<li>Have an operating system to run things</li>
+<li>Have the language compiler or interpreter. For example, Java, Go, Python, and so on.</li>
+<li>Install the application dependencies, i.e., libraries, packages, etc.</li>
+<li>Build the application to generate executables</li>
+<li>Run the executables with defined environment variables.</li>
+</ol>
+<p>But in the end, what we really need is to have a system that can execute the generated files. We don&#x27;t need to have the application source code inside the container, just the executables and their dependencies.</p>
+<p>I&#x27;ll call the file that will create the routine Dockerfile.</p>
+<ol>
+<li>It&#x27;s always necessary to declare a FROM</li>
+</ol>
+<pre><code class="language-Dockerfile">FROM ubuntu
+</code></pre>
+<p>Let&#x27;s build this one. Create a Dockerfile with this content.</p>
+<pre><code class="language-bash">❯ docker build -t davidpuziol/ubuntu .
+DEPRECATED: The legacy builder is deprecated and will be removed in a future release.
+            Install the buildx component to build images with BuildKit:
+            https://docs.docker.com/go/buildx/
+
+Sending build context to Docker daemon  317.2MB
+Step 1/1 : FROM ubuntu
+latest: Pulling from library/ubuntu
+fdcaa7e87498: Pull complete
+Digest: sha256:562456a05a0dbd62a671c1854868862a4687bf979a96d48ae8e766642cd911e8
+Status: Downloaded newer image for ubuntu:latest
+ ---&gt; de52d803b224
+Successfully built de52d803b224
+Successfully tagged davidpuziol/ubuntu:latest
+</code></pre>
+<p>What was done? From ubuntu it created an image called davidpuziol/ubuntu and nothing more.
+If we run this image we have ubuntu there</p>
+<pre><code class="language-bash">❯ docker run -it davidpuziol/ubuntu:latest bash
+root@e8e350471d95:/# cat /etc/os-release
+PRETTY_NAME=&quot;Ubuntu 24.04 LTS&quot;
+NAME=&quot;Ubuntu&quot;
+VERSION_ID=&quot;24.04&quot;
+VERSION=&quot;24.04 LTS (Noble Numbat)&quot;
+VERSION_CODENAME=noble
+ID=ubuntu
+ID_LIKE=debian
+HOME_URL=&quot;https://www.ubuntu.com/&quot;
+SUPPORT_URL=&quot;https://help.ubuntu.com/&quot;
+BUG_REPORT_URL=&quot;https://bugs.launchpad.net/ubuntu/&quot;
+PRIVACY_POLICY_URL=&quot;https://www.ubuntu.com/legal/terms-and-policies/privacy-policy&quot;
+UBUNTU_CODENAME=noble
+LOGO=ubuntu-logo
+# We don&#x27;t have python here
+root@e8e350471d95:/# whereis python
+python:
+root@e8e350471d95:/#
+</code></pre>
+<p>The davidpuziol/ubuntu image is exactly the same as the ubuntu image. See that it has the same size, the same IMAGE_ID</p>
+<pre><code class="language-bash">
+❯ docker images
+REPOSITORY           TAG       IMAGE ID       CREATED        SIZE
+davidpuziol/ubuntu   latest    de52d803b224   2 days ago     76.2MB
+ubuntu               latest    de52d803b224   2 days ago     76.2MB
+kindest/node         &lt;none&gt;    09c50567d34e   2 months ago   956MB
+</code></pre>
+<p>This will be the initial image you&#x27;ll use to start doing what you need. Let&#x27;s imagine I want to install python on this ubuntu. Each RUN command executes a layer in your container.</p>
+<p>We need to update the repositories and then install python.</p>
+<pre><code class="language-Dockerfile">FROM ubuntu:22.04
+
+RUN sudo apt-get update
+RUN sudo apt-get install python -y
+</code></pre>
+<p>Building this image with the same command above we&#x27;ll have an image that updated and then installed python. This image used ubuntu 22.04. The first one used 24.04.</p>
+<p>Every command must not have user interaction, remember that. That&#x27;s why the -y was passed in the install parameter.</p>
+<p>Building again, let&#x27;s define a tag. When we don&#x27;t define the tag it&#x27;s latest</p>
+<pre><code class="language-bash">docker build -t davidpuziol/ubuntu:v1 .
+# will show the entire installation process
+
+# Running image
+❯ docker run -it davidpuziol/ubuntu:v1 bash
+root@db6927a8b536:/# whereis python3
+python3: /usr/bin/python3 /usr/lib/python3 /etc/python3 /usr/share/python3
+root@db6927a8b536:/# python3 --version
+Python 3.10.12
+</code></pre>
+<p>But we need this image to have environment variables. Let&#x27;s put a variable called MYVAR=david</p>
+<pre><code class="language-Dockerfile">FROM ubuntu:22.04
+
+RUN apt-get update
+RUN apt-get install python -y
+
+ENV MYVAR=david
+</code></pre>
+<pre><code class="language-bash"># Let&#x27;s change to v2
+docker build -t davidpuziol/ubuntu:v2 .
+DEPRECATED: The legacy builder is deprecated and will be removed in a future release.
+            Install the buildx component to build images with BuildKit:
+            https://docs.docker.com/go/buildx/
+
+Sending build context to Docker daemon  317.2MB
+Step 1/4 : FROM ubuntu:22.04
+ ---&gt; 437ec753bef3
+Step 2/4 : RUN apt-get update
+ ---&gt; Using cache
+ ---&gt; 36ece36a9a1c
+Step 3/4 : RUN apt-get install python3 -y
+ ---&gt; Using cache # OBSERVE THAT IT USED THE IMAGE IT ALREADY HAD BEFORE
+ ---&gt; 243f9ff2aa56
+ # ADDED ONLY THE LAST STEP
+Step 4/4 : ENV MYVAR=david
+ ---&gt; Running in 9200241f31f5
+ ---&gt; Removed intermediate container 9200241f31f5
+ ---&gt; ef48a65d545f
+Successfully built ef48a65d545f
+Successfully tagged davidpuziol/ubuntu:v2
+
+docker run -it davidpuziol/ubuntu:v2 bash
+root@ba9c48260bb4:/# env | grep MYVAR
+MYVAR=david
+root@ba9c48260bb4:/#
+</code></pre>
+<p>So far we&#x27;ve only installed tools, environment variables, but haven&#x27;t put anything to run yet.</p>
+<p>When we define to run the application with the command <code>docker run -it davidpuziol/ubuntu:v2 bash</code> we force bash to be the entrypoint of this container. If bash stops, the container will die.</p>
+<p>The container&#x27;s function is to die, what&#x27;s keeping it alive is the bash that was passed. If bash stops it will die. Every container needs an entrypoint. The entrypoint is the process that will keep the container running.</p>
+<pre><code class="language-Dockerfile">FROM ubuntu:22.04
+
+RUN apt-get update
+RUN apt-get install python -y
+
+ENV MYVAR=david
+
+ENTRYPOINT [&quot;bash&quot;]
+</code></pre>
+<pre><code class="language-bash"> docker build -t davidpuziol/ubuntu:v3 .
+DEPRECATED: The legacy builder is deprecated and will be removed in a future release.
+            Install the buildx component to build images with BuildKit:
+            https://docs.docker.com/go/buildx/
+
+Sending build context to Docker daemon  317.2MB
+Step 1/5 : FROM ubuntu:22.04
+ ---&gt; 437ec753bef3
+Step 2/5 : RUN apt-get update
+ ---&gt; Using cache
+ ---&gt; 36ece36a9a1c
+Step 3/5 : RUN apt-get install python3 -y
+ ---&gt; Using cache
+ ---&gt; 243f9ff2aa56
+Step 4/5 : ENV MYVAR=david
+ ---&gt; Using cache
+ ---&gt; ef48a65d545f
+Step 5/5 : ENTRYPOINT [&quot;bash&quot;]
+ ---&gt; Running in 952493e489a0
+ ---&gt; Removed intermediate container 952493e489a0
+ ---&gt; a2a274001f9a
+Successfully built a2a274001f9a
+Successfully tagged davidpuziol/ubuntu:v3
+
+# We didn&#x27;t pass the command it will execute. When we entered it went straight to bash
+❯ docker run -it davidpuziol/ubuntu:v2
+root@e0ae401dc83b:/#
+</code></pre>
+<p>Let&#x27;s observe how the image grew.</p>
+<pre><code class="language-bash">docker images
+REPOSITORY           TAG       IMAGE ID       CREATED          SIZE
+davidpuziol/ubuntu   v3        a2a274001f9a   2 minutes ago    158MB # entrypoint didn&#x27;t change size, but changed ID
+davidpuziol/ubuntu   v2        ef48a65d545f   11 minutes ago   158MB # environment doesn&#x27;t change size, but changed ID
+davidpuziol/ubuntu   v1        243f9ff2aa56   18 minutes ago   158MB # OS + python
+davidpuziol/ubuntu   latest    de52d803b224   2 days ago       76.2MB # only the OS
+ubuntu               latest    de52d803b224   2 days ago       76.2MB
+ubuntu               22.04     437ec753bef3   8 days ago       77.9MB
+kindest/node         &lt;none&gt;    09c50567d34e   2 months ago     956MB
+</code></pre>
+<p>Note:</p>
+<p><code>ENTRYPOINT</code> represents in the POD container the <code>command:</code>
+<code>CMD</code> represents in the POD container the <code>args:</code></p>
+<p>If we want to create an image that will sleep for 60 seconds</p>
+<pre><code class="language-Dockerfile">FROM ubuntu:22.04
+
+RUN apt-get update
+RUN apt-get install python -y
+
+ENV MYVAR=david
+
+ENTRYPOINT [&quot;sleep&quot;]
+CMD [&quot;60&quot;]
+</code></pre>
+<p>We also have COPY which will copy content from the machine that&#x27;s building to inside the image. This is when you&#x27;ll copy the application into the container.</p>
+<pre><code class="language-Dockerfile">FROM ubuntu:22.04
+
+RUN apt-get update
+RUN apt-get install python -y
+RUN other dependency commands you need for python for example
+
+
+ENV MYVAR=david
+
+# SOURCE ON LOCAL MACHINE  DESTINATION IN CONTAINER
+copy . /opt/myapp
+
+# same as doing RUN cd /opt/myapp to change directory
+WORKDIR /opt/myapp
+
+# the container port you want to expose
+EXPOSE 8080
+
+ENTRYPOINT [&quot;python3&quot;]
+CMD [&quot;meuapp.py&quot;]
+</code></pre>
+<p>This is the basics you need to know. The port will be the communication with the application. Without exposing a port, a Kubernetes service won&#x27;t be able to reach the pod&#x27;s container.</p>
+<blockquote>
+<p>Of course, your application will also be prepared to do something on port 8080, that&#x27;s why we&#x27;re exposing this port.</p>
+</blockquote>
+<p>There are many details involved in creating an image. This container above is running with the root user which wouldn&#x27;t be ideal for security. We&#x27;ll see more details along the way.</p>
+<p>Do a more in-depth study of Docker and everything will become clearer.</p>
+<p>Check out more information about <a href="https://devsecops.puziol.com.br/en/kubernetes/cka/container-entrypoint-command">entrypoint and runtime</a></p>
+<p>Be familiar with the commands</p>
+<pre><code class="language-bash">docker image
+docker inspect
+docker run -p hostport:containerport image:tag
+docker run -p hostport:containerport --entrypoint myentrypoint image:tag arg1 arg2 arg3
+docker run -e APP=test
+# commands mapping volumes are also necessary to understand containers and how things work inside pods
+</code></pre>
+      <div class="docs-pager">
+        <a href="../../../../#blogs">All blogs</a>
+        <a href="../">Back to CKAD</a>
+      </div>
+    </article>
+    <aside class="docs-toc">
+      <div class="docs-toc-title">On this page</div>
+      <nav>
+        <a href="#images">Images</a>
+      </nav>
+    </aside>
+  </div>
+  <script src="../../../../js/docs.js"></script>
+</body>
+</html>

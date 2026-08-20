@@ -93,68 +93,211 @@
       <ul class="nested">${children}</ul>
     </li>`;
 
-  if (navEl && sidebar?.dataset.nav === "cks") {
+  if (navEl && sidebar?.dataset.nav === "kubestronaut") {
     const r = root;
-    const cksItem = (id, label) => {
-      const href = id === "exam" ? r : `${r}${id}/`;
-      const cls = id === active || (id === "exam" && (active === "exam" || active === "overview")) ? "active" : "";
+    const cert = sidebar.dataset.cert || "cks";
+    const certItem = (path, label) => {
+      const href = path ? `${r}${path}/` : r;
+      const id = path || "exam";
+      const cls = id === active ? "active" : "";
       return `<li><a class="${cls}" href="${href}">${label}</a></li>`;
     };
-    const open = (ids) => ids.includes(active);
-    navEl.innerHTML = [
-      cksItem("exam", "CKS Exam"),
+    const open = (paths) => paths.some((p) => p === active || (p === "exam" && active === "exam"));
+
+    const cksNav = () => [
+      certItem("", "CKS Exam"),
       group("Introduction", open(["introduction", "study-environment", "review-kubernetes", "review-containers"]), [
-        cksItem("introduction", "Introduction"),
-        cksItem("study-environment", "Study Environment"),
-        cksItem("review-kubernetes", "Review Kubernetes"),
-        cksItem("review-containers", "Review Containers"),
+        certItem("introduction", "Introduction"),
+        certItem("study-environment", "Study Environment"),
+        certItem("review-kubernetes", "Review Kubernetes"),
+        certItem("review-containers", "Review Containers"),
       ].join("")),
       group("Network", open(["network-security-policies", "ingress", "mtls", "cloud-platform-node-metadata", "control-access-gui-elements"]), [
-        cksItem("network-security-policies", "Network Policies"),
-        cksItem("ingress", "Ingress"),
-        cksItem("mtls", "mTLS"),
-        cksItem("cloud-platform-node-metadata", "Node metadata"),
-        cksItem("control-access-gui-elements", "GUI access"),
+        certItem("network-security-policies", "Network Policies"),
+        certItem("ingress", "Ingress"),
+        certItem("mtls", "mTLS"),
+        certItem("cloud-platform-node-metadata", "Node metadata"),
+        certItem("control-access-gui-elements", "GUI access"),
       ].join("")),
       group("Hardening &amp; Security", open(["cis-benchmark", "attack-surface-reduction", "hash-verification"]), [
-        cksItem("cis-benchmark", "CIS Benchmark"),
-        cksItem("attack-surface-reduction", "Attack surface"),
-        cksItem("hash-verification", "Hash verification"),
+        certItem("cis-benchmark", "CIS Benchmark"),
+        certItem("attack-surface-reduction", "Attack surface"),
+        certItem("hash-verification", "Hash verification"),
       ].join("")),
       group("RBAC", open(["rbac", "rbac-users", "service-accounts"]), [
-        cksItem("rbac", "RBAC"),
-        cksItem("rbac-users", "Users"),
-        cksItem("service-accounts", "Service accounts"),
+        certItem("rbac", "RBAC"),
+        certItem("rbac-users", "Users"),
+        certItem("service-accounts", "Service accounts"),
       ].join("")),
       group("API", open(["restrict-access", "secrets", "update-process"]), [
-        cksItem("restrict-access", "Restrict API access"),
-        cksItem("secrets", "Secrets"),
-        cksItem("update-process", "Update process"),
+        certItem("restrict-access", "Restrict API access"),
+        certItem("secrets", "Secrets"),
+        certItem("update-process", "Update process"),
       ].join("")),
       group("Container Runtime", open(["runtime-classes", "sandboxes", "security-context"]), [
-        cksItem("runtime-classes", "RuntimeClasses"),
-        cksItem("sandboxes", "Sandboxes"),
-        cksItem("security-context", "Security context"),
+        certItem("runtime-classes", "RuntimeClasses"),
+        certItem("sandboxes", "Sandboxes"),
+        certItem("security-context", "Security context"),
       ].join("")),
       group("Supply Chain", open(["container-registries", "images-vulnerabilities", "security-images", "static-analysis-conftest", "static-analysis-kubesec", "pod-security-standards", "open-policy-agent"]), [
-        cksItem("container-registries", "Registries"),
-        cksItem("images-vulnerabilities", "Image vulnerabilities"),
-        cksItem("security-images", "Secure images"),
-        cksItem("static-analysis-conftest", "Conftest"),
-        cksItem("static-analysis-kubesec", "Kubesec"),
-        cksItem("pod-security-standards", "Pod Security Standards"),
-        cksItem("open-policy-agent", "OPA"),
+        certItem("container-registries", "Registries"),
+        certItem("images-vulnerabilities", "Image vulnerabilities"),
+        certItem("security-images", "Secure images"),
+        certItem("static-analysis-conftest", "Conftest"),
+        certItem("static-analysis-kubesec", "Kubesec"),
+        certItem("pod-security-standards", "Pod Security Standards"),
+        certItem("open-policy-agent", "OPA"),
       ].join("")),
       group("Behavioral Analysis", open(["kernel-space-security", "falco-runtime-security", "container-immutability", "kubernetes-auditing"]), [
-        cksItem("kernel-space-security", "Kernel space security"),
-        cksItem("falco-runtime-security", "Falco runtime security"),
-        cksItem("container-immutability", "Container immutability"),
-        cksItem("kubernetes-auditing", "Kubernetes auditing"),
+        certItem("kernel-space-security", "Kernel space security"),
+        certItem("falco-runtime-security", "Falco runtime security"),
+        certItem("container-immutability", "Container immutability"),
+        certItem("kubernetes-auditing", "Kubernetes auditing"),
       ].join("")),
-      cksItem("solved-questions", "CKS: Solved Questions"),
-      cksItem("tips", "CKS Tips"),
-      cksItem("real-world-exam", "CKS Real World exam"),
+      certItem("solved-questions", "CKS: Solved Questions"),
+      certItem("tips", "CKS Tips"),
+      certItem("real-world-exam", "CKS Real World exam"),
     ].join("");
+
+    const ckaNav = () => [
+      certItem("", "Exam"),
+      group("CKA: Conceitos principais", open(["review", "cluster-architecture", "design-cluster", "etcd", "etcd-ha", "kube-api-server", "kube-controller-manager", "kube-scheduler", "kube-proxy", "static-pods", "labels-selectors"]), [
+        certItem("review", "Review"),
+        certItem("cluster-architecture", "Cluster Architecture"),
+        certItem("design-cluster", "Design Cluster"),
+        certItem("etcd", "etcd"),
+        certItem("etcd-ha", "etcd HA"),
+        certItem("kube-api-server", "kube-api-server"),
+        certItem("kube-controller-manager", "kube-controller-manager"),
+        certItem("kube-scheduler", "kube-scheduler"),
+        certItem("kube-proxy", "kube-proxy"),
+        certItem("static-pods", "Static Pods"),
+        certItem("labels-selectors", "Labels &amp; Selectors"),
+      ].join("")),
+      group("Scheduling", open(["manual-scheduling", "multiple-schedulers", "node-selector-affinity", "taint-tolerations", "resource-requirements-limits"]), [
+        certItem("manual-scheduling", "Manual Scheduling"),
+        certItem("multiple-schedulers", "Multiple Schedulers"),
+        certItem("node-selector-affinity", "Node Selector &amp; Affinity"),
+        certItem("taint-tolerations", "Taints &amp; Tolerations"),
+        certItem("resource-requirements-limits", "Resource Requirements"),
+      ].join("")),
+      group("Logging Monitoring", open(["kubernetes-logs", "monitoring-cluster"]), [
+        certItem("kubernetes-logs", "Kubernetes Logs"),
+        certItem("monitoring-cluster", "Monitoring Cluster"),
+      ].join("")),
+      group("Application Lifecycle Management", open(["init-containers-multi-containers", "liveness-readiness-startup-probes", "rolling-updates-rollbacks", "configmap-envs", "secrets", "container-entrypoint-command"]), [
+        certItem("init-containers-multi-containers", "Init &amp; Multi Containers"),
+        certItem("liveness-readiness-startup-probes", "Probes"),
+        certItem("rolling-updates-rollbacks", "Rolling Updates"),
+        certItem("configmap-envs", "ConfigMaps"),
+        certItem("secrets", "Secrets"),
+        certItem("container-entrypoint-command", "Entrypoint &amp; Command"),
+      ].join("")),
+      group("Cluster Maintenance", open(["cluster-maintenance/backup-restore", "cluster-maintenance/cluster-update-process", "cluster-maintenance/create-cluster-kubeadm", "cluster-maintenance/os-upgrade", "cluster-maintenance/releases"]), [
+        certItem("cluster-maintenance/backup-restore", "Backup &amp; Restore"),
+        certItem("cluster-maintenance/cluster-update-process", "Cluster Update"),
+        certItem("cluster-maintenance/create-cluster-kubeadm", "Create Cluster"),
+        certItem("cluster-maintenance/os-upgrade", "OS Upgrade"),
+        certItem("cluster-maintenance/releases", "Releases"),
+      ].join("")),
+      group("CKA: Security", open(["security-primitives", "authentication", "authorization", "api-groups", "api-certificates", "service-accounts", "kubeconfig", "kubectx-kubens", "tls-fundamentals", "kubernetes-tls", "network-policies", "security-context", "image-security"]), [
+        certItem("security-primitives", "Security Primitives"),
+        certItem("authentication", "Authentication"),
+        certItem("authorization", "Authorization"),
+        certItem("api-groups", "API Groups"),
+        certItem("api-certificates", "API Certificates"),
+        certItem("service-accounts", "Service Accounts"),
+        certItem("kubeconfig", "kubeconfig"),
+        certItem("kubectx-kubens", "kubectx &amp; kubens"),
+        certItem("tls-fundamentals", "TLS Fundamentals"),
+        certItem("kubernetes-tls", "Kubernetes TLS"),
+        certItem("network-policies", "Network Policies"),
+        certItem("security-context", "Security Context"),
+        certItem("image-security", "Image Security"),
+      ].join("")),
+      group("Storage", open(["storage/conceitos-armazenamento", "storage/volumes", "storage/persistent-volume", "storage/storage-class", "storage/container-storage-interface"]), [
+        certItem("storage/conceitos-armazenamento", "Storage Concepts"),
+        certItem("storage/volumes", "Volumes"),
+        certItem("storage/persistent-volume", "Persistent Volume"),
+        certItem("storage/storage-class", "Storage Class"),
+        certItem("storage/container-storage-interface", "CSI"),
+      ].join("")),
+      group("Networking", open(["networking-pre-requisites", "network-namespaces", "docker-networking", "cluster-network", "pod-network-interface", "container-network-interface", "coredns", "dns-basics", "dns-kubernetes", "service-network", "ingress"]), [
+        certItem("networking-pre-requisites", "Prerequisites"),
+        certItem("network-namespaces", "Network Namespaces"),
+        certItem("docker-networking", "Docker Networking"),
+        certItem("cluster-network", "Cluster Network"),
+        certItem("pod-network-interface", "Pod Network"),
+        certItem("container-network-interface", "CNI"),
+        certItem("coredns", "CoreDNS"),
+        certItem("dns-basics", "DNS Basics"),
+        certItem("dns-kubernetes", "DNS in Kubernetes"),
+        certItem("service-network", "Services"),
+        certItem("ingress", "Ingress"),
+      ].join("")),
+      group("Installation Configuration Validation", open(["kubeadm-installation", "download-kubernetes-binaries"]), [
+        certItem("kubeadm-installation", "kubeadm Installation"),
+        certItem("download-kubernetes-binaries", "Download Binaries"),
+      ].join("")),
+      group("Troubleshooting", open(["troubleshooting/sequence-check-failure-application", "troubleshooting/sequence-check-failure-control-plane", "troubleshooting/sequence-check-failure-nodes", "troubleshooting/network-troubleshooting", "troubleshooting/kubectl-advanced-commands"]), [
+        certItem("troubleshooting/sequence-check-failure-application", "App Failures"),
+        certItem("troubleshooting/sequence-check-failure-control-plane", "Control Plane"),
+        certItem("troubleshooting/sequence-check-failure-nodes", "Node Failures"),
+        certItem("troubleshooting/network-troubleshooting", "Network"),
+        certItem("troubleshooting/kubectl-advanced-commands", "kubectl Advanced"),
+      ].join("")),
+      group("Hardway Installation", open(["hardway-install/proposal", "hardway-install/preparing-required-files", "hardway-install/bootstraps"]), [
+        certItem("hardway-install/proposal", "Proposal"),
+        certItem("hardway-install/preparing-required-files", "Required Files"),
+        certItem("hardway-install/bootstraps", "Bootstraps"),
+      ].join("")),
+      certItem("tips", "Tips"),
+      certItem("cheats", "Cheats"),
+      certItem("solved-questions", "CKA: Solved Questions"),
+    ].join("");
+
+    const ckadNav = () => [
+      certItem("", "CKAD Exam"),
+      group("CKAD: Conceitos principais", open(["recap-kubernetes", "configuration-from-cka", "containers-images"]), [
+        certItem("recap-kubernetes", "Recap Kubernetes"),
+        certItem("configuration-from-cka", "Configuration from CKA"),
+        certItem("containers-images", "Containers &amp; Images"),
+      ].join("")),
+      group("Configuration", open(["deployments", "jobs-cronjobs"]), [
+        certItem("deployments", "Deployments"),
+        certItem("jobs-cronjobs", "Jobs &amp; CronJobs"),
+      ].join("")),
+      group("Multi Containers Pods", open(["multi-containers-pods"]), [
+        certItem("multi-containers-pods", "Multi Containers Pods"),
+      ].join("")),
+      group("Observability", open(["readiness-liveness-startup-probes", "logs-and-monitoring"]), [
+        certItem("readiness-liveness-startup-probes", "Probes"),
+        certItem("logs-and-monitoring", "Logs &amp; Monitoring"),
+      ].join("")),
+      group("Pod Design", open(["statefulset", "custom-resources"]), [
+        certItem("statefulset", "StatefulSet"),
+        certItem("custom-resources", "Custom Resources"),
+      ].join("")),
+      group("Services &amp; Networking", open(["services-networking"]), [
+        certItem("services-networking", "Services &amp; Networking"),
+      ].join("")),
+      group("Volumes", open(["volumes"]), [
+        certItem("volumes", "Volumes"),
+      ].join("")),
+      group("CKAD: Security", open(["api-version", "api-depreciations", "admission-controllers", "security-roadmap"]), [
+        certItem("api-version", "API Version"),
+        certItem("api-depreciations", "API Depreciations"),
+        certItem("admission-controllers", "Admission Controllers"),
+        certItem("security-roadmap", "Security Roadmap"),
+      ].join("")),
+      group("CKAD: Helm", open(["helm-basics"]), [
+        certItem("helm-basics", "Helm Basics"),
+      ].join("")),
+    ].join("");
+
+    const label = cert === "cka" ? "CKA" : cert === "ckad" ? "CKAD" : "CKS";
+    sidebar.querySelector(".docs-nav-label").textContent = label;
+    navEl.innerHTML = cert === "cka" ? ckaNav() : cert === "ckad" ? ckadNav() : cksNav();
   } else if (navEl) {
     navEl.innerHTML = [
       item("overview", "Overview"),

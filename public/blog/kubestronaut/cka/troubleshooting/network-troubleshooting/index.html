@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Network Troubleshooting — Hieu Nguyen</title>
+  <meta name="description" content="Network Troubleshooting — Kubestronaut roadmap.">
+  <link rel="icon" href="../../../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../../../">i'm<span>.hieu</span></a>
+    <nav class="docs-series">
+      <a href="../../../../../blog/web-security/">Web Security</a>
+      <a class="active" href="../../../">Kubestronaut roadmap</a>
+    </nav>
+    <nav class="docs-cert-tabs"><a href="../../../cka/" class="active">CKA</a><a href="../../../ckad/" class="">CKAD</a><a href="../../../cks/" class="">CKS</a></nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-nav="kubestronaut" data-cert="cka" data-docs-root="../../" data-active="troubleshooting/network-troubleshooting">
+      <div class="docs-nav-label">CKA</div>
+      <ul class="docs-nav" id="docsNav"></ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../../../">Home</a>
+        <span>›</span>
+        <a href="../../../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../../../">Kubestronaut</a>
+        <span>›</span>
+        <a href="../../">CKA</a>
+        <span>›</span>
+        <span>Network Troubleshooting</span>
+      </div>
+      <div id="top"></div>
+<header><h1>Network Troubleshooting</h1></header><h2 id="cni-plugins">CNI Plugins</h2>
+<p>Various plugins can be used to create networking between nodes. In the exam, the URL will be provided if necessary. For more documentation <a href="https://kubernetes.io/docs/concepts/cluster-administration/addons/#networking-and-network-policy" target="_blank" rel="noopener noreferrer">https://kubernetes.io/docs/concepts/cluster-administration/addons/#networking-and-network-policy</a></p>
+<ol>
+<li>
+<p>Weave Net: <code>kubectl apply -f https://github.com/weaveworks/weave/releases/download/v2.8.1/weave-daemonset-k8s.yaml</code></p>
+</li>
+<li>
+<p>Flannel: <code>kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/2140ac876ef134e0ed5af15c65e414cf26827915/Documentation/kube-flannel.yml</code>
+2.1. Does not support network policies.</p>
+</li>
+<li>
+<p>Calico: <code>curl https://raw.githubusercontent.com/projectcalico/calico/v3.25.0/manifests/calico.yaml -O; kubectl apply -f calico.yaml</code></p>
+</li>
+</ol>
+<p>If there are multiple CNI configuration files, kubelet will use the first one in alphabetical order.</p>
+<h2 id="dns-in-kubernetes">DNS in Kubernetes</h2>
+<p>As DNS server, Kubernetes uses <a href="https://coredns.io/" target="_blank" rel="noopener noreferrer">CoreDNS</a> which is very flexible and extensible.</p>
+<p>Memory and Pods</p>
+<p>The memory usage by CoreDNS is affected by the number of pods and services in the cluster, but only visible in large-scale clusters. Cache size and query rate also influence memory utilization.</p>
+<p>The CoreDNS resources are:</p>
+<p>Kubernetes resources for CoreDNS are:</p>
+<ul>
+<li>service account: coredns</li>
+<li>cluster-roles: coredns and kube-dns</li>
+<li>clusterrolebindings: coredns and kube-dns</li>
+<li>deployment: coredns</li>
+<li>configmap: coredns</li>
+<li>service: kube-dns</li>
+</ul>
+<p>Analyzing the CoreDNS deployment, a configmap is used for configurations.</p>
+<pre><code class="language-yaml">    spec:
+      volumes:
+        - name: config-volume
+          configMap:
+            name: coredns #&lt;&lt;&lt;&lt;
+            items:
+              - key: Corefile
+                path: Corefile
+            defaultMode: 420
+</code></pre>
+<p>Here&#x27;s the configmap content.</p>
+<pre><code class="language-bash">kubectl describe cm -n kube-system coredns
+Name:         coredns
+Namespace:    kube-system
+Labels:       &lt;none&gt;
+Annotations:  &lt;none&gt;
+
+Data
+====
+Corefile:
+----
+### Port 53 is used for DNS resolution.
+.:53 {
+    errors
+    health {
+       lameduck 5s
+    }
+    ready
+    # This is the k8s backend for cluster.local and reverse domains.
+    kubernetes cluster.local in-addr.arpa ip6.arpa {
+       pods insecure
+       fallthrough in-addr.arpa ip6.arpa
+       ttl 30
+    }
+    prometheus :9153
+    # Forward cluster domains directly to the correct authoritative DNS server.
+    forward . /etc/resolv.conf {
+       max_concurrent 1000
+    }
+    cache 30
+    loop
+    reload
+    loadbalance
+}
+
+
+BinaryData
+====
+
+Events:  &lt;none&gt;
+</code></pre>
+<p><a href="https://kubernetes.io/docs/tasks/administer-cluster/dns-debugging-resolution/" target="_blank" rel="noopener noreferrer">https://kubernetes.io/docs/tasks/administer-cluster/dns-debugging-resolution/</a></p>
+<p>Troubleshooting issues related to CoreDNS.</p>
+<ol>
+<li>
+<p>If CoreDNS is in pending state, check if any CNI plugin is installed.</p>
+</li>
+<li>
+<p>If CoreDNS pods are in CrashLoopBackOff or Error state. If you&#x27;re using nodes running SELinux with an old Docker version, CoreDNS may not start. To solve this problem you can try the following steps.</p>
+<p>2.1. Update the container runtime version.</p>
+<p>2.2. Disable SELinux on the operating system.</p>
+<p>2.3. Modify the CoreDNS deployment and set allowPrivilegeEscalation to true.</p>
+<pre><code class="language-bash">kubectl -n kube-system get deployment coredns -o yaml | sed &#x27;s/allowPrivilegeEscalation: false/allowPrivilegeEscalation: true/g&#x27; | kubectl apply -f -
+</code></pre>
+<p>2.4. Another cause for CoreDNS to have CrashLoopBackOff is when a CoreDNS Pod deployed in Kubernetes detects a loop. There are many ways to work around this issue, some are listed here:</p>
+<ul>
+<li>Add the following to the kubelet yaml configuration: resolvConf: <code>&lt;path-to-your-real-resolv-conf-file&gt;</code> This flag tells kubelet to pass an alternative resolv.conf to pods. For systems that use systemd-resolved, /run/systemd/resolve/resolv.conf is typically the location of the &quot;real&quot; resolv.conf, although it may be different depending on your distribution.</li>
+<li>Disable DNS local cache on host nodes and restore /etc/resolv.conf to the original.</li>
+<li>A quick fix is to edit your Corefile, replacing forward . /etc/resolv.conf with the IP address of your upstream DNS, for example forward . 8.8.8.8. But this only fixes the CoreDNS problem, kubelet will continue forwarding the invalid resolv.conf to all default dnsPolicy pods, leaving them unable to resolve DNS.</li>
+</ul>
+</li>
+<li>
+<p>If CoreDNS pods and kube-dns service are working well, check if the kube-dns service has valid endpoints. <code>kubectl -n kube-system get ep kube-dns</code> If there are no endpoints for the service, inspect it and make sure it&#x27;s using the correct selectors and ports.</p>
+</li>
+</ol>
+<h2 id="kube-proxy">Kube-Proxy</h2>
+<p>kube-proxy is a network proxy that runs on each node in the cluster. kube-proxy maintains network rules on nodes. These network rules allow network communication to pods from network sessions inside or outside the cluster.</p>
+<p>If the cluster was configured with kubeadm, kube-proxy will be running as a daemonset.</p>
+<p>kube-proxy is responsible for monitoring services and endpoints associated with each service. When the client is going to connect to the service using the virtual IP, kube-proxy is responsible for sending traffic to the real pods.</p>
+<p>If you run <code>kubectl describe ds -n kube-system kube-proxy</code> you can see that the kube-proxy binary is executed with the following command inside the kube-proxy container.</p>
+<pre><code class="language-bash">kubectl describe ds -n kube-system kube-proxy
+Name:           kube-proxy
+Selector:       k8s-app=kube-proxy
+Node-Selector:  kubernetes.io/os=linux
+Labels:         k8s-app=kube-proxy
+Annotations:    deprecated.daemonset.template.generation: 1
+Desired Number of Nodes Scheduled: 4
+Current Number of Nodes Scheduled: 4
+Number of Nodes Scheduled with Up-to-date Pods: 4
+Number of Nodes Scheduled with Available Pods: 4
+Number of Nodes Misscheduled: 0
+Pods Status:  4 Running / 0 Waiting / 0 Succeeded / 0 Failed
+Pod Template:
+  Labels:           k8s-app=kube-proxy
+  Service Account:  kube-proxy
+  Containers:
+   kube-proxy:
+    Image:      registry.k8s.io/kube-proxy:v1.29.1
+    Port:       &lt;none&gt;
+    Host Port:  &lt;none&gt;
+####################
+    Command:
+      /usr/local/bin/kube-proxy
+      --config=/var/lib/kube-proxy/config.conf
+      --hostname-override=$(NODE_NAME)
+####################
+    Environment:
+      NODE_NAME:   (v1:spec.nodeName)
+    Mounts:
+      /lib/modules from lib-modules (ro)
+      /run/xtables.lock from xtables-lock (rw)
+      /var/lib/kube-proxy from kube-proxy (rw)
+  Volumes:
+   kube-proxy:
+    Type:      ConfigMap (a volume populated by a ConfigMap)
+    Name:      kube-proxy
+    Optional:  false
+   xtables-lock:
+    Type:          HostPath (bare host directory volume)
+    Path:          /run/xtables.lock
+    HostPathType:  FileOrCreate
+   lib-modules:
+    Type:               HostPath (bare host directory volume)
+    Path:               /lib/modules
+    HostPathType:
+  Priority Class Name:  system-node-critical
+Events:                 &lt;none&gt;
+</code></pre>
+<p>So it fetches configuration from a /var/lib/kube-proxy/config.conf file and we can override the hostname with the node name on which the pod is running.</p>
+<p>In the configuration file we define clusterCIDR, kubeproxy mode, ipvs, iptables, bindaddress, kube-config etc.</p>
+<p>How to troubleshoot issues related to kube-proxy:</p>
+<ol>
+<li>
+<p>Check if the kube-proxy pod in the kube-system namespace is running.</p>
+</li>
+<li>
+<p>Check kube-proxy logs.</p>
+</li>
+<li>
+<p>Check if the configmap is correctly defined and if the configuration file to run the kube-proxy binary is correct.</p>
+</li>
+<li>
+<p>kube-config is defined in the configmap.</p>
+</li>
+<li>
+<p>check if kube-proxy is running inside the container.</p>
+</li>
+</ol>
+<pre><code class="language-bash"># netstat -plan | grep kube-proxy
+tcp        0      0 0.0.0.0:30081           0.0.0.0:*               LISTEN      1/kube-proxy
+tcp        0      0 127.0.0.1:10249         0.0.0.0:*               LISTEN      1/kube-proxy
+tcp        0      0 172.17.0.12:33706       172.17.0.12:6443        ESTABLISHED 1/kube-proxy
+tcp6       0      0 :::10256                :::*                    LISTEN      1/kube-proxy
+</code></pre>
+      <div class="docs-pager">
+        <a href="../../../../../#blogs">All blogs</a>
+        <a href="../../">Back to CKA</a>
+      </div>
+    </article>
+    <aside class="docs-toc">
+      <div class="docs-toc-title">On this page</div>
+      <nav>
+        <a href="#cni-plugins">CNI Plugins</a>
+        <a href="#dns-in-kubernetes">DNS in Kubernetes</a>
+        <a href="#kube-proxy">Kube-Proxy</a>
+      </nav>
+    </aside>
+  </div>
+  <script src="../../../../../js/docs.js"></script>
+</body>
+</html>

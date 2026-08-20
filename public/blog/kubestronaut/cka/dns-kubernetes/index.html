@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DNS in Kubernetes — Hieu Nguyen</title>
+  <meta name="description" content="DNS in Kubernetes — Kubestronaut roadmap.">
+  <link rel="icon" href="../../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../../">i'm<span>.hieu</span></a>
+    <nav class="docs-series">
+      <a href="../../../../blog/web-security/">Web Security</a>
+      <a class="active" href="../../">Kubestronaut roadmap</a>
+    </nav>
+    <nav class="docs-cert-tabs"><a href="../../cka/" class="active">CKA</a><a href="../../ckad/" class="">CKAD</a><a href="../../cks/" class="">CKS</a></nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-nav="kubestronaut" data-cert="cka" data-docs-root="../" data-active="dns-kubernetes">
+      <div class="docs-nav-label">CKA</div>
+      <ul class="docs-nav" id="docsNav"></ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../../">Home</a>
+        <span>›</span>
+        <a href="../../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../../">Kubestronaut</a>
+        <span>›</span>
+        <a href="../">CKA</a>
+        <span>›</span>
+        <span>DNS in Kubernetes</span>
+      </div>
+      <div id="top"></div>
+<header><h1>DNS in Kubernetes</h1></header><p>What names are assigned to which objects?
+What DNS records are assigned to services?
+What DNS records are assigned to pods?</p>
+<p>Nodes are created before the Kubernetes cluster and probably registered in your organization&#x27;s DNS and assigned some IP within your organization&#x27;s network. How they are managed is not a concern within the cluster.</p>
+<p>When we set up the cluster, Kubernetes deploys a DNS server called CoreDNS. If you do the setup manually, you&#x27;ll have to do it yourself.</p>
+<pre><code class="language-bash">k get pods -n kube-system -o wide
+NAME                                                READY   STATUS      RESTARTS      AGE   IP           NODE                        NOMINATED NODE   READINESS GATES
+coredns-76f75df574-7d75t                            1/1     Running     1 (21h ago)   40h   10.40.0.3    cka-cluster-worker          &lt;none&gt;           &lt;none&gt;
+coredns-76f75df574-99kmh                            1/1     Running     1 (21h ago)   40h   10.40.0.2    cka-cluster-worker          &lt;none&gt;           &lt;none&gt;
+etcd-cka-cluster-control-plane                      1/1     Running     0             21h   172.18.0.5   cka-cluster-control-plane   &lt;none&gt;           &lt;none&gt;
+kube-apiserver-cka-cluster-control-plane            1/1     Running     0             21h   172.18.0.5   cka-cluster-control-plane   &lt;none&gt;           &lt;none&gt;
+kube-controller-manager-cka-cluster-control-plane   1/1     Running     1 (21h ago)   40h   172.18.0.5   cka-cluster-control-plane   &lt;none&gt;           &lt;none&gt;
+kube-proxy-6gk2j                                    1/1     Running     1 (21h ago)   40h   172.18.0.3   cka-cluster-worker2         &lt;none&gt;           &lt;none&gt;
+kube-proxy-bgpzr                                    1/1     Running     1 (21h ago)   40h   172.18.0.2   cka-cluster-worker          &lt;none&gt;           &lt;none&gt;
+kube-proxy-l8xxj                                    1/1     Running     1 (21h ago)   40h   172.18.0.4   cka-cluster-worker3         &lt;none&gt;           &lt;none&gt;
+kube-proxy-vg8mb                                    1/1     Running     1 (21h ago)   40h   172.18.0.5   cka-cluster-control-plane   &lt;none&gt;           &lt;none&gt;
+kube-scheduler-cka-cluster-control-plane            1/1     Running     1 (21h ago)   40h   172.18.0.5   cka-cluster-control-plane   &lt;none&gt;           &lt;none&gt;
+node-shell-0bdf1591-55c6-47fa-acc6-58c934eb2096     0/1     Completed   0             9h    172.18.0.3   cka-cluster-worker2         &lt;none&gt;           &lt;none&gt;
+weave-net-29ffl                                     2/2     Running     4 (21h ago)   40h   172.18.0.2   cka-cluster-worker          &lt;none&gt;           &lt;none&gt;
+weave-net-4q8kr                                     2/2     Running     4 (21h ago)   40h   172.18.0.4   cka-cluster-worker3         &lt;none&gt;           &lt;none&gt;
+weave-net-8zxbw                                     2/2     Running     5 (21h ago)   40h   172.18.0.3   cka-cluster-worker2         &lt;none&gt;           &lt;none&gt;
+weave-net-phbz8                                     2/2     Running     4 (21h ago)   40h   172.18.0.5   cka-cluster-control-plane   &lt;none&gt;           &lt;none&gt;
+
+k get deploy -n kube-system -o wide
+NAME      READY   UP-TO-DATE   AVAILABLE   AGE   CONTAINERS   IMAGES                                    SELECTOR
+coredns   2/2     2            2           40h   coredns      registry.k8s.io/coredns/coredns:v1.11.1   k8s-app=kube-dns
+
+kubectl get svc -n kube-system
+NAME       TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)                  AGE
+kube-dns   ClusterIP   10.96.0.10   &lt;none&gt;        53/UDP,53/TCP,9153/TCP   40h
+</code></pre>
+<p>Notice that CoreDNS here is a deployment with two replicas and not a DaemonSet. We also have a service created.</p>
+<blockquote>
+<p>In the past, Kubernetes used kube-dns, now it uses coredns. coredns and kube-dns are all the same thing at this point.</p>
+</blockquote>
+<p>Every time a service or pod is created, kube-dns/coredns, depending on the cluster configuration, is responsible for creating an entry in the records table. It does this by monitoring the kube-apiserver.</p>
+<p>Since any service and pod is accessible throughout the cluster, just mapping hostname to IP is sufficient.</p>
+<p><img decoding="async" loading="lazy" alt="alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-29-894f1ddc5c55675bdd0540d81c64a5c3.png" width="1019" height="492" class="img_ev3q"></p>
+<p>Pods can reference other pods or services in the same namespace only by name. If a pod wants to access another pod in another namespace, it must reference the namespace as well.</p>
+<p><img decoding="async" loading="lazy" alt="alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-30-c3497786364ce05d46206a0f1203d043.png" width="1063" height="652" class="img_ev3q"></p>
+<p>We can still pass the group and domain of the cluster which would work.</p>
+<p><img decoding="async" loading="lazy" alt="alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-31-d3a1faa6a34abf6fef351e2e8e3eb9b6.png" width="1246" height="665" class="img_ev3q"></p>
+<p>The DNS record for pods is not created by default, but it can be done. The record will use the pod&#x27;s IP and replace the <code>.</code> with <code>-</code>.</p>
+<p><img decoding="async" loading="lazy" alt="alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-32-486cbab2be7b2f3b5cead523d83e3fc1.png" width="1234" height="658" class="img_ev3q"></p>
+<p>Every time a pod is created, its /etc/resolv.conf uses the nameserver pointing to coredns.</p>
+<p><img decoding="async" loading="lazy" alt="alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-33-5547dc85898e4fd582af7412141653fe.png" width="1165" height="652" class="img_ev3q"></p>
+<p>Exploring a bit how coredns is deployed.</p>
+<pre><code class="language-bash">kubectl get deploy -n kube-system coredns -o yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    deployment.kubernetes.io/revision: &quot;1&quot;
+  creationTimestamp: &quot;2024-02-29T18:15:52Z&quot;
+  generation: 1
+  labels:
+    k8s-app: kube-dns
+  name: coredns
+  namespace: kube-system
+  resourceVersion: &quot;113296&quot;
+  uid: 9a958820-df9c-46b6-bbed-2b1858bd1008
+spec:
+  progressDeadlineSeconds: 600
+  # Two replicas for redundancy and strategy so that at least 1 is active
+  replicas: 2
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      k8s-app: kube-dns
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        k8s-app: kube-dns
+    spec:
+      # To avoid being on the same hostname
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: k8s-app
+                  operator: In
+                  values:
+                  - kube-dns
+              topologyKey: kubernetes.io/hostname
+            weight: 100
+
+      containers:
+      # The entrypoint is the coredns binary and the configuration passed will be in this /etc/core/CoreFile
+      - args:
+        - -conf
+        - /etc/coredns/Corefile
+        image: registry.k8s.io/coredns/coredns:v1.11.1
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          failureThreshold: 5
+          httpGet:
+            path: /health
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: 60
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 5
+        name: coredns
+        # USES PORT 53
+        ports:
+        - containerPort: 53
+          name: dns
+          protocol: UDP
+        - containerPort: 53
+          name: dns-tcp
+          protocol: TCP
+        - containerPort: 9153
+          name: metrics
+          protocol: TCP
+        readinessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /ready
+            port: 8181
+            scheme: HTTP
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 1
+        resources:
+          limits:
+            memory: 170Mi
+          requests:
+            cpu: 100m
+            memory: 70Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            add:
+            - NET_BIND_SERVICE
+            drop:
+            - ALL
+          readOnlyRootFilesystem: true
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /etc/coredns
+          name: config-volume
+          readOnly: true
+      dnsPolicy: Default
+      nodeSelector:
+        kubernetes.io/os: linux
+      priorityClassName: system-cluster-critical
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      serviceAccount: coredns
+      serviceAccountName: coredns
+      terminationGracePeriodSeconds: 30
+      tolerations:
+      - key: CriticalAddonsOnly
+        operator: Exists
+      - effect: NoSchedule
+        key: node-role.kubernetes.io/control-plane
+      volumes: # We can observe that we use a configmap for the coredns configuration
+      - configMap:
+          defaultMode: 420
+          items:
+          - key: Corefile
+            path: Corefile
+          name: coredns
+        name: config-volume
+...
+</code></pre>
+<p>If we explore the configmap, we can see that we have several configured plugins:</p>
+<ul>
+<li>errors</li>
+<li>health</li>
+<li>kubernetes (this is the plugin that makes coredns work with kubernetes)</li>
+<li>prometheus</li>
+<li>cache</li>
+<li>reload</li>
+</ul>
+<p>These are all plugins and the settings passed to them. If you want to explore more plugins you can visit <a href="https://coredns.io/plugins/" target="_blank" rel="noopener noreferrer">https://coredns.io/plugins/</a></p>
+<pre><code class="language-bash">kubectl describe cm -n kube-system coredns
+Name:         coredns
+Namespace:    kube-system
+Labels:       &lt;none&gt;
+Annotations:  &lt;none&gt;
+
+Data
+====
+Corefile:
+----
+.:53 {
+    errors
+    health {
+       lameduck 5s
+    }
+    ready
+    kubernetes cluster.local in-addr.arpa ip6.arpa {
+       pods insecure
+       fallthrough in-addr.arpa ip6.arpa
+       ttl 30
+    }
+    prometheus :9153
+    forward . /etc/resolv.conf {
+       max_concurrent 1000
+    }
+    cache 30
+    loop
+    reload
+    loadbalance
+}
+
+
+BinaryData
+====
+
+Events:  &lt;none&gt;
+</code></pre>
+<p>Let&#x27;s focus on the kubernetes plugin.
+To enable the DNS record for pods, just add an entry here.</p>
+<pre><code class="language-bash">    kubernetes cluster.local in-addr.arpa ip6.arpa {
+       pods insecure
+       fallthrough in-addr.arpa ip6.arpa
+       ttl 30
+    }
+</code></pre>
+<p>But how does the pod receive this entry to use coredns to resolve names? Kubelet</p>
+<p>If we analyze the kubelet config file we can see:</p>
+<pre><code class="language-bash">root@cka-cluster-worker:/var/lib/kubelet# cat /var/lib/kubelet/config.yaml
+apiVersion: kubelet.config.k8s.io/v1beta1
+authentication:
+# Removed to reduce output
+clusterDNS: # Here we have a list and the first one already has the entry for the coredns service
+- 10.96.0.10
+# Removed to reduce output
+
+kubectl get svc -n kube-system -o wide
+NAME       TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)                  AGE   SELECTOR
+kube-dns   ClusterIP   10.96.0.10   &lt;none&gt;        53/UDP,53/TCP,9153/TCP   42h   k8s-app=kube-dns
+</code></pre>
+<p>Let&#x27;s check the resolv.conf of a pod and see some details...</p>
+<pre><code class="language-bash">kubectl exec -it nginx-7854ff8877-wc4dr -c nginx -- bash
+
+root@nginx-7854ff8877-wc4dr:/# cat /etc/resolv.conf
+search default.svc.cluster.local svc.cluster.local cluster.local
+nameserver 10.96.0.10
+options ndots:5
+</code></pre>
+<p>See the configured nameserver and also notice that we have a search that looks for all possibilities. It&#x27;s also worth noting that we only have the possibility to resolve this for services and for pods we need to pass the full domain.</p>
+      <div class="docs-pager">
+        <a href="../../../../#blogs">All blogs</a>
+        <a href="../">Back to CKA</a>
+      </div>
+    </article>
+    <aside class="docs-toc">
+      <div class="docs-toc-title">On this page</div>
+      <nav>
+        <a href="#top">On this page</a>
+      </nav>
+    </aside>
+  </div>
+  <script src="../../../../js/docs.js"></script>
+</body>
+</html>

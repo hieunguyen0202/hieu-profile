@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Container Storage Interface (CSI) — Hieu Nguyen</title>
+  <meta name="description" content="Container Storage Interface (CSI) — Kubestronaut roadmap.">
+  <link rel="icon" href="../../../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../../../">i'm<span>.hieu</span></a>
+    <nav class="docs-series">
+      <a href="../../../../../blog/web-security/">Web Security</a>
+      <a class="active" href="../../../">Kubestronaut roadmap</a>
+    </nav>
+    <nav class="docs-cert-tabs"><a href="../../../cka/" class="active">CKA</a><a href="../../../ckad/" class="">CKAD</a><a href="../../../cks/" class="">CKS</a></nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-nav="kubestronaut" data-cert="cka" data-docs-root="../../" data-active="storage/container-storage-interface">
+      <div class="docs-nav-label">CKA</div>
+      <ul class="docs-nav" id="docsNav"></ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../../../">Home</a>
+        <span>›</span>
+        <a href="../../../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../../../">Kubestronaut</a>
+        <span>›</span>
+        <a href="../../">CKA</a>
+        <span>›</span>
+        <span>Container Storage Interface (CSI)</span>
+      </div>
+      <div id="top"></div>
+<header><h1>Container Storage Interface (CSI)</h1></header><p>In the past, Kubernetes only used Docker as a container runtime. All the code to work with Docker was inserted directly into the Kubernetes source code. With the arrival of new container runtimes like RKT and CRI-O, a way to support them without inserting them into the Kubernetes source code was needed.</p>
+<p>Therefore, Docker was removed from the Kubernetes source code and a generic interface was created for this purpose called CRI (Container Runtime Interface) so that in the future new runtimes could be added to Kubernetes.</p>
+<p>CRI establishes a clear and standardized interface between Kubernetes and container runtimes, allowing Kubernetes to be more flexible and agnostic regarding the underlying runtime.</p>
+<p><img decoding="async" loading="lazy" alt="alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-3-f955f3b5fb7cf3463e2b1541216622f6.png" width="763" height="283" class="img_ev3q"></p>
+<p>Similarly, to support different networks, the Container Network Interface (CNI) was created, which defines the standards for network communication and allows various players to develop solutions for Kubernetes.</p>
+<p>The CSI Driver is not exclusive to Kubernetes; it is an interface designed to connect systems that manage containers to external storage drivers. This storage volume integration is applicable in a variety of scenarios, from container orchestrators to isolated execution environments and any other situation where it is necessary to bind external storage to containers.</p>
+<p>It simplifies the integration of new storage providers by establishing a standardized interface for volume drivers. This standardization allows various storage providers to develop CSI-compatible plugins, following the standards established by the interface. This promotes greater flexibility of choice for users and facilitates interoperability between different container orchestration systems and storage providers.</p>
+<p><img decoding="async" loading="lazy" alt="alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-4-fe8bcd0a2283dba34ffbf15d11bf34c7.png" width="999" height="534" class="img_ev3q"></p>
+<blockquote>
+<p>In programming, an interface defines a contract or set of methods that a class or object must implement. It is an abstraction that describes the operations an object can perform, but does not contain the implementation of those operations.</p>
+</blockquote>
+<pre><code class="language-java">// Interface defines the contract
+interface Animal {
+    void makeSound();
+}
+
+// Specific implementation of the interface
+class Dog implements Animal {
+    public void makeSound() {
+        System.out.println(&quot;Woof woof!&quot;);
+    }
+}
+</code></pre>
+      <div class="docs-pager">
+        <a href="../../../../../#blogs">All blogs</a>
+        <a href="../../">Back to CKA</a>
+      </div>
+    </article>
+    <aside class="docs-toc">
+      <div class="docs-toc-title">On this page</div>
+      <nav>
+        <a href="#top">On this page</a>
+      </nav>
+    </aside>
+  </div>
+  <script src="../../../../../js/docs.js"></script>
+</body>
+</html>

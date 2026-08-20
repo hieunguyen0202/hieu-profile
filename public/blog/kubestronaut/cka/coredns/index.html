@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CoreDNS — Hieu Nguyen</title>
+  <meta name="description" content="CoreDNS — Kubestronaut roadmap.">
+  <link rel="icon" href="../../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../../">i'm<span>.hieu</span></a>
+    <nav class="docs-series">
+      <a href="../../../../blog/web-security/">Web Security</a>
+      <a class="active" href="../../">Kubestronaut roadmap</a>
+    </nav>
+    <nav class="docs-cert-tabs"><a href="../../cka/" class="active">CKA</a><a href="../../ckad/" class="">CKAD</a><a href="../../cks/" class="">CKS</a></nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-nav="kubestronaut" data-cert="cka" data-docs-root="../" data-active="coredns">
+      <div class="docs-nav-label">CKA</div>
+      <ul class="docs-nav" id="docsNav"></ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../../">Home</a>
+        <span>›</span>
+        <a href="../../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../../">Kubestronaut</a>
+        <span>›</span>
+        <a href="../">CKA</a>
+        <span>›</span>
+        <span>CoreDNS</span>
+      </div>
+      <div id="top"></div>
+<header><h1>CoreDNS</h1></header><p>We saw why we need a DNS server and how it can help manage name resolution in large environments with many hosts and how you can configure your hosts to point to a DNS server. Now we&#x27;ll see how to configure a host as a DNS server.</p>
+<p>There are many DNS server solutions out there, but we&#x27;ll focus on <a href="https://coredns.io/" target="_blank" rel="noopener noreferrer">CoreDNS</a> which is used in Kubernetes.</p>
+<p>The CoreDNS binaries can be downloaded from the <a href="https://github.com/coredns/coredns" target="_blank" rel="noopener noreferrer">Github</a> page or as a Docker image. Let&#x27;s go the traditional way. Download the binary using curl or wget and extract it. You&#x27;ll get the coredns executable.</p>
+<pre><code class="language-bash">wget https://github.com/coredns/coredns/releases/download/v1.11.2/coredns_1.11.2_linux_amd64.tgz
+tar -xzvf coredns_1.11.2_linux_amd64.tgz
+chmod +x coredns
+</code></pre>
+<p>To start CoreDNS just running the binary should work, but if another DNS server is using port 53 you&#x27;ll get this error.</p>
+<pre><code class="language-bash">./coredns
+Listen: listen tcp :53: bind: permission denied
+
+# Change the port and it will work
+
+./coredns -dns.port=1053
+.:1053
+CoreDNS-1.11.2
+linux/amd64, go1.20.14, 8868454
+</code></pre>
+<p>Now we haven&#x27;t specified the IP for hostname mappings. For that you need to provide some configurations. There are several ways to do this, we&#x27;ll see one. First, we put all entries in the DNS server&#x27;s /etc/hosts file.</p>
+<p>Then we configure CoreDNS to use that file. CoreDNS loads its configuration from a file called Corefile. Here&#x27;s a simple configuration that instructs CoreDNS to fetch the IP for hostname mappings from the /etc/hosts file. When the DNS server runs, it now picks up the IPs and names from the /etc/hosts file on the server.</p>
+<p>CoreDNS also supports other ways to configure DNS entries through plugins. We&#x27;ll see the <a href="https://coredns.io/plugins/kubernetes/" target="_blank" rel="noopener noreferrer">plugin</a> it uses for Kubernetes in a later section.</p>
+      <div class="docs-pager">
+        <a href="../../../../#blogs">All blogs</a>
+        <a href="../">Back to CKA</a>
+      </div>
+    </article>
+    <aside class="docs-toc">
+      <div class="docs-toc-title">On this page</div>
+      <nav>
+        <a href="#top">On this page</a>
+      </nav>
+    </aside>
+  </div>
+  <script src="../../../../js/docs.js"></script>
+</body>
+</html>

@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manual Scheduling — Hieu Nguyen</title>
+  <meta name="description" content="Manual Scheduling — Kubestronaut roadmap.">
+  <link rel="icon" href="../../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../../">i'm<span>.hieu</span></a>
+    <nav class="docs-series">
+      <a href="../../../../blog/web-security/">Web Security</a>
+      <a class="active" href="../../">Kubestronaut roadmap</a>
+    </nav>
+    <nav class="docs-cert-tabs"><a href="../../cka/" class="active">CKA</a><a href="../../ckad/" class="">CKAD</a><a href="../../cks/" class="">CKS</a></nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-nav="kubestronaut" data-cert="cka" data-docs-root="../" data-active="manual-scheduling">
+      <div class="docs-nav-label">CKA</div>
+      <ul class="docs-nav" id="docsNav"></ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../../">Home</a>
+        <span>›</span>
+        <a href="../../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../../">Kubestronaut</a>
+        <span>›</span>
+        <a href="../">CKA</a>
+        <span>›</span>
+        <span>Manual Scheduling</span>
+      </div>
+      <div id="top"></div>
+<header><h1>Manual Scheduling</h1></header><p>By default, all Nodes are eligible by the kube-scheduler if we don&#x27;t define a nodeName in the spec.</p>
+<pre><code class="language-yaml">apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx
+  labels:
+    app: nginx
+spec:
+  containers:
+  - name: nginx
+    image: nginx
+    ports:
+    - containerPort: 8080
+  #nodeName: &lt;&lt;&lt;&lt;&lt;
+</code></pre>
+<blockquote>
+<p>If there is no Scheduler (like kube-scheduler) to define which Node to choose, the Pod would remain in <code>Pending</code> state.</p>
+</blockquote>
+<p>If there is no Scheduler and a specific Node is defined for the Pod, it will start on the defined Node if it exists and has sufficient resources.</p>
+<p>Let&#x27;s start the Pod with a nodeName that doesn&#x27;t exist.</p>
+<pre><code class="language-bash">kubectl get nodes
+NAME                       STATUS   ROLES                  AGE   VERSION
+k3d-k3d-cluster-agent-1    Ready    &lt;none&gt;                 69d   v1.27.4+k3s1
+k3d-k3d-cluster-agent-2    Ready    &lt;none&gt;                 69d   v1.27.4+k3s1
+k3d-k3d-cluster-agent-0    Ready    &lt;none&gt;                 69d   v1.27.4+k3s1
+k3d-k3d-cluster-server-0   Ready    control-plane,master   69d   v1.27.4+k3s1
+
+cat &lt;&lt;EOF &gt; pod-node-name.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx
+  labels:
+    app: nginx
+spec:
+  containers:
+  - name: nginx
+    image: nginx
+    ports:
+    - containerPort: 8080
+  nodeName: node01
+EOF
+
+# Trying to start a Pod on a Node that doesn&#x27;t exist in the cluster
+kubectl apply -f pod-node-name.yaml
+pod/nginx created
+
+kubectl get pods
+NAME    READY   STATUS    RESTARTS   AGE
+nginx   0/1     Pending   0          4s
+</code></pre>
+<p>Even with an existing Scheduler, it didn&#x27;t find the selected Node because we don&#x27;t have node01, so it stayed in pending and then disappeared.</p>
+<p>Changing the nodeName of a Pod is not allowed by Kubernetes, as it&#x27;s not possible to move a Pod from one Node to another. It needs to be recreated, meaning you must delete it first and then create it again.</p>
+<p>To do this with kubectl apply, we can use <code>kubectl replace --force</code></p>
+<pre><code class="language-bash"># Attempting to change by modifying the file from node01 to node02 which also doesn&#x27;t exist
+cat &lt;&lt;EOF &gt; pod-node-name.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx
+  labels:
+    app: nginx
+spec:
+  containers:
+  - name: nginx
+    image: nginx
+    ports:
+    - containerPort: 8080
+  nodeName: node02
+EOF
+
+kubectl apply -f ./files/pod-node-name.yaml
+pod/nginx created
+kubectl apply -f ./files/pod-node-name.yaml
+The Pod &quot;nginx&quot; is invalid: spec: Forbidden: pod updates may not change fields other than `spec.containers[*].image`,`spec.initContainers[*].image`,`spec.activeDeadlineSeconds`,`spec.tolerations` (only additions to existing tolerations),`spec.terminationGracePeriodSeconds` (allow it to be set to 1 if it was previously negative)
+  core.PodSpec{
+        ... // 9 identical fields
+        ServiceAccountName:           &quot;default&quot;,
+        AutomountServiceAccountToken: nil,
+-       NodeName:                     &quot;node01&quot;,
++       NodeName:                     &quot;node02&quot;,
+        SecurityContext:              &amp;{},
+        ImagePullSecrets:             nil,
+        ... // 19 identical fields
+  }
+
+kubectl replace --force -f ./files/pod-node-name.yaml
+pod &quot;nginx&quot; deleted
+pod/nginx replaced
+
+# The watch command keeps monitoring, since we don&#x27;t have node02 it terminated and didn&#x27;t keep trying to start because it&#x27;s just a Pod without a ReplicaSet to control it
+kubectl get pods -o wide --watch
+NAME    READY   STATUS    RESTARTS   AGE   IP       NODE     NOMINATED NODE   READINESS GATES
+nginx   0/1     Pending   0          12s   &lt;none&gt;   node02   &lt;none&gt;           &lt;none&gt;
+nginx   0/1     Failed    0          49s   &lt;none&gt;   node02   &lt;none&gt;           &lt;none&gt;
+nginx   0/1     Terminating   0          49s   &lt;none&gt;   node02   &lt;none&gt;           &lt;none&gt;
+nginx   0/1     Terminating   0          49s   &lt;none&gt;   node02   &lt;none&gt;           &lt;none&gt;
+</code></pre>
+<p>Of course, if we set a Node that exists, everything would work accordingly.</p>
+      <div class="docs-pager">
+        <a href="../../../../#blogs">All blogs</a>
+        <a href="../">Back to CKA</a>
+      </div>
+    </article>
+    <aside class="docs-toc">
+      <div class="docs-toc-title">On this page</div>
+      <nav>
+        <a href="#top">On this page</a>
+      </nav>
+    </aside>
+  </div>
+  <script src="../../../../js/docs.js"></script>
+</body>
+</html>

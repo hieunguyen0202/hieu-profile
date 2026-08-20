@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Networking Prerequisites — Hieu Nguyen</title>
+  <meta name="description" content="Networking Prerequisites — Kubestronaut roadmap.">
+  <link rel="icon" href="../../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../../">i'm<span>.hieu</span></a>
+    <nav class="docs-series">
+      <a href="../../../../blog/web-security/">Web Security</a>
+      <a class="active" href="../../">Kubestronaut roadmap</a>
+    </nav>
+    <nav class="docs-cert-tabs"><a href="../../cka/" class="active">CKA</a><a href="../../ckad/" class="">CKAD</a><a href="../../cks/" class="">CKS</a></nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-nav="kubestronaut" data-cert="cka" data-docs-root="../" data-active="networking-pre-requisites">
+      <div class="docs-nav-label">CKA</div>
+      <ul class="docs-nav" id="docsNav"></ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../../">Home</a>
+        <span>›</span>
+        <a href="../../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../../">Kubestronaut</a>
+        <span>›</span>
+        <a href="../">CKA</a>
+        <span>›</span>
+        <span>Networking Prerequisites</span>
+      </div>
+      <div id="top"></div>
+<header><h1>Networking Prerequisites</h1></header><p>Complete with this content <a href="https://github.com/kubernetes/kubernetes/blob/master/pkg/proxy/ipvs/README.md" target="_blank" rel="noopener noreferrer">https://github.com/kubernetes/kubernetes/blob/master/pkg/proxy/ipvs/README.md</a></p>
+<p>You can&#x27;t talk about networking without understanding the basics of networks.</p>
+<h2 id="interfaces">Interfaces</h2>
+<p>Interfaces are the network cards, physical or virtual, of the host. They may or may not be associated with a network.
+When we talk about network interfaces, it can be via cable (Ethernet), wireless, etc.</p>
+<p>To list the devices we can use the command:</p>
+<pre><code class="language-bash">ip link
+</code></pre>
+<p>Generally the main network card is eth0. The physical medium doesn&#x27;t matter much in network nomenclature. An Ethernet cable or fiber could be the physical medium of the eth0 interface.</p>
+<h2 id="switch">Switch</h2>
+<p>If two computers are connected to the same network, how do they communicate? Through the switch. A switch is used to connect devices on the <strong>SAME NETWORK</strong>.</p>
+<p><img decoding="async" loading="lazy" alt="alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-0558d41d217fc2fdb9f03ffa3ddac715.png" width="1115" height="445" class="img_ev3q"></p>
+<p>To set an IP on an interface we use the command.</p>
+<pre><code class="language-bash">ip addr add IP/CIDR dev interface_name
+</code></pre>
+<h2 id="router">Router</h2>
+<p>If <strong>B</strong> needs to connect with <strong>C</strong> but they are on different networks, how do they communicate?</p>
+<p><img decoding="async" loading="lazy" alt="alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-1-77fd4c661cf10da88a8e656193e71e93.png" width="1084" height="288" class="img_ev3q"></p>
+<p>When we need to communicate two machines on different networks, a router comes into play. The router&#x27;s function is to <strong>INTERCONNECT NETWORKS</strong>.</p>
+<p>A router is another server (usually a dedicated device that only runs Linux for this purpose) with many interfaces, but set on different networks. Normally these interfaces are connected to different switches.</p>
+<p>Once they are connected to different networks, they have IPs within those networks, usually the first IP, which is called gateway, but it could be any IP in that network.</p>
+<p><img decoding="async" loading="lazy" alt="alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-2-e4ada1a0d0d9354ec8b2755f20e1483d.png" width="1097" height="293" class="img_ev3q"></p>
+<p>When <strong>B</strong> needs to send a packet to <strong>C</strong>, how does it know where the router is on the network?</p>
+<p>When we configure the network on <strong>a device</strong> we need to point to who the gateway is, which in this case will be the router. The router is the entry and exit door of this network.</p>
+<p>If we think that the network is a room the gateway is the door.</p>
+<p>The system needs to know where that door leads. Going out through that gateway I can get where? To which networks?</p>
+<p>It&#x27;s necessary to have these configurations in each operating system.</p>
+<p>To see this information we can just run the <code>route</code> command.</p>
+<pre><code class="language-bash"># This is a command on my own machine
+route
+
+Kernel IP routing table
+Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
+default         unifi.localdoma 0.0.0.0         UG    100    0        0 enx00e04c6810f3
+default         unifi.localdoma 0.0.0.0         UG    600    0        0 wlp0s20f3
+10.0.0.0        0.0.0.0         255.255.255.0   U     100    0        0 enx00e04c6810f3
+10.0.0.0        0.0.0.0         255.255.255.0   U     600    0        0 wlp0s20f3
+link-local      0.0.0.0         255.255.0.0     U     1000   0        0 enx00e04c6810f3
+172.17.0.0      0.0.0.0         255.255.0.0     U     0      0        0 docker0
+172.18.0.0      0.0.0.0         255.255.0.0     U     0      0        0 br-93a4fed73578
+172.19.0.0      0.0.0.0         255.255.0.0     U     0      0        0 br-56339616a3bf
+192.168.56.0    0.0.0.0         255.255.255.0   U     0      0        0 vboxnet0
+192.168.122.0   0.0.0.0         255.255.255.0   U     0      0        0 virbr0
+</code></pre>
+<p>If there is no route it&#x27;s not possible to have access to anything except your own network.</p>
+<p>On machine <strong>B</strong> if we run the command.</p>
+<pre><code class="language-bash">ip route add 192.168.2.0/24 via 192.168.1.1
+</code></pre>
+<p>We&#x27;re telling it that to reach the 192.168.2.0/24 network we need to exit through IP 192.168.1.1 which is the router&#x27;s IP, but we don&#x27;t know if the router will reach the network we want. In our case here we do know.</p>
+<p>Routes need to be known by all network devices, it&#x27;s no use one knowing and another not, but let&#x27;s imagine everyone knows.</p>
+<p>If the router is connected to the Internet we could have a route for each site.</p>
+<p><img decoding="async" loading="lazy" alt="alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-3-be8cdaac86d049c3fe29b09d67959af3.png" width="1106" height="686" class="img_ev3q"></p>
+<p>But this is not viable, so everything we don&#x27;t know we put the IP 0.0.0.0/0.</p>
+<p>To simplify even more, we can have only a default route. On the 192.168.2.1 network we can simply say that everything goes through a gateway to simplify the table.</p>
+<p><img decoding="async" loading="lazy" alt="alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-4-989d74c3ee9819b39d55781d79a1ba39.png" width="989" height="213" class="img_ev3q"></p>
+<p>Likewise, when we&#x27;re on the same network we use 0.0.0.0 to say we don&#x27;t need a gateway, because we&#x27;re on the same network. The image below is showing host <em>C</em>.</p>
+<p><img decoding="async" loading="lazy" alt="alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-5-41db2d534497e34ff5dcfd30709bcf31.png" width="954" height="190" class="img_ev3q"></p>
+<p>If we had this scenario with more than one gateway we would have to have two entries.</p>
+<p><img decoding="async" loading="lazy" alt="alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-6-1584389cee4661c2d742e7c9a7aded12.png" width="1143" height="649" class="img_ev3q"></p>
+<p>If a machine is not able to communicate with another, checking routes is a good place to start troubleshooting.</p>
+<p>Now let&#x27;s think from the router&#x27;s perspective. Let&#x27;s put the router as a hostB connected to two networks (X and Y), how would we communicate from a hostA on network X to a hostC on network Y through this hostB that knows both?</p>
+<p><img decoding="async" loading="lazy" alt="alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-7-565cea4faf643c0c5d5157dec9e99304.png" width="1144" height="513" class="img_ev3q"></p>
+<p>We define in hostA and hostC the routes through the gateway to hostB&#x27;s IP.</p>
+<p><img decoding="async" loading="lazy" alt="alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-8-1a08fde7548d72f3d6ff4c03001633e5.png" width="1177" height="641" class="img_ev3q"></p>
+<p>Still we can&#x27;t communicate, despite knowing the route. In this case we don&#x27;t get responses to ping, right?</p>
+<p>If it were that simple, imagine how many attacks we would take? So you just aim at the right place and everything will be solved?</p>
+<p>In Linux an interface is not authorized to forward packets to another interface by default. The default rule is deny everything and enable only what we need.</p>
+<p>For this it&#x27;s necessary to change some system configurations.</p>
+<pre><code class="language-bash">cat /etc/sysctl.conf
+...
+net.ipv4.ip_forward=1 # The default is 0, set to 1
+...
+</code></pre>
+<p>If you&#x27;re remembering, this is one of the requirements that need to be done on any Kubernetes node.</p>
+      <div class="docs-pager">
+        <a href="../../../../#blogs">All blogs</a>
+        <a href="../">Back to CKA</a>
+      </div>
+    </article>
+    <aside class="docs-toc">
+      <div class="docs-toc-title">On this page</div>
+      <nav>
+        <a href="#interfaces">Interfaces</a>
+        <a href="#switch">Switch</a>
+        <a href="#router">Router</a>
+      </nav>
+    </aside>
+  </div>
+  <script src="../../../../js/docs.js"></script>
+</body>
+</html>

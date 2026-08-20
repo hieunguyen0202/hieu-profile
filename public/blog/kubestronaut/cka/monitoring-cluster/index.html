@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cluster Monitoring — Hieu Nguyen</title>
+  <meta name="description" content="Cluster Monitoring — Kubestronaut roadmap.">
+  <link rel="icon" href="../../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../../">i'm<span>.hieu</span></a>
+    <nav class="docs-series">
+      <a href="../../../../blog/web-security/">Web Security</a>
+      <a class="active" href="../../">Kubestronaut roadmap</a>
+    </nav>
+    <nav class="docs-cert-tabs"><a href="../../cka/" class="active">CKA</a><a href="../../ckad/" class="">CKAD</a><a href="../../cks/" class="">CKS</a></nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-nav="kubestronaut" data-cert="cka" data-docs-root="../" data-active="monitoring-cluster">
+      <div class="docs-nav-label">CKA</div>
+      <ul class="docs-nav" id="docsNav"></ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../../">Home</a>
+        <span>›</span>
+        <a href="../../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../../">Kubestronaut</a>
+        <span>›</span>
+        <a href="../">CKA</a>
+        <span>›</span>
+        <span>Cluster Monitoring</span>
+      </div>
+      <div id="top"></div>
+<header><h1>Cluster Monitoring</h1></header><p>Kubernetes doesn&#x27;t come with an integrated monitoring solution to collect metrics from nodes and pods, but we have many open-source solutions we can use.</p>
+<ul>
+<li>Metrics Server (formerly Heapster)</li>
+<li>Prometheus</li>
+<li>Elastic Stack</li>
+</ul>
+<p>And paid ones like:</p>
+<ul>
+<li>Datadog</li>
+<li>Dynatrace</li>
+<li>NewRelic</li>
+</ul>
+<p>Let&#x27;s focus on Metrics Server. We can run one metrics server per Kubernetes cluster.</p>
+<p>One of the Kubelet&#x27;s subcomponents is cAdvisor, which has the function of exposing pod metrics through a Kubelet API so that Metrics Server can collect them.</p>
+<p>Metrics Server collects data from Kubelet using the Kubelet API and stores it in memory. Metrics Server doesn&#x27;t keep a history like Prometheus and other solutions.</p>
+<p>To deploy Metrics Server, we&#x27;ll use <a href="https://github.com/kubernetes-sigs/metrics-server" target="_blank" rel="noopener noreferrer">GitHub Metrics Server</a> or <a href="https://artifacthub.io/packages/helm/metrics-server/metrics-server" target="_blank" rel="noopener noreferrer">Helm Metrics Server</a></p>
+<pre><code class="language-bash">helm repo add metrics-server https://kubernetes-sigs.github.io/metrics-server/
+helm show values metrics-server/metrics-server &gt; values.yaml
+</code></pre>
+<p>Metrics Server applied directly to the Kind cluster sometimes has issues with certificates. Add the last line.</p>
+<pre><code class="language-yaml">defaultArgs:
+  - --cert-dir=/tmp
+  - --kubelet-preferred-address-types=InternalIP,ExternalIP,Hostname
+  - --kubelet-use-node-status-port
+  - --metric-resolution=15s
+  - --kubelet-insecure-tls # For kind clusters
+</code></pre>
+<p>And execute the command to install passing the values we just modified.</p>
+<pre><code class="language-bash">helm upgrade --install metrics-server metrics-server/metrics-server --values values.yaml
+</code></pre>
+<p>Once installed, we can use the commands.</p>
+<pre><code class="language-bash">kubectl top nodes
+NAME                        CPU(cores)   CPU%   MEMORY(bytes)   MEMORY%
+cka-cluster-control-plane   165m         1%     1027Mi          1%
+cka-cluster-worker          41m          0%     478Mi           0%
+cka-cluster-worker2         38m          0%     475Mi           0%
+cka-cluster-worker3         39m          0%     393Mi           0%
+
+kubectl top pods -A
+NAMESPACE            NAME                                                CPU(cores)   MEMORY(bytes)
+default              metrics-server-699ffcdc79-njfq8                     5m           20Mi
+default              myapp-rs-4qj5l                                      0m           23Mi
+default              myapp-rs-jpct9                                      0m           23Mi
+default              myapp-rs-wvd7l                                      0m           23Mi
+istio-system         istiod-6d8c55dd6c-47s57                             4m           107Mi
+kube-system          coredns-76f75df574-7d75t                            3m           15Mi
+kube-system          coredns-76f75df574-99kmh                            3m           58Mi
+kube-system          etcd-cka-cluster-control-plane                      26m          97Mi
+kube-system          kube-apiserver-cka-cluster-control-plane            68m          387Mi
+kube-system          kube-controller-manager-cka-cluster-control-plane   22m          113Mi
+kube-system          kube-proxy-6gk2j                                    8m           70Mi
+kube-system          kube-proxy-bgpzr                                    5m           70Mi
+kube-system          kube-proxy-l8xxj                                    7m           70Mi
+kube-system          kube-proxy-vg8mb                                    4m           71Mi
+kube-system          kube-scheduler-cka-cluster-control-plane            6m           65Mi
+kube-system          weave-net-29ffl                                     2m           118Mi
+kube-system          weave-net-4q8kr                                     2m           117Mi
+kube-system          weave-net-8zxbw                                     1m           117Mi
+kube-system          weave-net-phbz8                                     2m           117Mi
+local-path-storage   local-path-provisioner-7577fdbbfb-7t9pc             1m           31Mi
+</code></pre>
+      <div class="docs-pager">
+        <a href="../../../../#blogs">All blogs</a>
+        <a href="../">Back to CKA</a>
+      </div>
+    </article>
+    <aside class="docs-toc">
+      <div class="docs-toc-title">On this page</div>
+      <nav>
+        <a href="#top">On this page</a>
+      </nav>
+    </aside>
+  </div>
+  <script src="../../../../js/docs.js"></script>
+</body>
+</html>

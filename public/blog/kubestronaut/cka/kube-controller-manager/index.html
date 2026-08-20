@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kube Controller Manager — Hieu Nguyen</title>
+  <meta name="description" content="Kube Controller Manager — Kubestronaut roadmap.">
+  <link rel="icon" href="../../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../../">i'm<span>.hieu</span></a>
+    <nav class="docs-series">
+      <a href="../../../../blog/web-security/">Web Security</a>
+      <a class="active" href="../../">Kubestronaut roadmap</a>
+    </nav>
+    <nav class="docs-cert-tabs"><a href="../../cka/" class="active">CKA</a><a href="../../ckad/" class="">CKAD</a><a href="../../cks/" class="">CKS</a></nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-nav="kubestronaut" data-cert="cka" data-docs-root="../" data-active="kube-controller-manager">
+      <div class="docs-nav-label">CKA</div>
+      <ul class="docs-nav" id="docsNav"></ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../../">Home</a>
+        <span>›</span>
+        <a href="../../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../../">Kubestronaut</a>
+        <span>›</span>
+        <a href="../">CKA</a>
+        <span>›</span>
+        <span>Kube Controller Manager</span>
+      </div>
+      <div id="top"></div>
+<header><h1>Kube Controller Manager</h1></header><p>The Kube-Controller-Manager manages the various controllers that exist in Kubernetes. Different controllers can be installed in Kubernetes because the Kubernetes API is extensible. An example is the HPA (Horizontal Pod Autoscaler) which is not built-in to Kubernetes, but can be made available by installing the <a href="https://github.com/kubernetes-sigs/metrics-server" target="_blank" rel="noopener noreferrer">Metrics Server</a>.</p>
+<p>The goal of the Kube-Controller-Manager is to monitor the cluster to achieve the desired state for pods and nodes, making decisions to remediate the situation by directly interacting with the Kube-APIServer.</p>
+<p>The Kube-Controller-Manager takes necessary actions whenever:</p>
+<ul>
+<li>A node is added or removed from the cluster or even cannot be reached.</li>
+<li>A container stops executing or is not healthy</li>
+</ul>
+<h2 id="node-controller">Node Controller</h2>
+<p>This is the controller that monitors nodes.</p>
+<p>By default, every <code>5 seconds</code> it checks the status of <code>nodes</code>. If it cannot reach a node, it&#x27;s marked as <strong>Unreachable</strong>, but only after 40 seconds, meaning 8 attempts, it&#x27;s marked as <strong>NotReady</strong>. After being marked as NotReady, the Kube-Controller-Manager waits 5 minutes for the node to become available again; otherwise, it removes pods assigned to the node and tries to deploy them to another available node.</p>
+<p>Below we have some configurations that are passed to adjust these parameters.</p>
+<p><code>--node-monitor-period</code> <strong>duration</strong> (Default: 5s) <br>
+<code>--node-monitor-grace-period</code> <strong>duration</strong>  (Default: 40s)</p>
+<h2 id="replication-controller">Replication Controller</h2>
+<p>This is the controller that ensures pods are always available in the cluster with the desired number of pods for a given application. If a pod dies, it creates another.</p>
+<hr>
+<p>As mentioned, many controllers exist in the cluster. Whatever concepts we have in Kubernetes, there&#x27;s a controller for it.</p>
+<blockquote>
+<p><code>The set of controllers forms the intelligence behind Kubernetes.</code></p>
+</blockquote>
+<p><img decoding="async" loading="lazy" alt="Alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-11-4b90bdeadcff646c1ec40332bbe95f75.png" width="762" height="496" class="img_ev3q"></p>
+<p>Like other components, this one can also be installed as a service or pod running on <strong>masters</strong>.</p>
+<p><img decoding="async" loading="lazy" alt="Alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-12-27dd7b10b62e502b61c44bd9a1b3dd35.png" width="1001" height="523" class="img_ev3q"></p>
+<p><img decoding="async" loading="lazy" alt="Alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-13-016e89ec597eea5e83f471104f0e51ea.png" width="817" height="267" class="img_ev3q"></p>
+<p><img decoding="async" loading="lazy" alt="Alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-14-0c237800b5a8f6e24cb04a23dfa51537.png" width="814" height="304" class="img_ev3q"></p>
+<p><img decoding="async" loading="lazy" alt="Alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-15-c74adc24fa63af1010e4057a44390afa.png" width="810" height="364" class="img_ev3q"></p>
+<p>We can activate, deactivate and change configurations using the files above.</p>
+      <div class="docs-pager">
+        <a href="../../../../#blogs">All blogs</a>
+        <a href="../">Back to CKA</a>
+      </div>
+    </article>
+    <aside class="docs-toc">
+      <div class="docs-toc-title">On this page</div>
+      <nav>
+        <a href="#node-controller">Node Controller</a>
+        <a href="#replication-controller">Replication Controller</a>
+      </nav>
+    </aside>
+  </div>
+  <script src="../../../../js/docs.js"></script>
+</body>
+</html>

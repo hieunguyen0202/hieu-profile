@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Taints and Tolerations — Hieu Nguyen</title>
+  <meta name="description" content="Taints and Tolerations — Kubestronaut roadmap.">
+  <link rel="icon" href="../../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../../">i'm<span>.hieu</span></a>
+    <nav class="docs-series">
+      <a href="../../../../blog/web-security/">Web Security</a>
+      <a class="active" href="../../">Kubestronaut roadmap</a>
+    </nav>
+    <nav class="docs-cert-tabs"><a href="../../cka/" class="active">CKA</a><a href="../../ckad/" class="">CKAD</a><a href="../../cks/" class="">CKS</a></nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-nav="kubestronaut" data-cert="cka" data-docs-root="../" data-active="taint-tolerations">
+      <div class="docs-nav-label">CKA</div>
+      <ul class="docs-nav" id="docsNav"></ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../../">Home</a>
+        <span>›</span>
+        <a href="../../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../../">Kubestronaut</a>
+        <span>›</span>
+        <a href="../">CKA</a>
+        <span>›</span>
+        <span>Taints and Tolerations</span>
+      </div>
+      <div id="top"></div>
+<header><h1>Taints and Tolerations</h1></header><p>Taints are applied to Nodes and Tolerations are applied to Pods.</p>
+<p>Taints work on Nodes to prevent Pods from entering those Nodes, but if a Pod has a Toleration for this Taint, it <strong>can</strong> be scheduled to Nodes with the respective Taint.</p>
+<p>Let&#x27;s think of a Taint as repellent for the Node and Pods as different types of insects. We have repellents that work for some insects but not for others. If an insect (Pod) is immune (tolerates) to this repellent, it can reach (bite) the Nodes that use the repellent (Taint).</p>
+<p>Another analogy we can make is that Taints are locks and only Pods that have the keys (Tolerations) can open and enter. This lock has nothing to do with security or intrusion, it&#x27;s just a restriction between Pods and Nodes.</p>
+<blockquote>
+<p>A Pod that has a Toleration for a Taint is <code>possible</code> to be scheduled to the Node with this Taint, but this doesn&#x27;t guarantee it will happen. If there&#x27;s another Node without any Taint that&#x27;s better suited to receive the Pod, that one might be chosen. <code>It would only be guaranteed for a Pod to enter a Node with a Taint if all Nodes in the cluster had different Taints and the Pod had the Toleration for the specific Node</code>. Other resources exist to configure this guarantee.</p>
+</blockquote>
+<p>We can use Taints to separate:</p>
+<ul>
+<li>Nodes by environments</li>
+<li>Nodes by application type, for example, applications that require graphics processing would be better executed on Nodes with graphics cards.</li>
+</ul>
+<p>Taints can have any key-value set on the Node, just like Labels, but if a Taint exists, it needs to have an effect of what happens to a Pod if it doesn&#x27;t have the Toleration, and there are 3 possible values:</p>
+<ul>
+<li><code>NoSchedule</code>: If a Taint has this effect, <strong>new Pods</strong> should only be scheduled to this Node if they have the respective Toleration for the Taint.</li>
+<li><code>PreferNoSchedule</code>: Makes a preference not to schedule, but if there&#x27;s no space on other Nodes for a Pod, it can be scheduled.</li>
+<li><code>NoExecute</code>: Any Pod that doesn&#x27;t have this Toleration should not be scheduled and Pods that are on the Node without the Toleration should be removed.</li>
+</ul>
+<p>To apply a Taint to a Node, we need to execute the command <code>kubectl taint nodes node_name key=values:taint-effect</code>.</p>
+<pre><code class="language-bash"># Create Taint
+kubectl taint node k3d-k3d-cluster-server-0 app=test:NoSchedule
+# Remove Taint is the same command with - at the end
+kubectl taint node k3d-k3d-cluster-server-0 app=test:NoSchedule-
+</code></pre>
+<blockquote>
+<p>A BEST PRACTICE, AND RECOMMENDED, IS NOT TO DEPLOY APPLICATIONS ON MASTER NODES. THEREFORE, IT&#x27;S IMPORTANT THAT MASTER NODES HAVE A TAINT THAT NO POD TOLERATES WITH THE NoExecute EFFECT.</p>
+</blockquote>
+<p>In the Pod, to apply a Toleration, it&#x27;s necessary to include the desired configurations within the <code>tolerations</code> field in the Pod specification.</p>
+<pre><code class="language-yaml">apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx
+spec:
+  containers:
+  - name: nginx
+    image: nginx
+  tolerations:
+  - key: app
+    operator: Equal
+    value: test
+    effect: NoSchedule
+</code></pre>
+<p>For the example above, no Node has a Taint, but the Pod will have a Toleration.</p>
+<pre><code class="language-bash">kubectl apply -f pod-toleration.yaml
+pod/nginx created
+
+## In this sequence below, once it was created on the server, another time on agent2, meaning it doesn&#x27;t change anything
+kubectl get pods -o wide
+NAME    READY   STATUS    RESTARTS   AGE     IP          NODE                       NOMINATED NODE   READINESS GATES
+nginx   1/1     Running   0          4m20s   10.42.3.3   k3d-k3d-cluster-server-0   &lt;none&gt;           &lt;none&gt;
+
+kubectl delete pod nginx
+pod &quot;nginx&quot; deleted
+
+kubectl apply -f pod-toleration.yaml
+pod/nginx created
+
+kubectl get pods -o wide
+NAME    READY   STATUS              RESTARTS   AGE   IP       NODE                      NOMINATED NODE   READINESS GATES
+nginx   1/1     Running   0          4m20s   10.42.3.3   k3d-k3d-cluster-agent-1   &lt;none&gt;           &lt;none&gt;
+
+kubectl delete pod nginx
+pod &quot;nginx&quot; deleted
+
+NAME                       STATUS   ROLES                  AGE   VERSION        INTERNAL-IP   EXTERNAL-IP   OS-IMAGE   KERNEL-VERSION     CONTAINER-RUNTIME
+k3d-k3d-cluster-agent-2    Ready    &lt;none&gt;                 70d   v1.27.4+k3s1   172.18.0.2    &lt;none&gt;        K3s dev    6.2.0-39-generic   containerd://1.7.1-k3s1
+k3d-k3d-cluster-server-0   Ready    control-plane,master   70d   v1.27.4+k3s1   172.18.0.4    &lt;none&gt;        K3s dev    6.2.0-39-generic   containerd://1.7.1-k3s1
+k3d-k3d-cluster-agent-1    Ready    &lt;none&gt;                 70d   v1.27.4+k3s1   172.18.0.3    &lt;none&gt;        K3s dev    6.2.0-39-generic   containerd://1.7.1-k3s1
+k3d-k3d-cluster-agent-0    Ready    &lt;none&gt;                 70d   v1.27.4+k3s1   172.18.0.5    &lt;none&gt;        K3s dev    6.2.0-39-generic   containerd://1.7.1-k3s1
+
+## Let&#x27;s apply Taints to the server Node, agent0, agent1, but not the same ones as the Pod&#x27;s Toleration
+kubectl taint node k3d-k3d-cluster-server-0 run=test:NoSchedule
+node/k3d-k3d-cluster-server-0 tainted
+kubectl taint node k3d-k3d-cluster-agent-0 run=test:NoSchedule
+node/k3d-k3d-cluster-agent-0 tainted
+kubectl taint node k3d-k3d-cluster-agent-1 run=test:NoSchedule
+node/k3d-k3d-cluster-agent-1 tainted
+
+# Note that it went to agent2
+kubectl get pods -o wide
+NAME    READY   STATUS    RESTARTS   AGE   IP           NODE                      NOMINATED NODE   READINESS GATES
+nginx   1/1     Running   0          7s    10.42.2.48   k3d-k3d-cluster-agent-2   &lt;none&gt;           &lt;none&gt;
+
+# Applying a Taint to agent2 to not schedule and already remove those without the Toleration
+kubectl taint node k3d-k3d-cluster-agent-2 run=test:NoExecute
+node/k3d-k3d-cluster-agent-2 tainted
+
+kubectl get pods -o wide
+No resources found in default namespace. # The Pod disappeared and didn&#x27;t come back because it doesn&#x27;t have a ReplicaSet
+
+kubectl apply -f pod-toleration.yaml
+pod/nginx created
+kubectl get pods -o wide
+NAME    READY   STATUS    RESTARTS   AGE   IP       NODE     NOMINATED NODE   READINESS GATES
+nginx   0/1     Pending   0          56s   &lt;none&gt;   &lt;none&gt;   &lt;none&gt;           &lt;none&gt;
+
+kubectl describe pods nginx
+Name:             nginx
+Namespace:        default
+Priority:         0
+Service Account:  default
+Node:             &lt;none&gt;
+Labels:           &lt;none&gt;
+Annotations:      &lt;none&gt;
+Status:           Pending
+IP:
+IPs:              &lt;none&gt;
+Containers:
+  nginx:
+    Image:        nginx
+    Port:         &lt;none&gt;
+    Host Port:    &lt;none&gt;
+    Environment:  &lt;none&gt;
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-2nh84 (ro)
+Conditions:
+  Type           Status
+  PodScheduled   False
+Volumes:
+  kube-api-access-2nh84:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    ConfigMapOptional:       &lt;nil&gt;
+    DownwardAPI:             true
+QoS Class:                   BestEffort
+Node-Selectors:              &lt;none&gt;
+Tolerations:                 app=test:NoSchedule
+                             node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+## See that there&#x27;s no available Node
+Events:
+  Type     Reason            Age    From               Message
+  ----     ------            ----   ----               -------
+  Warning  FailedScheduling  3m22s  default-scheduler  0/4 nodes are available: 4 node(s) had untolerated taint {run: test}. preemption: 0/4 nodes are available: 4 Preemption is not helpful for scheduling..
+
+## Now let&#x27;s apply to agent1 the Taint that the Pod has the Toleration for
+files git:(main) ✗ kubectl taint node k3d-k3d-cluster-agent-1 app=test:NoSchedule
+node/k3d-k3d-cluster-agent-1 tainted
+
+# And why didn&#x27;t it enter and is still pending? Because it would need to tolerate both Taints, so let&#x27;s remove the first one
+kubectl get pods -o wide
+NAME    READY   STATUS    RESTARTS   AGE     IP       NODE     NOMINATED NODE   READINESS GATES
+nginx   0/1     Pending   0          5m19s   &lt;none&gt;   &lt;none&gt;   &lt;none&gt;           &lt;none&gt;
+
+# Removing the Taint that the Pod doesn&#x27;t support
+kubectl taint node k3d-k3d-cluster-agent-1 run=test:NoSchedule-
+node/k3d-k3d-cluster-agent-1 untainted
+
+kubectl get pods -o wide
+NAME    READY   STATUS    RESTARTS   AGE     IP           NODE                      NOMINATED NODE   READINESS GATES
+nginx   1/1     Running   0          6m36s   10.42.1.36   k3d-k3d-cluster-agent-1   &lt;none&gt;           &lt;none&gt;
+</code></pre>
+<p>Of course, we could have added one more Toleration since it&#x27;s a list in the Pod, but this was just to illustrate.</p>
+<p><img decoding="async" loading="lazy" alt="Alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-6-cad0fb5dee58f5bbab288cc0c28a159b.png" width="352" height="416" class="img_ev3q"></p>
+<p>DaemonSets are specified to place one Pod on each Node, but a DaemonSet also respects Taints. If it doesn&#x27;t support the Taints, it won&#x27;t enter the Node.</p>
+      <div class="docs-pager">
+        <a href="../../../../#blogs">All blogs</a>
+        <a href="../">Back to CKA</a>
+      </div>
+    </article>
+    <aside class="docs-toc">
+      <div class="docs-toc-title">On this page</div>
+      <nav>
+        <a href="#top">On this page</a>
+      </nav>
+    </aside>
+  </div>
+  <script src="../../../../js/docs.js"></script>
+</body>
+</html>

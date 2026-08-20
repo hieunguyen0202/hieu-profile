@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Component Bootstraps — Hieu Nguyen</title>
+  <meta name="description" content="Component Bootstraps — Kubestronaut roadmap.">
+  <link rel="icon" href="../../../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../../../">i'm<span>.hieu</span></a>
+    <nav class="docs-series">
+      <a href="../../../../../blog/web-security/">Web Security</a>
+      <a class="active" href="../../../">Kubestronaut roadmap</a>
+    </nav>
+    <nav class="docs-cert-tabs"><a href="../../../cka/" class="active">CKA</a><a href="../../../ckad/" class="">CKAD</a><a href="../../../cks/" class="">CKS</a></nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-nav="kubestronaut" data-cert="cka" data-docs-root="../../" data-active="hardway-install/bootstraps">
+      <div class="docs-nav-label">CKA</div>
+      <ul class="docs-nav" id="docsNav"></ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../../../">Home</a>
+        <span>›</span>
+        <a href="../../../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../../../">Kubestronaut</a>
+        <span>›</span>
+        <a href="../../">CKA</a>
+        <span>›</span>
+        <span>Component Bootstraps</span>
+      </div>
+      <div id="top"></div>
+<header><h1>Component Bootstraps</h1></header><p>Masters, workers and ETCDs have different components, but some similar ones. Let&#x27;s start with the similar ones first that must be executed on all masters and workers.</p>
+<p>During the Vagrant machine provisioning process we can call these scripts. All must be available in shared_files.</p>
+<p>Kubernetes nodes need to have swap and firewall disabled and some modules loaded. We also need to install the container runtime, CNI, kubectl, and others.</p>
+<p>Create the script below with the name <strong>bootstrap_nodes.sh</strong> and have it available in the shared_files folder.</p>
+<pre><code class="language-bash">echo -e &quot;\n##### Disabling swap #####&quot;
+sudo sed -i &#x27;/swap/d&#x27; /etc/fstab
+sudo swapoff -a
+
+echo -e &quot;\n##### Disabling firewall #####&quot;
+sudo systemctl disable --now ufw &gt;/dev/null 2&gt;&amp;1
+
+echo -e &quot;\n##### Enabling kernel modules required for Containerd #####&quot;
+cat &lt;&lt;EOF | sudo tee /etc/modules-load.d/k8s.conf
+overlay
+br_netfilter
+EOF
+
+sudo modprobe overlay
+sudo modprobe br_netfilter
+
+# sysctl params required by setup, params persist across reboots
+cat &lt;&lt;EOF | sudo tee /etc/sysctl.d/k8s.conf
+net.bridge.bridge-nf-call-iptables  = 1
+net.bridge.bridge-nf-call-ip6tables = 1
+net.ipv4.ip_forward                 = 1
+EOF
+
+# Apply sysctl params without reboot
+sudo sysctl --system
+
+echo -e &quot;\n##### Check Modules #####&quot;
+lsmod | grep br_netfilter
+lsmod | grep overlay
+sysctl net.bridge.bridge-nf-call-iptables net.bridge.bridge-nf-call-ip6tables net.ipv4.ip_forward
+
+sudo mkdir -p /var/lib/kubernetes/
+
+echo -e &quot;\n##### Installing Container Runtime Interface #####&quot;
+echo -e &quot;\n##### 1 - Adding kubernetes repository #####&quot;
+sudo mkdir -p /etc/apt/keyrings
+
+KUBE_LATEST=$(curl -L -s https://dl.k8s.io/release/stable.txt | awk &#x27;BEGIN { FS=&quot;.&quot; } { printf &quot;%s.%s&quot;, $1, $2 }&#x27;)
+
+curl -fsSL https://pkgs.k8s.io/core:/stable:/${KUBE_LATEST}/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+echo &quot;deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/${KUBE_LATEST}/deb/ /&quot; | sudo tee /etc/apt/sources.list.d/kubernetes.list
+
+echo -e &quot;\n##### 2 - Installing packages #####&quot;
+sudo apt update
+sudo apt install -y containerd kubernetes-cni kubectl ipvsadm ipset
+
+echo -e &quot;\n##### 3 - Enabling systemd Cgroups in containerd #####&quot;
+sudo cp /etc/containerd/config.toml /etc/containerd/config.toml.default
+containerd config default | sed &#x27;s/SystemdCgroup = false/SystemdCgroup = true/&#x27; | sudo tee /etc/containerd/config.toml
+
+sudo systemctl restart containerd.service
+systemctl status containerd.service
+</code></pre>
+<p>A cluster doesn&#x27;t work without an ETCD. It&#x27;s the key piece where everything will be stored. Let&#x27;s create a bootstrap for it that will be executed on each of the masters. Currently we are using ETCD inside the master itself, but we can have separate machines for this purpose. In an update to this repository I&#x27;ll modify some things to make this possible and make it even harder.</p>
+<pre><code class="language-bash">#!/bin/bash
+
+ETCD_VERSION=&quot;v3.5.12&quot;
+INTERNAL_IP=&quot;$(ip addr show enp0s8 | grep &quot;inet &quot; | awk &#x27;{print $2}&#x27; | cut -d / -f 1)&quot; # IP OF THE MACHINE ITSELF INSTALLING ETCD
+MASTER1_IP=$(dig +short master1)
+MASTER2_IP=$(dig +short master2)
+MASTER3_IP=$(dig +short master3)
+ETCD_NAME=$(hostname -s)
+CA_CERTIFICATE_KUBERNETES=ca
+CA_CERTIFICATE_ETCD=ca
+ETCD_SERVER_CERTIFICATE=etcd-server
+
+echo -e &quot;\n##### Downloading ETCD binaries #####&quot;
+wget -q --show-progress --https-only --timestamping \
+  &quot;https://github.com/coreos/etcd/releases/download/${ETCD_VERSION}/etcd-${ETCD_VERSION}-linux-amd64.tar.gz&quot;
+tar -xvf etcd-${ETCD_VERSION}-linux-amd64.tar.gz
+sudo mv etcd-${ETCD_VERSION}-linux-amd64/etcd* /usr/local/bin/
+rm -rf etcd-${ETCD_VERSION}-linux-amd64*
+
+echo -e &quot;\n##### Creating directories used by ETCD #####&quot;
+sudo mkdir -p /etc/etcd /var/lib/etcd /var/lib/kubernetes/pki
+cd /vagrant/shared_files/pki
+
+echo -e &quot;\n##### Copying certificates used by ETCD #####&quot;
+sudo cp ${ETCD_SERVER_CERTIFICATE}.key ${ETCD_SERVER_CERTIFICATE}.crt /etc/etcd/
+sudo cp ${CA_CERTIFICATE_KUBERNETES}.crt /var/lib/kubernetes/pki/
+sudo chown root:root /etc/etcd/*
+sudo chmod 600 /etc/etcd/*
+sudo chown root:root /var/lib/kubernetes/pki/*
+sudo chmod 600 /var/lib/kubernetes/pki/*
+sudo ln -s /var/lib/kubernetes/pki/${CA_CERTIFICATE_KUBERNETES}.crt /etc/etcd/${CA_CERTIFICATE_KUBERNETES}.crt
+
+echo -e &quot;\n##### Creating service for ETCD #####&quot;
+cat &lt;&lt;EOF | sudo tee /etc/systemd/system/etcd.service
+[Unit]
+Description=etcd
+Documentation=https://github.com/coreos
+
+[Service]
+ExecStart=/usr/local/bin/etcd \\
+  --name ${ETCD_NAME} \\
+  --cert-file=/etc/etcd/${ETCD_SERVER_CERTIFICATE}.crt  \\
+  --key-file=/etc/etcd/${ETCD_SERVER_CERTIFICATE}.key \\
+  --peer-cert-file=/etc/etcd/${ETCD_SERVER_CERTIFICATE}.crt \\
+  --peer-key-file=/etc/etcd/${ETCD_SERVER_CERTIFICATE}.key \\
+  --trusted-ca-file=/etc/etcd/${CA_CERTIFICATE_KUBERNETES}.crt\\
+  --peer-trusted-ca-file=/etc/etcd/${CA_CERTIFICATE_ETCD}.crt\\
+  --peer-client-cert-auth \\
+  --client-cert-auth \\
+  --initial-advertise-peer-urls https://${INTERNAL_IP}:2380 \\
+  --listen-peer-urls https://${INTERNAL_IP}:2380 \\
+  --listen-client-urls https://${INTERNAL_IP}:2379,https://127.0.0.1:2379 \\
+  --advertise-client-urls https://${INTERNAL_IP}:2379 \\
+  --initial-cluster-token etcd-cluster-0 \\
+  --initial-cluster master1=https://${MASTER1_IP}:2380,master2=https://${MASTER2_IP}:2380,master3=https://${MASTER3_IP}:2380 \\
+  --initial-cluster-state new \\
+  --data-dir=/var/lib/etcd
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+sudo systemctl daemon-reload
+sudo systemctl enable etcd
+sudo systemctl start etcd
+
+echo -e &quot;\n##### Verifying ETCD #####&quot;
+sudo ETCDCTL_API=3 etcdctl member list \
+  --endpoints=https://127.0.0.1:2379 \
+  --cacert=/etc/etcd/ca.crt \
+  --cert=/etc/etcd/etcd-server.crt \
+  --key=/etc/etcd/etcd-server.key || true
+</code></pre>
+<p>Now let&#x27;s move on to bootstrapping the control-plane components that should be on the masters. The control-plane components will be executed as services instead of pods. In the future I may improve this documentation to install via pod.</p>
+<p>Before creating the services we copy all certificates to the right places and create the services using these certificates. Finally we check if everything is running accordingly.</p>
+<pre><code class="language-bash">#!/bin/bash
+echo -e &quot;\n##### Downloading control-plane binaries #####&quot;
+
+KUBE_VERSION=$(curl -L -s https://dl.k8s.io/release/stable.txt)
+#https://kubernetes.io/releases/download/#binaries
+wget -q --show-progress --https-only --timestamping \
+  &quot;https://dl.k8s.io/release/${KUBE_VERSION}/bin/linux/amd64/kube-apiserver&quot; \
+  &quot;https://dl.k8s.io/release/${KUBE_VERSION}/bin/linux/amd64/kube-controller-manager&quot; \
+  &quot;https://dl.k8s.io/release/${KUBE_VERSION}/bin/linux/amd64/kube-scheduler&quot; \
+  &quot;https://dl.k8s.io/release/${KUBE_VERSION}/bin/linux/amd64/kubectl&quot;
+
+chmod +x kube-apiserver kube-controller-manager kube-scheduler kubectl
+sudo mv kube-apiserver kube-controller-manager kube-scheduler kubectl /usr/local/bin/
+
+CA_CERT_NAME=ca
+KUBE_APISERVER_CERT_NAME=kube-apiserver
+KUBE_APISERVER_CLIENT_CERT_NAME=apiserver-kubelet-client
+KUBE_CONTROLLER_MANAGER_CERT_NAME=kube-controller-manager
+KUBE_SCHEDULER_CERT_NAME=kube-scheduler
+ETCD_CERT_NAME=etcd-server
+SERVICE_ACCOUNT=service-account
+
+echo -e &quot;\n##### Putting certificates in the correct places #####&quot;
+sudo mkdir -p /var/lib/kubernetes/pki
+cd /vagrant/shared_files/pki
+
+sudo cp ${CA_CERT_NAME}.* /var/lib/kubernetes/pki/
+sudo cp ${KUBE_APISERVER_CERT_NAME}.* /var/lib/kubernetes/pki/
+sudo cp ${KUBE_APISERVER_CLIENT_CERT_NAME}.* /var/lib/kubernetes/pki/
+sudo cp ${KUBE_CONTROLLER_MANAGER_CERT_NAME}.* /var/lib/kubernetes/pki/
+sudo cp ${KUBE_SCHEDULER_CERT_NAME}.* /var/lib/kubernetes/pki/
+sudo cp ${ETCD_CERT_NAME}.* /var/lib/kubernetes/pki/
+sudo cp ${SERVICE_ACCOUNT}.* /var/lib/kubernetes/pki/
+
+sudo chown root:root /var/lib/kubernetes/pki/*
+sudo chmod 600 /var/lib/kubernetes/pki/*
+
+echo -e &quot;\n##### Putting kubeconfigs in the correct places #####&quot;
+sudo mkdir -p /var/lib/kubernetes/
+cd /vagrant/shared_files/kubeconfigs
+
+sudo cp ${CA_CERT_NAME}.kubeconfig /var/lib/kubernetes/
+sudo cp ${KUBE_APISERVER_CERT_NAME}.kubeconfig /var/lib/kubernetes/
+sudo cp ${KUBE_APISERVER_CLIENT_CERT_NAME}.kubeconfig /var/lib/kubernetes/
+sudo cp ${KUBE_CONTROLLER_MANAGER_CERT_NAME}.kubeconfig /var/lib/kubernetes/
+sudo cp ${KUBE_SCHEDULER_CERT_NAME}.kubeconfig /var/lib/kubernetes/
+sudo cp ${ETCD_CERT_NAME}.kubeconfig /var/lib/kubernetes/
+sudo cp ${SERVICE_ACCOUNT}.kubeconfig /var/lib/kubernetes/
+
+sudo chmod 600 /var/lib/kubernetes/*.kubeconfig
+
+INTERNAL_IP=$(ip addr show enp0s8 | grep &quot;inet &quot; | awk &#x27;{print $2}&#x27; | cut -d / -f 1)
+LOADBALANCER=$(dig +short loadbalancer)
+
+MASTER1_IP=$(dig +short master1)
+MASTER2_IP=$(dig +short master2)
+MASTER3_IP=$(dig +short master3)
+
+POD_CIDR=10.244.0.0/16
+SERVICE_CIDR=10.96.0.0/16
+
+############################ KUBE-APISERVER ##########################################
+echo -e &quot;\n##### Creating service for kube-apiserver #####&quot;
+echo -e &quot;\n##### Copying encryption-config.yaml to the right place #####&quot;
+
+cd /vagrant/shared_files/
+sudo cp encryption-config.yaml /var/lib/kubernetes/
+
+cat &lt;&lt;EOF | sudo tee /etc/systemd/system/kube-apiserver.service
+[Unit]
+Description=Kubernetes API Server
+Documentation=https://github.com/kubernetes/kubernetes
+
+[Service]
+ExecStart=/usr/local/bin/kube-apiserver \\
+  --advertise-address=${INTERNAL_IP} \\
+  --allow-privileged=true \\
+  --apiserver-count=3 \\
+  --audit-log-maxage=30 \\
+  --audit-log-maxbackup=3 \\
+  --audit-log-maxsize=100 \\
+  --audit-log-path=/var/log/audit.log \\
+  --authorization-mode=Node,RBAC \\
+  --bind-address=0.0.0.0 \\
+  --client-ca-file=/var/lib/kubernetes/pki/${CA_CERT_NAME}.crt \\
+  --enable-admission-plugins=NodeRestriction,ServiceAccount \\
+  --enable-bootstrap-token-auth=true \\
+  --etcd-cafile=/var/lib/kubernetes/pki/${CA_CERT_NAME}.crt \\
+  --etcd-certfile=/var/lib/kubernetes/pki/${ETCD_CERT_NAME}.crt \\
+  --etcd-keyfile=/var/lib/kubernetes/pki/${ETCD_CERT_NAME}.key \\
+  --etcd-servers=https://${MASTER1_IP}:2379,https://${MASTER2_IP}:2379,https://${MASTER3_IP}:2379 \\
+  --event-ttl=1h \\
+  --encryption-provider-config=/var/lib/kubernetes/encryption-config.yaml \\
+  --kubelet-certificate-authority=/var/lib/kubernetes/pki/${CA_CERT_NAME}.crt \\
+  --kubelet-client-certificate=/var/lib/kubernetes/pki/${KUBE_APISERVER_CLIENT_CERT_NAME}.crt \\
+  --kubelet-client-key=/var/lib/kubernetes/pki/${KUBE_APISERVER_CLIENT_CERT_NAME}.key \\
+  --runtime-config=api/all=true \\
+  --service-account-key-file=/var/lib/kubernetes/pki/${SERVICE_ACCOUNT}.crt \\
+  --service-account-signing-key-file=/var/lib/kubernetes/pki/${SERVICE_ACCOUNT}.key \\
+  --service-account-issuer=https://${LOADBALANCER}:6443 \\
+  --service-cluster-ip-range=${SERVICE_CIDR} \\
+  --service-node-port-range=30000-32767 \\
+  --tls-cert-file=/var/lib/kubernetes/pki/${KUBE_APISERVER_CERT_NAME}.crt \\
+  --tls-private-key-file=/var/lib/kubernetes/pki/${KUBE_APISERVER_CERT_NAME}.key \\
+  --v=2
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+############################ KUBE-CONTROLLER-MANAGER ##########################################
+echo -e &quot;\n##### Creating service for kube-controller-manager #####&quot;
+cd /vagrant/shared_files/kubeconfigs
+sudo cp ${KUBE_CONTROLLER_MANAGER_CERT_NAME}.kubeconfig /var/lib/kubernetes/
+
+cat &lt;&lt;EOF | sudo tee /etc/systemd/system/kube-controller-manager.service
+[Unit]
+Description=Kubernetes Controller Manager
+Documentation=https://github.com/kubernetes/kubernetes
+
+[Service]
+ExecStart=/usr/local/bin/kube-controller-manager \\
+  --allocate-node-cidrs=true \\
+  --authentication-kubeconfig=/var/lib/kubernetes/${KUBE_CONTROLLER_MANAGER_CERT_NAME}.kubeconfig \\
+  --authorization-kubeconfig=/var/lib/kubernetes/${KUBE_CONTROLLER_MANAGER_CERT_NAME}.kubeconfig \\
+  --bind-address=127.0.0.1 \\
+  --client-ca-file=/var/lib/kubernetes/pki/${CA_CERT_NAME}.crt \\
+  --cluster-cidr=${POD_CIDR} \\
+  --cluster-name=kubernetes \\
+  --cluster-signing-cert-file=/var/lib/kubernetes/pki/${CA_CERT_NAME}.crt \\
+  --cluster-signing-key-file=/var/lib/kubernetes/pki/${CA_CERT_NAME}.key \\
+  --controllers=*,bootstrapsigner,tokencleaner \\
+  --kubeconfig=/var/lib/kubernetes/${KUBE_CONTROLLER_MANAGER_CERT_NAME}.kubeconfig \\
+  --leader-elect=true \\
+  --node-cidr-mask-size=24 \\
+  --requestheader-client-ca-file=/var/lib/kubernetes/pki/${CA_CERT_NAME}.crt \\
+  --root-ca-file=/var/lib/kubernetes/pki/${CA_CERT_NAME}.crt \\
+  --service-account-private-key-file=/var/lib/kubernetes/pki/${SERVICE_ACCOUNT}.key \\
+  --service-cluster-ip-range=${SERVICE_CIDR} \\
+  --use-service-account-credentials=true \\
+  --v=2
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+############################### KUBE-SCHEDULER #############################################
+echo -e &quot;\n##### Creating service for kube-scheduler #####&quot;
+cd /vagrant/shared_files/kubeconfigs
+sudo cp ${KUBE_SCHEDULER_CERT_NAME}.kubeconfig /var/lib/kubernetes/
+
+cat &lt;&lt;EOF | sudo tee /etc/systemd/system/kube-scheduler.service
+[Unit]
+Description=Kubernetes Scheduler
+Documentation=https://github.com/kubernetes/kubernetes
+
+[Service]
+ExecStart=/usr/local/bin/kube-scheduler \\
+  --kubeconfig=/var/lib/kubernetes/${KUBE_SCHEDULER_CERT_NAME}.kubeconfig \\
+  --leader-elect=true \\
+  --v=2
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+############################### START COMPONENTS #############################################
+echo -e &quot;\n##### Starting APISERVER CONTROLLER-MANAGER SCHEDULER components #####&quot;
+
+sudo systemctl daemon-reload
+sudo systemctl enable kube-apiserver kube-controller-manager kube-scheduler
+sudo systemctl start kube-apiserver kube-controller-manager kube-scheduler
+
+echo -e &quot;\n##### Checking component status #####&quot;
+cd ~
+cp /vagrant/shared_files/kubeconfigs/admin.kubeconfig .
+kubectl get componentstatuses --kubeconfig admin.kubeconfig
+</code></pre>
+<p>In the case of workers we can work in a different way. Instead of creating certificates.</p>
+      <div class="docs-pager">
+        <a href="../../../../../#blogs">All blogs</a>
+        <a href="../../">Back to CKA</a>
+      </div>
+    </article>
+    <aside class="docs-toc">
+      <div class="docs-toc-title">On this page</div>
+      <nav>
+        <a href="#top">On this page</a>
+      </nav>
+    </aside>
+  </div>
+  <script src="../../../../../js/docs.js"></script>
+</body>
+</html>

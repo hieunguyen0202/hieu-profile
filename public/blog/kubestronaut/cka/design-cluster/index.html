@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Design Kubernetes Cluster — Hieu Nguyen</title>
+  <meta name="description" content="Design Kubernetes Cluster — Kubestronaut roadmap.">
+  <link rel="icon" href="../../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../../">i'm<span>.hieu</span></a>
+    <nav class="docs-series">
+      <a href="../../../../blog/web-security/">Web Security</a>
+      <a class="active" href="../../">Kubestronaut roadmap</a>
+    </nav>
+    <nav class="docs-cert-tabs"><a href="../../cka/" class="active">CKA</a><a href="../../ckad/" class="">CKAD</a><a href="../../cks/" class="">CKS</a></nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-nav="kubestronaut" data-cert="cka" data-docs-root="../" data-active="design-cluster">
+      <div class="docs-nav-label">CKA</div>
+      <ul class="docs-nav" id="docsNav"></ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../../">Home</a>
+        <span>›</span>
+        <a href="../../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../../">Kubestronaut</a>
+        <span>›</span>
+        <a href="../">CKA</a>
+        <span>›</span>
+        <span>Design Kubernetes Cluster</span>
+      </div>
+      <div id="top"></div>
+<header><h1>Design Kubernetes Cluster</h1></header><p>We can install Kubernetes in several ways. Which one is ideal for what you want to do?</p>
+<p>Let&#x27;s put some questions on the table.</p>
+<h2 id="cluster-purpose">Cluster Purpose</h2>
+<p><strong>What is the purpose of this cluster?</strong> WHY?</p>
+<ul>
+<li>Learning?
+<ul>
+<li>If you&#x27;re just starting and it&#x27;s your first time, you can use minikube which simulates a single node master cluster and we can deploy pods within the master itself.</li>
+<li>A great option is kind which creates nodes as containers on your local machine. It avoids creating VMs and we can simulate more master and worker nodes.</li>
+</ul>
+</li>
+<li>Development?
+<ul>
+<li>In a development environment, 1 master and several workers is a typical scenario.</li>
+<li>A bare metal cluster can be a great choice to reduce costs.</li>
+<li>Setup with kubeadm or kubespray would be an easy way to do it.</li>
+</ul>
+</li>
+<li>Production?
+<ul>
+<li>Multiple masters, at least 3.</li>
+<li>Can be provisioned with kubespray, kops, kubeadm, or using cloud-managed solutions which I actually consider the best option when possible.</li>
+</ul>
+</li>
+</ul>
+<p><a href="https://kubernetes.io/docs/setup/best-practices/cluster-large/" target="_blank" rel="noopener noreferrer">https://kubernetes.io/docs/setup/best-practices/cluster-large/</a></p>
+<p>Kubernetes supports up to 5000 nodes
+150000 pods in the cluster
+300000 total containers
+100 pods per node.</p>
+<h2 id="cluster-sizing">Cluster Sizing</h2>
+<p>There is an optimal balance between CPU and memory to avoid bottlenecks. Of course, each type of application can vary in resources. An application with heavy CPU usage and little memory or vice versa deviates from the standard and needs to be analyzed.</p>
+<p>If you have too much CPU and too little memory, the system may sit idle waiting for data to be fetched from memory. Similarly, if you have too much memory and too little CPU, the system may not be able to process data quickly enough.</p>
+<p>For general purposes, if you don&#x27;t yet know what will be built, think of at least 1 CPU for every 4GB RAM.</p>
+<p>Another important point is how many worker nodes you plan to have. Is it better to have many nodes with fewer resources or fewer nodes with more resources?</p>
+<p>Every time we have a daemonset that runs a pod on each node mandatorily, if you have many nodes, you&#x27;ll also lose a lot of resources. Every time a node comes up, if it&#x27;s very small, it has already lost part of its RAM to run the operating system. We need to find an ideal point where the application runs in high availability.</p>
+<p>I believe that at least 2 worker nodes is ideal to start with high availability. Some resources in Kubernetes would ideally have at least 3 worker nodes which would be the best scenario.</p>
+<p>To understand which sizing option to select, consider the pros and cons.</p>
+<p>Instance pricing: Generally, you can assume that the instance cost per CPU/RAM is linear across major cloud platforms.</p>
+<p>When determining your cluster capacity, there are many ways to approach node sizing. For example, if you calculated a cluster size of 16 CPU and 64 GB of RAM, you could divide the node size into these options:</p>
+<p>2 nodes: 8 CPU / 32 GB RAM
+4 nodes: 4 CPU / 16 GB RAM
+8 nodes: 2 CPU / 8 GB RAM
+16 nodes: 1 CPU / 4 GB RAM</p>
+<hr>
+<h3 id="fewer-larger-nodes">Fewer Larger Nodes</h3>
+<p>Pros</p>
+<p>If you have applications that use a lot of CPU or RAM, having larger nodes can ensure your application has sufficient resources.</p>
+<p>Cons
+High availability is difficult to achieve with a minimum set of nodes. If your application has 50 pods on two nodes (25 pods per node) and one node goes down, you&#x27;ll lose 50% of your service.</p>
+<p>Scaling: when autoscaling the cluster, the increment size becomes larger, which can result in provisioning more hardware than necessary.</p>
+<h3 id="more-smaller-nodes">More Smaller Nodes</h3>
+<p>Pros</p>
+<ul>
+<li>High availability is easier to maintain. If you have 50 instances with two pods per node (25 nodes) and one node goes down, you&#x27;ll reduce your service capacity by only 4%.</li>
+</ul>
+<p>Cons</p>
+<ul>
+<li>More system overhead to manage all the nodes.</li>
+<li>Possible underutilization, as nodes may be too small to add additional services.</li>
+<li>A simple daemonset like Prometheus node exporter would have 50 pods in this case.</li>
+</ul>
+<h3 id="balance">Balance</h3>
+<p>This scenario would be quite interesting:</p>
+<ul>
+<li>4 nodes with 16GB if applications are larger</li>
+<li>8 nodes with 8GB for smaller applications</li>
+</ul>
+<hr>
+<p><strong>Where will it be created?</strong> WHERE?</p>
+<p><strong>Will it be a cloud cluster?</strong>
+If it&#x27;s in the cloud, make everything easier so you can focus on applications and let the cloud handle the control plane.
+On AWS we have EKS which can be launched with Kops or terraform modules.
+On GCP we have GKE
+On Azure we have AKS.</p>
+<p><strong>Will it be on-premises?</strong>
+kubespray and kubeadm are great tools to help deploy the cluster</p>
+<p>Tips:</p>
+<ul>
+<li>Whenever possible, use SSD storage for higher performance.</li>
+<li>For multiple pods accessing the same storage, prefer Network storage</li>
+<li>Define labels on storage types to facilitate deployment using the correct storage</li>
+<li>Create node selectors to place pods on nodes with better performance for that pod</li>
+<li>Best practice recommends reserving masters to not deploy anything, only Kubernetes components. Ensure a taint is applied to these masters.</li>
+<li>Define dedicated resources for kubelet on each worker node.</li>
+</ul>
+<p><strong>What will we have in the cluster?</strong> WHAT?
+How many applications will be in the cluster?
+What type of applications will be used in the cluster? Resources can vary if it&#x27;s web applications, ephemeral applications, big data, etc.
+Type of resources used by these applications? Intensive CPU or memory usage.
+Will they be network-intensive applications?</p>
+<p>One detail that should be evaluated is having a dedicated ETCD cluster separate from the masters in very large clusters. Only consider this in extremely large clusters. While you can keep etcd with the masters, maintain it.</p>
+<h2 id="kubernetes-infrastructure">Kubernetes Infrastructure</h2>
+<p>We can deploy Kubernetes on our local machine, on dedicated physical machines, in the cloud, on virtualized machines, etc.</p>
+<h2 id="local-and-development">Local and Development</h2>
+<p>On Windows, it&#x27;s not possible to run Kubernetes components directly because there are no binaries available. It&#x27;s necessary to virtualize a Linux machine for this purpose, whether using Hyper-V, VMware, VirtualBox, etc. On Linux, we could simply run all components directly as a service if we wanted.</p>
+<p>Another widely used scenario is using these components as containers. Similarly, Windows doesn&#x27;t run Docker natively; under the hood it creates a VM and runs on Linux.</p>
+<p>But one way or another, you&#x27;ll need to be on Linux, whether virtualized or not. Containers are from the Linux world.</p>
+<p><a href="https://minikube.sigs.k8s.io/docs/start/" target="_blank" rel="noopener noreferrer">Minikube</a> creates a virtual machine with a single-node cluster. It can use various virtualizers like VirtualBox, VMware, Hyper-V, etc.</p>
+<p>I really like the tools <a href="https://kind.sigs.k8s.io/" target="_blank" rel="noopener noreferrer">kind</a> and <a href="https://k3d.io/v5.6.0/" target="_blank" rel="noopener noreferrer">K3D</a> which use Docker in Docker. Containers act &quot;like an operating system with Docker installed&quot; that spins up more containers inside it. <em>Container within container</em>. Creating an idea of NODE. You need to have Docker installed or some container runtime.</p>
+<p>kubeadm expects the machine to already be provisioned. A good scenario is having virtual machines ready to form a cluster with the kubeadm tool, as this binary expects the VMs to be provisioned. It can create single or multiple nodes. Vagrant is a great option to automate the process locally.</p>
+<h2 id="production">Production</h2>
+<p>There are two types of solutions</p>
+<p>Turnkey Solutions</p>
+<p>These are tools or scripts that work to create the cluster. You can provide the necessary VMs and these tools help configure the cluster. You are responsible for maintaining the VMs, applying patches, updates, etc.</p>
+<ul>
+<li>You provision the VMs</li>
+<li>You configure the VMs</li>
+<li>Use tools to deploy the cluster</li>
+<li>You maintain the VMs</li>
+</ul>
+<p>Kubespray and kops would be great examples.</p>
+<p>OpenShift would be an example
+Cloud Foundry Container Runtime
+VMware Cloud PKS
+Vagrant</p>
+<p>Hosted Solutions or Managed Solutions</p>
+<p>These are like Kubernetes as a Service. Usually ready-made solutions from some cloud.</p>
+<ul>
+<li>The provider provisions the VMs</li>
+<li>The provider installs Kubernetes and maintains the VMs</li>
+</ul>
+<p>OpenShift Online
+AKS
+GKE
+EKS</p>
+<h2 id="high-availability">High Availability</h2>
+<p>What happens to the rest of the cluster when we lose the master if we only have one?</p>
+<p>![singlemaster](/docs/kubernetes/certifications/cka/Installation Configuration Validation/pics/singlemaster.gif)</p>
+<p>As long as the workers are working and containers are running, and applications are responding, everything will continue normally until something starts to fail.</p>
+<p>If a container fails, it won&#x27;t come up anymore because we don&#x27;t have the controllers to monitor them and ensure and notify the worker that it needs to load a new pod.</p>
+<p>Access to the cluster through APIs or kubectl will not be possible.</p>
+<p>That&#x27;s why you should consider more master nodes.</p>
+<p>On all master nodes, the same Kubernetes components must run to avoid a single point of failure.</p>
+<p>Similarly, worker nodes with applications. If a worker node running the application stops, all pods will not be available on that node and it will start moving pods to another node, but there will be a downtime until everything is recognized. That&#x27;s why it&#x27;s good to have more workers and define criteria so that replicas of the same pod avoid being on the same node as much as possible.</p>
+<p>Let&#x27;s focus on the master, knowing that we need to have the same components inside them.</p>
+<p>The kube-apiserver works in active-active mode. This means that if we point kubeconfig to any of the master nodes, we&#x27;ll get a response. Ideally, have a load balancer in front of the cluster that will send requests in a balanced way to define which kube-apiserver should respond.</p>
+<p>The other master components (kube-controller-manager, kube-scheduler, etcd) work in active-passive mode. This means that the leader is the one who defines things and the others stay in passive mode checking if the leader is running. If it stops, the passives will take action to become the new leader.</p>
+<p>How does this work?</p>
+<p>Every time active-passive components start, they try to grab the endpoint for the component in question to become the leader.</p>
+<pre><code class="language-yaml">apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    component: kube-controller-manager
+    tier: control-plane
+  name: kube-controller-manager
+  namespace: kube-system
+spec:
+  containers:
+  - command:
+    - kube-controller-manager
+    - --allocate-node-cidrs=true
+    - --authentication-kubeconfig=/etc/kubernetes/controller-manager.conf
+    - --authorization-kubeconfig=/etc/kubernetes/controller-manager.conf
+    - --bind-address=127.0.0.1
+    - --client-ca-file=/etc/kubernetes/pki/ca.crt
+    - --cluster-cidr=10.244.0.0/16
+    - --cluster-name=kind-cluster
+    - --cluster-signing-cert-file=/etc/kubernetes/pki/ca.crt
+    - --cluster-signing-key-file=/etc/kubernetes/pki/ca.key
+    - --controllers=*,bootstrapsigner,tokencleaner
+    - --enable-hostpath-provisioner=true
+    - --kubeconfig=/etc/kubernetes/controller-manager.conf
+    - --leader-elect=true # Leader election enabled
+    - --requestheader-client-ca-file=/etc/kubernetes/pki/front-proxy-ca.crt
+    - --root-ca-file=/etc/kubernetes/pki/ca.crt
+    - --service-account-private-key-file=/etc/kubernetes/pki/sa.key
+    - --service-cluster-ip-range=10.96.0.0/16
+    - --use-service-account-credentials=true
+    image: registry.k8s.io/kube-controller-manager:v1.29.1
+</code></pre>
+<p>Other parameters are default and not specified here</p>
+<ul>
+<li><strong>--leader-elect-lease-duration 15s</strong>: defines the duration that it will be the leader</li>
+<li><strong>--leader-elect-renew-deadline 10s</strong>: notifies that it will try to renew to be the leader every 10 seconds. In other words, before the lease ends, it already updates to 10 seconds later for another 15s</li>
+<li><strong>--leader-elect-retry-period 2s</strong>: Is the time that whoever is not the leader will check if they can be the new leader.</li>
+</ul>
+<p>In the case of ETCD, we have the option to remove them from the masters and create an ETCD cluster (not another Kubernetes cluster) called external ETCD.</p>
+<p>Deploying ETCD on masters and managing it is certainly easier, in addition to saving resources. This topology with ETCD inside the masters is called Stacked Topology.</p>
+<p>When a master node stops responding, redundancy is compromised, but why?</p>
+      <div class="docs-pager">
+        <a href="../../../../#blogs">All blogs</a>
+        <a href="../">Back to CKA</a>
+      </div>
+    </article>
+    <aside class="docs-toc">
+      <div class="docs-toc-title">On this page</div>
+      <nav>
+        <a href="#cluster-purpose">Cluster Purpose</a>
+        <a href="#cluster-sizing">Cluster Sizing</a>
+        <a class="depth-3" href="#fewer-larger-nodes">Fewer Larger Nodes</a>
+        <a class="depth-3" href="#more-smaller-nodes">More Smaller Nodes</a>
+        <a class="depth-3" href="#balance">Balance</a>
+        <a href="#kubernetes-infrastructure">Kubernetes Infrastructure</a>
+        <a href="#local-and-development">Local and Development</a>
+        <a href="#production">Production</a>
+        <a href="#high-availability">High Availability</a>
+      </nav>
+    </aside>
+  </div>
+  <script src="../../../../js/docs.js"></script>
+</body>
+</html>

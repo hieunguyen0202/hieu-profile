@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kubeconfig — Hieu Nguyen</title>
+  <meta name="description" content="Kubeconfig — Kubestronaut roadmap.">
+  <link rel="icon" href="../../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../../">i'm<span>.hieu</span></a>
+    <nav class="docs-series">
+      <a href="../../../../blog/web-security/">Web Security</a>
+      <a class="active" href="../../">Kubestronaut roadmap</a>
+    </nav>
+    <nav class="docs-cert-tabs"><a href="../../cka/" class="active">CKA</a><a href="../../ckad/" class="">CKAD</a><a href="../../cks/" class="">CKS</a></nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-nav="kubestronaut" data-cert="cka" data-docs-root="../" data-active="kubeconfig">
+      <div class="docs-nav-label">CKA</div>
+      <ul class="docs-nav" id="docsNav"></ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../../">Home</a>
+        <span>›</span>
+        <a href="../../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../../">Kubestronaut</a>
+        <span>›</span>
+        <a href="../">CKA</a>
+        <span>›</span>
+        <span>Kubeconfig</span>
+      </div>
+      <div id="top"></div>
+<header><h1>Kubeconfig</h1></header><p>As seen previously, we can request direct access to the APIs by passing the certificates, but we end up using kubectl to make our lives easier.</p>
+<p>Kubectl has the same premise; we can use any command we want while also passing the necessary certificates and keys for the cluster.</p>
+<pre><code class="language-bash"> kubectl get pods --server https://127.0.0.1:33959 --client-key david.key --client-certificate david.crt --certificate-authority kind-ca.crt
+</code></pre>
+<p>To avoid passing these parameters all the time, we have the ~/.kube/config file that contains these configurations. <code>By default, it will look in $HOME/.kube/config</code> if the KUBECONFIG variable is not set in the terminal.</p>
+<p>It is also possible to pass the path where the desired config is located.</p>
+<pre><code class="language-bash">kubectl get pods --kubeconfig ~/.kube/config
+No resources found in default namespace.
+</code></pre>
+<p>The config file is divided into three parts.</p>
+<ul>
+<li>clusters: A list of clusters that we may want to access</li>
+<li>users: Different user accounts that can access the clusters. These users have different privileges on different clusters. The same user may be able to access more than one cluster.</li>
+<li>context: Matches users with clusters and defines which account will access which cluster. Users are not defined here, only the ones that already exist are used.</li>
+</ul>
+<p><img decoding="async" loading="lazy" alt="alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-19-e2e8535cfa540040ea0cb4a1d5df5589.png" width="1734" height="778" class="img_ev3q"></p>
+<p>The kubeconfig starts like this:</p>
+<pre><code class="language-yaml">apiVersion: v1
+kind: Config
+
+# If we had more than one context, which one would we be using at the moment?
+current-context: david@meu-cluster
+
+clusters:
+- name: meu-cluster
+  cluster:
+    certificate-authority: kind-ca.crt
+    server: https://127.0.0.1:33959
+
+contexts:
+- name: david@meu-cluster
+  context:
+    cluster: meu-cluster
+    user: david
+
+users:
+- name: david
+  user:
+    client-certificate: david.crt
+    client-key: david.key
+</code></pre>
+<p>I created this config here to test using the CSR I created.</p>
+<pre><code class="language-bash"># We got there, I just don&#x27;t have permission to list the pods because david doesn&#x27;t have any role linked to this user (as expected)
+kubectl get pods --kubeconfig config.yaml
+Error from server (Forbidden): pods is forbidden: User &quot;david&quot; cannot list resource &quot;pods&quot; in API group &quot;&quot; in the namespace &quot;default&quot;
+</code></pre>
+<p>To view the kubeconfig:</p>
+<pre><code class="language-bash"># Will show the default kubeconfig
+kubectl config view
+
+# If you want to see a specific kubeconfig
+kubectl config view --kubeconfig config.yaml
+apiVersion: v1
+clusters:
+- cluster:
+    certificate-authority: kind-ca.crt
+    server: https://127.0.0.1:33959
+  name: meu-cluster
+contexts:
+- context:
+    cluster: meu-cluster
+    user: david
+  name: david@meu-cluster
+current-context: david@meu-cluster
+kind: Config
+preferences: {}
+users:
+- name: david
+  user:
+    client-certificate: david.crt
+    client-key: david.key
+</code></pre>
+<p>An interesting thing is that it&#x27;s possible to embed the certificate this way, but it needs to be encoded in base64, avoiding having to store many files.</p>
+<pre><code class="language-yaml"># Will show the default kubeconfig
+kubectl config view
+
+# If you want to see a specific kubeconfig
+kubectl config view --kubeconfig config.yaml
+apiVersion: v1
+clusters:
+- cluster:
+    # By adding data we can paste directly
+    certificate-authority-data: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURCVENDQWUyZ0F3SUJBZ0lJZUw4ZEtTSDJyaDh3RFFZSktvWklodmNOQVFFTEJRQXdGVEVUTUJFR0ExVUUKQXhNS2EzVmlaWEp1WlhSbGN6QWVGdzB5TkRBeU1EZ3lNalUzTVRoYUZ3MHpOREF5TURVeU16QXlNVGhhTUJVeApFekFSQmdOVkJBTVRDbXQxWW1WeWJtVjBaWE13Z2dFaU1BMEdDU3FHU0liM0RRRUJBUVVBQTRJQkR3QXdnZ0VLCkFvSUJBUURSQ3kxOHRIQTRISmJTRHRPWm8yeXA0eXp5SjdRbkFpclhJbWZvcWpqak9lMHVGOEpvNEdqYkNiNjEKR2hCaVd0MytBNHJmSjN5R2R4NzVQdU9jbmhONnNpT1I1b09XVUh4MnpEYkp3U0RBOXBkdlhKYTBHZFUwTFRVWQptdlNrVU9uN0R0WnRMWjhxL2xFbElIcGhuU1g0dXFRVFRMODdOUEw5Q29tRlRIWkFYcVI4V2pTUVRGY1lsZTRiCmhpdTZjb01VcS8xQktDVGVOODRvbVZxbkx4dURka2Rqb3huWG0rUTNKajRpUXVqRko1TnJ4Rk9mQ1IyZzRPVFkKeDkycDFLNWtyblhTK3oyNk5yelIxVXA5ay8yZlFzMTI5UnNuNCtvQVBrZ3M0czFDWGZzOW1TLzVySmhxZW1SbwpJZ2h4YUFLUCswaG1TV1N5S2JaZ3F4RHMzZEFQQWdNQkFBR2pXVEJYTUE0R0ExVWREd0VCL3dRRUF3SUNwREFQCkJnTlZIUk1CQWY4RUJUQURBUUgvTUIwR0ExVWREZ1FXQkJRYUVRaFB3Qnoyd1dPbTY2RkVJN0hpRStWMUpqQVYKQmdOVkhSRUVEakFNZ2dwcmRXSmxjbTVsZEdWek1BMEdDU3FHU0liM0RRRUJDd1VBQTRJQkFRQ1JrQm1sOURLRAppWDdRZmMvamd1cXIrSzVGUnR2cmFhbmJsNHY2L2ZQMmR1R3pVNmZ2Uk12MFFzNHlLblBTZzBRc3ZYeUl0SFhaCjRQK0FnUExUWW56QXVLOHVxVW9DTEYzcS9EQ3VIN3BsV243SG1YR0wvSlEwS0JJeHdnazNwWVBDTzBZNTNST0oKdnhpWFB2RmdHb3Z0WldZajVSS245VDRGK2RpcjZnUXVmWGN0S0hlbDJvME9QOEtmek5xejVMMnBiWEU1OHZNTwpKazZGdmQ4Mm1IMU43U3BXQkpnVzZkM0NvNEZXK1pwNTI3c2ptdStJSHp5Y3RMVWZLL2hTU0RoTERDMU1XbVA0Cjk5RFYwc2dZMW1SWFR6N0FJempYeURUeTB6MFJkZ3k5aWJQU3dEUmJWcWlaK3YybWZzemtQdW5hem9obEh2OEoKNXc2M1BpTk5aQmVBCi0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K
+    server: https://127.0.0.1:33959
+  name: meu-cluster
+contexts:
+- context:
+    cluster: meu-cluster
+    user: david
+  name: david@meu-cluster
+current-context: david@meu-cluster
+kind: Config
+preferences: {}
+users:
+- name: david
+  user:
+    client-certificate-data: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURCVENDQWUyZ0F3SUJBZ0lRT0FWMFRzbk1vZEZteU1sb2tPUnRxREFOQmdrcWhraUc5dzBCQVFzRkFEQVYKTVJNd0VRWURWUVFERXdwcmRXSmxjbTVsZEdWek1CNFhEVEkwTURJd09URTBNRE16TkZvWERUSTFNREl3T0RFMApNRE16TkZvd0VERU9NQXdHQTFVRUF4TUZaR0YyYVdRd2dnRWlNQTBHQ1NxR1NJYjNEUUVCQVFVQUE0SUJEd0F3CmdnRUtBb0lCQVFESlBmWjVCcVN1bkZZV3hvTHk3bEo0ZUVrQlJVcFBvZlM3ZEl4R2h3MytSbkxkVCtxZ2dUMXEKZXhHekJ6RUk2alRFd0lxcW44bXdiVUlXK2locFZSTFlZaEd0bTZYd1MrMWV0emV5QzdqakJIbzNjMVFUZmJ5TApaVnRlb3BIRldlbjhtTFFRTkQvNUlIVE0wR3VBdTEzaDZqZktrbFgwZENQamxXdndqbDM0Zlk4M2cxMVFUR1NwCmhBUlZJWnNDSmRIQlRGMmZJUS91VWNvMGlxNk9DUWpZV05PNUVSemx1TlduTElWenpGazBXeTNZVVoyTGdjdDkKSmt2ZHRjZG5uRzZNanZLTFhrZ2x0bjZYTW1pZFpGYkVqRExsUWdmSHhuTlRBOVdxMjRkQkZ0VmxsdldvMjhESgpiWUw3WlY3NTNVZXpuT1ZTcTF2WGM2VHVyWk5YcWFITkFnTUJBQUdqVmpCVU1BNEdBMVVkRHdFQi93UUVBd0lGCm9EQVRCZ05WSFNVRUREQUtCZ2dyQmdFRkJRY0RBakFNQmdOVkhSTUJBZjhFQWpBQU1COEdBMVVkSXdRWU1CYUEKRkJvUkNFL0FIUGJCWTZicm9VUWpzZUlUNVhVbU1BMEdDU3FHU0liM0RRRUJDd1VBQTRJQkFRQUYwVG1GblRxNQpYL21JMnlTWU45L1gxNEJUdlFxY05Yc2VmZkVEUVhIUFVSUy9GcTNzRXRadGtOdjcwQ0NONGRxVE84eHR6WktUCkdMRVlncFcwQ0hreEoxelBLc3liUXNGc3hrTXJLM0M1Y083TldnRzZEN0liNmswS2JxY2tKVkhlZHJuNFNoWkQKVlMxNTFuc2k2eVNMeWM5QkR2Z1JYYm0xRFMrSEZQdEhyZ0ZER0UvZVhDSTBUMW1sdFdyR1YyWHQreFNhYnIrUQpPeGNvZDFDNlZlTmFSSElJSVVhMzVsOHNvRHBQcFRJYlFUYjRsZFBPVko1YVpiMUwvdmljR0JLc0cyOGZoeXc4CnJHUmRhRnMzR0VtcUNHOTdHcGxvZTFNYkk2MDFmR1ZMY1NobGpOczkzaG83L0dZWitmRHBZeG5yUnBnZjFUZlAKcEFQSmxGRWVROHNRCi0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K
+    client-key-data: LS0tLS1CRUdJTiBQUklWQVRFIEtFWS0tLS0tCk1JSUV2Z0lCQURBTkJna3Foa2lHOXcwQkFRRUZBQVNDQktnd2dnU2tBZ0VBQW9JQkFRREpQZlo1QnFTdW5GWVcKeG9MeTdsSjRlRWtCUlVwUG9mUzdkSXhHaHczK1JuTGRUK3FnZ1QxcWV4R3pCekVJNmpURXdJcXFuOG13YlVJVworaWhwVlJMWVloR3RtNlh3UysxZXR6ZXlDN2pqQkhvM2MxUVRmYnlMWlZ0ZW9wSEZXZW44bUxRUU5ELzVJSFRNCjBHdUF1MTNoNmpmS2tsWDBkQ1BqbFd2d2psMzRmWTgzZzExUVRHU3BoQVJWSVpzQ0pkSEJURjJmSVEvdVVjbzAKaXE2T0NRallXTk81RVJ6bHVOV25MSVZ6ekZrMFd5M1lVWjJMZ2N0OUprdmR0Y2Rubkc2TWp2S0xYa2dsdG42WApNbWlkWkZiRWpETGxRZ2ZIeG5OVEE5V3EyNGRCRnRWbGx2V28yOERKYllMN1pWNzUzVWV6bk9WU3ExdlhjNlR1CnJaTlhxYUhOQWdNQkFBRUNnZ0VBQVdjMEplUDZoSGowcm9KNHVjUmxoMDlueTA0NVV5c2R4RVZ2QXljVG5Wbk8KZjFKdnJRT0UzOXNqdDdQOWxXSjZxZ0s3RVpWamlCR0lqWldQY0JLVGg4L09DYVpsVTNLK2Vwb2lpTHE0Zm91Rgo1YUQ2NEw0YzhTNTVZdmVWVUJ5emgrZmszUnlvODdySGpiUTdVVUcyeVJ6UVRxdnMxUUJDR3MxZmp6NnNlWTlvCmxpTDZqWmJERzY4YS9NM3NVYzMwN2plQ1dqMXZ5am52MkFuc0gwWUoxNEJXSWVtU1VueVp2NlJQTWhEM01YRnUKNU1hS0wxKzZINE1NL0ZLWUZ2L0NGVkQwZFB1VDVSQmh4aXVZbGp6a3JJQjdEdTFFNWJ0QkQ2Q25QazlNU2IvcwpMYzdJd0RqeDg4MWR5dGNhRU8wQVZNbDNibThYU2VweWc2anZxNXhORVFLQmdRRHlhdnIzTHQ2TEJrQkZjTjZICkUwTXBxSjRjcTJrOStFUzFHdmlEb3A3dXdESzNCTXRUUUNON3Z4YlMyN3NFUU1rd2pvaURYR0JYdi8yQThUbmEKMVQyL3FxNW5ueXVPbko2eGM3SlNFR1pLblIrNlZhaVFVdlQ3M1JEZk4rbWFOWk9BNXp4V1hqQ284aithOU45eQpoaUM5NXRNNmt5aVRkK3BObExDQTNDei9mUUtCZ1FEVWhHVFVaem5jb3gzeUYzMWJaMkNpVnp5Z2dEUVFWZytDCkZGb0dubGtYRXlXZDg0eU4zVzBiUDViVzA3TFh1OWNMdy9SUmprZXduV0Z2Rm9OZVJvc0IrdEJ6YlhzME5EUEQKaDRUdUhGY0kwc1Q3aWp2ZGxrcWZPRUpPOVlOTytiOWZFS2NCY1AyaFM4Z3kwRFlrZGRQZVF4eG5Vc2pUMnE4cgpGcnRlRm94Y2tRS0JnUURJVTl2ZEZPQlhKdTFKOVVJUGdiMkkyWXoveUM4S1JQWVNhNTFldXE1NFFtQW1tbEdrCkZHYStSbVdJRG9qM3RNb04xRnUvb2tFRGd1YnMvV3VBQ2FRamxkcldTdFRsMzB2TS9QMHBqOS9ZWFF2eElnUlEKY0IxL1hXb3A3THlnOFJGWi9yei82b3B2c3ZFWkRxN3dweUs3aTlxV2x6RjYzQ2ZGd05BelRML3F5UUtCZ1FESwpHNnNrMFpNV3dVNSthVlovc2g0VjVpOHpXUm1xbTU0ZUVLclpkb2kxeUREVE9jZG5ON2xHMjcvaFNPM2grN04xCmJnT1IrR1UzazBVUmQvQ3huUmNnWjk4TWw0Yy9TNUliRjJ3Vlk0Qm1WTVNma0lTRXBTVU1yVjFxYUZWYnEyc1QKeHV0OUZHOHhrYmV3azVHYU5UQ3NSVmppN3JrdHVlRXpjbWY1QUNxMjhRS0JnRE1ZTGsvajBEc2N6UE9DUEVoUQpPUXV0cmFjbytDeTM1VkZLRk5nRWZlYmRMZ0taSEpqUHZZUWtuTFYxcWVxQzJMaXlGYnhBQmd3TFJ6SEZEMnUzCmRITzhaUDhoM3lPZVcrRUJyS1ZsczFCd294YzlRQVRob0YzYnFoNzRlanFoSnNVQTZaaU9oMCs2Q1ZDTjYxWXIKZmcvYXkrZmdabFY3c1FpSnQ3NmtpSU9ICi0tLS0tRU5EIFBSSVZBVEUgS0VZLS0tLS0K
+</code></pre>
+<p>When we run the view command, it doesn&#x27;t show the values when they are set through data.</p>
+<pre><code class="language-bash">kubectl config view --kubeconfig config.yaml
+apiVersion: v1
+clusters:
+- cluster:
+    certificate-authority-data: DATA+OMITTED
+    server: https://127.0.0.1:33959
+  name: meu-cluster
+contexts:
+- context:
+    cluster: meu-cluster
+    user: david
+  name: david@meu-cluster
+current-context: david@meu-cluster
+kind: Config
+preferences: {}
+users:
+- name: david
+  user:
+    client-certificate-data: DATA+OMITTED
+    client-key-data: DATA+OMITTED
+</code></pre>
+<p>Look at how interesting this is from the tests I was doing.</p>
+<pre><code class="language-bash">kubectl get pods --server https://127.0.0.1:33959 --client-key david.key --client-certificate david.crt --certificate-authority kind-ca.crt
+Error in configuration:
+* client-cert-data and client-cert are both specified for kind-kind-cluster. client-cert-data will override.
+* client-key-data and client-key are both specified for kind-kind-cluster; client-key-data will override
+</code></pre>
+<p>But when we try to do this, we have a problem. This means that it&#x27;s as if you were passing a --client-key and a --client-key-data that is defined in the kubeconfig file twice.</p>
+<p>To change the current context:</p>
+<pre><code class="language-bash">kubectl config use-context &lt;context_name&gt;
+</code></pre>
+<p>We can also set a default namespace for a context. So we can switch to a new context but changing the namespace. This would be another way to avoid deploying things to wrong namespaces.</p>
+      <div class="docs-pager">
+        <a href="../../../../#blogs">All blogs</a>
+        <a href="../">Back to CKA</a>
+      </div>
+    </article>
+    <aside class="docs-toc">
+      <div class="docs-toc-title">On this page</div>
+      <nav>
+        <a href="#top">On this page</a>
+      </nav>
+    </aside>
+  </div>
+  <script src="../../../../js/docs.js"></script>
+</body>
+</html>

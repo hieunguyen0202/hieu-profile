@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Container Entrypoint and Command — Hieu Nguyen</title>
+  <meta name="description" content="Container Entrypoint and Command — Kubestronaut roadmap.">
+  <link rel="icon" href="../../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../../">i'm<span>.hieu</span></a>
+    <nav class="docs-series">
+      <a href="../../../../blog/web-security/">Web Security</a>
+      <a class="active" href="../../">Kubestronaut roadmap</a>
+    </nav>
+    <nav class="docs-cert-tabs"><a href="../../cka/" class="active">CKA</a><a href="../../ckad/" class="">CKAD</a><a href="../../cks/" class="">CKS</a></nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-nav="kubestronaut" data-cert="cka" data-docs-root="../" data-active="container-entrypoint-command">
+      <div class="docs-nav-label">CKA</div>
+      <ul class="docs-nav" id="docsNav"></ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../../">Home</a>
+        <span>›</span>
+        <a href="../../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../../">Kubestronaut</a>
+        <span>›</span>
+        <a href="../">CKA</a>
+        <span>›</span>
+        <span>Container Entrypoint and Command</span>
+      </div>
+      <div id="top"></div>
+<header><h1>Container Entrypoint and Command</h1></header><p>An image can have entrypoints and commands and what&#x27;s the difference between them?</p>
+<p>First we need to understand that a container must die if the process it needs to execute also dies. This is the lifecycle of a container.</p>
+<p>If we do a simple test of running a standard ubuntu container without passing anything, it executes and dies. Why?</p>
+<pre><code class="language-bash">docker run ubuntu
+Unable to find image &#x27;ubuntu:latest&#x27; locally
+latest: Pulling from library/ubuntu
+a48641193673: Pull complete
+Digest: sha256:6042500cf4b44023ea1894effe7890666b0c5c7871ed83a97c36c76ae560bb9b
+Status: Downloaded newer image for ubuntu:latest
+
+docker ps
+CONTAINER ID   IMAGE                            COMMAND                  CREATED       STATUS         PORTS                             NAMES
+
+docker ps -a
+CONTAINER ID   IMAGE                            COMMAND                  CREATED          STATUS                      PORTS                             NAMES
+7b8e6f3f1825   ubuntu                           &quot;/bin/bash&quot;              22 seconds ago   Exited (0) 21 seconds ago                                     jovial_noyce
+</code></pre>
+<p>Because it did what had to be done... It executed the <code>/bin/bash</code> command and that&#x27;s it. Nothing kept it alive.</p>
+<p>Let&#x27;s run it again but now passing what we want to execute.</p>
+<pre><code class="language-bash">docker ps
+CONTAINER ID   IMAGE                            COMMAND                  CREATED          STATUS          PORTS                             NAMES
+15c54353ebf9   ubuntu                           &quot;sleep 60&quot;               12 seconds ago   Up 11 seconds                                     adoring_ramanujan
+
+docker ps -a
+CONTAINER ID   IMAGE                            COMMAND                  CREATED          STATUS                      PORTS                             NAMES
+15c54353ebf9   ubuntu                           &quot;sleep 60&quot;               49 seconds ago   Up 48 seconds                                                 adoring_ramanujan
+
+# and after 60s it died
+docker ps
+CONTAINER ID   IMAGE                            COMMAND                  CREATED       STATUS          PORTS                             NAMES
+</code></pre>
+<p>Within the dockerfile definitions we have:</p>
+<pre><code class="language-dockerfile">ENTRYPOINT \
+CMD
+</code></pre>
+<p>ENTRYPOINT represents the executable that will run and CMD what comes after.</p>
+<p>If we have a container with:</p>
+<pre><code class="language-dockerfile">ENTRYPOINT [&quot;sleep&quot;]
+CMD [&quot;10&quot;]
+</code></pre>
+<p>What it will always try to execute will be ENTRYPOINT + CMD, that is: sleep 10</p>
+<p>If we don&#x27;t have the entrypoint and only CMD, just 10 wouldn&#x27;t work, but we could bring the binary here. The first string always needs to be an executable and the rest are its parameters.</p>
+<pre><code class="language-dockerfile">CMD [&quot;sleep&quot;, &quot;10&quot;]
+</code></pre>
+<p>On the other hand, if we only had the entrypoint <code>sleep</code> without cmd, it wouldn&#x27;t do anything by itself, and would cause an error, because it&#x27;s expecting a parameter.</p>
+<p>ENTRYPOINT [&quot;sleep&quot;]</p>
+<p>It would be the same as doing this.</p>
+<pre><code class="language-bash">sleep
+sleep: missing operand
+Try &#x27;sleep --help&#x27; for more information.
+</code></pre>
+<p>In the case where we only need to execute a binary that doesn&#x27;t need inputs, it would work perfectly.</p>
+<p>If we wanted to create a pod with the ubuntu image and run <code>sleep 10</code>, we could replace the entrypoint and cmd.</p>
+<pre><code class="language-yaml">apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: sleeper
+  name: sleeper
+spec:
+  containers:
+  - image: ubuntu
+    name: sleeper
+    command: [&quot;sleep&quot;]
+    args: [&quot;10&quot;]
+  # would be the same thing
+  # command:
+  # - sleep
+  # args:
+  # - &quot;10&quot;
+    resources: {}
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+status: {}
+</code></pre>
+<p>Just for reference:</p>
+<p><img decoding="async" loading="lazy" alt="Alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-4-8e59e82e87981f0aac088d2214b6eafa.png" width="1059" height="468" class="img_ev3q"></p>
+<pre><code class="language-bash">kubectl apply -f sleeper.yaml
+kubectl get pods
+NAME                     READY   STATUS    RESTARTS      AGE
+nginx-7b8df77865-gt6fd   1/1     Running   1 (39m ago)   128m
+nginx-7b8df77865-95qhp   1/1     Running   1 (39m ago)   128m
+sleeper                  1/1     Running   0             8s
+
+kubectl get pods
+NAME                     READY   STATUS      RESTARTS      AGE
+nginx-7b8df77865-gt6fd   1/1     Running     1 (39m ago)   128m
+nginx-7b8df77865-95qhp   1/1     Running     1 (39m ago)   128m
+sleeper                  0/1     Completed   0             16s
+</code></pre>
+<p>To start a pod and pass commands we have:</p>
+<pre><code class="language-bash">kubectl run busybox --image busybox --dry-run=client -o yaml --command -- sleep 1000
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: busybox
+  name: busybox
+spec:
+  containers:
+  - command:
+    - sleep
+    - &quot;1000&quot;
+    image: busybox
+    name: busybox
+    resources: {}
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+status: {}
+
+kubectl exec -it busybox -- ping www.google.com.br
+
+PING www.google.com.br (172.217.162.131): 56 data bytes
+64 bytes from 172.217.162.131: seq=0 ttl=110 time=15.942 ms
+64 bytes from 172.217.162.131: seq=1 ttl=110 time=15.956 ms
+</code></pre>
+      <div class="docs-pager">
+        <a href="../../../../#blogs">All blogs</a>
+        <a href="../">Back to CKA</a>
+      </div>
+    </article>
+    <aside class="docs-toc">
+      <div class="docs-toc-title">On this page</div>
+      <nav>
+        <a href="#top">On this page</a>
+      </nav>
+    </aside>
+  </div>
+  <script src="../../../../js/docs.js"></script>
+</body>
+</html>

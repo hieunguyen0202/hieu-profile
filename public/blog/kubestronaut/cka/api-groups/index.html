@@ -1,0 +1,1067 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>API Groups — Hieu Nguyen</title>
+  <meta name="description" content="API Groups — Kubestronaut roadmap.">
+  <link rel="icon" href="../../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../../">i'm<span>.hieu</span></a>
+    <nav class="docs-series">
+      <a href="../../../../blog/web-security/">Web Security</a>
+      <a class="active" href="../../">Kubestronaut roadmap</a>
+    </nav>
+    <nav class="docs-cert-tabs"><a href="../../cka/" class="active">CKA</a><a href="../../ckad/" class="">CKAD</a><a href="../../cks/" class="">CKS</a></nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-nav="kubestronaut" data-cert="cka" data-docs-root="../" data-active="api-groups">
+      <div class="docs-nav-label">CKA</div>
+      <ul class="docs-nav" id="docsNav"></ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../../">Home</a>
+        <span>›</span>
+        <a href="../../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../../">Kubestronaut</a>
+        <span>›</span>
+        <a href="../">CKA</a>
+        <span>›</span>
+        <span>API Groups</span>
+      </div>
+      <div id="top"></div>
+<header><h1>API Groups</h1></header><p>As we&#x27;ve mentioned several times, any interaction with the server is done through an API that is managed by kube-apiserver.</p>
+<p>To make studying easier and not have to keep passing certificates directly every time we make a direct request to kube-apiserver using REST, let&#x27;s create a proxy.</p>
+<p>The command starts a local proxy server on port 6443 that allows access to the Kubernetes API Server. It could be any port, I used the same 6443 just to know it&#x27;s the server port. This way we can see everything through the browser.</p>
+<pre><code class="language-bash">kubectl proxy --port=6443 &amp;
+[1] 1735417
+➜  files git:(main) ✗ Starting to serve on 127.0.0.1:6443
+
+# If you don&#x27;t want to pass the port just run the command below and it will use port 8001
+kubectl proxy
+</code></pre>
+<blockquote>
+<p>kubectl proxy is not the same as kube-proxy. Kube-proxy is a Kubernetes component that manages services. In this case it&#x27;s just a command that makes life easier.</p>
+</blockquote>
+<p><img decoding="async" loading="lazy" alt="alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-20-a3894ef1407e87bd20029ce8bb55b8de.png" width="914" height="909" class="img_ev3q"></p>
+<p>Let&#x27;s look at what we have here.</p>
+<pre><code class="language-bash">curl http://127.0.0.1:6443
+{
+  &quot;paths&quot;: [
+    &quot;/.well-known/openid-configuration&quot;,
+    &quot;/api&quot;,
+    &quot;/api/v1&quot;,
+    &quot;/apis&quot;,
+    &quot;/apis/&quot;,
+    &quot;/apis/admissionregistration.k8s.io&quot;,
+    &quot;/apis/admissionregistration.k8s.io/v1&quot;,
+    &quot;/apis/apiextensions.k8s.io&quot;,
+    &quot;/apis/apiextensions.k8s.io/v1&quot;,
+    &quot;/apis/apiregistration.k8s.io&quot;,
+    &quot;/apis/apiregistration.k8s.io/v1&quot;,
+    &quot;/apis/apps&quot;,
+    &quot;/apis/apps/v1&quot;,
+    &quot;/apis/authentication.k8s.io&quot;,
+    &quot;/apis/authentication.k8s.io/v1&quot;,
+    &quot;/apis/authorization.k8s.io&quot;,
+    &quot;/apis/authorization.k8s.io/v1&quot;,
+    &quot;/apis/autoscaling&quot;,
+    &quot;/apis/autoscaling/v1&quot;,
+    &quot;/apis/autoscaling/v2&quot;,
+    &quot;/apis/batch&quot;,
+    &quot;/apis/batch/v1&quot;,
+    &quot;/apis/certificates.k8s.io&quot;,
+    &quot;/apis/certificates.k8s.io/v1&quot;,
+    &quot;/apis/coordination.k8s.io&quot;,
+    &quot;/apis/coordination.k8s.io/v1&quot;,
+    &quot;/apis/discovery.k8s.io&quot;,
+    &quot;/apis/discovery.k8s.io/v1&quot;,
+    &quot;/apis/events.k8s.io&quot;,
+    &quot;/apis/events.k8s.io/v1&quot;,
+    &quot;/apis/flowcontrol.apiserver.k8s.io&quot;,
+    &quot;/apis/flowcontrol.apiserver.k8s.io/v1&quot;,
+    &quot;/apis/flowcontrol.apiserver.k8s.io/v1beta3&quot;,
+    &quot;/apis/networking.k8s.io&quot;,
+    &quot;/apis/networking.k8s.io/v1&quot;,
+    &quot;/apis/node.k8s.io&quot;,
+    &quot;/apis/node.k8s.io/v1&quot;,
+    &quot;/apis/policy&quot;,
+    &quot;/apis/policy/v1&quot;,
+    &quot;/apis/rbac.authorization.k8s.io&quot;,
+    &quot;/apis/rbac.authorization.k8s.io/v1&quot;,
+    &quot;/apis/scheduling.k8s.io&quot;,
+    &quot;/apis/scheduling.k8s.io/v1&quot;,
+    &quot;/apis/storage.k8s.io&quot;,
+    &quot;/apis/storage.k8s.io/v1&quot;,
+    &quot;/healthz&quot;,
+    &quot;/healthz/autoregister-completion&quot;,
+    &quot;/healthz/etcd&quot;,
+    &quot;/healthz/log&quot;,
+    &quot;/healthz/ping&quot;,
+    &quot;/healthz/poststarthook/aggregator-reload-proxy-client-cert&quot;,
+    &quot;/healthz/poststarthook/apiservice-discovery-controller&quot;,
+    &quot;/healthz/poststarthook/apiservice-openapi-controller&quot;,
+    &quot;/healthz/poststarthook/apiservice-openapiv3-controller&quot;,
+    &quot;/healthz/poststarthook/apiservice-registration-controller&quot;,
+    &quot;/healthz/poststarthook/apiservice-status-available-controller&quot;,
+    &quot;/healthz/poststarthook/bootstrap-controller&quot;,
+    &quot;/healthz/poststarthook/crd-informer-synced&quot;,
+    &quot;/healthz/poststarthook/generic-apiserver-start-informers&quot;,
+    &quot;/healthz/poststarthook/kube-apiserver-autoregistration&quot;,
+    &quot;/healthz/poststarthook/priority-and-fairness-config-consumer&quot;,
+    &quot;/healthz/poststarthook/priority-and-fairness-config-producer&quot;,
+    &quot;/healthz/poststarthook/priority-and-fairness-filter&quot;,
+    &quot;/healthz/poststarthook/rbac/bootstrap-roles&quot;,
+    &quot;/healthz/poststarthook/scheduling/bootstrap-system-priority-classes&quot;,
+    &quot;/healthz/poststarthook/start-apiextensions-controllers&quot;,
+    &quot;/healthz/poststarthook/start-apiextensions-informers&quot;,
+    &quot;/healthz/poststarthook/start-cluster-authentication-info-controller&quot;,
+    &quot;/healthz/poststarthook/start-kube-aggregator-informers&quot;,
+    &quot;/healthz/poststarthook/start-kube-apiserver-admission-initializer&quot;,
+    &quot;/healthz/poststarthook/start-kube-apiserver-identity-lease-controller&quot;,
+    &quot;/healthz/poststarthook/start-kube-apiserver-identity-lease-garbage-collector&quot;,
+    &quot;/healthz/poststarthook/start-legacy-token-tracking-controller&quot;,
+    &quot;/healthz/poststarthook/start-service-ip-repair-controllers&quot;,
+    &quot;/healthz/poststarthook/start-system-namespaces-controller&quot;,
+    &quot;/healthz/poststarthook/storage-object-count-tracker-hook&quot;,
+    &quot;/livez&quot;,
+    &quot;/livez/autoregister-completion&quot;,
+    &quot;/livez/etcd&quot;,
+    &quot;/livez/log&quot;,
+    &quot;/livez/ping&quot;,
+    &quot;/livez/poststarthook/aggregator-reload-proxy-client-cert&quot;,
+    &quot;/livez/poststarthook/apiservice-discovery-controller&quot;,
+    &quot;/livez/poststarthook/apiservice-openapi-controller&quot;,
+    &quot;/livez/poststarthook/apiservice-openapiv3-controller&quot;,
+    &quot;/livez/poststarthook/apiservice-registration-controller&quot;,
+    &quot;/livez/poststarthook/apiservice-status-available-controller&quot;,
+    &quot;/livez/poststarthook/bootstrap-controller&quot;,
+    &quot;/livez/poststarthook/crd-informer-synced&quot;,
+    &quot;/livez/poststarthook/generic-apiserver-start-informers&quot;,
+    &quot;/livez/poststarthook/kube-apiserver-autoregistration&quot;,
+    &quot;/livez/poststarthook/priority-and-fairness-config-consumer&quot;,
+    &quot;/livez/poststarthook/priority-and-fairness-config-producer&quot;,
+    &quot;/livez/poststarthook/priority-and-fairness-filter&quot;,
+    &quot;/livez/poststarthook/rbac/bootstrap-roles&quot;,
+    &quot;/livez/poststarthook/scheduling/bootstrap-system-priority-classes&quot;,
+    &quot;/livez/poststarthook/start-apiextensions-controllers&quot;,
+    &quot;/livez/poststarthook/start-apiextensions-informers&quot;,
+    &quot;/livez/poststarthook/start-cluster-authentication-info-controller&quot;,
+    &quot;/livez/poststarthook/start-kube-aggregator-informers&quot;,
+    &quot;/livez/poststarthook/start-kube-apiserver-admission-initializer&quot;,
+    &quot;/livez/poststarthook/start-kube-apiserver-identity-lease-controller&quot;,
+    &quot;/livez/poststarthook/start-kube-apiserver-identity-lease-garbage-collector&quot;,
+    &quot;/livez/poststarthook/start-legacy-token-tracking-controller&quot;,
+    &quot;/livez/poststarthook/start-service-ip-repair-controllers&quot;,
+    &quot;/livez/poststarthook/start-system-namespaces-controller&quot;,
+    &quot;/livez/poststarthook/storage-object-count-tracker-hook&quot;,
+    &quot;/logs&quot;,
+    &quot;/metrics&quot;,
+    &quot;/metrics/slis&quot;,
+    &quot;/openapi/v2&quot;,
+    &quot;/openapi/v3&quot;,
+    &quot;/openapi/v3/&quot;,
+    &quot;/openid/v1/jwks&quot;,
+    &quot;/readyz&quot;,
+    &quot;/readyz/autoregister-completion&quot;,
+    &quot;/readyz/etcd&quot;,
+    &quot;/readyz/etcd-readiness&quot;,
+    &quot;/readyz/informer-sync&quot;,
+    &quot;/readyz/log&quot;,
+    &quot;/readyz/ping&quot;,
+    &quot;/readyz/poststarthook/aggregator-reload-proxy-client-cert&quot;,
+    &quot;/readyz/poststarthook/apiservice-discovery-controller&quot;,
+    &quot;/readyz/poststarthook/apiservice-openapi-controller&quot;,
+    &quot;/readyz/poststarthook/apiservice-openapiv3-controller&quot;,
+    &quot;/readyz/poststarthook/apiservice-registration-controller&quot;,
+    &quot;/readyz/poststarthook/apiservice-status-available-controller&quot;,
+    &quot;/readyz/poststarthook/bootstrap-controller&quot;,
+    &quot;/readyz/poststarthook/crd-informer-synced&quot;,
+    &quot;/readyz/poststarthook/generic-apiserver-start-informers&quot;,
+    &quot;/readyz/poststarthook/kube-apiserver-autoregistration&quot;,
+    &quot;/readyz/poststarthook/priority-and-fairness-config-consumer&quot;,
+    &quot;/readyz/poststarthook/priority-and-fairness-config-producer&quot;,
+    &quot;/readyz/poststarthook/priority-and-fairness-filter&quot;,
+    &quot;/readyz/poststarthook/rbac/bootstrap-roles&quot;,
+    &quot;/readyz/poststarthook/scheduling/bootstrap-system-priority-classes&quot;,
+    &quot;/readyz/poststarthook/start-apiextensions-controllers&quot;,
+    &quot;/readyz/poststarthook/start-apiextensions-informers&quot;,
+    &quot;/readyz/poststarthook/start-cluster-authentication-info-controller&quot;,
+    &quot;/readyz/poststarthook/start-kube-aggregator-informers&quot;,
+    &quot;/readyz/poststarthook/start-kube-apiserver-admission-initializer&quot;,
+    &quot;/readyz/poststarthook/start-kube-apiserver-identity-lease-controller&quot;,
+    &quot;/readyz/poststarthook/start-kube-apiserver-identity-lease-garbage-collector&quot;,
+    &quot;/readyz/poststarthook/start-legacy-token-tracking-controller&quot;,
+    &quot;/readyz/poststarthook/start-service-ip-repair-controllers&quot;,
+    &quot;/readyz/poststarthook/start-system-namespaces-controller&quot;,
+    &quot;/readyz/poststarthook/storage-object-count-tracker-hook&quot;,
+    &quot;/readyz/shutdown&quot;,
+    &quot;/version&quot;
+  ]
+}
+</code></pre>
+<p>Analyzing the first level we have a set.</p>
+<ul>
+<li><em>/api</em> : Core groups</li>
+<li><em>/apis</em> : Named groups</li>
+<li><em>/healthz</em> (deprecated) : Same as livez. It&#x27;s obsolete, it&#x27;s here for backward compatibility for now.</li>
+<li><em>/livez</em> : Used to monitor cluster health</li>
+<li><em>/logs</em> : Used to integrate with third-party log extraction applications</li>
+<li><em>/metrics</em> : Used to monitor cluster health</li>
+<li><em>/openapi</em> : Documentation
+<ul>
+<li>The OpenAPI specification defines a machine-readable interface for RESTful APIs, allowing developers to easily understand the structure and functionality of available APIs.</li>
+</ul>
+</li>
+<li><em>/openid</em> : Documentation</li>
+<li><em>/readyz</em> : Used to monitor cluster health</li>
+<li><em>/version</em> : Used to identify information about the cluster version</li>
+</ul>
+<blockquote>
+<p>livez and readyz only return ok which is a 200 code for each of these paths. They have different purposes.</p>
+</blockquote>
+<p>Starting with the simplest one, version.</p>
+<h2 id="version">/version</h2>
+<pre><code class="language-bash">curl http://127.0.0.1:6443/version
+{
+  &quot;major&quot;: &quot;1&quot;,
+  &quot;minor&quot;: &quot;29&quot;,
+  &quot;gitVersion&quot;: &quot;v1.29.1&quot;,
+  &quot;gitCommit&quot;: &quot;bc401b91f2782410b3fb3f9acf43a995c4de90d2&quot;,
+  &quot;gitTreeState&quot;: &quot;clean&quot;,
+  &quot;buildDate&quot;: &quot;2024-02-02T01:12:58Z&quot;,
+  &quot;goVersion&quot;: &quot;go1.21.6&quot;,
+  &quot;compiler&quot;: &quot;gc&quot;,
+  &quot;platform&quot;: &quot;linux/amd64&quot;
+}
+
+## And if I wanted to see it in kubectl
+kubectl get --raw /version
+{
+  &quot;major&quot;: &quot;1&quot;,
+  &quot;minor&quot;: &quot;29&quot;,
+  &quot;gitVersion&quot;: &quot;v1.29.1&quot;,
+  &quot;gitCommit&quot;: &quot;bc401b91f2782410b3fb3f9acf43a995c4de90d2&quot;,
+  &quot;gitTreeState&quot;: &quot;clean&quot;,
+  &quot;buildDate&quot;: &quot;2024-02-02T01:12:58Z&quot;,
+  &quot;goVersion&quot;: &quot;go1.21.6&quot;,
+  &quot;compiler&quot;: &quot;gc&quot;,
+  &quot;platform&quot;: &quot;linux/amd64&quot;
+}
+
+# Which would be the same as the command
+kubectl version -o yaml
+clientVersion:
+  buildDate: &quot;2024-01-17T13:49:03Z&quot;
+  compiler: gc
+  gitCommit: be3af46a4654bdf05b4838fe94e95ec8c165660c
+  gitTreeState: clean
+  gitVersion: v1.28.6
+  goVersion: go1.20.13
+  major: &quot;1&quot;
+  minor: &quot;28&quot;
+  platform: linux/amd64
+kustomizeVersion: v5.0.4-0.20230601165947-6ce0bf390ce3
+serverVersion:
+  buildDate: &quot;2024-02-02T01:12:58Z&quot;
+  compiler: gc
+  gitCommit: bc401b91f2782410b3fb3f9acf43a995c4de90d2
+  gitTreeState: clean
+  gitVersion: v1.29.1
+  goVersion: go1.21.6
+  major: &quot;1&quot;
+  minor: &quot;29&quot;
+  platform: linux/amd64
+</code></pre>
+<h2 id="livez-and-readyz">/livez and /readyz</h2>
+<p>A quick look at livez which is used to check if the server is operational and responding to requests.</p>
+<p>The livez endpoint is the sum of OK from all other endpoints below it. If something is wrong it won&#x27;t be OK.</p>
+<pre><code class="language-bash">kubectl get --raw=&#x27;/livez&#x27;
+ok
+
+# If you want a more verbose output with everything it executed, like a log
+kubectl get --raw=&#x27;/livez?verbose&#x27;
+[+]ping ok
+[+]log ok
+[+]etcd ok
+[+]poststarthook/start-kube-apiserver-admission-initializer ok
+[+]poststarthook/generic-apiserver-start-informers ok
+[+]poststarthook/priority-and-fairness-config-consumer ok
+[+]poststarthook/priority-and-fairness-filter ok
+[+]poststarthook/storage-object-count-tracker-hook ok
+[+]poststarthook/start-apiextensions-informers ok
+[+]poststarthook/start-apiextensions-controllers ok
+[+]poststarthook/crd-informer-synced ok
+[+]poststarthook/start-service-ip-repair-controllers ok
+[+]poststarthook/rbac/bootstrap-roles ok
+[+]poststarthook/scheduling/bootstrap-system-priority-classes ok
+[+]poststarthook/priority-and-fairness-config-producer ok
+[+]poststarthook/start-system-namespaces-controller ok
+[+]poststarthook/bootstrap-controller ok
+[+]poststarthook/start-cluster-authentication-info-controller ok
+[+]poststarthook/start-kube-apiserver-identity-lease-controller ok
+[+]poststarthook/start-kube-apiserver-identity-lease-garbage-collector ok
+[+]poststarthook/start-legacy-token-tracking-controller ok
+[+]poststarthook/aggregator-reload-proxy-client-cert ok
+[+]poststarthook/start-kube-aggregator-informers ok
+[+]poststarthook/apiservice-registration-controller ok
+[+]poststarthook/apiservice-status-available-controller ok
+[+]poststarthook/kube-apiserver-autoregistration ok
+[+]autoregister-completion ok
+[+]poststarthook/apiservice-openapi-controller ok
+[+]poststarthook/apiservice-openapiv3-controller ok
+[+]poststarthook/apiservice-discovery-controller ok
+livez check passed
+</code></pre>
+<p>The readyz also serves for monitoring but with the purpose of checking if the Kubernetes server is ready to accept application traffic.
+The ready endpoint is the sum of OK from all other endpoints below it. If something is wrong it won&#x27;t be OK.</p>
+<pre><code class="language-bash">kubectl get --raw=&#x27;/readyz&#x27;
+ok
+
+kubectl get --raw=&#x27;/readyz?verbose&#x27;
+[+]ping ok
+[+]log ok
+[+]etcd ok
+[+]etcd-readiness ok
+[+]informer-sync ok
+[+]poststarthook/start-kube-apiserver-admission-initializer ok
+[+]poststarthook/generic-apiserver-start-informers ok
+[+]poststarthook/priority-and-fairness-config-consumer ok
+[+]poststarthook/priority-and-fairness-filter ok
+[+]poststarthook/storage-object-count-tracker-hook ok
+[+]poststarthook/start-apiextensions-informers ok
+[+]poststarthook/start-apiextensions-controllers ok
+[+]poststarthook/crd-informer-synced ok
+[+]poststarthook/start-service-ip-repair-controllers ok
+[+]poststarthook/rbac/bootstrap-roles ok
+[+]poststarthook/scheduling/bootstrap-system-priority-classes ok
+[+]poststarthook/priority-and-fairness-config-producer ok
+[+]poststarthook/start-system-namespaces-controller ok
+[+]poststarthook/bootstrap-controller ok
+[+]poststarthook/start-cluster-authentication-info-controller ok
+[+]poststarthook/start-kube-apiserver-identity-lease-controller ok
+[+]poststarthook/start-kube-apiserver-identity-lease-garbage-collector ok
+[+]poststarthook/start-legacy-token-tracking-controller ok
+[+]poststarthook/aggregator-reload-proxy-client-cert ok
+[+]poststarthook/start-kube-aggregator-informers ok
+[+]poststarthook/apiservice-registration-controller ok
+[+]poststarthook/apiservice-status-available-controller ok
+[+]poststarthook/kube-apiserver-autoregistration ok
+[+]autoregister-completion ok
+[+]poststarthook/apiservice-openapi-controller ok
+[+]poststarthook/apiservice-openapiv3-controller ok
+[+]poststarthook/apiservice-discovery-controller ok
+[+]shutdown ok
+readyz check passed
+</code></pre>
+<h2 id="openapi">/openapi</h2>
+<p>All endpoints in openapi have a json document that describes the available APIs along with details about paths, parameters, return types and other relevant information about each endpoint.</p>
+<p>The main purpose of the /openapi endpoint is to provide developers with a standardized and automated description of the APIs available in the Kubernetes cluster. This is especially useful when building tools, clients, or automations that interact with Kubernetes, as it allows for easier and more robust integration with cluster APIs.</p>
+<hr>
+<p>Now let&#x27;s get to the main content,</p>
+<h2 id="api">/api</h2>
+<p>This group contains all core functionality, note that v1 has everything to do with the apiVersion we put in manifests, being a subgroup of api</p>
+<pre><code class="language-bash"># I removed some of the output using ... and leaving only the names. Only in pods I left for better analysis
+kubectl get --raw=&#x27;/api/v1&#x27;
+{
+  &quot;kind&quot;: &quot;APIResourceList&quot;,
+  &quot;groupVersion&quot;: &quot;v1&quot;,
+  &quot;resources&quot;: [
+    {
+      &quot;name&quot;: &quot;bindings&quot;,
+       ...
+    },
+    {
+      &quot;name&quot;: &quot;componentstatuses&quot;,
+      ...
+    },
+    {
+      &quot;name&quot;: &quot;configmaps&quot;,
+      ...
+      &quot;storageVersionHash&quot;: &quot;qFsyl6wFWjQ=&quot;
+    },
+    {
+      &quot;name&quot;: &quot;endpoints&quot;,
+      ...
+    },
+    {
+      &quot;name&quot;: &quot;events&quot;,
+      ...
+    },
+    {
+      &quot;name&quot;: &quot;limitranges&quot;,
+      ...
+    },
+    {
+      &quot;name&quot;: &quot;namespaces&quot;,
+      ...
+    },
+    {
+      &quot;name&quot;: &quot;namespaces/finalize&quot;,
+      ...
+    },
+    {
+      &quot;name&quot;: &quot;namespaces/status&quot;,
+      ...
+    },
+    {
+      &quot;name&quot;: &quot;nodes&quot;,
+      ...
+    },
+    {
+      &quot;name&quot;: &quot;nodes/proxy&quot;,
+      ...
+    },
+    {
+      &quot;name&quot;: &quot;nodes/status&quot;,
+      ...
+    },
+    {
+      &quot;name&quot;: &quot;persistentvolumeclaims&quot;,
+      ...
+    },
+    {
+      &quot;name&quot;: &quot;persistentvolumeclaims/status&quot;,
+      ...
+    },
+    {
+      &quot;name&quot;: &quot;persistentvolumes&quot;,
+      ...
+    },
+    {
+      &quot;name&quot;: &quot;persistentvolumes/status&quot;,
+      ...
+    },
+    {
+      &quot;name&quot;: &quot;pods&quot;,
+      &quot;singularName&quot;: &quot;pod&quot;,
+      &quot;namespaced&quot;: true, #&lt;&lt;&lt; Whether this resource is at namespace level. True = namespaced ; False = Cluster
+      &quot;kind&quot;: &quot;Pod&quot;,
+      &quot;verbs&quot;: [
+        &quot;create&quot;,
+        &quot;delete&quot;,
+        &quot;deletecollection&quot;,
+        &quot;get&quot;,
+        &quot;list&quot;,
+        &quot;patch&quot;,
+        &quot;update&quot;,
+        &quot;watch&quot;
+      ],
+      &quot;shortNames&quot;: [
+        &quot;po&quot;
+      ],
+      &quot;categories&quot;: [
+        &quot;all&quot;
+      ],
+      &quot;storageVersionHash&quot;: &quot;xPOwRZ+Yhw8=&quot;
+    },
+    {
+      &quot;name&quot;: &quot;pods/attach&quot;,
+      ...
+    },
+    {
+      &quot;name&quot;: &quot;pods/binding&quot;,
+      ...
+    },
+    {
+      &quot;name&quot;: &quot;pods/ephemeralcontainers&quot;,
+      ...
+    },
+    {
+      &quot;name&quot;: &quot;pods/eviction&quot;,
+      ...
+    },
+    {
+      &quot;name&quot;: &quot;pods/exec&quot;,
+      ...
+    },
+    {
+      &quot;name&quot;: &quot;pods/log&quot;,
+      ...
+    },
+    {
+      &quot;name&quot;: &quot;pods/portforward&quot;,
+      ...
+    },
+    {
+      &quot;name&quot;: &quot;pods/proxy&quot;,
+      ...
+    },
+    {
+      &quot;name&quot;: &quot;pods/status&quot;,
+      &quot;singularName&quot;: &quot;&quot;,
+      &quot;namespaced&quot;: true,
+      &quot;kind&quot;: &quot;Pod&quot;,
+      &quot;verbs&quot;: [
+        &quot;get&quot;,
+        &quot;patch&quot;,
+        &quot;update&quot;
+      ]
+    },
+    {
+      &quot;name&quot;: &quot;podtemplates&quot;,
+      ...
+    },
+    {
+      &quot;name&quot;: &quot;replicationcontrollers&quot;,
+      ...
+    },
+    {
+      &quot;name&quot;: &quot;replicationcontrollers/scale&quot;,
+      ...
+    },
+    {
+      &quot;name&quot;: &quot;replicationcontrollers/status&quot;,
+      ...
+    },
+    {
+      &quot;name&quot;: &quot;resourcequotas&quot;,
+      ...
+    },
+    {
+      &quot;name&quot;: &quot;resourcequotas/status&quot;,
+      ...
+    },
+    {
+      &quot;name&quot;: &quot;secrets&quot;,
+      ...
+    },
+    {
+      &quot;name&quot;: &quot;serviceaccounts&quot;,
+      ...
+    },
+    {
+      &quot;name&quot;: &quot;serviceaccounts/token&quot;,
+      ...
+    },
+    {
+      &quot;name&quot;: &quot;services&quot;,
+      ...
+    },
+    {
+      &quot;name&quot;: &quot;services/proxy&quot;,
+      ...
+    },
+    {
+      &quot;name&quot;: &quot;services/status&quot;,
+      ...
+    }
+  ]
+}
+</code></pre>
+<p>These resources are the main core of kubernetes. We&#x27;ve already seen many of them here.</p>
+<p>Making a more summarized list we have and whether their scope is at namespace or cluster level.</p>
+<ul>
+<li><em>bindings</em> : Namespace</li>
+<li><em>componentstatuses</em> : Cluster</li>
+<li><em>configmaps</em> : Namespace</li>
+<li><em>endpoints</em> : Namespace</li>
+<li><em>events</em> : Namespace</li>
+<li><em>limitranges</em> : Namespace</li>
+<li><em>namespaces</em> : Cluster</li>
+<li><em>nodes</em> : Cluster</li>
+<li><em>persistentvolumeclaims</em> : Namespace</li>
+<li><em>persistentvolumes</em> : Cluster</li>
+<li><em>pods</em> : Namespace</li>
+<li><em>podtemplates</em> : Namespace</li>
+<li><em>replicationcontrollers</em> : Namespace</li>
+<li><em>resourcequotas</em> : Namespace</li>
+<li><em>secrets</em> : Namespace</li>
+<li><em>serviceaccounts</em> : Namespace</li>
+<li><em>services</em> : Namespace</li>
+</ul>
+<p>Looking at pods we can see that we have verbs (actions) that we can execute on resources. The verbs are different depending on the resource.</p>
+<p>The possible verbs are those listed in the main resource like in pods.</p>
+<ul>
+<li>create</li>
+<li>delete</li>
+<li>deletecollection</li>
+<li>get</li>
+<li>list</li>
+<li>patch</li>
+<li>update</li>
+<li>watch</li>
+</ul>
+<p>In pod/status we don&#x27;t have some verbs.</p>
+<p>The same applies to services and service/* or persistentvolumeclaim and persistentvolumeclaim/*.</p>
+<p>Note that these verbs are widely used in the kubectl command itself.</p>
+<p>To see the possible apigroups we have the command.</p>
+<pre><code class="language-bash">kubectl get --raw=&#x27;/?-k&#x27;
+# or
+curl http://127.0.0.1:6443 -k
+</code></pre>
+<h2 id="apis">/apis</h2>
+<p>In apis the groups are more organized and will aggregate the newer resources available for Kubernetes. At the first level we only find more groups.</p>
+<pre><code class="language-bash">kubectl get --raw=&#x27;/apis&#x27; | jq
+{
+  &quot;kind&quot;: &quot;APIGroupList&quot;,
+  &quot;apiVersion&quot;: &quot;v1&quot;,
+  # Each group needs to be named with the available versions and the preferred version which would be the default
+  &quot;groups&quot;: [
+    {
+      &quot;name&quot;: &quot;apiregistration.k8s.io&quot;,
+      &quot;versions&quot;: [
+        {
+          &quot;groupVersion&quot;: &quot;apiregistration.k8s.io/v1&quot;,
+          &quot;version&quot;: &quot;v1&quot;
+        }
+      ],
+      &quot;preferredVersion&quot;: {
+        &quot;groupVersion&quot;: &quot;apiregistration.k8s.io/v1&quot;,
+        &quot;version&quot;: &quot;v1&quot;
+      }
+    },
+    ## I left this group complete to observe
+    {
+      &quot;name&quot;: &quot;apps&quot;,
+      &quot;versions&quot;: [
+        {
+          &quot;groupVersion&quot;: &quot;apps/v1&quot;, #We&#x27;ve used this before
+          &quot;version&quot;: &quot;v1&quot;
+        }
+      ],
+      &quot;preferredVersion&quot;: {
+        &quot;groupVersion&quot;: &quot;apps/v1&quot;,
+        &quot;version&quot;: &quot;v1&quot;
+      }
+    },
+    {
+      &quot;name&quot;: &quot;events.k8s.io&quot;,
+      ...
+    },
+    {
+      &quot;name&quot;: &quot;authentication.k8s.io&quot;,
+      ...
+    },
+    {
+      &quot;name&quot;: &quot;authorization.k8s.io&quot;,
+      ...
+    },
+    # A case with more than one version and showing that there is a default version
+    # In this case it&#x27;s used to support backward compatibility until it&#x27;s deprecated
+    {
+      &quot;name&quot;: &quot;autoscaling&quot;,
+      &quot;versions&quot;: [
+        {
+          &quot;groupVersion&quot;: &quot;autoscaling/v2&quot;,
+          &quot;version&quot;: &quot;v2&quot;
+        },
+        {
+          &quot;groupVersion&quot;: &quot;autoscaling/v1&quot;,
+          &quot;version&quot;: &quot;v1&quot;
+        }
+      ],
+      &quot;preferredVersion&quot;: {
+        &quot;groupVersion&quot;: &quot;autoscaling/v2&quot;,
+        &quot;version&quot;: &quot;v2&quot;
+      }
+    },
+    {
+      &quot;name&quot;: &quot;batch&quot;,
+      ...
+    },
+    {
+      &quot;name&quot;: &quot;certificates.k8s.io&quot;,
+      ...
+    },
+    {
+      &quot;name&quot;: &quot;networking.k8s.io&quot;,
+      ...
+    },
+    {
+      &quot;name&quot;: &quot;policy&quot;,
+      ...
+    },
+    {
+      &quot;name&quot;: &quot;rbac.authorization.k8s.io&quot;,
+      ...
+    },
+    {
+      &quot;name&quot;: &quot;storage.k8s.io&quot;,
+      ...
+    },
+    {
+      &quot;name&quot;: &quot;admissionregistration.k8s.io&quot;,
+      ...
+    },
+    {
+      &quot;name&quot;: &quot;apiextensions.k8s.io&quot;,
+      ...
+    },
+    {
+      &quot;name&quot;: &quot;scheduling.k8s.io&quot;,
+    },
+    {
+      &quot;name&quot;: &quot;coordination.k8s.io&quot;,
+      ...
+    },
+    {
+      &quot;name&quot;: &quot;node.k8s.io&quot;,
+      ...
+    },
+    {
+      &quot;name&quot;: &quot;discovery.k8s.io&quot;,
+      ...
+    },
+    {
+      &quot;name&quot;: &quot;flowcontrol.apiserver.k8s.io&quot;,
+      ...
+    }
+  ]
+}
+</code></pre>
+<p>Making a summary we have the subgroups below and within each of them we have more kubernetes resources.</p>
+<ul>
+<li><strong>apps</strong> : Namespace</li>
+<li><strong>events.k8s.io</strong> : Namespace</li>
+<li><strong>authentication.k8s.io</strong> : Cluster</li>
+<li><strong>authorization.k8s.io</strong> : Cluster and Namespace</li>
+<li><strong>autoscaling</strong> : Namespace</li>
+<li><strong>batch</strong> : Namespace</li>
+<li><strong>certificates.k8s.io</strong> : Cluster</li>
+<li><strong>networking.k8s.io</strong> : Namespace</li>
+<li><strong>policy</strong> : Namespace</li>
+<li><strong>rbac.authorization.k8s.io</strong> : Namespace</li>
+<li><strong>storage.k8s.io</strong> : Namespace</li>
+<li><strong>admissionregistration.k8s.io</strong> : Namespace</li>
+<li><strong>apiextensions.k8s.io</strong> : Namespace</li>
+<li><strong>scheduling.k8s.io</strong> : Namespace</li>
+<li><strong>coordination.k8s.io</strong> : Namespace</li>
+<li><strong>node.k8s.io</strong> : Namespace</li>
+<li><strong>discovery.k8s.io</strong> : Namespace</li>
+<li><strong>flowcontrol.apiserver.k8s.io</strong> : Namespace</li>
+</ul>
+<p>Let&#x27;s analyze apps, but what I&#x27;m going to do would apply to each of the groups above. Similarly I&#x27;ll reduce the output to make it easier to read. Likewise we have the verbs.</p>
+<pre><code class="language-bash">kubectl get --raw=&#x27;/apis/apps/v1&#x27; | jq
+{
+  # Here what is expected to have in each of the resources
+  &quot;kind&quot;: &quot;APIResourceList&quot;,
+  &quot;apiVersion&quot;: &quot;v1&quot;,
+  &quot;groupVersion&quot;: &quot;apps/v1&quot;,
+  &quot;resources&quot;: [
+    {
+      &quot;name&quot;: &quot;controllerrevisions&quot;,
+      &quot;singularName&quot;: &quot;controllerrevision&quot;,
+      &quot;namespaced&quot;: true,
+      &quot;kind&quot;: &quot;ControllerRevision&quot;,
+      &quot;verbs&quot;: [
+        &quot;create&quot;,
+        &quot;delete&quot;,
+        &quot;deletecollection&quot;,
+        &quot;get&quot;,
+        &quot;list&quot;,
+        &quot;patch&quot;,
+        &quot;update&quot;,
+        &quot;watch&quot;
+      ],
+      &quot;storageVersionHash&quot;: &quot;85nkx63pcBU=&quot;
+    },
+    {
+      &quot;name&quot;: &quot;daemonsets&quot;,
+      ...
+    {
+      &quot;name&quot;: &quot;daemonsets/status&quot;,
+       ...
+    {
+      &quot;name&quot;: &quot;deployments&quot;,
+      &quot;singularName&quot;: &quot;deployment&quot;,
+      &quot;namespaced&quot;: true,
+      &quot;kind&quot;: &quot;Deployment&quot;,
+      &quot;verbs&quot;: [
+        &quot;create&quot;,
+        &quot;delete&quot;,
+        &quot;deletecollection&quot;,
+        &quot;get&quot;,
+        &quot;list&quot;,
+        &quot;patch&quot;,
+        &quot;update&quot;,
+        &quot;watch&quot;
+      ],
+      &quot;shortNames&quot;: [
+        &quot;deploy&quot;
+      ],
+      &quot;categories&quot;: [
+        &quot;all&quot;
+      ],
+      &quot;storageVersionHash&quot;: &quot;8aSe+NMegvE=&quot;
+    },
+    {
+      &quot;name&quot;: &quot;deployments/scale&quot;,
+      ...
+    {
+      &quot;name&quot;: &quot;deployments/status&quot;,
+     ...
+    {
+      &quot;name&quot;: &quot;replicasets&quot;,
+      ...
+    {
+      &quot;name&quot;: &quot;replicasets/scale&quot;,
+      ...
+    {
+      &quot;name&quot;: &quot;replicasets/status&quot;,
+      ...
+    {
+      &quot;name&quot;: &quot;statefulsets&quot;,
+      ...
+    {
+      &quot;name&quot;: &quot;statefulsets/scale&quot;,
+      ...
+    {
+      &quot;name&quot;: &quot;statefulsets/status&quot;,
+      ...
+    }
+}
+</code></pre>
+<p>If we were to summarize we would find in apps.</p>
+<ul>
+<li>apps
+<ul>
+<li>v1
+<ul>
+<li>daemonsets</li>
+<li>deployments</li>
+<li>replicasets</li>
+<li>statefulset</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>Let&#x27;s fill in the groups and what we would find inside them. Remember that it&#x27;s not complete, only the main resource. I&#x27;ll emphasize showing what scope it has to better understand some concepts later.</p>
+<ul>
+<li>apps
+<ul>
+<li>v1
+<ul>
+<li><strong>daemonsets</strong> : Namespace</li>
+<li><strong>deployments</strong> : Namespace</li>
+<li><strong>replicasets</strong> : Namespace</li>
+<li><strong>statefulset</strong> : Namespace</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>events.k8s.io
+<ul>
+<li>v1
+<ul>
+<li><strong>events</strong> : Namespace</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>authentication.k8s.io
+<ul>
+<li>v1
+<ul>
+<li><strong>selfsubjectreviews</strong> : Cluster</li>
+<li><strong>tokenreviews</strong> : : Cluster</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>authorization.k8s.io
+<ul>
+<li>v1
+<ul>
+<li><strong>localsubjectaccessreviews</strong> : Namespace</li>
+<li><strong>selfsubjectaccessreviews</strong> : Cluster</li>
+<li><strong>selfsubjectrulesreviews</strong> : Cluster</li>
+<li><strong>subjectaccessreviews</strong> : Cluster</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>autoscaling
+<ul>
+<li>v1
+<ul>
+<li><strong>horizontalpodautoscalers</strong> : Namespace</li>
+</ul>
+</li>
+<li>v2
+<ul>
+<li><strong>horizontalpodautoscalers</strong> : Namespace</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>batch
+<ul>
+<li>v1
+<ul>
+<li><strong>cronjobs</strong> : Namespace</li>
+<li><strong>jobs</strong> : Namespace</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>certificates.k8s.io
+<ul>
+<li>v1
+<ul>
+<li><strong>certificatesigningrequests</strong>: Cluster</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>networking.k8s.io
+<ul>
+<li>v1
+<ul>
+<li><strong>ingresses</strong> : Namespace</li>
+<li><strong>ingressclasses</strong> : Cluster</li>
+<li><strong>networkpolicies</strong> : : Namespace</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>policy
+<ul>
+<li>v1
+<ul>
+<li><strong>poddisruptionbudgets</strong> : Namespace</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>rbac.authorization.k8s.io
+<ul>
+<li>v1
+<ul>
+<li><strong>clusterroles</strong> : Cluster</li>
+<li><strong>clusterrolebindings</strong> : Cluster</li>
+<li><strong>roles</strong> : Namespace</li>
+<li><strong>rolebindings</strong> : Namespace</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>storage.k8s.io
+<ul>
+<li>v1
+<ul>
+<li><strong>storageclasses</strong> : Cluster</li>
+<li><strong>volumeattachments</strong> : Cluster</li>
+<li><strong>csidrivers</strong> : Cluster</li>
+<li><strong>csinodes</strong> : Cluster</li>
+<li><strong>csistoragecapacities</strong> : Namespace</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>admissionregistration.k8s.io
+<ul>
+<li>v1
+<ul>
+<li><strong>mutatingwebhookconfigurations</strong> : Cluster</li>
+<li><strong>validatingwebhookconfigurations</strong> : Cluster</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>apiextensions.k8s.io
+<ul>
+<li>v1
+<ul>
+<li><strong>customresourcedefinitions</strong> : Cluster</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>scheduling.k8s.io
+<ul>
+<li>v1
+<ul>
+<li><strong>priorityclasses</strong> : Cluster</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>coordination.k8s.io
+<ul>
+<li>v1
+<ul>
+<li><strong>leases</strong> : Namespace</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>node.k8s.io
+<ul>
+<li>v1
+<ul>
+<li><strong>runtimeclasses</strong> : Cluster</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>discovery.k8s.io
+<ul>
+<li>v1
+<ul>
+<li><strong>endpointslices</strong> : Namespace</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>flowcontrol.apiserver.k8s.io
+<ul>
+<li>v1
+<ul>
+<li><strong>flowschemas</strong> : Cluster</li>
+<li><strong>prioritylevelconfigurations</strong> : Cluster</li>
+</ul>
+</li>
+<li>v1beta3
+<ul>
+<li><strong>flowschemas</strong> : Cluster</li>
+<li><strong>prioritylevelconfigurations</strong> : Cluster</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>What to take from all this?</p>
+<p>All kubernetes resources are grouped into different apigroups. At the top level we have /api with the kubernetes core and /apis with named groups. Within each group we have different resources and the associated verbs which are a set of possible actions that will be used to allow or deny a user from doing something and whether a resource is cluster or namespace level.</p>
+<p><img decoding="async" loading="lazy" alt="alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-21-6b9607677dccc262c68f85008bcd6ba9.png" width="1868" height="1007" class="img_ev3q"></p>
+<p>The command <code>kubectl api-resources</code> will bring all kubernetes resources.</p>
+<pre><code class="language-bash"># Cluster level resources
+kubectl api-resources  --namespaced=false -o name
+
+# Namespace level resources
+kubectl api-resources  --namespaced=true -o name
+</code></pre>
+      <div class="docs-pager">
+        <a href="../../../../#blogs">All blogs</a>
+        <a href="../">Back to CKA</a>
+      </div>
+    </article>
+    <aside class="docs-toc">
+      <div class="docs-toc-title">On this page</div>
+      <nav>
+        <a href="#version">/version</a>
+        <a href="#livez-and-readyz">/livez and /readyz</a>
+        <a href="#openapi">/openapi</a>
+        <a href="#api">/api</a>
+        <a href="#apis">/apis</a>
+      </nav>
+    </aside>
+  </div>
+  <script src="../../../../js/docs.js"></script>
+</body>
+</html>

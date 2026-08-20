@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Authorization — Hieu Nguyen</title>
+  <meta name="description" content="Authorization — Kubestronaut roadmap.">
+  <link rel="icon" href="../../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../../">i'm<span>.hieu</span></a>
+    <nav class="docs-series">
+      <a href="../../../../blog/web-security/">Web Security</a>
+      <a class="active" href="../../">Kubestronaut roadmap</a>
+    </nav>
+    <nav class="docs-cert-tabs"><a href="../../cka/" class="active">CKA</a><a href="../../ckad/" class="">CKAD</a><a href="../../cks/" class="">CKS</a></nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-nav="kubestronaut" data-cert="cka" data-docs-root="../" data-active="authorization">
+      <div class="docs-nav-label">CKA</div>
+      <ul class="docs-nav" id="docsNav"></ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../../">Home</a>
+        <span>›</span>
+        <a href="../../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../../">Kubestronaut</a>
+        <span>›</span>
+        <a href="../">CKA</a>
+        <span>›</span>
+        <span>Authorization</span>
+      </div>
+      <div id="top"></div>
+<header><h1>Authorization</h1></header><p>We have already seen that the kube-apiserver has the function of authenticating a user through certificates, but what can they do in the cluster?</p>
+<p>As administrators, we can do anything in the cluster, but we don&#x27;t want other users to be able to modify configurations, approve certificates, work in kube-system namespaces, delete secrets, etc.</p>
+<p>We can allow them to view, but not modify for example.</p>
+<p><img decoding="async" loading="lazy" alt="alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-22-b296a11662bf55d718c555d03d37dea2.png" width="1875" height="976" class="img_ev3q"></p>
+<p>A very interesting scenario is that a cluster can be divided among different organizations or teams and each one must work in their respective namespaces. This is where authorization can also help within the cluster.</p>
+<p>There are different authorization mechanisms:</p>
+<ul>
+<li>Node</li>
+<li>ABAC</li>
+<li>RBAC</li>
+<li>Webhook</li>
+<li>AlwaysAllow (Not recommended)</li>
+<li>AlwaysDeny (Not recommended)</li>
+</ul>
+<h2 id="node">Node</h2>
+<p>We know that users can access the kube-apiserver, but the Kubelet within the worker nodes also accesses it. When the Kubelet certificate was created, it was also specified that it should belong to the system:nodes group, remember?</p>
+<p>The system:nodes group already contains specific permissions for nodes in Kubernetes. The Kubelet needs to create pods on the node, update the kube-apiserver, update the node status, access storage, access other services, etc.</p>
+<p>What could a node do?</p>
+<pre><code class="language-bash">kubectl get clusterroles system:node -o yaml
+
+# To make it easier, I separated the pieces
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  annotations:
+    rbac.authorization.kubernetes.io/autoupdate: &quot;true&quot;
+  creationTimestamp: &quot;2024-02-08T23:02:26Z&quot;
+  labels:
+    kubernetes.io/bootstrapping: rbac-defaults
+  name: system:node
+  resourceVersion: &quot;84&quot;
+  uid: 923e2cc5-fd5e-47e5-b4ce-69f57431c2ba
+rules:
+
+##################
+- apiGroups:
+  - authentication.k8s.io
+  resources:
+  - tokenreviews
+  verbs:
+  - create
+
+##################
+- apiGroups:
+  - authorization.k8s.io
+  resources:
+  - localsubjectaccessreviews
+  - subjectaccessreviews
+  verbs:
+  - create
+
+################## SERVICES
+- apiGroups:
+  - &quot;&quot;
+  resources:
+  - services #&lt;&lt;&lt;
+  verbs:
+  - get
+  - list
+  - watch
+
+##################
+- apiGroups:
+  - &quot;&quot;
+  resources:
+  - nodes     &lt;------------------------|
+  verbs:                               |
+  - create                             |
+  - get                                |
+  - list                               |
+  - watch                              |
+                                       |
+##################                     ^
+- apiGroups:                           |
+  - &quot;&quot;                                 |
+  resources:                           |
+  - nodes/status                       |
+  verbs:                               |
+  - patch                              |
+  - update                             |
+                                       |
+##################                     ^
+- apiGroups:                           |
+  - &quot;&quot;                                 |
+  resources:                           |
+  - nodes # SAME AS TWO GROUPS ABOVE
+  verbs:
+  - patch
+  - update
+
+################## CREATE AND UPDATE EVENTS
+- apiGroups:
+  - &quot;&quot;
+  resources:
+  - events
+  verbs:
+  - create
+  - patch
+  - update
+
+################## NOTICE HERE. WE HAVE TWO GROUPS FOR THE SAME RESOURCE PODS
+# IF COMBINED IT WOULD BE THE SAME, BUT IT WAS SIMPLY SEPARATED PERMISSIONS FOR READING AND WRITING AS A FORM OF ORGANIZATION
+- apiGroups:
+  - &quot;&quot;
+  resources:
+  - pods
+  verbs:
+  - get
+  - list
+  - watch
+
+- apiGroups:
+  - &quot;&quot;
+  resources:
+  - pods   #&lt;&lt; SAME GROUP AS ABOVE
+  verbs:
+  - create
+  - delete
+
+##################
+- apiGroups:
+  - &quot;&quot;
+  resources:
+  - pods/status
+  verbs:
+  - patch
+  - update
+
+##################
+- apiGroups:
+  - &quot;&quot;
+  resources:
+  - pods/eviction
+  verbs:
+  - create
+
+##################
+- apiGroups:
+  - &quot;&quot;
+  resources:
+  - configmaps
+  - secrets
+  verbs:
+  - get
+  - list
+  - watch
+
+##################
+- apiGroups:
+  - &quot;&quot;
+  resources:
+  - persistentvolumeclaims
+  - persistentvolumes
+  verbs:
+  - get
+
+##################
+- apiGroups:
+  - &quot;&quot;
+  resources:
+  - endpoints
+  verbs:
+  - get
+
+##################
+- apiGroups:
+  - certificates.k8s.io
+  resources:
+  - certificatesigningrequests
+  verbs:
+  - create
+  - get
+  - list
+  - watch
+
+##################
+- apiGroups:
+  - coordination.k8s.io
+  resources:
+  - leases
+  verbs:
+  - create
+  - delete
+  - get
+  - patch
+  - update
+
+##################
+- apiGroups:
+  - storage.k8s.io
+  resources:
+  - volumeattachments
+  verbs:
+  - get
+
+##################
+- apiGroups:
+  - &quot;&quot;
+  resources:
+  - serviceaccounts/token
+  verbs:
+  - create
+
+##################
+- apiGroups:
+  - &quot;&quot;
+  resources:
+  - persistentvolumeclaims/status
+  verbs:
+  - get
+  - patch
+  - update
+
+##################
+- apiGroups:
+  - storage.k8s.io
+  resources:
+  - csidrivers
+  verbs:
+  - get
+  - list
+  - watch
+
+##################
+- apiGroups:
+  - storage.k8s.io
+  resources:
+  - csinodes
+  verbs:
+  - create
+  - delete
+  - get
+  - patch
+  - update
+
+##################
+- apiGroups:
+  - node.k8s.io
+  resources:
+  - runtimeclasses
+  verbs:
+  - get
+  - list
+  - watch
+</code></pre>
+<p>Looking at the output above, we could make this smaller, but it&#x27;s a matter of organization.</p>
+<h2 id="abac-attribute-based-access-control---deprecated">ABAC (Attribute-Based Access Control) - DEPRECATED</h2>
+<p>The study here is valuable for understanding Kubernetes history as it was removed from version 1.25 onwards.</p>
+<p>In this method, we associate a user or group of users with permissions on certain resources and the permissions over each resource.</p>
+<p>It is not possible to create a YAML file to define this. It is necessary to pass a JSON file as a parameter to the kube-apiserver in its manifest or service, depending on how the cluster was created.</p>
+<p>For example, in the kube-apiserver manifest we would have:</p>
+<pre><code class="language-yaml">...
+spec:
+  containers:
+  - command:
+    - kube-apiserver
+    - --advertise-address=172.18.0.4
+    - --allow-privileged=true
+    - --authorization-mode=Node,RBAC,ABAC ## added ABAC
+    - --abac-file=/my/path/to/abac.json ## the JSON file
+    - --client-ca-file=/etc/kubernetes/pki/ca.crt
+    ...
+</code></pre>
+<blockquote>
+<p>The AlwaysAllow mode is set by default if no --authorization-mode is defined. In this case, all users have unrestricted access to all cluster resources. AlwaysDeny would create a completely restricted cluster, even for administrative tasks. It would be used for security testing when everything is denied.</p>
+</blockquote>
+<p>In this JSON file we would have:</p>
+<pre><code class="language-json">{
+  &quot;apiVersion&quot;: &quot;abac.authorization.kubernetes.io/v1beta1&quot;,
+  &quot;kind&quot;: &quot;Policy&quot;,
+  &quot;spec&quot;: {
+    &quot;policies&quot;: [
+      {
+        &quot;apiVersion&quot;: &quot;abac.authorization.kubernetes.io/v1beta1&quot;,
+        &quot;kind&quot;: &quot;Policy&quot;,
+        &quot;spec&quot;: {
+          &quot;user&quot;: &quot;david&quot;,
+          &quot;namespace&quot;: &quot;default&quot;,
+          &quot;resource&quot;: &quot;*&quot;, # EVERYTHING ALLOWED
+          &quot;readonly&quot;: false
+        }
+      }
+      {
+        &quot;apiVersion&quot;: &quot;abac.authorization.kubernetes.io/v1beta1&quot;,
+        &quot;kind&quot;: &quot;Policy&quot;,
+        &quot;spec&quot;: {
+          &quot;user&quot;: &quot;joao&quot;,
+          &quot;namespace&quot;: &quot;default&quot;,
+          &quot;resource&quot;: &quot;daemonset&quot;, # ONLY ACCEPTS ONE RESOURCE AT A TIME
+          &quot;verbs&quot;: [&quot;get&quot;, &quot;list&quot;, &quot;watch&quot;]
+        }
+      }
+      {
+        &quot;apiVersion&quot;: &quot;abac.authorization.kubernetes.io/v1beta1&quot;,
+        &quot;kind&quot;: &quot;Policy&quot;,
+        &quot;spec&quot;: {
+          &quot;user&quot;: &quot;joao&quot;,
+          &quot;namespace&quot;: &quot;default&quot;,
+          &quot;resource&quot;: &quot;deployments&quot;,
+          &quot;verbs&quot;: &quot;verbs&quot;: [&quot;get&quot;, &quot;list&quot;, &quot;watch&quot;, &quot;create&quot;, &quot;update&quot;, &quot;delete&quot;]
+        }
+      }
+    ]
+  }
+}
+</code></pre>
+<p>And to take effect, we would need to restart the kube-apiserver. Each policy only accepts one name at a time; in the case of * it is acceptable for all, but we cannot put only 2 or 3. Another block is required as you can see above.</p>
+<p>This is no longer used and will not be on the exam, but it&#x27;s good to know how laborious it was to configure.</p>
+<h2 id="webhook">Webhook</h2>
+<p>What if we want to outsource all authorization mechanisms instead of using RBAC?</p>
+<p>Here are some tools for this purpose:</p>
+<ul>
+<li><a href="https://www.openpolicyagent.org/" target="_blank" rel="noopener noreferrer">Open Policy Agent (OPA)</a> is a broader tool that covers Kubernetes and other scenarios</li>
+<li><a href="https://www.openpolicyagent.org/" target="_blank" rel="noopener noreferrer">Gatekeeper</a> uses OPA but is exclusive to Kubernetes</li>
+<li><a href="https://kyverno.io/docs/introduction/" target="_blank" rel="noopener noreferrer">kyverno</a></li>
+</ul>
+<p><img decoding="async" loading="lazy" alt="alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-23-be2053b07b238bdf73be0415ac1166c3.png" width="951" height="541" class="img_ev3q"></p>
+<p>It is necessary to enable the Webhook in the kube-apiserver as an authorization mode. It tries to authorize following the established order when many modes are used.</p>
+<p>--authorization-mode=Node,RBAC,Webhook</p>
+<blockquote>
+<p>Node &gt; RBAC &gt; Webhook</p>
+</blockquote>
+<p>--authorization-mode=Node,Webhook,RBAC</p>
+<blockquote>
+<p>Node &gt; Webhook &gt; RBAC</p>
+</blockquote>
+<h2 id="rbac-role-based-access-control">RBAC (Role-Based Access Control)</h2>
+<p>This is the built-in method of Kubernetes.</p>
+<p>We define a role (function in the cluster) and associate users with that role.</p>
+<p>For example, the developer role can do certain things in the cluster and users who are developers act using this role. Administrators use administrator roles, and so on.</p>
+<p>Once we change the permissions of a role, all users who assume that role are affected at once. It is one of the ways we have to group things.</p>
+<p>Remember that david user we created for the cluster?</p>
+<p>Let&#x27;s create a role that he can use.</p>
+<p>First, we need to understand that there are two types of role:</p>
+<ul>
+<li>Role: Used to give permissions at the namespace level.</li>
+<li>ClusterRole: Used to give permissions at the cluster level.</li>
+</ul>
+<p>For example, get nodes is at what level? Cluster.</p>
+<p>If we want to create an admin role for example, we will give permissions at the cluster level.</p>
+<p>First, we need to create the role and then allow a user to assume this role using a binding. Let&#x27;s create two in the same file so it&#x27;s easy to understand.</p>
+<h3 id="roles-and-rolebindings">Roles and RoleBindings</h3>
+<p>Let&#x27;s start with a normal role with namespace scope.</p>
+<pre><code class="language-bash">cat &lt;&lt;EOF | kubectl apply -f -
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: dev-role
+rules:
+- apiGroups:
+  - &quot;&quot;
+  resources:
+  - deployments # &lt;&lt;&lt; Pay attention to this
+  - pods
+  - services
+  # THESE VERBS ARE APPLIED TO ALL RESOURCES ABOVE
+  verbs:
+  - create
+  - list
+  - get
+  - update
+  - delete
+  - watch
+- apiGroups: [&quot;&quot;]
+  resources: [&quot;ConfigMap&quot;]
+  verbs: [&quot;create&quot;]
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: david-binding-dev-role
+subjects:
+- kind: User
+  name: david
+  apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: Role
+  name: dev-role
+  apiGroup: rbac.authorization.k8s.io
+EOF
+
+role.rbac.authorization.k8s.io/dev-role created
+rolebinding.rbac.authorization.k8s.io/david-binding-role created
+</code></pre>
+<p>So we created a role that has permission to work with pods and deployments, but we didn&#x27;t specify a namespace. Let&#x27;s check.</p>
+<pre><code class="language-bash">kubectl get role
+NAME       CREATED AT
+dev-role   2024-02-11T09:32:38Z
+
+kubectl describe role dev-role
+Name:         dev-role
+Labels:       &lt;none&gt;
+Annotations:  &lt;none&gt;
+PolicyRule:
+  Resources    Non-Resource URLs  Resource Names  Verbs
+  ---------    -----------------  --------------  -----
+  deployments  []                 []              [create list get update delete watch]
+  pods         []                 []              [create list get update delete watch]
+  services     []                 []              [create list get update delete watch]
+  configmaps   []                 []              [create]
+
+kubectl get rolebindings
+NAME                     ROLE            AGE
+david-binding-dev-role   Role/dev-role   25s
+
+kubectl describe rolebindings david-binding-dev-role
+Name:         david-binding-dev-role
+Labels:       &lt;none&gt;
+Annotations:  &lt;none&gt;
+Role:
+  Kind:  Role
+  Name:  dev-role
+Subjects:
+  Kind  Name   Namespace
+  ----  ----   ---------
+  User  david
+</code></pre>
+<p>Let&#x27;s then check what a user could do</p>
+<pre><code class="language-bash">## In this case I&#x27;m checking for the user I&#x27;m currently logged in as
+kubectl auth can-i create deployments
+yes
+
+## Checking for another user
+kubectl auth can-i create deployments --as david
+no # WHY?
+
+kubectl auth can-i get pods --as david
+yes
+
+kubectl auth can-i create configmaps --as david
+yes
+
+kubectl auth can-i delete configmaps --as david
+no
+</code></pre>
+<p>Why can&#x27;t david create deployments but can create pods? Why did one work and the other didn&#x27;t?</p>
+<p>Because deployments are from a different apigroup, remember? When we don&#x27;t define an apigroup it will automatically understand that it&#x27;s the core, meaning api, so deployment is in another group.</p>
+<p>In the core we have:</p>
+<ul>
+<li>bindings</li>
+<li>componentstatuses</li>
+<li>configmaps</li>
+<li>endpoints</li>
+<li>events</li>
+<li>limitranges</li>
+<li>namespaces</li>
+<li>nodes</li>
+<li>persistentvolumeclaims</li>
+<li>persistentvolumes</li>
+<li>pods</li>
+<li>podtemplates</li>
+<li>replicationcontrollers</li>
+<li>resourcequotas</li>
+<li>secrets</li>
+<li>serviceaccounts</li>
+<li>services</li>
+</ul>
+<p>And in apis we have? Take a look there to remember!</p>
+<p>For deployment to work, it&#x27;s necessary to add this to the role, separating the deployment.</p>
+<pre><code class="language-yaml">- apiGroups: [&quot;apps&quot;]
+  resources: [&quot;deployments&quot;]
+  verbs: [&quot;create&quot;, &quot;list&quot;, &quot;get&quot;, &quot;update&quot;, &quot;delete&quot;, &quot;watch&quot;]
+</code></pre>
+<pre><code class="language-bash">cat &lt;&lt;EOF | kubectl apply -f -
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: dev-role
+rules:
+- apiGroups: [&quot;&quot;]
+  resources: [&quot;pods&quot;, &quot;services&quot;] # Removed deployments from here
+  verbs: [&quot;create&quot;, &quot;list&quot;, &quot;get&quot;, &quot;update&quot;, &quot;delete&quot;, &quot;watch&quot;]
+- apiGroups: [&quot;&quot;]
+  resources: [&quot;configmaps&quot;]
+  verbs: [&quot;create&quot;]
+- apiGroups: [&quot;apps&quot;]
+  resources: [&quot;deployments&quot;]
+  verbs: [&quot;create&quot;, &quot;list&quot;, &quot;get&quot;, &quot;update&quot;, &quot;delete&quot;, &quot;watch&quot;]
+EOF
+
+kubectl describe role dev-role
+Name:         dev-role
+Labels:       &lt;none&gt;
+Annotations:  &lt;none&gt;
+PolicyRule:
+  Resources         Non-Resource URLs  Resource Names  Verbs
+  ---------         -----------------  --------------  -----
+  pods              []                 []              [create list get update delete watch]
+  services          []                 []              [create list get update delete watch]
+  deployments.apps  []                 []              [create list get update delete watch]
+  configmaps        []                 []              [create]
+
+kubectl auth can-i create deployments --as david
+yes
+
+kubectl auth can-i create deployments --as david --namespace test
+no
+</code></pre>
+<blockquote>
+<p>When we don&#x27;t specify the namespace we want, it assumes default because Role has a namespace scope. It&#x27;s a best practice to always specify the namespace, even though I didn&#x27;t do it here.</p>
+</blockquote>
+<p>If you don&#x27;t know apigroups, you won&#x27;t understand RBAC. The reason resources are plural is exactly because within apigroups they are plural. Another observation we can make is that the second time we didn&#x27;t change the binding, only the role, and everything worked.</p>
+<p>We can also give permission to a resource with a specific name, such as a pod called nginx, using resourceNames.</p>
+<p>Creating a role can also be done using the kubectl command</p>
+<pre><code class="language-bash">## verbs resources and resource-name are lists
+create role new-role --verb=list,get,create,delete --resource=pods --resource-name=nginx
+role.rbac.authorization.k8s.io/new-role created
+
+kubectl describe role new-role
+Name:         new-role
+Labels:       &lt;none&gt;
+Annotations:  &lt;none&gt;
+PolicyRule:
+  Resources  Non-Resource URLs  Resource Names  Verbs
+  ---------  -----------------  --------------  -----
+  pods       []                 [nginx]         [list get create delete]
+
+
+kubectl create rolebinding new-role-binding --user=david --role=new-role
+rolebinding.rbac.authorization.k8s.io/new-role-binding created
+
+kubectl describe rolebindings new-role-binding
+Name:         new-role-binding
+Labels:       &lt;none&gt;
+Annotations:  &lt;none&gt;
+Role:
+  Kind:  Role
+  Name:  new-role
+Subjects:
+  Kind  Name   Namespace
+  ----  ----   ---------
+  User  david
+</code></pre>
+<h3 id="clusterroles-and-clusterrolebindings">ClusterRoles and ClusterRoleBindings</h3>
+<p>Looking inside a resource, we can see if a resource is at the namespace level or not.</p>
+<p>If you look again at /api/v1 we have the resources there, I took two examples:</p>
+<pre><code class="language-json">{
+  ...
+    {
+      &quot;name&quot;: &quot;nodes&quot;,
+      &quot;singularName&quot;: &quot;node&quot;,
+      &quot;namespaced&quot;: false, # Cluster level
+      &quot;kind&quot;: &quot;Node&quot;,
+      &quot;verbs&quot;: [
+        &quot;create&quot;,
+        &quot;delete&quot;,
+        &quot;deletecollection&quot;,
+        &quot;get&quot;,
+        &quot;list&quot;,
+        &quot;patch&quot;,
+        &quot;update&quot;,
+        &quot;watch&quot;
+      ],
+      &quot;shortNames&quot;: [
+        &quot;no&quot;
+      ],
+      &quot;storageVersionHash&quot;: &quot;XwShjMxG9Fs=&quot;
+    },
+    ...
+    {
+      &quot;name&quot;: &quot;pods&quot;,
+      &quot;singularName&quot;: &quot;pod&quot;,
+      &quot;namespaced&quot;: true, # Namespace level
+      &quot;kind&quot;: &quot;Pod&quot;,
+      &quot;verbs&quot;: [
+        &quot;create&quot;,
+        &quot;delete&quot;,
+        &quot;deletecollection&quot;,
+        &quot;get&quot;,
+        &quot;list&quot;,
+        &quot;patch&quot;,
+        &quot;update&quot;,
+        &quot;watch&quot;
+      ],
+      &quot;shortNames&quot;: [
+        &quot;po&quot;
+      ],
+      &quot;categories&quot;: [
+        &quot;all&quot;
+      ],
+      &quot;s
+    ...
+}
+...
+</code></pre>
+<p>Since cluster-scoped resources don&#x27;t need a namespace, we don&#x27;t need to specify them.</p>
+<p>To get all cluster-level resources we can do:</p>
+<pre><code class="language-bash">kubectl api-resources --namespaced=false
+
+NAME                              SHORTNAMES   APIVERSION                        NAMESPACED   KIND
+componentstatuses                 cs           v1                                false        ComponentStatus
+namespaces                        ns           v1                                false        Namespace
+nodes                             no           v1                                false        Node
+persistentvolumes                 pv           v1                                false        PersistentVolume
+mutatingwebhookconfigurations                  admissionregistration.k8s.io/v1   false        MutatingWebhookConfiguration
+validatingwebhookconfigurations                admissionregistration.k8s.io/v1   false        ValidatingWebhookConfiguration
+customresourcedefinitions         crd,crds     apiextensions.k8s.io/v1           false        CustomResourceDefinition
+apiservices                                    apiregistration.k8s.io/v1         false        APIService
+selfsubjectreviews                             authentication.k8s.io/v1          false        SelfSubjectReview
+tokenreviews                                   authentication.k8s.io/v1          false        TokenReview
+selfsubjectaccessreviews                       authorization.k8s.io/v1           false        SelfSubjectAccessReview
+selfsubjectrulesreviews                        authorization.k8s.io/v1           false        SelfSubjectRulesReview
+subjectaccessreviews                           authorization.k8s.io/v1           false        SubjectAccessReview
+certificatesigningrequests        csr          certificates.k8s.io/v1            false        CertificateSigningRequest
+flowschemas                                    flowcontrol.apiserver.k8s.io/v1   false        FlowSchema
+prioritylevelconfigurations                    flowcontrol.apiserver.k8s.io/v1   false        PriorityLevelConfiguration
+ingressclasses                                 networking.k8s.io/v1              false        IngressClass
+runtimeclasses                                 node.k8s.io/v1                    false        RuntimeClass
+clusterrolebindings                            rbac.authorization.k8s.io/v1      false        ClusterRoleBinding
+clusterroles                                   rbac.authorization.k8s.io/v1      false        ClusterRole
+priorityclasses                   pc           scheduling.k8s.io/v1              false        PriorityClass
+csidrivers                                     storage.k8s.io/v1                 false        CSIDriver
+csinodes                                       storage.k8s.io/v1                 false        CSINode
+storageclasses                    sc           storage.k8s.io/v1                 false        StorageClass
+volumeattachments                              storage.k8s.io/v1                 false        VolumeAttachment
+</code></pre>
+<p>The process is the same for Roles and RoleBindings but changing Role to ClusterRole and Binding to ClusterRoleBinding.</p>
+<p>Several clusterroles are created when a cluster is created for the first time.</p>
+<p>Here would be a role that could do anything.</p>
+<pre><code class="language-bash">cat &lt;&lt;EOF | kubectl apply -f -
+# DEFINE A ROLE ALLOWING EVERYTHING
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: admin-role
+rules:
+- apiGroups: [&quot;*&quot;] # FOR ALL APIGROUPS
+  resources: [&quot;*&quot;] # FOR ALL RESOURCES
+  verbs: [&quot;*&quot;] # ALL VERBS
+---
+
+# NOW WE BIND THIS ROLE WITH THE USER DAVID
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: david-binding-role
+subjects:
+- kind: User
+  name: david
+  apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: ClusterRole
+  name: admin-role
+  apiGroup: rbac.authorization.k8s.io
+EOF
+</code></pre>
+<p>An important thing to mention is that we can put namespace resources inside a ClusterRole normally, but not the opposite. The difference is that we are allowing ALL NAMESPACES.</p>
+      <div class="docs-pager">
+        <a href="../../../../#blogs">All blogs</a>
+        <a href="../">Back to CKA</a>
+      </div>
+    </article>
+    <aside class="docs-toc">
+      <div class="docs-toc-title">On this page</div>
+      <nav>
+        <a href="#node">Node</a>
+        <a href="#abac-attribute-based-access-control---deprecated">ABAC (Attribute-Based Access Control) - DEPRECATED</a>
+        <a href="#webhook">Webhook</a>
+        <a href="#rbac-role-based-access-control">RBAC (Role-Based Access Control)</a>
+        <a class="depth-3" href="#roles-and-rolebindings">Roles and RoleBindings</a>
+        <a class="depth-3" href="#clusterroles-and-clusterrolebindings">ClusterRoles and ClusterRoleBindings</a>
+      </nav>
+    </aside>
+  </div>
+  <script src="../../../../js/docs.js"></script>
+</body>
+</html>

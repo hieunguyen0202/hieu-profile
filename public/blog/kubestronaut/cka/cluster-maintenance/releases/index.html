@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kubernetes Releases — Hieu Nguyen</title>
+  <meta name="description" content="Kubernetes Releases — Kubestronaut roadmap.">
+  <link rel="icon" href="../../../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../../../">i'm<span>.hieu</span></a>
+    <nav class="docs-series">
+      <a href="../../../../../blog/web-security/">Web Security</a>
+      <a class="active" href="../../../">Kubestronaut roadmap</a>
+    </nav>
+    <nav class="docs-cert-tabs"><a href="../../../cka/" class="active">CKA</a><a href="../../../ckad/" class="">CKAD</a><a href="../../../cks/" class="">CKS</a></nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-nav="kubestronaut" data-cert="cka" data-docs-root="../../" data-active="cluster-maintenance/releases">
+      <div class="docs-nav-label">CKA</div>
+      <ul class="docs-nav" id="docsNav"></ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../../../">Home</a>
+        <span>›</span>
+        <a href="../../../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../../../">Kubestronaut</a>
+        <span>›</span>
+        <a href="../../">CKA</a>
+        <span>›</span>
+        <span>Kubernetes Releases</span>
+      </div>
+      <div id="top"></div>
+<header><h1>Kubernetes Releases</h1></header><p>We don&#x27;t need this for the exam, but it&#x27;s worth understanding to comprehend the Kubernetes project as a whole.</p>
+<p>Kubernetes is constantly evolving. What do we know so far about Kubernetes API versions?</p>
+<ul>
+<li>When we install Kubernetes, we install a specific version of Kubernetes.</li>
+</ul>
+<pre><code class="language-bash"># In this case we have version 1.27.4
+kubectl get nodes
+NAME                       STATUS   ROLES                  AGE    VERSION
+k3d-k3s-default-server-0   Ready    control-plane,master   2d8h   v1.27.4+k3s1
+k3d-k3s-default-agent-1    Ready    &lt;none&gt;                 2d8h   v1.27.4+k3s1
+k3d-k3s-default-agent-0    Ready    &lt;none&gt;                 2d8h   v1.27.4+k3s1
+</code></pre>
+<p>Kubernetes version is controlled through semantic versioning.</p>
+<p><img decoding="async" loading="lazy" alt="Alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-4-a2263e9d3fb4cf4342fbde08971cb241.png" width="359" height="245" class="img_ev3q"></p>
+<p>The first major version was v1.0 in July 2015 but the first stable version was v1.13.0</p>
+<p><img decoding="async" loading="lazy" alt="Alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-5-b60acd16d8d3289a29ba6527e27bb4fb.png" width="414" height="476" class="img_ev3q"></p>
+<p>They usually release the alpha version with new features disabled and then the beta version with features enabled and create the release.</p>
+<p><img decoding="async" loading="lazy" alt="Alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-6-1ddb277d9a2f13d73aa144dd6d4ed08d.png" width="602" height="417" class="img_ev3q"></p>
+<p>We can find releases at [<a href="https://github.com/kubernetes/kubernetes/releases" target="_blank" rel="noopener noreferrer">https://github.com/kubernetes/kubernetes/releases</a>]</p>
+<p>When we download one of these releases, what do we have?</p>
+<pre><code class="language-bash">wget https://github.com/kubernetes/kubernetes/archive/refs/tags/v1.28.5.zip
+unzip v1.28.5.zip
+
+ls -lha kubernetes-1.28.5/cmd
+total 108K
+drwxr-xr-x 26 david david 4.0K Dec 19 10:32 .
+drwxr-xr-x 18 david david 4.0K Dec 19 10:32 ..
+-rw-r--r--  1 david david  365 Dec 19 10:32 OWNERS
+drwxr-xr-x  2 david david 4.0K Dec 19 10:32 clicheck
+drwxr-xr-x  2 david david 4.0K Dec 19 10:32 cloud-controller-manager
+drwxr-xr-x  2 david david 4.0K Dec 19 10:32 dependencycheck
+drwxr-xr-x  2 david david 4.0K Dec 19 10:32 dependencyverifier
+drwxr-xr-x  2 david david 4.0K Dec 19 10:32 fieldnamedocscheck
+drwxr-xr-x  2 david david 4.0K Dec 19 10:32 gendocs
+drwxr-xr-x  2 david david 4.0K Dec 19 10:32 genkubedocs
+drwxr-xr-x  2 david david 4.0K Dec 19 10:32 genman
+drwxr-xr-x  2 david david 4.0K Dec 19 10:32 genswaggertypedocs
+drwxr-xr-x  2 david david 4.0K Dec 19 10:32 genutils
+drwxr-xr-x  2 david david 4.0K Dec 19 10:32 genyaml
+drwxr-xr-x  2 david david 4.0K Dec 19 10:32 importverifier
+drwxr-xr-x  3 david david 4.0K Dec 19 10:32 kube-apiserver #&lt;&lt;&lt;
+drwxr-xr-x  4 david david 4.0K Dec 19 10:32 kube-controller-manager #&lt;&lt;&lt;
+drwxr-xr-x  3 david david 4.0K Dec 19 10:32 kube-proxy #&lt;&lt;&lt;
+drwxr-xr-x  3 david david 4.0K Dec 19 10:32 kube-scheduler #&lt;&lt;&lt;
+drwxr-xr-x  4 david david 4.0K Dec 19 10:32 kubeadm
+drwxr-xr-x  2 david david 4.0K Dec 19 10:32 kubectl
+drwxr-xr-x  2 david david 4.0K Dec 19 10:32 kubectl-convert
+drwxr-xr-x  3 david david 4.0K Dec 19 10:32 kubelet #&lt;&lt;&lt;
+drwxr-xr-x  3 david david 4.0K Dec 19 10:32 kubemark
+drwxr-xr-x  2 david david 4.0K Dec 19 10:32 preferredimports
+drwxr-xr-x  2 david david 4.0K Dec 19 10:32 prune-junit-xml
+drwxr-xr-x  2 david david 4.0K Dec 19 10:32 yamlfmt
+</code></pre>
+<p>We have all the code we need but let&#x27;s pay attention to this.</p>
+<p>Kubernetes is a project that encompasses other projects. Remember that cAdvisor is present in Kubelet? Remember that ETCD is used?</p>
+<p>See that we need CNI, CoreDNS, ETCD, cAdvisor, etc</p>
+<p><code>The kube-apiserver, controller-manager, kube-scheduler, kubelet, kube-proxy kubectl are at the SAME VERSION because they are Kubernetes projects, but other components are at different versions.</code></p>
+<p>Other projects have their own repositories with their specific versions.</p>
+<pre><code class="language-bash">cat  kubernetes-1.28.5/build/dependencies.yaml
+dependencies:
+  # zeitgeist (https://github.com/kubernetes-sigs/zeitgeist) was inspired by
+  # (and now replaces) the cmd/verifydependencies tool to verify external
+  # dependencies across the repo.
+  #
+  # The zeitgeist dependencies.yaml file format is intended to be
+  # backwards-compatible with the original tooling.
+  #
+  # In instances where the file format may change across versions, this meta
+  # dependency check exists to ensure we&#x27;re pinned to a known good version.
+  #
+  # ref: https://github.com/kubernetes/kubernetes/pull/98845
+  - name: &quot;zeitgeist&quot;
+    version: &quot;v0.2.0&quot;
+    refPaths:
+    - path: hack/verify-external-dependencies-version.sh
+      match: sigs.k8s.io/zeitgeist@v.*
+
+  # CNI plugins
+  - name: &quot;cni&quot;
+    version: 1.2.0
+    refPaths:
+    - path: cluster/gce/config-common.sh
+      match: WINDOWS_CNI_VERSION=
+    - path: cluster/gce/gci/configure.sh
+      match: DEFAULT_CNI_VERSION=
+    - path: test/e2e_node/remote/utils.go
+      match: cniVersion[\t\n\f\r ]*=
+
+  # CoreDNS
+  - name: &quot;coredns-kube-up&quot;
+    version: 1.10.1
+    refPaths:
+    - path: cluster/addons/dns/coredns/coredns.yaml.base
+      match: registry.k8s.io/coredns
+    - path: cluster/addons/dns/coredns/coredns.yaml.in
+      match: registry.k8s.io/coredns
+    - path: cluster/addons/dns/coredns/coredns.yaml.sed
+      match: registry.k8s.io/coredns
+
+  - name: &quot;coredns-kubeadm&quot;
+    version: 1.10.1
+    refPaths:
+    - path: cmd/kubeadm/app/constants/constants.go
+      match: CoreDNSVersion =
+
+  # CRI Tools
+  - name: &quot;crictl&quot;
+    version: 1.27.0
+    refPaths:
+    - path: cluster/gce/windows/k8s-node-setup.psm1
+      match: CRICTL_VERSION =
+    - path: cluster/gce/gci/configure.sh
+      match: DEFAULT_CRICTL_VERSION=
+
+  # protoc
+  - name: &quot;protoc&quot;
+    version: 23.4
+    refPaths:
+    - path: hack/lib/protoc.sh
+      match: PROTOC_VERSION=
+
+  # etcd
+  - name: &quot;etcd&quot;
+    version: 3.5.9
+    refPaths:
+    - path: cluster/gce/manifests/etcd.manifest
+      match: etcd_docker_tag|etcd_version
+    - path: cluster/gce/upgrade-aliases.sh
+      match: ETCD_IMAGE|ETCD_VERSION
+    - path: cmd/kubeadm/app/constants/constants.go
+      match: DefaultEtcdVersion =
+    - path: hack/lib/etcd.sh
+      match: ETCD_VERSION=
+    - path: staging/src/k8s.io/sample-apiserver/artifacts/example/deployment.yaml
+      match: gcr.io/etcd-development/etcd
+    - path: test/e2e/framework/providers/gcp.go
+      match: const etcdImage
+    - path: test/utils/image/manifest.go
+      match: configs\[Etcd\] = Config{list\.GcEtcdRegistry, &quot;etcd&quot;, &quot;\d+\.\d+.\d+(-(alpha|beta|rc).\d+)?(-\d+)?&quot;}
+
+  - name: &quot;etcd-image&quot;
+    version: 3.5.9
+    refPaths:
+    - path: cluster/images/etcd/Makefile
+      match: BUNDLED_ETCD_VERSIONS\?|LATEST_ETCD_VERSION\?
+    - path: cluster/images/etcd/migrate/options.go
+
+  - name: &quot;node-problem-detector&quot;
+    version: 0.8.13
+    refPaths:
+    - path: test/e2e_node/image_list.go
+      match: const defaultImage
+    - path: test/kubemark//docs/kubernetes/certifications/cka/cluster-maintenance/resources/hollow-node_template.yaml
+      match: registry.k8s.io/node-problem-detector/node-problem-detector
+    - path: cluster/addons/node-problem-detector/npd.yaml
+      match: registry.k8s.io/node-problem-detector/node-problem-detector
+    # TODO(dims): Ensure newer versions get uploaded to
+    # - https://console.cloud.google.com/storage/browser/gke-release/winnode/node-problem-detector
+    # - https://gcsweb.k8s.io/gcs/kubernetes-release/node-problem-detector/
+    # and then the following references get fixed.
+    #
+    # - path: cluster/gce/gci/configure.sh
+    #  match: DEFAULT_NPD_VERSION=
+    #- path: cluster/gce/windows/k8s-node-setup.psm1
+    #  match: DEFAULT_NPD_VERSION
+
+  # From https://github.com/etcd-io/etcd/blob/main/Makefile
+  - name: &quot;golang: etcd release version&quot;
+    version: 1.19.9 # https://github.com/etcd-io/etcd/blob/main/CHANGELOG/CHANGELOG-3.5.md
+    refPaths:
+    - path: cluster/images/etcd/Makefile
+      match: &#x27;GOLANG_VERSION := \d+.\d+(alpha|beta|rc)?\.?(\d+)?&#x27;
+
+  # Golang
+  - name: &quot;golang: upstream version&quot;
+    version: 1.20.12
+    refPaths:
+    - path: .go-version
+    - path: build/build-image/cross/VERSION
+    - path: staging/publishing/rules.yaml
+      match: &#x27;default-go-version\: \d+.\d+(alpha|beta|rc)?\.?(\d+)?&#x27;
+    - path: test/images/Makefile
+      match: GOLANG_VERSION=\d+.\d+(alpha|beta|rc)?\.?\d+
+
+  # Golang pre-releases are denoted as `1.y&lt;pre-release stage&gt;`
+  # Example: go1.16rc1
+  #
+  # This entry is a stub of the major version to allow dependency checks to
+  # pass when building Kubernetes using a pre-release of Golang.
+  - name: &quot;golang: 1.&lt;major&gt;&quot;
+    version: 1.20
+    refPaths:
+    - path: build/build-image/cross/VERSION
+    - path: hack/lib/golang.sh
+      match: minimum_go_version=go([0-9]+\.[0-9]+)
+
+  - name: &quot;registry.k8s.io/kube-cross: dependents&quot;
+    version: v1.28.0-go1.20.12-bullseye.0
+    refPaths:
+    - path: build/build-image/cross/VERSION
+
+  # Base images
+  - name: &quot;registry.k8s.io/debian-base: dependents&quot;
+    version: bookworm-v1.0.0
+    refPaths:
+    - path: cluster/images/etcd/Makefile
+      match: BASEIMAGE\?\=registry\.k8s\.io\/build-image\/debian-base:[a-zA-Z]+\-v((([0-9]+)\.([0-9]+)\.([0-9]+)(?:-([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?)(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?)
+    - path: cluster/images/etcd/Makefile
+      match: BASEIMAGE\?\=registry\.k8s\.io\/build-image\/debian-base-arm:[a-zA-Z]+\-v((([0-9]+)\.([0-9]+)\.([0-9]+)(?:-([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?)(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?)
+    - path: cluster/images/etcd/Makefile
+      match: BASEIMAGE\?\=registry\.k8s\.io\/build-image\/debian-base-arm64:[a-zA-Z]+\-v((([0-9]+)\.([0-9]+)\.([0-9]+)(?:-([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?)(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?)
+    - path: cluster/images/etcd/Makefile
+      match: BASEIMAGE\?\=registry\.k8s\.io\/build-image\/debian-base-ppc64le:[a-zA-Z]+\-v((([0-9]+)\.([0-9]+)\.([0-9]+)(?:-([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?)(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?)
+    - path: cluster/images/etcd/Makefile
+      match: BASEIMAGE\?\=registry\.k8s\.io\/build-image\/debian-base-s390x:[a-zA-Z]+\-v((([0-9]+)\.([0-9]+)\.([0-9]+)(?:-([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?)(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?)
+    - path: test/conformance/image/Makefile
+      match: BASE_IMAGE_VERSION\?=
+
+  - name: &quot;registry.k8s.io/distroless-iptables: dependents&quot;
+    version: v0.2.8
+    refPaths:
+    - path: build/common.sh
+      match: __default_distroless_iptables_version=
+    - path: test/utils/image/manifest.go
+      match: configs\[DistrolessIptables\] = Config{list\.BuildImageRegistry, &quot;distroless-iptables&quot;, &quot;v([0-9]+)\.([0-9]+)\.([0-9]+)&quot;}
+
+  - name: &quot;registry.k8s.io/go-runner: dependents&quot;
+    version: v2.3.1-go1.20.12-bullseye.0
+    refPaths:
+    - path: build/common.sh
+      match: __default_go_runner_version=
+
+  - name: &quot;registry.k8s.io/pause&quot;
+    version: 3.9
+    refPaths:
+    - path: build/pause/Makefile
+      match: TAG\s*\?=
+
+  - name: &quot;registry.k8s.io/pause: dependents&quot;
+    version: 3.9
+    refPaths:
+    - path: cluster/gce/config-common.sh
+      match: registry.k8s.io\/pause:\d+\.\d+
+    - path: cluster/gce/gci/configure-helper.sh
+      match: registry.k8s.io\/pause:\d+\.\d+
+    - path: cluster/gce/windows/smoke-test.sh
+      match: registry.k8s.io\/pause:\d+\.\d+
+    - path: cmd/kubeadm/app/constants/constants.go
+      match: PauseVersion\s+=
+    - path: cmd/kubeadm/app/util/template_test.go
+      match: validTmpl\s+=
+    - path: cmd/kubeadm/app/util/template_test.go
+      match: validTmplOut\s+=
+    - path: cmd/kubeadm/app/util/template_test.go
+      match: doNothing\s+=
+    - path: cmd/kubelet/app/options/container_runtime.go
+      match: defaultPodSandboxImageVersion\s+=
+    - path: hack/testdata/pod-with-precision.json
+      match: registry.k8s.io\/pause:\d+\.\d+
+    - path: staging/src/k8s.io/kubectl/testdata/set/multi-resource-yaml.yaml
+      match: registry.k8s.io\/pause:\d+\.\d+
+    - path: staging/src/k8s.io/kubectl/testdata/set/namespaced-resource.yaml
+      match: registry.k8s.io\/pause:\d+\.\d+
+    - path: test/cmd/core.sh
+      match: registry.k8s.io\/pause:\d+\.\d+
+    - path: test/fixtures/pkg/kubectl/cmd/set/multi-resource-yaml.yaml
+      match: registry.k8s.io\/pause:\d+\.\d+
+    - path: test/fixtures/pkg/kubectl/cmd/set/namespaced-resource.yaml
+      match: registry.k8s.io\/pause:\d+\.\d+
+    - path: test/integration/benchmark-controller.json
+      match: registry.k8s.io\/pause:\d+\.\d+
+    - path: test/integration/scheduler_perf/config/pod-default.yaml
+      match: registry.k8s.io\/pause:\d+\.\d+
+    - path: test/integration/scheduler_perf/config/pod-with-node-affinity.yaml
+      match: registry.k8s.io\/pause:\d+\.\d+
+    - path: test/integration/scheduler_perf/config/pod-with-pod-affinity.yaml
+      match: registry.k8s.io\/pause:\d+\.\d+
+    - path: test/integration/scheduler_perf/config/pod-with-pod-anti-affinity.yaml
+      match: registry.k8s.io\/pause:\d+\.\d+
+    - path: test/integration/scheduler_perf/config/pod-with-preferred-pod-affinity.yaml
+      match: registry.k8s.io\/pause:\d+\.\d+
+    - path: test/integration/scheduler_perf/config/pod-with-preferred-pod-anti-affinity.yaml
+      match: registry.k8s.io\/pause:\d+\.\d+
+    - path: test/integration/scheduler_perf/config/pod-with-preferred-topology-spreading.yaml
+      match: registry.k8s.io\/pause:\d+\.\d+
+    - path: test/integration/scheduler_perf/config/pod-with-secret-volume.yaml
+      match: registry.k8s.io\/pause:\d+\.\d+
+    - path: test/integration/scheduler_perf/config/pod-with-topology-spreading.yaml
+      match: registry.k8s.io\/pause:\d+\.\d+
+    - path: test/utils/runners.go
+      match: registry.k8s.io\/pause:\d+\.\d+
+    - path: test/utils/image/manifest.go
+      match: configs\[Pause\] = Config{list\.GcRegistry, &quot;pause&quot;, &quot;\d+\.\d+(.\d+)?&quot;}
+
+  - name: &quot;registry.k8s.io/build-image/setcap: dependents&quot;
+    version: bookworm-v1.0.0
+    refPaths:
+    - path: build/common.sh
+      match: __default_setcap_version=
+
+  # cadvisor
+  - name: &quot;gcr.io/cadvisor/cadvisor: dependents&quot;
+    version: &quot;v0.47.2&quot;
+    refPaths:
+    - path: test/e2e_node/resource_collector.go
+      match: gcr.io\/cadvisor\/cadvisor:v\d+\.\d+\.\d+
+    - path: test/e2e_node/image_list.go
+      mathc: gcr.io\/cadvisor\/cadvisor:v\d+\.\d+\.\d+
+
+  # GCB docker gcloud image
+  - name: &quot;gcb-docker-gcloud: dependents&quot;
+    version: v20221007-69e0da97ef
+    refPaths:
+    - path: build/pause/cloudbuild.yaml
+      match: gcr.io/k8s-staging-test-infra/gcb-docker-gcloud
+    - path: cluster/images/etcd/cloudbuild.yaml
+      match: gcr.io/k8s-staging-test-infra/gcb-docker-gcloud
+    - path: test/images/cloudbuild.yaml
+      match: gcr.io/k8s-staging-test-infra/gcb-docker-gcloud
+</code></pre>
+<p>Kubernetes versions deprecate some things and create others. We need to be aware of this as they may require adjustments to manifests.</p>
+      <div class="docs-pager">
+        <a href="../../../../../#blogs">All blogs</a>
+        <a href="../../">Back to CKA</a>
+      </div>
+    </article>
+    <aside class="docs-toc">
+      <div class="docs-toc-title">On this page</div>
+      <nav>
+        <a href="#top">On this page</a>
+      </nav>
+    </aside>
+  </div>
+  <script src="../../../../../js/docs.js"></script>
+</body>
+</html>

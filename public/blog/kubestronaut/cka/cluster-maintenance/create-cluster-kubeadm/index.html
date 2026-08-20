@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Creating Cluster with Kubeadm — Hieu Nguyen</title>
+  <meta name="description" content="Creating Cluster with Kubeadm — Kubestronaut roadmap.">
+  <link rel="icon" href="../../../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../../../">i'm<span>.hieu</span></a>
+    <nav class="docs-series">
+      <a href="../../../../../blog/web-security/">Web Security</a>
+      <a class="active" href="../../../">Kubestronaut roadmap</a>
+    </nav>
+    <nav class="docs-cert-tabs"><a href="../../../cka/" class="active">CKA</a><a href="../../../ckad/" class="">CKAD</a><a href="../../../cks/" class="">CKS</a></nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-nav="kubestronaut" data-cert="cka" data-docs-root="../../" data-active="cluster-maintenance/create-cluster-kubeadm">
+      <div class="docs-nav-label">CKA</div>
+      <ul class="docs-nav" id="docsNav"></ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../../../">Home</a>
+        <span>›</span>
+        <a href="../../../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../../../">Kubestronaut</a>
+        <span>›</span>
+        <a href="../../">CKA</a>
+        <span>›</span>
+        <span>Creating Cluster with Kubeadm</span>
+      </div>
+      <div id="top"></div>
+<header><h1>Creating Cluster with Kubeadm</h1></header><p>Creating a cluster with kubeadm is a fairly simple process.</p>
+<p>Some requirements are necessary for the machines.</p>
+<p>In an exam environment it probably won&#x27;t be necessary to pay attention to this, but it&#x27;s good to know to ensure.</p>
+<p>First, swap and firewall need to be disabled and some modules loaded.</p>
+<pre><code class="language-bash">## Following the documentation https://kubernetes.io/docs/setup/production-environment/
+## https://docs.docker.com/engine/install/ubuntu/container-runtimes/
+
+echo -e &quot;\n##### Disabling swap #####&quot;
+sudo sed -i &#x27;/swap/d&#x27; /etc/fstab
+sudo swapoff -a
+
+echo -e &quot;\n##### Disabling firewall #####&quot;
+sudo systemctl disable --now ufw &gt;/dev/null 2&gt;&amp;1
+
+echo -e &quot;\n##### Enabling kernel modules required for containerd #####&quot;
+cat &lt;&lt;EOF &gt;&gt; /etc/modules
+ip_vs
+ip_vs_rr
+ip_vs_wrr
+ip_vs_sh
+br_netfilter
+nf_conntrack
+EOF
+
+systemctl restart systemd-modules-load.service
+# sysctl params required by setup, params persist across reboots
+# IPv6 settings can be removed if not using IPv6
+cat &lt;&lt;EOF | sudo tee /etc/sysctl.d/10-kubernetes.conf
+net.ipv6.conf.all.disable_ipv6 = 1
+net.ipv6.conf.default.disable_ipv6 = 1
+net.ipv6.conf.lo.disable_ipv6 = 1
+net.bridge.bridge-nf-call-iptables=1
+net.ipv4.ip_forward=1
+EOF
+# Apply sysctl params without reboot
+sudo sysctl --system
+#sudo mkdir -p /var/lib/kubernetes/
+</code></pre>
+<p>Then it&#x27;s necessary that the machines have a container runtime installed as well as kubeadm kubelet and kubectl. Containerd is already in the Kubernetes repository.</p>
+<pre><code class="language-bash">echo -e &quot;\n##### Installing Container Runtime Interface #####&quot;
+echo -e &quot;\n##### 1 - Adding the kubernetes repository #####&quot;
+sudo mkdir -p /etc/apt/keyrings
+
+# The latest version can be checked at https://dl.k8s.io/release/stable.txt. The example value would be 1.29.3 but we only need 1.29. To facilitate we have the command below.
+KUBE_LATEST=$(curl -L -s https://dl.k8s.io/release/stable.txt | awk &#x27;BEGIN { FS=&quot;.&quot; } { printf &quot;%s.%s&quot;, $1, $2 }&#x27;)
+
+curl -fsSL https://pkgs.k8s.io/core:/stable:/${KUBE_LATEST}/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+
+echo &quot;deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/${KUBE_LATEST}/deb/ /&quot; | sudo tee /etc/apt/sources.list.d/kubernetes.list
+
+# This would be an example for a specific kubernetes version
+#curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.28/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+
+# echo &quot;deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.28/deb/ /&quot; | sudo tee /etc/apt/sources.list.d/kubernetes.list
+
+echo -e &quot;\n##### 2 - Installing packages #####&quot;
+sudo apt update
+sudo apt install -y containerd ipvsadm ipset
+
+echo -e &quot;\n##### 3 - Enabling systemd Cgroups in containerd #####&quot;
+sudo cp /etc/containerd/config.toml /etc/containerd/config.toml.default
+containerd config default | sed &#x27;s/SystemdCgroup = false/SystemdCgroup = true/&#x27; | sudo tee /etc/containerd/config.toml
+
+sudo systemctl restart containerd.service
+systemctl status containerd.service
+
+# After we have the container runtime installed we can add kubeadm kubelet and kubectl
+sudo apt-get update
+sudo apt-get install -y kubelet kubeadm kubectl
+sudo apt-mark hold kubelet kubeadm kubectl
+
+sudo systemctl enable kubelet
+sudo systemctl status kubelet
+</code></pre>
+<p>Usually this entire process shouldn&#x27;t be asked during the exam, but if it is, it&#x27;s good to know.</p>
+<p>Kubeadm checks if the node meets the requirements. It requires 2 GiB or more of RAM and at least 2 CPUs on control-plane machines. This can be ignored in the command we&#x27;re going to execute. In the exam if this is requested they may not provide machines with these resources, after all it&#x27;s not a production environment.</p>
+<p>Once we have kubeadm kubectl and kubelet available on the master node we can execute:</p>
+<pre><code class="language-bash">
+# To facilitate the command it&#x27;s good to run a completion
+source &lt;(kubeadm completion bash)
+
+# If no version is passed it will install the latest available for the specified kubeadm. We can check what we have available in kubeadm before installing.
+
+# To see versions we can use based on the installed version
+apt-cache madison kubeadm
+
+# Here we are setting up control plane.
+kubeadm init --kubernetes-version=1.29.0 --pod-network-cidr 192.168.0.0/16 --ignore-preflight-errors=NumCPU --ignore-preflight-errors=Mem
+</code></pre>
+<p>In the case of workers, all bootstrap is the same, but the kubeadm command will be the join provided by the kubeadm init command</p>
+<p>If you lost the join command in the kubeadm output on the control-plane we can generate another one.</p>
+<pre><code class="language-bash">controlplane $ kubeadm token create --print-join-command
+#kubeadm join 172.30.1.2:6443 --token i80ben.9k3mlcpc0flghkny --discovery-token-ca-cert-hash sha256:190ba21620d6cd0fa70a014fa5c7f66e48055885cd844eba55d85a4eac0bb8aa
+</code></pre>
+      <div class="docs-pager">
+        <a href="../../../../../#blogs">All blogs</a>
+        <a href="../../">Back to CKA</a>
+      </div>
+    </article>
+    <aside class="docs-toc">
+      <div class="docs-toc-title">On this page</div>
+      <nav>
+        <a href="#top">On this page</a>
+      </nav>
+    </aside>
+  </div>
+  <script src="../../../../../js/docs.js"></script>
+</body>
+</html>

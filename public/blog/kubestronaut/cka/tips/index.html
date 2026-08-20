@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CKA Tips — Hieu Nguyen</title>
+  <meta name="description" content="CKA Tips — Kubestronaut roadmap.">
+  <link rel="icon" href="../../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../../">i'm<span>.hieu</span></a>
+    <nav class="docs-series">
+      <a href="../../../../blog/web-security/">Web Security</a>
+      <a class="active" href="../../">Kubestronaut roadmap</a>
+    </nav>
+    <nav class="docs-cert-tabs"><a href="../../cka/" class="active">CKA</a><a href="../../ckad/" class="">CKAD</a><a href="../../cks/" class="">CKS</a></nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-nav="kubestronaut" data-cert="cka" data-docs-root="../" data-active="tips">
+      <div class="docs-nav-label">CKA</div>
+      <ul class="docs-nav" id="docsNav"></ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../../">Home</a>
+        <span>›</span>
+        <a href="../../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../../">Kubestronaut</a>
+        <span>›</span>
+        <a href="../">CKA</a>
+        <span>›</span>
+        <span>CKA Tips</span>
+      </div>
+      <div id="top"></div>
+<header><h1>CKA Tips</h1></header><h2 id="pod">Pod</h2>
+<p>Create an NGINX pod</p>
+<pre><code class="language-bash">kubectl run nginx --image=nginx
+# Generate Pod manifest YAML file (-o yaml). Don&#x27;t create it (--dry-run)
+kubectl run nginx --image=nginx --dry-run=client -o yaml
+</code></pre>
+<h2 id="deployment">Deployment</h2>
+<p>Create a Deployment</p>
+<pre><code class="language-bash">kubectl create deployment --image=nginx nginx
+# Generate Deployment YAML file (-o yaml). Don&#x27;t create it (--dry-run)
+kubectl create deployment --image=nginx nginx --dry-run=client -o yaml
+# Generate Deployment with 4 Replicas
+kubectl create deployment nginx --image=nginx --replicas=4
+# You can also scale a Deployment using the kubectl scale command.
+kubectl scale deployment nginx --replicas=4
+# Another way to do this is to save the YAML definition to a file and modify
+kubectl create deployment nginx --image=nginx --dry-run=client -o yaml &gt; nginx-deployment.yaml
+</code></pre>
+<h2 id="service">Service</h2>
+<p>Create a Service named redis-service of type ClusterIP to expose the redis pod on port 6379</p>
+<pre><code class="language-bash"># Expose will automatically use the pod labels.
+kubectl expose pod redis --port=6379 --name redis-service --dry-run=client -o yaml
+
+# Creating a service this way it will not use the labels. Use it to create the manifest and add the necessary labels.
+kubectl create service clusterip redis --tcp=6379:6379 --dry-run=client -o yaml
+</code></pre>
+      <div class="docs-pager">
+        <a href="../../../../#blogs">All blogs</a>
+        <a href="../">Back to CKA</a>
+      </div>
+    </article>
+    <aside class="docs-toc">
+      <div class="docs-toc-title">On this page</div>
+      <nav>
+        <a href="#pod">Pod</a>
+        <a href="#deployment">Deployment</a>
+        <a href="#service">Service</a>
+      </nav>
+    </aside>
+  </div>
+  <script src="../../../../js/docs.js"></script>
+</body>
+</html>

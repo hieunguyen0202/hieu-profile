@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TLS Fundamentals — Hieu Nguyen</title>
+  <meta name="description" content="TLS Fundamentals — Kubestronaut roadmap.">
+  <link rel="icon" href="../../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../../">i'm<span>.hieu</span></a>
+    <nav class="docs-series">
+      <a href="../../../../blog/web-security/">Web Security</a>
+      <a class="active" href="../../">Kubestronaut roadmap</a>
+    </nav>
+    <nav class="docs-cert-tabs"><a href="../../cka/" class="active">CKA</a><a href="../../ckad/" class="">CKAD</a><a href="../../cks/" class="">CKS</a></nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-nav="kubestronaut" data-cert="cka" data-docs-root="../" data-active="tls-fundamentals">
+      <div class="docs-nav-label">CKA</div>
+      <ul class="docs-nav" id="docsNav"></ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../../">Home</a>
+        <span>›</span>
+        <a href="../../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../../">Kubestronaut</a>
+        <span>›</span>
+        <a href="../">CKA</a>
+        <span>›</span>
+        <span>TLS Fundamentals</span>
+      </div>
+      <div id="top"></div>
+<header><h1>TLS Fundamentals</h1></header><p>A certificate is used to ensure trust between two parties during a transaction.</p>
+<p>When a user tries to access a web server, TLS certificates ensure that communication between the user and server is encrypted and that the server and user are who they claim to be.</p>
+<p>If a user sent their credentials without encryption, a hacker with a simple sniffer would be able to recover the credentials by sniffing network traffic and invade the user&#x27;s account.</p>
+<p>Once data is encrypted, it will be scrambled and only those who have the key will be able to decipher it; if someone sniffs the network, this data won&#x27;t make any sense.</p>
+<p>If the key to decrypt needs to be sent to the server over the same network, then it wouldn&#x27;t make sense, because this key could also be intercepted along the way and used to decrypt the data.</p>
+<p>The system in which both sides know the decryption key is called symmetric encryption. The same key used to encrypt is used to decrypt.</p>
+<p>Asymmetric encryption is when you have a key pair, a PUBLIC key that encrypts data (known to everyone) and another PRIVATE key (known only to the recipient) that will decrypt the data. When we want to send something to someone, we must encrypt the content with their PUBLIC key and only the recipient will be able to decrypt it using their PRIVATE key.</p>
+<p>We already do this whole process on GitHub, GitLab, SSH, etc.</p>
+<p>If you don&#x27;t have a key pair for SSH, it&#x27;s time to have one.</p>
+<pre><code class="language-bash">ssh-keygen
+</code></pre>
+<p>The command above will generate a key pair for SSH purposes.</p>
+<ul>
+<li>id_rsa: is the private key that only you should know</li>
+<li>id_rsa.pub: is your public key that you can put on GitHub, GitLab, on servers you access via SSH, etc.</li>
+</ul>
+<p>Knowing this scenario, when we access a server via HTTPS in the browser for example, the server automatically sends its public key to the user&#x27;s browser. The browser creates a symmetric encryption key (it already knows which one it is) encrypts it with the server&#x27;s public key and sends it back to it. Only the server is capable of decrypting this with its private key. Therefore, both will know a symmetric key without anyone else knowing and from that moment it&#x27;s possible to encrypt everything using only the symmetric key.</p>
+<p>It&#x27;s crucial to understand how the asymmetric key pair works: when encrypting something with the public key, only the corresponding private key can decrypt it. It&#x27;s not possible to decrypt something encrypted with the same public key. On the other hand, if something is encrypted with your private key, it can be decrypted with your public key, which is publicly known. Therefore, it&#x27;s essential to encrypt everything destined for you with your public key, while what is destined for others must be encrypted with their respective public keys.</p>
+<p>To generate a key pair for SSL purposes, the command is a bit different.</p>
+<pre><code class="language-bash">openssl genrsa -out mysite.key 1024
+
+cat mysite.key
+-----BEGIN PRIVATE KEY-----
+MIICdwIBADANBgkqhkiG9w0BAQEFAASCAmEwggJdAgEAAoGBAM7KqoAHnpP91ix8
+O33/HIKxAmm1vIludtZ0YdWoEBlLZ2DMmq7e8MbP6QEkPuElu6g9eZLqb0zVNDsP
+UETlYe2nJ+oLJWH0M6WIwIgoITzyIJRjwK9QVTW7AqAOePtlugeEE/JyrlZGzuog
+M2xMHUr4JIx19DsUNoXhpt++2mTlAgMBAAECgYAYvOXoqwCtc5BLghEb4YjnmYVQ
+YA1N44kT3phVluVWIU8cpV1bzg+/uN+G428iQAFS/wesK59k8Zxt9EcF9urf7C5c
+gnS4RTD7FpYyTn8sGPe5CvAort89kFSeYEoAzfPaIjpxGWg5mBMz2OBU+gPLC+3e
+8RZT80WIQvR9MuGrgQJBAOvIcMf/bCH/0mdhGtXlP/lFXF+WEMK7jsb+DWbTYAXu
+sYwan3/TfsZPvMEqQHLeWmDXvA+rpATT8NaIOuaj9uMCQQDghdnjf/5hDSeFHlpc
+HNFX0ToE6THqVl9kRevVWUsuAnOMuPRCfC43+yF7olGmSC26A1D0vXRD18GyaNOf
+0zeXAkEAilikBFXU5uYqWMpbaqIHNYYDO3rb/sb6cbxjtK/WKeTyfJiqeeBpBIeI
+43adNklNkoFDMZauuL57FAX/OZF/rQJAV81geSxLsW5wfwlwssb+QwZqVxNO1uJy
+KYeCg4uI7/Q7ddO6iemANZo67Nt8bLebUjwLw7n3JrTQZdHCuKTj/wJBAMW+rymx
+DrgwtfuIZwRCWIH7xSQmLNa/DWkFc+zMtbBiMIFFXRVKm8/zJyQOVY1PCqcd50vc
+FrcqB+7CxSbRlYQ=
+-----END PRIVATE KEY-----
+
+openssl rsa -in mysite.key -pubout &gt; mysite.pem
+
+ cat mysite.pem
+-----BEGIN PUBLIC KEY-----
+MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDOyqqAB56T/dYsfDt9/xyCsQJp
+tbyJbnbWdGHVqBAZS2dgzJqu3vDGz+kBJD7hJbuoPXmS6m9M1TQ7D1BE5WHtpyfq
+CyVh9DOliMCIKCE88iCUY8CvUFU1uwKgDnj7ZboHhBPycq5WRs7qIDNsTB1K+CSM
+dfQ7FDaF4abfvtpk5QIDAQAB
+-----END PUBLIC KEY-----
+</code></pre>
+<p>The OpenSSL command can generate keys with different algorithms and sizes. For example, we could have generated one with 2048. Notice that the private key size changed quite a bit.</p>
+<pre><code class="language-bash">openssl genrsa -out mysite.key 2048
+
+cat mysite.key
+-----BEGIN PRIVATE KEY-----
+MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDb7sWrKNtNMfkl
+mFwiK9OikyKbaHzzSFiQldgr4FFwmLonbFyqWBDGfIlZFr7yKPEVs7YWtghkDNDx
+qgbAuMm3+Q5C4zuiu0t2biP6zVz6c4PsYPZ+HRrkeSfDbMo2WMMa5KGf2rh/Bzsm
+90+qItbcJMCg1l+/CMWK4TQFsSdt8YAKf4ZU6XV3xtFTtWnt59lfy/syYjWf2eAH
+ATATXAqEi3qlUkpHf0qODQY8MoVPrD+HSRlQCCaBl2pMq+J18x3UPwMWPCKsF2FU
+ihGgTbUSHdagYs8Mqy/7i5iKRoKsxu4znD15TF/4GuS/uJ7W3wwRodHOFGh/lYZq
+FDA6i/yJAgMBAAECggEAAjAh7038wIvaurEFWaGt/VQRaBJmC9WQa//Ror4ckU4z
+q+i8E0XFBPSAOU6sn6QgoeKj0R4Gf1hRS9YxMwGjoBzuM2QnV7sdSRRXb0tTvXog
+ud1NFnwbpGJALwWKDXhcmIvlv71hUII16HFVbY/jK1WCRRdc5H2l2XfcGKJmjgVw
+UXjVOL7643WKoJl62OfIg/aqcvMs4fA/VqQ9UWBzpsRibE6yfSzVvjKMFrJo3oN7
+wN3RyYNtzS98cjLB0BTN0qEPVaKLQuA8VYEOq4/qwOC5LXLamJJCfQVxbvGqX/ew
+vZKqOH7/slV4G5O0NE36OM7p3IWAWybkOfkCsm8KMQKBgQD9KpC1XBgOAzJHmqGz
+eKMOinx/jZyWiCCPNH/Wy3Rg+Nu+XDtoE/KbL+NZQqKbxQZOg+bBYIE0gZjw6Txb
+uwpo8dLrMSIaMokn6aFfks6BxbrQFoziwJP9q1L+omE7WXPmpkiqGGskWuok/XIa
+YM3qEVjAdIXSrbFEqZK/00V2EwKBgQDeZPpStTR+DlNTe8iLHdsB5uhzKA+A0Jr5
+Tr6dwCSClqqOd8Qd7rXxtf/xlzT9mKUNJVGYlxlGkYzA+PNyxOAbMWN4NghnuJM/
+BEbcNuLOeJFVyKU36M9SAbhsNTTb4wEVMOW31J8xqt4fJt1gVcybaREM3Cm5r6KJ
+qHYuqI6GcwKBgQC8Jx1jXG2YRHHi256f5uGwleYPWmztR4CDTe5Q8eath2axZJTW
+NjURdxbNqQN3J4gXZFpkj9eW8VZ8fatZNXp4InmySFLjC3n6Ct3fTRljQ1QjAQ92
+GtAiMGk/S+ldlY7Y9e59VCaU32izUxWxWw7OjlPavP8UY/iiYjDplhhCtwKBgHu8
+00qRZ9N7RQF+Lea5hdFZGJx5/aY+avurxIMhFS9ThTIfkQ7WcoU6Ll3NM76l36+g
+w/WSnI2XDimQWmPRBqAaqq2H4sVS/Rpi1spP/4HBs5t3N/YTosaODn6mW/K8Ky4P
+NsFBnBGWcGAEz8d59Y3Ct6ngFZcrEdRl1tu/DQ3hAoGANdDNsZ6OJT0lD3UJb8UN
+Jy0NPk5VgXFUDkMzdeAyepCfX3Q2WSw+jsutapqrO5DWP17eTgonqNsUHbCUxxCO
+PQZaFTBKlQSI5+mMum3fl9DfDmcyjF7d6SEflrVIsnA5AKOj2bvf9O/y110yNMIq
+JwDuCja1Pwfa12NARLsI+6A=
+-----END PRIVATE KEY----
+
+openssl rsa -in mysite.key -pubout &gt; mysite.pem
+
+cat mysite.pem
+-----BEGIN PUBLIC KEY-----
+MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA2+7FqyjbTTH5JZhcIivT
+opMim2h880hYkJXYK+BRcJi6J2xcqlgQxnyJWRa+8ijxFbO2FrYIZAzQ8aoGwLjJ
+t/kOQuM7ortLdm4j+s1c+nOD7GD2fh0a5Hknw2zKNljDGuShn9q4fwc7JvdPqiLW
+3CTAoNZfvwjFiuE0BbEnbfGACn+GVOl1d8bRU7Vp7efZX8v7MmI1n9ngBwEwE1wK
+hIt6pVJKR39Kjg0GPDKFT6w/h0kZUAgmgZdqTKvidfMd1D8DFjwirBdhVIoRoE21
+Eh3WoGLPDKsv+4uYikaCrMbuM5w9eUxf+Brkv7ie1t8MEaHRzhRof5WGahQwOov8
+iQIDAQAB
+-----END PUBLIC KEY-----
+</code></pre>
+<p>But none of this guarantees that the server we&#x27;re trying to access is actually the correct server. A hacker could have a server and host an identical website pretending to be the real server and send their public key to you, and you would encrypt data for them with their public key.</p>
+<p>Let&#x27;s imagine that the hacker is someone who administers a network and simply changed the network&#x27;s DNS server to point the address <code>https://server.com</code> to the IP with the website they created.</p>
+<p>This is where the need to know if the public key you received is legitimate or not comes in.</p>
+<p>When we receive the public key, we don&#x27;t just receive the public key; we receive a certificate that contains the public key. The certificate has some information that will be needed for validation.</p>
+<p>In the previous examples we generated the private key and then the public key using the private key. With this command we can use the private key to generate a certificate and it will contain the public key.</p>
+<pre><code class="language-bash">openssl req -x509 -new -key mysite.key -out certificado.pem
+
+You are about to be asked to enter information that will be incorporated
+into your certificate request.
+What you are about to enter is what is called a Distinguished Name or a DN.
+There are quite a few fields but you can leave some blank
+For some fields there will be a default value,
+If you enter &#x27;.&#x27;, the field will be left blank.
+-----
+Country Name (2 letter code) [AU]:BR
+State or Province Name (full name) [Some-State]:ES
+Locality Name (eg, city) []:Vila Velha
+Organization Name (eg, company) [Internet Widgits Pty Ltd]:devsecops
+Organizational Unit Name (eg, section) []:personal
+Common Name (e.g. server FQDN or YOUR name) []:devsecops
+Email Address []:[email protected]
+
+cat certificado.pem
+-----BEGIN CERTIFICATE-----
+MIID9zCCAt+gAwIBAgIUfYH2ViX4fsY2IrO7fLfkNTp7uv0wDQYJKoZIhvcNAQEL
+BQAwgYoxCzAJBgNVBAYTAkJSMQswCQYDVQQIDAJFUzETMBEGA1UEBwwKVmlsYSBW
+ZWxoYTESMBAGA1UECgwJZGV2c2Vjb3BzMREwDwYDVQQLDAhwZXJzb25hbDESMBAG
+A1UEAwwJZGV2c2Vjb3BzMR4wHAYJKoZIhvcNAQkBFg9kYXZpZEBnbWFpbC5jb20w
+HhcNMjQwMjA0MTgxNzAzWhcNMjQwMzA1MTgxNzAzWjCBijELMAkGA1UEBhMCQlIx
+CzAJBgNVBAgMAkVTMRMwEQYDVQQHDApWaWxhIFZlbGhhMRIwEAYDVQQKDAlkZXZz
+ZWNvcHMxETAPBgNVBAsMCHBlcnNvbmFsMRIwEAYDVQQDDAlkZXZzZWNvcHMxHjAc
+BgkqhkiG9w0BCQEWD2RhdmlkQGdtYWlsLmNvbTCCASIwDQYJKoZIhvcNAQEBBQAD
+ggEPADCCAQoCggEBAKyVjzmLJsbi0zmon1NFYqzCn5gMSL6q5OfhtlBUxE8iDu4B
+H+9eP6c8FK6rLuA5nNCTbUQj37d7rwekIjF1KN6+B+W/av/xkRi3mbBzIR73Iwhv
+OatNz+XXJPDH9hxSa7VKKmJ/TG4GvkbForBrVCsMbcvlh1EN87HIT3nYUzB8QRX+
+NDeiv4o3sEB8NwrWcO8cRwSLxUMr1iQSEQcpdBv4OH6paQkqyJM9KxoR7u0IYXSt
+O61NBPfrHRXoGwJvkkVEay6acWj4CO+J+Ft9piy5wG/BlvKV9X3aGF72qS2Hipoe
+qC+L/ICpviMZANW0lstNbgV6FbUS2/pGUNjzpqkCAwEAAaNTMFEwHQYDVR0OBBYE
+FCdy2zrMEzzK3W6X9Bbbi1saMQowMB8GA1UdIwQYMBaAFCdy2zrMEzzK3W6X9Bbb
+i1saMQowMA8GA1UdEwEB/wQFMAMBAf8wDQYJKoZIhvcNAQELBQADggEBAImSI9i1
+Rr8BeDuPuPa4SxNROyR9mXO+UqAPnb1Omrtp8+4tfrs2lXLFYwcTMub4dHLeV30f
+k9BJtpcbGvDyDy2yC/S4Nqn+wB1uKmjQFW8XBe4RCTRWUvWqC9CARUNGF5ABveN7
+ZU+w7hg1hZI1AQiP/cz2Z/yPDZ+sgyrctmMrN2YJB47cErXNw2bcDd9TUBgdoI6A
+ZtkvAmbRdKkc0yU7Q6aUDby5nunpV1B72hkX6dpg4WT8APem1KGG4h2ZXZlSKgC1
+qzJaMqWLom47xcRSMM0CTCQDh37OPQlUNsOPyVcrVrSBhuXuqcDQ1NtoUfNGa/VU
+oZY5Zwj/v1JYpak=
+-----END CERTIFICATE-----
+</code></pre>
+<p>Opening this file in the system we can see this and more things that didn&#x27;t fit in the screenshot.</p>
+<p><img decoding="async" loading="lazy" alt="Alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-9-7938fa6289fd44a23a03963ace3d89e0.png" width="956" height="985" class="img_ev3q"></p>
+<p>This is a self-signed certificate. Notice the Verified by: devsecops field.</p>
+<p>If you generated the certificate you&#x27;ll have to sign it yourself and nobody trusts you, therefore, this is not considered a secure certificate.</p>
+<p>We could generate a certificate saying we&#x27;re Amazon, passing all the necessary data on its behalf.</p>
+<p>What proves that a site is who it claims to be?</p>
+<p>Looking more closely at an amazon.com certificate for example we have:</p>
+<p><img decoding="async" loading="lazy" alt="Alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-10-e8da5ce2dee0c4772ed08cc58f135058.png" width="536" height="561" class="img_ev3q"></p>
+<p>Now a certificate like Amazon&#x27;s we have Issued By DigiCert Global CA G2.
+In other words, someone who isn&#x27;t Amazon verified that this certificate is legitimate.</p>
+<p>This is where the most important part of all comes in: who signed and issued the certificate?</p>
+<p>The browser already does this work for you. It verifies who signed and issued the certificate and, if it&#x27;s not a recognized Certificate Authority (CA), it will say that this certificate is not valid, therefore the page won&#x27;t be secure.</p>
+<p>Several CAs exist and can sign a certificate.</p>
+<ul>
+<li><a href="https://sep.securitycloud.symantec.com/v2/landing" target="_blank" rel="noopener noreferrer">Symantec</a></li>
+<li><a href="https://comodosslstore.com/" target="_blank" rel="noopener noreferrer">Comodo</a></li>
+<li><a href="https://www.globalsign.com/" target="_blank" rel="noopener noreferrer">GlobalSign</a></li>
+<li><a href="https://www.digicert.com/" target="_blank" rel="noopener noreferrer">DigiCert</a></li>
+<li><a href="https://www.entrust.com/" target="_blank" rel="noopener noreferrer">Entrust</a></li>
+<li><a href="https://letsencrypt.org/" target="_blank" rel="noopener noreferrer">LetsEncrypt</a></li>
+</ul>
+<p>And many others...</p>
+<p>To generate a legitimate certificate and pay for it, you need to create a CSR (Certificate Signing Request), which is an encoded data block that is generated by an entity requesting a digital certificate. A CSR contains the public information associated with a public key for which the certificate will be issued.</p>
+<p>When you want to obtain a digital certificate, you need to generate a CSR and send it to a trusted Certificate Authority (CA) for signing. The CA uses the information in the CSR to create a digital certificate that links the public key provided in the CSR to a particular holder (such as a domain or organization).</p>
+<p>To generate a CSR, the command is as follows:</p>
+<pre><code class="language-bash">openssl req -new -key mysite.key -out mysite.csr
+
+# We answer some questions...
+You are about to be asked to enter information that will be incorporated
+into your certificate request.
+What you are about to enter is what is called a Distinguished Name or a DN.
+There are quite a few fields but you can leave some blank
+For some fields there will be a default value,
+If you enter &#x27;.&#x27;, the field will be left blank.
+-----
+Country Name (2 letter code) [AU]:BR
+State or Province Name (full name) [Some-State]:ES
+Locality Name (eg, city) []:Vila Velha
+Organization Name (eg, company) [Internet Widgits Pty Ltd]:devsecops.puziol.com.br
+Organizational Unit Name (eg, section) []:devsecops
+Common Name (e.g. server FQDN or YOUR name) []:devsecops.puziol.com.br
+Email Address []:[email protected]
+
+Please enter the following &#x27;extra&#x27; attributes
+to be sent with your certificate request
+A challenge password []:mypass
+An optional company name []:devsecops
+
+cat mysite.csr
+-----BEGIN CERTIFICATE REQUEST-----
+MIIDHjCCAgYCAQAwgacxCzAJBgNVBAYTAkJSMQswCQYDVQQIDAJFUzETMBEGA1UE
+BwwKVmlsYSBWZWxoYTEgMB4GA1UECgwXZGV2c2Vjb3BzLnB1emlvbC5jb20uYnIx
+EjAQBgNVBAsMCWRldnNlY29wczEgMB4GA1UEAwwXZGV2c2Vjb3BzLnB1emlvbC5j
+b20uYnIxHjAcBgkqhkiG9w0BCQEWD2RhdmlkQGdtYWlsLmNvbTCCASIwDQYJKoZI
+hvcNAQEBBQADggEPADCCAQoCggEBAKyVjzmLJsbi0zmon1NFYqzCn5gMSL6q5Ofh
+tlBUxE8iDu4BH+9eP6c8FK6rLuA5nNCTbUQj37d7rwekIjF1KN6+B+W/av/xkRi3
+mbBzIR73IwhvOatNz+XXJPDH9hxSa7VKKmJ/TG4GvkbForBrVCsMbcvlh1EN87HI
+T3nYUzB8QRX+NDeiv4o3sEB8NwrWcO8cRwSLxUMr1iQSEQcpdBv4OH6paQkqyJM9
+KxoR7u0IYXStO61NBPfrHRXoGwJvkkVEay6acWj4CO+J+Ft9piy5wG/BlvKV9X3a
+GF72qS2HipoeqC+L/ICpviMZANW0lstNbgV6FbUS2/pGUNjzpqkCAwEAAaAxMBUG
+CSqGSIb3DQEJBzEIDAZteXBhc3MwGAYJKoZIhvcNAQkCMQsMCWRldnNlY29wczAN
+BgkqhkiG9w0BAQsFAAOCAQEAqdM/RmCkIuMAIFcqK6nb4+dJfNXtmggv+0yLZu0K
+ccN1STg4XgttfvR1ZJAS38IUEWSEUIJ7K4nkxdUDZnxoXFEFpzN5PKpdp6/i3Sv2
+o6xp7uWQhIs08zeg5MA4wuKjcNMev58zv7w4YTQNlhZzJj6mtWIWTkb2y5XYwLeV
+1vHz6vqbb2TE+UFNmBteX0q+QOK63ymoODVNBTss36c05Hs6pr8WYAN6nNIK3HcK
+/b015LP6J6AdZGx3CXDxc+UDRMn1W0vG86/yduRqMZmeUTE/BD7l5PoFxZwnUJqX
+j+PtE66Cj5z6duvO4qa/hdQmT/R+DR7QOTEbsDMrdSKKUg==
+-----END CERTIFICATE REQUEST-----
+
+# We can also pass all parameters in the command
+# C = Country
+# ST = State
+# O = Organization
+# CN = Common Name
+openssl req -new -key mysite.key -out mysite.csr -subj &quot;/C=BR/ST=ES/O=devsecops/CN=devsecops.puziol.com.br&quot;
+</code></pre>
+<p>This generated .csr file must be sent to the certificate authority for signing. The CA has its own public and private keys. An interesting fact is that this type of signing server needs to be kept with maximum security because if its private key is exposed, all certificates must be automatically invalidated.</p>
+<p>The CA will check the data and send back the issued certificate signed with its private key. Now we&#x27;ll have a certificate that the browser will trust.</p>
+<p>But how does the browser know it was signed by a legitimate CA and not a fake CA?</p>
+<p>Inside browsers we have several built-in public keys from legitimate CAs.</p>
+<p><img decoding="async" loading="lazy" alt="Alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-11-e6d96e3101ca7ffc7adb5585a93e1045.png" width="1177" height="979" class="img_ev3q"></p>
+<p>It&#x27;s worth remembering that these are public CAs that help us validate public sites. These authorities can&#x27;t validate a site that is on a private organization network.</p>
+<p>Most CAs have services that can be deployed internally as a CA Server internally within the company. However, we can create our own CA to sign internal certificates and install it in browsers.</p>
+<p>Finally, but not least, there&#x27;s the question of how the server can guarantee the authenticity of the user. It&#x27;s essential to protect against possible attacks from hackers who might impersonate someone else by intercepting data traffic.</p>
+<p>Several government tax services require companies to have their certificates to prove their identity when communicating with their servers. The server requests the client&#x27;s certificate to know that they are in fact who they claim to be. That&#x27;s why it&#x27;s also necessary to install these certificates on the client machine.</p>
+<p>All this infrastructure created is known as PKI (Public Key Infrastructure).</p>
+<p>Generally, certificates with public keys have the following names.</p>
+<p>Certificate with public key:</p>
+<ul>
+<li>server.crt</li>
+<li>server.pem</li>
+<li>client.crt</li>
+<li>client.pem</li>
+</ul>
+<p>Private keys usually have the word <code>key</code> as an extension or part of the name:</p>
+<ul>
+<li>server.key</li>
+<li>server-key.pem</li>
+<li>client.key</li>
+<li>client-key.pem</li>
+</ul>
+<p>But if you check what we have inside, you can see the difference right at the beginning of the file:</p>
+<ul>
+<li>
+<p>-----BEGIN PRIVATE KEY-----</p>
+</li>
+<li>
+<p>-----BEGIN PUBLIC KEY-----</p>
+</li>
+<li>
+<p>-----BEGIN CERTIFICATE-----</p>
+</li>
+</ul>
+      <div class="docs-pager">
+        <a href="../../../../#blogs">All blogs</a>
+        <a href="../">Back to CKA</a>
+      </div>
+    </article>
+    <aside class="docs-toc">
+      <div class="docs-toc-title">On this page</div>
+      <nav>
+        <a href="#top">On this page</a>
+      </nav>
+    </aside>
+  </div>
+  <script src="../../../../js/docs.js"></script>
+</body>
+</html>

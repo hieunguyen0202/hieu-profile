@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Security Context — Hieu Nguyen</title>
+  <meta name="description" content="Security Context — Kubestronaut roadmap.">
+  <link rel="icon" href="../../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../../">i'm<span>.hieu</span></a>
+    <nav class="docs-series">
+      <a href="../../../../blog/web-security/">Web Security</a>
+      <a class="active" href="../../">Kubestronaut roadmap</a>
+    </nav>
+    <nav class="docs-cert-tabs"><a href="../../cka/" class="active">CKA</a><a href="../../ckad/" class="">CKAD</a><a href="../../cks/" class="">CKS</a></nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-nav="kubestronaut" data-cert="cka" data-docs-root="../" data-active="security-context">
+      <div class="docs-nav-label">CKA</div>
+      <ul class="docs-nav" id="docsNav"></ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../../">Home</a>
+        <span>›</span>
+        <a href="../../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../../">Kubestronaut</a>
+        <span>›</span>
+        <a href="../">CKA</a>
+        <span>›</span>
+        <span>Security Context</span>
+      </div>
+      <div id="top"></div>
+<header><h1>Security Context</h1></header><h2 id="container-vs-host-vs-privileges">Container vs Host vs Privileges</h2>
+<p>First, let&#x27;s understand a bit about container security, as it only makes sense in Kubernetes if we understand containers.</p>
+<p>The host that hosts the containers has its own running processes that carry the operating system, the Docker daemon if you have Docker or some other container runtime.</p>
+<p>To make an analysis, let&#x27;s run any container and put it to sleep for 1 hour so that there&#x27;s something holding the process and it doesn&#x27;t die.</p>
+<pre><code class="language-bash">docker run --name ubuntu  ubuntu sleep 3600
+</code></pre>
+<p>The container shares the same kernel as the host, but they are isolated through namespaces in Linux. The host has its namespace and each container has its own separate one.</p>
+<p>That&#x27;s why the container can only see its processes and nothing outside of it.</p>
+<p>Inside the container:</p>
+<pre><code class="language-bash">docker ps
+CONTAINER ID   IMAGE                  COMMAND                  CREATED              STATUS              PORTS                       NAMES
+764da973f0fe   ubuntu                 &quot;sleep 3600&quot;             About a minute ago   Up About a minute                               ubuntu
+
+docker exec -it ubuntu  ps aux
+USER         PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
+root           1  0.0  0.0   2792  1408 ?        Ss   08:04   0:00 sleep 3600
+root           7  0.0  0.0   7064  2944 pts/0    Rs+  08:05   0:00 ps aux
+</code></pre>
+<p>The process that keeps the container running has pid 1.</p>
+<p>On the host:</p>
+<pre><code class="language-bash">git:(main) ✗ ps -aux | grep sleep
+david-p+ 1628755  0.0  0.0 2066812 25536 pts/2   Sl+  05:04   0:00 docker run --name ubuntu ubuntu sleep 3600
+root     1628843  0.0  0.0   2792  1408 ?        Ss   05:04   0:00 sleep 3600
+david-p+ 1631734  0.0  0.0   9220  2560 pts/5    R+   05:08   0:00 grep --color=auto sleep
+</code></pre>
+<p>On the host we can see the container process which is sleep 3600 but with a different pid. This is because processes can have different PIDs in different namespaces, this is how Docker works.</p>
+<p>If we create another container, what can we see?</p>
+<pre><code class="language-bash">docker run --name centos centos sleep 3600
+
+docker exec -it centos ps aux
+USER         PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
+root           1  0.0  0.0  23048  2560 ?        Ss   08:14   0:00 /usr/bin/coreutils --coreutils-prog-shebang=sleep /usr/bin/sleep 3600
+root           7  1.0  0.0  44668  3456 pts/0    Rs+  08:16   0:00 ps aux
+
+# and on the host
+
+ps -aux | grep sleep
+david-p+ 1628755  0.0  0.0 2066812 24948 pts/2   Sl+  05:04   0:00 docker run --name ubuntu ubuntu sleep 3600
+root     1628843  0.0  0.0   2792  1408 ?        Ss   05:04   0:00 sleep 3600
+david-p+ 1634805  0.0  0.0 1992824 26052 pts/5   Sl+  05:14   0:00 docker run --name centos centos sleep 3600
+root     1634985  0.0  0.0  23048  2560 ?        Ss   05:14   0:00 /usr/bin/coreutils --coreutils-prog-shebang=sleep /usr/bin/sleep 3600
+david-p+ 1639928  0.0  0.0   9220  2560 pts/4    S+   05:17   0:00 grep --color=auto sleep
+</code></pre>
+<p>We can analyze here that inside the container we are running the process as root user.</p>
+<p>We can force another user to run the process by passing --user 1000 in the command. Generally, 1000 is the first user created other than root. On my personal machine, 1001 is my user id.</p>
+<pre><code class="language-bash">docker run --name ubuntu --user 1001 ubuntu sleep 3600
+
+docker exec -it ubuntu  ps aux
+USER         PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
+1001           1  0.0  0.0   2792  1536 ?        Ss   08:23   0:00 sleep 3600
+1001           7  0.0  0.0   7064  2944 pts/0    Rs+  08:23   0:00 ps aux
+</code></pre>
+<p>Or define it in the Dockerfile of the image we&#x27;re going to build by creating a custom image.</p>
+<pre><code class="language-dockerfile">FROM ubuntu
+USER 1001
+</code></pre>
+<p>Now on the host we have:</p>
+<pre><code class="language-bash">ps aux | grep sleep
+david-p+ 1658884  0.0  0.0 1845040 25728 pts/9   Sl+  05:38   0:00 docker run --name ubuntu --user 1001 ubuntu sleep 3600
+david-p+ 1658972  0.0  0.0   2792  1408 ?        Ss   05:38   0:00 sleep 3600
+david-p+ 1660399  0.0  0.0   9220  2688 pts/8    S+   05:40   0:00 grep --color=auto sleep
+</code></pre>
+<p>And who is executing the process? david-p....</p>
+<p>What we can see is that we use the same user inside the container and on the host. The same root from the container is the root from the system and the same user 1001 from the container is the 1001 from the host which is my own and appeared there as sleep being a process from my user.</p>
+<p>But wasn&#x27;t it supposed to be isolated? If this is true, isn&#x27;t it dangerous?</p>
+<p>Can the process inside the container do anything that the root user can do on the host? Actually no. Docker uses a Linux feature called capabilities that limits the powers of root inside the container or the passed user, but it&#x27;s the same user with limited powers.</p>
+<p>The root user can do anything on the host system as we already know.</p>
+<p>To see what a user can do we can analyze the file /usr/include/linux/capability.h</p>
+<p>If we want to remove this limitation so that the container&#x27;s root user can do more things we can do:</p>
+<pre><code class="language-bash"># This container is already executed as root and --privileged enables all root privileges of the container within the host.
+docker run --name ubuntu --privileged  ubuntu sleep 3600
+
+# or only a specific permission --cap-drop would remove a permission
+docker run --name ubuntu --cap-add CHOWN ubuntu sleep 3600
+</code></pre>
+<p>Here is the list:</p>
+<table><thead><tr><th>Capability Key</th><th>Capability Description</th></tr></thead><tbody><tr><td>AUDIT_WRITE</td><td>Write records to the kernel audit log.</td></tr><tr><td>CHOWN</td><td>Make arbitrary changes to file UIDs and GIDs (see chown(2)).</td></tr><tr><td>DAC_OVERRIDE</td><td>Bypass file read, write, and execute permission checks.</td></tr><tr><td>FOWNER</td><td>Bypass permission checks on operations that normally require the filesystem UID of the process to match the UID of the file.</td></tr><tr><td>FSETID</td><td>Don&#x27;t clear set-user-ID and set-group-ID permission bits when a file is modified.</td></tr><tr><td>KILL</td><td>Bypass permission checks for sending signals.</td></tr><tr><td>MKNOD</td><td>Create special files using mknod(2).</td></tr><tr><td>NET_BIND_SERVICE</td><td>Bind a socket to privileged Internet domain ports (port numbers less than 1024).</td></tr><tr><td>NET_RAW</td><td>Use RAW and PACKET sockets.</td></tr><tr><td>SETFCAP</td><td>Set file capabilities.</td></tr><tr><td>SETGID</td><td>Make arbitrary manipulations of process GIDs and supplementary GID list.</td></tr><tr><td>SETPCAP</td><td>Modify process capabilities.</td></tr><tr><td>SETUID</td><td>Make arbitrary manipulations of process UIDs.</td></tr><tr><td>SYS_CHROOT</td><td>Use chroot(2), change root directory.</td></tr><tr><td>AUDIT_CONTROL</td><td>Enable and disable kernel auditing; change auditing filter rules; retrieve auditing status and filtering rules.</td></tr><tr><td>AUDIT_READ</td><td>Allow reading the audit log via multicast netlink socket.</td></tr><tr><td>BLOCK_SUSPEND</td><td>Allow preventing system suspends.</td></tr><tr><td>BPF</td><td>Allow creating BPF maps, loading BPF Type Format (BTF) data, retrieve JITed code of BPF programs and more.</td></tr><tr><td>CHECKPOINT_RESTORE</td><td>Allow checkpoint/restore related operations. Introduced in kernel 5.9.</td></tr><tr><td>DAC_READ_SEARCH</td><td>Bypass file read permission checks and directory read and execute permission checks.</td></tr><tr><td>IPC_LOCK</td><td>Lock memory (mlock(2), mlockall(2), mmap(2), shmctl(2)).</td></tr><tr><td>IPC_OWNER</td><td>Bypass permission checks for operations on System V IPC objects.</td></tr><tr><td>LEASE</td><td>Establish leases on arbitrary files (see fcntl(2)).</td></tr><tr><td>LINUX_IMMUTABLE</td><td>Set the FS_APPEND_FL and FS_IMMUTABLE_FL i-node flags.</td></tr><tr><td>MAC_ADMIN</td><td>Allow MAC configuration or state changes. Implemented for the Smack LSM.</td></tr><tr><td>MAC_OVERRIDE</td><td>Override Mandatory Access Control (MAC). Implemented for the Smack Linux Security Module (LSM).</td></tr><tr><td>NET_ADMIN</td><td>Perform various network-related operations.</td></tr><tr><td>NET_BROADCAST</td><td>Make socket broadcasts and listen to multicasts.</td></tr><tr><td>PERFMON</td><td>Allow privileged system performance and observability operations using perf_events, i915_perf and other kernel subsystems.</td></tr><tr><td>SYS_ADMIN</td><td>Perform a range of system administration operations.</td></tr><tr><td>SYS_BOOT</td><td>Use reboot(2) and kexec_load(2), reboot and load a new kernel for later execution.</td></tr><tr><td>SYS_MODULE</td><td>Load and unload kernel modules.</td></tr><tr><td>SYS_NICE</td><td>Raise process nice value (nice(2), setpriority(2)) and change the nice value for arbitrary processes.</td></tr><tr><td>SYS_PACCT</td><td>Use acct(2), switch process accounting on or off.</td></tr><tr><td>SYS_PTRACE</td><td>Trace arbitrary processes using ptrace(2).</td></tr><tr><td>SYS_RAWIO</td><td>Perform I/O port operations (iopl(2) and ioperm(2)).</td></tr><tr><td>SYS_RESOURCE</td><td>Override resource limits.</td></tr><tr><td>SYS_TIME</td><td>Set system clock (settimeofday(2), stime(2), adjtimex(2)); set real-time (hardware) clock.</td></tr><tr><td>SYS_TTY_CONFIG</td><td>Use vhangup(2); employ various privileged ioctl(2) operations on virtual terminals.</td></tr><tr><td>SYSLOG</td><td>Perform privileged syslog(2) operations.</td></tr><tr><td>WAKE_ALARM</td><td>Trigger something that will wake up the system.</td></tr></tbody></table>
+<p>A user with these permissions could simply kill system processes, reboot the machine, change network configurations, create new users, change file permissions, etc.</p>
+<pre><code class="language-bash">docker run -it --name ubuntu --privileged ubuntu bash
+root@a40542f4c76e:~# reboot
+bash: reboot: command not found
+</code></pre>
+<p>The Ubuntu image is a minimal image without many utilities which already helps with security. Alpine is even smaller, with much less. That&#x27;s why Alpine is great. Less is more!</p>
+<pre><code class="language-bash">docker run -it --name centos --privileged centos:8 bash
+reboot
+System has not been booted with systemd as init system (PID 1). Can&#x27;t operate.
+Failed to connect to bus: Host is down
+Failed to talk to init daemon.
+
+# Inside the container
+[root@5622c6f14e5e /]# reboot -f
+Rebooting.
+
+#
+docker ps -a | grep centos
+5622c6f14e5e   5d0da3dc9764  &quot;bash&quot; 2 minutes ago   Exited (129) 2 minutes ago  centos
+</code></pre>
+<p>In this case the container rebooted, not the host, but it rebooted, meaning it had privileges to execute the command.</p>
+<p>Using the --privileged flag when starting a Docker container grants additional privileges to the container, allowing it to have access to devices and resources on the host system. However, this option does not grant direct access to the host system outside the container.</p>
+<p>When you execute commands inside a Docker container, they are isolated from the host system, even when the container is started with the --privileged option. This is a fundamental feature of container technology, which aims to ensure security and isolation between container processes and host processes.</p>
+<p>Therefore, even if you have additional privileges inside the container using --privileged, access to the host is still restricted. This means that even as root user inside the container, you will not have direct access to the host system, unless you use specific techniques, such as mounting the host filesystem inside the container (which can be risky and is not recommended unless necessary).</p>
+<hr>
+<p>Understanding this, now everything we can do in Kubernetes.</p>
+<p>The securityContext can be applied to all containers in the pod if declared at the spec level, only to a specific container if declared at the container level, or both, with the container level taking precedence over the pod level. <code>However, capabilities are only applied at the container level</code>.</p>
+<pre><code class="language-yaml">apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: ubuntu
+  name: ubuntu
+spec:
+  # Pod level
+  securityContext:
+    runAsUser: 1000
+
+  containers:
+  - name: ubuntu
+    command: [&quot;sleep&quot;,&quot;3600&quot;]
+    image: ubuntu
+#  securityContext:
+#    runAsUser: 1001 &lt;&lt; changing the user
+#    capabilities:
+#      add: [&quot;NET_ADMIN&quot;,&quot;SYSLOG&quot;]
+
+# Keeping the same user but adding capabilities
+#  securityContext:
+#    capabilities:
+#      add: [&quot;NET_ADMIN&quot;,&quot;SYSLOG&quot;]
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+status: {}
+</code></pre>
+<p>To find out which user the container inside the pod is running as:</p>
+<pre><code class="language-bash">             #PODS                         #CONTAINER # COMMAND
+kubectl exec pods/nginx-david-c8644f94d-nlgch nginx -- whoami
+</code></pre>
+      <div class="docs-pager">
+        <a href="../../../../#blogs">All blogs</a>
+        <a href="../">Back to CKA</a>
+      </div>
+    </article>
+    <aside class="docs-toc">
+      <div class="docs-toc-title">On this page</div>
+      <nav>
+        <a href="#container-vs-host-vs-privileges">Container vs Host vs Privileges</a>
+      </nav>
+    </aside>
+  </div>
+  <script src="../../../../js/docs.js"></script>
+</body>
+</html>

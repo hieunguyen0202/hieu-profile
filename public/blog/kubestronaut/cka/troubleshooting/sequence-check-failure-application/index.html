@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Application Failure Verification Sequence — Hieu Nguyen</title>
+  <meta name="description" content="Application Failure Verification Sequence — Kubestronaut roadmap.">
+  <link rel="icon" href="../../../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../../../">i'm<span>.hieu</span></a>
+    <nav class="docs-series">
+      <a href="../../../../../blog/web-security/">Web Security</a>
+      <a class="active" href="../../../">Kubestronaut roadmap</a>
+    </nav>
+    <nav class="docs-cert-tabs"><a href="../../../cka/" class="active">CKA</a><a href="../../../ckad/" class="">CKAD</a><a href="../../../cks/" class="">CKS</a></nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-nav="kubestronaut" data-cert="cka" data-docs-root="../../" data-active="troubleshooting/sequence-check-failure-application">
+      <div class="docs-nav-label">CKA</div>
+      <ul class="docs-nav" id="docsNav"></ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../../../">Home</a>
+        <span>›</span>
+        <a href="../../../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../../../">Kubestronaut</a>
+        <span>›</span>
+        <a href="../../">CKA</a>
+        <span>›</span>
+        <span>Application Failure Verification Sequence</span>
+      </div>
+      <div id="top"></div>
+<header><h1>Application Failure Verification Sequence</h1></header><p>If an application is having problems, where should we start?</p>
+<p>Let&#x27;s consider a scenario of a Web application that communicates with the database.</p>
+<p><img decoding="async" loading="lazy" alt="Application Example" src="https://devsecops.puziol.com.br/en/assets/images/aplicationexample-267762f9b98dbfc3765ba831f5d41406.svg" width="859" height="466" class="img_ev3q"></p>
+<p>Here are some tips on how to perform a check to try to discover where a specific problem is occurring.</p>
+<p>A good log can be of great help. However, depending on the problem, we can have an idea whether to start from the left or the right.</p>
+<p>Everything will depend on how objects are organized in the cluster. If we have database and web application in different namespaces, different network policies, etc. But let&#x27;s simplify the problem, although it&#x27;s important to keep this in mind.</p>
+<p>The ideal is to check each link shown in the image.</p>
+<p>If a user reports problems accessing the application, where should we start?</p>
+<p>If they reported that the problem is related to access, then let&#x27;s start with the web application.</p>
+<ol>
+<li>
+<p>Test if the webapp is accessible. A great tool for this is curl. Run: <code>curl http://webapp-service:node-port</code></p>
+</li>
+<li>
+<p>Check the endpoints in the webapp service to see if they match those of the pods.</p>
+<p>2.1. Check if the service selector matches the labels of the pods it&#x27;s targeting.</p>
+</li>
+<li>
+<p>Check the pods, logs and events of the web application pods to see if they&#x27;re not being restarted.</p>
+<p>3.1. Check using <code>kubectl log</code>, <code>kubectl get pod</code>, <code>kubectl describe pod</code>, etc.</p>
+<p>3.2. Check Network Policy.</p>
+<p>3.3. Check Init Containers if they exist.</p>
+<p>3.4. Check commands and arguments.</p>
+<p>3.5. Check environment variables.</p>
+<p>3.6. Check secrets used.</p>
+<p>3.7. Check mounted volumes and PVCs.</p>
+</li>
+<li>
+<p>Check the database service in the same way as in step 2.</p>
+</li>
+<li>
+<p>Check the database pod as in step 3.</p>
+</li>
+</ol>
+<p>This was just a quick idea, but if you&#x27;re not familiar with Kubernetes, it can be difficult to know where to start.</p>
+      <div class="docs-pager">
+        <a href="../../../../../#blogs">All blogs</a>
+        <a href="../../">Back to CKA</a>
+      </div>
+    </article>
+    <aside class="docs-toc">
+      <div class="docs-toc-title">On this page</div>
+      <nav>
+        <a href="#top">On this page</a>
+      </nav>
+    </aside>
+  </div>
+  <script src="../../../../../js/docs.js"></script>
+</body>
+</html>

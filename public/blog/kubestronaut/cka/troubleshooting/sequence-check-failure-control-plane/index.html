@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Control Plane Failure Verification Sequence — Hieu Nguyen</title>
+  <meta name="description" content="Control Plane Failure Verification Sequence — Kubestronaut roadmap.">
+  <link rel="icon" href="../../../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../../../">i'm<span>.hieu</span></a>
+    <nav class="docs-series">
+      <a href="../../../../../blog/web-security/">Web Security</a>
+      <a class="active" href="../../../">Kubestronaut roadmap</a>
+    </nav>
+    <nav class="docs-cert-tabs"><a href="../../../cka/" class="active">CKA</a><a href="../../../ckad/" class="">CKAD</a><a href="../../../cks/" class="">CKS</a></nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-nav="kubestronaut" data-cert="cka" data-docs-root="../../" data-active="troubleshooting/sequence-check-failure-control-plane">
+      <div class="docs-nav-label">CKA</div>
+      <ul class="docs-nav" id="docsNav"></ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../../../">Home</a>
+        <span>›</span>
+        <a href="../../../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../../../">Kubestronaut</a>
+        <span>›</span>
+        <a href="../../">CKA</a>
+        <span>›</span>
+        <span>Control Plane Failure Verification Sequence</span>
+      </div>
+      <div id="top"></div>
+<header><h1>Control Plane Failure Verification Sequence</h1></header><ol>
+<li>
+<p>Check the state of nodes in the cluster and ensure all are ready. Run the command <code>kubectl get nodes</code>. If the command doesn&#x27;t respond, there&#x27;s probably a problem with kube-apiserver. In this case, you&#x27;ll need to SSH into one of the cluster&#x27;s master nodes to investigate.</p>
+<p>1.1. Check the state of pods in the cluster with the command <code>kubectl get pods -n kube-system</code>. This will ensure the control plane pods are running. If the pods aren&#x27;t present, it&#x27;s likely the deployment wasn&#x27;t done using kubeadm.</p>
+<p>1.2. If the deployment wasn&#x27;t done with kubeadm, it was probably configured as a service on the operating system. Each operating system manages processes differently. Although most use systemd nowadays, you can check with the command <code>ps -p 1</code>. Check the status with the commands <code>systemctl status kube-apiserver</code>, <code>systemctl status controller-manager</code>, <code>systemctl status kube-scheduler</code> on master nodes and on worker nodes, <code>systemctl status kubelet</code>, <code>systemctl status kube-proxy</code>.</p>
+<p>1.3. Check the controller logs. If the controllers are running as pods, use <code>kubectl logs</code> on each of them. If they&#x27;re services, use <code>journalctl -u service-name</code>.</p>
+<p>1.4. Check certificates and their paths. In the case of pods, also check volume mount points.</p>
+</li>
+</ol>
+      <div class="docs-pager">
+        <a href="../../../../../#blogs">All blogs</a>
+        <a href="../../">Back to CKA</a>
+      </div>
+    </article>
+    <aside class="docs-toc">
+      <div class="docs-toc-title">On this page</div>
+      <nav>
+        <a href="#top">On this page</a>
+      </nav>
+    </aside>
+  </div>
+  <script src="../../../../../js/docs.js"></script>
+</body>
+</html>

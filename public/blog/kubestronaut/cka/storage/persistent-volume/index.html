@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Persistent Volume — Hieu Nguyen</title>
+  <meta name="description" content="Persistent Volume — Kubestronaut roadmap.">
+  <link rel="icon" href="../../../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../../../">i'm<span>.hieu</span></a>
+    <nav class="docs-series">
+      <a href="../../../../../blog/web-security/">Web Security</a>
+      <a class="active" href="../../../">Kubestronaut roadmap</a>
+    </nav>
+    <nav class="docs-cert-tabs"><a href="../../../cka/" class="active">CKA</a><a href="../../../ckad/" class="">CKAD</a><a href="../../../cks/" class="">CKS</a></nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-nav="kubestronaut" data-cert="cka" data-docs-root="../../" data-active="storage/persistent-volume">
+      <div class="docs-nav-label">CKA</div>
+      <ul class="docs-nav" id="docsNav"></ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../../../">Home</a>
+        <span>›</span>
+        <a href="../../../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../../../">Kubestronaut</a>
+        <span>›</span>
+        <a href="../../">CKA</a>
+        <span>›</span>
+        <span>Persistent Volume</span>
+      </div>
+      <div id="top"></div>
+<header><h1>Persistent Volume</h1></header><p>In the previous session, we configured the volume inside the pod spec. All configuration for volume access is inside the pod.</p>
+<p>When we have an environment with several deployments, we would need to configure volume parameters in all definitions.</p>
+<p>To avoid this, we can manage the volume in a more centralized way where the administrator could create a pool of volumes <code>at cluster level</code> that could be used by users to deploy applications in the cluster.</p>
+<p><img decoding="async" loading="lazy" alt="alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-8-acd47e7ba0c7d435ddd5aa888f8d9d98.png" width="976" height="591" class="img_ev3q"></p>
+<p>Each application creates a <code>Persistent Volume Claim</code> which is a volume request. Let&#x27;s understand more later.</p>
+<p>To create a Persistent Volume.</p>
+<pre><code class="language-bash">cat &lt;&lt;EOF | kubectl apply -f -
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-vol1
+spec:
+  accessModes:
+    - ReadWriteOnce
+  capacity:
+    storage: 1Gi
+  hostPath:
+    path: /tmp/data
+EOF
+
+kubectl get pv
+NAME                                       CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS      CLAIM                                           STORAGECLASS   VOLUMEATTRIBUTESCLASS   REASON   AGE
+pv-vol1                                    1Gi        RWO            Retain           Available                                                                  &lt;unset&gt;                          10s
+</code></pre>
+<blockquote>
+<p>This created PV doesn&#x27;t have a Storage Class because it was provisioned manually. Keep this in mind.</p>
+</blockquote>
+<p>AccessModes defines how the volume should be mounted <code>ON ALL HOSTS</code>. In the example above, we put it in /tmp which is a folder that has permission for this.</p>
+<p>Could be:</p>
+<ul>
+<li>ReadOnlyMany</li>
+<li>ReadWriteOnce</li>
+<li>ReadWriteMany</li>
+</ul>
+<p>Again, let&#x27;s test this hostPath solution to see what happens.</p>
+<p>This would be a more productive case.</p>
+<pre><code class="language-bash">apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-vol1
+spec:
+  accessModes:
+    - ReadWriteOnce
+  capacity:
+    storage: 1Gi
+  awsElasticBlockStore:
+    volumeID: &lt;volume-id&gt;
+    fsType: ext4
+</code></pre>
+<p>Let&#x27;s get the concepts a bit clearer</p>
+<p>PersistentVolume (PV):</p>
+<ul>
+<li>A PersistentVolume is a storage resource provisioned in the Kubernetes cluster.</li>
+<li>Exists independently of the Pods that use it.</li>
+<li>Are provisioned manually by the cluster administrator or dynamically through a storage provisioner (Storage Class).</li>
+<li>Represent the actual physical storage available in the cluster, which can be disks, network volumes, or any other type of supported storage.</li>
+<li>PVs have a specification that defines characteristics such as capacity, access mode (ReadWriteOnce, ReadWriteMany, ReadOnlyMany), among others.</li>
+</ul>
+<p>PersistentVolumeClaim (PVC):</p>
+<ul>
+<li>Is a request made by a pod for persistent storage.</li>
+<li>A PVC requests a certain type of storage (for example, a certain capacity and access mode) and Kubernetes finds a suitable PV that satisfies this request.</li>
+<li>Are used by developers to request storage without needing to worry about specific details of how storage is provisioned and managed in the cluster.</li>
+<li>When a PVC is created and there are no corresponding PVs available, Kubernetes can provision a new PV automatically based on PVC specifications. This is known as dynamic provisioning.</li>
+<li>When a PVC is created and there is a suitable PV available, Kubernetes automatically binds the PVC to the corresponding PV.</li>
+</ul>
+<blockquote>
+<p>A PVC only exists bound to a PV and a PV can only have one PVC when bound.</p>
+</blockquote>
+<p>The PVC requests access to a PV, but which one? Based on matches and parameters. Just as we can select a node that meets certain requirements for a pod, the PVC requests a PV that meets its requirements.</p>
+<p>We could have requirements:</p>
+<ul>
+<li>Sufficient Capacity</li>
+<li>Access Modes</li>
+<li>Volume Modes</li>
+<li>Storage Class</li>
+<li>Selector</li>
+</ul>
+<p>In a volume&#x27;s metadata, we can have labels to use matchLabels. It&#x27;s generally good to use this because more than one PV can meet the PVC requirements.</p>
+<p>All criteria need to be satisfied, but a PVC that only needs sufficient space of 1Gi can be bound to a 100Gi PV if there&#x27;s no other option available. If it&#x27;s just you, you go anyway.</p>
+<p>If no PV satisfies the criteria, the PVC will remain Pending until a PV satisfies the criteria.</p>
+<p>Let&#x27;s create a PVC so the previous PV satisfies it.</p>
+<pre><code class="language-bash">cat &lt;&lt;EOF | kubectl apply -f -
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: myclaim
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 500Mi
+EOF
+
+kubectl get PVC
+NAME      STATUS    VOLUME   CAPACITY   ACCESS MODES   STORAGECLASS   VOLUMEATTRIBUTESCLASS   AGE
+myclaim   Pending
+
+kubectl describe PVC myclaim
+Name:          myclaim
+Namespace:     default
+StorageClass:  standard # &lt;&lt;&lt; See this
+Status:        Pending
+Volume:
+Labels:        &lt;none&gt;
+Annotations:   &lt;none&gt;
+Finalizers:    [kubernetes.io/PVC-protection]
+Capacity:
+Access Modes:
+VolumeMode:    Filesystem
+Used By:       &lt;none&gt;
+Events:
+  Type    Reason                Age                From                         Message
+  ----    ------                ----               ----                         -------
+  Normal  WaitForFirstConsumer  12s (x2 over 24s)  persistentvolume-controller  waiting for first consumer to be created before binding
+</code></pre>
+<p>We didn&#x27;t define a Storage Class but it has one. When not defined, the default will be used.</p>
+<pre><code class="language-bash">kubectl get sc
+NAME                 PROVISIONER             RECLAIMPOLICY   VOLUMEBINDINGMODE      ALLOWVOLUMEEXPANSION   AGE
+standard (default)   rancher.io/local-path   Delete          WaitForFirstConsumer   false                  7d11h
+
+kubectl describe sc standard
+Name:            standard
+IsDefaultClass:  Yes
+Annotations:     kubectl.kubernetes.io/last-applied-configuration={&quot;apiVersion&quot;:&quot;storage.k8s.io/v1&quot;,&quot;kind&quot;:&quot;StorageClass&quot;,&quot;metadata&quot;:{&quot;annotations&quot;:{&quot;storageclass.kubernetes.io/is-default-class&quot;:&quot;true&quot;},&quot;name&quot;:&quot;standard&quot;},&quot;provisioner&quot;:&quot;rancher.io/local-path&quot;,&quot;reclaimPolicy&quot;:&quot;Delete&quot;,&quot;volumeBindingMode&quot;:&quot;WaitForFirstConsumer&quot;}
+,storageclass.kubernetes.io/is-default-class=true
+Provisioner:           rancher.io/local-path
+Parameters:            &lt;none&gt;
+AllowVolumeExpansion:  &lt;unset&gt;
+MountOptions:          &lt;none&gt;
+ReclaimPolicy:         Delete
+VolumeBindingMode:     WaitForFirstConsumer
+Events:                &lt;none&gt;
+</code></pre>
+<p>If you observed well, the PVC didn&#x27;t bind with the PV.</p>
+<p>When a pod uses this PVC, the bind will be made. This is a configuration of the Storage Class (the provisioner) of my cluster. Since it&#x27;s not possible to edit a Storage Class because it&#x27;s immutable, I would need to create a Storage Class for this to see this bind happen without needing a pod.</p>
+<p>Let&#x27;s create another Storage Class then.</p>
+<pre><code class="language-bash">cat &lt;&lt;EOF | kubectl apply -f -
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: fast
+provisioner: rancher.io/local-path
+reclaimPolicy: Delete
+volumeBindingMode: Immediate
+EOF
+
+# Note that this Storage Class is not the system default, so to be used it needs to be pointed to.
+kubectl get sc
+NAME                 PROVISIONER             RECLAIMPOLICY   VOLUMEBINDINGMODE      ALLOWVOLUMEEXPANSION   AGE
+fast                 rancher.io/local-path   Delete          Immediate              false                  5s
+standard (default)   rancher.io/local-path   Delete          WaitForFirstConsumer   false                  6d18h
+
+# Another PV pointing to the Storage Class
+cat &lt;&lt;EOF | kubectl apply -f -
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-vol2
+spec:
+  accessModes:
+    - ReadWriteOnce
+  capacity:
+    storage: 1Gi
+  hostPath:
+    path: /tmp/data
+  storageClassName: fast
+EOF
+
+kubectl get pv
+NAME                                       CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS      CLAIM                                           STORAGECLASS   VOLUMEATTRIBUTESCLASS   REASON   AGE
+pv-vol1                                    1Gi        RWO            Retain           Available                                                                  &lt;unset&gt;                          3h13m
+pv-vol2                                    1Gi        RWO            Retain           Available                                                   fast           &lt;unset&gt;                          8s
+
+# Another PVC but forcing it to be in the fast Storage Class
+cat &lt;&lt;EOF | kubectl apply -f -
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: myclaim2
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 500Mi
+  storageClassName: fast
+EOF
+
+# Seeing the bind
+kubectl get PVC
+NAME       STATUS    VOLUME    CAPACITY   ACCESS MODES   STORAGECLASS   VOLUMEATTRIBUTESCLASS   AGE
+myclaim    Pending                                       standard       &lt;unset&gt;                 56m
+myclaim2   Bound     pv-vol2   1Gi        RWO            fast           &lt;unset&gt;                 6s
+
+kubectl get pv
+NAME                                       CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS      CLAIM                                           STORAGECLASS   VOLUMEATTRIBUTESCLASS   REASON   AGE
+pv-vol1                                    1Gi        RWO            Retain           Available                                                                  &lt;unset&gt;                          3h19m
+pv-vol2                                    1Gi        RWO            Retain           Bound       default/myclaim2                                fast           &lt;unset&gt;                          5m59s
+</code></pre>
+<p>Let&#x27;s create a PVC that would look for the fast Storage Class but wouldn&#x27;t have a PV to associate with.</p>
+<pre><code class="language-bash">cat &lt;&lt;EOF | kubectl apply -f -
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: myclaim3
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 500Mi
+  storageClassName: fast
+EOF
+
+kubectl get PVC
+NAME       STATUS    VOLUME    CAPACITY   ACCESS MODES   STORAGECLASS   VOLUMEATTRIBUTESCLASS   AGE
+myclaim    Pending                                       standard       &lt;unset&gt;                 63m
+myclaim2   Bound     pv-vol2   1Gi        RWO            fast           &lt;unset&gt;                 6m22s
+myclaim3   Pending                                       fast           &lt;unset&gt;                 2m26s
+
+# Let&#x27;s delete myclaim2 to release and see what happens
+kubectl delete PVC myclaim2
+persistentvolumeclaim &quot;myclaim2&quot; deleted
+
+# Even so, it still hasn&#x27;t found available
+kubectl get PVC
+NAME       STATUS    VOLUME   CAPACITY   ACCESS MODES   STORAGECLASS   VOLUMEATTRIBUTESCLASS   AGE
+myclaim    Pending                                      standard       &lt;unset&gt;                 6h36m
+myclaim3   Pending                                      fast           &lt;unset&gt;                 5h35m
+
+kubectl get pv
+NAME                                       CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS      CLAIM                                           STORAGECLASS   VOLUMEATTRIBUTESCLASS   REASON   AGE
+pv-vol1                                    1Gi        RWO            Retain           Available                                                                  &lt;unset&gt;                          8h
+pv-vol2                                    1Gi        RWO            Retain           Released    default/myclaim2                                fast           &lt;unset&gt;                          5h43m
+</code></pre>
+<p>What happens when we delete a PVC. By default, even losing the binding, the PV is not deleted. It happens that a PV has a data retention policy and the default is Retain.</p>
+<p><em>persistentVolumeReclaimPolicy: Retain</em> is the default</p>
+<p>We didn&#x27;t define this, so it kept Retain.</p>
+<ul>
+<li><em>Retain</em>: Data remains and no other PVC can associate, NOT EVEN THE SAME?</li>
+<li><em>Recycle</em>: the PV becomes available again when the PVC is destroyed and data will be erased when another PVC requests access.</li>
+<li><em>Delete</em>: the PV will be destroyed when the PVC is destroyed.</li>
+</ul>
+<p>If I create the same previous PVC, will it be associated with the PV?</p>
+<pre><code class="language-bash">cat &lt;&lt;EOF | kubectl apply -f -
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: myclaim2
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 500Mi
+  storageClassName: fast
+
+EOF
+persistentvolumeclaim/myclaim2 created
+
+kubectl get PVC
+NAME       STATUS    VOLUME   CAPACITY   ACCESS MODES   STORAGECLASS   VOLUMEATTRIBUTESCLASS   AGE
+myclaim    Pending                                      standard       &lt;unset&gt;                 6h45m
+myclaim2   Pending                                      fast           &lt;unset&gt;                 6s
+myclaim3   Pending                                      fast           &lt;unset&gt;                 5h44m
+
+# Why hasn&#x27;t it gone yet?
+kubectl describe PVC myclaim2
+Name:          myclaim2
+Namespace:     default
+StorageClass:  fast
+Status:        Pending
+Volume:
+Labels:        &lt;none&gt;
+Annotations:   volume.beta.kubernetes.io/storage-provisioner: rancher.io/local-path
+               volume.kubernetes.io/storage-provisioner: rancher.io/local-path
+Finalizers:    [kubernetes.io/PVC-protection]
+Capacity:
+Access Modes:
+VolumeMode:    Filesystem
+Used By:       &lt;none&gt;
+Events:
+  Type     Reason                Age                From                                                                                                Message
+  ----     ------                ----               ----                                                                                                -------
+  Normal   Provisioning          29s (x2 over 44s)  rancher.io/local-path_local-path-provisioner-7577fdbbfb-5dd24_6c93344f-2afb-45ff-b736-d7a5071e082a  External provisioner is provisioning volume for claim &quot;default/myclaim2&quot;
+  Warning  ProvisioningFailed    29s (x2 over 44s)  rancher.io/local-path_local-path-provisioner-7577fdbbfb-5dd24_6c93344f-2afb-45ff-b736-d7a5071e082a  failed to provision volume with StorageClass &quot;fast&quot;: configuration error, no node was specified
+  Normal   ExternalProvisioning  7s (x4 over 44s)   persistentvolume-controller                                                                         Waiting for a volume to be created either by the external provisioner &#x27;rancher.io/local-path&#x27; or manually by the system administrator. If volume creation is delayed, please verify that the provisioner is running and correctly registered.
+#
+</code></pre>
+<p>No, not even creating an identical PVC will we get this PV.</p>
+<p>TODO: Let&#x27;s try a recovery attempt later and see the possible paths to get a pod to access this data again.</p>
+<p>Let&#x27;s now deploy a POD that uses a PVC and will dynamically create the PV.
+As I saw earlier, we created a PVC and a PV was not created, and below we&#x27;ll use very similar code and it will work. The reason for this is that when we use a PVC inside the pod, it&#x27;s at this moment that dynamic provisioning happens, at the moment it says attach the PVC to the pod.</p>
+<pre><code class="language-bash">cat &lt;&lt; EOF | kubectl apply -f -
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: myclaim
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 500Mi
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: mypod
+spec:
+  containers:
+    - name: myfrontend
+      image: nginx
+      volumeMounts:
+      - mountPath: &quot;/var/www/html&quot;
+        name: mypd
+  volumes:
+    - name: mypd
+      persistentVolumeClaim:
+        claimName: myclaim
+EOF
+
+kubectl get PVC
+NAME      STATUS   VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   VOLUMEATTRIBUTESCLASS   AGE
+myclaim   Bound    PVC-903f9ac6-ded9-4d1e-b5d3-2c277ce41f87   500Mi      RWO            standard       &lt;unset&gt;                 4s
+
+kubectl get pod
+NAME    READY   STATUS    RESTARTS   AGE
+mypod   1/1     Running   0          12s
+
+# We can see that the PV was dynamically created with Reclaim Policy Delete, meaning it will also be deleted when the PVC is deleted.
+kubectl get pv
+NAME                                       CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS   CLAIM                                           STORAGECLASS   VOLUMEATTRIBUTESCLASS   REASON   AGE
+PVC-903f9ac6-ded9-4d1e-b5d3-2c277ce41f87   500Mi      RWO            Delete           Bound    default/myclaim                                 standard       &lt;unset&gt;                          19s
+
+kubectl delete pod mypod
+pod &quot;mypod&quot; deleted
+
+kubectl get PVC
+NAME      STATUS   VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   VOLUMEATTRIBUTESCLASS   AGE
+myclaim   Bound    PVC-903f9ac6-ded9-4d1e-b5d3-2c277ce41f87   500Mi      RWO            standard       &lt;unset&gt;                 47s
+
+kubectl delete PVC myclaim
+persistentvolumeclaim &quot;myclaim&quot; deleted
+
+kubectl get pv
+NAME                                       CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS   CLAIM                                           STORAGECLASS   VOLUMEATTRIBUTESCLASS   REASON   AGE
+</code></pre>
+<p>TODO: I need to digest this a bit more</p>
+<p>We&#x27;ve already seen that it&#x27;s possible to reserve a PV for a specific PVC, but I need to be sure about READ WRITE ONCE and MANY and if what I did locally would have any problem.</p>
+      <div class="docs-pager">
+        <a href="../../../../../#blogs">All blogs</a>
+        <a href="../../">Back to CKA</a>
+      </div>
+    </article>
+    <aside class="docs-toc">
+      <div class="docs-toc-title">On this page</div>
+      <nav>
+        <a href="#top">On this page</a>
+      </nav>
+    </aside>
+  </div>
+  <script src="../../../../../js/docs.js"></script>
+</body>
+</html>

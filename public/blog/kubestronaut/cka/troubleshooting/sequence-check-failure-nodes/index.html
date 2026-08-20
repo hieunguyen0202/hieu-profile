@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Node Failure Verification Sequence — Hieu Nguyen</title>
+  <meta name="description" content="Node Failure Verification Sequence — Kubestronaut roadmap.">
+  <link rel="icon" href="../../../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../../../">i'm<span>.hieu</span></a>
+    <nav class="docs-series">
+      <a href="../../../../../blog/web-security/">Web Security</a>
+      <a class="active" href="../../../">Kubestronaut roadmap</a>
+    </nav>
+    <nav class="docs-cert-tabs"><a href="../../../cka/" class="active">CKA</a><a href="../../../ckad/" class="">CKAD</a><a href="../../../cks/" class="">CKS</a></nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-nav="kubestronaut" data-cert="cka" data-docs-root="../../" data-active="troubleshooting/sequence-check-failure-nodes">
+      <div class="docs-nav-label">CKA</div>
+      <ul class="docs-nav" id="docsNav"></ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../../../">Home</a>
+        <span>›</span>
+        <a href="../../../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../../../">Kubestronaut</a>
+        <span>›</span>
+        <a href="../../">CKA</a>
+        <span>›</span>
+        <span>Node Failure Verification Sequence</span>
+      </div>
+      <div id="top"></div>
+<header><h1>Node Failure Verification Sequence</h1></header><p>In case of a node failure, we have some situations to keep in mind.</p>
+<ol>
+<li>
+<p>Check the status of nodes with the command <code>kubectl get nodes</code> to see the status.</p>
+</li>
+<li>
+<p>Look for events of not-ready nodes with the describe command for this node. Check the conditions.</p>
+<pre><code class="language-bash">kubectl describe nodes kind-cluster-worker
+Conditions:
+Type             Status  LastHeartbeatTime                 LastTransitionTime                Reason                       Message
+----             ------  -----------------                 ------------------                ------                       -------
+# If MemoryPressure is true, we&#x27;re low on memory to run pods. Pods are probably crashing.
+MemoryPressure   False   Mon, 26 Feb 2024 08:57:01 -0300   Thu, 08 Feb 2024 20:02:46 -0300   KubeletHasSufficientMemory   kubelet has sufficient memory available
+# If DiskPressure is true, then we&#x27;re low on disk capacity
+DiskPressure     False   Mon, 26 Feb 2024 08:57:01 -0300   Thu, 08 Feb 2024 20:02:46 -0300   KubeletHasNoDiskPressure     kubelet has no disk pressure
+# PIDPressure will be set to true if there are too many pods on this node
+PIDPressure      False   Mon, 26 Feb 2024 08:57:01 -0300   Thu, 08 Feb 2024 20:02:46 -0300   KubeletHasSufficientPID      kubelet has sufficient PID available
+Ready            True    Mon, 26 Feb 2024 08:57:01 -0300   Thu, 08 Feb 2024 20:02:49 -0300   KubeletReady                 kubelet is posting ready status
+</code></pre>
+<p>If any of these pressures is set to true, we already know it&#x27;s some resource shortage. If it&#x27;s <code>Unknown</code>, probably some accident happened and the status was lost.</p>
+</li>
+<li>
+<p>Check the processes and consumption on the node with the <code>top</code> and <code>df -h</code> commands</p>
+<pre><code class="language-bash">top - 12:11:32 up 22:41,  0 user,  load average: 3.25, 2.79, 2.56
+Tasks:  17 total,   1 running,  16 sleeping,   0 stopped,   0 zombie
+%Cpu(s):  8.0 us,  0.5 sy,  0.0 ni, 91.2 id,  0.1 wa,  0.0 hi,  0.2 si,  0.0 st
+MiB Mem :  64001.3 total,  41471.9 free,  11956.6 used,  13210.8 buff/cache
+MiB Swap:   1952.0 total,   1952.0 free,      0.0 used.  52044.7 avail Mem
+
+    PID USER      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ COMMAND
+    116 root      20   0 2470452  66056  36480 S   0.7   0.1  13:23.44 containerd
+    223 root      20   0 2999176  86524  53376 S   0.3   0.1   8:36.64 kubelet
+    1 root      20   0   20392  11648   8704 S   0.0   0.0   0:01.13 systemd
+    97 root      20   0   24792  11008  10240 S   0.0   0.0   0:00.08 systemd-journal
+    271 root      20   0  722648  13824   9856 S   0.0   0.0   0:07.79 containerd-shim
+    287 root      20   0  722648  13852   9856 S   0.0   0.0   0:07.95 containerd-shim
+    317 65535     20   0     996    512    512 S   0.0   0.0   0:00.00 pause
+    324 65535     20   0     996    512    512 S   0.0   0.0   0:00.01 pause
+    358 root      20   0 1284848  49360  36608 S   0.0   0.1   0:07.92 kube-proxy
+    446 root      20   0  743928  27448  19072 S   0.0   0.0   0:15.96 kindnetd
+14316 root      20   0  722392  13184   9600 S   0.0   0.0   0:00.01 containerd-shim
+14336 65535     20   0     996    512    512 S   0.0   0.0   0:00.00 pause
+14373 root      20   0    2484   1280   1280 S   0.0   0.0   0:00.01 sleep
+14400 root      20   0    2576   1408   1408 S   0.0   0.0   0:00.00 sh
+14406 root      20   0    2576    128    128 S   0.0   0.0   0:00.00 sh
+14407 root      20   0    4192   3328   2816 S   0.0   0.0   0:00.00 bash
+14412 root      20   0    8568   4736   2688 R   0.0   0.0   0:00.00 top
+
+root@kind-cluster-worker:/# df -h
+Filesystem                 Size  Used Avail Use% Mounted on
+overlay                    1.8T  571G  1.2T  33% /
+tmpfs                       64M     0   64M   0% /dev
+shm                         64M     0   64M   0% /dev/shm
+/dev/mapper/vgubuntu-root  1.8T  571G  1.2T  33% /var
+tmpfs                       32G  8.6M   32G   1% /run
+tmpfs                       32G     0   32G   0% /tmp
+tmpfs                      5.0M     0  5.0M   0% /run/lock
+tmpfs                       63G   12K   63G   1% /var/lib/kubelet/pods/5a2bf15d-36fa-4c73-94a3-b491f4774e72/volumes/kubernetes.io~projected/kube-api-access-tpjjt
+tmpfs                       50M   12K   50M   1% /var/lib/kubelet/pods/92c3fe67-ccb9-437c-8d18-c16008dfa93b/volumes/kubernetes.io~projected/kube-api-access-cxt56
+shm                         64M     0   64M   0% /run/containerd/io.containerd.grpc.v1.cri/sandboxes/b6087483482422390d1fad0ec6726dfd98aba0d990b3f7f5a6d8224c15c4a4a3/shm
+shm                         64M     0   64M   0% /run/containerd/io.containerd.grpc.v1.cri/sandboxes/c13daa616a7ee7a7144b2acf39476a6e36fd454c1ebf345c26d3834703d11756/shm
+overlay                    1.8T  571G  1.2T  33% /run/containerd/io.containerd.runtime.v2.task/k8s.io/b6087483482422390d1fad0ec6726dfd98aba0d990b3f7f5a6d8224c15c4a4a3/rootfs
+overlay                    1.8T  571G  1.2T  33% /run/containerd/io.containerd.runtime.v2.task/k8s.io/c13daa616a7ee7a7144b2acf39476a6e36fd454c1ebf345c26d3834703d11756/rootfs
+overlay                    1.8T  571G  1.2T  33% /run/containerd/io.containerd.runtime.v2.task/k8s.io/0e6c2021f2b349bb0a16e5e5ecedb44a364566413ddfac25d09dd0538bf1de3b/rootfs
+overlay                    1.8T  571G  1.2T  33% /run/containerd/io.containerd.runtime.v2.task/k8s.io/970340bd3152b21a503b9e8fbc0b6af4948bed0bc9581f03f7140cbad18b8015/rootfs
+tmpfs                       63G   12K   63G   1% /var/lib/kubelet/pods/1af287b4-b519-4956-995a-5cf7403e0699/volumes/kubernetes.io~projected/kube-api-access-h9vz9
+overlay                    1.8T  571G  1.2T  33% /run/containerd/io.containerd.runtime.v2.task/k8s.io/36a2786c5693be823e1cd178341a794744583fe1d67548132f4a364933d54967/rootfs
+overlay                    1.8T  571G  1.2T  33% /run/containerd/io.containerd.runtime.v2.task/k8s.io/27c42f370c029cf965538366fd6f310cb9408ef6b305442ce21f32ec8947e2a6/rootfs
+</code></pre>
+</li>
+<li>
+<p>Check the kubelet status and logs with <code>systemd status kubelet.service</code> and <code>journalctl -xeu kubelet</code></p>
+</li>
+<li>
+<p>Also check certificates and see if they haven&#x27;t expired</p>
+<pre><code class="language-bash">root@kind-cluster-worker:/# openssl x509 -in /var/lib/kubelet/pki/kubelet.crt
+-----BEGIN CERTIFICATE-----
+MIIDTTCCAjWgAwIBAgIIdyIAO9Z5gVAwDQYJKoZIhvcNAQELBQAwLDEqMCgGA1UE
+Awwha2luZC1jbHVzdGVyLXdvcmtlci1jYUAxNzA3NDMzMzY1MB4XDTI0MDIwODIy
+MDI0NVoXDTI1MDIwNzIyMDI0NVowKTEnMCUGA1UEAwwea2luZC1jbHVzdGVyLXdv
+cmtlckAxNzA3NDMzMzY1MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA
+nXOMHMXoQiRePWMKnI6NN0VI7lhy6Te2Ia2y+QZ+qeDfMM9mi62kwbHcnCnFsptJ
+8CBqv1mYpzNJaCDDiOrtB9Fv6gs6k0xARF+Tdw+CC2Mo7UJEVh4S5A1BnYTJUctm
+tWA9jzUqbh3cxaubmN2AmzlmTk2+A6FZX+fR/bdNs9Gh+zrrkhF2irfs8Sxbp68f
+KMB6HsgZOSdt014Dz9J5xB37Hh0R3KS0FYLcJ4TVaPGJrCypL26GezfZWjCRFm7q
+wB/t7vbSNV/gFNt533Vdr6AxF8IZEVzdB2fxJ6/ofNDbsioFQ1iDhv4wQECu6jCH
+6NkbzCZrPDF4KJrLXGjkNwIDAQABo3YwdDAOBgNVHQ8BAf8EBAMCBaAwEwYDVR0l
+BAwwCgYIKwYBBQUHAwEwDAYDVR0TAQH/BAIwADAfBgNVHSMEGDAWgBT53Jnk+X3i
+R7lLud6Q3HnbydB0azAeBgNVHREEFzAVghNraW5kLWNsdXN0ZXItd29ya2VyMA0G
+CSqGSIb3DQEBCwUAA4IBAQAnNioBu6agqKH/kDgjGfut865x8ufWw2wlmyunx5CS
+njAdP/csErsSrVXlzlYhdNaXHvCYZcwXCjUpL8wNYHJqT5aRhuMr4w6ZYACWY50o
+jyepzZFA8BNxA7FH5SnQbr+JZP1y+bXlF3JbfYPNAEHZBRSuayw3WdU9iSuGghnG
+pQA0OjOjZ7MwYXF3NKPuS/rPi6NERjykT8VYW6G2kIJDgPf4EaJ5lEKM3ifxjW+n
+vu7XpnjG+Ff48Gq47BBwxhE9p/YTFLzyGZnbArx+u6V2yui3Q3agi7f0oJT1fqkp
+RfbxkFBrCCuiVbswcaf4eBFwyMNqyg9mhn8r4Wo4N2z8
+-----END CERTIFICATE-----
+root@kind-cluster-worker:/# openssl x509 -in /var/lib/kubelet/pki/kubelet.crt --text
+Certificate:
+    Data:
+        Version: 3 (0x2)
+        Serial Number: 8584424096722944336 (0x7722003bd6798150)
+        Signature Algorithm: sha256WithRSAEncryption
+        Issuer: CN = kind-cluster-worker-ca@1707433365
+        Validity
+            Not Before: Feb  8 22:02:45 2024 GMT
+            Not After : Feb  7 22:02:45 2025 GMT #OK
+        Subject: CN = kind-cluster-worker@1707433365
+        Subject Public Key Info:
+            Public Key Algorithm: rsaEncryption
+                Public-Key: (2048 bit)
+                Modulus:
+                    00:9d:73:8c:1c:c5:e8:42:24:5e:3d:63:0a:9c:8e:
+                    8d:37:45:48:ee:58:72:e9:37:b6:21:ad:b2:f9:06:
+                    7e:a9:e0:df:30:cf:66:8b:ad:a4:c1:b1:dc:9c:29:
+                    c5:b2:9b:49:f0:20:6a:bf:59:98:a7:33:49:68:20:
+                    c3:88:ea:ed:07:d1:6f:ea:0b:3a:93:4c:40:44:5f:
+                    93:77:0f:82:0b:63:28:ed:42:44:56:1e:12:e4:0d:
+                    41:9d:84:c9:51:cb:66:b5:60:3d:8f:35:2a:6e:1d:
+                    dc:c5:ab:9b:98:dd:80:9b:39:66:4e:4d:be:03:a1:
+                    59:5f:e7:d1:fd:b7:4d:b3:d1:a1:fb:3a:eb:92:11:
+                    76:8a:b7:ec:f1:2c:5b:a7:af:1f:28:c0:7a:1e:c8:
+                    19:39:27:6d:d3:5e:03:cf:d2:79:c4:1d:fb:1e:1d:
+                    11:dc:a4:b4:15:82:dc:27:84:d5:68:f1:89:ac:2c:
+                    a9:2f:6e:86:7b:37:d9:5a:30:91:16:6e:ea:c0:1f:
+                    ed:ee:f6:d2:35:5f:e0:14:db:79:df:75:5d:af:a0:
+                    31:17:c2:19:11:5c:dd:07:67:f1:27:af:e8:7c:d0:
+                    db:b2:2a:05:43:58:83:86:fe:30:40:40:ae:ea:30:
+                    87:e8:d9:1b:cc:26:6b:3c:31:78:28:9a:cb:5c:68:
+                    e4:37
+                Exponent: 65537 (0x10001)
+        X509v3 extensions:
+            X509v3 Key Usage: critical
+                Digital Signature, Key Encipherment
+            X509v3 Extended Key Usage:
+                TLS Web Server Authentication
+            X509v3 Basic Constraints: critical
+                CA:FALSE
+            X509v3 Authority Key Identifier:
+                F9:DC:99:E4:F9:7D:E2:47:B9:4B:B9:DE:90:DC:79:DB:C9:D0:74:6B
+            X509v3 Subject Alternative Name:
+                DNS:kind-cluster-worker
+    Signature Algorithm: sha256WithRSAEncryption
+    Signature Value:
+        27:36:2a:01:bb:a6:a0:a8:a1:ff:90:38:23:19:fb:ad:f3:ae:
+        71:f2:e7:d6:c3:6c:25:9b:2b:a7:c7:90:92:9e:30:1d:3f:f7:
+        2c:12:bb:12:ad:55:e5:ce:56:21:74:d6:97:1e:f0:98:65:cc:
+        17:0a:35:29:2f:cc:0d:60:72:6a:4f:96:91:86:e3:2b:e3:0e:
+        99:60:00:96:63:9d:28:8f:27:a9:cd:91:40:f0:13:71:03:b1:
+        47:e5:29:d0:6e:bf:89:64:fd:72:f9:b5:e5:17:72:5b:7d:83:
+        cd:00:41:d9:05:14:ae:6b:2c:37:59:d5:3d:89:2b:86:82:19:
+        c6:a5:00:34:3a:33:a3:67:b3:30:61:71:77:34:a3:ee:4b:fa:
+        cf:8b:a3:44:46:3c:a4:4f:c5:58:5b:a1:b6:90:82:43:80:f7:
+        f8:11:a2:79:94:42:8c:de:27:f1:8d:6f:a7:be:ee:d7:a6:78:
+        c6:f8:57:f8:f0:6a:b8:ec:10:70:c6:11:3d:a7:f6:13:14:bc:
+        f2:19:99:db:02:bc:7e:bb:a5:76:ca:e8:b7:43:76:a0:8b:b7:
+        f4:a0:94:f5:7e:a9:29:45:f6:f1:90:50:6b:08:2b:a2:55:bb:
+        30:71:a7:f8:78:11:70:c8:c3:6a:ca:0f:66:86:7f:2b:e1:6a:
+        38:37:6c:fc
+-----BEGIN CERTIFICATE-----
+MIIDTTCCAjWgAwIBAgIIdyIAO9Z5gVAwDQYJKoZIhvcNAQELBQAwLDEqMCgGA1UE
+Awwha2luZC1jbHVzdGVyLXdvcmtlci1jYUAxNzA3NDMzMzY1MB4XDTI0MDIwODIy
+MDI0NVoXDTI1MDIwNzIyMDI0NVowKTEnMCUGA1UEAwwea2luZC1jbHVzdGVyLXdv
+cmtlckAxNzA3NDMzMzY1MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA
+nXOMHMXoQiRePWMKnI6NN0VI7lhy6Te2Ia2y+QZ+qeDfMM9mi62kwbHcnCnFsptJ
+8CBqv1mYpzNJaCDDiOrtB9Fv6gs6k0xARF+Tdw+CC2Mo7UJEVh4S5A1BnYTJUctm
+tWA9jzUqbh3cxaubmN2AmzlmTk2+A6FZX+fR/bdNs9Gh+zrrkhF2irfs8Sxbp68f
+KMB6HsgZOSdt014Dz9J5xB37Hh0R3KS0FYLcJ4TVaPGJrCypL26GezfZWjCRFm7q
+wB/t7vbSNV/gFNt533Vdr6AxF8IZEVzdB2fxJ6/ofNDbsioFQ1iDhv4wQECu6jCH
+6NkbzCZrPDF4KJrLXGjkNwIDAQABo3YwdDAOBgNVHQ8BAf8EBAMCBaAwEwYDVR0l
+BAwwCgYIKwYBBQUHAwEwDAYDVR0TAQH/BAIwADAfBgNVHSMEGDAWgBT53Jnk+X3i
+R7lLud6Q3HnbydB0azAeBgNVHREEFzAVghNraW5kLWNsdXN0ZXItd29ya2VyMA0G
+CSqGSIb3DQEBCwUAA4IBAQAnNioBu6agqKH/kDgjGfut865x8ufWw2wlmyunx5CS
+njAdP/csErsSrVXlzlYhdNaXHvCYZcwXCjUpL8wNYHJqT5aRhuMr4w6ZYACWY50o
+jyepzZFA8BNxA7FH5SnQbr+JZP1y+bXlF3JbfYPNAEHZBRSuayw3WdU9iSuGghnG
+pQA0OjOjZ7MwYXF3NKPuS/rPi6NERjykT8VYW6G2kIJDgPf4EaJ5lEKM3ifxjW+n
+vu7XpnjG+Ff48Gq47BBwxhE9p/YTFLzyGZnbArx+u6V2yui3Q3agi7f0oJT1fqkp
+RfbxkFBrCCuiVbswcaf4eBFwyMNqyg9mhn8r4Wo4N2z8
+-----END CERTIFICATE-----
+</code></pre>
+<p>Also check the endpoints that kubelet is pointing to kube-apiserver.</p>
+</li>
+</ol>
+      <div class="docs-pager">
+        <a href="../../../../../#blogs">All blogs</a>
+        <a href="../../">Back to CKA</a>
+      </div>
+    </article>
+    <aside class="docs-toc">
+      <div class="docs-toc-title">On this page</div>
+      <nav>
+        <a href="#top">On this page</a>
+      </nav>
+    </aside>
+  </div>
+  <script src="../../../../../js/docs.js"></script>
+</body>
+</html>

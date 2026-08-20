@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pod Networking — Hieu Nguyen</title>
+  <meta name="description" content="Pod Networking — Kubestronaut roadmap.">
+  <link rel="icon" href="../../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../../">i'm<span>.hieu</span></a>
+    <nav class="docs-series">
+      <a href="../../../../blog/web-security/">Web Security</a>
+      <a class="active" href="../../">Kubestronaut roadmap</a>
+    </nav>
+    <nav class="docs-cert-tabs"><a href="../../cka/" class="active">CKA</a><a href="../../ckad/" class="">CKAD</a><a href="../../cks/" class="">CKS</a></nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-nav="kubestronaut" data-cert="cka" data-docs-root="../" data-active="pod-network-interface">
+      <div class="docs-nav-label">CKA</div>
+      <ul class="docs-nav" id="docsNav"></ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../../">Home</a>
+        <span>›</span>
+        <a href="../../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../../">Kubestronaut</a>
+        <span>›</span>
+        <a href="../">CKA</a>
+        <span>›</span>
+        <span>Pod Networking</span>
+      </div>
+      <div id="top"></div>
+<header><h1>Pod Networking</h1></header><p>We talked about the network connecting nodes, but there&#x27;s also another layer of networking that is crucial for cluster operation, which is networking at the pod layer.</p>
+<p>Our Kubernetes cluster will soon have a large number of pods and services running.</p>
+<p>How are pods handled? How do they communicate with each other? How do you access the services running on these pods internally, from within the cluster, and externally, from outside the cluster?</p>
+<p>Kubernetes does not come with a built-in solution for this; it expects you to implement a networking solution that solves these challenges. However, Kubernetes has clearly defined the requirements for pod networking. Kubernetes expects that:</p>
+<ul>
+<li>each pod gets its own unique IP address and that each pod can reach all other pods
+on the same node using that IP address.</li>
+<li>each pod must be able to reach all other pods on other nodes as well using the same IP address. It doesn&#x27;t matter what the IP address is and what range or subnet it belongs to.</li>
+</ul>
+<p>As long as you can implement a solution that takes care of automatic IP address assignment and establishes connectivity between pods on a node, as well as between pods on different nodes, there will be no problem.</p>
+<p>So, how would you implement a model that meets these requirements?</p>
+<p>There are many networking solutions available that do this, but as this is a study, let&#x27;s try to use what we&#x27;ve learned to solve this problem ourselves first to help understand how other solutions work.</p>
+<p>Let&#x27;s imagine we have a cluster with three nodes. It doesn&#x27;t matter if they are master or worker, as all run pods.</p>
+<p>The nodes are part of an external network and have addresses.</p>
+<ul>
+<li>master1 (192.168.0.1)</li>
+<li>worker1 (192.168.0.2)</li>
+<li>worker2 (192.168.0.3)</li>
+</ul>
+<p>When containers are created, the container runtime used on the Kubernetes nodes creates network namespaces for them. To allow communication between them, we need to attach these namespaces to a bridge network as we saw earlier.</p>
+<p>To comply with what CNI defined, we would need to create a bridge interface on each node that must belong to a different network. Containers would need to receive different IPs as well.</p>
+<p>We would then have:</p>
+<ul>
+<li>master1   bridge 10.244.1.1 (network is 10.244.1.0/24)
+<ul>
+<li>containers would have IP 10.244.<em>1.2</em>, 10.244.<em>1.3</em>, 10.244.<em>1.4</em></li>
+</ul>
+</li>
+<li>node1     bridge 10.244.2.1 (network is 10.244.2.0/24)
+<ul>
+<li>containers would have IP 10.244.<em>2.2</em>, 10.244.<em>2.3</em>, 10.244.<em>2.4</em></li>
+</ul>
+</li>
+<li>node2     bridge 10.244.3.1 (network is 10.244.3.0/24)
+<ul>
+<li>containers would have IP 10.244.<em>3.2</em>, 10.244.<em>3.3</em>, 10.244.<em>3.4</em></li>
+</ul>
+</li>
+</ul>
+<p>We create a bridge network on each node, activate the interface and assign an IP address and set the IP proposed above.</p>
+<p>The remaining steps must be performed for each container and whenever a new container is created, so
+we write a script for this.</p>
+<p>In this script, we would have the following steps:</p>
+<ul>
+<li>Create a pipe or virtual network cable. We create this using the ip link add command.</li>
+<li>Connect one end to the container and the other end to the bridge using the ip link set command.</li>
+<li>Assign the IP address using the ip addr command and add a route to the default gateway. But what IP do we add? Do we manage this ourselves or store this information in some kind of database? For now, we&#x27;ll assume this function picks a free IP on the subnet, taking an IP on the bridge network that is not being used.</li>
+<li>Activate the created interfaces</li>
+</ul>
+<p>Containers on the same node can now communicate with each other within the same node.</p>
+<p>We copy the script to the other nodes and run the script on them to assign the IP address and connect these containers to their own internal networks. We&#x27;ve solved the first part of the challenge. All pods receive their own unique IP address and can communicate with each other on their own nodes.</p>
+<p>The next part is to allow them to reach other pods on other nodes. Let&#x27;s say, for example, that a pod at 10.244.2.2 on node1 wants to ping pod 10.244.3.2 on node2.</p>
+<p>So far, the first one has no idea where address 10.244.3.2 is because it&#x27;s on a different network from its own.</p>
+<p>Therefore, it forwards to the bridge IP, as it is configured as the default gateway. Node one also doesn&#x27;t know since 10.244.2.2 is a private network on node two.</p>
+<p>Add a route to node one&#x27;s routing table to route traffic to 10.244.2.2 where the second node&#x27;s IP is 192.168.1.12.</p>
+<p>After the route is added,
+the blue pod can ping.</p>
+<p>Instead of configuring routes on each server, a better solution is to do this on a router, if there is one on your network, and point all hosts to use it as the default gateway. This way, you can easily manage the routes for all networks in the router&#x27;s routing table.</p>
+<p>With this, the individual virtual networks we created with address 10.244.1.0/24 on each node now form a single large network with address 10.244.0.0/16.</p>
+<p>It&#x27;s time to bring it all together.</p>
+<p>We performed several manual steps to prepare the environment with bridge networks and routing tables.</p>
+<p>We then wrote a script that can be run for each container and performs the necessary steps to connect each container to the network. And we run the script manually.</p>
+<p>Of course, we don&#x27;t want to do this in large environments where thousands of pods are created every minute.</p>
+<p>So how do we run the script automatically when a pod is created in Kubernetes?</p>
+<p>This is where CNI comes in, acting as an intermediary. CNI tells Kubernetes that this is how you should call a script as soon as you create a container.</p>
+<p>And CNI tells us: &quot;This is how your script should be. So we need to modify the script a bit to meet CNI standards.</p>
+<p>It must have an ADD section that will take care of adding a container to the network and a DELETE section that will take care of removing the container&#x27;s interfaces from the network and releasing the IP address, etc.</p>
+<p>So our script is ready.</p>
+<p>The container runtime on each node is responsible for creating containers.</p>
+<p>Whenever a container is created, the container runtime examines the CNI configuration passed as a command-line argument when it was executed and identifies the name of our script.</p>
+<p>It then looks in the CNI bin directory to find our script and then executes the script with the add command and the name and ID of the container&#x27;s namespace, and our script takes care of the rest.</p>
+<p>The plugins, scripts that do the repetitive work, are located in <code>/opt/cni/bin/</code></p>
+<pre><code class="language-bash">root@kind-cluster-worker:/etc/cni/net.d# ls -lha /opt/cni/bin
+total 15M
+drwxr-xr-x 2 root root 4.0K Feb  2 00:14 .
+drwxr-xr-x 3 root root 4.0K Feb  2 00:14 ..
+-rwxr-xr-x 1 root root 3.4M Feb  2 00:12 host-local
+-rwxr-xr-x 1 root root 3.4M Feb  2 00:12 loopback
+-rwxr-xr-x 1 root root 3.8M Feb  2 00:12 portmap
+-rwxr-xr-x 1 root root 4.2M Feb  2 00:12 ptp
+</code></pre>
+<p>And the configuration is in <code>/etc/cni/net.d/</code>. If there was more than one file in this folder, it would pick the first one according to lexicographic order.</p>
+<pre><code class="language-bash">root@kind-cluster-worker:/etc/cni/net.d# ls /etc/cni/net.d/
+10-kindnet.conflist
+</code></pre>
+<p>Analyzing this <code>10-kindnet.conflist</code> file which is a CNI configuration file used by kind</p>
+<pre><code class="language-json">{
+  &quot;cniVersion&quot;:&quot;0.3.1&quot;,
+  &quot;name&quot;:&quot;kindnet&quot;,
+  &quot;plugins&quot;:[
+    {
+      &quot;type&quot;:&quot;ptp&quot;,
+      &quot;ipMasq&quot;:false,
+      &quot;ipam&quot;:{
+        &quot;type&quot;:&quot;host-local&quot;,
+        &quot;dataDir&quot;:&quot;/run/cni-ipam-state&quot;,
+        &quot;routes&quot;:[
+          {
+            &quot;dst&quot;:&quot;0.0.0.0/0&quot;
+          }
+        ],
+        &quot;ranges&quot;:[
+          [
+            {
+              &quot;subnet&quot;:&quot;10.244.2.0/24&quot;
+            }
+          ]
+        ]
+      },
+      &quot;mtu&quot;:1500
+    },
+    {
+      &quot;type&quot;:&quot;portmap&quot;,
+      &quot;capabilities&quot;:{
+        &quot;portMappings&quot;:true
+      }
+    }
+  ]
+}
+</code></pre>
+<p>But let&#x27;s try to find where the configuration that points to this CNI is shown.</p>
+<p>Who is responsible for creating containers in Kubernetes? Kubelet, so that&#x27;s where we need to check.</p>
+<p>Kubelet doesn&#x27;t run as a pod, so let&#x27;s see the service that defines it.</p>
+<pre><code class="language-bash">root@kind-cluster-worker:/etc/systemd/system# cat /etc/systemd/system/kubelet.service
+
+[Unit]
+Description=kubelet: The Kubernetes Node Agent
+Documentation=http://kubernetes.io/docs/
+ConditionPathExists=/var/lib/kubelet/config.yaml
+[Service]
+ExecStart=/usr/bin/kubelet
+Restart=always
+StartLimitInterval=0
+RestartSec=1s
+CPUAccounting=true
+MemoryAccounting=true
+Slice=kubelet.slice
+KillMode=process
+
+[Install]
+WantedBy=multi-user.target
+root@kind-cluster-worker:/etc/systemd/system#
+
+# Let&#x27;s look at what we have here ConditionPathExists=/var/lib/kubelet/config.yaml
+root@kind-cluster-worker:/etc/systemd/system# cat /var/lib/kubelet/config.yaml
+apiVersion: kubelet.config.k8s.io/v1beta1
+authentication:
+  anonymous:
+    enabled: false
+  webhook:
+    cacheTTL: 0s
+    enabled: true
+  x509:
+    clientCAFile: /etc/kubernetes/pki/ca.crt
+authorization:
+  mode: Webhook
+  webhook:
+    cacheAuthorizedTTL: 0s
+    cacheUnauthorizedTTL: 0s
+cgroupDriver: systemd
+cgroupRoot: /kubelet
+clusterDNS:
+- 10.96.0.10
+clusterDomain: cluster.local
+containerRuntimeEndpoint: &quot;&quot;
+cpuManagerReconcilePeriod: 0s
+evictionHard:
+  imagefs.available: 0%
+  nodefs.available: 0%
+  nodefs.inodesFree: 0%
+evictionPressureTransitionPeriod: 0s
+failSwapOn: false
+fileCheckFrequency: 0s
+healthzBindAddress: 127.0.0.1
+healthzPort: 10248
+httpCheckFrequency: 0s
+imageGCHighThresholdPercent: 100
+imageMaximumGCAge: 0s
+imageMinimumGCAge: 0s
+kind: KubeletConfiguration
+logging:
+  flushFrequency: 0
+  options:
+    json:
+      infoBufferSize: &quot;0&quot;
+  verbosity: 0
+memorySwap: {}
+nodeStatusReportFrequency: 0s
+nodeStatusUpdateFrequency: 0s
+rotateCertificates: true
+runtimeRequestTimeout: 0s
+shutdownGracePeriod: 0s
+shutdownGracePeriodCriticalPods: 0s
+staticPodPath: /etc/kubernetes/manifests
+streamingConnectionIdleTimeout: 0s
+syncFrequency: 0s
+volumeStatsAggPeriod: 0s
+
+root@kind-cluster-worker:/etc/systemd/system# ps -aux | grep kubelet
+root         216  1.5  0.1 2998920 87512 ?       Ssl  Feb28  15:19 /usr/bin/kubelet --bootstrap-kubeconfig=/etc/kubernetes/bootstrap-kubelet.conf --kubeconfig=/etc/kubernetes/kubelet.conf --config=/var/lib/kubelet/config.yaml --container-runtime-endpoint=unix:///run/containerd/containerd.sock --node-ip=172.18.0.3 --node-labels= --pod-infra-container-image=registry.k8s.io/pause:3.9 --provider-id=kind://docker/kind-cluster/kind-cluster-worker --runtime-cgroups=/system.slice/containerd.service
+root       10841  0.0  0.0   3324  1664 pts/1    S+   14:51   0:00 grep kubelet
+</code></pre>
+<p>Since we didn&#x27;t find anything, let&#x27;s recreate our kind cluster, but now disabling the default CNI to install another one. Let&#x27;s take the opportunity to improve some things in the configuration we&#x27;ll pass to kind.</p>
+<p>Uninstall the previous cluster</p>
+<pre><code class="language-bash">kind delete cluster
+</code></pre>
+<p>Create a file called kind-config.yaml</p>
+<pre><code class="language-yaml">kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+name: cka-cluster
+networking:
+  ipFamily: ipv4
+  disableDefaultCNI: true
+  kubeProxyMode: &quot;ipvs&quot;
+  podSubnet: &quot;10.244.0.0/16&quot;
+  serviceSubnet: &quot;10.96.0.0/12&quot;
+nodes:
+- role: control-plane
+- role: worker
+- role: worker
+- role: worker
+</code></pre>
+<pre><code class="language-bash">kind create cluster --config kind-config.yaml
+Creating cluster &quot;cka-cluster&quot; ...
+ ✓ Ensuring node image (kindest/node:v1.29.1) 🖼
+ ✓ Preparing nodes 📦 📦 📦 📦
+ ✓ Writing configuration 📜
+ ✓ Starting control-plane 🕹️
+ ✓ Installing StorageClass 💾
+ ✓ Joining worker nodes 🚜
+Set kubectl context to &quot;kind-cka-cluster&quot;
+You can now use your cluster with:
+
+kubectl cluster-info --context kind-cka-cluster
+
+Thanks for using kind! 😊
+
+# No ready nodes
+k get nodes
+NAME                        STATUS     ROLES           AGE   VERSION
+cka-cluster-control-plane   NotReady   control-plane   34s   v1.29.1
+cka-cluster-worker          NotReady   &lt;none&gt;          13s   v1.29.1
+cka-cluster-worker2         NotReady   &lt;none&gt;          11s   v1.29.1
+cka-cluster-worker3         NotReady   &lt;none&gt;          12s   v1.29.1
+</code></pre>
+<p>And now we&#x27;ll install the <a href="https://github.com/weaveworks/weave/releases" target="_blank" rel="noopener noreferrer">weave CNI</a>.</p>
+<pre><code class="language-bash">kubectl apply -f https://github.com/weaveworks/weave/releases/download/v2.8.1/weave-daemonset-k8s.yaml
+serviceaccount/weave-net created
+clusterrole.rbac.authorization.k8s.io/weave-net created
+clusterrolebinding.rbac.authorization.k8s.io/weave-net created
+role.rbac.authorization.k8s.io/weave-net created
+rolebinding.rbac.authorization.k8s.io/weave-net created
+daemonset.apps/weave-net created
+
+kubectl get nodes
+NAME                        STATUS   ROLES           AGE    VERSION
+cka-cluster-control-plane   Ready    control-plane   110s   v1.29.1
+cka-cluster-worker          Ready    &lt;none&gt;          89s    v1.29.1
+cka-cluster-worker2         Ready    &lt;none&gt;          87s    v1.29.1
+cka-cluster-worker3         Ready    &lt;none&gt;          88s    v1.29.1
+
+kubectl get ds -n kube-system
+NAME         DESIRED   CURRENT   READY   UP-TO-DATE   AVAILABLE   NODE SELECTOR            AGE
+kube-proxy   4         4         4       4            4           kubernetes.io/os=linux   3m15s
+weave-net    4         4         4       4            4           &lt;none&gt;                   103s
+</code></pre>
+<p>Now let&#x27;s check things again.</p>
+<pre><code class="language-bash">root@cka-cluster-worker:/etc/cni/net.d# cat /etc/cni/net.d/10-weave.conflist
+{
+    &quot;cniVersion&quot;: &quot;0.3.0&quot;,
+    &quot;name&quot;: &quot;weave&quot;,
+    &quot;plugins&quot;: [
+        {
+            &quot;name&quot;: &quot;weave&quot;,
+            &quot;type&quot;: &quot;weave-net&quot;,
+            &quot;hairpinMode&quot;: true
+        },
+        {
+            &quot;type&quot;: &quot;portmap&quot;,
+            &quot;capabilities&quot;: {&quot;portMappings&quot;: true},
+            &quot;snat&quot;: true
+        }
+    ]
+}
+
+# We have different plugins because we use weavenet instead of kindnet
+root@cka-cluster-worker:/etc/cni/net.d# ls /opt/cni/bin/
+host-local  loopback  portmap  ptp  weave-ipam  weave-net  weave-plugin-latest
+
+ps -aux | grep kubelet
+root         251  2.0  0.1 2998152 84476 ?       Ssl  18:16   0:08 /usr/bin/kubelet --bootstrap-kubeconfig=/etc/kubernetes/bootstrap-kubelet.conf --kubeconfig=/etc/kubernetes/kubelet.conf --config=/var/lib/kubelet/config.yaml --container-runtime-endpoint=unix:///run/containerd/containerd.sock --node-ip=172.18.0.5 --node-labels= --pod-infra-container-image=registry.k8s.io/pause:3.9 --provider-id=kind://docker/cka-cluster/cka-cluster-worker --runtime-cgroups=/system.slice/containerd.service
+</code></pre>
+<p>We still didn&#x27;t find anything. By analyzing other study materials, we found that in the service we could pass parameters to indicate where the plugin folder is located.</p>
+<p><img decoding="async" loading="lazy" alt="alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-25-5b7f875b90a63606389e7fe5d53eff4f.png" width="1253" height="424" class="img_ev3q"></p>
+<h2 id="cni-plugin">CNI Plugin</h2>
+<p>Let&#x27;s dive deeper into a CNI solution and the concepts can be applied to the rest. Let&#x27;s take Weave as an example.</p>
+<p>The solution we used so far mapped which networks are on which hosts, while when a packet was sent from one pod to another, it followed the flow of going to the network, then to the router, then the host and then to another pod. But this solution doesn&#x27;t work well with thousands of pods and hundreds of nodes. The routing table may not support so many entries and we need to be creative and find new solutions.</p>
+<p>Thinking of Kubernetes as a company and the nodes as branches. Within the branches we have different sectors with different departments. If it were within the same city or in a small country, we could create a logistics system and hire a courier who would take documents from one place to another. Nobody needs to know the address of the branches and we would put on the correspondence only:</p>
+<ul>
+<li>Branch name</li>
+<li>Sector name</li>
+<li>Department name</li>
+<li>Recipient name</li>
+</ul>
+<blockquote>
+<p>If the courier goes by car, bus, motorcycle, car or bicycle is their problem. They just need to deliver! The one who needs to know where the branch addresses are is them.</p>
+</blockquote>
+<p>If the company has branches in different countries, one courier is not enough, so we would need to improve our system by outsourcing the delivery service. So we can hire a company that will place an agent responsible for each country or area. Documents would always be delivered between agents and they are responsible for solving the delivery within their responsibility.</p>
+<p><img decoding="async" loading="lazy" alt="alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-26-38b08b8ea17c211479a2ea57d69f8a06.png" width="1018" height="558" class="img_ev3q"></p>
+<p>Going back to our CNI, we saw above that Weavenet creates a daemonset, that is, one pod (agent) per node (country). These agents know the topology of the entire network as they communicate with each other. They communicate with each other to exchange information about the nodes, networks and pods within them. Each agent or peer stores a topology of the entire setup. This way, they know the pods and their IPs on the other nodes. Weave creates its own bridge on the nodes with the name weave and assigns an IP address to each network.</p>
+<pre><code class="language-bash"># WORKER-1
+root@cka-cluster-worker:/# ip link show weave
+5: weave: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1376 qdisc noqueue state UP mode DEFAULT group default qlen 1000
+    link/ether e2:0f:fd:ef:ad:fa brd ff:ff:ff:ff:ff:ff
+root@cka-cluster-worker:/# ip addr show weave
+5: weave: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1376 qdisc noqueue state UP group default qlen 1000
+    link/ether e2:0f:fd:ef:ad:fa brd ff:ff:ff:ff:ff:ff
+    inet 10.40.0.0/12 brd 10.47.255.255 scope global weave
+       valid_lft forever preferred_lft forever
+
+# WORKER-2 See that it starts with 10.32
+root@cka-cluster-worker2:/# ip link show weave
+5: weave: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1376 qdisc noqueue state UP mode DEFAULT group default qlen 1000
+    link/ether 5e:56:a8:56:6e:f4 brd ff:ff:ff:ff:ff:ff
+root@cka-cluster-worker2:/# ip addr show weave
+5: weave: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1376 qdisc noqueue state UP group default qlen 1000
+    link/ether 5e:56:a8:56:6e:f4 brd ff:ff:ff:ff:ff:ff
+    inet 10.34.0.0/12 brd 10.47.255.255 scope global weave
+       valid_lft forever preferred_lft forever
+root@cka-cluster-worker2:/#
+</code></pre>
+<p>Remember that a single pod can be connected to multiple bridge networks. It all depends on the routes configured in the namespaces. For example, you can have a pod attached to the Weave Bridge as well as the Docker Bridge created by Docker.</p>
+<blockquote>
+<p>The path a packet takes to reach its destination depends on the route configured in the container.</p>
+</blockquote>
+<p>Weave ensures that pods get the correct route configured to reach the agent, and the agent takes care of the other pods. Now, when a packet is sent from one pod to another on another node, Weave intercepts the packet and identifies that it&#x27;s on a separate network, encapsulating it in a new packet with a new source and destination and sending it over the network. On the other side, the Weave agent retrieves the packet, decapsulates it and forwards it to the correct pod.</p>
+<p>Weave and Weave Peers can be deployed as services or daemons on each cluster node manually or, if Kubernetes is already configured, an easier way to do this is to deploy them as pods in the cluster as we did with kubectl apply in kind.</p>
+<p>When the basic Kubernetes system is ready, with the nodes and network properly configured between the nodes and the basic control plane components deployed, Weave can be deployed in the cluster with a single kubectl apply command that implements all the necessary components for Weave in the cluster. Most importantly, Weave peers are deployed as a daemon set.</p>
+<pre><code class="language-bash">kubectl get pods -A -n kube-system -o wide | grep weave
+kube-system          weave-net-29ffl                                     2/2     Running   4 (4h4m ago)   23h    172.18.0.2   cka-cluster-worker          &lt;none&gt;           &lt;none&gt;
+kube-system          weave-net-4q8kr                                     2/2     Running   4 (4h4m ago)   23h    172.18.0.4   cka-cluster-worker3         &lt;none&gt;           &lt;none&gt;
+kube-system          weave-net-8zxbw                                     2/2     Running   5 (4h4m ago)   23h    172.18.0.3   cka-cluster-worker2         &lt;none&gt;           &lt;none&gt;
+kube-system          weave-net-phbz8                                     2/2     Running   4 (4h4m ago)   23h    172.18.0.5   cka-cluster-control-plane   &lt;none&gt;           &lt;none&gt;
+</code></pre>
+<p>An important thing is that when we apply the Weavenet yaml, it&#x27;s good to check the CIDR in the kube-proxy configmap and apply the same.</p>
+<pre><code class="language-bash">kubectl describe cm -n kube-system kube-proxy | grep CIDR
+clusterCIDR: 10.244.0.0/16
+  excludeCIDRs: null
+</code></pre>
+<p>If we check what comes default in the yaml.</p>
+<pre><code class="language-bash">wget https://github.com/weaveworks/weave/releases/download/v2.8.1/weave-daemonset-k8s.yaml
+
+# Let&#x27;s check the weave container definitions in the daemonset item
+cat weave-daemonset-k8s.yaml
+# Removed above
+ - apiVersion: apps/v1
+    kind: DaemonSet
+    metadata:
+      name: weave-net
+      labels:
+        name: weave-net
+      namespace: kube-system
+    spec:
+      # Removed this part to make it easy to read here!
+          containers:
+            - name: weave
+              command:
+                - /home/weave/launch.sh
+              env:
+          ##############################################
+                # we don&#x27;t have a variable to define the CIDR we&#x27;ll use so we can add it
+                - name: IPALLOC_RANGE # ADD
+                  value: 10.244.0.0/16
+          ###############################################
+                - name: INIT_CONTAINER
+                  value: &quot;true&quot;
+                - name: HOSTNAME
+                  valueFrom:
+                    fieldRef:
+                      apiVersion: v1
+</code></pre>
+<p>For troubleshooting purposes, view the logs using the kubectl logs command.</p>
+      <div class="docs-pager">
+        <a href="../../../../#blogs">All blogs</a>
+        <a href="../">Back to CKA</a>
+      </div>
+    </article>
+    <aside class="docs-toc">
+      <div class="docs-toc-title">On this page</div>
+      <nav>
+        <a href="#cni-plugin">CNI Plugin</a>
+      </nav>
+    </aside>
+  </div>
+  <script src="../../../../js/docs.js"></script>
+</body>
+</html>

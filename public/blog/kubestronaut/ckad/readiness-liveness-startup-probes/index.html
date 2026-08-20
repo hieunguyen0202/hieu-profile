@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Readiness, Liveness, and Startup Probes — Hieu Nguyen</title>
+  <meta name="description" content="Readiness, Liveness, and Startup Probes — Kubestronaut roadmap.">
+  <link rel="icon" href="../../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../../">i'm<span>.hieu</span></a>
+    <nav class="docs-series">
+      <a href="../../../../blog/web-security/">Web Security</a>
+      <a class="active" href="../../">Kubestronaut roadmap</a>
+    </nav>
+    <nav class="docs-cert-tabs"><a href="../../cka/" class="">CKA</a><a href="../../ckad/" class="active">CKAD</a><a href="../../cks/" class="">CKS</a></nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-nav="kubestronaut" data-cert="ckad" data-docs-root="../" data-active="readiness-liveness-startup-probes">
+      <div class="docs-nav-label">CKAD</div>
+      <ul class="docs-nav" id="docsNav"></ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../../">Home</a>
+        <span>›</span>
+        <a href="../../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../../">Kubestronaut</a>
+        <span>›</span>
+        <a href="../">CKAD</a>
+        <span>›</span>
+        <span>Readiness, Liveness, and Startup Probes</span>
+      </div>
+      <div id="top"></div>
+<header><h1>Readiness, Liveness, and Startup Probes</h1></header><p>Some materials are already available in CKA.</p>
+<p>Follow this order:</p>
+<p>Before talking about the topics below, let&#x27;s understand the lifecycle of a pod.</p>
+<p>A pod has its status that can be seen with the kubectl describe command. As soon as the pod is created, it stays in <code>Pending</code>. This means the scheduler needs to define a node for it that meets the necessary conditions. If the scheduler can&#x27;t find a suitable node, it will stay in the pending state.</p>
+<p>When a pod enters the <code>Container Creating</code> state, the scheduler has already defined a node. At this moment, the pulling of images from the containers of this pod will begin.</p>
+<p>Once the containers are started, it enters the <code>Running</code> state.</p>
+<p>For these stages to be marked, we can see them with the kubectl describe command in conditions.</p>
+<pre><code class="language-bash">❯ k run nginx --image nginx
+pod/nginx created
+
+❯ k describe pod nginx
+Name:             nginx
+Namespace:        kube-system
+Priority:         0
+Service Account:  default
+Node:             cka-cluster-worker/172.18.0.5
+Start Time:       Wed, 01 May 2024 22:55:01 -0300
+Labels:           run=nginx
+Annotations:      &lt;none&gt;
+Status:           Running
+IP:               10.42.0.1
+IPs:
+  IP:  10.42.0.1
+Containers:
+  nginx:
+    Container ID:   containerd://3711ea86007c956593e6bf9f1db3e9859057f9d120163466b3f3d3500fd3155e
+    Image:          nginx
+    Image ID:       docker.io/library/nginx@sha256:ed6d2c43c8fbcd3eaa44c9dab6d94cb346234476230dc1681227aa72d07181ee
+    Port:           &lt;none&gt;
+    Host Port:      &lt;none&gt;
+    State:          Running
+      Started:      Wed, 01 May 2024 22:55:08 -0300
+    Ready:          True
+    Restart Count:  0
+    Environment:    &lt;none&gt;
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-z4x92 (ro)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   True  # &lt;&lt;&lt; SEE THE CONDITIONS
+  Initialized                 True
+  Ready                       True
+  ContainersReady             True
+  PodScheduled                True
+Volumes:
+  kube-api-access-z4x92:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    ConfigMapOptional:       &lt;nil&gt;
+    DownwardAPI:             true
+QoS Class:                   BestEffort
+Node-Selectors:              &lt;none&gt;
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type    Reason     Age   From               Message
+  ----    ------     ----  ----               -------
+  Normal  Scheduled  8s    default-scheduler  Successfully assigned kube-system/nginx to cka-cluster-worker
+  Normal  Pulling    8s    kubelet            Pulling image &quot;nginx&quot;
+  Normal  Pulled     2s    kubelet            Successfully pulled image &quot;nginx&quot; in 5.718s (5.718s including waiting)
+  Normal  Created    2s    kubelet            Created container nginx
+  Normal  Started    2s    kubelet            Started container nginx
+</code></pre>
+<p>Let&#x27;s talk specifically about the block below:</p>
+<pre><code class="language-yaml">Conditions:
+  Type                        Status
+  PodReadyToStartContainers   True
+  Initialized                 True
+  Ready                       True
+  ContainersReady             True
+  PodScheduled                True
+</code></pre>
+<p><code>Ready true</code> and <code>ContainersReady</code> mean that the applications inside the pods are working and ready to receive traffic. Some applications take longer than others to be ready. Some take milliseconds to start and others can take 30 seconds to finish the start process. At this moment, the pod is in Running state which is not necessarily true.</p>
+<p>By default, Kubernetes understands that a pod, as soon as it&#x27;s started, is ready to receive traffic and the service pointing to this pod will already distribute traffic to it.</p>
+<p><img decoding="async" loading="lazy" alt="podout" src="https://devsecops.puziol.com.br/en/assets/images/podout-3e68668be1ca6b71e9976186526fc6f6.gif" width="885" height="785" class="img_ev3q"></p>
+<p>What we can do is test the application in some way so that only if the test is successful will this state be changed to true. This is where probes come in. If it were a web application, as a developer, we could create a healthcheck endpoint that responds <code>ok</code>. We could run a script inside the container to check if everything is ready.</p>
+<p>When we have a readinessProbe block, the condition is not immediately set to true.</p>
+<p><img decoding="async" loading="lazy" alt="alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-12fc28dfccc588e72f5bf9e9d7304b6b.png" width="1684" height="401" class="img_ev3q"></p>
+<p>Once having the readiness, this would happen:</p>
+<p><img decoding="async" loading="lazy" alt="podreadiness" src="https://devsecops.puziol.com.br/en/assets/images/podreadiness-0963d8d74daf4d678f780ca1787f8ecf.gif" width="885" height="785" class="img_ev3q"></p>
+<ol>
+<li><a href="https://devsecops.puziol.com.br/en/kubernetes/cka/liveness-readiness-startup-probes">Liveness, Readiness and Startup Probes</a></li>
+</ol>
+<p>Now that we understand a bit, let&#x27;s talk about liveness. When a container stops working <code>AND KUBERNETES DETECTS IT</code>, it automatically restarts the pod, but there are cases where the container gets stuck in an infinite loop and the application doesn&#x27;t stop. That&#x27;s what liveness is for, to constantly test the application to see if it&#x27;s responding. If it doesn&#x27;t respond, the conditions are forcefully changed so that this pod can undergo a restart.</p>
+<p>The definitions of this block are the same as readiness.</p>
+<p>It&#x27;s worth mentioning that readiness and liveness can suffer from race conditions. Imagine we define a liveness to test a healthcheck endpoint every 5 seconds and we define that if it tests 3 times and doesn&#x27;t respond, it invalidates the pod, but the application takes 1 minute to be ready. Obviously, the pod will never come up because it will always undergo a restart before it&#x27;s even ready.</p>
+      <div class="docs-pager">
+        <a href="../../../../#blogs">All blogs</a>
+        <a href="../">Back to CKAD</a>
+      </div>
+    </article>
+    <aside class="docs-toc">
+      <div class="docs-toc-title">On this page</div>
+      <nav>
+        <a href="#top">On this page</a>
+      </nav>
+    </aside>
+  </div>
+  <script src="../../../../js/docs.js"></script>
+</body>
+</html>

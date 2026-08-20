@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Authentication — Hieu Nguyen</title>
+  <meta name="description" content="Authentication — Kubestronaut roadmap.">
+  <link rel="icon" href="../../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../../">i'm<span>.hieu</span></a>
+    <nav class="docs-series">
+      <a href="../../../../blog/web-security/">Web Security</a>
+      <a class="active" href="../../">Kubestronaut roadmap</a>
+    </nav>
+    <nav class="docs-cert-tabs"><a href="../../cka/" class="active">CKA</a><a href="../../ckad/" class="">CKAD</a><a href="../../cks/" class="">CKS</a></nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-nav="kubestronaut" data-cert="cka" data-docs-root="../" data-active="authentication">
+      <div class="docs-nav-label">CKA</div>
+      <ul class="docs-nav" id="docsNav"></ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../../">Home</a>
+        <span>›</span>
+        <a href="../../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../../">Kubestronaut</a>
+        <span>›</span>
+        <a href="../">CKA</a>
+        <span>›</span>
+        <span>Authentication</span>
+      </div>
+      <div id="top"></div>
+<header><h1>Authentication</h1></header><p>What are the possible types of users we have in the cluster?</p>
+<ul>
+<li>Admins: Those who access the cluster for administrative tasks. They usually have full cluster access.</li>
+<li>Developers: Access the cluster to test or deploy applications.</li>
+<li>End Users: Access applications running in the cluster.</li>
+<li>Bots: Third-party applications that access applications in the cluster for integration purposes.</li>
+</ul>
+<p>It&#x27;s necessary to protect communication between internal components and access from these possible users through authentication and authorization mechanisms.</p>
+<p>Application users are managed by the applications themselves, so let&#x27;s remove them from this scenario.</p>
+<p>So we&#x27;re left with two types of users:</p>
+<ul>
+<li>Humans:
+<ul>
+<li>admins</li>
+<li>developers</li>
+</ul>
+</li>
+<li>Applications (services, processes, applications, etc)</li>
+</ul>
+<p>For applications, we use Kubernetes ServiceAccounts, but we can&#x27;t create a user with a <code>kubectl create user david</code> command. An external source is needed to validate a user and allow them to use some role within the cluster. We could use LDAP, for example.</p>
+<blockquote>
+<p>All user access is managed by kube-apiserver, whether accessing via kubectl or via API.</p>
+</blockquote>
+<p>The kube-apiserver authenticates the user before processing the request.</p>
+<p><img decoding="async" loading="lazy" alt="Alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-5-64aef154f08df4e141eb5bf434b9fd6a.png" width="1021" height="595" class="img_ev3q"></p>
+<p>But how does kube-apiserver perform this authentication?</p>
+<ul>
+<li>Static password file.</li>
+<li>Static token file.</li>
+<li>Certificates</li>
+<li>Identity services like LDAP, Kerberos, etc</li>
+</ul>
+<p><img decoding="async" loading="lazy" alt="Alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-6-3a7f24f8d5a66d99e8ec40cbe9199de1.png" width="1067" height="386" class="img_ev3q"></p>
+<h2 id="static-passwords-and-tokens">Static Passwords and Tokens</h2>
+<p>This method was <code>DISCONTINUED</code> in 1.19 and won&#x27;t even appear on the exam, but it&#x27;s worth it for a first introduction to the subject.</p>
+<p>You need to create a CSV file with the columns password, username, and userid. The last column for groups is optional.</p>
+<p>For example, user-details.csv with the following content:</p>
+<pre><code class="language-csv">abcd123,david,u0001,group1
+asdf4321,joao,u0002,group1
+4321qwer,maria,u0003,grou2
+</code></pre>
+<p>You can also create the token file, for example creating a token-details.csv file:</p>
+<pre><code class="language-csv">Kuandfa1AD123ava234adavc12,david,u0010,group1
+dDAar1435ASAdvcra32314dcca,joao,u0020,group1
+Adafa13279DiiyrteuYUTR345c,maria,u0030,grou2
+</code></pre>
+<blockquote>
+<p>The kube-apiserver needs to start knowing where these files are located by passing the flags <code>--basic-auth-file=user-details.csv</code> and <code>--token-auth-file=token-details.csv</code>. You don&#x27;t need to pass both, as they are just different authentication methods.</p>
+</blockquote>
+<p>If you&#x27;re running as a service, you should pass it like this. You need to restart the service for it to take effect.</p>
+<p><img decoding="async" loading="lazy" alt="Alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-7-5e183cc63370fbbfff8cfb97a56fb128.png" width="877" height="559" class="img_ev3q"></p>
+<p>If we&#x27;re running kube-apiserver through pods, for example launched by kubeadm, you need to modify the kube-apiserver.yaml pod. The kubeadm tool will automatically restart kube-apiserver with the new modifications.</p>
+<p><img decoding="async" loading="lazy" alt="Alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-8-a618b49b7cab93291d3d586c622b2d56.png" width="851" height="645" class="img_ev3q"></p>
+<p>To use kubectl with username and password authentication, we need to pass the username and password.</p>
+<pre><code class="language-bash">kubectl get pods --username=david --password=abcd123
+# via API password and username (david)
+curl -v -k https://master-node-ip:6443/api/v1/pods -u &quot;david:abcd123&quot;
+# via API token (joao)
+curl -v -k https://master-node-ip:6443/api/v1/pods --header &quot;Authorization: Bearer: dDAar1435ASAdvcra32314dcca&quot;
+</code></pre>
+<p>Or in our .kube/config file, the user for the cluster would be like this, so we wouldn&#x27;t need to pass the username and password with each command:</p>
+<pre><code class="language-yaml">clusters:
+- name: my-cluster
+  cluster:
+    server: https://cluster-address
+ ...
+contexts:
+- name: joao-token
+  context:
+    cluster: my-cluster
+    user: joao
+- name: david-password
+  context:
+    cluster: my-cluster
+    user: david
+current-context: joao-token
+
+users:
+- name: david
+  user:
+    auth-provider:
+      name: &quot;basic-auth&quot;
+      config:
+        username: david
+        password: abcd123
+- name: joao
+  user:
+    auth-provider:
+      name: &quot;token&quot;
+      config:
+        token: dDAar1435ASAdvcra32314dcca
+</code></pre>
+<p>These methods are not recommended and are considered insecure, especially with passwords and tokens that are very easy to use in brute force attacks. Storing passwords and tokens in files has never been a secure option.</p>
+<p>You should consider passing the path where the files were created.</p>
+      <div class="docs-pager">
+        <a href="../../../../#blogs">All blogs</a>
+        <a href="../">Back to CKA</a>
+      </div>
+    </article>
+    <aside class="docs-toc">
+      <div class="docs-toc-title">On this page</div>
+      <nav>
+        <a href="#static-passwords-and-tokens">Static Passwords and Tokens</a>
+      </nav>
+    </aside>
+  </div>
+  <script src="../../../../js/docs.js"></script>
+</body>
+</html>

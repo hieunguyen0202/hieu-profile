@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Multiple Schedulers — Hieu Nguyen</title>
+  <meta name="description" content="Multiple Schedulers — Kubestronaut roadmap.">
+  <link rel="icon" href="../../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../../">i'm<span>.hieu</span></a>
+    <nav class="docs-series">
+      <a href="../../../../blog/web-security/">Web Security</a>
+      <a class="active" href="../../">Kubestronaut roadmap</a>
+    </nav>
+    <nav class="docs-cert-tabs"><a href="../../cka/" class="active">CKA</a><a href="../../ckad/" class="">CKAD</a><a href="../../cks/" class="">CKS</a></nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-nav="kubestronaut" data-cert="cka" data-docs-root="../" data-active="multiple-schedulers">
+      <div class="docs-nav-label">CKA</div>
+      <ul class="docs-nav" id="docsNav"></ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../../">Home</a>
+        <span>›</span>
+        <a href="../../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../../">Kubestronaut</a>
+        <span>›</span>
+        <a href="../">CKA</a>
+        <span>›</span>
+        <span>Multiple Schedulers</span>
+      </div>
+      <div id="top"></div>
+<header><h1>Multiple Schedulers</h1></header><p>We can have different Schedulers in the cluster. What we need to do is specify which Scheduler we want to use in the Pod. This Scheduler will be responsible for reading the Pod configuration and choosing the correct Node.</p>
+<p>It&#x27;s necessary that Schedulers have different names.</p>
+<p>Let&#x27;s take any Pod we have in our cluster.</p>
+<pre><code class="language-bash">k get pods busybox -o yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: &quot;2024-03-18T03:06:56Z&quot;
+  labels:
+    run: busybox
+  name: busybox
+  namespace: default
+  resourceVersion: &quot;2879304&quot;
+  uid: b055b81d-96d4-4fe7-8666-635a9d03f4bf
+spec:
+  containers:
+  - command:
+    - sleep
+    - &quot;1000&quot;
+    image: busybox
+    imagePullPolicy: Always
+    name: busybox
+    resources: {}
+    terminationMessagePath: /dev/termination-log
+    terminationMessagePolicy: File
+    volumeMounts:
+    - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+      name: kube-api-access-xxwlk
+      readOnly: true
+  dnsPolicy: ClusterFirst
+  enableServiceLinks: true
+  nodeName: cka-cluster-worker3
+  preemptionPolicy: PreemptLowerPriority
+  priority: 0
+  restartPolicy: Always
+  schedulerName: default-scheduler #&lt;&lt;&lt;
+  ...
+</code></pre>
+<p>We can see that even though a Scheduler wasn&#x27;t defined, we have the default-scheduler. We could pass another Scheduler in the spec.</p>
+<p>The simplest way to create a Scheduler is by deploying another one.</p>
+<p>The kind cluster creates the Scheduler as a Pod instead of a service, what can we do? Create another one, but passing specific configurations.</p>
+<p>Let&#x27;s analyze the kube-scheduler configuration. This is the Scheduler that kind itself created with kubeadm.</p>
+<pre><code class="language-bash">kubectl get pods -n kube-system kube-scheduler-cka-cluster-control-plane -o=jsonpath=&#x27;{.spec.containers[*].command}&#x27; | jq
+[
+  &quot;kube-scheduler&quot;,
+  &quot;--authentication-kubeconfig=/etc/kubernetes/scheduler.conf&quot;,
+  &quot;--authorization-kubeconfig=/etc/kubernetes/scheduler.conf&quot;,
+  &quot;--bind-address=127.0.0.1&quot;,
+  &quot;--kubeconfig=/etc/kubernetes/scheduler.conf&quot;,
+  &quot;--leader-elect=true&quot;
+]
+</code></pre>
+<p>We can add another Scheduler and pass --config with the configuration file we&#x27;ll create.</p>
+<p>If we&#x27;re going to create this Scheduler on all masters, we need to define --leader-elect=true. We could create the Scheduler using Static Pods by going inside the master and placing the manifest in /etc/kubernetes/manifest.</p>
+<p>In the documentation, we have a model using the official Scheduler itself.</p>
+<p>In this set of manifests we have:</p>
+<ul>
+<li>Service account</li>
+<li>2 ClusterRoleBindings that will give permission to the ServiceAccount in the same group as kube-scheduler <code>system:kube-scheduler</code> and in <code>system:volume-scheduler</code></li>
+<li>1 RoleBinding that will give permission to the ServiceAccount in <code>extension-apiserver-authentication-reader</code></li>
+<li>The ConfigMap that will be mounted as a volume to provide a configuration file. With this, we can put all parameters inside it and reduce the number of entries above.</li>
+</ul>
+<p>Create a file with the content below and apply it to the cluster.</p>
+<pre><code class="language-yaml">apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: my-scheduler
+  namespace: kube-system
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: my-scheduler-as-kube-scheduler
+subjects:
+- kind: ServiceAccount
+  name: my-scheduler
+  namespace: kube-system
+roleRef:
+  kind: ClusterRole
+  name: system:kube-scheduler
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: my-scheduler-as-volume-scheduler
+subjects:
+- kind: ServiceAccount
+  name: my-scheduler
+  namespace: kube-system
+roleRef:
+  kind: ClusterRole
+  name: system:volume-scheduler
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: my-scheduler-extension-apiserver-authentication-reader
+  namespace: kube-system
+roleRef:
+  kind: Role
+  name: extension-apiserver-authentication-reader
+  apiGroup: rbac.authorization.k8s.io
+subjects:
+- kind: ServiceAccount
+  name: my-scheduler
+  namespace: kube-system
+---
+## Here we can define a ConfigMap that will be mounted as a volume to deliver this file
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: my-scheduler-config
+  namespace: kube-system
+data:
+  my-scheduler-config.yaml: |
+    apiVersion: kubescheduler.config.k8s.io/v1beta2
+    kind: KubeSchedulerConfiguration
+    profiles:
+      - schedulerName: my-scheduler
+    leaderElection:
+      leaderElect: true  # Was false, changed to true to test with 3 replicas
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    component: scheduler
+    tier: control-plane
+  name: my-scheduler
+  namespace: kube-system
+spec:
+  selector:
+    matchLabels:
+      component: scheduler
+      tier: control-plane
+  replicas: 3 # Was 1, changed to 3
+  template:
+    metadata:
+      labels:
+        component: scheduler
+        tier: control-plane
+        version: second
+    spec:
+      serviceAccountName: my-scheduler
+      containers:
+      - command:
+        - /usr/local/bin/kube-scheduler
+        - --config=/etc/kubernetes/my-scheduler/my-scheduler-config.yaml
+        image: registry.k8s.io/kube-scheduler:v1.29.1 # Changed because we don&#x27;t have the previous image
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 10259
+            scheme: HTTPS
+          initialDelaySeconds: 15
+        name: kube-second-scheduler
+        readinessProbe:
+          httpGet:
+            path: /healthz
+            port: 10259
+            scheme: HTTPS
+        resources:
+          requests:
+            cpu: &#x27;0.1&#x27;
+        securityContext:
+          privileged: false
+        volumeMounts:
+          - name: config-volume
+            mountPath: /etc/kubernetes/my-scheduler
+      hostNetwork: false
+      hostPID: false
+      volumes:
+        - name: config-volume
+          configMap:
+            name: my-scheduler-config
+</code></pre>
+<pre><code class="language-bash">kubectl apply -f my-scheduler.yaml
+serviceaccount/my-scheduler created
+clusterrolebinding.rbac.authorization.k8s.io/my-scheduler-as-kube-scheduler created
+clusterrolebinding.rbac.authorization.k8s.io/my-scheduler-as-volume-scheduler created
+rolebinding.rbac.authorization.k8s.io/my-scheduler-extension-apiserver-authentication-reader created
+configmap/my-scheduler-config created
+deployment.apps/my-scheduler created
+
+k get pods -n kube-system | grep my-scheduler
+my-scheduler-8ffc64976-449zr                        1/1     Running   0              92s
+my-scheduler-8ffc64976-6hn6t                        1/1     Running   0              92s
+my-scheduler-8ffc64976-nj8xp                        1/1     Running   0              92s
+</code></pre>
+<p>Some things we can analyze:</p>
+<ul>
+<li>The master has Taints and we didn&#x27;t define any Toleration for it to go to the master. It won&#x27;t go.</li>
+<li>We didn&#x27;t define any nodeAffinity or podAntiAffinity for it to distribute the 3 replicas on different Nodes. If it happens, it&#x27;s mere coincidence.</li>
+<li>The default Scheduler that scheduled these Pods!</li>
+</ul>
+<p>Now let&#x27;s use this Scheduler to create a Pod</p>
+<pre><code class="language-bash">cat &lt;&lt;EOF | kubectl apply -f -
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx
+spec:
+  containers:
+  - name: nginx
+    image: nginx
+  schedulerName:  my-scheduler
+EOF
+
+k describe pod nginx |  grep scheduler
+  Normal  Scheduled  56s   my-scheduler  Successfully assigned default/nginx to cka-cluster-worker3
+</code></pre>
+<h2 id="scheduler-profiles">Scheduler Profiles</h2>
+<p>A Scheduler has a queue to schedule Pods. If they all have the same priority, then they enter at the end of the queue and follow the flow. First come, first served to be scheduled.</p>
+<p>It&#x27;s possible to configure different priorities and link a Pod to this priority. This way, it&#x27;s possible for high-priority Pods to jump the queue. This is quite useful if a service really can&#x27;t wait.</p>
+<p>To define a priority, we can create as defined below. This is not a namespace-level resource, but cluster-level. A Scheduler looks at all Pods regardless of namespace.</p>
+<pre><code class="language-yaml">apiVersion: scheduling.k8s.io/v1
+kind: PriorityClass
+metadata:
+  name: high-priority
+value: 1000000
+globalDefault: false # Whether it will be the default or not
+description: &quot;This priority class should be used for XYZ service pods only.&quot;
+</code></pre>
+<p>There are already two defined in the cluster.</p>
+<pre><code class="language-bash">k get priorityclasses.scheduling.k8s.io -o wide
+NAME                      VALUE        GLOBAL-DEFAULT   AGE
+system-cluster-critical   2000000000   false            18d
+system-node-critical      2000001000   false            18d
+</code></pre>
+<p>When it&#x27;s the Pod&#x27;s turn to be scheduled, it goes to the filtering stage. Nodes that can&#x27;t receive the Pod, either due to lack of resources or user choice using nodeSelector, affinities, Taints and Tolerations will be eliminated, and only those that passed filtering can schedule the Pod.</p>
+<p>Finally, we have the scoring stage. This stage will select which of the remaining Nodes is best to start the Pod. How is this score defined? If a Pod needs 2 CPUs and we have two possible Nodes, the first with 2 available CPUs and the second with 6, obviously the one with 6 already has a higher score. In this case, both would have sufficient memory to run the Pod, otherwise they wouldn&#x27;t have passed the filtering stage.</p>
+<p>Finally, we have the binding process which is when the Node is actually defined and the kubelet of that Node will be responsible for starting the Pod.</p>
+<p>The stages are:</p>
+<ul>
+<li>Scheduling Queue</li>
+<li>Filtering</li>
+<li>Scoring</li>
+<li>Binding</li>
+</ul>
+<p>All these operations are performed with certain plugins.</p>
+<p><img decoding="async" loading="lazy" alt="alt text" src="https://devsecops.puziol.com.br/en/assets/images/image18-51f8d42a97c5bfccc07d1bec3b5e4ae8.png" width="1804" height="480" class="img_ev3q"></p>
+<p>A plugin can be associated with more than one stage.</p>
+<p>A curiosity is that in the scoring stage, we have a plugin called ImageLocality. A Node that already has the image available may have a higher score.</p>
+<p>These stages can be further subdivided using different plugins that analyze in different ways.</p>
+<p><img decoding="async" loading="lazy" alt="alt text" src="https://devsecops.puziol.com.br/en/assets/images/image19-6b9c28daa13a9c86351f46f7d8bb3d30.png" width="1854" height="718" class="img_ev3q"></p>
+<p>You can write your own Scheduler methods.</p>
+<blockquote>
+<p>A situation that can occur when having several different Schedulers is that each can have completely different rules, reading and interpreting Nodes differently, creating a race condition.</p>
+</blockquote>
+<p>To avoid this, it&#x27;s interesting to have one Scheduler with multiple profiles. This way, the same binary would be used for everyone.</p>
+<pre><code class="language-yaml">    apiVersion: kubescheduler.config.k8s.io/v1beta2
+    kind: KubeSchedulerConfiguration
+    profiles:
+      - schedulerName: my-scheduler
+        plugins:
+          score:
+            disabled:
+            - name: TaintToleration
+            enabled:
+            - name: MyCustomPluginA
+            - name: MyCustomPluginB
+      - schedulerName: my-scheduler2
+        plugins:
+          preScore:
+            disabled:
+            - name: &#x27;*&#x27;
+      - schedulerName: my-scheduler3
+    leaderElection:
+      leaderElect: true  # Was false, changed to true to test with 3 replicas
+</code></pre>
+      <div class="docs-pager">
+        <a href="../../../../#blogs">All blogs</a>
+        <a href="../">Back to CKA</a>
+      </div>
+    </article>
+    <aside class="docs-toc">
+      <div class="docs-toc-title">On this page</div>
+      <nav>
+        <a href="#scheduler-profiles">Scheduler Profiles</a>
+      </nav>
+    </aside>
+  </div>
+  <script src="../../../../js/docs.js"></script>
+</body>
+</html>

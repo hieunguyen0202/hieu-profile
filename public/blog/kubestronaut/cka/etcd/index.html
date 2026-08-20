@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ETCD (Distributed reliable Key-Value Store) — Hieu Nguyen</title>
+  <meta name="description" content="ETCD (Distributed reliable Key-Value Store) — Kubestronaut roadmap.">
+  <link rel="icon" href="../../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../../">i'm<span>.hieu</span></a>
+    <nav class="docs-series">
+      <a href="../../../../blog/web-security/">Web Security</a>
+      <a class="active" href="../../">Kubestronaut roadmap</a>
+    </nav>
+    <nav class="docs-cert-tabs"><a href="../../cka/" class="active">CKA</a><a href="../../ckad/" class="">CKAD</a><a href="../../cks/" class="">CKS</a></nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-nav="kubestronaut" data-cert="cka" data-docs-root="../" data-active="etcd">
+      <div class="docs-nav-label">CKA</div>
+      <ul class="docs-nav" id="docsNav"></ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../../">Home</a>
+        <span>›</span>
+        <a href="../../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../../">Kubestronaut</a>
+        <span>›</span>
+        <a href="../">CKA</a>
+        <span>›</span>
+        <span>ETCD (Distributed reliable Key-Value Store)</span>
+      </div>
+      <div id="top"></div>
+<header><h1>ETCD (Distributed reliable Key-Value Store)</h1></header><p><a href="https://github.com/etcd-io/etcd" target="_blank" rel="noopener noreferrer">https://github.com/etcd-io/etcd</a></p>
+<p>As mentioned earlier, ETCD is a store for keeping key-value pairs in a:</p>
+<ul>
+<li>Secure</li>
+<li>Fast</li>
+<li>Simple</li>
+</ul>
+<p>way.</p>
+<p>When a SQL database adds a new entry to a table, not all information is filled in. A new column would impact the addition of this information for all entries (rows) in the table.</p>
+<p><img decoding="async" loading="lazy" alt="Alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-5-951492d69cdaa3b36be6c815f2eebf74.png" width="982" height="355" class="img_ev3q"></p>
+<p>In a key-value store like ETCD, it would look like this.</p>
+<p><img decoding="async" loading="lazy" alt="Alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-6-2226c121b3de005db49794a73e63c39f.png" width="1148" height="627" class="img_ev3q"></p>
+<p>All information for an entry is kept together in a single key-value table, and a new entry doesn&#x27;t impact others. YAML and JSON can represent these tables in a very simple way.</p>
+<h2 id="installation">Installation</h2>
+<p>To install, just download the binary, extract and run.</p>
+<pre><code class="language-bash">curl -L https://github.com/etcd-io/etcd/releases/download/v3.5.11/etcd-v3.5.11-linux-amd64.tar.gz -o etcd-v3.5.11-linux-amd64.tar.gz
+tar xzvf etcd-v3.5.11-linux-amd64.tar.gz
+tar - xzvf
+cd etcd-v3.5.11-linux-amd64
+./etcd
+....#Removed
+94d&quot;,&quot;cluster-version&quot;:&quot;3.5&quot;}
+{&quot;level&quot;:&quot;info&quot;,&quot;ts&quot;:&quot;2023-12-22T19:55:41.701034-0300&quot;,&quot;caller&quot;:&quot;api/capability.go:75&quot;,&quot;msg&quot;:&quot;enabled capabilities for version&quot;,&quot;cluster-version&quot;:&quot;3.5&quot;}
+{&quot;level&quot;:&quot;info&quot;,&quot;ts&quot;:&quot;2023-12-22T19:55:41.701049-0300&quot;,&quot;caller&quot;:&quot;etcdserver/server.go:2599&quot;,&quot;msg&quot;:&quot;cluster version is updated&quot;,&quot;cluster-version&quot;:&quot;3.5&quot;}
+{&quot;level&quot;:&quot;info&quot;,&quot;ts&quot;:&quot;2023-12-22T19:55:41.701228-0300&quot;,&quot;caller&quot;:&quot;embed/serve.go:187&quot;,&quot;msg&quot;:&quot;serving client traffic insecurely; this is strongly discouraged!&quot;,&quot;traffic&quot;:&quot;grpc+http&quot;,&quot;address&quot;:&quot;127.0.0.1:2379&quot;} #&lt;&lt;&lt;&lt;&lt;
+</code></pre>
+<p>It will start a service that will listen on port 2379.</p>
+<p>Using a client we can retrieve and store information. The client that comes with the package is <code>etcdctl</code>.</p>
+<pre><code class="language-bash">./etcdctl version
+etcdctl version: 3.5.11
+API version: 3.5
+➜ ./etcdctl put key1 value1
+OK
+➜ ./etcdctl get key1
+key1
+value1
+</code></pre>
+<p>If you want to install etcdctl on an Ubuntu machine, we can install the package.</p>
+<pre><code class="language-bash">sudo apt-get install etcd-client
+</code></pre>
+<h2 id="etcd-in-kubernetes">ETCD in Kubernetes</h2>
+<p>It&#x27;s used to store information about nodes, pods, configs, secrets, accounts, roles, bindings, etc. All information that the Kube-APIServer manages is stored in ETCD, meaning if we lose ETCD, the entire cluster is lost.</p>
+<blockquote>
+<p>Only after the information is updated in ETCD is a cluster change considered complete.</p>
+</blockquote>
+<p>Usually ETCD ends up being placed together with the control plane nodes when we configure the cluster using kubeadm, but ETCD can be a service separate from Kubernetes. During the course we&#x27;ll learn how to configure a cluster with external ETCD in high availability.</p>
+      <div class="docs-pager">
+        <a href="../../../../#blogs">All blogs</a>
+        <a href="../">Back to CKA</a>
+      </div>
+    </article>
+    <aside class="docs-toc">
+      <div class="docs-toc-title">On this page</div>
+      <nav>
+        <a href="#installation">Installation</a>
+        <a href="#etcd-in-kubernetes">ETCD in Kubernetes</a>
+      </nav>
+    </aside>
+  </div>
+  <script src="../../../../js/docs.js"></script>
+</body>
+</html>

@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Backup and Restore — Hieu Nguyen</title>
+  <meta name="description" content="Backup and Restore — Kubestronaut roadmap.">
+  <link rel="icon" href="../../../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../../../">i'm<span>.hieu</span></a>
+    <nav class="docs-series">
+      <a href="../../../../../blog/web-security/">Web Security</a>
+      <a class="active" href="../../../">Kubestronaut roadmap</a>
+    </nav>
+    <nav class="docs-cert-tabs"><a href="../../../cka/" class="active">CKA</a><a href="../../../ckad/" class="">CKAD</a><a href="../../../cks/" class="">CKS</a></nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-nav="kubestronaut" data-cert="cka" data-docs-root="../../" data-active="cluster-maintenance/backup-restore">
+      <div class="docs-nav-label">CKA</div>
+      <ul class="docs-nav" id="docsNav"></ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../../../">Home</a>
+        <span>›</span>
+        <a href="../../../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../../../">Kubestronaut</a>
+        <span>›</span>
+        <a href="../../">CKA</a>
+        <span>›</span>
+        <span>Backup and Restore</span>
+      </div>
+      <div id="top"></div>
+<header><h1>Backup and Restore</h1></header><p>We know that:</p>
+<ul>
+<li>Applications should be defined in their respective manifest files that can be applied generating only the difference.
+<ul>
+<li>However, sometimes we can use imperative declarations and don&#x27;t have a copy of the manifests. Not all team members usually follow the correct method and many times when putting out fires they resort to faster and more desperate methods.</li>
+<li>We cannot share these differences applied via imperative methods and we always need to look in the cluster and check.</li>
+<li>We should always version our manifests in a git repository to be maintained by the team</li>
+<li>The kube-apiserver has all manifest declarations whether made imperatively or not.</li>
+</ul>
+</li>
+<li>The cluster stores all its data in the ETCD cluster whether it&#x27;s deployed together with master nodes or another way.</li>
+<li>Application data is stored in persistent volumes</li>
+</ul>
+<h2 id="kube-apiserver">Kube-ApiServer</h2>
+<p>Let&#x27;s retrieve the manifests that kube-apiserver has.</p>
+<pre><code class="language-bash">kubectl get all --all-namespaces -o yaml &gt; all_manifests.yaml
+</code></pre>
+<p>However, the command above is only for a small group of objects and there are many others that should be considered. Therefore, retrieving manifests this way is not the best path.</p>
+<p>There are tools for this purpose such as Velero, but it should not be used in the exam.</p>
+<h2 id="etcd">ETCD</h2>
+<p>Instead of backing up kube-apiserver we can backup the ETCD cluster which stores kube-apiserver data and all resources created in the cluster.</p>
+<blockquote>
+<p>Sometimes in a cloud-managed environment we don&#x27;t have access to etcd so this solution wouldn&#x27;t help. Therefore backing up using kube-apiserver is the best way.</p>
+</blockquote>
+<p>ETCD has its own cluster that can be external or not, but they are usually hosted inside master nodes.</p>
+<p>In the etcd installation, we have specified the location where all data is stored and we can use this directory for a backup tool.</p>
+<p>If etcd is running as a pod, it&#x27;s usually a static pod that has manifests in /etc/kubernetes/manifests</p>
+<p>If we analyze the manifest of these static pods if etcd is deployed this way</p>
+<pre><code class="language-yaml">#cat /etc/kubernetes/manifests/etcd.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  annotations:
+    kubeadm.kubernetes.io/etcd.advertise-client-urls: https://192.12.50.3:2379
+  creationTimestamp: null
+  labels:
+    component: etcd
+    tier: control-plane
+  name: etcd
+  namespace: kube-system
+spec:
+  containers:
+  - command:
+    - etcd
+    - --advertise-client-urls=https://192.12.50.3:2379
+    - --cert-file=/etc/kubernetes/pki/etcd/server.crt # certificate used
+    - --client-cert-auth=true
+    - --data-dir=/var/lib/etcd
+    - --experimental-initial-corrupt-check=true
+    - --experimental-watch-progress-notify-interval=5s
+    - --initial-advertise-peer-urls=https://192.12.50.3:2380
+    - --initial-cluster=controlplane=https://192.12.50.3:2380
+    - --key-file=/etc/kubernetes/pki/etcd/server.key
+    - --listen-client-urls=https://127.0.0.1:2379,https://192.12.50.3:2379
+    - --listen-metrics-urls=http://127.0.0.1:2381
+    - --listen-peer-urls=https://192.12.50.3:2380
+    - --name=controlplane
+    - --peer-cert-file=/etc/kubernetes/pki/etcd/peer.crt
+    - --peer-client-cert-auth=true
+    - --peer-key-file=/etc/kubernetes/pki/etcd/peer.key # cert key used
+    - --peer-trusted-ca-file=/etc/kubernetes/pki/etcd/ca.crt
+    - --snapshot-count=10000
+    - --trusted-ca-file=/etc/kubernetes/pki/etcd/ca.crt # CA used
+    image: registry.k8s.io/etcd:3.5.7-0
+    imagePullPolicy: IfNotPresent
+    livenessProbe:
+      failureThreshold: 8
+      httpGet:
+        host: 127.0.0.1
+        path: /health?exclude=NOSPACE&amp;serializable=true
+        port: 2381
+        scheme: HTTP
+      initialDelaySeconds: 10
+      periodSeconds: 10
+      timeoutSeconds: 15
+    name: etcd
+    resources:
+      requests:
+        cpu: 100m
+        memory: 100Mi
+    startupProbe:
+      failureThreshold: 24
+      httpGet:
+        host: 127.0.0.1
+        path: /health?serializable=false
+        port: 2381
+        scheme: HTTP
+      initialDelaySeconds: 10
+      periodSeconds: 10
+      timeoutSeconds: 15
+    volumeMounts: # See the volumes
+    - mountPath: /var/lib/etcd
+      name: etcd-data
+    - mountPath: /etc/kubernetes/pki/etcd
+      name: etcd-certs
+  hostNetwork: true
+  priority: 2000001000
+  priorityClassName: system-node-critical
+  securityContext:
+    seccompProfile:
+      type: RuntimeDefault
+# These host volumes are being mapped inside the pod on the same paths
+  volumes:
+  - hostPath:
+      path: /etc/kubernetes/pki/etcd
+      type: DirectoryOrCreate
+    name: etcd-certs
+  - hostPath:
+      path: /var/lib/etcd
+      type: DirectoryOrCreate
+    name: etcd-data
+status: {}
+</code></pre>
+<p>Also observe that we also have the path of certificates being passed using the reference of the volumes that was mounted.</p>
+<p><img decoding="async" loading="lazy" alt="Alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-13-1e6c8651b05d07555a0c6ea5045ff6cb.png" width="1860" height="739" class="img_ev3q"></p>
+<p>The etcdctl command needs a variable to recognize whether it&#x27;s api v2 or v3.</p>
+<pre><code class="language-bash">etcdctl --version
+etcdctl version: 3.3.13
+API version: 2
+
+# this command doesn&#x27;t exist in v2
+etcdctl version
+No help topic for &#x27;version&#x27;
+
+# This is the variable that needs to be defined to know the version by passing to v3 we have other commands and version works here as well as snapshot which we don&#x27;t have in v2
+export ETCDCTL_API=3
+
+etcdctl version
+etcdctl version: 3.3.13
+API version: 3.3
+</code></pre>
+<p>ETCD also comes with a builtin solution that can take a snapshot of the database in v3.</p>
+<p>If etcd is under tls we need to pass the command below with the pointed certificates.</p>
+<blockquote>
+<p>etcdctl snapshot save --endpoints=127.0.0.1:2379 --cacert=/etc/kubernetes/pki/etcd/ca.crt --cert=/etc/kubernetes/pki/etcd/server.crt --key=/etc/kubernetes/pki/etcd/server.key /opt/snapshot-pre-boot.db</p>
+</blockquote>
+<pre><code class="language-bash"># In this case I installed etcd on my own machine so I didn&#x27;t need to pass certificates
+
+etcdctl snapshot save snapshot.db  # pass the full path of the file if you want.
+{&quot;level&quot;:&quot;info&quot;,&quot;ts&quot;:1704447228.7458081,&quot;caller&quot;:&quot;snapshot/v3_snapshot.go:119&quot;,&quot;msg&quot;:&quot;created temporary db file&quot;,&quot;path&quot;:&quot;snapshot.db.part&quot;}
+{&quot;level&quot;:&quot;info&quot;,&quot;ts&quot;:&quot;2024-01-05T06:33:48.747-0300&quot;,&quot;caller&quot;:&quot;clientv3/maintenance.go:200&quot;,&quot;msg&quot;:&quot;opened snapshot stream; downloading&quot;}
+{&quot;level&quot;:&quot;info&quot;,&quot;ts&quot;:1704447228.747063,&quot;caller&quot;:&quot;snapshot/v3_snapshot.go:127&quot;,&quot;msg&quot;:&quot;fetching snapshot&quot;,&quot;endpoint&quot;:&quot;127.0.0.1:2379&quot;}
+{&quot;level&quot;:&quot;info&quot;,&quot;ts&quot;:&quot;2024-01-05T06:33:48.748-0300&quot;,&quot;caller&quot;:&quot;clientv3/maintenance.go:208&quot;,&quot;msg&quot;:&quot;completed snapshot read; closing&quot;}
+{&quot;level&quot;:&quot;info&quot;,&quot;ts&quot;:1704447228.7492132,&quot;caller&quot;:&quot;snapshot/v3_snapshot.go:142&quot;,&quot;msg&quot;:&quot;fetched snapshot&quot;,&quot;endpoint&quot;:&quot;127.0.0.1:2379&quot;,&quot;size&quot;:&quot;20 kB&quot;,&quot;took&quot;:0.003339672}
+{&quot;level&quot;:&quot;info&quot;,&quot;ts&quot;:1704447228.7493641,&quot;caller&quot;:&quot;snapshot/v3_snapshot.go:152&quot;,&quot;msg&quot;:&quot;saved&quot;,&quot;path&quot;:&quot;snapshot.db&quot;}
+Snapshot saved at snapshot.db
+
+# To see the status of the backup
+etcdctl snapshot status snapshot.db
+bfa20374, 0, 3, 20 kB
+</code></pre>
+<p>To recover data using this snapshot.</p>
+<pre><code class="language-bash">sudo systemctl stop etcd.service
+
+sudo systemctl status etcd.service
+○ etcd.service - etcd - highly-available key value store
+     Loaded: loaded (/lib/systemd/system/etcd.service; enabled; preset: enabled)
+     Active: inactive (dead) since Fri 2024-01-05 06:38:00 -03; 31s ago
+   Duration: 4min 30.235s
+       Docs: https://etcd.io/docs
+             man:etcd
+    Process: 50148 ExecStart=/usr/bin/etcd $DAEMON_ARGS (code=killed, signal=TERM)
+   Main PID: 50148 (code=killed, signal=TERM)
+        CPU: 2.152s
+
+Jan 05 06:33:30 david-laptop etcd[50148]: enabled capabilities for version 3.4
+Jan 05 06:33:48 david-laptop etcd[50148]: sending database snapshot to client 20 kB [20480 bytes]
+Jan 05 06:33:48 david-laptop etcd[50148]: sending database sha256 checksum to client [32 bytes]
+Jan 05 06:33:48 david-laptop etcd[50148]: successfully sent database snapshot to client 20 kB [20480 bytes]
+Jan 05 06:38:00 david-laptop systemd[1]: Stopping etcd.service - etcd - highly-available key value store...
+Jan 05 06:38:00 david-laptop etcd[50148]: received terminated signal, shutting down...
+Jan 05 06:38:00 david-laptop etcd[50148]: skipped leadership transfer for single voting member cluster
+Jan 05 06:38:00 david-laptop systemd[1]: etcd.service: Deactivated successfully. #&lt;&lt;&lt;
+
+
+# The restore command will take the snapshot and put it in a specific directory that will need to be used later
+
+sudo etcdctl snapshot restore snapshot.db --data-dir /var/lib/etcd-from-backup
+{&quot;level&quot;:&quot;info&quot;,&quot;ts&quot;:1704447747.1907465,&quot;caller&quot;:&quot;snapshot/v3_snapshot.go:296&quot;,&quot;msg&quot;:&quot;restoring snapshot&quot;,&quot;path&quot;:&quot;snapshot.db&quot;,&quot;wal-dir&quot;:&quot;/var/lib/etcd-from-backup/member/wal&quot;,&quot;data-dir&quot;:&quot;/var/lib/etcd-from-backup&quot;,&quot;snap-dir&quot;:&quot;/var/lib/etcd-from-backup/member/snap&quot;}
+{&quot;level&quot;:&quot;info&quot;,&quot;ts&quot;:1704447747.195053,&quot;caller&quot;:&quot;membership/cluster.go:392&quot;,&quot;msg&quot;:&quot;added member&quot;,&quot;cluster-id&quot;:&quot;cdf818194e3a8c32&quot;,&quot;local-member-id&quot;:&quot;0&quot;,&quot;added-peer-id&quot;:&quot;8e9e05c52164694d&quot;,&quot;added-peer-peer-urls&quot;:[&quot;http://localhost:2380&quot;]}
+{&quot;level&quot;:&quot;info&quot;,&quot;ts&quot;:1704447747.1978393,&quot;caller&quot;:&quot;snapshot/v3_snapshot.go:309&quot;,&quot;msg&quot;:&quot;restored snapshot&quot;,&quot;path&quot;:&quot;snapshot.db&quot;,&quot;wal-dir&quot;:&quot;/var/lib/etcd-from-backup/member/wal&quot;,&quot;data-dir&quot;:&quot;/var/lib/etcd-from-backup&quot;,&quot;snap-dir&quot;:&quot;/var/lib/etcd-from-backup/member/snap&quot;}
+</code></pre>
+<p>Now we need to configure the etcd service again to use this directory.</p>
+<p><img decoding="async" loading="lazy" alt="Alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-14-90a8596e958fba4ffa399a5ff2d68daf.png" width="1819" height="627" class="img_ev3q"></p>
+<p>And then we can reload the service and start it again.</p>
+<pre><code class="language-bash">systemctl daemon-reload
+systemctl restart etcd-service
+</code></pre>
+<blockquote>
+<p>In an external etcd cluster it&#x27;s necessary that the etcd data directory belongs to the etcd user</p>
+</blockquote>
+<pre><code class="language-bash"># to set permission when necessary
+chown etcd:etcd -R /var/lib/etcd
+</code></pre>
+      <div class="docs-pager">
+        <a href="../../../../../#blogs">All blogs</a>
+        <a href="../../">Back to CKA</a>
+      </div>
+    </article>
+    <aside class="docs-toc">
+      <div class="docs-toc-title">On this page</div>
+      <nav>
+        <a href="#kube-apiserver">Kube-ApiServer</a>
+        <a href="#etcd">ETCD</a>
+      </nav>
+    </aside>
+  </div>
+  <script src="../../../../../js/docs.js"></script>
+</body>
+</html>

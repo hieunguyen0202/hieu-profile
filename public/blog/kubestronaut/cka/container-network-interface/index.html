@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Container Network Interface (CNI) — Hieu Nguyen</title>
+  <meta name="description" content="Container Network Interface (CNI) — Kubestronaut roadmap.">
+  <link rel="icon" href="../../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../../">i'm<span>.hieu</span></a>
+    <nav class="docs-series">
+      <a href="../../../../blog/web-security/">Web Security</a>
+      <a class="active" href="../../">Kubestronaut roadmap</a>
+    </nav>
+    <nav class="docs-cert-tabs"><a href="../../cka/" class="active">CKA</a><a href="../../ckad/" class="">CKAD</a><a href="../../cks/" class="">CKS</a></nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-nav="kubestronaut" data-cert="cka" data-docs-root="../" data-active="container-network-interface">
+      <div class="docs-nav-label">CKA</div>
+      <ul class="docs-nav" id="docsNav"></ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../../">Home</a>
+        <span>›</span>
+        <a href="../../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../../">Kubestronaut</a>
+        <span>›</span>
+        <a href="../">CKA</a>
+        <span>›</span>
+        <span>Container Network Interface (CNI)</span>
+      </div>
+      <div id="top"></div>
+<header><h1>Container Network Interface (CNI)</h1></header><p>So far, we&#x27;ve explored how network namespaces work, how to connect several of these namespaces to a bridge network, how to create pairs (virtual cables) with virtual interfaces, how to attach each end to the namespace and the bridge, how to assign IPs and bring them up, and how to enable NAT or IP masquerading for external communication.</p>
+<p>We also observed how Docker follows a similar process, but using different naming standards. Other container solutions solve their networking challenges in a similar way, including Kubernetes.</p>
+<p>All these solutions try to solve the same problems differently, but end up following the same steps. Why not create a single standard approach?</p>
+<p>It was in this scenario that the Bridge program emerged, which encapsulates all the necessary steps to connect a container to a bridge network.</p>
+<p>Using a simple command like:</p>
+<pre><code class="language-bash">bridge add 2353245 /var/run/netns/2353245
+</code></pre>
+<p>The container runtime is freed from the responsibility of implementing this task. For example, if a container runtime invokes the bridge passing the following parameters bridge add <code>&lt;container_id&gt;</code> <code>&lt;namespace&gt;</code>, that would be sufficient.</p>
+<p>If you wanted to create such a program for yourself, perhaps for a new type of network, what arguments and commands should you pass? How would you ensure the program works correctly with existing runtimes? How to be sure that container runtimes like Kubernetes or rkt would invoke your program correctly? This is where the definition of standards becomes crucial.</p>
+<p>CNI is a set of standards that defines how programs should be developed to solve networking challenges in a container runtime environment.</p>
+<p>The programs are called plugins. In this case, the bridge program we refer to is a plugin for CNI. CNI defines how the plugin should be developed and how container runtimes should invoke them.</p>
+<p>CNI assigns a set of responsibilities to both container runtimes and plugins. For container runtimes, CNI specifies that they are responsible for creating a network namespace for each container. Then, the runtimes must identify the networks to which the containers should connect and invoke the plugins during container creation (add) and deletion (del). Additionally, CNI stipulates the configuration of plugins in the container runtime environment using a JSON file.</p>
+<p>In turn, the plugins must support command-line arguments like add, del and check, accepting parameters such as the network namespace. They are also responsible for assigning IP addresses to containers, configuring necessary routes for communication between containers on the network, and specifying the results in a particular format. As long as both container runtimes and plugins comply with these guidelines, they can coexist harmoniously.</p>
+<p>CNI includes a set of supported plugins, such as Bridge, VLAN, IP VLAN, MAC VLAN, WINDOWS, Host Local and DHCP. Additionally, there are other third-party plugins available, such as Weave, Flannel, Cilium, VMware NXC, Calico, among others. All of these implement CNI standards, allowing any container runtime to work with any of these plugins.</p>
+<p>However, Docker does not implement CNI, but rather CNM (Container Network Model), which represents the container network model. CNM is another standard that aims to solve container networking challenges similar to CNI, but with some differences. Due to these differences, CNI plugins don&#x27;t integrate natively with Docker. This means you can&#x27;t run a Docker container and specify the network plugin to use a CNI and specify one of these plugins. But this doesn&#x27;t mean you can&#x27;t use Docker with CNI at all. Just work around it, like creating a Docker container without any network configuration and then manually invoking the bridge plugin. This is practically what Kubernetes does when it creates Docker containers: it creates them without networking and then invokes the configured CNI plugins that take care of the rest of the configuration.</p>
+      <div class="docs-pager">
+        <a href="../../../../#blogs">All blogs</a>
+        <a href="../">Back to CKA</a>
+      </div>
+    </article>
+    <aside class="docs-toc">
+      <div class="docs-toc-title">On this page</div>
+      <nav>
+        <a href="#top">On this page</a>
+      </nav>
+    </aside>
+  </div>
+  <script src="../../../../js/docs.js"></script>
+</body>
+</html>

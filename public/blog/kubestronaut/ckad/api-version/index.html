@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>API Version — Hieu Nguyen</title>
+  <meta name="description" content="API Version — Kubestronaut roadmap.">
+  <link rel="icon" href="../../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../../">i'm<span>.hieu</span></a>
+    <nav class="docs-series">
+      <a href="../../../../blog/web-security/">Web Security</a>
+      <a class="active" href="../../">Kubestronaut roadmap</a>
+    </nav>
+    <nav class="docs-cert-tabs"><a href="../../cka/" class="">CKA</a><a href="../../ckad/" class="active">CKAD</a><a href="../../cks/" class="">CKS</a></nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-nav="kubestronaut" data-cert="ckad" data-docs-root="../" data-active="api-version">
+      <div class="docs-nav-label">CKAD</div>
+      <ul class="docs-nav" id="docsNav"></ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../../">Home</a>
+        <span>›</span>
+        <a href="../../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../../">Kubestronaut</a>
+        <span>›</span>
+        <a href="../">CKAD</a>
+        <span>›</span>
+        <span>API Version</span>
+      </div>
+      <div id="top"></div>
+<header><h1>API Version</h1></header><p>For Kubernetes functionalities and resources to be created, new APIs are also needed.</p>
+<blockquote>
+<p>Stable versions are what we call <code>V1</code>.</p>
+</blockquote>
+<p>But we encounter several different versions along the way and let&#x27;s understand how they appear.</p>
+<p><img decoding="async" loading="lazy" alt="alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-0b730d8d895f627e8da9398a9dbf4019.png" width="909" height="317" class="img_ev3q"></p>
+<p>Explaining each of them better:</p>
+<h2 id="alpha">Alpha</h2>
+<p><img decoding="async" loading="lazy" alt="alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-1-ab049d4723de6065545f4f4d471afd57.png" width="862" height="575" class="img_ev3q"></p>
+<p>When an API has just been included in the Kubernetes code for the first time</p>
+<p>It&#x27;s not available by default and needs to be enabled to be used.</p>
+<p>It may still have bugs and can be deprecated quickly. It&#x27;s generally used by users who are interested in giving their feedback and collaborating with Kubernetes. Should not be used in production.</p>
+<p>Creating an alpha object that&#x27;s not enabled won&#x27;t work.</p>
+<h2 id="beta">Beta</h2>
+<p>Moving forward a bit from the alpha version with bugs already fixed, we have beta.</p>
+<p>This one is available by default, may still contain minor errors, but has already been tested and approved including end-to-end tests. The tendency is for them to become v1 in the future, but it&#x27;s not guaranteed.</p>
+<h2 id="ga-stable">GA Stable</h2>
+<p>After a few months and a few releases, betas move to GA which are considered the stable versions we know as <code>v1</code>. They&#x27;re much more reliable and will be present in several future Kubernetes releases and can be used by all users.</p>
+<p><img decoding="async" loading="lazy" alt="alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-2-3f6de20bdd4d44dd0deba66fe92aee4c.png" width="1090" height="378" class="img_ev3q"></p>
+<p>Here we have an example of Kubernetes version <a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.30/" target="_blank" rel="noopener noreferrer">1.30</a>.</p>
+<p>If you want to search for other versions</p>
+<p><img decoding="async" loading="lazy" alt="alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-3-1d81d9327d8506719fa49aa33b7fc0ec.png" width="1075" height="810" class="img_ev3q"></p>
+<p>An example of evolution:</p>
+<table><thead><tr><th>API GROUP</th><th>1.25</th><th>1.26</th><th>1.27</th><th>1.28</th><th>1.29</th><th>1.30</th></tr></thead><tbody><tr><td>admissionregistration.k8s.io</td><td>v1</td><td>v1, v1alpha1</td><td>v1, v1alpha1</td><td>v1, v1beta1, v1alpha1</td><td>v1, v1beta1, v1alpha1</td><td>v1, v1beta1, v1alpha1</td></tr><tr><td>apiextensions.k8s.io</td><td>v1</td><td>v1</td><td>v1</td><td>v1</td><td>v1</td><td>v1</td></tr><tr><td>apiregistration.k8s.io</td><td>v1</td><td>v1</td><td>v1</td><td>v1</td><td>v1</td><td>v1</td></tr><tr><td>apps</td><td>v1</td><td>v1</td><td>v1</td><td>v1</td><td>v1</td><td>v1</td></tr><tr><td>authentication.k8s.io</td><td>v1</td><td>v1, v1alpha1</td><td>v1, v1beta1, v1alpha1</td><td>v1, v1beta1, v1alpha1</td><td>v1, v1beta1, v1alpha1</td><td>v1, v1beta1, v1alpha1</td></tr><tr><td>authorization.k8s.io</td><td>v1</td><td>v1</td><td>v1</td><td>v1</td><td>v1</td><td>v1</td></tr><tr><td>autoscaling</td><td>v1, v2, v2beta2</td><td>v2, v1</td><td>v2, v1</td><td>v2, v1</td><td>v2, v1</td><td>v2, v1</td></tr><tr><td>batch</td><td>v1</td><td>v1</td><td>v1</td><td>v1</td><td>v1</td><td>v1</td></tr><tr><td>certificates.k8s.io</td><td>v1</td><td>v1</td><td>v1, v1alpha1</td><td>v1, v1alpha1</td><td>v1, v1alpha1</td><td>v1, v1alpha1</td></tr><tr><td>coordination.k8s.io</td><td>v1</td><td>v1</td><td>v1</td><td>v1</td><td>v1</td><td>v1</td></tr><tr><td>core</td><td>v1</td><td>v1</td><td>v1</td><td>v1</td><td>v1</td><td>v1</td></tr><tr><td>discovery.k8s.io</td><td>v1</td><td>v1</td><td>v1</td><td>v1</td><td>v1</td><td>v1</td></tr><tr><td>events.k8s.io</td><td>v1</td><td>v1</td><td>v1</td><td>v1</td><td>v1</td><td>v1</td></tr><tr><td>flowcontrol.apiserver.k8s.io</td><td>v1beta2, v1beta1</td><td>v1beta3, v1beta2</td><td>v1beta3, v1beta2</td><td>v1beta3, v1beta2</td><td>v1, v1beta3</td><td>v1, v1beta3</td></tr><tr><td>internal.apiserver.k8s.io</td><td>v1alpha1</td><td>v1alpha1</td><td>v1alpha1</td><td>v1alpha1</td><td>v1alpha1</td><td>v1alpha1</td></tr><tr><td>networking.k8s.io</td><td>v1, v1alpha1</td><td>v1, v1alpha1</td><td>v1, v1alpha1</td><td>v1, v1alpha1</td><td>v1, v1alpha1</td><td>v1, v1alpha1</td></tr><tr><td>node.k8s.io</td><td>v1</td><td>v1</td><td>v1</td><td>v1</td><td>v1</td><td>v1</td></tr><tr><td>policy</td><td>v1</td><td>v1</td><td>v1</td><td>v1</td><td>v1</td><td>v1</td></tr><tr><td>rbac.authorization.k8s.io</td><td>v1</td><td>v1</td><td>v1</td><td>v1</td><td>v1</td><td>v1</td></tr><tr><td>resource.k8s.io</td><td></td><td>v1alpha1</td><td>v1alpha2</td><td>v1alpha2</td><td>v1alpha2</td><td>v1alpha2</td></tr><tr><td>scheduling.k8s.io</td><td>v1</td><td>v1</td><td>v1</td><td>v1</td><td>v1</td><td>v1</td></tr><tr><td>storage.k8s.io</td><td>v1, v1beta1</td><td>v1, v1beta1</td><td>v1</td><td>v1</td><td>v1, v1alpha1</td><td>v1, v1alpha1</td></tr><tr><td>storagemigration.k8s.io</td><td></td><td></td><td></td><td></td><td></td><td>v1alpha1</td></tr></tbody></table>
+<p>We can observe that Kubernetes supports multiple versions at the same time to provide support for previous versions.</p>
+<hr>
+<p>We can observe that the API group offers support for multiple versions at the same time. This means we&#x27;ll be able to create the same object using any of these versions.</p>
+<p>Although it supports multiple versions, only one can be the preferred or stored version.</p>
+<p><img decoding="async" loading="lazy" alt="alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-4-ab13f30029b64f0111215eed1339ee35.png" width="1779" height="869" class="img_ev3q"></p>
+<p>The preferred version is the one that&#x27;s retrieved by the kubectl command and the stored one is the one that&#x27;s stored in etcd.</p>
+<p>When a version is defined different from the preferred one, it&#x27;s converted to the preferred version.</p>
+<pre><code class="language-bash">&gt; kubectl proxy
+Starting to serve on 127.0.0.1:8001
+
+❯ curl http://localhost:8001/apis/batch
+{
+  &quot;kind&quot;: &quot;APIGroup&quot;,
+  &quot;apiVersion&quot;: &quot;v1&quot;,
+  &quot;name&quot;: &quot;batch&quot;,
+  &quot;versions&quot;: [
+    {
+      &quot;groupVersion&quot;: &quot;batch/v1&quot;,
+      &quot;version&quot;: &quot;v1&quot;
+    }
+  ],
+  &quot;preferredVersion&quot;: {
+    &quot;groupVersion&quot;: &quot;batch/v1&quot;,
+    &quot;version&quot;: &quot;v1&quot;
+  }
+}
+</code></pre>
+<p>To observe what we have inside etcd, it&#x27;s necessary to search in etcd itself.</p>
+<p>To enable alpha versions, we can pass the parameter to the kube-api-server service.</p>
+<p>In the case of enabling version v2alpha1 of batch, we can pass</p>
+<pre><code class="language-yaml">--runtime-config=batch/v2alpha1
+</code></pre>
+<p>The service needs to be restarted if it&#x27;s a static pod or service in the operating system.</p>
+      <div class="docs-pager">
+        <a href="../../../../#blogs">All blogs</a>
+        <a href="../">Back to CKAD</a>
+      </div>
+    </article>
+    <aside class="docs-toc">
+      <div class="docs-toc-title">On this page</div>
+      <nav>
+        <a href="#alpha">Alpha</a>
+        <a href="#beta">Beta</a>
+        <a href="#ga-stable">GA Stable</a>
+      </nav>
+    </aside>
+  </div>
+  <script src="../../../../js/docs.js"></script>
+</body>
+</html>

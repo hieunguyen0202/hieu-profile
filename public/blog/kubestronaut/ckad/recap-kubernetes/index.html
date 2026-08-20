@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kubernetes Recap — Hieu Nguyen</title>
+  <meta name="description" content="Kubernetes Recap — Kubestronaut roadmap.">
+  <link rel="icon" href="../../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../../">i'm<span>.hieu</span></a>
+    <nav class="docs-series">
+      <a href="../../../../blog/web-security/">Web Security</a>
+      <a class="active" href="../../">Kubestronaut roadmap</a>
+    </nav>
+    <nav class="docs-cert-tabs"><a href="../../cka/" class="">CKA</a><a href="../../ckad/" class="active">CKAD</a><a href="../../cks/" class="">CKS</a></nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-nav="kubestronaut" data-cert="ckad" data-docs-root="../" data-active="recap-kubernetes">
+      <div class="docs-nav-label">CKAD</div>
+      <ul class="docs-nav" id="docsNav"></ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../../">Home</a>
+        <span>›</span>
+        <a href="../../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../../">Kubestronaut</a>
+        <span>›</span>
+        <a href="../">CKAD</a>
+        <span>›</span>
+        <span>Kubernetes Recap</span>
+      </div>
+      <div id="top"></div>
+<header><h1>Kubernetes Recap</h1></header><p>Before starting the course, understand how Kubernetes works and its architecture. It&#x27;s not necessary to understand the component configuration for CKAD, only the responsibility of each one.</p>
+<h2 id="cluster-architecture">Cluster Architecture</h2>
+<p>Check out <a href="https://devsecops.puziol.com.br/en/kubernetes/cka/cluster-architecture">cluster architecture</a>. In the containers section, we explain the difference between <code>Docker</code> and <code>ContainerD</code>, pay attention to this.</p>
+<p>Some knowledge of containers is necessary, but we&#x27;ll see more things ahead and they&#x27;ll be pointed out at the right time to follow a logical flow.</p>
+<h2 id="review">Review</h2>
+<p>You need to be familiar with <code>YAML</code> and <code>JSON</code>. So do an overview before starting if necessary. Study material can be found at <a href="/en/development/yaml">YAML</a> and <a href="/en/development/json">JSON</a>.</p>
+<p>Another detail is that you won&#x27;t be able to create things if you don&#x27;t have a Kubernetes cluster available.</p>
+<h2 id="todo-install-docker-and-create-a-cluster-using-kind-with-1-master-and-3-workers">TODO Install Docker and create a cluster using kind with 1 master and 3 workers</h2>
+<p>During the test, you can only use the vi and nano editors. I recommend being familiar with them. So do your studies using them already.</p>
+<h2 id="todo-install-vi-and-nano">TODO Install Vi and Nano</h2>
+<p>You can&#x27;t start a certification course if you don&#x27;t have the minimum necessary knowledge about anything in Kubernetes. Do a brief introduction to the main components we&#x27;ll work with during the course. This material can be found in <a href="https://devsecops.puziol.com.br/en/kubernetes/cka/review">review</a>.</p>
+      <div class="docs-pager">
+        <a href="../../../../#blogs">All blogs</a>
+        <a href="../">Back to CKAD</a>
+      </div>
+    </article>
+    <aside class="docs-toc">
+      <div class="docs-toc-title">On this page</div>
+      <nav>
+        <a href="#cluster-architecture">Cluster Architecture</a>
+        <a href="#review">Review</a>
+        <a href="#todo-install-docker-and-create-a-cluster-using-kind-with-1-master-and-3-workers">TODO Install Docker and create a cluster using kind with 1 master and 3 workers</a>
+        <a href="#todo-install-vi-and-nano">TODO Install Vi and Nano</a>
+      </nav>
+    </aside>
+  </div>
+  <script src="../../../../js/docs.js"></script>
+</body>
+</html>

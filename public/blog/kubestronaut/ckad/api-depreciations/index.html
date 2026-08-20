@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>API Deprecations — Hieu Nguyen</title>
+  <meta name="description" content="API Deprecations — Kubestronaut roadmap.">
+  <link rel="icon" href="../../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../../">i'm<span>.hieu</span></a>
+    <nav class="docs-series">
+      <a href="../../../../blog/web-security/">Web Security</a>
+      <a class="active" href="../../">Kubestronaut roadmap</a>
+    </nav>
+    <nav class="docs-cert-tabs"><a href="../../cka/" class="">CKA</a><a href="../../ckad/" class="active">CKAD</a><a href="../../cks/" class="">CKS</a></nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-nav="kubestronaut" data-cert="ckad" data-docs-root="../" data-active="api-depreciations">
+      <div class="docs-nav-label">CKAD</div>
+      <ul class="docs-nav" id="docsNav"></ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../../">Home</a>
+        <span>›</span>
+        <a href="../../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../../">Kubestronaut</a>
+        <span>›</span>
+        <a href="../">CKAD</a>
+        <span>›</span>
+        <span>API Deprecations</span>
+      </div>
+      <div id="top"></div>
+<header><h1>API Deprecations</h1></header><p>Let&#x27;s understand a bit about the lifecycle of an API.</p>
+<p>A new API group can be added to Kubernetes but will always start with v1alpha1.</p>
+<p>Let&#x27;s imagine a test/v1alpha1 API that was added to Kubernetes and that we have two objects we could declare, that is, two different kinds:</p>
+<ul>
+<li>course</li>
+<li>webinar</li>
+</ul>
+<p>But let&#x27;s imagine that webinar wasn&#x27;t a good choice and we want to remove it.</p>
+<p>It&#x27;s not possible to remove it from version v1alpha1, it&#x27;s necessary to release v1alpha2, because the first rule of API group policies is:</p>
+<blockquote>
+<p>API elements can only be removed by incrementing the API Group version.</p>
+</blockquote>
+<p>In version v1alpha1, we&#x27;ll have the course and webinar kinds available, and in version v1alpha2, only course.</p>
+<p>Kubernetes supporting multiple versions avoids having to change all manifests that use a previous version.</p>
+<p>What would change would be the preferred version that would now be set to v1alpha2 when we use course.</p>
+<p>This leads us to the second rule of API deprecation policies:</p>
+<blockquote>
+<p>API objects must be able to navigate API versions in a given version without loss of information, with exceptions for REST resources that don&#x27;t exist in some versions.</p>
+</blockquote>
+<p>If we create an API and an object in version v1alpha1 and it&#x27;s converted to v1alpha2 and back to v1alpha1, it must be equal to the original.</p>
+<p>This means that if a field is added in v1alpha2, it must also be added in v1alpha1 because a direct conversion wouldn&#x27;t be possible if a field doesn&#x27;t exist.</p>
+<p>Over time, v1beta1, v1beta2 are released until reaching the stable version v1. In this new v1, we don&#x27;t need Kubernetes to support all these versions if v1 has compatibility with the previous ones, then they&#x27;ll be deprecated to maintain only v1.</p>
+<p>A new rule must be respected:</p>
+<blockquote>
+<p>In addition to the most recent API versions in each range, older API versions must be supported after their announced discontinuation for a period of no less than:</p>
+<ul>
+<li>GA: 12 months or 3 releases</li>
+<li>Beta: 9 months or 3 releases</li>
+<li>Alpha: 0 releases</li>
+</ul>
+</blockquote>
+<p>Alpha versions don&#x27;t need to be supported for any release, but beta and GA (stable) versions need to be supported for between 9 and 12 months.</p>
+<p>If we look at the example below, version x+1 doesn&#x27;t need to support version v1alpha1.</p>
+<p>When this happens, it&#x27;s necessary to create a release note warning of this change, as actions are required for users who have already used v1alpha1.</p>
+<p><img decoding="async" loading="lazy" alt="alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-5-b17dbe9b678162e5f91dbaa2d6e0a0ef.png" width="1054" height="499" class="img_ev3q"></p>
+<p>It&#x27;s also possible that in a v1beta1 version, for example, it doesn&#x27;t need to support alpha versions. If this doesn&#x27;t happen, a new release note will be given. That&#x27;s why it&#x27;s not very interesting to use alphas in production.</p>
+<p>When the version reaches beta, things change because they need to be supported for a minimum time. We also have rule 3:</p>
+<blockquote>
+<p>The preferred version and the storage version of an API group cannot advance until a release that supports the new version and the previous version has been made.</p>
+</blockquote>
+<p>What we have here is that even though a new version appears, it cannot be the preferred one on its first appearance.</p>
+<p>Deprecating a version doesn&#x27;t mean it simply won&#x27;t be supported immediately because at least 3 releases will need to be maintained.</p>
+<p>Let&#x27;s analyze a release and deprecation flow:</p>
+<table><thead><tr><th>Api Group Version</th><th>Preferred/ Storage Version</th><th>Release Versions</th><th>Notes</th></tr></thead><tbody><tr><td></td><td>/v1alpha1</td><td>x</td><td>First release</td></tr><tr><td></td><td>/v1alpha2</td><td>x+1</td><td>Alphas don&#x27;t need to support previous versions</td></tr><tr><td></td><td>/v1beta1</td><td>x+2</td><td>First beta, rules must be respected</td></tr><tr><td>/v1beta2</td><td>/v1beta1 (deprecated)</td><td>x+3</td><td>We release the new version but v1beta1 is still preferred</td></tr><tr><td>/v1beta1(deprecated)</td><td>/v1beta2</td><td>x+4</td><td>Second time v1beta1 appears as deprecated. At this moment, v1beta2 is already preferred</td></tr><tr><td>/v1 /v1beta1(deprecated)</td><td>/v1beta2 (deprecated)</td><td>x+5</td><td>Release of v1. Third time v1beta1 appears as deprecated. First time v1beta2 appears as deprecated. Since it was v1&#x27;s first appearance, v1beta1 is still preferred</td></tr><tr><td>/v1beta2 (deprecated)</td><td>/v1</td><td>x+6</td><td>Removed v1beta1 after 3 releases. v1beta2 is deprecated for the second time. v1 assumes preferred</td></tr><tr><td>/v1beta2 (deprecated)</td><td>/v1</td><td>x+7</td><td>v1beta2 cannot be removed yet. It&#x27;s necessary to support it one more time to count 3</td></tr><tr><td></td><td>/v1</td><td>x+8</td><td>v1beta2 removed completely</td></tr></tbody></table>
+<p>If a v2alpha1 is created, the v1 stable version cannot be deprecated until a v2 stable exists. It would be necessary to create v2alphaXs, v2betaXs, v2 to then deprecate v1.</p>
+<hr>
+<p>As we&#x27;ve seen, in new releases, new APIs can be added or removed, even changing preferred and stored APIs.</p>
+<p>In a Kubernetes update to a new release, it may be necessary to convert manifests when an API version has been completely removed after 3 deprecated releases.</p>
+<p><img decoding="async" loading="lazy" alt="alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-6-4213ba233f02cd42180da7d706b34caa.png" width="955" height="556" class="img_ev3q"></p>
+<p>We can use <code>kubectl convert</code> for this. This is a plugin that needs to be installed separately as it&#x27;s not built-in.</p>
+<p>We can use the <code>kubectl-convert</code> cli directly, but if we have it in the path, the <code>kubectl convert</code> command will make a call to this cli.</p>
+      <div class="docs-pager">
+        <a href="../../../../#blogs">All blogs</a>
+        <a href="../">Back to CKAD</a>
+      </div>
+    </article>
+    <aside class="docs-toc">
+      <div class="docs-toc-title">On this page</div>
+      <nav>
+        <a href="#top">On this page</a>
+      </nav>
+    </aside>
+  </div>
+  <script src="../../../../js/docs.js"></script>
+</body>
+</html>

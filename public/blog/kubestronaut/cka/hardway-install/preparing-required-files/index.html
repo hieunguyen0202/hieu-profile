@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Preparing Required Files — Hieu Nguyen</title>
+  <meta name="description" content="Preparing Required Files — Kubestronaut roadmap.">
+  <link rel="icon" href="../../../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../../../">i'm<span>.hieu</span></a>
+    <nav class="docs-series">
+      <a href="../../../../../blog/web-security/">Web Security</a>
+      <a class="active" href="../../../">Kubestronaut roadmap</a>
+    </nav>
+    <nav class="docs-cert-tabs"><a href="../../../cka/" class="active">CKA</a><a href="../../../ckad/" class="">CKAD</a><a href="../../../cks/" class="">CKS</a></nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-nav="kubestronaut" data-cert="cka" data-docs-root="../../" data-active="hardway-install/preparing-required-files">
+      <div class="docs-nav-label">CKA</div>
+      <ul class="docs-nav" id="docsNav"></ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../../../">Home</a>
+        <span>›</span>
+        <a href="../../../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../../../">Kubestronaut</a>
+        <span>›</span>
+        <a href="../../">CKA</a>
+        <span>›</span>
+        <span>Preparing Required Files</span>
+      </div>
+      <div id="top"></div>
+<header><h1>Preparing Required Files</h1></header><p>We need to generate certificates that we will use in all Kubernetes components.
+Certificates are used to identify who the components are, which groups they belong to so they have the appropriate permissions, and to authorize themselves in the kube-apiserver.</p>
+<p>Since each one has a different certificate we can create different kubeconfigs using these certificates.</p>
+<p>Since certificates in Kubernetes are in the /var/lib/kubernetes/pki folder, we&#x27;ll create a folder with the same name inside shared_files with the necessary files.</p>
+<p>A CA is needed to sign all these certificates. Create and run the following script inside the shared_files folder.</p>
+<p>Change the IPs to the IPs you defined in your Vagrantfile.</p>
+<p>If you notice, this script will only be called on master1 to create the certificates that will be used by all. They will be available inside shared_files. If you want to run the scripts manually, do so for study purposes.</p>
+<p>Create the script calling it 1_generate_certificate_control_plane.sh</p>
+<pre><code class="language-bash">#!/bin/bash
+
+mkdir pki
+cd pki
+
+############################# CA #############################################
+echo -e &quot;\n##### Creating CA ######&quot;
+openssl genrsa -out ca.key 2048
+openssl req -new -key ca.key -subj &quot;/CN=KUBERNETES-CA/O=Kubernetes&quot; -out ca.csr
+openssl x509 -req -in ca.csr -signkey ca.key -CAcreateserial -out ca.crt -days 1000
+
+############################# ADMIN #############################################
+echo -e &quot;\n##### Creating certificate for admin ######&quot;
+openssl genrsa -out admin.key 2048
+openssl req -new -key admin.key -subj &quot;/CN=admin/O=system:masters&quot; -out admin.csr
+openssl x509 -req -in admin.csr -CA ca.crt -CAkey ca.key -CAcreateserial -out admin.crt -days 1000
+
+############################# CONTROLLER MANAGER #############################################
+echo -e &quot;\n##### Creating certificate for controller manager ######&quot;
+openssl genrsa -out kube-controller-manager.key 2048
+openssl req -new -key kube-controller-manager.key -subj &quot;/CN=system:kube-controller-manager/O=system:kube-controller-manager&quot; -out kube-controller-manager.csr
+openssl x509 -req -in kube-controller-manager.csr -CA ca.crt -CAkey ca.key -CAcreateserial -out kube-controller-manager.crt -days 1000
+
+############################# SCHEDULER #############################################
+echo -e &quot;\n##### Creating certificate for scheduler ######&quot;
+openssl genrsa -out kube-scheduler.key 2048
+openssl req -new -key kube-scheduler.key -subj &quot;/CN=system:kube-scheduler/O=system:kube-scheduler&quot; -out kube-scheduler.csr
+openssl x509 -req -in kube-scheduler.csr -CA ca.crt -CAkey ca.key -CAcreateserial -out kube-scheduler.crt -days 1000
+
+############################# KUBE-PROXY #############################################
+echo -e &quot;\n##### Creating certificate for kube-proxy ######&quot;
+openssl genrsa -out kube-proxy.key 2048
+openssl req -new -key kube-proxy.key -subj &quot;/CN=system:kube-proxy/O=system:node-proxier&quot; -out kube-proxy.csr
+openssl x509 -req -in kube-proxy.csr -CA ca.crt -CAkey ca.key -CAcreateserial -out kube-proxy.crt -days 1000
+
+############################# API SERVER #############################################
+echo -e &quot;\n##### Creating certificate for Api Server ######&quot;
+
+cat &lt;&lt; EOF &gt;&gt; openssl-apiserver.cnf
+[req]
+req_extensions = v3_req
+distinguished_name = req_distinguished_name
+
+[req_distinguished_name]
+
+[v3_req]
+basicConstraints = critical, CA:FALSE
+keyUsage = critical, nonRepudiation, digitalSignature, keyEncipherment
+extendedKeyUsage = serverAuth
+subjectAltName = @alt_names
+
+[alt_names]
+DNS.1 = kubernetes
+DNS.2 = kubernetes.default
+DNS.3 = kubernetes.default.svc
+DNS.4 = kubernetes.default.svc.cluster.local
+IP.1 = 10.96.0.1
+IP.2 = 10.0.0.201
+IP.3 = 10.0.0.202
+IP.4 = 10.0.0.203
+IP.5 = 10.0.0.200
+IP.6 = 127.0.0.1
+EOF
+
+openssl genrsa -out kube-apiserver.key 2048
+openssl req -new -key kube-apiserver.key -subj &quot;/CN=kube-apiserver/O=Kubernetes&quot; -out kube-apiserver.csr -config openssl-apiserver.cnf
+openssl x509 -req -in kube-apiserver.csr -CA ca.crt -CAkey ca.key -CAcreateserial -out kube-apiserver.crt -extensions v3_req -extfile openssl-apiserver.cnf -days 1000
+
+############################# API SERVER CLIENT #############################################
+echo -e &quot;\n##### Creating certificate for Api Server as Kubelet client ######&quot;
+
+cat &lt;&lt;EOF &gt;&gt; openssl-kubelet.cnf
+[req]
+req_extensions = v3_req
+distinguished_name = req_distinguished_name
+[req_distinguished_name]
+[v3_req]
+basicConstraints = critical, CA:FALSE
+keyUsage = critical, nonRepudiation, digitalSignature, keyEncipherment
+extendedKeyUsage = clientAuth
+EOF
+
+openssl genrsa -out apiserver-kubelet-client.key 2048
+openssl req -new -key apiserver-kubelet-client.key -subj &quot;/CN=kube-apiserver-kubelet-client/O=system:masters&quot; -out apiserver-kubelet-client.csr -config openssl-kubelet.cnf
+openssl x509 -req -in apiserver-kubelet-client.csr -CA ca.crt -CAkey ca.key -CAcreateserial -out apiserver-kubelet-client.crt -extensions v3_req -extfile openssl-kubelet.cnf -days 1000
+
+############################# ETCD SERVER #############################################
+echo -e &quot;\n##### Creating certificate for ETCD ######&quot;
+
+cat &lt;&lt; EOF &gt;&gt; openssl-etcd.cnf
+[req]
+req_extensions = v3_req
+distinguished_name = req_distinguished_name
+
+[req_distinguished_name]
+
+[ v3_req ]
+basicConstraints = CA:FALSE
+keyUsage = nonRepudiation, digitalSignature, keyEncipherment
+subjectAltName = @alt_names
+
+[alt_names]
+IP.1 = 10.0.0.201
+IP.2 = 10.0.0.202
+IP.3 = 10.0.0.203
+IP.4 = 127.0.0.1
+
+[req_distinguished_name]
+EOF
+
+openssl genrsa -out etcd-server.key 2048
+openssl req -new -key etcd-server.key -subj &quot;/CN=etcd-server/O=Kubernetes&quot; -out etcd-server.csr -config openssl-etcd.cnf
+openssl x509 -req -in etcd-server.csr -CA ca.crt -CAkey ca.key -CAcreateserial -out etcd-server.crt -extensions v3_req -extfile openssl-etcd.cnf -days 1000
+
+############################# SERVICE ACCOUNT #############################################
+echo -e &quot;\n##### Creating certificate for service-account ######&quot;
+openssl genrsa -out service-account.key 2048
+openssl req -new -key service-account.key -subj &quot;/CN=service-accounts/O=Kubernetes&quot; -out service-account.csr
+openssl x509 -req -in service-account.csr -CA ca.crt -CAkey ca.key -CAcreateserial -out service-account.crt -days 1000
+
+echo -e &quot;\n##### Removing unnecessary .csr and .cnf files ######&quot;
+rm -rf *.csr
+rm -rf *.cnf
+</code></pre>
+<p>The second step is to create the kubeconfig files.
+All generated .kubeconfig files will point to the certificate files that will be in the correct folder afterwards.
+The only case where the certificate content is shown is for the admin.</p>
+<p>Create the script below inside shared_files with the name 3_generate_kubeconfigs_control_plane.sh. For organizational purposes we&#x27;ll put it in the created kubeconfigs folder to be moved to the correct place later.</p>
+<pre><code class="language-bash">#!/bin/bash
+
+mkdir kubeconfigs
+cd kubeconfigs
+
+echo -e &quot;\n##### Generating kubeconfig for kube-proxy #####&quot;
+kubectl config set-cluster kubernetes-the-hard-way \
+  --certificate-authority=/var/lib/kubernetes/pki/ca.crt \
+  --server=https://10.0.0.200:6443 \
+  --kubeconfig=kube-proxy.kubeconfig
+
+kubectl config set-credentials system:kube-proxy \
+  --client-certificate=/var/lib/kubernetes/pki/kube-proxy.crt \
+  --client-key=/var/lib/kubernetes/pki/kube-proxy.key \
+  --kubeconfig=kube-proxy.kubeconfig
+
+kubectl config set-context default \
+  --cluster=kubernetes-the-hard-way \
+  --user=system:kube-proxy \
+  --kubeconfig=kube-proxy.kubeconfig
+
+kubectl config use-context default --kubeconfig=kube-proxy.kubeconfig
+
+echo -e &quot;\n##### Generating kubeconfig for controller-manager #####&quot;
+kubectl config set-cluster kubernetes-the-hard-way \
+  --certificate-authority=/var/lib/kubernetes/pki/ca.crt \
+  --server=https://127.0.0.1:6443 \
+  --kubeconfig=kube-controller-manager.kubeconfig
+
+kubectl config set-credentials system:kube-controller-manager \
+  --client-certificate=/var/lib/kubernetes/pki/kube-controller-manager.crt \
+  --client-key=/var/lib/kubernetes/pki/kube-controller-manager.key \
+  --kubeconfig=kube-controller-manager.kubeconfig
+
+kubectl config set-context default \
+  --cluster=kubernetes-the-hard-way \
+  --user=system:kube-controller-manager \
+  --kubeconfig=kube-controller-manager.kubeconfig
+
+kubectl config use-context default --kubeconfig=kube-controller-manager.kubeconfig
+
+echo -e &quot;\n##### Generating kubeconfig for scheduler #####&quot;
+kubectl config set-cluster kubernetes-the-hard-way \
+  --certificate-authority=/var/lib/kubernetes/pki/ca.crt \
+  --server=https://127.0.0.1:6443 \
+  --kubeconfig=kube-scheduler.kubeconfig
+
+kubectl config set-credentials system:kube-scheduler \
+  --client-certificate=/var/lib/kubernetes/pki/kube-scheduler.crt \
+  --client-key=/var/lib/kubernetes/pki/kube-scheduler.key \
+  --kubeconfig=kube-scheduler.kubeconfig
+
+kubectl config set-context default \
+  --cluster=kubernetes-the-hard-way \
+  --user=system:kube-scheduler \
+  --kubeconfig=kube-scheduler.kubeconfig
+
+kubectl config use-context default --kubeconfig=kube-scheduler.kubeconfig
+
+echo -e &quot;\n##### Generating kubeconfig for admin #####&quot;
+kubectl config set-cluster kubernetes-the-hard-way \
+  --certificate-authority=../pki/ca.crt \
+  --embed-certs=true \
+  --server=https://127.0.0.1:6443 \
+  --kubeconfig=admin.kubeconfig
+
+kubectl config set-credentials admin \
+  --client-certificate=../pki/admin.crt \
+  --client-key=../pki/admin.key \
+  --embed-certs=true \
+  --kubeconfig=admin.kubeconfig
+
+kubectl config set-context default \
+  --cluster=kubernetes-the-hard-way \
+  --user=admin \
+  --kubeconfig=admin.kubeconfig
+
+kubectl config use-context default --kubeconfig=admin.kubeconfig
+</code></pre>
+<p>Another file we need to have is an object in Kubernetes that will encrypt secrets and other components we want.
+It is necessary to generate a key, so we&#x27;ll do that before creating the object that the kube-apiserver will use.</p>
+<p>Create the script below in the shared_files folder with whatever name you want and run the script. The output will only be the object we need called <code>encryption-config.yaml</code>.</p>
+<pre><code class="language-bash">#!/bin/bash
+
+ENCRYPTION_KEY=$(head -c 32 /dev/urandom | base64)
+echo -e &quot;\n##### Generating encryption method to be used in the cluster #####&quot;
+
+# Move to /var/lib/kubernetes
+cat &gt; encryption-config.yaml &lt;&lt;EOF
+apiVersion: v1
+kind: EncryptionConfig
+resources:
+  - resources:
+      - secrets
+      - configmaps
+    providers:
+      - aescbc:
+          keys:
+            - name: key1
+              secret: ${ENCRYPTION_KEY}
+      - identity: {}
+EOF
+</code></pre>
+      <div class="docs-pager">
+        <a href="../../../../../#blogs">All blogs</a>
+        <a href="../../">Back to CKA</a>
+      </div>
+    </article>
+    <aside class="docs-toc">
+      <div class="docs-toc-title">On this page</div>
+      <nav>
+        <a href="#top">On this page</a>
+      </nav>
+    </aside>
+  </div>
+  <script src="../../../../../js/docs.js"></script>
+</body>
+</html>

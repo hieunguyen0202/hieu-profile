@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ETCD High Availability — Hieu Nguyen</title>
+  <meta name="description" content="ETCD High Availability — Kubestronaut roadmap.">
+  <link rel="icon" href="../../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../../">i'm<span>.hieu</span></a>
+    <nav class="docs-series">
+      <a href="../../../../blog/web-security/">Web Security</a>
+      <a class="active" href="../../">Kubestronaut roadmap</a>
+    </nav>
+    <nav class="docs-cert-tabs"><a href="../../cka/" class="active">CKA</a><a href="../../ckad/" class="">CKAD</a><a href="../../cks/" class="">CKS</a></nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-nav="kubestronaut" data-cert="cka" data-docs-root="../" data-active="etcd-ha">
+      <div class="docs-nav-label">CKA</div>
+      <ul class="docs-nav" id="docsNav"></ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../../">Home</a>
+        <span>›</span>
+        <a href="../../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../../">Kubestronaut</a>
+        <span>›</span>
+        <a href="../">CKA</a>
+        <span>›</span>
+        <span>ETCD High Availability</span>
+      </div>
+      <div id="top"></div>
+<header><h1>ETCD High Availability</h1></header><p>ETCD is a secure, fast, and simple key-value database.</p>
+<p>Generally, a database stores data in table format.
+![Traditional database](/docs/kubernetes/certifications/cka/Installation Configuration Validation/pics/image-5.png)</p>
+<p>But ETCD stores data in document or page format. This means that each individual in the table has its own key-value file. Changing each document doesn&#x27;t alter other files.</p>
+<p>![ETCD database](/docs/kubernetes/certifications/cka/Installation Configuration Validation/pics/image-6.png)</p>
+<p>ETCD operates in a distributed manner, but how exactly does this work?</p>
+<p>Both read and write operations can be performed on any ETCD instance, with the guarantee that data among them will remain consistent. While reading presents no difficulties, the write process deserves a more detailed explanation.</p>
+<p>In an ETCD cluster, one instance is designated as the leader, while the others are followers. When a write request is sent directly to the leader, it executes it automatically and replicates the data to the followers. If a write is made to a follower&#x27;s endpoint, it receives the request, forwards it to the leader for processing, and then replicates the updated data to other cluster members.</p>
+<p>A write is only considered complete when successfully replicated to the majority of cluster members. This mechanism is enabled by Raft Consensus, an algorithm used by ETCD, which you can learn more about through this <a href="https://raft.github.io/" target="_blank" rel="noopener noreferrer">link</a>.</p>
+<p>In summary, to ensure system resilience, Raft Consensus requires at least three ETCD instances, thus avoiding single points of failure.</p>
+<table><thead><tr><th>Num Nodes</th><th>Failure Points</th><th>Majority (Nodes/2 +1)</th><th>Usable</th></tr></thead><tbody><tr><td>1</td><td>0</td><td>1</td><td>Yes, but not recommended</td></tr><tr><td>2</td><td>0</td><td>2</td><td>No</td></tr><tr><td>3</td><td>1</td><td>2</td><td>Yes</td></tr><tr><td>4</td><td>1</td><td>3</td><td>No</td></tr><tr><td>5</td><td>2</td><td>3</td><td>Yes</td></tr><tr><td>6</td><td>3</td><td>4</td><td>No</td></tr><tr><td>7</td><td>3</td><td>4</td><td>Yes</td></tr></tbody></table>
+<p>It&#x27;s important to note that the number of instances in the ETCD cluster needs to be odd and greater than 3 for at least 1 failure point.</p>
+<p>When the leader becomes unavailable, a vote is initiated to elect a new leader. Each instance in the cluster proposes to assume the leader role, and voting is time-based. Each instance generates a random time and communicates to others that it&#x27;s proposing to be the new leader. The instance that generates the shortest time will be the first to communicate and assume leadership.</p>
+<p>If a follower becomes unavailable in a 3-node cluster, it&#x27;s crucial that at least the leader and another follower can replicate data, thus ensuring the majority (2 out of 3) to maintain data consistency.</p>
+<p>For a write to be considered successful, it&#x27;s not necessary for all cluster members to receive data replication, but rather the majority. When a follower returns to availability, data is synchronized with it.</p>
+      <div class="docs-pager">
+        <a href="../../../../#blogs">All blogs</a>
+        <a href="../">Back to CKA</a>
+      </div>
+    </article>
+    <aside class="docs-toc">
+      <div class="docs-toc-title">On this page</div>
+      <nav>
+        <a href="#top">On this page</a>
+      </nav>
+    </aside>
+  </div>
+  <script src="../../../../js/docs.js"></script>
+</body>
+</html>

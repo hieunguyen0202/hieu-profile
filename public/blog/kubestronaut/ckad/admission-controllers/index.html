@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admission Controllers — Hieu Nguyen</title>
+  <meta name="description" content="Admission Controllers — Kubestronaut roadmap.">
+  <link rel="icon" href="../../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../../">i'm<span>.hieu</span></a>
+    <nav class="docs-series">
+      <a href="../../../../blog/web-security/">Web Security</a>
+      <a class="active" href="../../">Kubestronaut roadmap</a>
+    </nav>
+    <nav class="docs-cert-tabs"><a href="../../cka/" class="">CKA</a><a href="../../ckad/" class="active">CKAD</a><a href="../../cks/" class="">CKS</a></nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-nav="kubestronaut" data-cert="ckad" data-docs-root="../" data-active="admission-controllers">
+      <div class="docs-nav-label">CKAD</div>
+      <ul class="docs-nav" id="docsNav"></ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../../">Home</a>
+        <span>›</span>
+        <a href="../../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../../">Kubestronaut</a>
+        <span>›</span>
+        <a href="../">CKAD</a>
+        <span>›</span>
+        <span>Admission Controllers</span>
+      </div>
+      <div id="top"></div>
+<header><h1>Admission Controllers</h1></header><p>Before creating a resource in Kubernetes, we go through a validation flow:</p>
+<ol>
+<li>User authentication</li>
+<li>Authorization to check if what they&#x27;re requesting they can do</li>
+<li>Admission</li>
+</ol>
+<p>The Admission Controller&#x27;s function is to perform checks, carry out operations, or make changes before creating the resource.</p>
+<p>We can&#x27;t create a resource in a namespace that doesn&#x27;t exist, so the request needs to be rejected.</p>
+<p>Some default parameters need to be filled if the user hasn&#x27;t provided them:</p>
+<ul>
+<li>If quotas exist, they must be checked</li>
+<li>Existing rate limits must be applied or checked</li>
+<li>Check the specified scheduler or define the default if not specified</li>
+<li>Etc.</li>
+</ul>
+<p><img decoding="async" loading="lazy" alt="admissioncontrollers" src="https://devsecops.puziol.com.br/en/assets/images/admissioncontroller-494b93c212631b32889ce2bb0d27c2c3.png" width="1827" height="653" class="img_ev3q"></p>
+<p>Admission controllers can also reject a request if it&#x27;s not possible.</p>
+<p>We can enable an admission controller that automatically creates the namespace if it doesn&#x27;t exist.</p>
+<p>To verify the admission controllers activated in the kube-api-server, we can check this way:</p>
+<pre><code class="language-bash">❯ kubectl exec -n kube-system kube-apiserver-kind-cluster-control-plane -- kube-apiserver -h | grep &quot;enable-admission-plugins strings&quot;
+      --enable-admission-plugins strings       admission plugins that should be enabled in addition to default enabled ones (NamespaceLifecycle, LimitRanger, ServiceAccount, TaintNodesByCondition, PodSecurity, Priority, DefaultTolerationSeconds, DefaultStorageClass, StorageObjectInUseProtection, PersistentVolumeClaimResize, RuntimeClass, CertificateApproval, CertificateSigning, ClusterTrustBundleAttest, CertificateSubjectRestriction, DefaultIngressClass, MutatingAdmissionWebhook, ValidatingAdmissionPolicy, ValidatingAdmissionWebhook, ResourceQuota). Comma-delimited list of admission plugins: AlwaysAdmit, AlwaysDeny, AlwaysPullImages, CertificateApproval, CertificateSigning, CertificateSubjectRestriction, ClusterTrustBundleAttest, DefaultIngressClass, DefaultStorageClass, DefaultTolerationSeconds, DenyServiceExternalIPs, EventRateLimit, ExtendedResourceToleration, ImagePolicyWebhook, LimitPodHardAntiAffinityTopology, LimitRanger, MutatingAdmissionWebhook, NamespaceAutoProvision, NamespaceExists, NamespaceLifecycle, NodeRestriction, OwnerReferencesPermissionEnforcement, PersistentVolumeClaimResize, PersistentVolumeLabel, PodNodeSelector, PodSecurity, PodTolerationRestriction, Priority, ResourceQuota, RuntimeClass, SecurityContextDeny, ServiceAccount, StorageObjectInUseProtection, TaintNodesByCondition, ValidatingAdmissionPolicy, ValidatingAdmissionWebhook. The order of plugins in this flag does not matter.
+</code></pre>
+<p>Above we show admission controllers enabled by default.</p>
+<p>To enable an admission controller, we can pass it via parameters to the kube-api-server whether it&#x27;s running as a service in the operating system or as a static pod.</p>
+<pre><code class="language-bash"> k get pods -n kube-system kube-apiserver-kind-cluster-control-plane -o yaml | grep admission
+    - --enable-admission-plugins=NodeRestriction,NamespaceLifecycle
+    - --disable-admission-plugins=DefaultStorageClass
+</code></pre>
+<p>Above we&#x27;re enabling NamespaceLifecycle so that if the namespace doesn&#x27;t exist, it will be automatically created, and disabling the default storageclass.</p>
+<h2 id="mutating-admission-controllers-and-validating-admission-controllers">Mutating Admission Controllers and Validating Admission Controllers</h2>
+<p>This type of admission controller makes increments to manifests when something isn&#x27;t specified.</p>
+<p>When we declare a PVC for example and don&#x27;t specify the storageclass, and then analyze the yaml that was deployed with get -o yaml, we can observe that we&#x27;ll have <code>storageClass: default</code> present. Another example could be the scheduler name in pods. We don&#x27;t usually pass it, but if you observe the deployed yaml, it will be there.</p>
+<p>There are plugins that only do validation. When a request arrives with a manifest, a sequence of mutating-type admission controllers do their work and then the validation-type plugins. Some plugins can do both jobs.</p>
+<p><img decoding="async" loading="lazy" alt="admisionorder" src="https://devsecops.puziol.com.br/en/assets/images/admisionorder-6b13cb17194501d7cb926f8177491cc1.png" width="479" height="517" class="img_ev3q"></p>
+<p>We can also create our own admission controllers. It&#x27;s necessary to implement an application with our own codes and logic to make the change, inclusion, or validation.</p>
+<p><img decoding="async" loading="lazy" alt="alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-8-4d006699e12603e473438b853769f128.png" width="1053" height="628" class="img_ev3q"></p>
+<p>Once it&#x27;s passed through all admission controllers, a call will be made to the admission webhook server we developed, passing a JSON object that should be reviewed.</p>
+<p>This object contains all the details about the request, the user who made the request, the type of operation the user is trying to perform, which object, and details about the object itself when receiving the request.</p>
+<p>The admission webhook server responds with an admission review object with the result of whether the request is allowed or not.</p>
+<p>It can be developed in any language as long as it receives the JSON and responds with the specific JSON. It&#x27;s also necessary to use TLS.</p>
+<p>Kubernetes itself can be used to run this application using deployment and service to reach the service.</p>
+<p>An object is created in Kubernetes that will specify when this admission webhook should be called based on rules and how to reach the service.</p>
+<p><img decoding="async" loading="lazy" alt="alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-7-918db08a389c6d6367d76c7c6c9ab8e1.png" width="1103" height="602" class="img_ev3q"></p>
+      <div class="docs-pager">
+        <a href="../../../../#blogs">All blogs</a>
+        <a href="../">Back to CKAD</a>
+      </div>
+    </article>
+    <aside class="docs-toc">
+      <div class="docs-toc-title">On this page</div>
+      <nav>
+        <a href="#mutating-admission-controllers-and-validating-admission-controllers">Mutating Admission Controllers and Validating Admission Controllers</a>
+      </nav>
+    </aside>
+  </div>
+  <script src="../../../../js/docs.js"></script>
+</body>
+</html>

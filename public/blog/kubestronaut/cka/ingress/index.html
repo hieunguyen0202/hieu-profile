@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ingress — Hieu Nguyen</title>
+  <meta name="description" content="Ingress — Kubestronaut roadmap.">
+  <link rel="icon" href="../../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../../">i'm<span>.hieu</span></a>
+    <nav class="docs-series">
+      <a href="../../../../blog/web-security/">Web Security</a>
+      <a class="active" href="../../">Kubestronaut roadmap</a>
+    </nav>
+    <nav class="docs-cert-tabs"><a href="../../cka/" class="active">CKA</a><a href="../../ckad/" class="">CKAD</a><a href="../../cks/" class="">CKS</a></nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-nav="kubestronaut" data-cert="cka" data-docs-root="../" data-active="ingress">
+      <div class="docs-nav-label">CKA</div>
+      <ul class="docs-nav" id="docsNav"></ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../../">Home</a>
+        <span>›</span>
+        <a href="../../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../../">Kubestronaut</a>
+        <span>›</span>
+        <a href="../">CKA</a>
+        <span>›</span>
+        <span>Ingress</span>
+      </div>
+      <div id="top"></div>
+<header><h1>Ingress</h1></header><p>What&#x27;s the difference between service and ingress?</p>
+<p>Let&#x27;s imagine the following scenario.</p>
+<p>We have an app deployed in the cluster. To access its database it points to the database service which is of type ClusterIP that is only accessible within the cluster.</p>
+<p>For the application to be accessible outside the cluster, we need to create a service of type NodePort. A high port between 30000 and 32767 was chosen. Every time a node receives a request on this port, it will forward to the app service.</p>
+<blockquote>
+<p>A NodePort type service creates another ClusterIP type service.</p>
+</blockquote>
+<p>If we remember that a service is rules, then it creates two rules, one for all nodes on the port that must point to the normal service which is of type ClusterIP.</p>
+<p>To access the application, we need to type the IP of any of the Kubernetes nodes and the port. It could be the IP of any node.</p>
+<p>If traffic increases, we can increase the number of pod replicas and the service will take care of dividing the traffic between the pods.</p>
+<p>But we don&#x27;t want the user to type the address using the IP and port of our nodes. Since we can only use high ports in NodePort, what could we do to have something like <code>http://app.com</code>?</p>
+<p>We could create a proxy. A server that listens to that address on port 80 that the user doesn&#x27;t need to type and forwards to app.com:30080</p>
+<p><img decoding="async" loading="lazy" alt="nodeport" src="https://devsecops.puziol.com.br/en/assets/images/nodeport-ea9f9848d059d259ebfbf65d06da9abf.svg" width="950" height="573" class="img_ev3q"></p>
+<p>But this scenario is when you have the cluster hosted in your datacenter.</p>
+<p>In the case of a cluster hosted in a cloud for example, we could create the service that is of type NodePort as LoadBalancer.</p>
+<p>When we do this in a cloud, automatically the cloud services create a load balancer that will be used to route all traffic to your cluster on the nodeport you defined.</p>
+<p>If you create another application and again define a service of type LoadBalancer, another load balancer will be created in the cloud pointing to a new nodeport. And in the end you&#x27;ll pay a lot.</p>
+<p>To solve this scenario we could have a single application inside our cluster that acts as a reverse proxy. It analyzes the URL and forwards to the correct service. This way we would only have one load balancer in the cloud.</p>
+<p>Instead of manually configuring this application, ingress is an object that configures this for us as a Kubernetes object.</p>
+<p>It&#x27;s necessary to deploy a solution to be the reverse proxy. We can use several, but some are here:</p>
+<ul>
+<li>Nginx (It&#x27;s the most popular)</li>
+<li>Istio</li>
+<li>Traefik</li>
+<li>HAProxy</li>
+</ul>
+<p>These controllers are programmed to monitor Kubernetes for ingress objects to configure their entries.</p>
+<p>If you don&#x27;t have one of these applications in your cluster, an ingress object won&#x27;t work.</p>
+<p>What we&#x27;re doing is bringing a proxy into Kubernetes and creating objects that configure it easily. Having an entry point that can be filtered and dispatched to which service should respond.</p>
+<p>Let&#x27;s focus on the nginx ingress controller which is the most famous. How to deploy nginx?</p>
+<p>Normally we would use helm for this, but let&#x27;s go the traditional way.</p>
+<p>The first thing we need is to have a configmap that will have all the parameters to avoid passing all args in the deployment. It&#x27;s also easier to make modifications.</p>
+<p>A summary of what we would need:</p>
+<p><img decoding="async" loading="lazy" alt="alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-34-54ec9458270056807d76d6f31b0243bc.png" width="1819" height="886" class="img_ev3q"></p>
+<p>Once configured we need the <a href="https://kubernetes.io/docs/concepts/services-networking/ingress/" target="_blank" rel="noopener noreferrer">ingress</a> objects.</p>
+<p>The object comes down to something very simple:</p>
+<pre><code class="language-bash">apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: my-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  # The name of the ingress class we&#x27;ll use
+  ingressClassName: nginx
+  # The list of rules we&#x27;ll pass
+  rules: []
+</code></pre>
+<pre><code class="language-yaml">apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-app
+spec:
+  rules:
+  # In this case we&#x27;re also analyzing the domain.
+  - host: &quot;app.mysite.com&quot;
+    http:
+      paths:
+      - pathType: Prefix
+        path: &quot;/&quot;
+        backend:
+          service:
+            name: service-app1
+            port:
+              number: 8080 # Service port that will redirect to the app port.
+
+  # here we&#x27;re analyzing only the URL path passed without caring about the domain.
+  - http:
+      paths:
+      - pathType: Prefix
+        path: &quot;/&quot;
+        backend:
+          service:
+            name: service-app2
+            port:
+              number: 8080 # Service port that will redirect to the app port.
+
+    # Here would be an idea that if the first rule is not resolved, we move to the second. Great for putting something to respond if the URL doesn&#x27;t exist like a 404 error.
+  - host: &quot;*.foo.com&quot;
+    http:
+      paths:
+      - pathType: Prefix
+        path: &quot;/&quot;
+        backend:
+          service:
+            name: service-404
+            port:
+              number: 8989
+</code></pre>
+<p>The order of the rule matters.</p>
+<p>We could also divide this into several separate ingresses, which would be best practice.</p>
+      <div class="docs-pager">
+        <a href="../../../../#blogs">All blogs</a>
+        <a href="../">Back to CKA</a>
+      </div>
+    </article>
+    <aside class="docs-toc">
+      <div class="docs-toc-title">On this page</div>
+      <nav>
+        <a href="#top">On this page</a>
+      </nav>
+    </aside>
+  </div>
+  <script src="../../../../js/docs.js"></script>
+</body>
+</html>

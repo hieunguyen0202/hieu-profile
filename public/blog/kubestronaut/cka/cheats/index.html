@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tips — Hieu Nguyen</title>
+  <meta name="description" content="Tips — Kubestronaut roadmap.">
+  <link rel="icon" href="../../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../../">i'm<span>.hieu</span></a>
+    <nav class="docs-series">
+      <a href="../../../../blog/web-security/">Web Security</a>
+      <a class="active" href="../../">Kubestronaut roadmap</a>
+    </nav>
+    <nav class="docs-cert-tabs"><a href="../../cka/" class="active">CKA</a><a href="../../ckad/" class="">CKAD</a><a href="../../cks/" class="">CKS</a></nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-nav="kubestronaut" data-cert="cka" data-docs-root="../" data-active="cheats">
+      <div class="docs-nav-label">CKA</div>
+      <ul class="docs-nav" id="docsNav"></ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../../">Home</a>
+        <span>›</span>
+        <a href="../../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../../">Kubestronaut</a>
+        <span>›</span>
+        <a href="../">CKA</a>
+        <span>›</span>
+        <span>Tips</span>
+      </div>
+      <div id="top"></div>
+<header><h1>Tips</h1></header><p>These are some tips that can help a lot during the exam.</p>
+<h2 id="completion">Completion</h2>
+<p>Auto-complete for commands is good to set up if it&#x27;s not working.</p>
+<pre><code class="language-bash">sudo apt-get install bash-completion # This is already installed, but if setting up a study environment you will need it.
+source &lt;(kubectl completion bash) # autocomplete configuration in the current shell bash, the bash-completion package must be installed first.
+echo &quot;source &lt;(kubectl completion bash)&quot; &gt;&gt; ~/.bashrc # to add autocomplete permanently to your bash shell.
+echo &quot;source &lt;(kubectl completion bash)&quot; &gt;&gt; ~/.zshrc # to add autocomplete permanently to your zsh shell
+echo &quot;source &lt;(etcdctl completion bash)&quot; &gt;&gt; ~/.bashrc # to add autocomplete permanently to your bash shell.
+echo &quot;source &lt;(etcdctl completion bash)&quot; &gt;&gt; ~/.zshrc  # to add autocomplete permanently to your bash shell.
+</code></pre>
+<h2 id="aliases">Aliases</h2>
+<pre><code class="language-bash">echo &quot;alias k=kubectl&quot; &gt;&gt; ~/.bashrc
+echo &quot;alias k=kubectl&quot; &gt;&gt; ~/.zshrc
+</code></pre>
+<h2 id="exports">Exports</h2>
+<p>We can export some values that help save time.</p>
+<pre><code class="language-bash">echo &quot;export dr=&#x27;--dry-run=client -o yaml&#x27;&quot;  &gt;&gt; ~/.bashrc
+echo &quot;export dr=&#x27;--dry-run=client -o yaml&#x27;&quot;  &gt;&gt; ~/.zshrc
+echo &quot;export now=&#x27;--grace-period=0 --force&#x27;&quot; &gt;&gt; ~/.bashrc
+echo &quot;export now=&#x27;--grace-period=0 --force&#x27;&quot; &gt;&gt; ~/.zshrc
+</code></pre>
+<p>For example, the command <strong>kubectl run mypod --image nginx --dry-run=client -o yaml</strong> is shortened to <strong>kubectl run mypod --image nginx $dr</strong> and can be reduced even further with <strong>k run mypod --image nginx $dr</strong>.</p>
+<h2 id="use-resource-name-abbreviations">Use Resource Name Abbreviations</h2>
+<ul>
+<li><code>k get ns</code> = kubectl get namespaces</li>
+<li><code>k get sa</code> = kubectl get serviceaccounts</li>
+<li><code>k get svc</code> = kubectl get services</li>
+<li><code>k get pv,pvc</code> = kubectl get persistentvolumes,persistentvolumeclaim</li>
+</ul>
+<h2 id="what-to-do-when-starting-the-exam">What to do when starting the exam?</h2>
+<p>Open Firefox and go to <a href="https://kubernetes.io/docs/home/" target="_blank" rel="noopener noreferrer">https://kubernetes.io/docs/home/</a>. Bookmark it so you don&#x27;t have to type it again.</p>
+<p>Open the terminal and type all the commands above to ensure that if you close the terminal again, it comes back with everything you need already configured.</p>
+<blockquote>
+<blockquote>
+<p>Keep more than one terminal tab open. Use the second tab for ssh commands that you will likely have during the exam.</p>
+</blockquote>
+</blockquote>
+<p>The answers to questions 1, 2, 3... are in /opt/course/1, /opt/course/2, /opt/course/3...</p>
+<p>So start by putting the terminal in the right place even before reading the question.</p>
+<pre><code class="language-bash">cd /opt/course/1/
+</code></pre>
+<h2 id="avoid-silly-mistakes">Avoid Silly Mistakes</h2>
+<ul>
+<li>In the header of all questions there will be a command to switch to the correct cluster. Even if it&#x27;s the same as the previous cluster, copy, paste and execute to be sure</li>
+<li>Whenever a resource name is given, whether namespace, pod, deploy, image, commands or anything else that can be copied and pasted, do copy/paste to avoid typing errors</li>
+<li>Always observe the namespace being requested. For each command think, am I in the correct namespace? Another way is to always switch to the specific namespace for the question using <code>kubectl config set-context --current --namespace NAMESPACE-NAME</code></li>
+<li>Check the results of what you applied to the cluster before moving to another question</li>
+</ul>
+<h2 id="monitor-time">Monitor Time</h2>
+<p>If the exam has between 15 and 20 questions in 120 minutes, the average time per question is between 6 and 9 minutes. Try to study while tracking this average time per question.</p>
+<p>On low-weight questions you should be able to save time for higher-weight questions. Think about it.</p>
+<h2 id="linux-commands">Linux Commands</h2>
+<ul>
+<li>
+<p><code>wc -l</code> : to count lines. Remember to remove the headers from Kubernetes output.</p>
+<pre><code class="language-bash">kubectl get pods -n kube-system --no-headers | wc -l
+    12
+</code></pre>
+</li>
+<li>
+<p><code>awk &#x27;{print $1}</code> : where $1 is the column to print from the output usually from a grep you did.</p>
+<pre><code class="language-bash">kubectl get pods --no-headers
+mydeploy-569bfcf767-ssxl6   1/1   Running   0     11m
+
+kubectl get pods --no-headers | awk &#x27;{print $1}&#x27;
+mydeploy-569bfcf767-ssxl6
+</code></pre>
+</li>
+<li>
+<p><code>tr &quot; &quot; &quot;\n&quot;</code> : replacing spaces with a new line.</p>
+</li>
+<li>
+<p><code>curl -s ip:port</code> : in this example we are trying to connect using ip:port via curl. It&#x27;s good to have this command ready to test communication between pods if necessary.</p>
+<pre><code class="language-bash">echo &quot;this is a test&quot; | tr &quot; &quot; &quot;\n&quot;
+this
+is
+a
+test
+</code></pre>
+</li>
+<li>
+<p><code>ssh</code> :Execute a command using ssh on a machine without needing to be inside it to get the output.</p>
+<pre><code class="language-bash">ssh &lt;your-user&gt;@&lt;ip-address&gt; &quot;&lt;command&gt;&quot; &amp;&gt; output.txt
+</code></pre>
+</li>
+</ul>
+<h2 id="save-time-by-finding-documentation-quickly">Save time by finding documentation quickly</h2>
+<p>Keywords:</p>
+<ul>
+<li>persistent volume</li>
+<li>toleration</li>
+<li>nodeSelector</li>
+<li>affinity</li>
+<li>fieldRef</li>
+<li>Upgrading kubeadm clusters</li>
+<li>kubelet</li>
+<li>network-policies</li>
+<li>etcd</li>
+<li>liveness and readiness probe</li>
+<li>configmap</li>
+<li>securitycontext</li>
+<li>share storage</li>
+</ul>
+<h2 id="commands-that-should-be-memorized">Commands that should be memorized</h2>
+<pre><code class="language-bash">kubectl config get-contexts -o name
+kubectl config use-context kind-kind-cluster-ia
+kubectl config set-context --current --namespace kube-system
+kubectl config current-context
+cat ~/.kube/config | grep current-context | awk &#x27;{print $2}&#x27; # Another method
+
+# --dry-run=client -o yaml &gt; manifest.yaml - This could be used to redirect the output of the commands below as a simulation
+
+kubectl run mypod --image nginx --labels=id=1234,env=prod
+kubectl create deploy --image nginx --replicas 2
+
+kubectl get pods --sort-by metadata.name
+kubectl get pods --sort-by metadata.name -o custom-columns=NAME:.metadata.name
+kubectl get pods --sort-by metadata.name -o custom-columns=NAME:.metadata.name,NODE:.spec.nodeName
+
+# Filter pods in all namespaces that have the passed label and field as well
+kubectl get pods --all-namespaces --selector k8s-app=kube-dns --field-selector=spec.nodeName=kind-cluster-ia-control-plane -o wide
+NAMESPACE     NAME                       READY   STATUS    RESTARTS   AGE   IP           NODE                            NOMINATED NODE   READINESS GATES
+kube-system   coredns-76f75df574-82xg7   1/1     Running   0          23h   10.244.0.3   kind-cluster-ia-control-plane   &lt;none&gt;           &lt;none&gt;
+kube-system   coredns-76f75df574-p5jzh   1/1     Running   0          23h   10.244.0.2   kind-cluster-ia-control-plane   &lt;none&gt;           &lt;none&gt;
+
+kubectl auth can-i
+</code></pre>
+<h2 id="what-should-be-at-your-fingertips">What should be at your fingertips</h2>
+<h3 id="storage">Storage</h3>
+<ul>
+<li>For pv and pvc we need to understand hostPath well since it&#x27;s unlikely they&#x27;ll have something different on the exam</li>
+<li>For pods understand emptyDir well for communication between pods</li>
+</ul>
+<h3 id="apis">APIs</h3>
+<p>kubectl api-resources  --namespaced=true -o name</p>
+<p>If a cluster update question comes up, leave it for last.</p>
+      <div class="docs-pager">
+        <a href="../../../../#blogs">All blogs</a>
+        <a href="../">Back to CKA</a>
+      </div>
+    </article>
+    <aside class="docs-toc">
+      <div class="docs-toc-title">On this page</div>
+      <nav>
+        <a href="#completion">Completion</a>
+        <a href="#aliases">Aliases</a>
+        <a href="#exports">Exports</a>
+        <a href="#use-resource-name-abbreviations">Use Resource Name Abbreviations</a>
+        <a href="#what-to-do-when-starting-the-exam">What to do when starting the exam?</a>
+        <a href="#avoid-silly-mistakes">Avoid Silly Mistakes</a>
+        <a href="#monitor-time">Monitor Time</a>
+        <a href="#linux-commands">Linux Commands</a>
+        <a href="#save-time-by-finding-documentation-quickly">Save time by finding documentation quickly</a>
+        <a href="#commands-that-should-be-memorized">Commands that should be memorized</a>
+        <a href="#what-should-be-at-your-fingertips">What should be at your fingertips</a>
+        <a class="depth-3" href="#storage">Storage</a>
+        <a class="depth-3" href="#apis">APIs</a>
+      </nav>
+    </aside>
+  </div>
+  <script src="../../../../js/docs.js"></script>
+</body>
+</html>

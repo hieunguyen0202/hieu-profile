@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Node Selector and Node Affinity — Hieu Nguyen</title>
+  <meta name="description" content="Node Selector and Node Affinity — Kubestronaut roadmap.">
+  <link rel="icon" href="../../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../../">i'm<span>.hieu</span></a>
+    <nav class="docs-series">
+      <a href="../../../../blog/web-security/">Web Security</a>
+      <a class="active" href="../../">Kubestronaut roadmap</a>
+    </nav>
+    <nav class="docs-cert-tabs"><a href="../../cka/" class="active">CKA</a><a href="../../ckad/" class="">CKAD</a><a href="../../cks/" class="">CKS</a></nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-nav="kubestronaut" data-cert="cka" data-docs-root="../" data-active="node-selector-affinity">
+      <div class="docs-nav-label">CKA</div>
+      <ul class="docs-nav" id="docsNav"></ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../../">Home</a>
+        <span>›</span>
+        <a href="../../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../../">Kubestronaut</a>
+        <span>›</span>
+        <a href="../">CKA</a>
+        <span>›</span>
+        <span>Node Selector and Node Affinity</span>
+      </div>
+      <div id="top"></div>
+<header><h1>Node Selector and Node Affinity</h1></header><h2 id="node-selector">Node Selector</h2>
+<p>The nodeSelector uses Labels to specify which Nodes we want to target. We can also group Nodes using Labels and define Pods to be deployed only on Nodes that have those corresponding Labels.</p>
+<p><img decoding="async" loading="lazy" alt="Alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-7-d440c05f1408dd191781c20561dfbcb7.png" width="1052" height="376" class="img_ev3q"></p>
+<p>To add a Label to a Node.</p>
+<pre><code class="language-bash">kubectl label nodes k3d-k3d-cluster-agent-1 size=large
+node/k3d-k3d-cluster-agent-1 labeled
+
+kubectl describe node k3d-k3d-cluster-agent-1
+Name:               k3d-k3d-cluster-agent-1
+Roles:              &lt;none&gt;
+Labels:             beta.kubernetes.io/arch=amd64
+                    beta.kubernetes.io/instance-type=k3s
+                    beta.kubernetes.io/os=linux
+                    kubernetes.io/arch=amd64
+                    kubernetes.io/hostname=k3d-k3d-cluster-agent-1
+                    kubernetes.io/os=linux
+                    node.kubernetes.io/instance-type=k3s
+                    size=large
+
+kubectl get node k3d-k3d-cluster-agent-1 --show-labels
+NAME                      STATUS   ROLES    AGE   VERSION        LABELS
+k3d-k3d-cluster-agent-1   Ready    &lt;none&gt;   70d   v1.27.4+k3s1   beta.kubernetes.io/arch=amd64,beta.kubernetes.io/instance-type=k3s,beta.kubernetes.io/os=linux,kubernetes.io/arch=amd64,kubernetes.io/hostname=k3d-k3d-cluster-agent-1,kubernetes.io/os=linux,node.kubernetes.io/instance-type=k3s,size=large
+
+kubectl label nodes k3d-k3d-cluster-agent-1 size-
+node/k3d-k3d-cluster-agent-1 unlabeled
+</code></pre>
+<p>However, nodeSelector isn&#x27;t always sufficient to solve our problems when requirements are more complex.</p>
+<h2 id="node-affinity">Node Affinity</h2>
+<p>In this context, we face a limitation of nodeSelector, which cannot handle complexities such as the need to select Nodes of a certain size, like large or medium, but avoid small ones. With nodeSelector, it&#x27;s not possible to create &#x27;one or another&#x27; expressions or even negate a specific condition.</p>
+<blockquote>
+<p>With great power comes great complexity.</p>
+</blockquote>
+<p>This nodeSelector and this affinity do the same thing!</p>
+<p><img decoding="async" loading="lazy" alt="Alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-8-e16d356c9a74072aa670fdc08319ec5e.png" width="969" height="452" class="img_ev3q"></p>
+<p>Every affinity expression comes under the <code>affinity:</code> key</p>
+<p>There are affinities for Nodes and Pods, so we have the possible initials:</p>
+<p>These values are not defined but can be set.</p>
+<pre><code class="language-yaml">apiVersion: v1
+...
+spec:
+  containers:
+  ....
+  affinity:
+    nodeAffinity: null
+    podAffinity: null
+    podAntiAffinity: null
+</code></pre>
+<p>The nodeAffinity will define an affinity for the Pod to be scheduled to a Node.</p>
+<p>The podAffinity and podAntiAffinity define affinity between Pods. For example, we can configure a Pod to be placed where another specific Pod exists (podAffinity) or avoid being placed where Pods of a specific type exist (podAntiAffinity). A practical example would be ensuring that Pods A and B are always on the same Node, not just on the same group of Nodes with the same Label, to minimize network traffic and improve performance.</p>
+<p>Within these affinity types, we can have these expressions:</p>
+<ul>
+<li>
+<p><code>requiredDuringSchedulingIgnoredDuringExecution</code>: Defines MANDATORY rules for the Scheduler. If a Node doesn&#x27;t meet these rules, the Pod won&#x27;t be scheduled on it, but if it&#x27;s already scheduled, it doesn&#x27;t need to be removed from the Node if a Label is removed for example.</p>
+</li>
+<li>
+<p><code>preferredDuringSchedulingIgnoredDuringExecution</code>: Same as the previous rule but after trying as much as possible, if it can&#x27;t and there&#x27;s a way to be scheduled elsewhere, it can go there, as it&#x27;s not mandatory.</p>
+</li>
+<li>
+<p><code>requiredDuringSchedulingRequiredDuringExecution</code>: The difference in not ignoring is that if conditions change, for example if a Label is removed, it will also remove the Pod. <strong>IT&#x27;S NOT POSSIBLE TO HAVE THIS EXPRESSION TOGETHER WITH OTHERS</strong></p>
+<ul>
+<li>
+<blockquote>
+<p>STILL DOESN&#x27;T WORK WITH nodeAffinity</p>
+</blockquote>
+</li>
+</ul>
+</li>
+<li>
+<p><code>preferredDuringSchedulingRequiredDuringExecution</code>: This expression is also possible. <strong>IT&#x27;S NOT POSSIBLE TO HAVE THIS EXPRESSION TOGETHER WITH OTHERS</strong></p>
+<ul>
+<li>
+<blockquote>
+<p>STILL DOESN&#x27;T WORK WITH nodeAffinity</p>
+</blockquote>
+</li>
+</ul>
+</li>
+</ul>
+<p>This would be possible.</p>
+<pre><code class="language-yaml">apiVersion: v1
+...
+spec:
+  containers:
+  ....
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        block
+      preferredDuringSchedulingIgnoredDuringExecution:
+        block
+    podAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        block
+      preferredDuringSchedulingIgnoredDuringExecution:
+        block
+    podAntiAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        block
+      preferredDuringSchedulingIgnoredDuringExecution:
+        block
+</code></pre>
+<p>This would be possible, but doesn&#x27;t work yet.</p>
+<pre><code class="language-yaml">apiVersion: v1
+...
+spec:
+  containers:
+  ....
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingRequiredDuringExecution: # In particular, this expression can&#x27;t be used yet, it&#x27;s an issue under development in Kubernetes
+        block
+    podAffinity:
+      requiredDuringSchedulingRequiredDuringExecution:
+        block
+    podAntiAffinity:
+      requiredDuringSchedulingRequiredDuringExecution:
+        block
+</code></pre>
+<p>This would still be possible</p>
+<pre><code class="language-yaml">apiVersion: v1
+...
+spec:
+  containers:
+  ....
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingRequiredDuringExecution: # In particular, this expression can&#x27;t be used yet, it&#x27;s an issue under development in Kubernetes
+        block
+    podAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        block
+      preferredDuringSchedulingIgnoredDuringExecution:
+        block
+    podAntiAffinity:
+      requiredDuringSchedulingRequiredDuringExecution:
+        block
+</code></pre>
+<p>But this is not possible</p>
+<pre><code class="language-yaml">apiVersion: v1
+...
+spec:
+  containers:
+  ....
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingRequiredDuringExecution: # In particular, this expression can&#x27;t be used yet, it&#x27;s an issue under development in Kubernetes
+        block
+    podAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        block
+      requiredDuringSchedulingRequiredDuringExecution: # RequiredDuringExecution doesn&#x27;t combine with anyone
+        block
+    podAntiAffinity:
+      requiredDuringSchedulingRequiredDuringExecution:
+        block
+</code></pre>
+<p>Now let&#x27;s focus on the Block:</p>
+<p>The block can be <code>nodeSelectorTerms if using nodeAffinity</code> or <code>podSelectorTerms if using podAffinity or podAntiAffinity</code></p>
+<blockquote>
+<p>nodeSelectorTerms and podSelectorTerms enable the possible <code>OR</code>. Either one expression, or another expression, or another, etc. Could matchExpressions be placed directly in the block without being inside the terms blocks? Yes it could. If you keep it, it doesn&#x27;t hurt and it&#x27;s BETTER.</p>
+</blockquote>
+<p>So let&#x27;s go to the block.</p>
+<pre><code class="language-yaml">apiVersion: v1
+kind: Pod
+...
+spec:
+  containers:
+  ....
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingRequiredDuringExecution:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: key1
+            operator: In
+            values:
+            - value1
+            - value2
+        # OR Rule 2
+        - matchFields:
+          - key: metadata.name
+            operator: In
+            values:
+            - node-1
+</code></pre>
+<p>Now to better understand what I said, the two affinities below are the same thing.</p>
+<pre><code class="language-yaml">  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingRequiredDuringExecution:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: key1
+            operator: In
+            values:
+            - value1
+            - value2
+
+# BUT IN THIS AFFINITY YOU LOST THE OR OPTION SO ALWAYS USE THE ONE ABOVE
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingRequiredDuringExecution:
+        matchExpressions:
+        - key: key1
+          operator: In
+          values:
+          - value1
+          - value2
+</code></pre>
+<p>Now let&#x27;s understand the possible operators we can use.</p>
+<ul>
+<li><code>In</code>: Will compare if the key values are IDENTICAL</li>
+<li><code>NotIn</code>: Will compare if the key values are DIFFERENT</li>
+<li><code>Exists</code>: Only wants to know if the key exists regardless of value</li>
+<li><code>DoesNotExist</code>: Only wants to know if the key DOESN&#x27;T EXIST regardless of value</li>
+<li><code>Gt</code>: Greater than, like the In operator but will compare numbers even if they&#x27;re strings</li>
+<li><code>Lt</code>: Less than</li>
+</ul>
+<p>In the case of Exists and DoesNotExist, an example</p>
+<pre><code class="language-yaml">  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingRequiredDuringExecution:
+        matchExpressions:
+        - key: key1
+          operator: Exists
+</code></pre>
+<hr>
+<p>If both are applied to a Pod <code>nodeSelector takes precedence over affinity</code>.</p>
+<pre><code class="language-yaml">apiVersion: v1
+kind: Pod
+metadata:
+  name: example-pod
+spec:
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: key1
+            operator: In
+            values:
+            - value1
+            - value2
+  nodeSelector:
+    key2: value3
+  containers:
+  - name: my-container
+    image: my-image
+</code></pre>
+<p>Moral of the story... If you master affinity, you don&#x27;t need nodeSelector, but it&#x27;s good to know.</p>
+      <div class="docs-pager">
+        <a href="../../../../#blogs">All blogs</a>
+        <a href="../">Back to CKA</a>
+      </div>
+    </article>
+    <aside class="docs-toc">
+      <div class="docs-toc-title">On this page</div>
+      <nav>
+        <a href="#node-selector">Node Selector</a>
+        <a href="#node-affinity">Node Affinity</a>
+      </nav>
+    </aside>
+  </div>
+  <script src="../../../../js/docs.js"></script>
+</body>
+</html>

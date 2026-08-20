@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StatefulSet — Hieu Nguyen</title>
+  <meta name="description" content="StatefulSet — Kubestronaut roadmap.">
+  <link rel="icon" href="../../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../../">i'm<span>.hieu</span></a>
+    <nav class="docs-series">
+      <a href="../../../../blog/web-security/">Web Security</a>
+      <a class="active" href="../../">Kubestronaut roadmap</a>
+    </nav>
+    <nav class="docs-cert-tabs"><a href="../../cka/" class="">CKA</a><a href="../../ckad/" class="active">CKAD</a><a href="../../cks/" class="">CKS</a></nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-nav="kubestronaut" data-cert="ckad" data-docs-root="../" data-active="statefulset">
+      <div class="docs-nav-label">CKAD</div>
+      <ul class="docs-nav" id="docsNav"></ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../../">Home</a>
+        <span>›</span>
+        <a href="../../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../../">Kubestronaut</a>
+        <span>›</span>
+        <a href="../">CKAD</a>
+        <span>›</span>
+        <span>StatefulSet</span>
+      </div>
+      <div id="top"></div>
+<header><h1>StatefulSet</h1></header><p>The study for certification also serves to improve knowledge. StatefulSet is not yet covered in the exam, but I believe it will be covered in the future. This is an optional study that I decided to document to consolidate the content.</p>
+<p>Many applications we deploy via Helm use this method. Let&#x27;s understand why.</p>
+<p>We know that:</p>
+<ul>
+<li>We can&#x27;t rely on a pod&#x27;s IP. If a pod dies, another can be created with a completely different IP.</li>
+<li>We can&#x27;t guarantee that a pod created by a deployment will have a specific name, because every time a pod is created it receives a random name. We have a name that starts with the deployment name plus the ReplicaSet number which is random, and then a random number at the end that will define the pod.</li>
+<li>There is no order for replica creation. They are all created in parallel.</li>
+</ul>
+<p>If we need to create an application that despite having 3 replicas, one depends on the other, how would we do it? An example of this is a database.</p>
+<p>We need the first one to be the master and others to be slaves that point to the master.</p>
+<p>The configurations of other replicas depend on the first one which will be our master.</p>
+<p>The slaves synchronize with the master and need to point to it, so the master cannot change its name. If the master stops, it needs to come back with the same name.</p>
+<p>All these problems are solved using StatefulSet.</p>
+<p>In StatefulSet, names are given as pod-0, pod-1, pod-2 in sequence, ensuring there are no random names.</p>
+<p>A replica only starts when the previous one finishes initializing.</p>
+<p>Let&#x27;s observe a MySQL database deployment.</p>
+<p><img decoding="async" loading="lazy" alt="alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-c62f396f49e6982d8bbda418c824920c.png" width="990" height="647" class="img_ev3q"></p>
+<p>First, we need to create the master. Then we need to create the first slave by replicating data from the master. Then we need to create the second slave that points to the master, but to avoid load on the master, we replicate the data from the first slave.</p>
+<p>Many applications we use like Jaeger, Vault, databases, have this type of behavior. That&#x27;s why it&#x27;s worth understanding a bit about StatefulSet. The use is very specific, and used only in some scenarios. The vast majority of applications can work as deployments.</p>
+<p>StatefulSets can scale up, scale down, do rolling updates, rollback, etc., just like deployments. The difference is in the items mentioned earlier that ensure order and fixed names.</p>
+<p>The template for StatefulSet is exactly the same as for deployments with only one difference. You need to specify the <code>serviceName</code>.</p>
+<p>Let&#x27;s create a simple MySQL StatefulSet.</p>
+<pre><code class="language-bash">kubectl create deployment mysql --image mysql --replicas 3 --dry-run=client -o yaml &gt; mysql.yaml
+
+# Let&#x27;s show the edited file
+
+cat mysql.yaml
+apiVersion: apps/v1
+#kind: Deployment
+kind: StatefulSet
+metadata:
+  creationTimestamp: null
+  labels:
+    app: mysql
+  name: mysql
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: mysql
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: mysql
+    spec:
+      containers:
+      - image: mysql
+        name: mysql
+        resources: {}
+  serviceName: mysql-headless
+</code></pre>
+<p>Let&#x27;s apply and observe what happens.</p>
+<pre tabindex="0" class="codeBlockStandalone_MEMb thin-scrollbar language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#F8F8F2;--prism-background-color:#282A36"><code class="codeBlockLines_e6Vv"></code></pre>
+      <div class="docs-pager">
+        <a href="../../../../#blogs">All blogs</a>
+        <a href="../">Back to CKAD</a>
+      </div>
+    </article>
+    <aside class="docs-toc">
+      <div class="docs-toc-title">On this page</div>
+      <nav>
+        <a href="#top">On this page</a>
+      </nav>
+    </aside>
+  </div>
+  <script src="../../../../js/docs.js"></script>
+</body>
+</html>

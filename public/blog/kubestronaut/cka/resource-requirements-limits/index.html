@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Resource Requirements and Limits — Hieu Nguyen</title>
+  <meta name="description" content="Resource Requirements and Limits — Kubestronaut roadmap.">
+  <link rel="icon" href="../../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../../">i'm<span>.hieu</span></a>
+    <nav class="docs-series">
+      <a href="../../../../blog/web-security/">Web Security</a>
+      <a class="active" href="../../">Kubestronaut roadmap</a>
+    </nav>
+    <nav class="docs-cert-tabs"><a href="../../cka/" class="active">CKA</a><a href="../../ckad/" class="">CKAD</a><a href="../../cks/" class="">CKS</a></nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-nav="kubestronaut" data-cert="cka" data-docs-root="../" data-active="resource-requirements-limits">
+      <div class="docs-nav-label">CKA</div>
+      <ul class="docs-nav" id="docsNav"></ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../../">Home</a>
+        <span>›</span>
+        <a href="../../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../../">Kubestronaut</a>
+        <span>›</span>
+        <a href="../">CKA</a>
+        <span>›</span>
+        <span>Resource Requirements and Limits</span>
+      </div>
+      <div id="top"></div>
+<header><h1>Resource Requirements and Limits</h1></header><p>Pods always consume physical resources like memory and CPU from the Nodes they&#x27;re running on. The Scheduler cannot direct a Pod to a Node that doesn&#x27;t have sufficient resources to run it. However, more than one Node may have sufficient resources to run a Pod, and it&#x27;s up to the Scheduler to decide where it goes.</p>
+<p>To filter which possible Nodes, first the following is taken into consideration:</p>
+<ol>
+<li>
+<ul>
+<li>taints and tolerations</li>
+</ul>
+</li>
+<li>
+<ul>
+<li>nodeSelector</li>
+</ul>
+</li>
+<li>
+<ul>
+<li>Affinity</li>
+</ul>
+</li>
+<li>
+<ul>
+<li>resources</li>
+</ul>
+</li>
+</ol>
+<p>The first three will filter the possible Nodes that could receive the Pods. Among the possibilities, the Scheduler will create a score for each of them based on available resources to choose which is best to receive the Pod.</p>
+<p>If no Node has resources to receive the Pod, it will remain with <code>Pending</code> status.</p>
+<p><img decoding="async" loading="lazy" alt="Alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-9-1ca898104264088e9d3bd399ce8ec0b3.png" width="1127" height="535" class="img_ev3q"></p>
+<p>An important observation is that each Container within a Pod can have its resources defined individually. Resources are not assigned to the Pod as a whole, but to each Container that runs inside the Pod. When we add up the resources of all Containers within a Pod, we get the Pod&#x27;s total resources. However, it&#x27;s the Kubernetes Scheduler that performs this resource allocation, considering the needs of each Container.</p>
+<p>In fact, it wouldn&#x27;t make sense to assign resources directly to the Pod, as the Scheduler needs to understand and distribute resources appropriately among the different Containers that make up the Pod.</p>
+<p>By default, a Container has no defined limit, meaning it <code>CAN CONSUME AN ENTIRE NODE</code>.</p>
+<pre><code class="language-yaml">apiVersion: v1
+kind: Pod
+...
+spec:
+  containers:
+  - name: busybox
+    image: busybox
+    resources:
+      ## requests are the guaranteed resources for the container
+      requests:
+        memory: &quot;32Mi&quot;
+        cpu: &quot;100m&quot;
+    ## Limits is how far a container can extend
+      limits:
+        memory: &quot;128Mi&quot;
+        cpu: &quot;500m&quot;
+  - name: nginx
+    image: nginx
+    resources:
+    # If requests is not defined, it will equal limits
+      limits:
+        memory: &quot;128Mi&quot;
+        cpu: &quot;500m&quot;
+</code></pre>
+<p>Understanding the values.</p>
+<p>The smallest value for cpu is 0.1 = 100m (m=milli)
+1 would represent 1 vcpu, meaning one cpu core.</p>
+<p>For memory, we can see the table for knowledge, but what interests us is M (Megabytes) and G (Gigabyte)
+Using G we&#x27;re using the decimal base while Gi uses the binary base.</p>
+<p><img decoding="async" loading="lazy" alt="Alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-10-3759262434fe7677d964ef8edd6d4a60.png" width="468" height="315" class="img_ev3q"></p>
+<p>1.074G would be equal to 1Gi
+1.048M would be equal to 1Mi</p>
+<p>An aspect to consider is that a container doesn&#x27;t constantly operate at its maximum capacity. The demand for resources like memory and CPU can vary over time as the process executed by the container needs more or fewer resources.</p>
+<p>When additional resources are available, the process can take advantage of them to optimize its performance. However, this approach can lead to a situation where other processes on the node, including those from the node&#x27;s own operating system and containers from other pods, end up being harmed due to excessive resource allocation by the container in question.</p>
+<p>To avoid this, we can define limits to curb this growth.</p>
+<blockquote>
+<p>In the case of CPU, the node is able to effectively limit the container&#x27;s consumption to not exceed the necessary amount. However, regarding memory, this limit enforcement is not as effective. If a container tries to exceed the established memory limit, the action is usually to terminate the pod to prevent it from continuing to grow and affecting the performance of other resources, resulting in an &quot;Out of Memory&quot; (OOM) event.</p>
+</blockquote>
+<p>Scenarios:</p>
+<ul>
+<li>Running without requests and without limits is not a best practice and allows suffocation.</li>
+<li>Running with limits without requests would be the same as underutilizing available resources if they exist.</li>
+<li>Running with requests and limits gives you control but we&#x27;ll still underutilize resources if they&#x27;re available.</li>
+<li>Running with requests guarantees the minimum for the pod and allows it to grow. But in this case, if all pods have the request defined, they have a minimum resource guarantee. This is the ideal scenario.</li>
+</ul>
+<blockquote>
+<p>We usually use limits to avoid misuse of infrastructure.</p>
+</blockquote>
+<p><img decoding="async" loading="lazy" alt="Alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-11-90c2ad62237f0e197038b92491bd5ab3.png" width="1067" height="410" class="img_ev3q"></p>
+<p>How to define a default value for all containers of all pods within a namespace?</p>
+<p>A LimitRange provides constraints that can:</p>
+<ul>
+<li>Enforce minimum and maximum compute resource usage per pod or container in a namespace.</li>
+<li>Enforce minimum and maximum storage request per PersistentVolumeClaim in a namespace.</li>
+<li>Enforce a ratio between request and limit for a resource in a namespace.</li>
+<li>Set default request/limits for compute resources in a namespace and automatically inject them into containers at runtime.</li>
+</ul>
+<p><img decoding="async" loading="lazy" alt="Alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-12-2b4868718483081413160c9803ba3f03.png" width="1024" height="509" class="img_ev3q"></p>
+<p>If pods are already running and a LimitRange is created later, only new pods will have these values set automatically.</p>
+<p>If we want to limit an entire namespace&#x27;s resources across the cluster, we would use ResourceQuotas.</p>
+<p><img decoding="async" loading="lazy" alt="Alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-13-124969cb48caf2a9bac65d599e7f23ef.png" width="1179" height="410" class="img_ev3q"></p>
+      <div class="docs-pager">
+        <a href="../../../../#blogs">All blogs</a>
+        <a href="../">Back to CKA</a>
+      </div>
+    </article>
+    <aside class="docs-toc">
+      <div class="docs-toc-title">On this page</div>
+      <nav>
+        <a href="#top">On this page</a>
+      </nav>
+    </aside>
+  </div>
+  <script src="../../../../js/docs.js"></script>
+</body>
+</html>

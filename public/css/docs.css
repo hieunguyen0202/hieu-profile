@@ -228,7 +228,78 @@ body.docs::before {
   background: var(--accent-faint);
 }
 
+.docs-cert-tabs {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-left: 8px;
+}
+
+.docs-cert-tabs a {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+  padding: 3px 8px;
+  border: 1px solid transparent;
+  border-radius: 6px;
+}
+
+.docs-cert-tabs a:hover,
+.docs-cert-tabs a.active {
+  color: var(--accent);
+  border-color: rgba(34, 211, 238, 0.25);
+  background: rgba(34, 211, 238, 0.06);
+}
+
+.docs-shell-single {
+  grid-template-columns: minmax(0, 1fr);
+  max-width: 900px;
+}
+
+.roadmap-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+  margin-top: 28px;
+}
+
+.roadmap-card {
+  display: block;
+  padding: 20px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.02);
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.roadmap-card:hover {
+  border-color: rgba(34, 211, 238, 0.35);
+  background: var(--accent-faint);
+}
+
+.roadmap-card h2 {
+  font-size: 1.25rem;
+  margin-bottom: 8px;
+}
+
+.roadmap-card p {
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.docs-topbar {
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
 .docs-topbar-spacer {
+  flex: 1;
+}
+
   flex: 1;
 }
 

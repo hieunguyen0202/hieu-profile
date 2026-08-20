@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Init Containers and Multi Containers — Hieu Nguyen</title>
+  <meta name="description" content="Init Containers and Multi Containers — Kubestronaut roadmap.">
+  <link rel="icon" href="../../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../../">i'm<span>.hieu</span></a>
+    <nav class="docs-series">
+      <a href="../../../../blog/web-security/">Web Security</a>
+      <a class="active" href="../../">Kubestronaut roadmap</a>
+    </nav>
+    <nav class="docs-cert-tabs"><a href="../../cka/" class="active">CKA</a><a href="../../ckad/" class="">CKAD</a><a href="../../cks/" class="">CKS</a></nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-nav="kubestronaut" data-cert="cka" data-docs-root="../" data-active="init-containers-multi-containers">
+      <div class="docs-nav-label">CKA</div>
+      <ul class="docs-nav" id="docsNav"></ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../../">Home</a>
+        <span>›</span>
+        <a href="../../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../../">Kubestronaut</a>
+        <span>›</span>
+        <a href="../">CKA</a>
+        <span>›</span>
+        <span>Init Containers and Multi Containers</span>
+      </div>
+      <div id="top"></div>
+<header><h1>Init Containers and Multi Containers</h1></header><h2 id="multi-containers">Multi Containers</h2>
+<p>As we know, a pod can have more than one container.</p>
+<p>Containers in a pod share the same network, the same declared volumes, and all things defined in spec.</p>
+<p>They are born together and die together. Containers in a pod are scaled together and the service points to the pod, with each container listening on a specific port of the pod. Thus, a service can point to the ports of both containers.</p>
+<p>As mentioned earlier, a pod should run its main application in one container, but often needs other containers alongside to help with certain things without mixing application functionalities.</p>
+<p>These containers are called sidecars.</p>
+<p>They are commonly used, for example, to send application logs to a specific location, but they have other functionalities that are better defined in the CKAD course.</p>
+<p>These containers are expected to always be alive to keep the pod alive.</p>
+<blockquote>
+<p>If any of the containers fail, the pod will restart.</p>
+</blockquote>
+<h2 id="init-containers">Init Containers</h2>
+<p>Sometimes we only need to run a process that must be completed in a container, such as pulling code or a binary to be used by the main application. After finishing the pull, the container will stop and not stay alive, and the pod will keep restarting.</p>
+<p>In this case, we use init containers.</p>
+<p>Init containers run processes <code>before</code> the containers start and only run once during pod creation. Init containers must complete their task before the containers can start.</p>
+<p>If any init container fails its task, Kubernetes will keep restarting the pod repeatedly until all init containers are successfully started.</p>
+<p>Therefore, init container processes need to terminate instead of having a process that keeps them alive like in standard containers.</p>
+<p>This is commonly used for application bootstrapping.</p>
+<pre><code class="language-yaml">apiVersion: v1
+kind: Pod
+metadata:
+  name: myapp-pod
+  labels:
+    app: myapp
+spec:
+  # This is the application container
+  containers:
+  - name: myapp-container
+    image: alpine
+    command: [&#x27;echo&#x27;, &#x27;The app is running&#x27;, &#x27;&amp;&amp;&#x27;,&#x27;sleep 3600&#x27;]
+  # These are the containers that need to start before the application.
+  initContainers:
+  - name: init-myservice
+    image: busybox
+    command: [&#x27;sleep&#x27;, &quot;30&quot;]
+    # Simulation of a second process
+  - name: init-mydb
+    image: busybox
+    command: [&#x27;sleep&#x27;, &#x27;60&#x27;]
+</code></pre>
+<p>It wouldn&#x27;t make sense to start the application if it depends on another and we need to ensure the service is available, so we use two containers to perform the checks.</p>
+<p>Init containers DO NOT EXECUTE IN PARALLEL, but SEQUENTIALLY. One finishes first before the other starts.</p>
+<p>If we have a sequence of two containers, one with sleep 30 and another with sleep 60, we would first wait 30 seconds and then 60 seconds, totaling 90 seconds.</p>
+<p>Another curiosity is that when pods show 2/2 or 3/3, they represent containers and not init containers. They are not added to the container count.</p>
+      <div class="docs-pager">
+        <a href="../../../../#blogs">All blogs</a>
+        <a href="../">Back to CKA</a>
+      </div>
+    </article>
+    <aside class="docs-toc">
+      <div class="docs-toc-title">On this page</div>
+      <nav>
+        <a href="#multi-containers">Multi Containers</a>
+        <a href="#init-containers">Init Containers</a>
+      </nav>
+    </aside>
+  </div>
+  <script src="../../../../js/docs.js"></script>
+</body>
+</html>

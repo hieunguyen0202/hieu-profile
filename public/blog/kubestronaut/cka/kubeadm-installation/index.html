@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kubeadm Installation — Hieu Nguyen</title>
+  <meta name="description" content="Kubeadm Installation — Kubestronaut roadmap.">
+  <link rel="icon" href="../../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../../">i'm<span>.hieu</span></a>
+    <nav class="docs-series">
+      <a href="../../../../blog/web-security/">Web Security</a>
+      <a class="active" href="../../">Kubestronaut roadmap</a>
+    </nav>
+    <nav class="docs-cert-tabs"><a href="../../cka/" class="active">CKA</a><a href="../../ckad/" class="">CKAD</a><a href="../../cks/" class="">CKS</a></nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-nav="kubestronaut" data-cert="cka" data-docs-root="../" data-active="kubeadm-installation">
+      <div class="docs-nav-label">CKA</div>
+      <ul class="docs-nav" id="docsNav"></ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../../">Home</a>
+        <span>›</span>
+        <a href="../../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../../">Kubestronaut</a>
+        <span>›</span>
+        <a href="../">CKA</a>
+        <span>›</span>
+        <span>Kubeadm Installation</span>
+      </div>
+      <div id="top"></div>
+<header><h1>Kubeadm Installation</h1></header><p>Let&#x27;s perform a cluster installation using kubeadm.</p>
+<p>The kubeadm tool helps us set up a multi-node cluster using Kubernetes best practices.</p>
+<p>Just to recap, the Kubernetes cluster consists of several components, including kube-apiserver, etcd, controllers, etc.</p>
+<p>![alt text](/docs/kubernetes/certifications/cka/Installation Configuration Validation/pics/image.png)</p>
+<p>We&#x27;ve seen some of the requirements around security and certificates to enable communication between all components. Installing all these various components individually on different nodes and modifying all necessary configuration files to ensure all components point to each other and establish certificates so they work is a tedious task.</p>
+<p>The kubeadm tool helps us by taking care of all these tasks.</p>
+<p>First, you need to have several systems or VMs provisioned. So, we&#x27;ll need a couple of nodes to form our Kubernetes cluster. These can be physical or virtual machines. Since this is a lab, we&#x27;ll create virtual machines using VirtualBox and Vagrant.</p>
+<p>With Vagrant, we can create a bootstrap after the machine comes up, placing necessary commands in a script.</p>
+<p>The commands for nodes that will be masters are different from those that will be workers, but kubeadm will also help us with this task.</p>
+<p>All nodes need a running container runtime. Kubeadm will run the controllers as static pods within our cluster.</p>
+<h2 id="procedure-for-kubernetes-cluster-deployment">Procedure for Kubernetes Cluster Deployment</h2>
+<ol>
+<li>
+<p><strong>Machine Provisioning (ALL):</strong>
+1.1. Ensure machines meet minimum requirements, including:</p>
+<ul>
+<li>System operating system update</li>
+<li>Disable swap usage.</li>
+<li>Disable firewall or configure it correctly to allow necessary traffic.</li>
+</ul>
+</li>
+<li>
+<p><strong>Container Runtime Installation (ALL):</strong></p>
+<ul>
+<li>Install containerd on all machines according to manufacturer instructions.</li>
+</ul>
+</li>
+<li>
+<p><strong>Kubeadm Installation (ALL):</strong></p>
+<ul>
+<li>Install kubeadm on all machines, following official Kubernetes documentation instructions.</li>
+<li><a href="https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/" target="_blank" rel="noopener noreferrer">https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/</a></li>
+</ul>
+</li>
+<li>
+<p><strong>Master Configuration (MASTER1):</strong></p>
+<ul>
+<li>On one of the master machines, we&#x27;ll initialize the cluster using kubeadm as if it were single node.</li>
+</ul>
+</li>
+<li>
+<p><strong>CNI Deployment to create cluster network (MASTER1):</strong></p>
+<ul>
+<li>We&#x27;ll deploy a CNI solution to establish our cluster network.</li>
+</ul>
+</li>
+<li>
+<p><strong>Add other masters:</strong></p>
+<ul>
+<li>On machines designated as masters, execute specific kubeadm commands to join the cluster with master function.</li>
+</ul>
+</li>
+<li>
+<p><strong>Adding Workers to Cluster:</strong></p>
+<ul>
+<li>On machines designated as workers, execute specific kubeadm commands to join the cluster.</li>
+</ul>
+</li>
+</ol>
+<h2 id="requirements">Requirements</h2>
+<p>We&#x27;ll need Vagrant installed and VirtualBox. It&#x27;s good to check the link <a href="https://github.com/kodekloudhub/certified-kubernetes-administrator-course" target="_blank" rel="noopener noreferrer">https://github.com/kodekloudhub/certified-kubernetes-administrator-course</a></p>
+<p>Create a folder for the project.</p>
+<pre><code class="language-bash">mkdir kubeadm-env
+cd kubeadm-env
+</code></pre>
+<p>And let&#x27;s create a file called <code>Vagrantfile</code> with this content:</p>
+<pre><code class="language-ruby">NUM_EXTRA_MASTER_NODE = 2
+NUM_WORKER_NODE = 2
+
+IP_NW = &quot;192.168.56.&quot;
+MASTER_IP_START = 11
+NODE_IP_START = 20
+
+Vagrant.configure(&quot;2&quot;) do |config|
+
+  config.vm.box = &quot;ubuntu/jammy64&quot;
+  config.vm.boot_timeout = 900
+
+  config.vm.box_check_update = false
+
+  # Provision Master Nodes
+  config.vm.define &quot;kubemaster&quot; do |node|
+    node.vm.provider &quot;virtualbox&quot; do |vb|
+      vb.name = &quot;kubemaster01&quot;
+      vb.memory = 2048
+      vb.cpus = 2
+    end
+    node.vm.hostname = &quot;kubemaster01&quot;
+    node.vm.network :private_network, ip: IP_NW + &quot;#{MASTER_IP_START}&quot;
+    node.vm.network &quot;forwarded_port&quot;, guest: 22, host: &quot;#{2710}&quot;
+  end
+
+  # Provision Extra Masters
+  (1..NUM_EXTRA_MASTER_NODE).each do |i|
+    config.vm.define &quot;kubemaster0#{i+1}&quot; do |node|
+      node.vm.provider &quot;virtualbox&quot; do |vb|
+        vb.name = &quot;kubemaster0#{i+1}&quot;
+        vb.memory = 2048
+        vb.cpus = 2
+      end
+      node.vm.hostname = &quot;kubemaster0#{i+1}&quot;
+      node.vm.network :private_network, ip: IP_NW + &quot;#{MASTER_IP_START + i + 1}&quot;
+      node.vm.network &quot;forwarded_port&quot;, guest: 22, host: &quot;#{2710 + i + 1}&quot;
+    end
+  end
+
+  # Provision Worker Nodes
+  (1..NUM_WORKER_NODE).each do |i|
+    config.vm.define &quot;kubenode0#{i}&quot; do |node|
+      node.vm.provider &quot;virtualbox&quot; do |vb|
+        vb.name = &quot;kubenode0#{i}&quot;
+        vb.memory = 1024
+        vb.cpus = 1
+      end
+      node.vm.hostname = &quot;kubenode0#{i}&quot;
+      node.vm.network :private_network, ip: IP_NW + &quot;#{NODE_IP_START + i}&quot;
+      node.vm.network &quot;forwarded_port&quot;, guest: 22, host: &quot;#{2720 + i}&quot;
+    end
+  end
+end
+</code></pre>
+<p>This file will only bring up 5 VMs and won&#x27;t execute anything inside them as bootstrap. Steps 1, 2, and 3 apply to all nodes, so let&#x27;s create a script for general bootstrap.</p>
+<pre><code class="language-shell">#!/bin/bash
+
+echo &quot;##### Update System #####&quot;
+sudo apt-get update
+sudo apt-get upgrade -y
+
+## Following documentation https://kubernetes.io/docs/setup/production-environment/
+## https://docs.docker.com/engine/install/ubuntu/container-runtimes/
+
+echo &quot;##### Disabling swap #####&quot;
+sed -i &#x27;/swap/d&#x27; /etc/fstab
+swapoff -a
+
+echo &quot;##### Disabling firewall #####&quot;
+systemctl disable --now ufw &gt;/dev/null 2&gt;&amp;1
+
+echo &quot;##### Enabling kernel modules required for containerd #####&quot;
+cat &gt;&gt;/etc/modules-load.d/containerd.conf&lt;&lt;EOF
+overlay
+br_netfilter
+EOF
+modprobe overlay
+modprobe br_netfilter
+
+echo &quot;##### Module Fix #####&quot;
+cat &lt;&lt;EOF | sudo tee /etc/modules-load.d/k8s.conf
+overlay
+br_netfilter
+EOF
+
+sudo modprobe overlay
+sudo modprobe br_netfilter
+
+# sysctl params required by setup, params persist across reboots
+cat &lt;&lt;EOF | sudo tee /etc/sysctl.d/k8s.conf
+net.bridge.bridge-nf-call-iptables  = 1
+net.bridge.bridge-nf-call-ip6tables = 1
+net.ipv4.ip_forward                 = 1
+EOF
+
+# Apply sysctl params without reboot
+sudo sysctl --system
+
+# Verifying
+sysctl net.bridge.bridge-nf-call-iptables net.bridge.bridge-nf-call-ip6tables net.ipv4.ip_forward
+
+echo &quot;##### Install Containerd #####&quot;
+
+sudo apt-get update
+sudo apt-get install ca-certificates curl
+
+echo &quot;##### Install Containerd: Add Docker&#x27;s official GPG key #####&quot;
+
+sudo install -m 0755 -d /etc/apt/keyrings
+sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+sudo chmod a+r /etc/apt/keyrings/docker.asc
+
+echo &quot;##### Install Containerd: Add the repository to Apt sources #####&quot;
+
+echo \
+  &quot;deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
+  $(. /etc/os-release &amp;&amp; echo &quot;$VERSION_CODENAME&quot;) stable&quot; | \
+  sudo tee /etc/apt/sources.list.d/docker.list &gt; /dev/null
+
+echo &quot;##### Install Containerd: Install Packages #####&quot;
+
+sudo apt-get update
+sudo apt-get install containerd.io -y
+
+echo &quot;##### Install Containerd: Verifying Service #####&quot;
+systemctl status containerd.service
+
+echo &quot;##### Install Containerd: Fix Cgroups Driver for systemd #####&quot;
+
+sudo mv /etc/containerd/config.toml /etc/containerd/config.toml.default
+
+sudo tee /etc/containerd/config.toml  &gt; /dev/null &lt;&lt;EOF
+[plugins.&quot;io.containerd.grpc.v1.cri&quot;.containerd.runtimes.runc]
+  [plugins.&quot;io.containerd.grpc.v1.cri&quot;.containerd.runtimes.runc.options]
+    SystemdCgroup = true
+EOF
+
+sudo systemctl restart containerd.service
+systemctl status containerd.service
+
+#https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/
+echo &quot;##### Install Kubeadm kubelet and kubectl #####&quot;
+sudo apt-get install -y apt-transport-https ca-certificates curl gpg
+
+echo &quot;##### Install Kubeadm kubelet and kubectl: Add Kubernetes&#x27;s official GPG key&quot;
+curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.29/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+
+echo &quot;##### Install Kubeadm kubelet and kubectl: Add the repository to Apt sources&quot;
+echo &#x27;deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.29/deb/ /&#x27; | sudo tee /etc/apt/sources.list.d/kubernetes.list
+sudo apt-get update
+
+echo &quot;##### Install Kubeadm kubelet and kubectl: Install Packages #####&quot;
+sudo apt-get install -y kubelet kubeadm kubectl
+sudo apt-mark hold kubelet kubeadm kubectl
+</code></pre>
+<p>I&#x27;ve made all necessary comments in this script so you understand what we&#x27;re going to do. Now let&#x27;s add this script to all VMs.</p>
+<p>Save this script in the same folder as the Vagrantfile with the name bootstrap.sh</p>
+<pre><code class="language-bash">ls -lha
+total 20K
+drwxrwxr-x 3 david-prata david-prata 4,0K fev 25 02:12 .
+drwxrwxr-x 3 david-prata david-prata 4,0K fev 24 21:02 ..
+-rw-rw-r-- 1 david-prata david-prata 3,0K fev 25 02:15 bootstrap.sh
+-rw-rw-r-- 1 david-prata david-prata 1,7K fev 25 02:17 Vagrantfile
+</code></pre>
+<p>Let&#x27;s add the lines below commented.</p>
+<pre><code class="language-ruby">NUM_EXTRA_MASTER_NODE = 2
+NUM_WORKER_NODE = 2
+
+IP_NW = &quot;192.168.56.&quot;
+MASTER_IP_START = 11
+NODE_IP_START = 20
+
+Vagrant.configure(&quot;2&quot;) do |config|
+
+  config.vm.box = &quot;ubuntu/jammy64&quot;
+  config.vm.boot_timeout = 900
+
+  config.vm.box_check_update = false
+
+  # Provision Master Nodes
+  config.vm.define &quot;kubemaster&quot; do |node|
+    # Name shown in GUI
+    node.vm.provider &quot;virtualbox&quot; do |vb|
+      vb.name = &quot;kubemaster01&quot;
+      vb.memory = 2048
+      vb.cpus = 2
+    end
+    node.vm.hostname = &quot;kubemaster01&quot;
+    node.vm.network :private_network, ip: IP_NW + &quot;#{MASTER_IP_START}&quot;
+    node.vm.network &quot;forwarded_port&quot;, guest: 22, host: &quot;#{2710}&quot;
+    node.vm.provision &quot;shell&quot;, path: &quot;bootstrap.sh&quot; ## ADDED
+  end
+
+  # Provision Extra Masters
+  (1..NUM_EXTRA_MASTER_NODE).each do |i|
+    config.vm.define &quot;kubemaster0#{i+1}&quot; do |node|
+      node.vm.provider &quot;virtualbox&quot; do |vb|
+        vb.name = &quot;kubemaster0#{i+1}&quot;
+        vb.memory = 2048
+        vb.cpus = 2
+      end
+      node.vm.hostname = &quot;kubemaster0#{i+1}&quot;
+      node.vm.network :private_network, ip: IP_NW + &quot;#{MASTER_IP_START + i + 1}&quot;
+      node.vm.network &quot;forwarded_port&quot;, guest: 22, host: &quot;#{2710 + i + 1}&quot;
+      node.vm.provision &quot;shell&quot;, path: &quot;bootstrap.sh&quot; ## ADDED
+    end
+  end
+
+  # Provision Worker Nodes
+  (1..NUM_WORKER_NODE).each do |i|
+    config.vm.define &quot;kubenode0#{i}&quot; do |node|
+      node.vm.provider &quot;virtualbox&quot; do |vb|
+        vb.name = &quot;kubenode0#{i}&quot;
+        vb.memory = 1024
+        vb.cpus = 1
+      end
+      node.vm.hostname = &quot;kubenode0#{i}&quot;
+      node.vm.network :private_network, ip: IP_NW + &quot;#{NODE_IP_START + i}&quot;
+      node.vm.network &quot;forwarded_port&quot;, guest: 22, host: &quot;#{2720 + i}&quot;
+     node.vm.provision &quot;shell&quot;, path: &quot;bootstrap.sh&quot; ## ADDED
+    end
+  end
+end
+</code></pre>
+<p>On each node, we&#x27;ll then be ready to set up the cluster.</p>
+<p>On the first master node, we need to initialize the cluster.</p>
+<p><code>kubeadm init --apiserver-advertise-address=&lt;MASTER IP&gt; --pod-network-cidr=&lt;NETWORK THAT PODS WILL HAVE&gt;</code></p>
+<p>We already know what the masters&#x27; IPs are. We defined the IPs automatically in the Vagrantfile.</p>
+<table><thead><tr><th>IPS</th><th>NODE</th></tr></thead><tbody><tr><td>kubemaster01</td><td>192.168.56.11</td></tr><tr><td>kubemaster02</td><td>192.168.56.12</td></tr><tr><td>kubemaster03</td><td>192.168.56.13</td></tr><tr><td>kubemaster01</td><td>192.168.56.21</td></tr><tr><td>kubemaster01</td><td>192.168.56.22</td></tr></tbody></table>
+<p>Let&#x27;s define the network that will be used by pods as 10.244.0.0/16, could be another, of course.</p>
+<p>So the command would be:
+<code>kubeadm init --apiserver-advertise-address=192.168.56.11 --pod-network-cidr=10.244.0.0/16</code></p>
+<p>We can automate this.</p>
+<pre><code class="language-bash">IP_ADDR=`ip -4 address show enp0s8 | grep inet | awk &#x27;{print $2}&#x27; | cut -d/ -f1`
+POD_CIDR=&quot;10.244.0.0/16&quot;
+
+echo &quot;##### Initializing cluster #####&quot;
+sudo kubeadm init --apiserver-advertise-address=$IP_ADDR --pod-network-cidr=$POD_CIDR
+
+mkdir -p $HOME/.kube
+sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+sudo chown $(id -u):$(id -g) $HOME/.kube/config
+</code></pre>
+<p>Let&#x27;s talk a bit about this command. We don&#x27;t have a load balancer in front of our cluster here. If we had one, we should pass some additional parameters in this command <code>--control-plane-endpoint=&lt;LB_IP:6443&gt; --upload-certs</code>.</p>
+<blockquote>
+<p>The init command pulls some images that will be used automatically. If you want to pull these images before running the init command to be faster, it&#x27;s possible, but not mandatory. <code>kubeadm config images pull</code>.</p>
+</blockquote>
+<p>Running the above script, we have the cluster with a single master node. In the console, it shows the necessary commands we should continue executing, see the output.</p>
+<pre><code class="language-bash">###
+Your Kubernetes control-plane has initialized successfully!
+
+To start using your cluster, you need to run the following as a regular user:
+
+  mkdir -p $HOME/.kube
+  sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+  sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
+Alternatively, if you are the root user, you can run:
+
+export KUBECONFIG=/etc/kubernetes/admin.conf
+
+You should now deploy a pod network to the cluster.
+Run &quot;kubectl apply -f [podnetwork].yaml&quot; with one of the options listed at:
+  https://kubernetes.io/docs/concepts/cluster-administration/addons/
+
+Then you can join any number of worker nodes by running the following on each as root:
+
+kubeadm join 192.168.56.11:6443 --token 9n1vty.afan7eb99kaxltcj \
+        --discovery-token-ca-cert-hash sha256:6ebd7fd44972113263b6e85e8bdddd841774a39db9a48bd04d575c034c188247
+</code></pre>
+<p>The generated kubeconfig is at /etc/kubernetes/admin.conf. We need it for kubectl to work, so let&#x27;s put the above commands inside our script. Another thing we need to do is install a CNI in the cluster. We&#x27;ll also apply it to the cluster using kubectl that we just made work. We could use other CNI options, but let&#x27;s choose Weavenet.</p>
+<pre><code class="language-bash">IP_ADDR=`ip -4 address show enp0s8 | grep inet | awk &#x27;{print $2}&#x27; | cut -d/ -f1`
+POD_CIDR=&quot;10.244.0.0/16&quot;
+
+echo &quot;##### Init Cluster #####&quot;
+sudo kubeadm init --apiserver-advertise-address=$IP_ADDR --pod-network-cidr=$POD_CIDR
+
+echo &quot;##### Copy kubeconfig #####&quot;
+mkdir -p $HOME/.kube
+sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
+##https://github.com/weaveworks/weave?tab=readme-ov-file
+echo &quot;##### Deploy CNI weavenet #####&quot;
+kubectl apply -f https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d &#x27;\n&#x27;) &gt;/dev/null 2&gt;&amp;1
+</code></pre>
+<pre><code class="language-bash">kubeadm token create --certificate-key $(kubeadm init phase upload-certs --upload-certs | tail -1 ) --print-join-command &gt; /join_masters.sh
+</code></pre>
+      <div class="docs-pager">
+        <a href="../../../../#blogs">All blogs</a>
+        <a href="../">Back to CKA</a>
+      </div>
+    </article>
+    <aside class="docs-toc">
+      <div class="docs-toc-title">On this page</div>
+      <nav>
+        <a href="#procedure-for-kubernetes-cluster-deployment">Procedure for Kubernetes Cluster Deployment</a>
+        <a href="#requirements">Requirements</a>
+      </nav>
+    </aside>
+  </div>
+  <script src="../../../../js/docs.js"></script>
+</body>
+</html>

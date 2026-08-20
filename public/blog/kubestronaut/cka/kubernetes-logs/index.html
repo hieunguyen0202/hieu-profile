@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kubernetes Logs — Hieu Nguyen</title>
+  <meta name="description" content="Kubernetes Logs — Kubestronaut roadmap.">
+  <link rel="icon" href="../../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../../">i'm<span>.hieu</span></a>
+    <nav class="docs-series">
+      <a href="../../../../blog/web-security/">Web Security</a>
+      <a class="active" href="../../">Kubestronaut roadmap</a>
+    </nav>
+    <nav class="docs-cert-tabs"><a href="../../cka/" class="active">CKA</a><a href="../../ckad/" class="">CKAD</a><a href="../../cks/" class="">CKS</a></nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-nav="kubestronaut" data-cert="cka" data-docs-root="../" data-active="kubernetes-logs">
+      <div class="docs-nav-label">CKA</div>
+      <ul class="docs-nav" id="docsNav"></ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../../">Home</a>
+        <span>›</span>
+        <a href="../../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../../">Kubestronaut</a>
+        <span>›</span>
+        <a href="../">CKA</a>
+        <span>›</span>
+        <span>Kubernetes Logs</span>
+      </div>
+      <div id="top"></div>
+<header><h1>Kubernetes Logs</h1></header><p>To view the logs of a container using Docker, we have the following scenario:</p>
+<pre><code class="language-bash"># Running an image locally that simulates events, we can observe that output is shown in the console output normally
+
+docker run davidpuziol/event-simulator:latest
+[2023-12-29 13:52:21,254] INFO in event-simulator: USER4 is viewing page1
+[2023-12-29 13:52:22,254] INFO in event-simulator: USER1 is viewing page3
+[2023-12-29 13:52:23,256] INFO in event-simulator: USER1 logged in
+[2023-12-29 13:52:24,258] INFO in event-simulator: USER1 logged in
+[2023-12-29 13:52:25,258] INFO in event-simulator: USER1 is viewing page2
+[2023-12-29 13:52:26,260] WARNING in event-simulator: USER5 Failed to Login as the account is locked due to MANY FAILED ATTEMPTS.
+[2023-12-29 13:52:26,260] INFO in event-simulator: USER1 logged out
+[2023-12-29 13:52:27,261] INFO in event-simulator: USER4 logged in
+[2023-12-29 13:52:28,263] INFO in event-simulator: USER4 logged out
+[2023-12-29 13:52:29,264] WARNING in event-simulator: USER7 Order failed as the item is OUT OF STOCK.
+[2023-12-29 13:52:29,265] INFO in event-simulator: USER1 logged in
+
+# Running a container in daemon mode, we would have this
+docker run -d davidpuziol/event-simulator:latest
+d835e4d49d68cd7c2075d54c4965bfc6753c5894d7ee45097f47fba8399a8329
+
+# To view the logs, we could use a follow to keep displaying the logs
+docker logs d835e4d49d68cd7c2075d54c4965bfc6753c5894d7ee45097f47fba8399a8329 -f
+</code></pre>
+<p>Now let&#x27;s run a pod in Kubernetes.</p>
+<pre><code class="language-yaml">apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: event-simulator
+  name: event-simulator
+spec:
+  containers:
+  - image: davidpuziol/event-simulator
+    name: event-simulator
+    resources: {}
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+status: {}
+</code></pre>
+<pre><code class="language-bash">kubectl run event-simulator --image davidpuziol/event-simulator -o yaml --dry-run=client &gt; pod-simulator.yaml
+kubectl apply -f pod-simulator.yaml
+pod/event-simulator created
+kubectl get pods event-simulator
+NAME              READY   STATUS              RESTARTS   AGE
+event-simulator   1/1     Running             0          11s
+
+kubectl logs -f event-simulator
+2023-12-29 14:15:32,686] INFO in event-simulator: USER4 is viewing page3
+[2023-12-29 14:15:33,688] INFO in event-simulator: USER3 is viewing page1
+[2023-12-29 14:15:34,689] WARNING in event-simulator: USER5 Failed to Login as the account is locked due to MANY FAILED ATTEMPTS.
+[2023-12-29 14:15:34,690] INFO in event-simulator: USER3 logged out
+[2023-12-29 14:15:35,691] INFO in event-simulator: USER4 logged in
+[2023-12-29 14:15:36,692] INFO in event-simulator: USER1 is viewing page1
+</code></pre>
+<p>Creating another pod with more than one container. Let&#x27;s use the same one just to see the logs coming out. Create the file pod-simulator-multi.yaml:</p>
+<pre><code class="language-yaml">apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: event-simulator-multi
+  name: event-simulator-multi
+spec:
+  containers:
+  - image: davidpuziol/event-simulator
+    name: event-simulator
+    resources: {}
+  - image: davidpuziol/event-simulator
+    name: event-simulator2
+    resources: {}
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+status: {}
+</code></pre>
+<pre><code class="language-bash">kubectl apply -f pod-simulator-multi.yaml
+pod/event-simulator-multi created
+
+kubectl get pods
+NAME                   READY   STATUS    RESTARTS      AGE
+nginx                  1/1     Running   1 (12h ago)   40h
+event-simulator        1/1     Running   0             3m15s
+event-simulator-multi   2/2     Running   0             12s
+
+# Showing only logs from the container called event-simulator
+kubectl logs -f event-simulator-multi event-simulator
+# Showing only logs from the container called event-simulator2
+kubectl logs -f event-simulator-multi event-simulator2
+</code></pre>
+      <div class="docs-pager">
+        <a href="../../../../#blogs">All blogs</a>
+        <a href="../">Back to CKA</a>
+      </div>
+    </article>
+    <aside class="docs-toc">
+      <div class="docs-toc-title">On this page</div>
+      <nav>
+        <a href="#top">On this page</a>
+      </nav>
+    </aside>
+  </div>
+  <script src="../../../../js/docs.js"></script>
+</body>
+</html>

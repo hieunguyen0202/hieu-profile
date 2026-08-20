@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kube Proxy — Hieu Nguyen</title>
+  <meta name="description" content="Kube Proxy — Kubestronaut roadmap.">
+  <link rel="icon" href="../../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../../">i'm<span>.hieu</span></a>
+    <nav class="docs-series">
+      <a href="../../../../blog/web-security/">Web Security</a>
+      <a class="active" href="../../">Kubestronaut roadmap</a>
+    </nav>
+    <nav class="docs-cert-tabs"><a href="../../cka/" class="active">CKA</a><a href="../../ckad/" class="">CKAD</a><a href="../../cks/" class="">CKS</a></nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-nav="kubestronaut" data-cert="cka" data-docs-root="../" data-active="kube-proxy">
+      <div class="docs-nav-label">CKA</div>
+      <ul class="docs-nav" id="docsNav"></ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../../">Home</a>
+        <span>›</span>
+        <a href="../../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../../">Kubestronaut</a>
+        <span>›</span>
+        <a href="../">CKA</a>
+        <span>›</span>
+        <span>Kube Proxy</span>
+      </div>
+      <div id="top"></div>
+<header><h1>Kube Proxy</h1></header><p>In a Kubernetes cluster, all pods have access to all other pods. To enable this connectivity, a networking solution is deployed in the Kubernetes cluster, establishing an internal virtual network. Later on, we&#x27;ll explore the various options available for this purpose.</p>
+<p>It&#x27;s important to note that there&#x27;s no guarantee that a pod&#x27;s IP will always be the same, as it can fail and be recreated by the Replication Controller with a different IP. For this reason, we reference pods through services using names, which resolve the corresponding IPs. This is what services and their endpoints exist for, being managed by Kube-Proxy.</p>
+<p>A service doesn&#x27;t bind directly to a pod, as it&#x27;s a virtual entity that doesn&#x27;t have interfaces or an active listening process. The service exists exclusively in Kubernetes memory. Kube-Proxy monitors the creation of new services and, whenever a new service is created, it configures appropriate rules on each node to forward traffic to the correct pod ports. This is accomplished through the use of <code>iptables</code> or <code>ipvs</code>.</p>
+<p>Kube-Proxy runs on each node as a service or as a pod, depending on the installation.</p>
+<p><img decoding="async" loading="lazy" alt="Alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-18-58042b2b70d4a9a2ac83aa2e87d628e3.png" width="993" height="177" class="img_ev3q"></p>
+<p>Note that, running as a pod, the controller is a DaemonSet that ensures one Kube-Proxy per node.</p>
+<p><img decoding="async" loading="lazy" alt="Alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-19-d059ad89d89fc78826c4c6226dd11ba0.png" width="1000" height="383" class="img_ev3q"></p>
+      <div class="docs-pager">
+        <a href="../../../../#blogs">All blogs</a>
+        <a href="../">Back to CKA</a>
+      </div>
+    </article>
+    <aside class="docs-toc">
+      <div class="docs-toc-title">On this page</div>
+      <nav>
+        <a href="#top">On this page</a>
+      </nav>
+    </aside>
+  </div>
+  <script src="../../../../js/docs.js"></script>
+</body>
+</html>

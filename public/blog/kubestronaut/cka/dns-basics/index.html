@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DNS Fundamentals — Hieu Nguyen</title>
+  <meta name="description" content="DNS Fundamentals — Kubestronaut roadmap.">
+  <link rel="icon" href="../../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../../">i'm<span>.hieu</span></a>
+    <nav class="docs-series">
+      <a href="../../../../blog/web-security/">Web Security</a>
+      <a class="active" href="../../">Kubestronaut roadmap</a>
+    </nav>
+    <nav class="docs-cert-tabs"><a href="../../cka/" class="active">CKA</a><a href="../../ckad/" class="">CKAD</a><a href="../../cks/" class="">CKS</a></nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-nav="kubestronaut" data-cert="cka" data-docs-root="../" data-active="dns-basics">
+      <div class="docs-nav-label">CKA</div>
+      <ul class="docs-nav" id="docsNav"></ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../../">Home</a>
+        <span>›</span>
+        <a href="../../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../../">Kubestronaut</a>
+        <span>›</span>
+        <a href="../">CKA</a>
+        <span>›</span>
+        <span>DNS Fundamentals</span>
+      </div>
+      <div id="top"></div>
+<header><h1>DNS Fundamentals</h1></header><p>We have two computers hostA and hostB on the same network. A wants to reach B.</p>
+<p>We can ping using B&#x27;s IP or give it a name to make it easier. Making a comparison, you can type the number to call someone or go to your contacts and click on the name.</p>
+<p>The /etc/hosts file binds an IP to a name in Linux. It&#x27;s our contact list.</p>
+<p>The real hostname of hostB is host-2. But remember I mentioned the contact list? In my contact list I can put whatever name I want to call john. I want to call john &quot;john&quot;. That&#x27;s what hostA just did.</p>
+<p><img decoding="async" loading="lazy" alt="alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-9-cd077beea7e759ce19d1235e5f658f82.png" width="1058" height="620" class="img_ev3q"></p>
+<p>We can define in the hosts file the IP of anything, but that doesn&#x27;t mean it&#x27;s true. If you ping <code>www.google.com</code> the server that will respond will be the one whose IP you defined.</p>
+<p>We can have as many names as we want even for the same IP.</p>
+<p>The advantage of using names is that every time we write that name it will search the file and translate to the IP of where we&#x27;re going without having to remember the IP of things.</p>
+<p>The problem with this is that everyone would need to have all the network entries. If a host changed its IP the name wouldn&#x27;t translate to the correct IP. Managing this gets complicated as it tends to grow.</p>
+<p><img decoding="async" loading="lazy" alt="alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-10-271f2fc864776d6d48f5f3d06f35c5ae.png" width="1114" height="621" class="img_ev3q"></p>
+<p>To solve this problem we move all entries to a single server that will manage names centrally and whoever needs to resolve a name goes to it. This server is known as <code>DNS Server</code>.</p>
+<p><img decoding="async" loading="lazy" alt="alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-11-b96d45833f1091bb931229e2e5b9b64e.png" width="1828" height="1028" class="img_ev3q"></p>
+<p>In Linux we configure who will be the DNS Server in the /etc/resolv.conf file avoiding entries in /etc/hosts.</p>
+<p>We can still continue making configurations manually in /etc/hosts, it&#x27;s even the first file that will be consulted and if it doesn&#x27;t find the name then it will use the DNS server. If it finds in both, /etc/hosts will be the one to translate.</p>
+<p><img decoding="async" loading="lazy" alt="alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-12-9d51fcbfdfb7454eb9736a21abda0783.png" width="1181" height="666" class="img_ev3q"></p>
+<p>The precedence of which should be used first is found in the /etc/nsswitch.conf file and can be changed.</p>
+<p><img decoding="async" loading="lazy" alt="alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-13-5243b7ead4a9eff919a04344131c651c.png" width="1851" height="832" class="img_ev3q"></p>
+<p>If we can&#x27;t resolve using /etc/hosts and with the DNS server then it will fail.</p>
+<p>It&#x27;s possible to have several DNS servers configured in /etc/resolv.conf.</p>
+<p>It&#x27;s also possible that if a DNS server fails to resolve the name it calls ANOTHER to help. For example we have there <code>Forward All 8.8.8.8</code>. This means it resolves what it can and what it can&#x27;t uses Google&#x27;s DNS which is a public DNS server that knows everything.</p>
+<p>The most used are:</p>
+<ul>
+<li>Google Public DNS:
+<ul>
+<li>8.8.8.8 (Primary)</li>
+<li>8.8.4.4 (Alternative)</li>
+<li>Developed and maintained by Google, known for its speed and reliability.</li>
+</ul>
+</li>
+<li>Cloudflare DNS
+<ul>
+<li>1.1.1.1 (Primary)</li>
+<li>1.0.0.1 (Alternative)</li>
+<li>Focused on privacy and security, Cloudflare DNS is known for its speed and for not logging DNS query logs</li>
+</ul>
+</li>
+<li>OpenDNS
+<ul>
+<li>208.67.222.222 (Primary)</li>
+<li>208.67.220.220 (Alternative)</li>
+<li>Offers phishing protection and optionally configurable content filters.</li>
+</ul>
+</li>
+</ul>
+<p><img decoding="async" loading="lazy" alt="alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-14-bc2cb546122631d498e57faabbe3181a.png" width="1205" height="688" class="img_ev3q"></p>
+<h2 id="domain">Domain</h2>
+<p><code>www.google.com</code></p>
+<p>Domains are divided by . to make it easier to remember the name on the Internet and group things according to their intention.</p>
+<p>These are the domains known as TLD - (Top-Level Domain). The top level is the last block after dividing the entire domain.</p>
+<p><img decoding="async" loading="lazy" alt="alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-15-dc3bc25e31eb7bd031b67bb0e7032aeb.png" width="1786" height="340" class="img_ev3q"></p>
+<ul>
+<li><code>.com</code> – for commercial sites.</li>
+<li><code>.org</code> – for organizations.</li>
+<li><code>.net</code> – for networks.</li>
+<li><code>.xyz</code> – for general use.</li>
+<li><code>.name</code> –  for individuals.</li>
+<li><code>.biz</code> – for businesses and ventures in general.</li>
+<li><code>.space</code> – to have your own space on the web.</li>
+<li><code>.site</code> – to make your own space on the Internet.</li>
+<li><code>.info</code> – for information platforms.</li>
+<li><code>.club</code> – for online clubs.</li>
+<li><code>.tech</code> – for technology portals.</li>
+<li><code>.online</code> – to establish a presence on the Internet.</li>
+<li><code>.co</code> – for large corporations and brands.</li>
+<li><code>.pro</code> – for professionals in any market niche.</li>
+<li><code>.app</code> – for app creators</li>
+<li><code>.dev</code> – for developers.</li>
+<li><code>.studio</code> – for artists, musicians and culture professionals.</li>
+<li><code>.agency</code> – for agencies of any kind.</li>
+<li><code>.life</code> – to show your lifestyle.</li>
+<li><code>.blog</code> – to reinforce that you are a blogger.</li>
+<li><code>.cloud</code> – for cloud businesses and companies.</li>
+<li><code>.link</code> – for the world of connected business</li>
+<li><code>.io</code> – for technology companies.</li>
+<li><code>.tv</code> – for entertainment in general.</li>
+<li>MANY OTHERS..</li>
+</ul>
+<p>There are many others and the more the Internet grows, the more appear.</p>
+<p>We have TLDs for countries.</p>
+<ul>
+<li><code>.br</code> – Brazil.</li>
+<li><code>.es</code> – Spain.</li>
+<li><code>.ru</code> –  Russia.</li>
+<li><code>.us</code> – United States.</li>
+<li><code>.eu</code> – European Union.</li>
+<li><code>.ca</code> –  Canada.</li>
+<li><code>.nl</code> – Netherlands.</li>
+<li><code>.de</code> –  Germany.</li>
+<li><code>.fr</code> – France.</li>
+<li><code>.jp</code> – Japan.</li>
+<li><code>.ai</code> – Anguilla</li>
+<li><code>.cn</code> – China.</li>
+<li>OTHERS.</li>
+</ul>
+<p>There are sponsored top levels that cannot be sold because they have a specific destination.</p>
+<ul>
+<li>.gov – for government sites.</li>
+<li>.edu – for educational institutions.</li>
+<li>.int – for international organizations based on treaties.</li>
+<li>.mil – for the US military.</li>
+<li>OTHERS.</li>
+</ul>
+<p>And in Brazil&#x27;s case that we have several. <code>.com.br</code>, <code>.net.br</code>, <code>.org.br</code>?</p>
+<p>The .br is the top level and the others are known as second-level domains. Generally these domains associated with countries have an organization behind them to control. If you want to have a registration in the .br top level you need to buy at <a href="https://registro.br/" target="_blank" rel="noopener noreferrer">Registro.br</a>. There&#x27;s no way to buy a domain with only .br at the end like mydomain.br.</p>
+<p>Let&#x27;s go to the simple case.</p>
+<p>We have the example <code>www.google.com</code>. The .com is the TLD, google is the domain, which is always under some TLD or second-level TDS as we saw in the case of .br and www is the subdomain.</p>
+<p>Once we have the domain (google.com) we can create several subdomains to point to different things on the Internet, but everything under the main domain.</p>
+<p>If we analyze this as a tree we have:</p>
+<p><img decoding="async" loading="lazy" alt="alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-16-6d885c099311deda4ea75385d8135e0f.png" width="1240" height="573" class="img_ev3q"></p>
+<p>Let&#x27;s imagine we&#x27;re in an organization and it has its DNS server.</p>
+<p>When we make a request to access app.google.com for example what path is taken to resolve the IP?</p>
+<ol>
+<li>
+<p>The organization&#x27;s DNS Server checks if it can resolve, if it already has it registered then returns the IP.</p>
+</li>
+<li>
+<p>If it doesn&#x27;t have another DNS (nameserver) it can try to resolve then returns that it doesn&#x27;t know. Otherwise, tries on other DNS servers and keeps the IP for a <code>period of time</code> so the next request is faster.</p>
+</li>
+</ol>
+<p><img decoding="async" loading="lazy" alt="alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-17-f7ba224ba13c3616e8d231f7496060fe.png" width="1007" height="552" class="img_ev3q"></p>
+<p>Append</p>
+<p><img decoding="async" loading="lazy" alt="alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-18-6a1dc963820d35bc93ebcf16b96e03fa.png" width="1225" height="651" class="img_ev3q"></p>
+<p>Records</p>
+<p><img decoding="async" loading="lazy" alt="alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-19-844a68f923ebf4b41d370bfd7af3c640.png" width="1071" height="209" class="img_ev3q"></p>
+<h2 id="tools">Tools</h2>
+<p>Some tools to test name resolution.</p>
+<h3 id="nslookup">nslookup</h3>
+<p>This tool doesn&#x27;t consider /etc/hosts, only if the DNS servers in resolv.conf will be able to resolve.</p>
+<pre><code class="language-bash">nslookup www.google.com
+Server:         8.8.8.8  # Which DNS server I have in my resolv.conf that will be used to resolve
+Address:        8.8.8.8#53 # DNS servers use port 53
+
+Non-authoritative answer:
+Name:   www.google.com
+Address: 142.250.78.228
+Name:   www.google.com
+Address: 2800:3f0:4004:810::2004
+
+# I can use a specific server to try to resolve
+nslookup google.com 1.1.1.1
+Server:         1.1.1.1
+Address:        1.1.1.1#53
+
+Non-authoritative answer:
+Name:   google.com
+Address: 142.251.135.110
+Name:   google.com
+Address: 2800:3f0:4004:80b::200e
+
+nslookup animpossibledomainname.com
+Server:         8.8.8.8
+Address:        8.8.8.8#53
+
+** server can&#x27;t find animpossibledomainname.com: NXDOMAIN
+</code></pre>
+<h3 id="dig">dig</h3>
+<p>This tool is more verbose and returns what&#x27;s on your DNS server, not just the IP.</p>
+<pre><code class="language-bash">dig www.google.com
+
+; &lt;&lt;&gt;&gt; DiG 9.18.18-0ubuntu0.22.04.2-Ubuntu &lt;&lt;&gt;&gt; www.google.com
+;; global options: +cmd
+;; Got answer:
+;; -&gt;&gt;HEADER&lt;&lt;- opcode: QUERY, status: NOERROR, id: 19037
+;; flags: qr rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 1
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 1232
+;; QUESTION SECTION:
+;www.google.com.                        IN      A
+
+;; ANSWER SECTION:
+www.google.com.         6       IN      A       142.250.79.164
+
+;; Query time: 4 msec
+;; SERVER: 8.8.8.8#53(8.8.8.8) (UDP)
+;; WHEN: Sat Feb 17 23:17:56 -03 2024
+;; MSG SIZE  rcvd: 59
+</code></pre>
+      <div class="docs-pager">
+        <a href="../../../../#blogs">All blogs</a>
+        <a href="../">Back to CKA</a>
+      </div>
+    </article>
+    <aside class="docs-toc">
+      <div class="docs-toc-title">On this page</div>
+      <nav>
+        <a href="#domain">Domain</a>
+        <a href="#tools">Tools</a>
+        <a class="depth-3" href="#nslookup">nslookup</a>
+        <a class="depth-3" href="#dig">dig</a>
+      </nav>
+    </aside>
+  </div>
+  <script src="../../../../js/docs.js"></script>
+</body>
+</html>

@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Network Namespaces — Hieu Nguyen</title>
+  <meta name="description" content="Network Namespaces — Kubestronaut roadmap.">
+  <link rel="icon" href="../../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../../">i'm<span>.hieu</span></a>
+    <nav class="docs-series">
+      <a href="../../../../blog/web-security/">Web Security</a>
+      <a class="active" href="../../">Kubestronaut roadmap</a>
+    </nav>
+    <nav class="docs-cert-tabs"><a href="../../cka/" class="active">CKA</a><a href="../../ckad/" class="">CKAD</a><a href="../../cks/" class="">CKS</a></nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-nav="kubestronaut" data-cert="cka" data-docs-root="../" data-active="network-namespaces">
+      <div class="docs-nav-label">CKA</div>
+      <ul class="docs-nav" id="docsNav"></ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../../">Home</a>
+        <span>›</span>
+        <a href="../../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../../">Kubestronaut</a>
+        <span>›</span>
+        <a href="../">CKA</a>
+        <span>›</span>
+        <span>Network Namespaces</span>
+      </div>
+      <div id="top"></div>
+<header><h1>Network Namespaces</h1></header><p>Network namespaces are used by containers to implement network isolation.</p>
+<blockquote>
+<p>This is a very important study to understand how networking works in containers. It&#x27;s the foundation for understanding many things in Docker and Kubernetes.</p>
+</blockquote>
+<p>Speaking of processes, containers are separated from the host through namespaces.</p>
+<p>If we think of a house, each child has their own room. This ensures that each one has privacy in their own room and can only mess up their own space. It would be like a house within a house, but the parents can check the rooms.</p>
+<p>When we create a container, we ensure that the processes of that container cannot see the processes of the host and other containers. The container thinks it&#x27;s alone. The host can see the processes of all containers.</p>
+<p><img decoding="async" loading="lazy" alt="alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-20-f976e936d0f90998603305c0a9a00673.png" width="1742" height="694" class="img_ev3q"></p>
+<p>If you noticed in the image above, the container sees the process that keeps the container alive as PID 1, but the host sees this process as PID 3816.</p>
+<p>Namespaces are an isolation created by Linux to &quot;fool&quot; the container.</p>
+<p>When a container is created, a network namespace is created on the host to isolate the network information of the host and the container. Who does this work? The container runtime. Let&#x27;s try to do it ourselves and put this into practice.</p>
+<p><img decoding="async" loading="lazy" alt="alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-21-84b757a36a0cc3d011deb9d14344ccec.png" width="986" height="449" class="img_ev3q"></p>
+<h2 id="creating-network-namespaces">Creating Network Namespaces</h2>
+<p>On an Ubuntu virtual machine, let&#x27;s play around. Install the net-tools package.
+Let&#x27;s create 4 namespaces to follow the study example.</p>
+<pre><code class="language-bash"># Creating the network namespace
+ubuntu@ubuntu:~$ sudo ip netns add red
+ubuntu@ubuntu:~$ sudo ip netns add blue
+ubuntu@ubuntu:~$ sudo ip netns add orange
+ubuntu@ubuntu:~$ sudo ip netns add gray
+ubuntu@ubuntu:~$ sudo ip netns
+gray
+orange
+blue
+red
+
+# Testing the interfaces that appear in each namespace
+# HOST
+ubuntu@ubuntu:~$ ip link
+1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+2: enp1s0: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc pfifo_fast state UP mode DEFAULT group default qlen 1000
+    link/ether 52:54:00:bd:d2:80 brd ff:ff:ff:ff:ff:ff
+
+# NAMESPACES
+# In the red namespace we have the loopback interface with no access to the host&#x27;s interfaces
+ubuntu@ubuntu:~$ sudo ip -n red link
+1: lo: &lt;LOOPBACK&gt; mtu 65536 qdisc noop state DOWN mode DEFAULT group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+ubuntu@ubuntu:~$ sudo ip -n blue link
+1: lo: &lt;LOOPBACK&gt; mtu 65536 qdisc noop state DOWN mode DEFAULT group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+ubuntu@ubuntu:~$ sudo ip -n orange link
+1: lo: &lt;LOOPBACK&gt; mtu 65536 qdisc noop state DOWN mode DEFAULT group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+ubuntu@ubuntu:~$ sudo ip -n gray link
+1: lo: &lt;LOOPBACK&gt; mtu 65536 qdisc noop state DOWN mode DEFAULT group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+
+
+# The same applies to the arp table
+# HOST
+ubuntu@ubuntu:~$ arp
+Address                  HWtype  HWaddress           Flags Mask            Iface
+_gateway                 ether   52:55:0a:00:02:02   C                     enp1s0
+10.0.2.3                 ether   52:55:0a:00:02:03   C                     enp1s0
+
+# NAMESPACES
+# No output for the namespaces
+ubuntu@ubuntu:~$ sudo ip netns exec red arp
+ubuntu@ubuntu:~$ sudo ip netns exec blue arp
+ubuntu@ubuntu:~$ sudo ip netns exec orange arp
+ubuntu@ubuntu:~$ sudo ip netns exec gray arp
+
+# The same for routing tables
+# HOST
+ubuntu@ubuntu:~$ route
+Kernel IP routing table
+Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
+default         _gateway        0.0.0.0         UG    100    0        0 enp1s0
+10.0.2.0        0.0.0.0         255.255.255.0   U     100    0        0 enp1s0
+link-local      0.0.0.0         255.255.0.0     U     1000   0        0 enp1s0
+
+# NAMESPACES
+ubuntu@ubuntu:~$ sudo ip netns exec red route
+Kernel IP routing table
+Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
+ubuntu@ubuntu:~$ sudo ip netns exec blue route
+Kernel IP routing table
+Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
+ubuntu@ubuntu:~$ sudo ip netns exec orange route
+Kernel IP routing table
+Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
+ubuntu@ubuntu:~$ sudo ip netns exec gray route
+Kernel IP routing table
+Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
+</code></pre>
+<p>So we&#x27;ve already seen a bit of namespace usage and the idea behind it, both in processes and networking. Now let&#x27;s get our hands dirty.</p>
+<h2 id="connecting-two-namespaces">Connecting Two Namespaces</h2>
+<p>With 4 namespaces we can then try to connect two namespaces red and blue to test. Now we&#x27;re going to enter the virtual world.</p>
+<p>The proposal will be this.</p>
+<p><img decoding="async" loading="lazy" alt="conect" src="data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgdmlld0JveD0iMCAwIDUzMyAzMzEiIHdpZHRoPSI1MzMiIGhlaWdodD0iMzMxIiBmaWx0ZXI9ImludmVydCg5MyUpIGh1ZS1yb3RhdGUoMTgwZGVnKSI+CiAgPCEtLSBzdmctc291cmNlOmV4Y2FsaWRyYXcgLS0+CgogIDxkZWZzPgogICAgPHN0eWxlIGNsYXNzPSJzdHlsZS1mb250cyI+CiAgICAgIEBmb250LWZhY2UgewogICAgICAgIGZvbnQtZmFtaWx5OiAiVmlyZ2lsIjsKICAgICAgICBzcmM6IHVybCgiaHR0cHM6Ly9maWxlJTJCLnZzY29kZS1yZXNvdXJjZS52c2NvZGUtY2RuLm5ldC9ob21lL2RhdmlkLXByYXRhLy52c2NvZGUvZXh0ZW5zaW9ucy9wb21kdHIuZXhjYWxpZHJhdy1lZGl0b3ItMy43LjMvcHVibGljLy9kaXN0L2V4Y2FsaWRyYXctYXNzZXRzL1ZpcmdpbC53b2ZmMiIpOwogICAgICB9CiAgICAgIEBmb250LWZhY2UgewogICAgICAgIGZvbnQtZmFtaWx5OiAiQ2FzY2FkaWEiOwogICAgICAgIHNyYzogdXJsKCJodHRwczovL2ZpbGUlMkIudnNjb2RlLXJlc291cmNlLnZzY29kZS1jZG4ubmV0L2hvbWUvZGF2aWQtcHJhdGEvLnZzY29kZS9leHRlbnNpb25zL3BvbWR0ci5leGNhbGlkcmF3LWVkaXRvci0zLjcuMy9wdWJsaWMvL2Rpc3QvZXhjYWxpZHJhdy1hc3NldHMvQ2FzY2FkaWEud29mZjIiKTsKICAgICAgfQogICAgICBAZm9udC1mYWNlIHsKICAgICAgICBmb250LWZhbWlseTogIkFzc2lzdGFudCI7CiAgICAgICAgc3JjOiB1cmwoImh0dHBzOi8vZmlsZSUyQi52c2NvZGUtcmVzb3VyY2UudnNjb2RlLWNkbi5uZXQvaG9tZS9kYXZpZC1wcmF0YS8udnNjb2RlL2V4dGVuc2lvbnMvcG9tZHRyLmV4Y2FsaWRyYXctZWRpdG9yLTMuNy4zL3B1YmxpYy8vZGlzdC9leGNhbGlkcmF3LWFzc2V0cy9Bc3Npc3RhbnQtUmVndWxhci53b2ZmMiIpOwogICAgICB9CiAgICA8L3N0eWxlPgoKICA8L2RlZnM+CiAgPGcgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgxMCAxMSkgcm90YXRlKDAgMjU2LjUgMTU1KSI+PHBhdGggZD0iTTMyIDAgQzE0My41OCAtMS4zNCwgMjUzLjQ3IC0xLjQ0LCA0ODEgMCBNMzIgMCBDMTg5LjA3IDAuMzksIDM0NS4yNyAwLjUsIDQ4MSAwIE00ODEgMCBDNTAzLjA5IDAuMTYsIDUxMy41MSA5LjUsIDUxMyAzMiBNNDgxIDAgQzUwMy43MSAxLCA1MTIuMTIgMTAuNywgNTEzIDMyIE01MTMgMzIgQzUxMi4wOSAxMzAuMzQsIDUxMS42NiAyMjcuMzIsIDUxMyAyNzggTTUxMyAzMiBDNTEyLjYxIDEyMC44MiwgNTEyLjk3IDIxMS4wNCwgNTEzIDI3OCBNNTEzIDI3OCBDNTEyLjQ1IDMwMS4xNiwgNTA0LjA2IDMxMC45OCwgNDgxIDMxMCBNNTEzIDI3OCBDNTEyLjYxIDI5OS43OCwgNTAyLjU3IDMxMi4yNiwgNDgxIDMxMCBNNDgxIDMxMCBDMzYwLjY4IDMwOC42OCwgMjQxLjUxIDMwOC40MSwgMzIgMzEwIE00ODEgMzEwIEMzNjEuOCAzMDguNjksIDI0MS40OSAzMDguNCwgMzIgMzEwIE0zMiAzMTAgQzguOTMgMzExLjE4LCAtMS45NCAyOTkuMzIsIDAgMjc4IE0zMiAzMTAgQzEwLjQ2IDMxMS40MiwgMi4wMiAzMDAuODUsIDAgMjc4IE0wIDI3OCBDLTAuMTkgMjE2LjA3LCAtMC4xNCAxNTEuNjUsIDAgMzIgTTAgMjc4IEMtMS4wNyAyMDkuNjcsIC0wLjM0IDE0MC4xNywgMCAzMiBNMCAzMiBDMS42OCA5LCAxMi4wOSAtMC41MSwgMzIgMCBNMCAzMiBDLTEuNiA4LjM4LCAxMi4yOCAxLjI2LCAzMiAwIiBzdHJva2U9IiMxZTFlMWUiIHN0cm9rZS13aWR0aD0iMiIgZmlsbD0ibm9uZSI+PC9wYXRoPjwvZz48ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgyNDUgMTApIHJvdGF0ZSgwIDMyLjA1OTk3NDY3MDQxMDE1NiAxOC41ODc2Njk0ODk3MTEwOSkiPjx0ZXh0IHg9IjAiIHk9IjAiIGZvbnQtZmFtaWx5PSJWaXJnaWwsIFNlZ29lIFVJIEVtb2ppIiBmb250LXNpemU9IjI5Ljc0MDI3MTE4MzUzNzczNnB4IiBmaWxsPSIjMWUxZTFlIiB0ZXh0LWFuY2hvcj0ic3RhcnQiIHN0eWxlPSJ3aGl0ZS1zcGFjZTogcHJlOyIgZGlyZWN0aW9uPSJsdHIiIGRvbWluYW50LWJhc2VsaW5lPSJ0ZXh0LWJlZm9yZS1lZGdlIj5ob3N0PC90ZXh0PjwvZz48ZyBzdHJva2UtbGluZWNhcD0icm91bmQiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDMwMi42NDk1NzI2NDk1NzI2MyAxNDEpIHJvdGF0ZSgwIDk1LjY3NTIxMzY3NTIxMzY4IDgwLjgyOTA1OTgyOTA1OTgyKSI+PHBhdGggZD0iTTMyIDAgQzcyIDIuNzksIDExMy44MSAyLjg3LCAxNTkuMzUgMCBNMzIgMCBDNjguMzYgLTAuMzksIDEwMy41OSAwLjgsIDE1OS4zNSAwIE0xNTkuMzUgMCBDMTgwLjU2IDEuODUsIDE5Mi4wNiA5LjAyLCAxOTEuMzUgMzIgTTE1OS4zNSAwIEMxODEuOTcgMi4wOSwgMTkwLjkzIDExLjIzLCAxOTEuMzUgMzIgTTE5MS4zNSAzMiBDMTg4LjY4IDYwLjMxLCAxODguNTEgODUuMzEsIDE5MS4zNSAxMjkuNjYgTTE5MS4zNSAzMiBDMTkxLjE1IDY1Ljc3LCAxOTIuMSAxMDAuOTIsIDE5MS4zNSAxMjkuNjYgTTE5MS4zNSAxMjkuNjYgQzE5MC41NyAxNTIuODEsIDE3OS42NCAxNjEuNjYsIDE1OS4zNSAxNjEuNjYgTTE5MS4zNSAxMjkuNjYgQzE5MC4xIDE1MC4wOSwgMTgyLjU4IDE1OS45MSwgMTU5LjM1IDE2MS42NiBNMTU5LjM1IDE2MS42NiBDMTEyLjYzIDE2MS4yMywgNjIuNzQgMTYyLjY5LCAzMiAxNjEuNjYgTTE1OS4zNSAxNjEuNjYgQzExNS45NiAxNjEuOTcsIDcxLjk2IDE2MS4yMSwgMzIgMTYxLjY2IE0zMiAxNjEuNjYgQzExLjQgMTYyLjQ0LCAwLjk2IDE1MS45OSwgMCAxMjkuNjYgTTMyIDE2MS42NiBDMTIuOTQgMTYxLjY2LCAwLjggMTQ4Ljk1LCAwIDEyOS42NiBNMCAxMjkuNjYgQy0yLjM4IDEwOC4zNywgLTAuNjEgODIuNDksIDAgMzIgTTAgMTI5LjY2IEMwLjc1IDEwNC44MSwgMC40NCA4MC4yOSwgMCAzMiBNMCAzMiBDLTAuNTEgMTAuNDIsIDguODcgMC41MSwgMzIgMCBNMCAzMiBDMS44OCAxMS44MywgMTIuMjMgLTAuMTcsIDMyIDAiIHN0cm9rZT0iIzE5NzFjMiIgc3Ryb2tlLXdpZHRoPSIyIiBmaWxsPSJub25lIj48L3BhdGg+PC9nPjxnIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMzAxIDE5Ny4wODU0NzAwODU0NzAxKSByb3RhdGUoMCA0OS45NDAxNzA5NDAxNzA5NiAyMy43NjkyMzA3NjkyMzA3NzQpIj48cGF0aCBkPSJNMTEuODggMCBDMzMuNzUgMS4xOCwgNTQuOTUgMC41OSwgODggMCBNMTEuODggMCBDNDAuNDIgMS4yMSwgNjcuMjUgMC4yLCA4OCAwIE04OCAwIEM5NS45NyAtMS4yNiwgMTAwLjYyIDIuODYsIDk5Ljg4IDExLjg4IE04OCAwIEM5Ny44OCAtMC43NiwgOTguMDkgMy42NiwgOTkuODggMTEuODggTTk5Ljg4IDExLjg4IEMxMDEuMDcgMTguNDgsIDk3Ljk4IDIzLjc2LCA5OS44OCAzNS42NSBNOTkuODggMTEuODggQzk5LjggMTYuOTcsIDEwMC43OCAyMi4zNywgOTkuODggMzUuNjUgTTk5Ljg4IDM1LjY1IEMxMDAuNDEgNDIuMDUsIDk1LjU0IDQ4LjE1LCA4OCA0Ny41NCBNOTkuODggMzUuNjUgQzk5LjI5IDQzLjM1LCA5Ny40OSA0Ny4xOCwgODggNDcuNTQgTTg4IDQ3LjU0IEM2OS42NyA0Ni44NSwgNDguMjcgNDkuMDcsIDExLjg4IDQ3LjU0IE04OCA0Ny41NCBDNTkuMDMgNDcuMjcsIDI3LjYyIDQ2Ljg3LCAxMS44OCA0Ny41NCBNMTEuODggNDcuNTQgQzMuNDIgNDYuNDMsIDAuNzkgNDQuMTQsIDAgMzUuNjUgTTExLjg4IDQ3LjU0IEM0LjAyIDQ5LjAzLCAtMS4yNSA0NC43NSwgMCAzNS42NSBNMCAzNS42NSBDLTEuNDQgMjYuNzgsIDAuMTYgMTguODQsIDAgMTEuODggTTAgMzUuNjUgQy0wLjQ3IDI4LjI5LCAwLjc5IDIyLjEyLCAwIDExLjg4IE0wIDExLjg4IEMtMSA0LjgxLCAzLjUgMC40MiwgMTEuODggMCBNMCAxMS44OCBDLTAuNyAzLjY5LCA1LjUxIDEuNTcsIDExLjg4IDAiIHN0cm9rZT0iIzE5NzFjMiIgc3Ryb2tlLXdpZHRoPSIyIiBmaWxsPSJub25lIj48L3BhdGg+PC9nPjxnIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoNDIuMTQ5NTcyNjQ5NTcyNzUgMTM4LjE3MDk0MDE3MDk0MDE4KSByb3RhdGUoMCA5NS42NzUyMTM2NzUyMTM2OCA4MC44MjkwNTk4MjkwNTk4MikiPjxwYXRoIGQ9Ik0zMiAwIEM4Mi4yNiAtMS4wMSwgMTI4LjYgLTEuMTcsIDE1OS4zNSAwIE0zMiAwIEM2Ny42NCAtMS4xOSwgMTAyLjMxIC0xLjIsIDE1OS4zNSAwIE0xNTkuMzUgMCBDMTgyLjY0IC0xLjI0LCAxOTAuOTUgMTAuMzcsIDE5MS4zNSAzMiBNMTU5LjM1IDAgQzE4MS41IC0xLjMzLCAxOTIuMzUgMTEuMTksIDE5MS4zNSAzMiBNMTkxLjM1IDMyIEMxOTAuMjkgNTUuODIsIDE5MC4zMSA4MC4xLCAxOTEuMzUgMTI5LjY2IE0xOTEuMzUgMzIgQzE5MSA1My4yMSwgMTkxLjEzIDc2LjIxLCAxOTEuMzUgMTI5LjY2IE0xOTEuMzUgMTI5LjY2IEMxOTMuMTEgMTUyLjU1LCAxODEuNjkgMTYxLjU1LCAxNTkuMzUgMTYxLjY2IE0xOTEuMzUgMTI5LjY2IEMxOTEuMyAxNTAuMTYsIDE3OS41OSAxNjAuMzcsIDE1OS4zNSAxNjEuNjYgTTE1OS4zNSAxNjEuNjYgQzEyNi4yNiAxNjIuMTMsIDk4LjQyIDE2Mi43MiwgMzIgMTYxLjY2IE0xNTkuMzUgMTYxLjY2IEMxMjQuNTMgMTU5Ljk5LCA5MC44IDE2MC4wMiwgMzIgMTYxLjY2IE0zMiAxNjEuNjYgQzEyLjA5IDE2MS45MSwgLTEuODYgMTUxLjg0LCAwIDEyOS42NiBNMzIgMTYxLjY2IEMxMi41OSAxNjIuODYsIDEuODUgMTUwLjU4LCAwIDEyOS42NiBNMCAxMjkuNjYgQy0wLjQxIDEwNC43MSwgMS4wMSA4NC41OCwgMCAzMiBNMCAxMjkuNjYgQy0xLjE4IDEwOC4xNCwgLTEuNjEgODQuMzIsIDAgMzIgTTAgMzIgQzAuNzMgOS40NCwgMTIuMTYgLTAuNjgsIDMyIDAgTTAgMzIgQzAuNTYgOS44NywgOS4yNiAtMC4xNywgMzIgMCIgc3Ryb2tlPSIjZTAzMTMxIiBzdHJva2Utd2lkdGg9IjIiIGZpbGw9Im5vbmUiPjwvcGF0aD48L2c+PGcgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgxMjkuNSAxOTYuMjU2NDEwMjU2NDEwMjgpIHJvdGF0ZSgwIDQ5Ljk0MDE3MDk0MDE3MDk2IDIzLjc2OTIzMDc2OTIzMDc3NCkiPjxwYXRoIGQ9Ik0xMS44OCAwIEM0MC40MSAtMC4wNywgNzAuOTggMC4yMSwgODggMCBNMTEuODggMCBDNDAuMiAtMC4wNSwgNzAuODIgLTAuNDksIDg4IDAgTTg4IDAgQzk1LjUyIC0wLjMsIDEwMC41OSAyLjgxLCA5OS44OCAxMS44OCBNODggMCBDOTYuOTIgMC41MiwgOTguNjcgNC45MiwgOTkuODggMTEuODggTTk5Ljg4IDExLjg4IEM5OC4yNiAxOC42NSwgOTguMTggMjYuMjksIDk5Ljg4IDM1LjY1IE05OS44OCAxMS44OCBDOTkuMzcgMjAuMzgsIDEwMC42NCAyOC42NSwgOTkuODggMzUuNjUgTTk5Ljg4IDM1LjY1IEMxMDAuODggNDMuNDcsIDk1Ljg4IDQ2LjgxLCA4OCA0Ny41NCBNOTkuODggMzUuNjUgQzk4Ljc4IDQyLjI4LCA5NC42OSA0Ny41NSwgODggNDcuNTQgTTg4IDQ3LjU0IEM2Mi4wOSA0Ny42NSwgMzEuOTQgNDguMTMsIDExLjg4IDQ3LjU0IE04OCA0Ny41NCBDNzAuMzggNDYuMTIsIDUzLjE4IDQ3LjA0LCAxMS44OCA0Ny41NCBNMTEuODggNDcuNTQgQzIuMSA0OC4zOSwgMS42NyA0NC42MiwgMCAzNS42NSBNMTEuODggNDcuNTQgQzUuODIgNDcuMTMsIC0xLjQ5IDQ1LjQ2LCAwIDM1LjY1IE0wIDM1LjY1IEMxLjc2IDI5Ljc2LCAtMS40OCAyMy44OCwgMCAxMS44OCBNMCAzNS42NSBDLTAuNyAyOS44OSwgMC40NSAyNC45MSwgMCAxMS44OCBNMCAxMS44OCBDMS40OSAzLjI4LCA0LjQ1IC0wLjcsIDExLjg4IDAgTTAgMTEuODggQy0xLjQxIDMuNzksIDUuNjkgLTEuOTMsIDExLjg4IDAiIHN0cm9rZT0iI2UwMzEzMSIgc3Ryb2tlLXdpZHRoPSIyIiBmaWxsPSJub25lIj48L3BhdGg+PC9nPjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDE0MiAyMTApIHJvdGF0ZSgwIDQwLjg1OTk1NDgzMzk4NDM3NSAxMi41KSI+PHRleHQgeD0iMCIgeT0iMCIgZm9udC1mYW1pbHk9IlZpcmdpbCwgU2Vnb2UgVUkgRW1vamkiIGZvbnQtc2l6ZT0iMjBweCIgZmlsbD0iI2UwMzEzMSIgdGV4dC1hbmNob3I9InN0YXJ0IiBzdHlsZT0id2hpdGUtc3BhY2U6IHByZTsiIGRpcmVjdGlvbj0ibHRyIiBkb21pbmFudC1iYXNlbGluZT0idGV4dC1iZWZvcmUtZWRnZSI+dmV0aC1yZWQ8L3RleHQ+PC9nPjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDMwOC4xNDAwNDUxNjYwMTU2IDIwNy41KSByb3RhdGUoMCA0NC4yNTk5NDg3MzA0Njg3NSAxMi41KSI+PHRleHQgeD0iMCIgeT0iMCIgZm9udC1mYW1pbHk9IlZpcmdpbCwgU2Vnb2UgVUkgRW1vamkiIGZvbnQtc2l6ZT0iMjBweCIgZmlsbD0iIzE5NzFjMiIgdGV4dC1hbmNob3I9InN0YXJ0IiBzdHlsZT0id2hpdGUtc3BhY2U6IHByZTsiIGRpcmVjdGlvbj0ibHRyIiBkb21pbmFudC1iYXNlbGluZT0idGV4dC1iZWZvcmUtZWRnZSI+dmV0aC1ibHVlPC90ZXh0PjwvZz48ZyBzdHJva2UtbGluZWNhcD0icm91bmQiPjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDIzMSAyMjApIHJvdGF0ZSgwIDM2IC0wLjUpIj48cGF0aCBkPSJNMC44NiAwLjggQzEyLjggMC42NCwgNjAuMjEgMC4zMSwgNzIuMjcgLTAuMDUgTS0wLjE0IDAuMTcgQzExLjYxIC0wLjM5LCA1OS4yNiAtMS42MSwgNzEuNDYgLTEuNjciIHN0cm9rZT0iIzJmOWU0NCIgc3Ryb2tlLXdpZHRoPSI0IiBmaWxsPSJub25lIj48L3BhdGg+PC9nPjwvZz48bWFzaz48L21hc2s+PGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoOTEuMTQwMDQ1MTY2MDE1NjIgMjQyLjUpIHJvdGF0ZSgwIDcxLjAxOTk0MzIzNzMwNDY5IDEyLjUpIj48dGV4dCB4PSIwIiB5PSIwIiBmb250LWZhbWlseT0iVmlyZ2lsLCBTZWdvZSBVSSBFbW9qaSIgZm9udC1zaXplPSIyMHB4IiBmaWxsPSIjZTAzMTMxIiB0ZXh0LWFuY2hvcj0ic3RhcnQiIHN0eWxlPSJ3aGl0ZS1zcGFjZTogcHJlOyIgZGlyZWN0aW9uPSJsdHIiIGRvbWluYW50LWJhc2VsaW5lPSJ0ZXh0LWJlZm9yZS1lZGdlIj4xOTIuMTY4LjE1LjEvMjQ8L3RleHQ+PC9nPjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDMwOC41MDAwMzgxNDY5NzI2NiAyNDguNSkgcm90YXRlKDAgNzUuNDI5OTM5MjcwMDE5NTMgMTIuNSkiPjx0ZXh0IHg9IjAiIHk9IjAiIGZvbnQtZmFtaWx5PSJWaXJnaWwsIFNlZ29lIFVJIEVtb2ppIiBmb250LXNpemU9IjIwcHgiIGZpbGw9IiMxOTcxYzIiIHRleHQtYW5jaG9yPSJzdGFydCIgc3R5bGU9IndoaXRlLXNwYWNlOiBwcmU7IiBkaXJlY3Rpb249Imx0ciIgZG9taW5hbnQtYmFzZWxpbmU9InRleHQtYmVmb3JlLWVkZ2UiPjE5Mi4xNjguMTUuMi8yNDwvdGV4dD48L2c+PC9zdmc+Cg==" width="533" height="331" class="img_ev3q"></p>
+<p>Just as we can connect two machines with cables, we can create our virtual cables between namespaces. A cable is linked to an interface, so we need to create the interfaces.</p>
+<p>Let&#x27;s create the virtual interfaces on the host and then make them available in the namespaces.</p>
+<pre><code class="language-bash"># Creating our virtual cable between one interface and another
+ubuntu@ubuntu:~$ sudo ip link add veth-red type veth peer name veth-blue
+
+ubuntu@ubuntu:~$ ip link
+1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+2: enp1s0: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc pfifo_fast state UP mode DEFAULT group default qlen 1000
+    link/ether 52:54:00:bd:d2:80 brd ff:ff:ff:ff:ff:ff
+5: veth-blue@veth-red: &lt;BROADCAST,MULTICAST,M-DOWN&gt; mtu 1500 qdisc noop state DOWN mode DEFAULT group default qlen 1000
+    link/ether be:5c:26:df:91:c2 brd ff:ff:ff:ff:ff:ff
+6: veth-red@veth-blue: &lt;BROADCAST,MULTICAST,M-DOWN&gt; mtu 1500 qdisc noop state DOWN mode DEFAULT group default qlen 1000
+    link/ether f6:2e:b7:78:83:d0 brd ff:ff:ff:ff:ff:ff
+
+# Now let&#x27;s put these interfaces in each ns, because at the moment they&#x27;re still on the host
+ubuntu@ubuntu:~$ sudo ip link set veth-red netns red
+ubuntu@ubuntu:~$ sudo ip link set veth-blue netns blue
+
+# CHECKING... Notice that the interfaces are in the namespaces
+sudo ip -n red link
+1: lo: &lt;LOOPBACK&gt; mtu 65536 qdisc noop state DOWN mode DEFAULT group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+4: veth-red@if3: &lt;BROADCAST,MULTICAST&gt; mtu 1500 qdisc noqueue state DOWN mode DEFAULT group default qlen 1000
+    link/ether f6:2e:b7:78:83:d0 brd ff:ff:ff:ff:ff:ff link-netns blue
+
+ubuntu@ubuntu:~$ sudo ip -n blue link
+1: lo: &lt;LOOPBACK&gt; mtu 65536 qdisc noop state DOWN mode DEFAULT group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+3: veth-blue@if4: &lt;BROADCAST,MULTICAST&gt; mtu 1500 qdisc noqueue state DOWN mode DEFAULT group default qlen 1000
+    link/ether be:5c:26:df:91:c2 brd ff:ff:ff:ff:ff:ff link-netns red
+
+# CHECKING... Can we see them on the host? No.
+ip link
+1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+2: enp1s0: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc pfifo_fast state UP mode DEFAULT group default qlen 1000
+    link/ether 52:54:00:bd:d2:80 brd ff:ff:ff:ff:ff:ff
+
+# These interfaces don&#x27;t have IPs, so let&#x27;s add IPs to them so they&#x27;re on the same network
+ubuntu@ubuntu:~$ sudo ip -n red addr add 192.168.15.1/24 dev veth-red
+ubuntu@ubuntu:~$ sudo ip -n blue addr add 192.168.15.2/24 dev veth-blue
+
+# CHECKING
+sudo ip netns exec red ip addr show dev veth-red
+4: veth-red@if3: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc noqueue state UP group default qlen 1000
+    link/ether f6:2e:b7:78:83:d0 brd ff:ff:ff:ff:ff:ff link-netns blue
+    inet 192.168.15.1/24 scope global veth-red
+       valid_lft forever preferred_lft forever
+    inet6 fe80::f42e:b7ff:fe78:83d0/64 scope link
+       valid_lft forever preferred_lft forever
+sudo ip netns exec blue ip addr show dev veth-blue
+3: veth-blue@if4: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc noqueue state UP group default qlen 1000
+    link/ether be:5c:26:df:91:c2 brd ff:ff:ff:ff:ff:ff link-netns red
+    inet 192.168.15.2/24 scope global veth-blue
+       valid_lft forever preferred_lft forever
+    inet6 fe80::bc5c:26ff:fedf:91c2/64 scope link
+       valid_lft forever preferred_lft forever
+
+
+# Let&#x27;s bring up these interfaces because they were down.
+ubuntu@ubuntu:~$ sudo ip -n red link set veth-red up
+ubuntu@ubuntu:~$ sudo ip -n blue link set veth-blue up
+
+# And ping to see if it works
+
+ubuntu@ubuntu:~$ sudo ip netns exec red ping 192.168.15.2
+PING 192.168.15.2 (192.168.15.2) 56(84) bytes of data.
+64 bytes from 192.168.15.2: icmp_seq=1 ttl=64 time=0.065 ms
+...
+ubuntu@ubuntu:~$ sudo ip netns exec blue ping 192.168.15.1
+64 bytes from 192.168.15.1: icmp_seq=1 ttl=64 time=0.027 ms
+...
+</code></pre>
+<p>Now let&#x27;s check the arp tables and routes</p>
+<pre><code class="language-bash">ubuntu@ubuntu:~$ sudo ip netns exec red arp
+Address                  HWtype  HWaddress           Flags Mask            Iface
+192.168.15.2             ether   be:5c:26:df:91:c2   C                     veth-red
+ubuntu@ubuntu:~$ sudo ip netns exec blue arp
+Address                  HWtype  HWaddress           Flags Mask            Iface
+192.168.15.1             ether   f6:2e:b7:78:83:d0   C                     veth-blue
+# THE HOST DOESN&#x27;T KNOW, SO COMPLETELY ISOLATED
+ubuntu@ubuntu:~$ arp
+Address                  HWtype  HWaddress           Flags Mask            Iface
+_gateway                 ether   52:55:0a:00:02:02   C                     enp1s0
+10.0.2.3                 ether   52:55:0a:00:02:03   C                     enp1s0
+
+# THE SAME GOES FOR ROUTES
+ubuntu@ubuntu:~$ sudo ip netns exec red route
+Kernel IP routing table
+Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
+192.168.15.0    0.0.0.0         255.255.255.0   U     0      0        0 veth-red
+ubuntu@ubuntu:~$ sudo ip netns exec blue route
+Kernel IP routing table
+Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
+192.168.15.0    0.0.0.0         255.255.255.0   U     0      0        0 veth-blue
+</code></pre>
+<blockquote>
+<p>When you delete a namespace you delete all the resources that are in it.</p>
+</blockquote>
+<p>Just to restart for the next example.</p>
+<pre><code class="language-bash">ubuntu@ubuntu:~$ sudo ip netns delete red
+ubuntu@ubuntu:~$ sudo ip netns delete blue
+ubuntu@ubuntu:~$ sudo ip netns add red
+ubuntu@ubuntu:~$ sudo ip netns add blue
+</code></pre>
+<h2 id="connecting-multiple-namespaces">Connecting Multiple Namespaces</h2>
+<p>For two namespaces it&#x27;s easy, but what about when we want to have multiple namespaces as we will do in Kubernetes.</p>
+<p>Just as we created virtual cables, we can create virtual switches and connect the entire namespace to that switch. Creating a switch is the same as creating a virtual network inside the host since switches connect devices on the same network.</p>
+<p>There are several solutions available to create this network inside the host. We have for example Linux Bridge and OvS (Open vSwitch). Let&#x27;s use Linux Bridge.</p>
+<p>The first thing we should do is create a network interface on the host, like any other, but being of type bridge.</p>
+<pre><code class="language-bash">ubuntu@ubuntu:~$ sudo ip link add v-net-0 type bridge
+ubuntu@ubuntu:~$ ip link
+1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+2: enp1s0: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc pfifo_fast state UP mode DEFAULT group default qlen 1000
+    link/ether 52:54:00:bd:d2:80 brd ff:ff:ff:ff:ff:ff
+7: v-net-0: &lt;BROADCAST,MULTICAST&gt; mtu 1500 qdisc noop state DOWN mode DEFAULT group default qlen 1000
+    link/ether 6e:33:35:a2:97:5c brd ff:ff:ff:ff:ff:ff
+sudo ip link set dev v-net-0 up
+</code></pre>
+<p>Let&#x27;s now create a pair of virtual cables for each namespace where one end will be inside the namespace and its other end inside the host that will act as a switch.</p>
+<pre><code class="language-bash"># Creating the pairs
+ubuntu@ubuntu:~$ sudo ip link add veth-red type veth peer name veth-red-br
+ubuntu@ubuntu:~$ sudo ip link add veth-blue type veth peer name veth-blue-br
+ubuntu@ubuntu:~$ sudo ip link add veth-orange type veth peer name veth-orange-br
+ubuntu@ubuntu:~$ sudo ip link add veth-gray type veth peer name veth-gray-br
+
+# Moving the end of a pair inside each namespace
+ubuntu@ubuntu:~$ sudo ip link set veth-red netns red
+ubuntu@ubuntu:~$ sudo ip link set veth-blue netns blue
+ubuntu@ubuntu:~$ sudo ip link set veth-orange netns orange
+ubuntu@ubuntu:~$ sudo ip link set veth-gray netns gray
+
+# Activating all interfaces that went to the namespaces and setting the IPs and masks
+# Those that went to the namespaces and setting the IPs
+ubuntu@ubuntu:~$ sudo ip -n red link set veth-red up
+ubuntu@ubuntu:~$ sudo ip -n blue link set veth-blue up
+ubuntu@ubuntu:~$ sudo ip -n orange link set veth-orange up
+ubuntu@ubuntu:~$ sudo ip -n gray link set veth-gray up
+
+# Setting the IPs of the interfaces inside the namespaces
+ubuntu@ubuntu:~$ sudo ip -n red addr add 192.168.15.1/24 dev veth-red
+ubuntu@ubuntu:~$ sudo ip -n blue addr add 192.168.15.2/24 dev veth-blue
+ubuntu@ubuntu:~$ sudo ip -n orange addr add 192.168.15.3/24 dev veth-orange
+ubuntu@ubuntu:~$ sudo ip -n gray addr add 192.168.15.4/24 dev veth-gray
+
+# Those that remain on the host
+ubuntu@ubuntu:~$ sudo ip link set veth-red-br up
+ubuntu@ubuntu:~$ sudo ip link set veth-blue-br up
+ubuntu@ubuntu:~$ sudo ip link set veth-orange-br up
+ubuntu@ubuntu:~$ sudo ip link set veth-gray-br up
+
+# This is where the magic happens - joining everyone together.
+ubuntu@ubuntu:~$ sudo ip link set veth-red-br master v-net-0
+ubuntu@ubuntu:~$ sudo ip link set veth-blue-br master v-net-0
+ubuntu@ubuntu:~$ sudo ip link set veth-orange-br master v-net-0
+ubuntu@ubuntu:~$ sudo ip link set veth-gray-br master v-net-0
+
+# And finally we need v-net-0 to have an IP from the network on the host itself
+ubuntu@ubuntu:~$ sudo ip addr add 192.168.15.5/24 dev v-net-0
+</code></pre>
+<p>This network is still private and has no access outside the host. The red namespace will never be able to connect with other interfaces outside its network. For this it&#x27;s necessary to define a gateway.</p>
+<p>Our host has access to both networks so it would serve as our router.</p>
+<h2 id="connecting-namespaces-with-the-host">Connecting Namespaces with the Host</h2>
+<p>Although the namespace networks communicate with each other, they don&#x27;t communicate with the host network if you don&#x27;t define a gateway</p>
+<pre><code class="language-bash">ubuntu@ubuntu:~$ ip addr show
+1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+    inet6 ::1/128 scope host
+       valid_lft forever preferred_lft forever
+2: enp1s0: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc pfifo_fast state UP group default qlen 1000
+    link/ether 52:54:00:bd:d2:80 brd ff:ff:ff:ff:ff:ff`
+        #HOST IP
+    inet 10.0.2.15/24 brd 10.0.2.255 scope global dynamic noprefixroute enp1s0
+       valid_lft 71671sec preferred_lft 71671sec
+    inet6 fec0::4b95:b6e6:2660:9d70/64 scope site temporary dynamic
+       valid_lft 86341sec preferred_lft 14341sec
+    inet6 fec0::5054:ff:febd:d280/64 scope site dynamic mngtmpaddr
+       valid_lft 86341sec preferred_lft 14341sec
+    inet6 fe80::5054:ff:febd:d280/64 scope link
+       valid_lft forever preferred_lft forever
+7: v-net-0: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc noqueue state UP group default qlen 1000
+    link/ether 6e:33:35:a2:97:5c brd ff:ff:ff:ff:ff:ff
+    inet 192.168.15.5/24 scope global v-net-0
+       valid_lft forever preferred_lft forever
+    inet6 fe80::6c33:35ff:fea2:975c/64 scope link
+       valid_lft forever preferred_lft forever
+8: veth-red-br@if9: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc noqueue master v-net-0 state UP group default qlen 1000
+    link/ether da:96:b7:3f:34:43 brd ff:ff:ff:ff:ff:ff link-netns red
+    inet6 fe80::d896:b7ff:fe3f:3443/64 scope link
+       valid_lft forever preferred_lft forever
+10: veth-blue-br@if11: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc noqueue master v-net-0 state UP group default qlen 1000
+    link/ether 4a:cb:ef:ec:9b:26 brd ff:ff:ff:ff:ff:ff link-netns blue
+    inet6 fe80::48cb:efff:feec:9b26/64 scope link
+       valid_lft forever preferred_lft forever
+12: veth-orange-br@if13: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc noqueue master v-net-0 state UP group default qlen 1000
+    link/ether e6:d6:7a:e9:14:82 brd ff:ff:ff:ff:ff:ff link-netns orange
+    inet6 fe80::e4d6:7aff:fee9:1482/64 scope link
+       valid_lft forever preferred_lft forever
+14: veth-gray-br@if15: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc noqueue master v-net-0 state UP group default qlen 1000
+    link/ether b6:e8:a4:01:63:d7 brd ff:ff:ff:ff:ff:ff link-netns gray
+    inet6 fe80::b4e8:a4ff:fe01:63d7/64 scope link
+       valid_lft forever preferred_lft forever
+
+#ATTEMPT TO PING THE HOST
+ubuntu@ubuntu:~$ sudo ip netns exec red ping 10.0.2.15
+ping: connect: Network is unreachable
+</code></pre>
+<p>Let&#x27;s then define routes so that the host is reachable.</p>
+<pre><code class="language-bash"># We define that if we want to go to the 10.0.2.0/24 network we will have to go through the v-net-0 IP
+ubuntu@ubuntu:~$ sudo ip netns exec red ip route add 10.0.2.0/24 via 192.168.15.5
+ubuntu@ubuntu:~$ sudo ip netns exec red ping 10.0.2.15
+PING 10.0.2.15 (10.0.2.15) 56(84) bytes of data.
+64 bytes from 10.0.2.15: icmp_seq=1 ttl=64 time=0.130 ms
+64 bytes from 10.0.2.15: icmp_seq=2 ttl=64 time=0.035 ms
+
+#So let&#x27;s continue and do this for everyone
+ubuntu@ubuntu:~$ sudo ip netns exec blue ip route add 10.0.2.0/24 via 192.168.15.5
+ubuntu@ubuntu:~$ sudo ip netns exec orange ip route add 10.0.2.0/24 via 192.168.15.5
+ubuntu@ubuntu:~$ sudo ip netns exec gray ip route add 10.0.2.0/24 via 192.168.15.5
+
+# Let&#x27;s also add routes to go out to the internet
+ubuntu@ubuntu:~$ sudo ip netns exec red ip route add default via 192.168.15.5
+ubuntu@ubuntu:~$ sudo ip netns exec blue ip route add default via 192.168.15.5
+ubuntu@ubuntu:~$ sudo ip netns exec orange ip route add default via 192.168.15.5
+ubuntu@ubuntu:~$ sudo ip netns exec gray ip route add default via 192.168.15.5
+</code></pre>
+<h2 id="using-the-host-as-nat">Using the Host as NAT</h2>
+<p>But would it be possible to go out to the Internet and ping Google since the host has access to the Internet? No, it still wouldn&#x27;t be possible. It also wouldn&#x27;t be possible to access other machines on the same host network.</p>
+<p>The packets will leave the namespace with a header with the source IP and we need to transform them as if they had come from the host and not from a network inside the host. For this we need to mask these packets using iptables.</p>
+<pre><code class="language-bash">iptables -t nat -A POSTROUTING -s 192.168.15.0*24 -j MASQUERADE
+</code></pre>
+<h2 id="connecting-from-outside-into-a-namespace">Connecting from Outside into a Namespace</h2>
+<p>If we had some service running in a namespace how would it be reachable? Let&#x27;s imagine a service that is using port 80 of the container.
+Actually it is reachable through the host, but mapped into the namespace.</p>
+<pre><code class="language-bash">iptables -t nat -A PREROUTING --dport 80 --to-destination 192.168.15.1:80 -j DNAT
+</code></pre>
+<p>If you noticed well, it&#x27;s exactly how cluster IP works in Kubernetes.</p>
+<p>If we wanted to map port 8080 of the host to send to port 80 of the container it would be.</p>
+<pre><code class="language-bash">iptables -t nat -A PREROUTING --dport 8080 --to-destination 192.168.15.1:80 -j DNAT
+</code></pre>
+      <div class="docs-pager">
+        <a href="../../../../#blogs">All blogs</a>
+        <a href="../">Back to CKA</a>
+      </div>
+    </article>
+    <aside class="docs-toc">
+      <div class="docs-toc-title">On this page</div>
+      <nav>
+        <a href="#creating-network-namespaces">Creating Network Namespaces</a>
+        <a href="#connecting-two-namespaces">Connecting Two Namespaces</a>
+        <a href="#connecting-multiple-namespaces">Connecting Multiple Namespaces</a>
+        <a href="#connecting-namespaces-with-the-host">Connecting Namespaces with the Host</a>
+        <a href="#using-the-host-as-nat">Using the Host as NAT</a>
+        <a href="#connecting-from-outside-into-a-namespace">Connecting from Outside into a Namespace</a>
+      </nav>
+    </aside>
+  </div>
+  <script src="../../../../js/docs.js"></script>
+</body>
+</html>

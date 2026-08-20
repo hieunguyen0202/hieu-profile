@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CKS Exam - Certified Kubernetes Security Specialist — Hieu Nguyen</title>
+  <meta name="description" content="CKS Exam - Certified Kubernetes Security Specialist — Kubestronaut roadmap.">
+  <link rel="icon" href="../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../">i'm<span>.hieu</span></a>
+    <nav class="docs-series">
+      <a href="../../../blog/web-security/">Web Security</a>
+      <a class="active" href="../">Kubestronaut roadmap</a>
+    </nav>
+    <nav class="docs-cert-tabs"><a href="../cka/" class="">CKA</a><a href="../ckad/" class="">CKAD</a><a href="../cks/" class="active">CKS</a></nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-nav="kubestronaut" data-cert="cks" data-docs-root="./" data-active="exam">
+      <div class="docs-nav-label">CKS</div>
+      <ul class="docs-nav" id="docsNav"></ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../">Home</a>
+        <span>›</span>
+        <a href="../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../">Kubestronaut</a>
+        <span>›</span>
+        <a href="./">CKS</a>
+        <span>›</span>
+        <span>CKS Exam</span>
+      </div>
+      <div id="top"></div>
+<header><h1>CKS Exam - Certified Kubernetes Security Specialist</h1></header><p><img decoding="async" loading="lazy" alt="CKA" src="https://devsecops.puziol.com.br/en/assets/images/CKS-logo-8a8eb31ca9395abca085358fa27c4e7b.svg" width="200" height="200" class="img_ev3q"></p>
+<p><a href="https://www.cncf.io/training/certification/cks/" target="_blank" rel="noopener noreferrer" class="">Certified Kubernetes Security Specialist (CKS)</a> provides assurance that a CKS has the skills, knowledge, and competence in a broad range of best practices for securing container-based applications and Kubernetes platforms during build, deployment, and runtime. The CKA certification is required to take this exam. <code>The certificate is valid for 2 years</code>.</p>
+<blockquote>
+<p>Tip! The exam costs on average 300 dollars, but it&#x27;s possible during Black Friday and year-end periods to get discounts from 35% to 50%</p>
+</blockquote>
+<p>The certification exam is practical and assesses the candidate&#x27;s knowledge in Kubernetes and security.</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="what-is-covered-on-the-exam">What is covered on the exam?</h2>
+<p><a href="https://github.com/cncf/curriculum/blob/master/CKS_Curriculum_%20v1.30.pdf" target="_blank" rel="noopener noreferrer" class="">pdf</a></p>
+<p><strong>Cluster Setup (10%)</strong>:</p>
+<ul>
+<li class="">Use network security policies to restrict cluster access.</li>
+<li class="">Use the CIS benchmark to perform a security review of Kubernetes components.</li>
+<li class="">Set up ingress objects with security controls.</li>
+<li class="">Protect node and endpoint metadata.</li>
+<li class="">Minimize use of and access to GUI elements.</li>
+</ul>
+<p><strong>Cluster Hardening (15%)</strong>:</p>
+<ul>
+<li class="">Restrict access to the Kubernetes API.</li>
+<li class="">Use RBAC to minimize exposure.</li>
+<li class="">Exercise caution using service accounts, disable defaults, and minimize permissions for newly created ones.</li>
+</ul>
+<p><strong>System Hardening (15%)</strong>:</p>
+<ul>
+<li class="">Minimize host OS footprint/attack surface.</li>
+<li class="">Minimize IAM roles.</li>
+<li class="">Minimize external network access.</li>
+<li class="">Appropriately use kernel hardening tools such as AppArmor and seccomp.</li>
+</ul>
+<p><strong>Minimize Microservice Vulnerabilities (20%)</strong>:</p>
+<ul>
+<li class="">Configure security domains at the OS level.</li>
+<li class="">Manage Kubernetes secrets.</li>
+<li class="">Use container runtime sandboxes in multi-tenant environments.</li>
+</ul>
+<p><strong>Supply Chain Security (20%)</strong>:</p>
+<ul>
+<li class="">Minimize base image footprint.</li>
+<li class="">Ensure only allowed, signed, and validated images are used.</li>
+<li class="">Use static analysis of workloads.</li>
+<li class="">Scan images for known vulnerabilities.</li>
+</ul>
+<p><strong>Monitoring, Logging &amp; Runtime Security (20%)</strong>:</p>
+<ul>
+<li class="">Perform behavioral analytics of syscall process and file activities to detect malicious activities.</li>
+<li class="">Use audit logs to monitor access.</li>
+<li class="">Ensure immutability of containers at runtime.</li>
+<li class="">Deep analytics and forensics to identify possible intruders in environments.</li>
+<li class="">Detect threats within the attack phases and where they spread.</li>
+</ul>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="retake-policy">Retake Policy</h2>
+<p>A second attempt is possible if the candidate fails on the first try. If you don&#x27;t pass either attempt, a new purchase will allow for a new retake.</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="rescheduling-or-cancellation-policy">Rescheduling or Cancellation Policy</h2>
+<p>If you need to reschedule or cancel, it must be done with 24 hours notice; otherwise, it&#x27;s considered a TOTAL failure without retake rights.</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="about-the-exam">About the Exam</h2>
+<ul>
+<li class="">Online and supervised by a proctor in real-time</li>
+<li class="">Fully hands-on/practical</li>
+<li class="">Not a multiple-choice exam</li>
+<li class=""><code>2 Hours</code></li>
+<li class="">Requesting a pause via the pause function does not stop the timer</li>
+<li class="">Results delivered within 24 hours via email</li>
+</ul>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="about-the-exam-environment">About the Exam Environment</h2>
+<ul>
+<li class="">The location must be quiet, private, and well-lit. Cannot be conducted in public spaces.</li>
+<li class="">Cannot have a window behind the candidate</li>
+<li class="">Cannot have bright lights behind the candidate</li>
+<li class="">Only the candidate can be in the room</li>
+<li class="">The desk must be clear and free of notes and electronics</li>
+</ul>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="code-of-conduct">Code of Conduct</h2>
+<ul>
+<li class="">The candidate cannot communicate with anyone other than the proctor during the exam</li>
+<li class="">Cannot read questions aloud</li>
+<li class="">Cannot leave the webcam&#x27;s view or the desk unless the proctor permits</li>
+<li class="">Eating is not allowed during the exam; only transparent liquids are permitted. The bottle and cup used to hold the liquid must be transparent and without labels</li>
+<li class="">Cannot wear headphones or any electronic devices on the body or head unless medically necessary. Therefore, headphones will not be allowed</li>
+<li class="">Cannot make repetitive and excessive noise. If there&#x27;s construction near your home, take the exam in a different environment</li>
+<li class="">Cannot cover the mouth or face</li>
+<li class="">Cannot write any information on paper or any electronic device. Only on the console screen</li>
+<li class="">No inappropriate or questionable behavior</li>
+</ul>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="allowed-tools">Allowed Tools</h2>
+<p>A VM will be provided for the exam, and within this VM you can use:</p>
+<ul>
+<li class="">Command line usage</li>
+<li class="">Review documents installed by the Linux distribution, i.e., /usr/share/*</li>
+<li class="">Use packages that are part of the distribution</li>
+<li class="">Access documentation pages using the VM&#x27;s browser. Allowed pages including subdomains are:
+<ul>
+<li class=""><a href="https://kubernetes.io/docs/" target="_blank" rel="noopener noreferrer" class="">https://kubernetes.io/docs/</a></li>
+<li class=""><a href="https://kubernetes.io/blog/" target="_blank" rel="noopener noreferrer" class="">https://kubernetes.io/blog/</a></li>
+</ul>
+</li>
+<li class="">The search tool from <a href="https://kubernetes.io/docs/" target="_blank" rel="noopener noreferrer" class="">https://kubernetes.io/docs/</a> can be used, but only access subdomains from the links above</li>
+</ul>
+<blockquote>
+<p><code>I recommend using only the command line for everything throughout the course</code></p>
+</blockquote>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="system-requirements">System Requirements</h2>
+<p><a href="https://docs.linuxfoundation.org/tc-docs/certification/tips-cka-and-ckad" target="_blank" rel="noopener noreferrer" class="">https://docs.linuxfoundation.org/tc-docs/certification/tips-cka-and-ckad</a></p>
+<p>To verify if your environment is capable of running the test, go to <a href="https://syscheck.bridge.psiexams.com/" target="_blank" rel="noopener noreferrer" class="">https://syscheck.bridge.psiexams.com/</a></p>
+<p>The latest version of Chrome is recommended.
+One extra monitor can be used and 1080p resolution is recommended to support the ExamUI.</p>
+<p>Reliable internet connection:</p>
+<ul>
+<li class="">Disable bandwidth-intensive services
+<ul>
+<li class="">Streaming</li>
+<li class="">Video Calls</li>
+<li class="">Torrents and downloads</li>
+<li class="">Disable firewalls and VPNs</li>
+<li class="">Use ethernet cable if possible</li>
+</ul>
+</li>
+</ul>
+<p><code>You cannot use a virtual machine to take the exam</code> even if the compatibility check doesn&#x27;t show issues</p>
+<p>Working webcam and microphone. The webcam must be able to be moved to show the environment to the proctor.</p>
+<p>No other applications or browser windows can be running during the exam.</p>
+<p><img decoding="async" loading="lazy" alt="System Check" src="https://devsecops.puziol.com.br/en/assets/images/systemcheck-a3c7f21c45497cac89bac57a772e9fcd.png" width="1908" height="486" class="img_ev3q"></p>
+<p>Check requirements at <a href="https://helpdesk.psionline.com/hc/en-gb/articles/4409608794260-PSI-Bridge-Platform-System-Requirements" target="_blank" rel="noopener noreferrer" class="">https://helpdesk.psionline.com/hc/en-gb/articles/4409608794260-PSI-Bridge-Platform-System-Requirements</a></p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="questions">Questions?</h2>
+<ul>
+<li class="">Can I enable kubectl auto-complete? You should</li>
+</ul>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="how-to-study">How to Study?</h2>
+<p>The material used as a base was the Killer Shell course.</p></div></article><nav class="docusaurus-mt-lg pagination-nav" aria-label="Docs pages"><a class="pagination-nav__link pagination-nav__link--prev" href="/en/kubernetes/ckad/helm-basics"><div class="pagination-nav__sublabel">Previous</div><div class="pagination-nav__label">Helm Basics</div></a><a class="pagination-nav__link pagination-nav__link--next" href="/en/category/introduction"><div class="pagination-nav__sublabel">Next</div><div class="pagination-nav__label">Introduction</div></a></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#what-is-covered-on-the-exam" class="table-of-contents__link toc-highlight">What is covered on the exam?</a></li><li><a href="#retake-policy" class="table-of-contents__link toc-highlight">Retake Policy</a></li><li><a href="#rescheduling-or-cancellation-policy" class="table-of-contents__link toc-highlight">Rescheduling or Cancellation Policy</a></li><li><a href="#about-the-exam" class="table-of-contents__link toc-highlight">About the Exam</a></li><li><a href="#about-the-exam-environment" class="table-of-contents__link toc-highlight">About the Exam Environment</a></li><li><a href="#code-of-conduct" class="table-of-contents__link toc-highlight">Code of Conduct</a></li><li><a href="#allowed-tools" class="table-of-contents__link toc-highlight">Allowed Tools</a></li><li><a href="#system-requirements" class="table-of-contents__link toc-highlight">System Requirements</a></li><li><a href="#questions" class="table-of-contents__link toc-highlight">Questions?</a></li><li><a href="#how-to-study" class="table-of-contents__link toc-highlight">How to Study?</a></li></ul></div></div></div></div></main></div></div>
+      <div class="docs-pager">
+        <a href="../../../#blogs">All blogs</a>
+        <a href="introduction/">Next · Introduction</a>
+      </div>
+    </article>
+    <aside class="docs-toc">
+      <div class="docs-toc-title">On this page</div>
+      <nav>
+        <a href="#what-is-covered-on-the-exam">What is covered on the exam?</a>
+        <a href="#retake-policy">Retake Policy</a>
+        <a href="#rescheduling-or-cancellation-policy">Rescheduling or Cancellation Policy</a>
+        <a href="#about-the-exam">About the Exam</a>
+        <a href="#about-the-exam-environment">About the Exam Environment</a>
+        <a href="#code-of-conduct">Code of Conduct</a>
+        <a href="#allowed-tools">Allowed Tools</a>
+        <a href="#system-requirements">System Requirements</a>
+        <a href="#questions">Questions?</a>
+        <a href="#how-to-study">How to Study?</a>
+      </nav>
+    </aside>
+  </div>
+  <script src="../../../js/docs.js"></script>
+</body>
+</html>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Storage Class — Hieu Nguyen</title>
+  <meta name="description" content="Storage Class — Kubestronaut roadmap.">
+  <link rel="icon" href="../../../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../../../">i'm<span>.hieu</span></a>
+    <nav class="docs-series">
+      <a href="../../../../../blog/web-security/">Web Security</a>
+      <a class="active" href="../../../">Kubestronaut roadmap</a>
+    </nav>
+    <nav class="docs-cert-tabs"><a href="../../../cka/" class="active">CKA</a><a href="../../../ckad/" class="">CKAD</a><a href="../../../cks/" class="">CKS</a></nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-nav="kubestronaut" data-cert="cka" data-docs-root="../../" data-active="storage/storage-class">
+      <div class="docs-nav-label">CKA</div>
+      <ul class="docs-nav" id="docsNav"></ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../../../">Home</a>
+        <span>›</span>
+        <a href="../../../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../../../">Kubestronaut</a>
+        <span>›</span>
+        <a href="../../">CKA</a>
+        <span>›</span>
+        <span>Storage Class</span>
+      </div>
+      <div id="top"></div>
+<header><h1>Storage Class</h1></header><p>When defining a Storage Class, you specify details about how volumes should be provisioned, such as the storage provisioner to use, default reclaim policies, volume binding modes, among others.</p>
+<p>We can associate the StorageClass as a type of template for PersistentVolumes (PVs) in Kubernetes. The StorageClass provides a way to define default configurations for dynamic provisioning of persistent volumes. But this is not a completely valid statement, as storage class does other things besides that.</p>
+<p>When a volume is created and a storage class is pointed to, the volume will inherit the storage class configurations.</p>
+<p>It&#x27;s possible to create a volume without a Storage Class, but we&#x27;ll need to define several parameters in the volume and create things manually.</p>
+<p>In this example below, it&#x27;s necessary that the cloud volume be previously created before the PV. This is called static provisioning volumes.</p>
+<p><img decoding="async" loading="lazy" alt="alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-9-6a32b2baaffc12158f4598d5f764ddb2.png" width="909" height="791" class="img_ev3q"></p>
+<p>But it would be interesting if this volume could be created automatically. This is where another Storage Class functionality comes in. Which is to be the storage provisioner for the PV.</p>
+<p>The Storage Class uses Volume Driver Plugins to make this connection.</p>
+<p><img decoding="async" loading="lazy" alt="alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-10-22cc7401398750bdc37c21ea04d81cf3.png" width="808" height="387" class="img_ev3q"></p>
+<p>Each different provisioner type needs different parameters, so it&#x27;s not possible to put everything here in the study as there are many different ones as mentioned earlier. When setting up a specific Storage Class, you need to look up how to do it.</p>
+<p>We can use the Storage Class to create different disk types using the same provisioners, which is why it&#x27;s called class!</p>
+<p><img decoding="async" loading="lazy" alt="alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-11-2e2098256a1afaecb2a049e1fb01dcc6.png" width="1862" height="468" class="img_ev3q"></p>
+      <div class="docs-pager">
+        <a href="../../../../../#blogs">All blogs</a>
+        <a href="../../">Back to CKA</a>
+      </div>
+    </article>
+    <aside class="docs-toc">
+      <div class="docs-toc-title">On this page</div>
+      <nav>
+        <a href="#top">On this page</a>
+      </nav>
+    </aside>
+  </div>
+  <script src="../../../../../js/docs.js"></script>
+</body>
+</html>

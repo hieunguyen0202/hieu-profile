@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Deployments — Hieu Nguyen</title>
+  <meta name="description" content="Deployments — Kubestronaut roadmap.">
+  <link rel="icon" href="../../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../../">i'm<span>.hieu</span></a>
+    <nav class="docs-series">
+      <a href="../../../../blog/web-security/">Web Security</a>
+      <a class="active" href="../../">Kubestronaut roadmap</a>
+    </nav>
+    <nav class="docs-cert-tabs"><a href="../../cka/" class="">CKA</a><a href="../../ckad/" class="active">CKAD</a><a href="../../cks/" class="">CKS</a></nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-nav="kubestronaut" data-cert="ckad" data-docs-root="../" data-active="deployments">
+      <div class="docs-nav-label">CKAD</div>
+      <ul class="docs-nav" id="docsNav"></ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../../">Home</a>
+        <span>›</span>
+        <a href="../../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../../">Kubestronaut</a>
+        <span>›</span>
+        <a href="../">CKAD</a>
+        <span>›</span>
+        <span>Deployments</span>
+      </div>
+      <div id="top"></div>
+<header><h1>Deployments</h1></header><p>For this study, let&#x27;s follow this sequence:</p>
+<ol>
+<li><a href="https://devsecops.puziol.com.br/en/kubernetes/cka/labels-selectors">Labels</a></li>
+<li><a href="https://devsecops.puziol.com.br/en/kubernetes/cka/rolling-updates-rollbacks">Rolling Updates &amp; Rollbacks</a></li>
+</ol>
+<h2 id="blue-green-vs-canary">Blue Green vs Canary</h2>
+<p>In a few words, Blue-Green is the act of creating a second deployment, with a new name, new image, new labels, and it&#x27;s recommended to maintain a <code>version</code> label, but not necessary. Once the second deployment is ready, only the service selector should be changed to stop pointing to the first deployment and point to the second, redirecting all traffic immediately.</p>
+<p>On the other hand, Canary deployment is the act of migrating gradually. A percentage of the service requests should go to the first deployment and another percentage to the second. These percentages should be adjusted gradually so that over a period all traffic moves to the second deployment.</p>
+<p>In Canary deployment, both deployments need to have at least one label in common, for example <code>app=my-app-name</code>. In the Service, we&#x27;ll filter by this common label so that all pods from both deployments can respond to requests, even being from different versions.</p>
+<p>To control traffic, it&#x27;s only necessary to control the number of pods of both versions. In version 1, we can have 3 replicas and in version 2, we can have 7 replicas. This gives us 30% traffic to version 1 and 70% to version 2, since the service has the round-robin algorithm by default.</p>
+<p>There are better tools to do this, such as Istio, but we won&#x27;t study it in CKAD.</p>
+      <div class="docs-pager">
+        <a href="../../../../#blogs">All blogs</a>
+        <a href="../">Back to CKAD</a>
+      </div>
+    </article>
+    <aside class="docs-toc">
+      <div class="docs-toc-title">On this page</div>
+      <nav>
+        <a href="#blue-green-vs-canary">Blue Green vs Canary</a>
+      </nav>
+    </aside>
+  </div>
+  <script src="../../../../js/docs.js"></script>
+</body>
+</html>

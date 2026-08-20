@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Image Security — Hieu Nguyen</title>
+  <meta name="description" content="Image Security — Kubestronaut roadmap.">
+  <link rel="icon" href="../../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../../">i'm<span>.hieu</span></a>
+    <nav class="docs-series">
+      <a href="../../../../blog/web-security/">Web Security</a>
+      <a class="active" href="../../">Kubestronaut roadmap</a>
+    </nav>
+    <nav class="docs-cert-tabs"><a href="../../cka/" class="active">CKA</a><a href="../../ckad/" class="">CKAD</a><a href="../../cks/" class="">CKS</a></nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-nav="kubestronaut" data-cert="cka" data-docs-root="../" data-active="image-security">
+      <div class="docs-nav-label">CKA</div>
+      <ul class="docs-nav" id="docsNav"></ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../../">Home</a>
+        <span>›</span>
+        <a href="../../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../../">Kubestronaut</a>
+        <span>›</span>
+        <a href="../">CKA</a>
+        <span>›</span>
+        <span>Image Security</span>
+      </div>
+      <div id="top"></div>
+<header><h1>Image Security</h1></header><p>Many images are public and do not require authorization for the container runtime on each node to pull the image. However, images that actually run an organization&#x27;s applications should be private and protected against unauthorized access.</p>
+<p>Let&#x27;s look at this deployment as an example (or it could be a pod, it doesn&#x27;t matter)...</p>
+<pre><code class="language-yaml">apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: nginx
+  name: nginx
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx
+        resources: {}
+status: {}
+</code></pre>
+<p>The container named nginx will use the nginx image, but where does it come from? By default, these images reference the Docker image registry, which is why we can simplify using just the name nginx, as Kubernetes knows it comes from Docker.</p>
+<p>If we did this, it would be the same thing.</p>
+<pre><code class="language-yaml">...
+    spec:
+      containers:
+      - name: nginx
+        image: docker.io/nginx
+        resources: {}
+...
+</code></pre>
+<pre><code class="language-bash">kubectl create deployment nginx --image docker.io/nginx
+deployment.apps/nginx created
+➜  files git:(main) ✗ kubectl get deploy
+NAME    READY   UP-TO-DATE   AVAILABLE   AGE
+nginx   1/1     1            1           18s
+</code></pre>
+<p>Let&#x27;s do a different test for an image in a private repository.</p>
+<pre><code class="language-bash"># Authenticating to my docker account
+docker login
+Authenticating with existing credentials...
+WARNING! Your password will be stored unencrypted in /home/david-prata/.docker/config.json.
+Configure a credential helper to remove this warning. See
+https://docs.docker.com/engine/reference/commandline/login/#credentials-store
+
+Login Succeeded
+
+# Pulling a public image
+docker pull nginx
+Using default tag: latest
+latest: Pulling from library/nginx
+c57ee5000d61: Pull complete
+9b0163235c08: Pull complete
+f24a6f652778: Pull complete
+9f3589a5fc50: Pull complete
+f0bd99a47d4a: Pull complete
+398157bc5c51: Pull complete
+1ef1c1a36ec2: Pull complete
+Digest: sha256:84c52dfd55c467e12ef85cad6a252c0990564f03c4850799bf41dd738738691f
+Status: Downloaded newer image for nginx:latest
+docker.io/library/nginx:latest
+
+# Creating a new tag, but now referencing it as if it were mine
+docker tag nginx:latest davidpuziol/nginx
+docker push davidpuziol/nginx
+Using default tag: latest
+The push refers to repository [docker.io/davidpuziol/nginx] # &lt;&lt;&lt; Look where it&#x27;s going
+f205d290cd76: Mounted from library/nginx
+2b28485849ea: Mounted from library/nginx
+9f21a390e3f6: Mounted from library/nginx
+06536efc503a: Mounted from library/nginx
+84e0c9ef07d7: Mounted from library/nginx
+83bdf27d9eaa: Mounted from library/nginx
+fb1bd2fc5282: Mounted from library/nginx
+latest: digest: sha256:6a9af2366105c104e353d16998458d6a15aa5d6db0861ad9ce98538890391950 size: 1778
+
+# Let&#x27;s logout from docker and try to pull
+docker logout
+Removing login credentials for https://index.docker.io/v1/
+
+# And we cannot pull because we don&#x27;t have permission.
+docker pull davidpuziol/nginx
+Using default tag: latest
+Error response from daemon: pull access denied for davidpuziol/nginx, repository does not exist or may require &#x27;docker login&#x27;: denied: requested access to the resource is denied
+</code></pre>
+<p>This is exactly what will happen when we try to create a deployment with this image. Let&#x27;s test it.</p>
+<pre><code class="language-bash">kubectl create deployment nginx-david --image docker.io/davidpuziol/nginx
+deployment.apps/nginx-david created
+
+kubectl get deploy
+NAME          READY   UP-TO-DATE   AVAILABLE   AGE
+nginx         1/1     1            1           7m1s
+nginx-david   0/1     1            0           11s
+
+kubectl get pods nginx-david-54ccffddf9-mm5jp
+NAME                           READY   STATUS             RESTARTS   AGE
+nginx-david-54ccffddf9-mm5jp   0/1     ImagePullBackOff   0          24s
+</code></pre>
+<p>Looking at the image we have docker.io/davidpuziol/nginx which is the same as docker.io/davidpuziol/nginx:latest</p>
+<ul>
+<li>docker.io is the registry</li>
+<li>davidpuziol is the user account</li>
+<li>nginx is the image name</li>
+<li>latest is the image tag</li>
+</ul>
+<p>To perform the authentication process, we need to pass some login parameters. How do we do this?</p>
+<p>Several other registries exist besides docker.io. We have: ECR from AWS, ACR from Azure, GCR, or even repository servers that we create using Harbor, which is widely used in the open source world.</p>
+<blockquote>
+<p>GCR has many public images that are used in the cluster, such as gcr.io/kubernetes-e2e-test-images/dnsutils</p>
+</blockquote>
+<p>Take a look at this registry which has a lot of things used out there besides Docker.</p>
+<p>Many Kubernetes images that were in Google&#x27;s repositories (k8s.gcr.io) are migrating to another repository called <code>registry.k8s.io</code></p>
+<pre><code class="language-bash">kubectl describe pods -n kube-system kube-apiserver-kind-cluster-control-plane | grep Image:
+    Image:         registry.k8s.io/kube-apiserver:v1.29.1
+</code></pre>
+<p>Well, understanding the process that we need to be logged in, the runtime will try to login the same way when obtaining a private image.</p>
+<p>To pass the credentials, we first need them inside a secret.</p>
+<p>If we were to create a secret that had the registry data, it would be like this:</p>
+<p>Create a file with this content and base64 encode it as we will need it.</p>
+<pre><code class="language-bash">cat &lt;&lt;EOF | base64 -w 0
+{
+  &quot;auths&quot;: {
+    &quot;docker.io&quot;: {
+      &quot;username&quot;: &quot;myuser&quot;,
+      &quot;password&quot;: &quot;mypass123&quot;,
+      &quot;email&quot;: &quot;my@email123&quot;
+    }
+  }
+}
+EOF
+ewogICJhdXRocyI6IHsKICAgICJkb2NrZXIuaW8iOiB7CiAgICAgICJ1c2VybmFtZSI6ICJtZXV1c2VyIiwKICAgICAgInBhc3N3b3JkIjogIm1ldXBhc3MxMjMiLAogICAgICAiZW1haWwiOiAibWV1QGVtYWlsMTIzIgogICAgfQogIH0KfQo=
+</code></pre>
+<p>Create a manifest passing the encoded value. Note that the type of this secret is dockerconfigjson.</p>
+<pre><code class="language-bash">cat &lt;&lt;EOF | kubectl apply -f -
+apiVersion: v1
+kind: Secret
+metadata:
+  name: dockercreds
+type: kubernetes.io/dockerconfigjson
+data:
+  .dockerconfigjson: ewogICJhdXRocyI6IHsKICAgICJkb2NrZXIuaW8iOiB7CiAgICAgICJ1c2VybmFtZSI6ICJtZXV1c2VyIiwKICAgICAgInBhc3N3b3JkIjogIm1ldXBhc3MxMjMiLAogICAgICAiZW1haWwiOiAibWV1QGVtYWlsMTIzIgogICAgfQogIH0KfQo=
+EOF
+
+secret/dockercreds created
+</code></pre>
+<p>Now we can use this secret. Note that this is a Pod specification and not for the containers inside the pod. This secret will work for any image inside this pod. We can also observe that it&#x27;s a list.</p>
+<pre><code class="language-yaml">...
+    spec:
+      imagePullSecrets
+      - name: dockercreds
+      containers:
+      - name: nginx
+        image: docker.io/nginx
+        resources: {}
+...
+</code></pre>
+<p>Taking an example I did with real data, look.</p>
+<pre><code class="language-bash">kubectl get deployments.apps nginx-david -o yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+...
+  generation: 1
+  labels:
+    app: nginx-david
+spec:
+  ...
+  selector:
+    matchLabels:
+      app: nginx-david
+  ...
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: nginx-david
+    spec:
+      containers:
+      - image: docker.io/davidpuziol/nginx:latest
+        imagePullPolicy: Always
+        name: nginx
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      imagePullSecrets: #&lt;&lt;&lt; Used
+      - name: docker-david-secret
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+...
+
+kubectl get pods nginx-david-c8644f94d-nlgch
+NAME                          READY   STATUS    RESTARTS   AGE
+nginx-david-c8644f94d-nlgch   1/1     Running   0          15m
+
+kubectl describe pods nginx-david-c8644f94d-nlgch| grep Image:
+    Image:          docker.io/davidpuziol/nginx:latest
+</code></pre>
+<p>Generally, it&#x27;s not a good practice to create secrets in manifests, so we can use the command.</p>
+<pre><code class="language-bash">kubectl create secret docker-registry dockerreq --docker-email [email protected] --docker-username mytest --docker-password pass123 --docker-server docker.io
+secret/dockerreq created
+
+kubectl get secrets dockerreq -o yaml
+apiVersion: v1
+data:
+  .dockerconfigjson: eyJhdXRocyI6eyJkb2NrZXIuaW8iOnsidXNlcm5hbWUiOiJtZXV0ZXN0IiwicGFzc3dvcmQiOiJwYXNzMTIzIiwiZW1haWwiOiJtZXVAdGVzdC5jb20iLCJhdXRoIjoiYldWMWRHVnpkRHB3WVhOek1USXoifX19
+kind: Secret
+metadata:
+  creationTimestamp: &quot;2024-02-12T20:41:04Z&quot;
+  name: dockerreq
+  namespace: default
+  resourceVersion: &quot;479885&quot;
+  uid: 72a67fab-256e-414c-94c7-bb76badd19a0
+type: kubernetes.io/dockerconfigjson
+
+echo eyJhdXRocyI6eyJkb2NrZXIuaW8iOnsidXNlcm5hbWUiOiJtZXV0ZXN0IiwicGFzc3dvcmQiOiJwYXNzMTIzIiwiZW1haWwiOiJtZXVAdGVzdC5jb20iLCJhdXRoIjoiYldWMWRHVnpkRHB3WVhOek1USXoifX19 | base64 --decode
+{&quot;auths&quot;:{&quot;docker.io&quot;:{&quot;username&quot;:&quot;mytest&quot;,&quot;password&quot;:&quot;pass123&quot;,&quot;email&quot;:&quot;[email protected]&quot;,&quot;auth&quot;:&quot;bWV1dGVzdDpwYXNzMTIz&quot;}}}%
+</code></pre>
+      <div class="docs-pager">
+        <a href="../../../../#blogs">All blogs</a>
+        <a href="../">Back to CKA</a>
+      </div>
+    </article>
+    <aside class="docs-toc">
+      <div class="docs-toc-title">On this page</div>
+      <nav>
+        <a href="#top">On this page</a>
+      </nav>
+    </aside>
+  </div>
+  <script src="../../../../js/docs.js"></script>
+</body>
+</html>

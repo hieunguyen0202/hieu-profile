@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jobs and CronJobs — Hieu Nguyen</title>
+  <meta name="description" content="Jobs and CronJobs — Kubestronaut roadmap.">
+  <link rel="icon" href="../../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../../">i'm<span>.hieu</span></a>
+    <nav class="docs-series">
+      <a href="../../../../blog/web-security/">Web Security</a>
+      <a class="active" href="../../">Kubestronaut roadmap</a>
+    </nav>
+    <nav class="docs-cert-tabs"><a href="../../cka/" class="">CKA</a><a href="../../ckad/" class="active">CKAD</a><a href="../../cks/" class="">CKS</a></nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-nav="kubestronaut" data-cert="ckad" data-docs-root="../" data-active="jobs-cronjobs">
+      <div class="docs-nav-label">CKAD</div>
+      <ul class="docs-nav" id="docsNav"></ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../../">Home</a>
+        <span>›</span>
+        <a href="../../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../../">Kubestronaut</a>
+        <span>›</span>
+        <a href="../">CKAD</a>
+        <span>›</span>
+        <span>Jobs and CronJobs</span>
+      </div>
+      <div id="top"></div>
+<header><h1>Jobs and CronJobs</h1></header><p>An application that lives for a short period of time that&#x27;s destined for a task and then dies is considered a job.</p>
+<p>Some examples:</p>
+<ul>
+<li>Generate a report</li>
+<li>Process a complex calculation or an image</li>
+<li>Send emails</li>
+</ul>
+<p>If we were to do this with docker, we could do a simple mathematical operation.</p>
+<pre><code class="language-bash">❯ docker run --name soma ubuntu expr 3 + 2
+5
+❯ docker ps -a | grep soma
+d813cef7ec93   ubuntu                               &quot;expr 3 + 2&quot;             About a minute ago   Exited (0) About a minute ago                                                                         soma
+</code></pre>
+<p>The container is no longer running, it executed and exited with <code>exit code 0</code>, that is, it did what it had to do.</p>
+<p>This is the lifecycle of many pods, but we can separate this type of pod as Jobs.</p>
+<p>If we were to do this using a pod, what would happen?</p>
+<pre><code class="language-bash">❯ kubectl run math-pod --image ubuntu --dry-run=client -o yaml --command expr 3 + 2 &gt; math-pod.yaml
+
+❯ cat math-pod.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: math-pod
+  name: math-pod
+spec:
+  containers:
+  - command:
+    - &quot;expr&quot;
+    - &quot;3&quot;
+    - &quot;+&quot;
+    - &quot;2&quot;
+    image: ubuntu
+    name: math-pod
+    resources: {}
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+status: {}
+
+# It executes but keeps restarting all the time, because Kubernetes keeps trying to bring it back
+❯ k get pods math-pod
+NAME       READY   STATUS      RESTARTS      AGE
+math-pod   0/1     Completed   3 (28s ago)   47s
+</code></pre>
+<p>Kubernetes wants its applications to live forever. The default behavior of a pod is to try to restart the pod to keep it running if it&#x27;s stopped. Where can we confirm this?</p>
+<pre><code class="language-bash">kubectl get pod math-pod -o yaml | grep restartPolicy
+  restartPolicy: Always
+</code></pre>
+<p>If we had defined it as <code>Never</code> or <code>OnFailure</code>, this wouldn&#x27;t happen.</p>
+<p>We could have several containers processing in parallel within a pod, including using features like initContainers. But we have ReplicaSet which would do this too without needing to define multiple containers in a pod in case of wanting parallel processing.</p>
+<p>While a ReplicaSet wants to ensure a number of pods running, a Job wants to ensure that multiple pods complete a task.</p>
+<p>A Job is also a controller for pods just like ReplicaSet, the difference is that it wants them to finish. So let&#x27;s define a job.</p>
+<pre><code class="language-yaml">apiVersion: batch/v1 # Pay attention to the API
+kind: Job
+metadata:
+  name: math-add
+spec:
+  template:
+    spec:
+      containers:
+      - image: ubuntu
+        name: math-pod
+        resources: {}
+        command:
+        - &quot;expr&quot;
+        - &quot;3&quot;
+        - &quot;+&quot;
+        - &quot;2&quot;
+      dnsPolicy: ClusterFirst
+      restartPolicy: Never
+</code></pre>
+<p>Let&#x27;s test:</p>
+<pre><code class="language-bash">❯ kubectl apply -f math-job.yaml
+
+❯ k get jobs
+NAME       COMPLETIONS   DURATION   AGE
+math-add   1/1           4s         46s
+
+# We can observe that the pod didn&#x27;t keep restarting
+❯ k get pods
+NAME             READY   STATUS      RESTARTS   AGE
+math-add-skttf   0/1     Completed   0          49s
+
+❯ k logs pods/math-add-skttf
+5
+
+# Deleting the job also deletes the pod created by it
+❯ k delete job math-add
+job.batch &quot;math-add&quot; deleted
+
+❯ k get pods
+No resources found in default namespace.
+</code></pre>
+<p>Of course, this is a simple simulation that&#x27;s not used in the real world. Generally, a job will persist data in some volume, or send it somewhere, or send an email, etc.</p>
+<p>Continuing with the example, we can increase the number of tasks we want it to execute. Instead of using replicas, we use completions.</p>
+<pre><code class="language-yaml">apiVersion: batch/v1
+kind: Job
+metadata:
+  name: math-add
+spec:
+  completions: 3
+  template:
+    spec:
+      containers:
+      - image: ubuntu
+        name: math-pod
+        resources: {}
+        command:
+        - &quot;expr&quot;
+        - &quot;3&quot;
+        - &quot;+&quot;
+        - &quot;2&quot;
+      dnsPolicy: ClusterFirst
+      restartPolicy: Never
+</code></pre>
+<p>If we look at what it generated, we have:</p>
+<pre><code class="language-bash">❯ k apply -f math-job.yaml
+job.batch/math-add created
+
+❯ k get pods -o wide
+NAME             READY   STATUS      RESTARTS   AGE   IP            NODE                   NOMINATED NODE   READINESS GATES
+math-add-2gcbl   0/1     Completed   0          6s    10.244.2.12   kind-cluster-worker2   &lt;none&gt;           &lt;none&gt;
+math-add-fp6tc   0/1     Completed   0          15s   10.244.2.10   kind-cluster-worker2   &lt;none&gt;           &lt;none&gt;
+math-add-lfv5v   0/1     Completed   0          11s   10.244.2.11   kind-cluster-worker2   &lt;none&gt;           &lt;none&gt;
+
+❯ k get job math-add
+NAME       COMPLETIONS   DURATION   AGE
+math-add   3/3           13s        82s
+</code></pre>
+<p>If we observe the AGE column, we can see that these jobs were executed one after another.</p>
+<blockquote>
+<p>The job only finishes when it has 3 completions executed, otherwise it will keep creating new pods.</p>
+</blockquote>
+<p>For them to be executed in parallel, we can define parallelism. By default, it&#x27;s 1, that&#x27;s why it runs one after another.</p>
+<pre><code class="language-yaml">apiVersion: batch/v1
+kind: Job
+metadata:
+  name: math-add
+spec:
+  completions: 9
+  parallelism: 3 # Will run 3 at a time
+  template:
+    spec:
+      containers:
+      - image: ubuntu
+        name: math-pod
+        resources: {}
+        command:
+        - &quot;expr&quot;
+        - &quot;3&quot;
+        - &quot;+&quot;
+        - &quot;2&quot;
+      dnsPolicy: ClusterFirst
+      restartPolicy: Never
+</code></pre>
+<p>If we want all of them to run together, we need to define completions and parallelism with the same values.</p>
+<p>It&#x27;s also possible to define the number of failures, otherwise the job will keep running until it achieves its number of completions.</p>
+<h2 id="jobs-vs-cronjobs">Jobs vs CronJobs</h2>
+<p>The difference is that the CronJob is the controller of the Job. With CronJob, we can schedule Jobs periodically. If CronJob is a controller of Job, from our experience it needs to have a template for a Job inside it, but defining some extra things like the schedule which will be when the Job will execute.</p>
+<pre><code class="language-yaml">apiVersion: batch/v1 # Pay attention to the API
+kind: CronJob
+metadata:
+  name: cj-math-add
+spec:
+  schedule: &quot;*/1 * * * *&quot; # will run every 1 minute
+  jobTemplate: # This is the job
+    spec:
+      completions: 3 # All together
+      parallelism: 3
+      template:
+        spec:
+          containers:
+          - image: ubuntu
+            name: math-pod
+            resources: {}
+            command:
+            - &quot;expr&quot;
+            - &quot;3&quot;
+            - &quot;+&quot;
+            - &quot;2&quot;
+          dnsPolicy: ClusterFirst
+          restartPolicy: Never
+</code></pre>
+<p>Let&#x27;s create one to observe:</p>
+<pre><code class="language-bash">❯ k apply -f cronjob.yaml
+cronjob.batch/cj-math-add created
+
+❯ k get cronjobs
+NAME          SCHEDULE      SUSPEND   ACTIVE   LAST SCHEDULE   AGE
+cj-math-add   */1 * * * *   False     0        &lt;none&gt;          27s
+
+# It&#x27;s not time yet
+❯ k get jobs
+No resources found in default namespace.
+
+# It started
+❯ k get jobs
+NAME                   COMPLETIONS   DURATION   AGE
+cj-math-add-28579344   0/3           0s         0s
+
+# It completed
+❯ k get jobs
+NAME                   COMPLETIONS   DURATION   AGE
+cj-math-add-28579344   3/3           4s         6s
+
+# Observe the AGE and see that all were created together because of parallelism
+❯ k get pods
+NAME                         READY   STATUS      RESTARTS   AGE
+cj-math-add-28579344-cmtjz   0/1     Completed   0          17s
+cj-math-add-28579344-m999t   0/1     Completed   0          17s
+cj-math-add-28579344-s9kj6   0/1     Completed   0          17s
+
+# giving it more time we&#x27;ll see it ran again after one minute
+❯ k get jobs
+NAME                   COMPLETIONS   DURATION   AGE
+cj-math-add-28579344   3/3           4s         119s
+cj-math-add-28579345   3/3           5s         59s
+
+❯ k get pods
+NAME                         READY   STATUS      RESTARTS   AGE
+cj-math-add-28579344-cmtjz   0/1     Completed   0          2m4s
+cj-math-add-28579344-m999t   0/1     Completed   0          2m4s
+cj-math-add-28579344-s9kj6   0/1     Completed   0          2m4s
+cj-math-add-28579345-89dd6   0/1     Completed   0          64s
+cj-math-add-28579345-jfpzm   0/1     Completed   0          64s
+cj-math-add-28579345-lmh8j   0/1     Completed   0          64s
+cj-math-add-28579346-htpgx   0/1     Completed   0          4s
+cj-math-add-28579346-mndcv   0/1     Completed   0          4s
+cj-math-add-28579346-qkq6v   0/1     Completed   0          4s
+
+# Deleting the cronjob, it deletes all jobs which delete all pods
+❯ k delete cronjobs.batch cj-math-add
+cronjob.batch &quot;cj-math-add&quot; deleted
+
+❯ k get pods
+No resources found in default namespace.
+</code></pre>
+      <div class="docs-pager">
+        <a href="../../../../#blogs">All blogs</a>
+        <a href="../">Back to CKAD</a>
+      </div>
+    </article>
+    <aside class="docs-toc">
+      <div class="docs-toc-title">On this page</div>
+      <nav>
+        <a href="#jobs-vs-cronjobs">Jobs vs CronJobs</a>
+      </nav>
+    </aside>
+  </div>
+  <script src="../../../../js/docs.js"></script>
+</body>
+</html>

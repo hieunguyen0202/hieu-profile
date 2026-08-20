@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Liveness, Readiness and Startup Probes — Hieu Nguyen</title>
+  <meta name="description" content="Liveness, Readiness and Startup Probes — Kubestronaut roadmap.">
+  <link rel="icon" href="../../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../../">i'm<span>.hieu</span></a>
+    <nav class="docs-series">
+      <a href="../../../../blog/web-security/">Web Security</a>
+      <a class="active" href="../../">Kubestronaut roadmap</a>
+    </nav>
+    <nav class="docs-cert-tabs"><a href="../../cka/" class="active">CKA</a><a href="../../ckad/" class="">CKAD</a><a href="../../cks/" class="">CKS</a></nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-nav="kubestronaut" data-cert="cka" data-docs-root="../" data-active="liveness-readiness-startup-probes">
+      <div class="docs-nav-label">CKA</div>
+      <ul class="docs-nav" id="docsNav"></ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../../">Home</a>
+        <span>›</span>
+        <a href="../../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../../">Kubestronaut</a>
+        <span>›</span>
+        <a href="../">CKA</a>
+        <span>›</span>
+        <span>Liveness, Readiness and Startup Probes</span>
+      </div>
+      <div id="top"></div>
+<header><h1>Liveness, Readiness and Startup Probes</h1></header><h2 id="startup-probe">Startup Probe</h2>
+<p>The startup probe checks if the application inside the pod has finished initialization. This is useful for applications that have a longer startup time and may need additional time to be ready to receive traffic.</p>
+<p>The Kubelet uses the startup probe to know when a container application has started. If a startup probe is configured, readiness probe and liveness probe will not start until the startup probe is satisfied, ensuring that these probes don&#x27;t interfere with application initialization. This can be used to adopt liveness checks on slow-starting containers, preventing them from being killed by the Kubelet before they are up and running.</p>
+<h2 id="readiness-probe">Readiness Probe</h2>
+<p>The readiness probe is used to indicate when a pod is ready to serve traffic. It is used to ensure the pod is ready to receive connections and network traffic. A load balancer should only send traffic to a pod that is ready to process it, meaning it has fully initialized.</p>
+<p>A common pattern for liveness probes is to use a low-cost HTTP endpoint (healthcheck), but with a higher <code>failureThreshold</code>. This ensures the pod is observed as not ready for some period of time before being forcefully terminated.</p>
+<p>The Kubelet uses readiness probe tests to know when a container is ready to start accepting traffic. A pod is considered ready when all its containers are ready. One use of this signal is to control which pods are used as backends for services. When a pod is not ready, it is removed from service load balancers.</p>
+<h2 id="liveness-probe">Liveness Probe</h2>
+<p>The liveness probe is responsible for checking if the pod is alive and healthy. If the liveness probe fails, Kubernetes restarts the pod to restore the healthy state.</p>
+<p>The Kubelet uses the liveness probe to know when to restart a container. For example, liveness probes can detect a deadlock, where an application is running but unable to make progress. Restarting a container in this state can help make the application more available, despite bugs.</p>
+<p>In summary, the readiness probe checks if the pod is ready to accept traffic, while the liveness probe checks if the pod is alive and functional, but they are only used after the startup probe.</p>
+<pre><code class="language-bash">cat &lt;&lt;EOF | kubectl apply -f -
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    test: liveness
+  name: liveness-exec
+spec:
+  containers:
+  - name: liveness
+    image: registry.k8s.io/busybox
+    args:
+    - /bin/sh
+    - -c
+    - touch /tmp/healthy; sleep 30; rm -f /tmp/healthy; sleep 600
+    livenessProbe:
+      exec:
+        command:
+        - cat
+        - /tmp/healthy
+      initialDelaySeconds: 5
+      periodSeconds: 5
+      failureThreshold: 1 # Number of attempts before killing the pod. The default is 3.
+EOF
+</code></pre>
+      <div class="docs-pager">
+        <a href="../../../../#blogs">All blogs</a>
+        <a href="../">Back to CKA</a>
+      </div>
+    </article>
+    <aside class="docs-toc">
+      <div class="docs-toc-title">On this page</div>
+      <nav>
+        <a href="#startup-probe">Startup Probe</a>
+        <a href="#readiness-probe">Readiness Probe</a>
+        <a href="#liveness-probe">Liveness Probe</a>
+      </nav>
+    </aside>
+  </div>
+  <script src="../../../../js/docs.js"></script>
+</body>
+</html>

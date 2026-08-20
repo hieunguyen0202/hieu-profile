@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cluster Architecture — Hieu Nguyen</title>
+  <meta name="description" content="Cluster Architecture — Kubestronaut roadmap.">
+  <link rel="icon" href="../../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../../">i'm<span>.hieu</span></a>
+    <nav class="docs-series">
+      <a href="../../../../blog/web-security/">Web Security</a>
+      <a class="active" href="../../">Kubestronaut roadmap</a>
+    </nav>
+    <nav class="docs-cert-tabs"><a href="../../cka/" class="active">CKA</a><a href="../../ckad/" class="">CKAD</a><a href="../../cks/" class="">CKS</a></nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-nav="kubestronaut" data-cert="cka" data-docs-root="../" data-active="cluster-architecture">
+      <div class="docs-nav-label">CKA</div>
+      <ul class="docs-nav" id="docsNav"></ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../../">Home</a>
+        <span>›</span>
+        <a href="../../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../../">Kubestronaut</a>
+        <span>›</span>
+        <a href="../">CKA</a>
+        <span>›</span>
+        <span>Cluster Architecture</span>
+      </div>
+      <div id="top"></div>
+<header><h1>Cluster Architecture</h1></header><p>Kubernetes aims to host your containerized applications in an automated way, facilitating their deployment across multiple instances and simplifying communication between application services.
+We&#x27;ll use a more simplified approach than the one proposed in the course.</p>
+<p><img decoding="async" loading="lazy" alt="Alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-7d38acbd39eb177258ade0e356ff9078.png" width="763" height="270" class="img_ev3q"></p>
+<h2 id="control-plane-master">Control Plane (Master)</h2>
+<p>It&#x27;s the set of nodes that contain the components responsible for governing Kubernetes. These components maintain all the information necessary to ensure the system runs properly and control the pods and worker nodes.</p>
+<h3 id="etcd">ETCD</h3>
+<p>It&#x27;s the Kubernetes database. All cluster information is stored in ETCD through a key-value set.</p>
+<h3 id="kube-scheduler">Kube-Scheduler</h3>
+<p>It&#x27;s responsible for making decisions about allocating each pod to cluster nodes, taking into account various established policies, such as node capacity, topology, restriction policies, hardware type, among others. It also considers factors like taints, affinities, and other relevant configurations.</p>
+<h3 id="kube-controller-manager">Kube-Controller-Manager</h3>
+<p>It plays a fundamental role in monitoring cluster health. It detects any failures and attempts to correct them automatically. For example, if a node or pod stops responding, the Kube-Controller-Manager intervenes to ensure the correct number of pods is running, thus restoring the cluster&#x27;s desired state. This component acts as a kind of auditor, continuously verifying the cluster state to ensure its compliance and integrity.</p>
+<p>This component is formed by two other main components: Replication Controller and Node Controller.</p>
+<h3 id="kube-apiserver">Kube-APIServer</h3>
+<p>In Kubernetes, everything works through APIs. The Kube-APIServer is the central point of this architecture, being responsible for orchestrating operations within the Kubernetes cluster. It interprets requests sent by components, understanding what should be executed or not. Information is stored in ETCD. It&#x27;s through the Kube-APIServer that users interact and define manifests.</p>
+<p>The kubectl command communicates exclusively with the Kube-APIServer. Although less common, it&#x27;s possible to invoke the APIs directly with a POST command, without using kubectl.</p>
+<p>The Kube-APIServer performs several vital functions in the cluster:</p>
+<ul>
+<li>Authenticates the user</li>
+<li>Validates the request</li>
+<li>Retrieves data</li>
+<li>Updates ETCD (the only one that interacts with ETCD)</li>
+<li>Kube-Controller-Manager, Kube-Scheduler and Kubelet use the Kube-APIServer to make updates in the cluster in their respective areas.</li>
+</ul>
+<p>Like all Kubernetes components, the Kube-APIServer is distributed as a binary.</p>
+<h2 id="worker-nodes">Worker Nodes</h2>
+<p>These are the Kubernetes nodes that will actually be used to run pods.</p>
+<h3 id="kubelet">Kubelet</h3>
+<p>It&#x27;s the Kubernetes agent that runs inside nodes to send and receive data from the Kube-APIServer. It&#x27;s responsible for periodically reading the Kube-APIServer and executing commands inside nodes and sending pod status reports to the Kube-APIServer.</p>
+<p>It&#x27;s the Kubelet that has the function of pulling container images (using the CRI) on the node and executing pods. Then it continues to monitor the pod and report to the Kube-APIServer.</p>
+<p>The Kubelet is always manually installed inside each worker node and is usually present only on worker nodes and not on masters. Kubeadm doesn&#x27;t install the Kubelet. Some configurations can be passed to the Kubelet.</p>
+<h3 id="kube-proxy">Kube-proxy</h3>
+<p>It&#x27;s the network agent that ensures communication between cluster pods even when they are on different nodes.</p>
+<p><img decoding="async" loading="lazy" alt="Alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-1-859a9d63d118668dafecaf2d05d7aff3.png" width="1120" height="662" class="img_ev3q"></p>
+<p><img decoding="async" loading="lazy" alt="Alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-2-100f923cf6e339fa4009dee375e22d63.png" width="653" height="649" class="img_ev3q"></p>
+<p><img decoding="async" loading="lazy" alt="Alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-3-626db3990af81892bcf63a6ca199fbf5.png" width="902" height="642" class="img_ev3q"></p>
+<hr>
+<h2 id="containers">Containers</h2>
+<p>All machines that run pods, usually workers, need to have a Container Runtime Interface (CRI) installed to run containers. It doesn&#x27;t have to be Docker. In fact, it&#x27;s not very recommended to install Docker as the CRI, because it brings with it many other tools that interact with the CRI and are not necessary on nodes.</p>
+<p>For this, we can use <code>containerd</code>, which implements <code>runc</code>, which is the core of the CRI without bringing all these tools that Docker brings. Both Docker and containerd use the container declaration specification we already know, so any image created by Docker works on containerd. Containerd is a CNCF graduated project.</p>
+<p>However, containerd brings with it a CLI called <code>ctr</code> that is not very user-friendly and is mostly used for debugging, as it has limited features. To improve interaction with containerd, <code>crictl</code> was created, which extends ctr&#x27;s features, but is still not user-friendly for general purposes and is mainly for debugging, especially on worker nodes.</p>
+<p>To run things in a more user-friendly way, we can use <a href="https://github.com/containerd/nerdctl" target="_blank" rel="noopener noreferrer"><code>nerdctl</code></a> which is very similar to Docker CLI, supports most options that Docker supports, and has general purposes, including being used for image development.</p>
+<p><img decoding="async" loading="lazy" alt="Alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-4-dfa479ed3d781c239c25d9dcad9bbd0b.png" width="1543" height="545" class="img_ev3q"></p>
+      <div class="docs-pager">
+        <a href="../../../../#blogs">All blogs</a>
+        <a href="../">Back to CKA</a>
+      </div>
+    </article>
+    <aside class="docs-toc">
+      <div class="docs-toc-title">On this page</div>
+      <nav>
+        <a href="#control-plane-master">Control Plane (Master)</a>
+        <a class="depth-3" href="#etcd">ETCD</a>
+        <a class="depth-3" href="#kube-scheduler">Kube-Scheduler</a>
+        <a class="depth-3" href="#kube-controller-manager">Kube-Controller-Manager</a>
+        <a class="depth-3" href="#kube-apiserver">Kube-APIServer</a>
+        <a href="#worker-nodes">Worker Nodes</a>
+        <a class="depth-3" href="#kubelet">Kubelet</a>
+        <a class="depth-3" href="#kube-proxy">Kube-proxy</a>
+        <a href="#containers">Containers</a>
+      </nav>
+    </aside>
+  </div>
+  <script src="../../../../js/docs.js"></script>
+</body>
+</html>

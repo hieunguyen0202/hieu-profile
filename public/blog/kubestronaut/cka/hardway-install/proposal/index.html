@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kubernetes Hard Way Proposal — Hieu Nguyen</title>
+  <meta name="description" content="Kubernetes Hard Way Proposal — Kubestronaut roadmap.">
+  <link rel="icon" href="../../../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../../../">i'm<span>.hieu</span></a>
+    <nav class="docs-series">
+      <a href="../../../../../blog/web-security/">Web Security</a>
+      <a class="active" href="../../../">Kubestronaut roadmap</a>
+    </nav>
+    <nav class="docs-cert-tabs"><a href="../../../cka/" class="active">CKA</a><a href="../../../ckad/" class="">CKAD</a><a href="../../../cks/" class="">CKS</a></nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-nav="kubestronaut" data-cert="cka" data-docs-root="../../" data-active="hardway-install/proposal">
+      <div class="docs-nav-label">CKA</div>
+      <ul class="docs-nav" id="docsNav"></ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../../../">Home</a>
+        <span>›</span>
+        <a href="../../../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../../../">Kubestronaut</a>
+        <span>›</span>
+        <a href="../../">CKA</a>
+        <span>›</span>
+        <span>Kubernetes Hard Way Proposal</span>
+      </div>
+      <div id="top"></div>
+<header><h1>Kubernetes Hard Way Proposal</h1></header><p>The idea of the project is to get to know Kubernetes under the hood and put into practice all the knowledge acquired along the way. This will enable us to solve installation-related problems and in the future move towards tuning.</p>
+<p>We will try to do everything the hardest and most manual way possible, isolating each component when possible. We will try to create a cluster in a hard way.</p>
+<p>To create this environment we will need 6 machines.</p>
+<p>3 masters
+2 workers
+1 load balancer (Ideally at least 2, but we&#x27;ll give that a pass here)</p>
+<h2 id="environment">Environment</h2>
+<h3 id="requirements">Requirements</h3>
+<p>Have these two tools installed on your system.</p>
+<blockquote>
+<p>There is no step-by-step for installing these tools in this project. If it&#x27;s meant to be hard, you have to figure it out yourself.</p>
+</blockquote>
+<ul>
+<li><strong>Vagrant</strong> - Version 2.4.1 or higher - We will simulate an environment locally using Vagrant to spin up our machines.</li>
+<li><strong>VirtualBox</strong> Will be used by Vagrant to virtualize the machines.</li>
+</ul>
+<p>Define 6 IPs on your local network that can be used. The machines will not be in NAT but in bridge mode.</p>
+<p>See which network interface your local machine is using. Filter by your machine&#x27;s IP and look for this information. In my case it&#x27;s enx00e04c6810f3.</p>
+<pre><code class="language-bash">ip addr show | grep 10.0.0.105
+    inet 10.0.0.105/24 brd 10.0.0.255 scope global dynamic noprefixroute enx00e04c6810f3
+</code></pre>
+<p>Create this folder structure as follows.</p>
+<pre><code class="language-bash">tree -L 2
+.
+├── environment # Will contain Vagrant related files
+└── shared_files # Will contain all files and scripts we&#x27;ll create
+</code></pre>
+<p>Create a file in the environment folder called Vagrantfile with the following content. Already adjust for the IPs you chose. Observe the comments.</p>
+<pre><code class="language-ruby"># -*- mode: ruby -*-
+# vi:set ft=ruby sw=2 ts=2 sts=2:
+Vagrant.require_version &quot;&gt;= 2.4.1&quot;
+
+NETWORK_INTERFACE = &quot;enx00e04c6810f3&quot;  # Change to your network interface
+NETWORK_PREFIX = &quot;10.0.0.&quot; # Change to your network prefix
+
+# Change the IPs below according to the IPs you set aside on your network.
+# -*- mode: ruby -*-
+# vi:set ft=ruby sw=2 ts=2 sts=2:
+
+Vagrant.require_version &quot;&gt;= 2.4.1&quot;
+
+haproxy_machines = {
+  &quot;loadbalancer&quot;   =&gt; {&quot;memory&quot; =&gt; &quot;1024&quot;, &quot;cpu&quot; =&gt; &quot;1&quot;, &quot;disk&quot; =&gt; &quot;40&quot;, &quot;ip&quot; =&gt; &quot;200&quot;, &quot;image&quot; =&gt; &quot;ubuntu/jammy64&quot;},
+}
+
+masters_machines = {
+  &quot;master1&quot;   =&gt; {&quot;memory&quot; =&gt; &quot;2048&quot;, &quot;cpu&quot; =&gt; &quot;1&quot;, &quot;disk&quot; =&gt; &quot;40&quot;, &quot;ip&quot; =&gt; &quot;201&quot;, &quot;image&quot; =&gt; &quot;ubuntu/jammy64&quot;},
+  &quot;master2&quot;   =&gt; {&quot;memory&quot; =&gt; &quot;2048&quot;, &quot;cpu&quot; =&gt; &quot;1&quot;, &quot;disk&quot; =&gt; &quot;40&quot;, &quot;ip&quot; =&gt; &quot;202&quot;, &quot;image&quot; =&gt; &quot;ubuntu/jammy64&quot;},
+  &quot;master3&quot;   =&gt; {&quot;memory&quot; =&gt; &quot;2048&quot;, &quot;cpu&quot; =&gt; &quot;1&quot;, &quot;disk&quot; =&gt; &quot;40&quot;, &quot;ip&quot; =&gt; &quot;203&quot;, &quot;image&quot; =&gt; &quot;ubuntu/jammy64&quot;},
+}
+
+workers_machines = {
+  &quot;worker1&quot;   =&gt; {&quot;memory&quot; =&gt; &quot;2048&quot;, &quot;cpu&quot; =&gt; &quot;1&quot;, &quot;disk&quot; =&gt; &quot;40&quot;, &quot;ip&quot; =&gt; &quot;207&quot;, &quot;image&quot; =&gt; &quot;ubuntu/jammy64&quot;},
+  &quot;worker2&quot;   =&gt; {&quot;memory&quot; =&gt; &quot;2048&quot;, &quot;cpu&quot; =&gt; &quot;1&quot;, &quot;disk&quot; =&gt; &quot;40&quot;, &quot;ip&quot; =&gt; &quot;208&quot;, &quot;image&quot; =&gt; &quot;ubuntu/jammy64&quot;},
+}
+
+NETWORK_INTERFACE = &quot;enx00e04c6810f3&quot;
+NETWORK_PREFIX = &quot;10.0.0.&quot;
+
+Vagrant.configure(&quot;2&quot;) do |config|
+
+  haproxy_machines.each do |name, conf|
+    config.vm.define &quot;#{name}&quot; do |machine|
+      machine.vm.synced_folder &quot;../shared_files&quot;, &quot;/vagrant/shared_files&quot;
+      machine.vm.box = &quot;#{conf[&quot;image&quot;]}&quot;
+      machine.vm.hostname = &quot;#{name}&quot;
+      machine.vm.network &quot;public_network&quot;, bridge: &quot;#{NETWORK_INTERFACE}&quot;, ip: &quot;#{NETWORK_PREFIX}#{conf[&quot;ip&quot;]}&quot;
+      machine.vagrant.plugins = [&quot;vagrant-disksize&quot;]
+      machine.disksize.size = &quot;#{conf[&quot;disk&quot;]}GB&quot;
+      machine.vm.provider &quot;virtualbox&quot; do |vb|
+        vb.name = &quot;#{name}&quot;
+        vb.memory = conf[&quot;memory&quot;]
+        vb.cpus = conf[&quot;cpu&quot;]
+        vb.customize [&quot;modifyvm&quot;, :id, &quot;--groups&quot;, &quot;/kubernetes&quot;, &quot;--nicpromisc2&quot;, &quot;allow-all&quot;]
+      end
+      machine.vm.provision &quot;shell&quot;, path: &quot;../shared_files/update_vm.sh&quot;
+      machine.vm.provision &quot;shell&quot;, path: &quot;../shared_files/ssh.sh&quot;
+      machine.vm.provision &quot;shell&quot;, path: &quot;../shared_files/bootstrap_loadbalancer.sh&quot;
+    end
+  end
+
+  masters_machines.each do |name, conf|
+    config.vm.define &quot;#{name}&quot; do |machine|
+      machine.vm.synced_folder &quot;../shared_files&quot;, &quot;/vagrant/shared_files&quot;
+      machine.vm.box = &quot;#{conf[&quot;image&quot;]}&quot;
+      machine.vm.hostname = &quot;#{name}&quot;
+      machine.vm.network &quot;public_network&quot;, bridge: &quot;#{NETWORK_INTERFACE}&quot;, ip: &quot;#{NETWORK_PREFIX}#{conf[&quot;ip&quot;]}&quot;
+      machine.vagrant.plugins = [&quot;vagrant-disksize&quot;]
+      machine.disksize.size = &quot;#{conf[&quot;disk&quot;]}GB&quot;
+      machine.vm.provider &quot;virtualbox&quot; do |vb|
+        vb.name = &quot;#{name}&quot;
+        vb.memory = conf[&quot;memory&quot;]
+        vb.cpus = conf[&quot;cpu&quot;]
+        vb.customize [&quot;modifyvm&quot;, :id, &quot;--groups&quot;, &quot;/kubernetes&quot;, &quot;--nicpromisc2&quot;, &quot;allow-all&quot;]
+      end
+      machine.vm.provision &quot;shell&quot;, path: &quot;../shared_files/update_vm.sh&quot;
+      machine.vm.provision &quot;shell&quot;, path: &quot;../shared_files/ssh.sh&quot;
+      machine.vm.provision &quot;shell&quot;, path: &quot;../shared_files/bootstrap_nodes.sh&quot;
+
+      if name == &quot;master1&quot; # Generating all necessary files
+        machine.vm.provision &quot;shell&quot;, inline: &quot;cd /vagrant/shared_files/ &amp;&amp; ./1_generate_certificate_control_plane.sh&quot;
+        machine.vm.provision &quot;shell&quot;, inline: &quot;cd /vagrant/shared_files/ &amp;&amp; ./2_generate_certificate_workers.sh&quot;
+        machine.vm.provision &quot;shell&quot;, inline: &quot;cd /vagrant/shared_files/ &amp;&amp; ./3_generate_kubeconfigs_control_plane.sh&quot;
+        machine.vm.provision &quot;shell&quot;, inline: &quot;cd /vagrant/shared_files/ &amp;&amp; ./4_generate_kubeconfigs_workers.sh&quot;
+        machine.vm.provision &quot;shell&quot;, inline: &quot;cd /vagrant/shared_files/ &amp;&amp; ./5_create_encription_method.sh&quot;
+      end
+      machine.vm.provision &quot;shell&quot;, path: &quot;../shared_files/boostratp_etcd.sh&quot;
+      machine.vm.provision &quot;shell&quot;, path: &quot;../shared_files/boostrap_control_plane.sh&quot;
+      if name == &quot;master3&quot; # Install CNI and create ClusterRoles for nodes.
+        machine.vm.provision &quot;shell&quot;, path: &quot;../shared_files/configure_cluster.sh&quot;
+      end
+    end
+  end
+
+  workers_machines.each do |name, conf|
+    config.vm.define &quot;#{name}&quot; do |machine|
+      machine.vm.synced_folder &quot;../shared_files&quot;, &quot;/vagrant/shared_files&quot;
+      machine.vm.box = &quot;#{conf[&quot;image&quot;]}&quot;
+      machine.vm.hostname = &quot;#{name}&quot;
+      machine.vm.network &quot;public_network&quot;, bridge: &quot;#{NETWORK_INTERFACE}&quot;, ip: &quot;#{NETWORK_PREFIX}#{conf[&quot;ip&quot;]}&quot;
+      machine.vagrant.plugins = [&quot;vagrant-disksize&quot;]
+      machine.disksize.size = &quot;#{conf[&quot;disk&quot;]}GB&quot;
+      machine.vm.provider &quot;virtualbox&quot; do |vb|
+        vb.name = &quot;#{name}&quot;
+        vb.memory = conf[&quot;memory&quot;]
+        vb.cpus = conf[&quot;cpu&quot;]
+        vb.customize [&quot;modifyvm&quot;, :id, &quot;--groups&quot;, &quot;/kubernetes&quot;, &quot;--nicpromisc2&quot;, &quot;allow-all&quot;]
+      end
+      machine.vm.provision &quot;shell&quot;, path: &quot;../shared_files/update_vm.sh&quot;
+      machine.vm.provision &quot;shell&quot;, path: &quot;../shared_files/ssh.sh&quot;
+      machine.vm.provision &quot;shell&quot;, path: &quot;../shared_files/bootstrap_nodes.sh&quot;
+      machine.vm.provision &quot;shell&quot;, path: &quot;../shared_files/boostrap_workers.sh&quot;
+    end
+  end
+end
+</code></pre>
+<p>The proposal is that all our necessary files (certificates, kubeconfigs, yamls) are concentrated in a single folder to be copied to the correct places instead of using scp for everything.</p>
+<p><img decoding="async" loading="lazy" alt="environment" src="https://devsecops.puziol.com.br/en/assets/images/ambiente-66e5ba155e395e2fa0c164c4cee359d7.svg" width="743" height="463" class="img_ev3q"></p>
+<p>We can see in the code above we have blocks that execute loops for each set of machines.
+When the machine is provisioned, each line with <code>machine.vm.provision</code> will run some script in sequence. Not all scripts need to run on all machines. <code>We will place the scripts inside the shared_files folder</code> which will be mounted inside each of the created VMs.</p>
+<p>All machines need to run an update, define hosts, and set up DNS. Let&#x27;s create a script for that.</p>
+<p>All machines need to know all machines so we&#x27;ll update the hosts file. In a production environment we would have a nameserver to solve this problem, but since we don&#x27;t have one, we&#x27;ll define everything inside the hosts file.</p>
+<p>Be inside the shared_files folder to execute the command below.</p>
+<pre><code class="language-bash"># Adjust the IPs according to your chosen ones
+cat &lt;&lt;EOF &gt;&gt; hosts
+10.0.0.200 loadbalancer
+10.0.0.201 master1
+10.0.0.202 master2
+10.0.0.203 master3
+10.0.0.207 worker1
+10.0.0.208 worker2
+EOF
+
+cat &lt;&lt;EOF &gt;&gt; update_vm.sh
+#!/bin/bash
+echo -e &quot;\n##### Updating the Operating System #####&quot;
+sudo apt-get update
+sudo apt-get upgrade -y
+
+echo -e &quot;\n##### Setting /etc/hosts #####&quot;
+sudo cp /vagrant/shared_files/hosts /etc/hosts
+
+echo -e &quot;\n##### Changing DNS resolv to Google DNS #####&quot;
+sed -i -e &#x27;s/#DNS=/DNS=8.8.8.8/&#x27; /etc/systemd/resolved.conf
+service systemd-resolved restart
+
+echo -e &quot;\n##### Installing Chrony #####&quot;
+sudo apt-get install chrony -y
+EOF
+</code></pre>
+<p>Let&#x27;s set up SSH access on all machines. We could use the key generated by Vagrant itself, but we&#x27;ll refrain from that. We&#x27;ll allow all machines to make SSH access to each other even if it&#x27;s not necessary. It may facilitate your study.</p>
+<p>Let&#x27;s create an SSH key pair and the script that will make this key pair available to all users on all machines.</p>
+<pre><code class="language-bash">ssh-keygen -t rsa -b 4096 -f id_rsa -N &quot;&quot;
+</code></pre>
+<p>Since there are 3 users vagrant, ubuntu and root we&#x27;ll do it for all of them. I made it very explicit here.</p>
+<pre><code class="language-bash">cat &lt;&lt;EOF &gt;&gt; ssh.sh
+#!/bin/bash
+
+echo -e &quot;\n##### Add SSH key pair to vagrant user #####&quot;
+tee -a /home/vagrant/.ssh/authorized_keys &lt; /vagrant/shared_files/id_rsa.pub
+cp /vagrant/shared_files/id_rsa /home/vagrant/.ssh/id_rsa
+chmod 400 /home/vagrant/.ssh/id_rsa
+
+echo -e &quot;\n##### Add SSH key pair to ubuntu user #####&quot;
+sudo tee -a /home/ubuntu/.ssh/authorized_keys &lt; /vagrant/shared_files/id_rsa.pub
+sudo cp /vagrant/shared_files/id_rsa /home/ubuntu/.ssh/id_rsa
+sudo chown ubuntu:ubuntu /home/ubuntu/.ssh/id_rsa
+sudo chmod 400 /home/ubuntu/.ssh/id_rsa
+
+echo -e &quot;\n##### Add SSH key pair to root user #####&quot;
+sudo tee -a /root/.ssh/authorized_keys &lt; /vagrant/shared_files/id_rsa.pub
+sudo cp /vagrant/shared_files/id_rsa /root/.ssh/id_rsa
+sudo chown root:root /root/.ssh/id_rsa
+sudo chmod 400 /root/.ssh/id_rsa
+EOF
+</code></pre>
+      <div class="docs-pager">
+        <a href="../../../../../#blogs">All blogs</a>
+        <a href="../../">Back to CKA</a>
+      </div>
+    </article>
+    <aside class="docs-toc">
+      <div class="docs-toc-title">On this page</div>
+      <nav>
+        <a href="#environment">Environment</a>
+        <a class="depth-3" href="#requirements">Requirements</a>
+      </nav>
+    </aside>
+  </div>
+  <script src="../../../../../js/docs.js"></script>
+</body>
+</html>

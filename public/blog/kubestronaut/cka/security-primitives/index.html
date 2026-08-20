@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Security Primitives — Hieu Nguyen</title>
+  <meta name="description" content="Security Primitives — Kubestronaut roadmap.">
+  <link rel="icon" href="../../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../../">i'm<span>.hieu</span></a>
+    <nav class="docs-series">
+      <a href="../../../../blog/web-security/">Web Security</a>
+      <a class="active" href="../../">Kubestronaut roadmap</a>
+    </nav>
+    <nav class="docs-cert-tabs"><a href="../../cka/" class="active">CKA</a><a href="../../ckad/" class="">CKAD</a><a href="../../cks/" class="">CKS</a></nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-nav="kubestronaut" data-cert="cka" data-docs-root="../" data-active="security-primitives">
+      <div class="docs-nav-label">CKA</div>
+      <ul class="docs-nav" id="docsNav"></ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../../">Home</a>
+        <span>›</span>
+        <a href="../../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../../">Kubestronaut</a>
+        <span>›</span>
+        <a href="../">CKA</a>
+        <span>›</span>
+        <span>Security Primitives</span>
+      </div>
+      <div id="top"></div>
+<header><h1>Security Primitives</h1></header><p>In a production Kubernetes cluster, security is the main concern.</p>
+<p>Naturally, all access to hosts must be protected.</p>
+<ul>
+<li>Disable root access.</li>
+<li>Disable password authentication access.</li>
+<li>Only allow access via SSH key.</li>
+<li>Other precautions such as physical and virtual access to the infrastructure hosting Kubernetes.</li>
+</ul>
+<blockquote>
+<p>If something is compromised, everything is compromised</p>
+</blockquote>
+<p>The kube-apiserver is at the center of all Kubernetes communication, being the communication between Kubernetes components and the user themselves using kubectl. Through it we can do anything in Kubernetes, so the first line of defense is controlling access to the kube-apiserver.</p>
+<p>We need to ask ourselves...</p>
+<p><img decoding="async" loading="lazy" alt="Alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-e8ac0b96558184c079cc1c994fed43fc.png" width="1513" height="460" class="img_ev3q"></p>
+<p>Who can access can be defined by different authentication methods.</p>
+<ul>
+<li><code>Username and tokens</code> stored in files.</li>
+<li><code>Certificates</code>.</li>
+<li>External authentication providers - <code>LDAP</code>.</li>
+<li><code>Service Accounts</code> for machines.</li>
+</ul>
+<p>Once access is allowed, what can be done? Various mechanisms will be studied here.</p>
+<ul>
+<li>RBAC Authorization</li>
+<li>ABAC Authorization</li>
+<li>Node Authorization</li>
+<li>Webhook Mode</li>
+</ul>
+<p>All communication between Kubernetes components is encrypted by TLS.</p>
+<p><img decoding="async" loading="lazy" alt="Alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-1-c65f13bb9a1b22b39867d77bd10a2e98.png" width="1255" height="642" class="img_ev3q"></p>
+<p>By default all pods can access all pods within the cluster and to restrict these accesses we can use network policies.</p>
+<p><img decoding="async" loading="lazy" alt="Alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-2-c0836dffbf0c00e814eb5b0ef2fb835f.png" width="1097" height="580" class="img_ev3q"></p>
+<p><img decoding="async" loading="lazy" alt="Alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-3-cb856a45ff4c5ba75df393e5c46ca3ee.png" width="1126" height="558" class="img_ev3q"></p>
+      <div class="docs-pager">
+        <a href="../../../../#blogs">All blogs</a>
+        <a href="../">Back to CKA</a>
+      </div>
+    </article>
+    <aside class="docs-toc">
+      <div class="docs-toc-title">On this page</div>
+      <nav>
+        <a href="#top">On this page</a>
+      </nav>
+    </aside>
+  </div>
+  <script src="../../../../js/docs.js"></script>
+</body>
+</html>

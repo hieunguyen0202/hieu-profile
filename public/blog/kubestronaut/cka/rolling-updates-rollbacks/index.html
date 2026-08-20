@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rolling Updates and Rollbacks — Hieu Nguyen</title>
+  <meta name="description" content="Rolling Updates and Rollbacks — Kubestronaut roadmap.">
+  <link rel="icon" href="../../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../../">i'm<span>.hieu</span></a>
+    <nav class="docs-series">
+      <a href="../../../../blog/web-security/">Web Security</a>
+      <a class="active" href="../../">Kubestronaut roadmap</a>
+    </nav>
+    <nav class="docs-cert-tabs"><a href="../../cka/" class="active">CKA</a><a href="../../ckad/" class="">CKAD</a><a href="../../cks/" class="">CKS</a></nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-nav="kubestronaut" data-cert="cka" data-docs-root="../" data-active="rolling-updates-rollbacks">
+      <div class="docs-nav-label">CKA</div>
+      <ul class="docs-nav" id="docsNav"></ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../../">Home</a>
+        <span>›</span>
+        <a href="../../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../../">Kubestronaut</a>
+        <span>›</span>
+        <a href="../">CKA</a>
+        <span>›</span>
+        <span>Rolling Updates and Rollbacks</span>
+      </div>
+      <div id="top"></div>
+<header><h1>Rolling Updates and Rollbacks</h1></header><p>When creating a <code>deployment</code> we can define update strategies.</p>
+<ul>
+<li><code>Recreate</code>: destroys the old ones and creates new ones leaving the application down while the process finishes.</li>
+<li><code>RollingUpdate</code> (default): gradually destroys one and brings up another keeping the application running.</li>
+</ul>
+<p><img decoding="async" loading="lazy" alt="Alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-0d87b21adb2caff5e07c374ab0421699.png" width="1127" height="466" class="img_ev3q"></p>
+<p>We can update several things:</p>
+<ul>
+<li>New image</li>
+<li>Labels</li>
+<li>Number of replicas</li>
+<li>Arguments</li>
+<li>Environment variables</li>
+<li>etc</li>
+</ul>
+<p>The best way to do this is by reconfiguring the manifest file and using the command <code>kubectl apply -f manifest.yaml</code>, to keep a configuration file faithful to what is deployed in the cluster.</p>
+<p>Through <code>edit</code> or the <code>set image</code> command as shown below:</p>
+<pre><code class="language-bash">k create deployment nginx --image nginx
+deployment.apps/nginx created
+
+# nginx is the image name
+k set image deployment/nginx nginx=1.17
+deployment.apps/nginx image updated
+
+# Let&#x27;s deploy a pod with two containers for example.
+cat &lt;&lt;EOF | kubectl apply -f -
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-com-dois-containers
+spec:
+  containers:
+    - name: alpha
+      image: nginx
+      ports:
+        - containerPort: 80
+    - name: beta
+      image: alpine
+      command: [&quot;/bin/sh&quot;, &quot;-c&quot;]
+      args:
+        - sleep 4800
+EOF
+
+# Let&#x27;s update only the nginx image in the pod
+kubectl set image pods/pod-com-dois-containers alpha=nginx:1.17
+pod/pod-com-dois-containers image updated
+</code></pre>
+<p>See the difference in events that happen using these two strategies.</p>
+<p><img decoding="async" loading="lazy" alt="Alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-1-664b559aed07276e324da046088b111c.png" width="1841" height="742" class="img_ev3q"></p>
+<p>Recreate scaled to 0 and then back to 5, while RollingUpdate was gradually reducing and increasing.</p>
+<p>The deployment creates the replicaset that deploys a set of pods. When we update the deployment, it will create another replicaset that will deploy new pods and keep the old one at zero, but still present.</p>
+<p><img decoding="async" loading="lazy" alt="Alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-2-941cc20aeee4e26aec7d399e45e8e63d.png" width="1593" height="607" class="img_ev3q"></p>
+<p>That&#x27;s why we can rollback the application to the old replicaset if the new one has any problems.</p>
+<p>The deployment creates revisions pointing to the correct replicasets and through this we can roll back with the rollout command.</p>
+<p><img decoding="async" loading="lazy" alt="Alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-3-e2805db2cac65f34591e82ef594eb20f.png" width="1649" height="636" class="img_ev3q"></p>
+<pre><code class="language-bash">kubectl create deployment nginx --image nginx:1.24 --replicas 2 -o yaml --dry-run=client &gt; nginx.yaml
+
+kubectl apply -f nginx1.24.yaml
+deployment.apps/nginx created
+
+kubectl get deploy
+NAME    READY   UP-TO-DATE   AVAILABLE   AGE
+nginx   2/2     2            2           11s
+
+kubectl get rs
+NAME               DESIRED   CURRENT   READY   AGE
+nginx-69d846b5c6   2
+
+# I created another file based on 1.24 but with the 1.25 image
+kubectl apply -f nginx1.25.yaml
+deployment.apps/nginx configured # Note that it was not created, only configured
+
+kubectl describe deployments.apps nginx
+Name:                   nginx
+Namespace:              default
+CreationTimestamp:      Sat, 30 Dec 2023 11:26:06 -0300
+Labels:                 app=nginx
+# uses annotations to define the revision
+Annotations:            deployment.kubernetes.io/revision: 2
+Selector:               app=nginx
+Replicas:               2 desired | 2 updated | 2 total | 2 available | 0 unavailable
+# Note that RollingUpdate is default and it kills 25% and brings up 25%
+StrategyType:           RollingUpdate
+MinReadySeconds:        0
+RollingUpdateStrategy:  25% max unavailable, 25% max surge
+Pod Template:
+  Labels:  app=nginx
+  Containers:
+   nginx:
+    Image:        nginx:1.25
+    Port:         &lt;none&gt;
+    Host Port:    &lt;none&gt;
+    Environment:  &lt;none&gt;
+    Mounts:       &lt;none&gt;
+  Volumes:        &lt;none&gt;
+Conditions:
+  Type           Status  Reason
+  ----           ------  ------
+  Available      True    MinimumReplicasAvailable
+  Progressing    True    NewReplicaSetAvailable
+# See that it shows the previous replicaset and the new one
+OldReplicaSets:  nginx-69d846b5c6 (0/0 replicas created)
+NewReplicaSet:   nginx-7b8df77865 (2/2 replicas created)
+Events:
+  Type    Reason             Age   From                   Message
+  ----    ------             ----  ----                   -------
+  Normal  ScalingReplicaSet  2m9s  deployment-controller  Scaled up replica set nginx-69d846b5c6 to 2
+  Normal  ScalingReplicaSet  30s   deployment-controller  Scaled up replica set nginx-7b8df77865 to 1
+  Normal  ScalingReplicaSet  23s   deployment-controller  Scaled down replica set nginx-69d846b5c6 to 1 from 2
+  Normal  ScalingReplicaSet  23s   deployment-controller  Scaled up replica set nginx-7b8df77865 to 2 from 1
+  Normal  ScalingReplicaSet  16s   deployment-controller  Scaled down replica set nginx-69d846b5c6 to 0 from 1
+
+kubectl rollout history deployment nginx
+deployment.apps/nginx
+REVISION  CHANGE-CAUSE
+1         &lt;none&gt;
+2         &lt;none&gt;
+
+# The undo goes back to the previous revision, i.e. using the old-replica
+# Rollout works for daemonset deployment statefulset
+kubectl rollout undo deployment nginx
+deployment.apps/nginx rolled back
+
+kubectl describe deployments.apps nginx
+Name:                   nginx
+Namespace:              default
+CreationTimestamp:      Sat, 30 Dec 2023 11:26:06 -0300
+Labels:                 app=nginx
+Annotations:            deployment.kubernetes.io/revision: 3
+Selector:               app=nginx
+Replicas:               2 desired | 2 updated | 2 total | 2 available | 0 unavailable
+StrategyType:           RollingUpdate
+MinReadySeconds:        0
+RollingUpdateStrategy:  25% max unavailable, 25% max surge
+Pod Template:
+  Labels:  app=nginx
+  Containers:
+   nginx:
+    Image:        nginx:1.24
+    Port:         &lt;none&gt;
+    Host Port:    &lt;none&gt;
+    Environment:  &lt;none&gt;
+    Mounts:       &lt;none&gt;
+  Volumes:        &lt;none&gt;
+Conditions:
+  Type           Status  Reason
+  ----           ------  ------
+  Available      True    MinimumReplicasAvailable
+  Progressing    True    NewReplicaSetAvailable
+OldReplicaSets:  nginx-7b8df77865 (0/0 replicas created)
+NewReplicaSet:   nginx-69d846b5c6 (2/2 replicas created)
+Events:
+  Type    Reason             Age    From                   Message
+  ----    ------             ----   ----                   -------
+  Normal  ScalingReplicaSet  10m    deployment-controller  Scaled up replica set nginx-69d846b5c6 to 2
+  Normal  ScalingReplicaSet  8m22s  deployment-controller  Scaled up replica set nginx-7b8df77865 to 1
+  Normal  ScalingReplicaSet  8m15s  deployment-controller  Scaled down replica set nginx-69d846b5c6 to 1 from 2
+  Normal  ScalingReplicaSet  8m15s  deployment-controller  Scaled up replica set nginx-7b8df77865 to 2 from 1
+  Normal  ScalingReplicaSet  8m8s   deployment-controller  Scaled down replica set nginx-69d846b5c6 to 0 from 1
+  Normal  ScalingReplicaSet  6m54s  deployment-controller  Scaled up replica set nginx-69d846b5c6 to 1 from 0
+  Normal  ScalingReplicaSet  6m52s  deployment-controller  Scaled down replica set nginx-7b8df77865 to 1 from 2
+  Normal  ScalingReplicaSet  6m52s  deployment-controller  Scaled up replica set nginx-69d846b5c6 to 2 from 1
+  Normal  ScalingReplicaSet  6m51s  deployment-controller  Scaled down replica set nginx-7b8df77865 to 0 from 1
+
+kubectl get replicasets.apps
+NAME               DESIRED   CURRENT   READY   AGE
+nginx-69d846b5c6   2         2         2       10m
+nginx-7b8df77865   0         0         0       9m6s
+
+# Even though it goes back to using the first replicaset, it creates a new revision
+❯ kubectl rollout history deployment nginx
+deployment.apps/nginx
+REVISION  CHANGE-CAUSE
+2         &lt;none&gt;
+3         &lt;none&gt;
+
+# We could go back to a specific revision
+kubectl rollout undo deployment nginx --to-revision 2
+deployment.apps/nginx rolled bac
+
+# It went back to revision 2 but created 4, because it always creates a revision, because what matters to it is the replicaset that will be used.
+kubectl rollout history deployment nginx
+deployment.apps/nginx
+REVISION  CHANGE-CAUSE
+3         &lt;none&gt;
+4         &lt;none&gt;
+
+# It discards old ones
+kubectl rollout undo deployment nginx --to-revision 1
+error: unable to find specified revision 1 in history
+</code></pre>
+<p>To keep more revisions we could define the <code>revisionHistoryLimit</code> tag.</p>
+<p>For change causes to appear correctly, just use annotations</p>
+<pre><code class="language-yaml">apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: nginx
+  name: nginx
+  annotations:
+      kubernetes.io/change-cause: &quot;Image update to version 1.25&quot;
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - image: nginx:1.25
+        name: nginx
+        resources: {}
+  # We could also change some parameters and define the strategies
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  revisionHistoryLimit: 10 # Like this
+</code></pre>
+      <div class="docs-pager">
+        <a href="../../../../#blogs">All blogs</a>
+        <a href="../">Back to CKA</a>
+      </div>
+    </article>
+    <aside class="docs-toc">
+      <div class="docs-toc-title">On this page</div>
+      <nav>
+        <a href="#top">On this page</a>
+      </nav>
+    </aside>
+  </div>
+  <script src="../../../../js/docs.js"></script>
+</body>
+</html>

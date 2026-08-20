@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Labels and Selectors — Hieu Nguyen</title>
+  <meta name="description" content="Labels and Selectors — Kubestronaut roadmap.">
+  <link rel="icon" href="../../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../../">i'm<span>.hieu</span></a>
+    <nav class="docs-series">
+      <a href="../../../../blog/web-security/">Web Security</a>
+      <a class="active" href="../../">Kubestronaut roadmap</a>
+    </nav>
+    <nav class="docs-cert-tabs"><a href="../../cka/" class="active">CKA</a><a href="../../ckad/" class="">CKAD</a><a href="../../cks/" class="">CKS</a></nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-nav="kubestronaut" data-cert="cka" data-docs-root="../" data-active="labels-selectors">
+      <div class="docs-nav-label">CKA</div>
+      <ul class="docs-nav" id="docsNav"></ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../../">Home</a>
+        <span>›</span>
+        <a href="../../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../../">Kubestronaut</a>
+        <span>›</span>
+        <a href="../">CKA</a>
+        <span>›</span>
+        <span>Labels and Selectors</span>
+      </div>
+      <div id="top"></div>
+<header><h1>Labels and Selectors</h1></header><p>Labels and Selectors are ways to group resources in Kubernetes.</p>
+<p>Let&#x27;s imagine we have this group of animals.</p>
+<p><img decoding="async" loading="lazy" alt="Alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-12726a1fd2189d1170e7298fa9d31e3c.png" width="768" height="572" class="img_ev3q"></p>
+<p>We could group them by different criteria, for example:</p>
+<ul>
+<li>
+<p>By classes.
+<img decoding="async" loading="lazy" alt="Alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-1-c28ac103821283f179e1dd89dee85f25.png" width="999" height="634" class="img_ev3q"></p>
+</li>
+<li>
+<p>By types if they are wild or domestic.
+<img decoding="async" loading="lazy" alt="Alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-2-3e9938db43cf86c856c33845c8093132.png" width="1126" height="539" class="img_ev3q"></p>
+</li>
+<li>
+<p>By color.
+<img decoding="async" loading="lazy" alt="Alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-3-bdcb6ad27263b9f97000d27351c2b3f3.png" width="1111" height="542" class="img_ev3q"></p>
+</li>
+<li>
+<p>Or even by multiple criteria.</p>
+</li>
+</ul>
+<p>Any resource in Kubernetes can have multiple Labels. It&#x27;s a good practice to always use Labels to be able to filter resources.</p>
+<p><img decoding="async" loading="lazy" alt="Alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-5-34cd692f39318174f9cd02f668507990.png" width="1166" height="641" class="img_ev3q"></p>
+<p>To specify what we&#x27;re looking for, we use <code>Selectors</code>. They are fundamental for linking components in Kubernetes. We always use labels (Labels) within the metadata of objects, being able to define as many labels as needed. This way, labels form a flexible key-value list.</p>
+<pre><code class="language-yaml">apiVersion: v1
+kind: Pod
+metadata:
+  name: simple-webapp
+  labels:
+    app: webapp
+    function: frontend
+    ...
+</code></pre>
+<p>As mentioned earlier, we can select the specific Pods we want when searching for a Pod.</p>
+<p><code>kubectl get pods --selector app=webapp</code></p>
+<p>Labels are used to group elements, while Annotations are used to provide additional information, such as versions and feature integration details.</p>
+<p>To print Pods without the first header line.</p>
+<p><code>kubectl get pods --selector app=webapp --no-headers</code></p>
+<p>And to count the lines to know the number of Pods</p>
+<p><code>kubectl get pods --selector app=webapp --no-headers | wc -l</code></p>
+      <div class="docs-pager">
+        <a href="../../../../#blogs">All blogs</a>
+        <a href="../">Back to CKA</a>
+      </div>
+    </article>
+    <aside class="docs-toc">
+      <div class="docs-toc-title">On this page</div>
+      <nav>
+        <a href="#top">On this page</a>
+      </nav>
+    </aside>
+  </div>
+  <script src="../../../../js/docs.js"></script>
+</body>
+</html>

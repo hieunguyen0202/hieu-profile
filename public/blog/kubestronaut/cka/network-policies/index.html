@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Network Policies — Hieu Nguyen</title>
+  <meta name="description" content="Network Policies — Kubestronaut roadmap.">
+  <link rel="icon" href="../../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../../">i'm<span>.hieu</span></a>
+    <nav class="docs-series">
+      <a href="../../../../blog/web-security/">Web Security</a>
+      <a class="active" href="../../">Kubestronaut roadmap</a>
+    </nav>
+    <nav class="docs-cert-tabs"><a href="../../cka/" class="active">CKA</a><a href="../../ckad/" class="">CKAD</a><a href="../../cks/" class="">CKS</a></nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-nav="kubestronaut" data-cert="cka" data-docs-root="../" data-active="network-policies">
+      <div class="docs-nav-label">CKA</div>
+      <ul class="docs-nav" id="docsNav"></ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../../">Home</a>
+        <span>›</span>
+        <a href="../../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../../">Kubestronaut</a>
+        <span>›</span>
+        <a href="../">CKA</a>
+        <span>›</span>
+        <span>Network Policies</span>
+      </div>
+      <div id="top"></div>
+<header><h1>Network Policies</h1></header><p>Let&#x27;s start with the basics of networking...</p>
+<p><img decoding="async" loading="lazy" alt="alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-26-b3b0e7c2b97a9483f75db1077150eb73.png" width="1817" height="535" class="img_ev3q"></p>
+<p>Responses are allowed for whoever sent the request. We need to control what it can receive and where it can go.</p>
+<p>In this scenario:</p>
+<p>The frontend application must allow incoming traffic on port 443 HTTPS that it listens to from the Internet and must allow communication with the backend on port 5000.</p>
+<p>The backend application should only accept requests on port 5000, respond to them, and can make requests to the database on port 3306.</p>
+<p>The database only accepts requests on port 3306 and responds to them, not allowing outbound connections anywhere.</p>
+<p>For this we need to create rules for the ingress and egress of these applications.</p>
+<p>Ingress Rules are the inbound rules and Egress Rules are the outbound rules.</p>
+<p>What rules are needed for everything to work?</p>
+<ul>
+<li>
+<p>Frontend</p>
+<ul>
+<li>Allow port 443 on ingress</li>
+<li>Allow backend:5000 on egress</li>
+</ul>
+</li>
+<li>
+<p>Backend</p>
+<ul>
+<li>Allow port 5000 on ingress</li>
+<li>Allow database:3306 on egress</li>
+</ul>
+</li>
+<li>
+<p>Database</p>
+<ul>
+<li>Allow port 3306 on ingress</li>
+</ul>
+</li>
+</ul>
+<p>One of the prerequisites for the workflow in Kubernetes is that any pod can communicate with the others without any additional configuration like routes.</p>
+<p><img decoding="async" loading="lazy" alt="alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-27-b22fd75b3b80307c1b770d896fad6092.png" width="919" height="337" class="img_ev3q"></p>
+<p>In this networking solution, all pods are on a virtual network that extends across the nodes in the Kubernetes cluster and all of them, BY DEFAULT, can reach each other through IPs, names, and services configured for this purpose.</p>
+<blockquote>
+<p>Kubernetes is configured by default with an (All Allow) rule that allows traffic from any pod to any other pod.</p>
+</blockquote>
+<p>Returning to the proposed scenario, the frontend, backend, and database can all communicate with each other without any impediment within the cluster. The rules are going beyond what we want; for this we need to restrict these pods.</p>
+<p>Network policies are applied to pods, not on pods. It is a rule completely independent of the pod.</p>
+<p>For example, we need the database to only allow traffic coming from the backend pods on port 3306.</p>
+<p>To bind a network rule to a pod, we use the same technique that binds replicasets to pods and services to pods, using labels and selectors.</p>
+<p><img decoding="async" loading="lazy" alt="networkpolicy" src="https://devsecops.puziol.com.br/en/assets/images/networkpolicy-4e5bb9f92fe1a2800b98e595d4f5e424.gif" width="1429" height="627" class="img_ev3q"></p>
+<p><img decoding="async" loading="lazy" alt="alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-28-d19f4cabbbe63235952fd9d1fd26b6ed.png" width="1185" height="413" class="img_ev3q"></p>
+<pre><code class="language-yaml">apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: dbpolicy
+spec:
+  podSelector:
+    # Will be applied to all pods that have the label app: database
+    matchLabels:
+      app: database
+  policyTypes:
+  - Ingress
+  # Ingress rules accept traffic from pods that have the label app: backend
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          app: backend
+    # On port 3306 using TCP protocol
+    ports:
+    - protocol: TCP
+      port: 3306
+</code></pre>
+<p>There is only an effect if there is ingress and/or egress in the policy types because the rule must be applied either on ingress or egress.</p>
+<p>The CNI used for the network solution in the cluster must support network policies, otherwise it will have no effect.</p>
+<p>Calico, Cilium, Weave Net, Kube-router natively support network policies.</p>
+<p>Flannel does not support them.</p>
+<p>Now let&#x27;s think about the following. We have different pods that can have the same label, but in different namespaces.</p>
+<p><img decoding="async" loading="lazy" alt="alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-29-94ee465b690ce33515e0a7d21bbc36ae.png" width="639" height="603" class="img_ev3q"></p>
+<p>This way we can also restrict at the namespace level.</p>
+<pre><code class="language-yaml">apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: dbpolicy
+spec:
+  podSelector:
+    # Will be applied to all pods that have the label app: database
+    matchLabels:
+      app: database
+  policyTypes:
+  - Ingress
+  # Ingress rules accept traffic from pods that have the label app: backend and are in the prod namespace.
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          app: backend
+      namespaceSelector:
+        matchLabels:
+          name: prod
+    # On port 3306 using TCP protocol
+    ports:
+    - protocol: TCP
+      port: 3306
+</code></pre>
+<p>If we only use the namespaceSelector, all pods within the namespace could have access to the database.</p>
+<p>What if a backup server needed to access this database directly? The previous rule wouldn&#x27;t work.</p>
+<p>However, if we analyze the yaml more closely, we&#x27;ll see that from is a list of rules that are allowed. If any of the rules are satisfied, then it can pass. In the example above, we only have one rule (be from the prod namespace and have the backend label). Let&#x27;s add another rule then.</p>
+<pre><code class="language-yaml">apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: dbpolicy
+spec:
+  podSelector:
+    # Will be applied to all pods that have the label app: database
+    matchLabels:
+      app: database
+  policyTypes:
+  - Ingress
+  # Ingress rules accept traffic from pods that have the label app: backend and are in the prod namespace.
+  ingress:
+  - from:
+  ########### Rule 1 ##########
+    - podSelector:
+        matchLabels:
+          app: backend
+      namespaceSelector:
+        matchLabels:
+          name: prod
+  ########### Rule 2 ##########
+    - ipBlock:
+        cidr: 192.168.5.10/32 # Backup server IP
+    # On port 3306 using TCP protocol
+    ports:
+    - protocol: TCP
+      port: 3306
+</code></pre>
+<p>This shows that we have two ingress rules and any one that is satisfied is sufficient to allow the connection.</p>
+<p>Rule 1 - Be in the prod namespace and the pod needs to have the label app: backend
+Rule 2 - The connection would need to come from 192.168.5.10</p>
+<p>If you had done this, just made the mistake of putting a - in front of namespaceSelector.</p>
+<pre><code class="language-yaml">  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          app: backend
+    - namespaceSelector:
+        matchLabels:
+          name: prod
+    - ipBlock:
+        cidr: 192.168.5.10/32 # Backup server IP
+</code></pre>
+<p>There would be 3 different rules:</p>
+<p>Rule 1 - Any pod that has the label app: backend regardless of the namespace could be allowed.</p>
+<p>Rule 2 - Any pod in the prod namespace would be allowed</p>
+<p>Rule 3 - The request coming from IP 192.168.5.10 would be allowed</p>
+<blockquote>
+<p>Just one mistake here and everything can change!</p>
+</blockquote>
+<p>But let&#x27;s imagine that the database connects to the backup on port 80 and not the other way around, therefore.</p>
+<pre><code class="language-yaml">apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: dbpolicy
+spec:
+  podSelector:
+    matchLabels:
+      app: database
+  policyTypes:
+  - Ingress
+  - Egress # Egress rule also added
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          app: backend
+      namespaceSelector:
+        matchLabels:
+          name: prod
+    ports:
+    - protocol: TCP
+      port: 3306
+  egress:
+  - to:
+    - ipBlock:
+        cidr: 192.168.5.10/32
+    ports:
+    - protocol: TCP
+      port: 80
+</code></pre>
+<p>Both the from of ingress and the to of egress are also lists. So we could still have more rules within the same policy.</p>
+<pre><code class="language-yaml">apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: dbpolicy
+spec:
+  podSelector:
+    matchLabels:
+      app: database
+  policyTypes:
+  - Ingress
+  - Egress # Egress rule also added
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          app: backend
+      namespaceSelector:
+        matchLabels:
+          name: prod
+    ports:
+    - protocol: TCP
+      port: 3306
+
+  - from:
+    - podSelector:
+        matchLabels:
+          app: backend
+      namespaceSelector:
+        matchLabels:
+          name: staging
+    ports:
+    - protocol: TCP
+      port: 3306
+
+  egress:
+  - to:
+    - ipBlock:
+        cidr: 192.168.5.10/32
+    ports:
+    - protocol: TCP
+      port: 80
+
+  - to:
+    - ipBlock:
+        cidr: 192.168.5.10/32
+    ports:
+    - protocol: TCP
+      port: 443
+</code></pre>
+<p>I know this could be simpler, but it was just to illustrate.</p>
+<pre><code class="language-yaml">apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: dbpolicy
+spec:
+  podSelector:
+    matchLabels:
+      app: database
+  policyTypes:
+  - Ingress
+  - Egress # Egress rule also added
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          app: backend
+      matchExpressions:
+      - key: name
+        operator: In
+        values:
+        - prod
+        - staging
+    ports:
+    - protocol: TCP
+      port: 3306
+
+  egress:
+  - to:
+    - ipBlock:
+        cidr: 192.168.5.10/32
+    ports:
+    - protocol: TCP
+      port: 80
+    ports:
+    - protocol: TCP
+      port: 443
+</code></pre>
+      <div class="docs-pager">
+        <a href="../../../../#blogs">All blogs</a>
+        <a href="../">Back to CKA</a>
+      </div>
+    </article>
+    <aside class="docs-toc">
+      <div class="docs-toc-title">On this page</div>
+      <nav>
+        <a href="#top">On this page</a>
+      </nav>
+    </aside>
+  </div>
+  <script src="../../../../js/docs.js"></script>
+</body>
+</html>

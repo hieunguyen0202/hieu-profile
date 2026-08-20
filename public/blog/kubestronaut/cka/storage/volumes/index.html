@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Volumes — Hieu Nguyen</title>
+  <meta name="description" content="Volumes — Kubestronaut roadmap.">
+  <link rel="icon" href="../../../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../../../">i'm<span>.hieu</span></a>
+    <nav class="docs-series">
+      <a href="../../../../../blog/web-security/">Web Security</a>
+      <a class="active" href="../../../">Kubestronaut roadmap</a>
+    </nav>
+    <nav class="docs-cert-tabs"><a href="../../../cka/" class="active">CKA</a><a href="../../../ckad/" class="">CKAD</a><a href="../../../cks/" class="">CKS</a></nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-nav="kubestronaut" data-cert="cka" data-docs-root="../../" data-active="storage/volumes">
+      <div class="docs-nav-label">CKA</div>
+      <ul class="docs-nav" id="docsNav"></ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../../../">Home</a>
+        <span>›</span>
+        <a href="../../../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../../../">Kubestronaut</a>
+        <span>›</span>
+        <a href="../../">CKA</a>
+        <span>›</span>
+        <span>Volumes</span>
+      </div>
+      <div id="top"></div>
+<header><h1>Volumes</h1></header><p>We know that the container&#x27;s function is to process data and die, and what keeps it alive is the process with ID 1. If that process dies, the container stops. Data is only destroyed when the container is destroyed.</p>
+<p><img decoding="async" loading="lazy" alt="datalost" src="https://devsecops.puziol.com.br/en/assets/images/datalost-5a8d76d55a9970a2ffcd589b64d766b5.gif" width="765" height="214" class="img_ev3q"></p>
+<p>In the container world, to persist data, we use volumes.</p>
+<p><img decoding="async" loading="lazy" alt="retain" src="https://devsecops.puziol.com.br/en/assets/images/retain-7d94f1a77ef94d906136403a8e8e61f8.gif" width="798" height="298" class="img_ev3q"></p>
+<p>Containers within a pod run in their respective read-write layers as we discussed earlier. The pod controls the containers inside it, and when a pod is terminated, it <code>destroys</code> its respective containers, taking the data with it.</p>
+<p><img decoding="async" loading="lazy" alt="poddata" src="https://devsecops.puziol.com.br/en/assets/images/poddata-63371f41525e8ac6a8f4b61cb1cb9b85.gif" width="412" height="315" class="img_ev3q"></p>
+<p>To persist data, it&#x27;s also necessary to use volumes.</p>
+<p><img decoding="async" loading="lazy" alt="poddata" src="https://devsecops.puziol.com.br/en/assets/images/podvolumes-0b7ff1c4061930ea3af35f8865bca407.gif" width="412" height="322" class="img_ev3q"></p>
+<p>If we create a pod normally, data is lost when the pod dies</p>
+<p><img decoding="async" loading="lazy" alt="alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-5-f68e0bf0b5abf4e7c75435e630b00089.png" width="814" height="325" class="img_ev3q"></p>
+<p>To create a volume using a <code>Local</code> driver, we need to declare a volume. It would be the same process when a container automatically creates the volume. In the scenario below, we create a volume inside the host, but the volume is not yet being used.</p>
+<p><img decoding="async" loading="lazy" alt="alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-6-0091bbd5a489ecb331490201c2d85b67.png" width="1010" height="487" class="img_ev3q"></p>
+<p>It&#x27;s necessary to map that the container&#x27;s /opt corresponds to the volume at /data.</p>
+<p><img decoding="async" loading="lazy" alt="alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-7-da0f3bfe667c0d5dd8fc32cb4f561173.png" width="1023" height="505" class="img_ev3q"></p>
+<blockquote>
+<p>If this pod is destroyed and created again and comes up on a different node, will the data be there? No.</p>
+</blockquote>
+<p>Two points we must consider here.</p>
+<ol>
+<li>
+<p>This volume is passing a path on the node, so this directory must exist previously with appropriate permission.</p>
+</li>
+<li>
+<p>This would work for a single-node cluster.</p>
+</li>
+<li>
+<p>In a multi-node cluster, the pod can come up on any node that passes scheduler filtering. Data would not be available if it came up on a different node than the one it came up on before.</p>
+</li>
+</ol>
+<p>Having replicas for the same pod requires all pods to see the same directory for the data to make sense.</p>
+<pre><code class="language-bash">cat &lt;&lt;EOF | kubectl apply -f -
+apiVersion: v1
+kind: Pod
+metadata:
+  name: &quot;ramdon-number-generator&quot;
+spec:
+  containers:
+  - name: alpine
+    image: &quot;alpine&quot;
+
+    command: [&quot;/bin/sh&quot;, &quot;-c&quot;]
+    args: [&quot;shuf -i 0-100 -n 1 &gt;&gt; /opt/number.out;&quot;]
+    volumeMounts:
+    - name: data-volume
+      mountPath: /opt
+  volumes:
+    - name: data-volume
+      hostPath:
+        path: /data
+        type: Directory
+EOF
+
+# Observe that the pod is not ready.
+kubectl get pods
+NAME                      READY   STATUS              RESTARTS   AGE
+ramdon-number-generator   0/1     ContainerCreating   0          22s
+
+kubectl describe pod ramdon-number-generator
+## Removed for easier reading
+Events:
+  Type     Reason       Age                From               Message
+  ----     ------       ----               ----               -------
+  Normal   Scheduled    28s                default-scheduler  Successfully assigned default/ramdon-number-generator to kind-cluster-worker2
+  # Failed to mount as expected
+  Warning  FailedMount  13s (x6 over 29s)  kubelet            MountVolume.SetUp failed for volume &quot;data-volume&quot; : hostPath type check failed: /data is not a directory
+</code></pre>
+<p>If you changed it to /tmp, it would work.</p>
+<p>But this is a specific solution for some and not for the vast majority. Ideally, don&#x27;t store application data inside nodes, but have an external solution for this purpose.</p>
+<p>Kubernetes supports different types of storage solutions.</p>
+<ul>
+<li>NFS</li>
+<li>GlusterFS</li>
+<li>Flocker</li>
+<li>Ceph</li>
+<li>Scaleio</li>
+<li>vSphere</li>
+<li>Others</li>
+</ul>
+<p>And also many cloud solutions like:</p>
+<ul>
+<li>AWS</li>
+<li>Azure</li>
+<li>GCP</li>
+<li>others</li>
+</ul>
+<p>For example, on AWS, we could use EBS.</p>
+<pre><code class="language-yaml">  volumes:
+    - name: data-volume
+      awsElasticBlockStore:
+        volumeID: &lt;volume-id&gt;
+        fsType: ext4
+</code></pre>
+<p>Let&#x27;s create an nginx container and a volume shared between it and another. The second container should put the time in nginx&#x27;s index.html.</p>
+<pre><code class="language-bash">cat &lt;&lt;EOF | kubectl apply -f -
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-com-dois-containers
+spec:
+  containers:
+    - name: nginx-container
+      image: nginx
+      ports:
+        - containerPort: 80
+      volumeMounts:
+        - name: html-volume
+          mountPath: /usr/share/nginx/html
+    - name: hora-container
+      image: alpine
+      command: [&quot;/bin/sh&quot;, &quot;-c&quot;]
+      args:
+        - while true; do echo &quot;$(date &#x27;+%Y-%m-%d %H:%M:%S&#x27;)&quot; &gt; /mnt/html/index.html; sleep 1; done
+      volumeMounts:
+        - name: html-volume
+          mountPath: /mnt/html
+  volumes:
+    - name: html-volume
+      emptyDir: {}
+EOF
+</code></pre>
+      <div class="docs-pager">
+        <a href="../../../../../#blogs">All blogs</a>
+        <a href="../../">Back to CKA</a>
+      </div>
+    </article>
+    <aside class="docs-toc">
+      <div class="docs-toc-title">On this page</div>
+      <nav>
+        <a href="#top">On this page</a>
+      </nav>
+    </aside>
+  </div>
+  <script src="../../../../../js/docs.js"></script>
+</body>
+</html>

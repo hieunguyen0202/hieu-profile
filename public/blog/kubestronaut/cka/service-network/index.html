@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Service Networking — Hieu Nguyen</title>
+  <meta name="description" content="Service Networking — Kubestronaut roadmap.">
+  <link rel="icon" href="../../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../../">i'm<span>.hieu</span></a>
+    <nav class="docs-series">
+      <a href="../../../../blog/web-security/">Web Security</a>
+      <a class="active" href="../../">Kubestronaut roadmap</a>
+    </nav>
+    <nav class="docs-cert-tabs"><a href="../../cka/" class="active">CKA</a><a href="../../ckad/" class="">CKAD</a><a href="../../cks/" class="">CKS</a></nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-nav="kubestronaut" data-cert="cka" data-docs-root="../" data-active="service-network">
+      <div class="docs-nav-label">CKA</div>
+      <ul class="docs-nav" id="docsNav"></ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../../">Home</a>
+        <span>›</span>
+        <a href="../../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../../">Kubestronaut</a>
+        <span>›</span>
+        <a href="../">CKA</a>
+        <span>›</span>
+        <span>Service Networking</span>
+      </div>
+      <div id="top"></div>
+<header><h1>Service Networking</h1></header><p>You rarely configure your pods to communicate directly with each other. If you want a pod to access services from another pod, whether hosted on the same host or not, you should always use services.</p>
+<blockquote>
+<p>When a service is created, it can be accessed by all pods in the cluster regardless of which node the pods are on. While a pod is hosted on a node, a service is &quot;hosted&quot; across the entire cluster and not tied to a specific node.</p>
+</blockquote>
+<p>We have 3 types of services:</p>
+<ul>
+<li>ClusterIP: This is the default and only known within the cluster. An example is a database within the cluster for applications.</li>
+<li>NodePort: This is the type of service that exposes the service outside the cluster. A web application would be a great example for using this type. This service creates the SAME port on all cluster nodes and points to the service. A NodePort also has a ClusterIP.</li>
+<li>LoadBalancer: <code>we&#x27;ll talk about this later</code></li>
+</ul>
+<p><img decoding="async" loading="lazy" alt="alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-27-f9bc9e2c0e447689bdbbdabf389159df.png" width="754" height="415" class="img_ev3q"></p>
+<p>But how does this really work?</p>
+<p>Quick summary:</p>
+<ol>
+<li>
+<p>The kubelet watches for changes in the kube-apiserver and every time a pod is scheduled to be created on its node, it interacts with the container runtime and creates it.</p>
+</li>
+<li>
+<p>The container runtime does its job of creating the necessary namespaces for the pod and invokes the CNI plugin to create the network for that pod.</p>
+</li>
+</ol>
+<p>On each node we run kube-proxy, which is why it&#x27;s a DaemonSet:</p>
+<pre><code class="language-bash">kubectl get ds -n kube-system
+NAME         DESIRED   CURRENT   READY   UP-TO-DATE   AVAILABLE   NODE SELECTOR            AGE
+kube-proxy   4         4         4       4            4           kubernetes.io/os=linux   30h
+weave-net    4         4         4       4            4           &lt;none&gt;                   30h
+</code></pre>
+<p>Kube-proxy also watches for cluster changes through the kube-apiserver, just like kubelet, and whenever a new service is created, it takes action.</p>
+<p>Services are a <strong>concept</strong> that spans the entire cluster. They are not a resource created on the node like a container, but they exist across all cluster nodes. In fact, they don&#x27;t exist. There are no processes, interfaces, namespaces, containers, IPs, nothing. Services in Kubernetes are just virtual objects.</p>
+<p>So how do they get an IP?</p>
+<p>When we create a service, it receives an IP from a predefined range. The kube-proxy components running on each node take that IP address and create forwarding rules on each cluster node saying that all traffic arriving at that service IP should be directed to the pod IP.</p>
+<p><img decoding="async" loading="lazy" alt="alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-28-a773b5920b11479dac311cad3fe9a123.png" width="953" height="472" class="img_ev3q"></p>
+<p>Whenever a pod tries to access a service IP, it will be forwarded to the pod&#x27;s IP address which can be accessed on any cluster node.</p>
+<blockquote>
+<p>It&#x27;s not just about the IP but the combination of IP:PORT</p>
+</blockquote>
+<p>Every time a service is created, kube-proxy adds new rules, and every time it&#x27;s deleted, these rules are removed.</p>
+<p>How are these rules created and where?</p>
+<p>Kube-proxy supports different modes, such as:</p>
+<ul>
+<li>userspace: Kube-proxy listens on a port for each service and connects them with the pods.</li>
+<li>IPVS: kube-proxy creates IPVS rules.</li>
+<li>iptables: kube-proxy creates iptables rules</li>
+</ul>
+<p>In kube-proxy, the proxy-mode can be set using the --proxy-mode [userspace | iptables | ipvs] ... parameter</p>
+<blockquote>
+<p>If this is not set, the default is iptables.</p>
+</blockquote>
+<p>So, we&#x27;ll see how iptables are configured by kube-proxy and how you can view them on the nodes.</p>
+<p>Let&#x27;s create a deployment, which creates a replicaset, which creates a pod... It could be just a pod, but let&#x27;s go with the usual method, nobody creates pods without a controller.</p>
+<pre><code class="language-bash">kubectl create deployment nginx --image nginx
+deployment.apps/nginx created
+
+# WE CAN DO IT THIS WAY OR THE SECOND WAY
+kubectl expose deployment nginx --port=8080 --target-port=80 --type=ClusterIP
+service/nginx exposed
+
+kubectl delete svc nginx
+
+# AND WE COULD DO IT LIKE THIS
+kubectl create service clusterip nginx --tcp=8080:80
+</code></pre>
+<p>What did we define here? A service that will receive on port 8080 and send to nginx on port 80.</p>
+<p>The <code>kubectl expose</code> and <code>kubectl create service</code> commands are two different ways to achieve the same result: creating a service in Kubernetes. However, there are some differences between them:</p>
+<ul>
+<li>
+<p>kubectl expose:</p>
+<ul>
+<li>Requires you to specify a pre-existing deployment to create the service.</li>
+<li>In addition to creating a service, the expose command can modify or update an existing service</li>
+<li>Allows you to specify additional options, such as service type, service port and other details.</li>
+<li>More complex when used with many parameters.</li>
+</ul>
+</li>
+<li>
+<p>kubectl create service:</p>
+<ul>
+<li>Allows you to create a service without necessarily having a corresponding deployment.</li>
+<li>It creates a service with the specified ports and doesn&#x27;t offer many additional options.</li>
+<li>Less complex</li>
+</ul>
+</li>
+</ul>
+<pre><code class="language-bash">k get pods -o wide
+NAME                     READY   STATUS    RESTARTS   AGE   IP          NODE                  NOMINATED NODE   READINESS GATES
+nginx-7854ff8877-wc4dr   1/1     Running   0          13m   10.34.0.1   cka-cluster-worker2   &lt;none&gt;           &lt;none&gt;
+
+k get svc -o wide
+NAME         TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE   SELECTOR
+kubernetes   ClusterIP   10.96.0.1       &lt;none&gt;        443/TCP    30h   &lt;none&gt;
+nginx        ClusterIP   10.101.29.104   &lt;none&gt;        8080/TCP   3s    app=nginx
+</code></pre>
+<p>The real pod IP is 10.34.0.1
+The service IP is 10.109.205.172</p>
+<p>Why did the service get an IP?</p>
+<p>The definition is in the kube-apiserver, it&#x27;s one of the parameters passed when running the pod.</p>
+<pre><code class="language-bash">root@cka-cluster-control-plane:/etc# cat /etc/kubernetes/manifests/kube-apiserver.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  # Removed to reduce output ...
+  name: kube-apiserver
+  namespace: kube-system
+spec:
+  containers:
+  - command:
+    - kube-apiserver
+    - --advertise-address=172.18.0.5
+    - --allow-privileged=true
+    - --authorization-mode=Node,RBAC
+    - --client-ca-file=/etc/kubernetes/pki/ca.crt
+    - --enable-admission-plugins=NodeRestriction
+    - --enable-bootstrap-token-auth=true
+    - --etcd-cafile=/etc/kubernetes/pki/etcd/ca.crt
+    - --etcd-certfile=/etc/kubernetes/pki/apiserver-etcd-client.crt
+    - --etcd-keyfile=/etc/kubernetes/pki/apiserver-etcd-client.key
+    - --etcd-servers=https://127.0.0.1:2379
+    - --kubelet-client-certificate=/etc/kubernetes/pki/apiserver-kubelet-client.crt
+    - --kubelet-client-key=/etc/kubernetes/pki/apiserver-kubelet-client.key
+    - --kubelet-preferred-address-types=InternalIP,ExternalIP,Hostname
+    - --proxy-client-cert-file=/etc/kubernetes/pki/front-proxy-client.crt
+    - --proxy-client-key-file=/etc/kubernetes/pki/front-proxy-client.key
+    - --requestheader-allowed-names=front-proxy-client
+    - --requestheader-client-ca-file=/etc/kubernetes/pki/front-proxy-ca.crt
+    - --requestheader-extra-headers-prefix=X-Remote-Extra-
+    - --requestheader-group-headers=X-Remote-Group
+    - --requestheader-username-headers=X-Remote-User
+    - --runtime-config=
+    - --secure-port=6443
+    - --service-account-issuer=https://kubernetes.default.svc.cluster.local
+    - --service-account-key-file=/etc/kubernetes/pki/sa.pub
+    - --service-account-signing-key-file=/etc/kubernetes/pki/sa.key
+    - --service-cluster-ip-range=10.96.0.0/12 # &lt;&lt;&lt;&lt;&lt; Here will be the range
+    - --tls-cert-file=/etc/kubernetes/pki/apiserver.crt
+    - --tls-private-key-file=/etc/kubernetes/pki/apiserver.key
+    image: registry.k8s.io/kube-apiserver:v1.29.1
+    imagePullPolicy: IfNotPresent
+    ## Removed to reduce output
+
+## OR
+
+kubectl get pods -n kube-system kube-apiserver-cka-cluster-control-plane -o=jsonpath=&#x27;{.spec.containers[*].command}&#x27; | jq
+[
+  &quot;kube-apiserver&quot;,
+  &quot;--advertise-address=172.18.0.5&quot;,
+  &quot;--allow-privileged=true&quot;,
+  &quot;--authorization-mode=Node,RBAC&quot;,
+  &quot;--client-ca-file=/etc/kubernetes/pki/ca.crt&quot;,
+  &quot;--enable-admission-plugins=NodeRestriction&quot;,
+  &quot;--enable-bootstrap-token-auth=true&quot;,
+  &quot;--etcd-cafile=/etc/kubernetes/pki/etcd/ca.crt&quot;,
+  &quot;--etcd-certfile=/etc/kubernetes/pki/apiserver-etcd-client.crt&quot;,
+  &quot;--etcd-keyfile=/etc/kubernetes/pki/apiserver-etcd-client.key&quot;,
+  &quot;--etcd-servers=https://127.0.0.1:2379&quot;,
+  &quot;--kubelet-client-certificate=/etc/kubernetes/pki/apiserver-kubelet-client.crt&quot;,
+  &quot;--kubelet-client-key=/etc/kubernetes/pki/apiserver-kubelet-client.key&quot;,
+  &quot;--kubelet-preferred-address-types=InternalIP,ExternalIP,Hostname&quot;,
+  &quot;--proxy-client-cert-file=/etc/kubernetes/pki/front-proxy-client.crt&quot;,
+  &quot;--proxy-client-key-file=/etc/kubernetes/pki/front-proxy-client.key&quot;,
+  &quot;--requestheader-allowed-names=front-proxy-client&quot;,
+  &quot;--requestheader-client-ca-file=/etc/kubernetes/pki/front-proxy-ca.crt&quot;,
+  &quot;--requestheader-extra-headers-prefix=X-Remote-Extra-&quot;,
+  &quot;--requestheader-group-headers=X-Remote-Group&quot;,
+  &quot;--requestheader-username-headers=X-Remote-User&quot;,
+  &quot;--runtime-config=&quot;,
+  &quot;--secure-port=6443&quot;,
+  &quot;--service-account-issuer=https://kubernetes.default.svc.cluster.local&quot;,
+  &quot;--service-account-key-file=/etc/kubernetes/pki/sa.pub&quot;,
+  &quot;--service-account-signing-key-file=/etc/kubernetes/pki/sa.key&quot;,
+  &quot;--service-cluster-ip-range=10.96.0.0/12&quot;, ## Here
+  &quot;--tls-cert-file=/etc/kubernetes/pki/apiserver.crt&quot;,
+  &quot;--tls-private-key-file=/etc/kubernetes/pki/apiserver.key&quot;
+]
+</code></pre>
+<p>10.96.0.0/12 means that the first 12 bits of the IP address are fixed (10.96) and the remaining 20 bits are variable. This gives an IP address range from 10.96.0.0 to 10.111.255.255. So it&#x27;s within.</p>
+<blockquote>
+<p>The default is 10.0.0.0/24 which would allow us to create far fewer services.</p>
+</blockquote>
+<p>When we provide our CNI with the IP range that pods will use, we saw that it&#x27;s 10.244.0.0/16. They cannot overlap.
+There shouldn&#x27;t be a case where a pod and a service receive the same IP</p>
+<p>And why is the pod address at 10.34.0.1?</p>
+<pre><code class="language-bash">NAME                     READY   STATUS    RESTARTS   AGE   IP          NODE                  NOMINATED NODE   READINESS GATES
+nginx-7854ff8877-wc4dr   1/1     Running   0          47m   10.34.0.1   cka-cluster-worker2   &lt;none&gt;           &lt;none&gt;
+</code></pre>
+<p>Because that&#x27;s how Weavenet works. Remember the agents?</p>
+<p>Let&#x27;s check the rules created when this service was executed</p>
+      <div class="docs-pager">
+        <a href="../../../../#blogs">All blogs</a>
+        <a href="../">Back to CKA</a>
+      </div>
+    </article>
+    <aside class="docs-toc">
+      <div class="docs-toc-title">On this page</div>
+      <nav>
+        <a href="#top">On this page</a>
+      </nav>
+    </aside>
+  </div>
+  <script src="../../../../js/docs.js"></script>
+</body>
+</html>

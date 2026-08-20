@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kube-ApiServer — Hieu Nguyen</title>
+  <meta name="description" content="Kube-ApiServer — Kubestronaut roadmap.">
+  <link rel="icon" href="../../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../../">i'm<span>.hieu</span></a>
+    <nav class="docs-series">
+      <a href="../../../../blog/web-security/">Web Security</a>
+      <a class="active" href="../../">Kubestronaut roadmap</a>
+    </nav>
+    <nav class="docs-cert-tabs"><a href="../../cka/" class="active">CKA</a><a href="../../ckad/" class="">CKAD</a><a href="../../cks/" class="">CKS</a></nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-nav="kubestronaut" data-cert="cka" data-docs-root="../" data-active="kube-api-server">
+      <div class="docs-nav-label">CKA</div>
+      <ul class="docs-nav" id="docsNav"></ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../../">Home</a>
+        <span>›</span>
+        <a href="../../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../../">Kubestronaut</a>
+        <span>›</span>
+        <a href="../">CKA</a>
+        <span>›</span>
+        <span>Kube-ApiServer</span>
+      </div>
+      <div id="top"></div>
+<header><h1>Kube-ApiServer</h1></header><p>The <strong>kubectl</strong> command communicates with the Kube-APIServer and nothing else. We could also invoke the APIs directly with a POST command without using kubectl, although rarely used, it&#x27;s perfectly possible.</p>
+<p>The Kube-APIServer is at the center of all cluster updates.</p>
+<ul>
+<li>Authenticates the user.</li>
+<li>Validates the request.</li>
+<li>Retrieves data.</li>
+<li>Updates ETCD (the only one that interacts with ETCD).</li>
+<li>Kube-Controller-Manager, Kube-Scheduler and Kubelet use the Kube-APIServer to make updates in the cluster in their respective areas.</li>
+</ul>
+<p>The Kube-APIServer, like all Kubernetes components, is available as a binary.</p>
+<p><a href="https://github.com/kubernetes/kubernetes/blob/master/CHANGELOG/CHANGELOG-1.29.md#client-binaries" target="_blank" rel="noopener noreferrer">https://github.com/kubernetes/kubernetes/blob/master/CHANGELOG/CHANGELOG-1.29.md#client-binaries</a></p>
+<p>All Kubernetes cluster components need to know where the other components are. There are different methods of authentication, authorization, encryption and security. That&#x27;s why there are so many configuration options for these binaries.</p>
+<p><img decoding="async" loading="lazy" alt="Alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-7-63116fcc07ce524bb4451c49ebedf36e.png" width="997" height="427" class="img_ev3q"></p>
+<p>The parameters passed to the Kube-APIServer depend on how the cluster was set up. If you use a kubeadm tool to initialize the cluster, the Kube-APIServer will come up as a static pod in the kube-system namespace. Using another method could be different, such as coming up as a systemd service on master nodes.</p>
+<p><img decoding="async" loading="lazy" alt="Alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-8-43694a7cfae83b739f9119e824f8e60e.png" width="847" height="290" class="img_ev3q"></p>
+<p><img decoding="async" loading="lazy" alt="Alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-9-553cd2a0ab39d23c09fe957103ffb529.png" width="817" height="559" class="img_ev3q"></p>
+<p><img decoding="async" loading="lazy" alt="Alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-10-73c65ceeaf99f45481d559a76592f6ae.png" width="1054" height="301" class="img_ev3q"></p>
+      <div class="docs-pager">
+        <a href="../../../../#blogs">All blogs</a>
+        <a href="../">Back to CKA</a>
+      </div>
+    </article>
+    <aside class="docs-toc">
+      <div class="docs-toc-title">On this page</div>
+      <nav>
+        <a href="#top">On this page</a>
+      </nav>
+    </aside>
+  </div>
+  <script src="../../../../js/docs.js"></script>
+</body>
+</html>

@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cluster Update Process — Hieu Nguyen</title>
+  <meta name="description" content="Cluster Update Process — Kubestronaut roadmap.">
+  <link rel="icon" href="../../../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../../../">i'm<span>.hieu</span></a>
+    <nav class="docs-series">
+      <a href="../../../../../blog/web-security/">Web Security</a>
+      <a class="active" href="../../../">Kubestronaut roadmap</a>
+    </nav>
+    <nav class="docs-cert-tabs"><a href="../../../cka/" class="active">CKA</a><a href="../../../ckad/" class="">CKAD</a><a href="../../../cks/" class="">CKS</a></nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-nav="kubestronaut" data-cert="cka" data-docs-root="../../" data-active="cluster-maintenance/cluster-update-process">
+      <div class="docs-nav-label">CKA</div>
+      <ul class="docs-nav" id="docsNav"></ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../../../">Home</a>
+        <span>›</span>
+        <a href="../../../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../../../">Kubestronaut</a>
+        <span>›</span>
+        <a href="../../">CKA</a>
+        <span>›</span>
+        <span>Cluster Update Process</span>
+      </div>
+      <div id="top"></div>
+<header><h1>Cluster Update Process</h1></header><p>We know that Kubernetes is a tangle of projects. Let&#x27;s focus only on these for now.</p>
+<p><img decoding="async" loading="lazy" alt="Alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-7-7d24ed983560cabfeca92d4fd32b0f74.png" width="920" height="370" class="img_ev3q"></p>
+<p>It&#x27;s not mandatory that all components are at the same version, but since everyone communicates with kube-apiserver, no one can be at a version above it.</p>
+<p>We have the exception of kubectl being able to be 1 higher or 1 lower to give commands to the cluster. The rule for this distortion is as follows considering the minor version.</p>
+<p><img decoding="async" loading="lazy" alt="Alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-8-7fec5b69c95c63601634837785dfcbf2.png" width="877" height="411" class="img_ev3q"></p>
+<p>This allows us to update components separately, one at a time.</p>
+<p>Now let&#x27;s go to the recommendations for a cluster upgrade taking into account the rule we have above. We cannot have a distortion greater than 2 between kube-apiserver and kubelet and kube-proxy.</p>
+<p>Let&#x27;s imagine we&#x27;re on version 1.10 and version 1.11 and 1.12 were released. It would be ok to upgrade the master components with this difference of 2 for the worker nodes that contain kubelet and kube-proxy.</p>
+<p><img decoding="async" loading="lazy" alt="Alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-9-1ddecdf311799bc8ab53018e6a37b6c5.png" width="1033" height="445" class="img_ev3q"></p>
+<p>If version 1.13 were released it would no longer be possible. The best time to upgrade a cluster is before the next unsupported version.</p>
+<p>To avoid upgrading all the time, it&#x27;s interesting to wait for this difference of 2, but never 3.</p>
+<p>The ideal and recommended is to do the upgrade 1 by 1.</p>
+<p><img decoding="async" loading="lazy" alt="Alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-10-58f4bb82960cbabd71e69b964e15b97d.png" width="1031" height="426" class="img_ev3q"></p>
+<p>The upgrade process depends a lot on how the cluster was built.</p>
+<ul>
+<li>
+<p>In clouds, usually with a few clicks we can upgrade an entire cluster, as they give us this facility.</p>
+</li>
+<li>
+<p>If a cluster was built using kubeadm we can use kubeadm itself to do the upgrade.</p>
+</li>
+<li>
+<p>If the cluster was built from scratch it needs to be done manually.</p>
+</li>
+</ul>
+<p><img decoding="async" loading="lazy" alt="Alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-11-db22ccfc8894d6c0f9977cd473b64579.png" width="1079" height="457" class="img_ev3q"></p>
+<h2 id="kubeadm-update">Kubeadm Update</h2>
+<p>Two steps are necessary to update a cluster.</p>
+<ul>
+<li>
+<p><code>First update ALL masters</code></p>
+<ul>
+<li>While masters are undergoing updates it&#x27;s not possible to create, delete and modify anything in the cluster, but what already exists works normally as long as the nodes don&#x27;t go down.</li>
+<li>If something stops, for example a pod dies, it won&#x27;t be recreated because the controllers are being updated.</li>
+<li>It&#x27;s not possible to access the cluster using kubectl because kube-apiserver will be undergoing update as well.</li>
+<li>When the master nodes come back everything should work normally.</li>
+<li>Remembering that it should be at most 2 versions above kubelet and kube-proxy running on workers.</li>
+</ul>
+</li>
+<li>
+<p><code>Second update the nodes</code></p>
+<ul>
+<li><strong>All in once strategy (all at once)</strong>
+<ul>
+<li>If you&#x27;re going to upgrade all workers at once, all cluster applications will be inoperative.</li>
+<li>When nodes are ready new applications will be scheduled to the nodes and everything should work normally again.</li>
+</ul>
+</li>
+<li><strong>One node at a time strategy (One by one)</strong>
+<ul>
+<li>We use the strategy of draining one node at a time and updating that node.</li>
+</ul>
+</li>
+<li><strong>Add new nodes with newer versions</strong>
+<ul>
+<li>This case is one of the best scenarios especially if the cluster is in a cloud rather than an on-premises environment.</li>
+<li>Once new nodes are added, we can start eliminating old nodes since pods will be automatically relocated to the new nodes (with available resources).</li>
+<li>Good time for operating system upgrade.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>A very important detail; the version shown below is the version of Kubelet inside each of the nodes.</p>
+<p>Depending on the type of installation, if Kubelet is not available on the master, it wouldn&#x27;t even appear here. That is, the get nodes command only brings nodes with Kubelet installed.</p>
+<pre><code class="language-bash">kubectl get nodes
+NAME                       STATUS   ROLES                  AGE     VERSION
+k3d-k3s-default-agent-1    Ready    &lt;none&gt;                 2d13h   v1.27.4+k3s1
+k3d-k3s-default-agent-0    Ready    &lt;none&gt;                 2d13h   v1.27.4+k3s1
+k3d-k3s-default-server-0   Ready    control-plane,master   2d13h   v1.27.4+k3s1
+</code></pre>
+<blockquote>
+<p>The kubeadm command does not update Kubelet</p>
+</blockquote>
+<p>On the master node you can run the command to see which upgrades are possible. Even if it&#x27;s possible to do two upgrades forward you should do one at a time.</p>
+<p>Kubeadm maintains equal versions of Kubernetes components so upgrade it to the version you will install.</p>
+<p>It&#x27;s always good to follow the documentation <a href="https://kubernetes.io/docs/tasks/administer-cluster/kubeadm/kubeadm-upgrade/%5D" target="_blank" rel="noopener noreferrer">https://kubernetes.io/docs/tasks/administer-cluster/kubeadm/kubeadm-upgrade/</a></p>
+<p>But here&#x27;s a brief summary.</p>
+<p>Just observing this we can see it&#x27;s always good to go one by one in the minor.</p>
+<p>Update the repository to the version you want to update.</p>
+<p><img decoding="async" loading="lazy" alt="Alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-12-6b05cc50b2c112c9d59705fabec0372b.png" width="810" height="477" class="img_ev3q"></p>
+<pre><code class="language-bash"># In this example we have version 1.28, but if you were to do it for 1.29 edit the file below.
+nano /etc/apt/sources.list.d/kubernetes.list
+deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.28/deb/ /
+
+sudo apt update
+sudo apt-cache madison kubeadm
+sudo apt-get install kubeadm
+
+sudo apt-mark unhold kubeadm &amp;&amp; \
+sudo apt-get update &amp;&amp; sudo apt-get install -y kubeadm=&#x27;1.28.x-*&#x27; &amp;&amp; \
+sudo apt-mark hold kubeadm
+
+kubeadm version
+</code></pre>
+<pre><code class="language-bash"># Usually on masters there are no pods running which is good practice but if there are you need to drain.
+kubectl drain &lt;node_name_master&gt; --ignore-daemonsets
+
+# Update the repo
+apt-get update
+
+# Usually these packages are marked not to be updated
+apt-mark unhold kubeadm
+apt-get upgrade -y kubeadm=1.XX+1.0-00
+#apt-get upgrade -y kubeadm=1.XX+1.0-00 --allow-downgrade
+apt-mark hold kubeadm # Mark again
+# Kubeadm also updates kubectl, but it&#x27;s always good to check
+
+# Now you can run plan again to see how far you can go with the new kubeadm
+kubeadm upgrade plan
+# Now with the correct kubeadm version
+kubeadm upgrade apply v1.XX.Y
+
+# If it&#x27;s other control planes instead of the first just update
+kubeadm upgrade node
+
+# If the master has kubelet, it&#x27;s necessary to update it as well
+apt-mark unhold kubelet
+apt-get upgrade -y kubelet=1.XX+1.0-00 --allow-downgrades
+apt-mark hold kubelet
+
+systemctl daemon-reload
+systemctl restart kubelet
+
+# If you had to drain
+kubectl uncordon &lt;node_name_master&gt;
+</code></pre>
+<p>Now each of the worker nodes (one by one).</p>
+<pre><code class="language-bash">kubectl drain nodeX --ignore-daemonsets # Drain the pods
+cat /etc/*release*  # will show you which distro it is (If different from ubuntu)
+
+# Also need to upgrade kubeadm
+apt-mark unhold kubeadm
+apt-get upgrade -y kubeadm=1.XX+1.0-00
+apt-mark hold kubeadm
+
+sudo kubeadm upgrade node # But need to call after to update with the masters
+
+# Now let&#x27;s do kubectl and kubelet
+apt-mark unhold kubelet kubectl
+apt-get upgrade -y kubelet=1.XX+1.0-00 kubectl=1.XX+1.0-00 # inside the node update kubelet
+apt-mark hold kubelet kubectl
+
+systemctl daemon-reload
+systemctl restart kubelet # to restart the service with the new binary
+
+kubectl uncordon nodeX # free the node for scheduling
+</code></pre>
+<p>All this should be done again after we make a cluster from scratch also using kubeadm.</p>
+<p>It&#x27;s good to do tests with more than one master.</p>
+      <div class="docs-pager">
+        <a href="../../../../../#blogs">All blogs</a>
+        <a href="../../">Back to CKA</a>
+      </div>
+    </article>
+    <aside class="docs-toc">
+      <div class="docs-toc-title">On this page</div>
+      <nav>
+        <a href="#kubeadm-update">Kubeadm Update</a>
+      </nav>
+    </aside>
+  </div>
+  <script src="../../../../../js/docs.js"></script>
+</body>
+</html>

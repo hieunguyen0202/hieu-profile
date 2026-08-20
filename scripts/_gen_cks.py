@@ -7,7 +7,7 @@ import re
 from pathlib import Path
 
 SRC = Path("/tmp/cks-src")
-DST = Path(__file__).resolve().parents[1] / "public" / "blog" / "cks-exam"
+DST = Path(__file__).resolve().parents[1] / "public" / "blog" / "kubestronaut" / "cks"
 
 ORDER = [
     "exam",
@@ -132,11 +132,15 @@ def toc(body: str) -> str:
 
 def wrap(slug: str, title: str, body: str) -> str:
     nested = slug != "exam"
-    home = "../../../" if nested else "../../"
+    depth = 0
+    if nested:
+        depth = slug.count("/") + 1  # flat slugs only
+    home = "../" * (depth + 3)
     css = f"{home}css/docs.css"
     js = f"{home}js/docs.js"
     fav = f"{home}favicon.svg"
-    root = "../" if nested else "./"
+    root = "../" * depth if depth else "./"
+    roadmap = "../" * (depth + 1)
     i = ORDER.index(slug)
     prev = ORDER[i - 1] if i else None
     nxt = ORDER[i + 1] if i < len(ORDER) - 1 else None
@@ -153,13 +157,18 @@ def wrap(slug: str, title: str, body: str) -> str:
         pager_r = f'<a href="{href(nxt)}">Next · {CRUMB[nxt]}</a>' if nxt else f'<a href="{home}#blogs">All blogs</a>'
     crumb = CRUMB[slug]
     body = f'<div id="top"></div>\n{body}'
+    tabs = [("cka", "CKA"), ("ckad", "CKAD"), ("cks", "CKS")]
+    tab_html = "".join(
+        f'<a href="{roadmap}{cid}/" class="{"active" if cid == "cks" else ""}">{label}</a>'
+        for cid, label in tabs
+    )
     return f'''<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{htmlmod.escape(title)} — Hieu Nguyen</title>
-  <meta name="description" content="{htmlmod.escape(title)} — CKS study notes.">
+  <meta name="description" content="{htmlmod.escape(title)} — Kubestronaut roadmap.">
   <link rel="icon" href="{fav}" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -175,13 +184,14 @@ def wrap(slug: str, title: str, body: str) -> str:
     <a class="docs-brand" href="{home}">i'm<span>.hieu</span></a>
     <nav class="docs-series">
       <a href="{home}blog/web-security/">Web Security</a>
-      <a class="active" href="{href("exam")}">CKS exam</a>
+      <a class="active" href="{roadmap}">Kubestronaut roadmap</a>
     </nav>
+    <nav class="docs-cert-tabs">{tab_html}</nav>
     <span class="docs-topbar-spacer"></span>
     <a class="docs-top-link" href="{home}#blogs">blogs</a>
   </header>
   <div class="docs-shell">
-    <aside class="docs-sidebar" id="docsSidebar" data-nav="cks" data-docs-root="{root}" data-active="{slug}">
+    <aside class="docs-sidebar" id="docsSidebar" data-nav="kubestronaut" data-cert="cks" data-docs-root="{root}" data-active="{slug}">
       <div class="docs-nav-label">CKS</div>
       <ul class="docs-nav" id="docsNav"></ul>
     </aside>
@@ -190,6 +200,8 @@ def wrap(slug: str, title: str, body: str) -> str:
         <a href="{home}">Home</a>
         <span>›</span>
         <a href="{home}#blogs">Blogs</a>
+        <span>›</span>
+        <a href="{roadmap}">Kubestronaut</a>
         <span>›</span>
         <a href="{href("exam")}">CKS</a>
         <span>›</span>

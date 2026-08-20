@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kube-Scheduler — Hieu Nguyen</title>
+  <meta name="description" content="Kube-Scheduler — Kubestronaut roadmap.">
+  <link rel="icon" href="../../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../../">i'm<span>.hieu</span></a>
+    <nav class="docs-series">
+      <a href="../../../../blog/web-security/">Web Security</a>
+      <a class="active" href="../../">Kubestronaut roadmap</a>
+    </nav>
+    <nav class="docs-cert-tabs"><a href="../../cka/" class="active">CKA</a><a href="../../ckad/" class="">CKAD</a><a href="../../cks/" class="">CKS</a></nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-nav="kubestronaut" data-cert="cka" data-docs-root="../" data-active="kube-scheduler">
+      <div class="docs-nav-label">CKA</div>
+      <ul class="docs-nav" id="docsNav"></ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../../">Home</a>
+        <span>›</span>
+        <a href="../../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../../">Kubestronaut</a>
+        <span>›</span>
+        <a href="../">CKA</a>
+        <span>›</span>
+        <span>Kube-Scheduler</span>
+      </div>
+      <div id="top"></div>
+<header><h1>Kube-Scheduler</h1></header><p>Responsible for deciding which node will execute each pod. Not necessarily placing pods on nodes, that&#x27;s a Kubelet function.</p>
+<p>It wouldn&#x27;t make sense to try to place a pod that needs 4GB of RAM on a node that only has 2GB available.</p>
+<p>The Kube-Scheduler respects some criteria depending on the requirements needed for the pod. Some nodes can be dedicated to certain types of applications, such as applications involving graphics processing that need to go to nodes that have dedicated video cards.</p>
+<p>Scheduling a pod to a node involves some steps, one of which is filtering, which will define which possible nodes can receive this application. In our manifests, some definitions in pods are taken into account:</p>
+<ul>
+<li>Resources (requirements and limits)</li>
+<li>taints</li>
+<li>tolerations</li>
+<li>node selector</li>
+<li>affinity</li>
+</ul>
+<p>Another phase is to choose, among the possible filtered nodes, which one has the best score to receive the pod. The score is based on how many CPUs and memory are available and many other parameters that can be adjusted. The Kubelet updates the Kube-APIServer with this information.</p>
+<p>As with other components, we can run the Kube-Scheduler as a pod or service on master nodes.</p>
+<p><img decoding="async" loading="lazy" alt="Alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-16-b0321e69dce0374624c83a3d236c7887.png" width="991" height="314" class="img_ev3q"></p>
+<p><img decoding="async" loading="lazy" alt="Alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-17-b0d39aaf361a5f33c6d5b458610f8c68.png" width="812" height="185" class="img_ev3q"></p>
+      <div class="docs-pager">
+        <a href="../../../../#blogs">All blogs</a>
+        <a href="../">Back to CKA</a>
+      </div>
+    </article>
+    <aside class="docs-toc">
+      <div class="docs-toc-title">On this page</div>
+      <nav>
+        <a href="#top">On this page</a>
+      </nav>
+    </aside>
+  </div>
+  <script src="../../../../js/docs.js"></script>
+</body>
+</html>

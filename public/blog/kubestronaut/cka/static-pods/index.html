@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Static Pods — Hieu Nguyen</title>
+  <meta name="description" content="Static Pods — Kubestronaut roadmap.">
+  <link rel="icon" href="../../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../../">i'm<span>.hieu</span></a>
+    <nav class="docs-series">
+      <a href="../../../../blog/web-security/">Web Security</a>
+      <a class="active" href="../../">Kubestronaut roadmap</a>
+    </nav>
+    <nav class="docs-cert-tabs"><a href="../../cka/" class="active">CKA</a><a href="../../ckad/" class="">CKAD</a><a href="../../cks/" class="">CKS</a></nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-nav="kubestronaut" data-cert="cka" data-docs-root="../" data-active="static-pods">
+      <div class="docs-nav-label">CKA</div>
+      <ul class="docs-nav" id="docsNav"></ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../../">Home</a>
+        <span>›</span>
+        <a href="../../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../../">Kubestronaut</a>
+        <span>›</span>
+        <a href="../">CKA</a>
+        <span>›</span>
+        <span>Static Pods</span>
+      </div>
+      <div id="top"></div>
+<header><h1>Static Pods</h1></header><p>Before we begin, let&#x27;s understand that kubelet runs Pods on any Node, whether master or worker type.</p>
+<p>Some Kubernetes installations don&#x27;t have kubelet on masters because they run the kube-apiserver, kube-controller, etcd, and kube-scheduler components through services on the operating system. However, some installations run cluster components as Pods inside the master itself, so they need kubelet running.</p>
+<p>Kubelet only understands manifests to run Pods and nothing else. All other Kubernetes objects like Deployments, ReplicaSets, Services, etc. are not understood by kubelet.</p>
+<p>In a normal Kubernetes cluster configuration, kubelet waits for instructions from the kube-apiserver about which Pods should be loaded on the Node, but the decision was made by kube-scheduler and the data stored in etcd.</p>
+<p>What would happen if we had the following scenario?</p>
+<p><img decoding="async" loading="lazy" alt="Alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-14-e5f6d495402d89b0ccc565be6c1d6a40.png" width="935" height="655" class="img_ev3q"></p>
+<p>Here comes the question, how to run a Pod if there&#x27;s no api-server, if there&#x27;s no etcd, if there&#x27;s nothing?</p>
+<p>How could we provide Pod configurations to kubelet without kube-apiserver?</p>
+<p>We can inject Pods with YAML Pod definition files in a folder that kubelet is configured to read periodically. Any change in this folder, kubelet will recreate the Pods to execute the changes, and if the files are removed, the Pod will be automatically deleted. Obviously, we need a container runtime that kubelet can execute. These Pods that have no kube-apiserver intervention are called <code>Static Pods</code>.</p>
+<blockquote>
+<p>It could be any system directory as long as kubelet is configured to read this directory.</p>
+</blockquote>
+<p><img decoding="async" loading="lazy" alt="Alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-15-85afe8140a9cbb2527f439173afd1286.png" width="614" height="376" class="img_ev3q"></p>
+<p><img decoding="async" loading="lazy" alt="Alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-16-d6a4764ed8f5d232e67f0bf386313a1c.png" width="1252" height="573" class="img_ev3q"></p>
+<p>You can run a Pod on your own machine if you install kubelet. It will take care of the process of keeping this Pod running on your local machine, but we won&#x27;t have ReplicaSets, Deployments, meaning each Pod like any container.</p>
+<blockquote>
+<p>You&#x27;ll be able to see the Pod running with <code>docker ps</code> or <code>nerdctl ps</code> or <code>crictl ps</code> for example inside the cluster, but not with <code>kubectl get pods</code>, because remember kubectl works with kube-apiserver.</p>
+</blockquote>
+<p>Kubelet has two ways to execute Pods:</p>
+<ul>
+<li>By file, as we showed</li>
+<li>By an endpoint that&#x27;s used by kube-apiserver to provide input</li>
+</ul>
+<p>If we&#x27;re creating a static Pod by manually placing the file on a Node, can we see it through the kubectl get pods command? Yes we can, because kubelet creates a mirror object in kube-apiserver, but it&#x27;s not editable or manipulable through kubectl, meaning it can&#x27;t be deleted but can be viewed.</p>
+<p>As mentioned earlier, Static Pods are widely used for Kubernetes services themselves, and this is how kubeadm creates cluster components.</p>
+<p>Kube-scheduler has no effect on Static Pods.</p>
+<p><img decoding="async" loading="lazy" alt="Alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-17-373985b6a6517cf7916ec10ae753343f.png" width="1024" height="515" class="img_ev3q"></p>
+<p>However, one of Kubernetes requirements is to have swap disabled.</p>
+<pre><code class="language-bash">sudo apt-get install kubelet -y
+
+sudo swapoff -a
+
+sudo systemctl enable kubelet --now
+
+❯ sudo systemctl status kubelet
+● kubelet.service - kubelet: The Kubernetes Node Agent
+     Loaded: loaded (/lib/systemd/system/kubelet.service; enabled; preset: enabled)
+     Active: active (running) since Thu 2023-12-28 15:41:50 -03; 1s ago
+       Docs: https://kubernetes.io/docs/home/
+   Main PID: 64784 (kubelet)
+      Tasks: 21 (limit: 18778)
+     Memory: 26.0M
+        CPU: 173ms
+     CGroup: /system.slice/kubelet.service
+             └─64784 /usr/bin/kubelet
+
+## If any problem occurs, do a checkup
+journalctl -xeu kubelet
+</code></pre>
+<p>Kubelet installations create the kubelet.service service on the system, so let&#x27;s find where it is.</p>
+<pre><code class="language-bash">sudo find / -type f -name kubelet.service 2&gt;/dev/null
+
+/usr/lib/systemd/system/kubelet.service
+/var/lib/systemd/deb-systemd-helper-enabled/multi-user.target.wants/kubelet.service
+
+cat /etc/systemd/system/multi-user.target.wants/kubelet.service
+[Unit]
+Description=kubelet: The Kubernetes Node Agent
+Documentation=https://kubernetes.io/docs/home/
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+ExecStart=/usr/bin/kubelet
+Restart=always
+StartLimitInterval=0
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
+</code></pre>
+<p>This kubelet is still missing some configurations, as it doesn&#x27;t know where there are Pod manifests, doesn&#x27;t know who the container runtime is, knows nothing, so let&#x27;s adjust.</p>
+<p>Edit the file for this if you have docker installed on your machine.</p>
+<p>Note that I passed the container runtime, the endpoint, and the path where there will be Pods.</p>
+<pre><code class="language-unit">[Unit]
+Description=kubelet: The Kubernetes Node Agent
+Documentation=https://kubernetes.io/docs/home/
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+ExecStart=/usr/bin/kubelet \
+  --container-runtime-endpoint=unix:///var/run/containerd/containerd.sock \
+  --pod-manifest-path=/etc/kubernetes/manifests \
+  --v=2
+Restart=always
+StartLimitInterval=0
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
+</code></pre>
+<pre><code class="language-bash">### Restart the service and see if it applied the configurations
+sudo systemctl daemon-reload
+sudo systemctl restart kubelet.service
+sudo systemctl status kubelet.service
+● kubelet.service - kubelet: The Kubernetes Node Agent
+     Loaded: loaded (/lib/systemd/system/kubelet.service; enabled; preset: enabled)
+     Active: active (running) since Thu 2023-12-28 16:43:37 -03; 55s ago
+       Docs: https://kubernetes.io/docs/home/
+   Main PID: 186026 (kubelet)
+      Tasks: 28 (limit: 18778)
+     Memory: 28.4M
+        CPU: 791ms
+     CGroup: /system.slice/kubelet.service
+</code></pre>
+      <div class="docs-pager">
+        <a href="../../../../#blogs">All blogs</a>
+        <a href="../">Back to CKA</a>
+      </div>
+    </article>
+    <aside class="docs-toc">
+      <div class="docs-toc-title">On this page</div>
+      <nav>
+        <a href="#top">On this page</a>
+      </nav>
+    </aside>
+  </div>
+  <script src="../../../../js/docs.js"></script>
+</body>
+</html>

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kubectx and Kubens — Hieu Nguyen</title>
+  <meta name="description" content="Kubectx and Kubens — Kubestronaut roadmap.">
+  <link rel="icon" href="../../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../../">i'm<span>.hieu</span></a>
+    <nav class="docs-series">
+      <a href="../../../../blog/web-security/">Web Security</a>
+      <a class="active" href="../../">Kubestronaut roadmap</a>
+    </nav>
+    <nav class="docs-cert-tabs"><a href="../../cka/" class="active">CKA</a><a href="../../ckad/" class="">CKAD</a><a href="../../cks/" class="">CKS</a></nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-nav="kubestronaut" data-cert="cka" data-docs-root="../" data-active="kubectx-kubens">
+      <div class="docs-nav-label">CKA</div>
+      <ul class="docs-nav" id="docsNav"></ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../../">Home</a>
+        <span>›</span>
+        <a href="../../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../../">Kubestronaut</a>
+        <span>›</span>
+        <a href="../">CKA</a>
+        <span>›</span>
+        <span>Kubectx and Kubens</span>
+      </div>
+      <div id="top"></div>
+<header><h1>Kubectx and Kubens</h1></header><p>These two command line tools are very helpful when changing the current context and namespace for work, whether in a study environment or a production environment. Relying solely on kubectl for this is a tedious task.</p>
+<p>This is where command line tools like kubectx and kubens come into play.</p>
+<p>This project <a href="https://github.com/ahmetb/kubectx" target="_blank" rel="noopener noreferrer">https://github.com/ahmetb/kubectx</a> provides these very useful CLIs.</p>
+<h2 id="installation">Installation</h2>
+<pre><code class="language-bash">sudo git clone https://github.com/ahmetb/kubectx /opt/kubectx
+sudo ln -s /opt/kubectx/kubectx /usr/local/bin/kubectx
+</code></pre>
+<p>With kubectx you don&#x27;t need to use long &quot;kubectl config&quot; commands to switch between contexts. This tool is particularly useful for switching context between clusters in a multi-cluster environment.</p>
+<h2 id="kubectx">Kubectx</h2>
+<pre><code class="language-bash">kubectx
+k3d-k3s-default
+kind-kind-cluster
+[email protected]
+
+kubectx kind-kind-cluster
+Switched to context &quot;kind-kind-cluster&quot;.
+
+# current context
+kubectx -c
+kind-kind-cluster
+</code></pre>
+<h2 id="kubens">kubens</h2>
+<p>In the cluster we are already in, we can see the namespaces</p>
+<pre><code class="language-bash">kubens
+
+default
+demo
+kube-node-lease
+kube-public
+kube-system
+kubernetes-dashboard
+local-path-storage
+
+kubens demo
+Context &quot;kind-kind-cluster&quot; modified.
+Active namespace is &quot;demo&quot;.
+
+# From this moment on, any command I run is as if I were passing -n demo, meaning everything will go to the demo namespace
+
+kubectl get pods
+No resources found in demo namespace.
+
+kubens default
+Context &quot;kind-kind-cluster&quot; modified.
+Active namespace is &quot;default&quot;.
+
+kubectl get pods
+NAME                          READY   STATUS    RESTARTS   AGE
+nginx-david-c8644f94d-nlgch   1/1     Running   0          143m
+</code></pre>
+      <div class="docs-pager">
+        <a href="../../../../#blogs">All blogs</a>
+        <a href="../">Back to CKA</a>
+      </div>
+    </article>
+    <aside class="docs-toc">
+      <div class="docs-toc-title">On this page</div>
+      <nav>
+        <a href="#installation">Installation</a>
+        <a href="#kubectx">Kubectx</a>
+        <a href="#kubens">kubens</a>
+      </nav>
+    </aside>
+  </div>
+  <script src="../../../../js/docs.js"></script>
+</body>
+</html>
