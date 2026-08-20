@@ -88,8 +88,18 @@ CRUMB = {
 ASSET = "https://devsecops.puziol.com.br"
 
 
+def strip_tail(body: str) -> str:
+    """Remove Docusaurus pagination / TOC leftovers that break our layout."""
+    body = re.sub(r"</div></article>.*", "", body, flags=re.S)
+    body = re.sub(r'<nav class="(?:docusaurus-mt-lg )?pagination-nav".*', "", body, flags=re.S)
+    body = re.sub(r'<div class="tableOfContents[^"]*".*', "", body, flags=re.S)
+    body = re.sub(r"</main>.*", "", body, flags=re.S)
+    return body.strip()
+
+
 def clean(body: str, slug: str) -> str:
-    body = re.sub(r'<a class="hash-link"[^>]*>.*?</a>', "", body)
+    body = strip_tail(body)
+    body = re.sub(r'<a\b[^>]*class="hash-link"[^>]*>.*?</a>', "", body)
     body = re.sub(
         r'<a href="#[^"]*"[^>]*aria-label="Direct link[^"]*"[^>]*>\s*​?\s*</a>',
         "",
@@ -97,6 +107,8 @@ def clean(body: str, slug: str) -> str:
     )
     body = re.sub(r' translate="no"', "", body)
     body = body.replace('<!-- -->', "")
+    body = re.sub(r' class="anchor[^"]*"', "", body)
+    body = re.sub(r' class=""', "", body)
     body = re.sub(r'src="(/en/assets/[^"]+)"', rf'src="{ASSET}\1"', body)
     body = re.sub(r'src="(/assets/[^"]+)"', rf'src="{ASSET}\1"', body)
 

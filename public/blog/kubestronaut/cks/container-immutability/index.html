@@ -49,17 +49,17 @@
 <p>The advantage of this approach is that we always know the state in which the container is. Entering an application and changing a configuration won&#x27;t be replicable again.</p>
 <p>Immutable containers allow us to:</p>
 <ul>
-<li class="">Use advanced deployment methods</li>
-<li class="">Easy rollback</li>
-<li class="">Greater reliability</li>
-<li class="">Better security (at the container level), because we can always create a new one, certain that there are no malicious processes running</li>
+<li>Use advanced deployment methods</li>
+<li>Easy rollback</li>
+<li>Greater reliability</li>
+<li>Better security (at the container level), because we can always create a new one, certain that there are no malicious processes running</li>
 </ul>
 <p>Immutability and the ease of burning new images are some of the reasons that made containers so popular.</p>
 <p>What can we do to ensure containers are immutable:</p>
 <ul>
-<li class="">Remove bash/shell so it&#x27;s not possible to interact with the container</li>
-<li class="">Make the filesystem read-only so it&#x27;s not possible to write</li>
-<li class="">Run with a non-root user</li>
+<li>Remove bash/shell so it&#x27;s not possible to interact with the container</li>
+<li>Make the filesystem read-only so it&#x27;s not possible to write</li>
+<li>Run with a non-root user</li>
 </ul>
 <p>This is what best practices mandate and how to harden a container.</p>
 <p>But what if we don&#x27;t have control over container images? In this case, it&#x27;s always possible to use the image as a base and modify it to generate a new one.</p>
@@ -77,7 +77,7 @@
 <div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#F8F8F2;--prism-background-color:#282A36"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#F8F8F2;background-color:#282A36"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#F8F8F2"><span class="token function" style="color:rgb(80, 250, 123)">docker</span><span class="token plain"> run --read-only </span><span class="token parameter variable" style="color:rgb(189, 147, 249);font-style:italic">--tmpfs</span><span class="token plain"> /run my-container</span><br></span></code></pre></div></div>
 <p>We could still use the <code>init container</code> resource which starts before the application, prepares the ground, and only after it finishes will the application container be launched. If the init container prepares the volume that will be used by the application, giving it only read resources, it can be a good scenario.</p>
 <p><img decoding="async" loading="lazy" alt="alt text" src="https://devsecops.puziol.com.br/en/assets/images/image-2-dfdfedaec78ee282f54a098db77116c8.png" width="1637" height="605" class="img_ev3q"></p>
-<p>Obviously, it&#x27;s necessary to protect users from changing the pod spec using RBAC.</p></div></article><nav class="docusaurus-mt-lg pagination-nav" aria-label="Docs pages"><a class="pagination-nav__link pagination-nav__link--prev" href="../falco-runtime-security/"><div class="pagination-nav__sublabel">Previous</div><div class="pagination-nav__label">Falco Runtime Security</div></a><a class="pagination-nav__link pagination-nav__link--next" href="../kubernetes-auditing/"><div class="pagination-nav__sublabel">Next</div><div class="pagination-nav__label">Kubernetes Auditing</div></a></nav></div></div></div></div></main></div></div>
+<p>Obviously, it&#x27;s necessary to protect users from changing the pod spec using RBAC.</p>
       <div class="docs-pager">
         <a href="../falco-runtime-security/">Previous · Falco</a>
         <a href="../kubernetes-auditing/">Next · Auditing</a>
@@ -86,7 +86,7 @@
     <aside class="docs-toc">
       <div class="docs-toc-title">On this page</div>
       <nav>
-        <a href="#top">On this page</a>
+                <a href="#top">On this page</a>
       </nav>
     </aside>
   </div>

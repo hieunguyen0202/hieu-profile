@@ -44,31 +44,31 @@
         <span>PSS</span>
       </div>
       <div id="top"></div>
-<header><h1>Pod Security Standards</h1></header><p><a href="https://kubernetes.io/docs/concepts/security/pod-security-standards/" target="_blank" rel="noopener noreferrer" class="">Documentation</a></p>
+<header><h1>Pod Security Standards</h1></header><p><a href="https://kubernetes.io/docs/concepts/security/pod-security-standards/" target="_blank" rel="noopener noreferrer">Documentation</a></p>
 <p>Pod Security Standards (PSS) are a series of security policies in Kubernetes to ensure that pods are created and run with appropriate security practices. They were introduced to replace the PodSecurityPolicy (PSP) model, which was discontinued in version 1.25.</p>
 <p>They work through an Admission Controller that intercepts the request and verifies the policy.</p>
 <p>Kubernetes allows applying these standards per namespace, using labels to define the security level that should be enforced. This ensures that each namespace has its own security rules, without affecting the entire cluster.</p>
 <p>PSS defines three security levels:</p>
 <ul>
-<li class="">
+<li>
 <p><code>Privileged</code>: This level offers minimal security restrictions, allowing pods with broad permissions, such as running as root or using privileged capabilities. It&#x27;s used for workloads that require more control over the system. Example use: development environments or pods that need to access the host directly.</p>
 </li>
-<li class="">
+<li>
 <p><code>Baseline (Default)</code>: This is the recommended level for most workloads, offering balanced security. It imposes minimal restrictions to prevent unsafe actions, such as running processes as root, but still allows some flexibility. Example use: common applications that don&#x27;t need elevated permissions or direct host access.</p>
 </li>
-<li class="">
+<li>
 <p><code>Restricted</code>: This is the most secure level and applies the strictest restrictions, ensuring the use of ideal security practices. It prohibits the use of root, prevents privileged containers, and imposes strict controls over permissions and capabilities. Example use: critical applications or in highly regulated environments, where security is a priority.</p>
 </li>
 </ul>
 <p>Security levels can be applied in 3 different scenarios:</p>
 <ul>
-<li class="">
+<li>
 <p><strong>enforce</strong>: Enforcement of the policy level that will ensure all pods created in the namespace meet, at minimum, this policy. If a pod doesn&#x27;t comply with the chosen policy rules, it will be blocked.</p>
 </li>
-<li class="">
+<li>
 <p><strong>warn</strong>: The level that will generate warnings. Thus, when a pod doesn&#x27;t meet the imposed standards, users will receive a notification, but the pod will still be allowed.</p>
 </li>
-<li class="">
+<li>
 <p><strong>audit</strong>: The audit policy that will record events in logs, allowing you to track which pods are violating this policy, without affecting pod execution.</p>
 </li>
 </ul>
@@ -78,40 +78,40 @@
 <p>It&#x27;s not necessary to use all of this, I just put it to show possibilities.</p>
 <p>Explanation of each label:</p>
 <ul>
-<li class="">
+<li>
 <p><code>pod-security.kubernetes.io/enforce=baseline</code>: Defines that the baseline security level will be enforced on the namespace.
 This means that any pod that violates the minimum security rules defined by the &quot;baseline&quot; level will be blocked during creation or modification.</p>
 </li>
-<li class="">
+<li>
 <p><code>pod-security.kubernetes.io/enforce-version=latest</code>: Specifies the version of the security policy that will be applied. In this case, it uses the latest version of the pod security policy. Not mandatory.</p>
 </li>
-<li class="">
+<li>
 <p><code>pod-security.kubernetes.io/warn=restricted</code>: Applies the restricted security level in warning mode (warn). This means that if a pod violates the stricter rules of the &quot;restricted&quot; level, Kubernetes will issue a warning to the user, but won&#x27;t block pod creation. It&#x27;s useful for preparing the transition to stricter policies without interrupting operations.</p>
 </li>
-<li class="">
+<li>
 <p><code>pod-security.kubernetes.io/warn-version=latest</code>: Defines that the latest version of the restricted level will be used to generate warnings.</p>
 </li>
-<li class="">
+<li>
 <p><code>pod-security.kubernetes.io/audit=restricted</code>: Applies the restricted security level in audit mode (audit). When a pod is created or modified and violates the &quot;restricted&quot; level rules, this will be recorded in Kubernetes audit logs, allowing you to track events without blocking or warning the user.</p>
 </li>
-<li class="">
+<li>
 <p><code>pod-security.kubernetes.io/audit-version=latest</code>: Uses the latest version of the restricted level for auditing.
 Configuration Goal:</p>
 </li>
 </ul>
 <p>If you apply Pod Security Standards (PSS) to a namespace that already has running pods, the behavior depends on the label you use and the current state of the pods.</p>
 <ul>
-<li class="">
+<li>
 <p>Pods that are already running won&#x27;t be immediately affected by the security rules, because PSS is only checked during pod creation or modification. If the pods aren&#x27;t restarted or recreated, they&#x27;ll continue running normally, even if they&#x27;re not compliant with the new PSS rules.</p>
 </li>
-<li class="">
+<li>
 <p>New pods or recreated pods will be blocked if they don&#x27;t meet the rules.</p>
 </li>
 </ul>
 <p>If you try to create new pods or recreate (for example, in a rollout or deployment upgrade scenario) and they&#x27;re not compliant with the defined security level (like &quot;baseline&quot; or &quot;restricted&quot;), Kubernetes will prevent the creation of these pods.
 This also affects pods that go through reschedule events (like node failures or maintenance) or pods that are part of workloads like Deployments or StatefulSets.
 Necessary adjustments:</p>
-<p>Before applying a more restrictive security policy, like &quot;restricted&quot;, it&#x27;s recommended to review and adapt your pods to ensure they comply with the new rules.</p></div></article><nav class="docusaurus-mt-lg pagination-nav" aria-label="Docs pages"><a class="pagination-nav__link pagination-nav__link--prev" href="../security-context/"><div class="pagination-nav__sublabel">Previous</div><div class="pagination-nav__label">Security Context</div></a><a class="pagination-nav__link pagination-nav__link--next" href="/en/category/supply-chain"><div class="pagination-nav__sublabel">Next</div><div class="pagination-nav__label">Supply Chain</div></a></nav></div></div></div></div></main></div></div>
+<p>Before applying a more restrictive security policy, like &quot;restricted&quot;, it&#x27;s recommended to review and adapt your pods to ensure they comply with the new rules.</p>
       <div class="docs-pager">
         <a href="../static-analysis-kubesec/">Previous · Kubesec</a>
         <a href="../open-policy-agent/">Next · OPA</a>
@@ -120,7 +120,7 @@ Necessary adjustments:</p>
     <aside class="docs-toc">
       <div class="docs-toc-title">On this page</div>
       <nav>
-        <a href="#top">On this page</a>
+                <a href="#top">On this page</a>
       </nav>
     </aside>
   </div>
