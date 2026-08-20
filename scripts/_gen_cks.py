@@ -195,8 +195,8 @@ def wrap(slug: str, title: str, body: str) -> str:
     <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
     <a class="docs-brand" href="{home}">i'm<span>.hieu</span></a>
     <nav class="docs-series">
-      <a href="{home}blog/web-security/">Web Security</a>
-      <a class="active" href="{roadmap}">Kubestronaut roadmap</a>
+      <a href="{home}blog/web-security/">DevSecOps</a>
+      <a class="active" href="{roadmap}">Kubestronaut</a>
     </nav>
     <nav class="docs-cert-tabs">{tab_html}</nav>
     <span class="docs-topbar-spacer"></span>

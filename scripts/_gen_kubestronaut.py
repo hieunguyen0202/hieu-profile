@@ -362,8 +362,8 @@ def wrap(cert: str, local_path: str, title: str, crumb: str, body: str, active_s
     <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
     <a class="docs-brand" href="{home}">i'm<span>.hieu</span></a>
     <nav class="docs-series">
-      <a href="{home}blog/web-security/">Web Security</a>
-      <a class="active" href="{roadmap_href}">Kubestronaut roadmap</a>
+      <a href="{home}blog/web-security/">DevSecOps</a>
+      <a class="active" href="{roadmap_href}">Kubestronaut</a>
     </nav>
     <nav class="docs-cert-tabs">{tab_html}</nav>
     <span class="docs-topbar-spacer"></span>
@@ -496,8 +496,8 @@ def write_hub() -> None:
     <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
     <a class="docs-brand" href="../../">i'm<span>.hieu</span></a>
     <nav class="docs-series">
-      <a href="../web-security/">Web Security</a>
-      <a class="active" href="./">Kubestronaut roadmap</a>
+      <a href="../web-security/">DevSecOps</a>
+      <a class="active" href="./">Kubestronaut</a>
     </nav>
     <span class="docs-topbar-spacer"></span>
     <a class="docs-top-link" href="../../#blogs">blogs</a>
@@ -509,7 +509,7 @@ def write_hub() -> None:
         <span>›</span>
         <a href="../../#blogs">Blogs</a>
         <span>›</span>
-        <span>Kubestronaut roadmap</span>
+        <span>Kubestronaut</span>
       </div>
       <h1>Kubestronaut Roadmap</h1>
       <p class="lede">KCNA → CKA → CKAD → KCSA → CKS — the certification path, in order.</p>

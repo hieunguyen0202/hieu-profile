@@ -195,15 +195,15 @@ def wrap(slug: str, crumb: str, title: str, body: str) -> str:
     <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
     <a class="docs-brand" href="{home}">i'm<span>.hieu</span></a>
     <nav class="docs-series">
-      <a class="active" href="{href("overview")}">Web Security</a>
-      <a href="{'../../kubestronaut/' if nested else '../kubestronaut/'}">Kubestronaut roadmap</a>
+      <a class="active" href="{href("overview")}">DevSecOps</a>
+      <a href="{'../../kubestronaut/' if nested else '../kubestronaut/'}">Kubestronaut</a>
     </nav>
     <span class="docs-topbar-spacer"></span>
     <a class="docs-top-link" href="{home}#blogs">blogs</a>
   </header>
   <div class="docs-shell">
     <aside class="docs-sidebar" id="docsSidebar" data-docs-root="{'../' if nested else './'}" data-active="{'overview' if slug == 'overview' else slug}">
-      <div class="docs-nav-label">Web Security</div>
+      <div class="docs-nav-label">DevSecOps</div>
       <ul class="docs-nav" id="docsNav"></ul>
     </aside>
     <article class="docs-main">
