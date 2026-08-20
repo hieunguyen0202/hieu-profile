@@ -499,15 +499,10 @@ def write_hub() -> None:
       <a href="../web-security/">Web Security</a>
       <a class="active" href="./">Kubestronaut roadmap</a>
     </nav>
-    <nav class="docs-cert-tabs">
-      <a href="cka/">CKA</a>
-      <a href="ckad/">CKAD</a>
-      <a href="cks/">CKS</a>
-    </nav>
     <span class="docs-topbar-spacer"></span>
     <a class="docs-top-link" href="../../#blogs">blogs</a>
   </header>
-  <div class="docs-shell docs-shell-single">
+  <div class="docs-shell-hub">
     <article class="docs-main">
       <div class="docs-breadcrumb">
         <a href="../../">Home</a>
@@ -524,16 +519,22 @@ def write_hub() -> None:
       </div>
       <div class="roadmap-grid">
         <a class="roadmap-card" href="cka/">
+          <span class="roadmap-kicker">Administrator</span>
           <h2>CKA</h2>
-          <p>Certified Kubernetes Administrator — cluster ops, troubleshooting, storage, networking.</p>
+          <p>Cluster ops, troubleshooting, storage, networking, and kubeadm maintenance.</p>
+          <span class="roadmap-cta">Open CKA →</span>
         </a>
         <a class="roadmap-card" href="ckad/">
+          <span class="roadmap-kicker">Application Developer</span>
           <h2>CKAD</h2>
-          <p>Certified Kubernetes Application Developer — workloads, config, observability, Helm.</p>
+          <p>Workloads, config, observability, multi-container pods, volumes, and Helm.</p>
+          <span class="roadmap-cta">Open CKAD →</span>
         </a>
         <a class="roadmap-card" href="cks/">
+          <span class="roadmap-kicker">Security Specialist</span>
           <h2>CKS</h2>
-          <p>Certified Kubernetes Security Specialist — hardening, supply chain, runtime security.</p>
+          <p>Hardening, supply chain, runtime security, RBAC, and audit practices.</p>
+          <span class="roadmap-cta">Open CKS →</span>
         </a>
       </div>
     </article>
