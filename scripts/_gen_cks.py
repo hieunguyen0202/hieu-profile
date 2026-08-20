@@ -102,6 +102,8 @@ def clean(body: str, slug: str) -> str:
 
     def rel(m):
         path = m.group(1).rstrip("/")
+        if path.startswith("solved-questions/"):
+            return f'href="{ASSET}/en/kubernetes/cks/{path}" target="_blank" rel="noopener noreferrer"'
         last = path.split("/")[-1]
         if last in ("cks", "exam"):
             target = "exam"
@@ -145,7 +147,10 @@ def wrap(slug: str, title: str, body: str) -> str:
         return "../" if other == "exam" else f"../{other}/"
 
     pager_l = f'<a href="{href(prev)}">Previous · {CRUMB[prev]}</a>' if prev else f'<a href="{home}#blogs">All blogs</a>'
-    pager_r = f'<a href="{href(nxt)}">Next · {CRUMB[nxt]}</a>' if nxt else f'<a href="{home}#blogs">All blogs</a>'
+    if slug == "tips":
+        pager_r = f'<a href="{href("real-world-exam")}">Next · CKS Real World exam</a>'
+    else:
+        pager_r = f'<a href="{href(nxt)}">Next · {CRUMB[nxt]}</a>' if nxt else f'<a href="{home}#blogs">All blogs</a>'
     crumb = CRUMB[slug]
     body = f'<div id="top"></div>\n{body}'
     return f'''<!DOCTYPE html>
@@ -269,13 +274,12 @@ def main():
     DST.mkdir(parents=True, exist_ok=True)
     meta = {m["slug"]: m for m in json.loads((SRC / "meta.json").read_text())}
     for slug in ORDER:
-        if slug == "solved-questions":
+        raw = (SRC / f"{slug}.html").read_text(encoding="utf-8")
+        body = clean(raw, slug)
+        title = meta[slug]["title"]
+        if slug == "solved-questions" and "<h1" not in body:
             title = "CKS: Solved Questions"
-            body = solved_body()
-        else:
-            raw = (SRC / f"{slug}.html").read_text(encoding="utf-8")
-            body = clean(raw, slug)
-            title = meta[slug]["title"]
+            body = "<h1>CKS: Solved Questions</h1>\n" + body
         page = wrap(slug, title, body)
         if slug == "exam":
             (DST / "index.html").write_text(page, encoding="utf-8")
