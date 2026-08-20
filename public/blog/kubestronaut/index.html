@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Kubestronaut Roadmap — Hieu Nguyen</title>
-  <meta name="description" content="CKA, CKAD, and CKS study notes — Kubestronaut roadmap.">
+  <meta name="description" content="Kubestronaut path: KCNA → CKA → CKAD → KCSA → CKS study notes.">
   <link rel="icon" href="../../favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -35,30 +35,68 @@
         <span>Kubestronaut roadmap</span>
       </div>
       <h1>Kubestronaut Roadmap</h1>
-      <p class="lede">CKA · CKAD · CKS — exam notes and curriculum from the same track.</p>
+      <p class="lede">KCNA → CKA → CKAD → KCSA → CKS — the certification path, in order.</p>
       <div class="docs-meta">
-        <span><strong>Certs:</strong> 3</span>
-        <span><strong>Source:</strong> <a href="https://devsecops.puziol.com.br/en/kubernetes/cka" target="_blank" rel="noopener">Puziol DevSecOps</a></span>
+        <span><strong>Track:</strong> 5 certs</span>
+        <span><strong>Ready:</strong> CKA · CKAD · CKS</span>
+        <span><strong>Soon:</strong> KCNA · KCSA</span>
       </div>
-      <div class="roadmap-grid">
-        <a class="roadmap-card" href="cka/">
-          <span class="roadmap-kicker">Administrator</span>
-          <h2>CKA</h2>
-          <p>Cluster ops, troubleshooting, storage, networking, and kubeadm maintenance.</p>
-          <span class="roadmap-cta">Open CKA →</span>
-        </a>
-        <a class="roadmap-card" href="ckad/">
-          <span class="roadmap-kicker">Application Developer</span>
-          <h2>CKAD</h2>
-          <p>Workloads, config, observability, multi-container pods, volumes, and Helm.</p>
-          <span class="roadmap-cta">Open CKAD →</span>
-        </a>
-        <a class="roadmap-card" href="cks/">
-          <span class="roadmap-kicker">Security Specialist</span>
-          <h2>CKS</h2>
-          <p>Hardening, supply chain, runtime security, RBAC, and audit practices.</p>
-          <span class="roadmap-cta">Open CKS →</span>
-        </a>
+
+      <div class="cert-roadmap">
+        <div class="cert-step cert-step--right">
+          <div class="cert-step__milestone" data-short="1"><span>Step 01</span>Start</div>
+          <div class="cert-step__card is-soon" aria-disabled="true">
+            <span class="cert-step__badge">Associate · Coming soon</span>
+            <h2>KCNA</h2>
+            <p>Kubernetes and Cloud Native Associate — foundations of containers, orchestration, and cloud-native concepts.</p>
+            <div class="cert-step__meta"><span>Notes not published yet</span></div>
+            <span class="cert-step__cta">Placeholder — add later</span>
+          </div>
+        </div>
+
+        <div class="cert-step cert-step--left">
+          <div class="cert-step__milestone" data-short="2"><span>Step 02</span>Admin</div>
+          <a class="cert-step__card" href="cka/">
+            <span class="cert-step__badge">Administrator</span>
+            <h2>CKA</h2>
+            <p>Certified Kubernetes Administrator — cluster ops, troubleshooting, storage, networking, kubeadm.</p>
+            <div class="cert-step__meta"><span>Curriculum live</span></div>
+            <span class="cert-step__cta">Open CKA notes →</span>
+          </a>
+        </div>
+
+        <div class="cert-step cert-step--right">
+          <div class="cert-step__milestone" data-short="3"><span>Step 03</span>Developer</div>
+          <a class="cert-step__card" href="ckad/">
+            <span class="cert-step__badge">Application Developer</span>
+            <h2>CKAD</h2>
+            <p>Certified Kubernetes Application Developer — workloads, config, observability, volumes, Helm.</p>
+            <div class="cert-step__meta"><span>Curriculum live</span></div>
+            <span class="cert-step__cta">Open CKAD notes →</span>
+          </a>
+        </div>
+
+        <div class="cert-step cert-step--left">
+          <div class="cert-step__milestone" data-short="4"><span>Step 04</span>Security</div>
+          <div class="cert-step__card is-soon" aria-disabled="true">
+            <span class="cert-step__badge">Security Associate · Coming soon</span>
+            <h2>KCSA</h2>
+            <p>Kubernetes and Cloud Native Security Associate — security fundamentals before the specialist track.</p>
+            <div class="cert-step__meta"><span>Notes not published yet</span></div>
+            <span class="cert-step__cta">Placeholder — add later</span>
+          </div>
+        </div>
+
+        <div class="cert-step cert-step--right">
+          <div class="cert-step__milestone" data-short="5"><span>Step 05</span>Specialist</div>
+          <a class="cert-step__card" href="cks/">
+            <span class="cert-step__badge">Security Specialist</span>
+            <h2>CKS</h2>
+            <p>Certified Kubernetes Security Specialist — hardening, supply chain, runtime security, audit.</p>
+            <div class="cert-step__meta"><span>Curriculum live</span></div>
+            <span class="cert-step__cta">Open CKS notes →</span>
+          </a>
+        </div>
       </div>
     </article>
   </div>
