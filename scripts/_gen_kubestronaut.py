@@ -482,10 +482,10 @@ def write_hub() -> None:
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Kubestronaut Roadmap — Hieu Nguyen</title>
   <meta name="description" content="CKA, CKAD, and CKS study notes — Kubestronaut roadmap.">
-  <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="../../favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../css/docs.css">
+  <link rel="stylesheet" href="../../css/docs.css">
 </head>
 <body class="docs">
   <div class="cursor" id="cursor"></div>
@@ -494,9 +494,9 @@ def write_hub() -> None:
   <div class="grid-bg"></div>
   <header class="docs-topbar">
     <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
-    <a class="docs-brand" href="../">i'm<span>.hieu</span></a>
+    <a class="docs-brand" href="../../">i'm<span>.hieu</span></a>
     <nav class="docs-series">
-      <a href="../blog/web-security/">Web Security</a>
+      <a href="../web-security/">Web Security</a>
       <a class="active" href="./">Kubestronaut roadmap</a>
     </nav>
     <nav class="docs-cert-tabs">
@@ -505,14 +505,14 @@ def write_hub() -> None:
       <a href="cks/">CKS</a>
     </nav>
     <span class="docs-topbar-spacer"></span>
-    <a class="docs-top-link" href="../#blogs">blogs</a>
+    <a class="docs-top-link" href="../../#blogs">blogs</a>
   </header>
   <div class="docs-shell docs-shell-single">
     <article class="docs-main">
       <div class="docs-breadcrumb">
-        <a href="../">Home</a>
+        <a href="../../">Home</a>
         <span>›</span>
-        <a href="../#blogs">Blogs</a>
+        <a href="../../#blogs">Blogs</a>
         <span>›</span>
         <span>Kubestronaut roadmap</span>
       </div>
@@ -538,7 +538,7 @@ def write_hub() -> None:
       </div>
     </article>
   </div>
-  <script src="../js/docs.js"></script>
+  <script src="../../js/docs.js"></script>
 </body>
 </html>
 """
