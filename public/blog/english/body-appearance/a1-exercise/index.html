@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A1 Exercise · Body &amp; Appearance — The Quiet Corner</title>
+  <meta name="description" content="A1 reading exercise for Body &amp; Appearance vocabulary with IPA and bilingual sentences.">
+  <link rel="icon" href="../../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../../"><span>✦</span> The Quiet Corner <span>✦</span></a>
+    <nav class="docs-series">
+      <a href="../../../../blog/web-security/">DevSecOps</a>
+      <a href="../../../../blog/kubestronaut/">Kubestronaut</a>
+      <a class="active" href="../../">English</a>
+    </nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-nav="english" data-docs-root="../../" data-active="body-appearance">
+      <div class="docs-nav-label">English</div>
+      <ul class="docs-nav" id="docsNav">
+        <li><a href="../../">All topics</a></li>
+        <li><a href="../">Body &amp; Appearance</a></li>
+        <li><a class="active" href="./">A1 Exercise</a></li>
+      </ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../../">Home</a>
+        <span>›</span>
+        <a href="../../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../../">English</a>
+        <span>›</span>
+        <a href="../">Body &amp; Appearance</a>
+        <span>›</span>
+        <span>A1 Exercise</span>
+      </div>
+
+      <div class="vocab-topic-hero">
+        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 72 72' fill='none'%3E%3Crect width='72' height='72' rx='14' fill='%230b1220'/%3E%3Crect x='16' y='14' width='40' height='46' rx='6' stroke='%2322d3ee' stroke-width='2.5'/%3E%3Cpath d='M24 28h24M24 36h24M24 44h16' stroke='%23e4e4e7' stroke-width='2.5' stroke-linecap='round'/%3E%3Cpath d='M48 48l6 2-2 6-8-8 4 0z' fill='%2322d3ee'/%3E%3C/svg%3E" alt="" width="112" height="112">
+        <div>
+          <h1>A1 Exercise · Body &amp; Appearance</h1>
+          <p class="lede">Reading passage with every new word from this level’s LanGeek lessons — IPA, highlights, sentence translation, and free TTS.</p>
+          <div class="docs-meta">
+            <span><strong>Words:</strong> 20</span>
+            <span><strong>Lessons:</strong> The Body · The Head and Face</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="ex-toolbar" id="exToolbar">
+        <label class="ex-toggle"><input type="checkbox" id="togHighlight" checked> Highlights</label>
+        <label class="ex-toggle"><input type="checkbox" id="togIpa" checked> IPA</label>
+        <label class="ex-toggle"><input type="checkbox" id="togVi"> Dịch câu (VI)</label>
+        <span class="ex-sep"></span>
+        <label class="ex-voice">Voice
+          <select id="voiceSelect" aria-label="TTS voice"></select>
+        </label>
+        <label class="ex-voice">Speed
+          <input id="rateRange" type="range" min="0.7" max="1.15" step="0.05" value="0.95">
+          <span id="rateVal">0.95</span>
+        </label>
+        <button type="button" class="ex-btn primary" id="btnPlay">▶ Read passage</button>
+        <button type="button" class="ex-btn" id="btnStop">Stop</button>
+      </div>
+      
+      <section class="ex-passage" id="passage" data-tts-root>
+          <p class="ex-sent" data-sent="1">
+            <span class="ex-en">In this A1 <mark class="vocab" data-word="body">body</mark><span class="ipa">/ˈbɑːdi/</span> & Appearance passage, notice body, <mark class="vocab" data-word="hand">hand</mark><span class="ipa">/hænd/</span>, <mark class="vocab" data-word="arm">arm</mark><span class="ipa">/ɑːrm/</span>, and <mark class="vocab" data-word="foot">foot</mark><span class="ipa">/fʊt/</span>.</span>
+            <span class="ex-vi">Trong đoạn A1 về Body &amp; Appearance, hãy để ý cơ thể, tay, cánh tay, và bàn chân.</span>
+          </p>
+          <p class="ex-sent" data-sent="2">
+            <span class="ex-en">In this A1 Body & Appearance passage, notice <mark class="vocab" data-word="head">head</mark><span class="ipa">/hɛd/</span>, <mark class="vocab" data-word="leg">leg</mark><span class="ipa">/lɛg/</span>, <mark class="vocab" data-word="knee">knee</mark><span class="ipa">/niː/</span>, and <mark class="vocab" data-word="back">back</mark><span class="ipa">/bæk/</span>.</span>
+            <span class="ex-vi">Trong đoạn A1 về Body &amp; Appearance, hãy để ý đầu, chân, đầu gối, và lưng.</span>
+          </p>
+          <p class="ex-sent" data-sent="3">
+            <span class="ex-en">In this A1 Body & Appearance passage, notice <mark class="vocab" data-word="stomach">stomach</mark><span class="ipa">/ˈstʌmək/</span>, <mark class="vocab" data-word="hair">hair</mark><span class="ipa">/hɛr/</span>, <mark class="vocab" data-word="neck">neck</mark><span class="ipa">/nɛk/</span>, and <mark class="vocab" data-word="face">face</mark><span class="ipa">/feɪs/</span>.</span>
+            <span class="ex-vi">Trong đoạn A1 về Body &amp; Appearance, hãy để ý dạ dày, tóc, cổ, và mặt.</span>
+          </p>
+          <p class="ex-sent" data-sent="4">
+            <span class="ex-en">In this A1 Body & Appearance passage, notice <mark class="vocab" data-word="eye">eye</mark><span class="ipa">/aɪ/</span>, <mark class="vocab" data-word="nose">nose</mark><span class="ipa">/noʊz/</span>, <mark class="vocab" data-word="ear">ear</mark><span class="ipa">/ɪr/</span>, and <mark class="vocab" data-word="cheek">cheek</mark><span class="ipa">/tʃiːk/</span>.</span>
+            <span class="ex-vi">Trong đoạn A1 về Body &amp; Appearance, hãy để ý mắt, mũi, tai, và má.</span>
+          </p>
+          <p class="ex-sent" data-sent="5">
+            <span class="ex-en">In this A1 Body & Appearance passage, notice <mark class="vocab" data-word="chin">chin</mark><span class="ipa">/tʃɪn/</span>, <mark class="vocab" data-word="mouth">mouth</mark><span class="ipa">/maʊθ/</span>, <mark class="vocab" data-word="tooth">tooth</mark><span class="ipa">/tuːθ/</span>, and <mark class="vocab" data-word="lip">lip</mark><span class="ipa">/lɪp/</span>.</span>
+            <span class="ex-vi">Trong đoạn A1 về Body &amp; Appearance, hãy để ý cằm, miệng, răng, và môi.</span>
+          </p>
+      </section>
+
+      <section class="ex-vocab">
+        <h2>Word checklist · 20</h2>
+        <ul class="ex-vocab-list">
+          <li><mark class="vocab">body</mark> <span class="ipa">/ˈbɑːdi/</span> — cơ thể</li>
+          <li><mark class="vocab">hand</mark> <span class="ipa">/hænd/</span> — tay</li>
+          <li><mark class="vocab">arm</mark> <span class="ipa">/ɑːrm/</span> — cánh tay</li>
+          <li><mark class="vocab">foot</mark> <span class="ipa">/fʊt/</span> — bàn chân</li>
+          <li><mark class="vocab">head</mark> <span class="ipa">/hɛd/</span> — đầu</li>
+          <li><mark class="vocab">leg</mark> <span class="ipa">/lɛg/</span> — chân</li>
+          <li><mark class="vocab">knee</mark> <span class="ipa">/niː/</span> — đầu gối</li>
+          <li><mark class="vocab">back</mark> <span class="ipa">/bæk/</span> — lưng</li>
+          <li><mark class="vocab">stomach</mark> <span class="ipa">/ˈstʌmək/</span> — dạ dày</li>
+          <li><mark class="vocab">hair</mark> <span class="ipa">/hɛr/</span> — tóc</li>
+          <li><mark class="vocab">neck</mark> <span class="ipa">/nɛk/</span> — cổ</li>
+          <li><mark class="vocab">face</mark> <span class="ipa">/feɪs/</span> — mặt</li>
+          <li><mark class="vocab">eye</mark> <span class="ipa">/aɪ/</span> — mắt</li>
+          <li><mark class="vocab">nose</mark> <span class="ipa">/noʊz/</span> — mũi</li>
+          <li><mark class="vocab">ear</mark> <span class="ipa">/ɪr/</span> — tai</li>
+          <li><mark class="vocab">cheek</mark> <span class="ipa">/tʃiːk/</span> — má</li>
+          <li><mark class="vocab">chin</mark> <span class="ipa">/tʃɪn/</span> — cằm</li>
+          <li><mark class="vocab">mouth</mark> <span class="ipa">/maʊθ/</span> — miệng</li>
+          <li><mark class="vocab">tooth</mark> <span class="ipa">/tuːθ/</span> — răng</li>
+          <li><mark class="vocab">lip</mark> <span class="ipa">/lɪp/</span> — môi</li>
+        </ul>
+      </section>
+
+      <div class="docs-pager">
+        <a href="../">← Body &amp; Appearance</a>
+        <a href="../../">All topics →</a>
+      </div>
+    </article>
+  </div>
+  <script src="../../../../js/docs.js"></script>
+  <script src="../../../../js/exercise.js"></script>
+</body>
+</html>

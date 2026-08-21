@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A2 Exercise · Feelings &amp; Mind — The Quiet Corner</title>
+  <meta name="description" content="A2 reading exercise for Feelings &amp; Mind vocabulary with IPA and bilingual sentences.">
+  <link rel="icon" href="../../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../../"><span>✦</span> The Quiet Corner <span>✦</span></a>
+    <nav class="docs-series">
+      <a href="../../../../blog/web-security/">DevSecOps</a>
+      <a href="../../../../blog/kubestronaut/">Kubestronaut</a>
+      <a class="active" href="../../">English</a>
+    </nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-nav="english" data-docs-root="../../" data-active="feelings-mind">
+      <div class="docs-nav-label">English</div>
+      <ul class="docs-nav" id="docsNav">
+        <li><a href="../../">All topics</a></li>
+        <li><a href="../">Feelings &amp; Mind</a></li>
+        <li><a class="active" href="./">A2 Exercise</a></li>
+      </ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../../">Home</a>
+        <span>›</span>
+        <a href="../../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../../">English</a>
+        <span>›</span>
+        <a href="../">Feelings &amp; Mind</a>
+        <span>›</span>
+        <span>A2 Exercise</span>
+      </div>
+
+      <div class="vocab-topic-hero">
+        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 72 72' fill='none'%3E%3Crect width='72' height='72' rx='14' fill='%230b1220'/%3E%3Crect x='16' y='14' width='40' height='46' rx='6' stroke='%2322d3ee' stroke-width='2.5'/%3E%3Cpath d='M24 28h24M24 36h24M24 44h16' stroke='%23e4e4e7' stroke-width='2.5' stroke-linecap='round'/%3E%3Cpath d='M48 48l6 2-2 6-8-8 4 0z' fill='%2322d3ee'/%3E%3C/svg%3E" alt="" width="112" height="112">
+        <div>
+          <h1>A2 Exercise · Feelings &amp; Mind</h1>
+          <p class="lede">Reading passage with every new word from this level’s LanGeek lessons — IPA, highlights, sentence translation, and free TTS.</p>
+          <div class="docs-meta">
+            <span><strong>Words:</strong> 63</span>
+            <span><strong>Lessons:</strong> Emotions · The Mind</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="ex-toolbar" id="exToolbar">
+        <label class="ex-toggle"><input type="checkbox" id="togHighlight" checked> Highlights</label>
+        <label class="ex-toggle"><input type="checkbox" id="togIpa" checked> IPA</label>
+        <label class="ex-toggle"><input type="checkbox" id="togVi"> Dịch câu (VI)</label>
+        <span class="ex-sep"></span>
+        <label class="ex-voice">Voice
+          <select id="voiceSelect" aria-label="TTS voice"></select>
+        </label>
+        <label class="ex-voice">Speed
+          <input id="rateRange" type="range" min="0.7" max="1.15" step="0.05" value="0.95">
+          <span id="rateVal">0.95</span>
+        </label>
+        <button type="button" class="ex-btn primary" id="btnPlay">▶ Read passage</button>
+        <button type="button" class="ex-btn" id="btnStop">Stop</button>
+      </div>
+      
+      <section class="ex-passage" id="passage" data-tts-root>
+          <p class="ex-sent" data-sent="1">
+            <span class="ex-en">In this A2 Feelings & Mind passage, notice <mark class="vocab" data-word="emotion">emotion</mark><span class="ipa">/ɪˈmoʊʃən/</span>, <mark class="vocab" data-word="fear">fear</mark><span class="ipa">/fɪr/</span>, <mark class="vocab" data-word="anger">anger</mark><span class="ipa">/ˈæŋɡɚ/</span>, and <mark class="vocab" data-word="sadness">sadness</mark><span class="ipa">/ˈsædnəs/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Feelings &amp; Mind, hãy để ý cảm xúc, nỗi sợ, sự tức giận, và nỗi buồn.</span>
+          </p>
+          <p class="ex-sent" data-sent="2">
+            <span class="ex-en">In this A2 Feelings & Mind passage, notice <mark class="vocab" data-word="happiness">happiness</mark><span class="ipa">/ˈhæpiˌnəs/</span>, <mark class="vocab" data-word="joy">joy</mark><span class="ipa">/ʤɔɪ/</span>, <mark class="vocab" data-word="disgust">disgust</mark><span class="ipa">/dɪsˈɡʌst/</span>, and <mark class="vocab" data-word="surprise">surprise</mark><span class="ipa">/sɚˈpraɪz/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Feelings &amp; Mind, hãy để ý hạnh phúc, niềm vui, sự ghê tởm, và ngạc nhiên.</span>
+          </p>
+          <p class="ex-sent" data-sent="3">
+            <span class="ex-en">In this A2 Feelings & Mind passage, notice <mark class="vocab" data-word="trust">trust</mark><span class="ipa">/trʌst/</span>, <mark class="vocab" data-word="shame">shame</mark><span class="ipa">/ʃeɪm/</span>, <mark class="vocab" data-word="hatred">hatred</mark><span class="ipa">/ˈheɪtrɪd/</span>, and <mark class="vocab" data-word="love">love</mark><span class="ipa">/lʌv/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Feelings &amp; Mind, hãy để ý niềm tin, xấu hổ, sự căm thù, và tình yêu.</span>
+          </p>
+          <p class="ex-sent" data-sent="4">
+            <span class="ex-en">In this A2 Feelings & Mind passage, notice <mark class="vocab" data-word="kindness">kindness</mark><span class="ipa">/ˈkaɪndnəs/</span>, <mark class="vocab" data-word="sympathy">sympathy</mark><span class="ipa">/ˈsɪmpəˌθi/</span>, <mark class="vocab" data-word="amusement">amusement</mark><span class="ipa">/əˈmjuzmənt/</span>, and <mark class="vocab" data-word="confusion">confusion</mark><span class="ipa">/kənˈfjuʒən/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Feelings &amp; Mind, hãy để ý lòng tốt, sự thông cảm, sự giải trí, và sự bối rối.</span>
+          </p>
+          <p class="ex-sent" data-sent="5">
+            <span class="ex-en">In this A2 Feelings & Mind passage, notice <mark class="vocab" data-word="to laugh">laugh</mark><span class="ipa">/læf/</span>, <mark class="vocab" data-word="to cry">cry</mark><span class="ipa">/kraɪ/</span>, <mark class="vocab" data-word="to smile">smile</mark><span class="ipa">/smaɪl/</span>, and <mark class="vocab" data-word="to frown">frown</mark><span class="ipa">/fraʊn/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Feelings &amp; Mind, hãy để ý cười, khóc, cười, và nhíu mày.</span>
+          </p>
+          <p class="ex-sent" data-sent="6">
+            <span class="ex-en">In this A2 Feelings & Mind passage, notice <mark class="vocab" data-word="to miss">miss</mark><span class="ipa">/mɪs/</span>, <mark class="vocab" data-word="to worry">worry</mark><span class="ipa">/ˈwɝi/</span>, <mark class="vocab" data-word="to surprise">surprise</mark><span class="ipa">/sɚˈpraɪz/</span>, and <mark class="vocab" data-word="surprised">surprised</mark><span class="ipa">/sərˈpraɪzd/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Feelings &amp; Mind, hãy để ý nhớ, lo lắng, làm ngạc nhiên, và ngạc nhiên.</span>
+          </p>
+          <p class="ex-sent" data-sent="7">
+            <span class="ex-en">In this A2 Feelings & <mark class="vocab" data-word="mind">mind</mark><span class="ipa">/maɪnd/</span> passage, notice <mark class="vocab" data-word="to annoy">annoy</mark><span class="ipa">/əˈnɔɪ/</span>, <mark class="vocab" data-word="scared">scared</mark><span class="ipa">/skɛrd/</span>, mind, and <mark class="vocab" data-word="mental">mental</mark><span class="ipa">/ˈmɛntəl/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Feelings &amp; Mind, hãy để ý làm phiền, sợ hãi, tâm trí, và tâm thần.</span>
+          </p>
+          <p class="ex-sent" data-sent="8">
+            <span class="ex-en">In this A2 Feelings & Mind passage, notice <mark class="vocab" data-word="talent">talent</mark><span class="ipa">/ˈtælənt/</span>, <mark class="vocab" data-word="skill">skill</mark><span class="ipa">/skɪl/</span>, <mark class="vocab" data-word="knowledge">knowledge</mark><span class="ipa">/ˈnɑlɪʤ/</span>, and <mark class="vocab" data-word="guess">guess</mark><span class="ipa">/ɡɛs/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Feelings &amp; Mind, hãy để ý tài năng, kỹ năng, kiến thức, và phỏng đoán.</span>
+          </p>
+          <p class="ex-sent" data-sent="9">
+            <span class="ex-en">In this A2 Feelings & Mind passage, notice <mark class="vocab" data-word="to guess">guess</mark><span class="ipa">/ɡɛs/</span>, <mark class="vocab" data-word="to believe">believe</mark><span class="ipa">/bəˈliv/</span>, <mark class="vocab" data-word="belief">belief</mark><span class="ipa">/bəˈlif/</span>, and <mark class="vocab" data-word="memory">memory</mark><span class="ipa">/ˈmɛməri/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Feelings &amp; Mind, hãy để ý đoán, tin, niềm tin, và trí nhớ.</span>
+          </p>
+          <p class="ex-sent" data-sent="10">
+            <span class="ex-en">In this A2 Feelings & Mind passage, notice <mark class="vocab" data-word="to remember">remember</mark><span class="ipa">/rɪˈmɛmbɚ/</span>, <mark class="vocab" data-word="to forget">forget</mark><span class="ipa">/fɚˈɡɛt/</span>, <mark class="vocab" data-word="idea">idea</mark><span class="ipa">/aɪˈdiːə/</span>, and <mark class="vocab" data-word="favorite">favorite</mark><span class="ipa">/ˈfeɪvɚɪt/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Feelings &amp; Mind, hãy để ý nhớ, quên, ý tưởng, và yêu thích.</span>
+          </p>
+          <p class="ex-sent" data-sent="11">
+            <span class="ex-en">In this A2 Feelings & Mind passage, notice <mark class="vocab" data-word="suggestion">suggestion</mark><span class="ipa">/səˈʤɛstʃən/</span>, <mark class="vocab" data-word="to suggest">suggest</mark><span class="ipa">/səˈʤɛst/</span>, <mark class="vocab" data-word="goal">goal</mark><span class="ipa">/ɡoʊl/</span>, and <mark class="vocab" data-word="plan">plan</mark><span class="ipa">/plæn/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Feelings &amp; Mind, hãy để ý đề xuất, đề nghị, mục tiêu, và kế hoạch.</span>
+          </p>
+          <p class="ex-sent" data-sent="12">
+            <span class="ex-en">In this A2 Feelings & Mind passage, notice <mark class="vocab" data-word="to <mark class="vocab" data-word="hope">hope</mark><span class="ipa">/hoʊp/</span>">hope</mark><span class="ipa">/hoʊp/</span>, hope, <mark class="vocab" data-word="to imagine">imagine</mark><span class="ipa">/ɪˈmæʤən/</span>, and <mark class="vocab" data-word="to dream">dream</mark><span class="ipa">/driːm/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Feelings &amp; Mind, hãy để ý hy vọng, hy vọng, tưởng tượng, và mơ.</span>
+          </p>
+          <p class="ex-sent" data-sent="13">
+            <span class="ex-en">In this A2 Feelings & Mind passage, notice <mark class="vocab" data-word="to enjoy">enjoy</mark><span class="ipa">/ɪnˈʤɔɪ/</span>, <mark class="vocab" data-word="worried">worried</mark><span class="ipa">/ˈwɝid/</span>, <mark class="vocab" data-word="nervous">nervous</mark><span class="ipa">/ˈnɝvəs/</span>, and <mark class="vocab" data-word="calm">calm</mark><span class="ipa">/kɑm/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Feelings &amp; Mind, hãy để ý thưởng thức, lo lắng, lo lắng, và bình tĩnh.</span>
+          </p>
+          <p class="ex-sent" data-sent="14">
+            <span class="ex-en">In this A2 Feelings & Mind passage, notice <mark class="vocab" data-word="afraid">afraid</mark><span class="ipa">/əˈfreɪd/</span>, <mark class="vocab" data-word="experience">experience</mark><span class="ipa">/ɪkˈspɪriəns/</span>, <mark class="vocab" data-word="matter">matter</mark><span class="ipa">/ˈmætɚ/</span>, and <mark class="vocab" data-word="to decide">decide</mark><span class="ipa">/dɪˈsaɪd/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Feelings &amp; Mind, hãy để ý sợ hãi, kinh nghiệm, vấn đề, và quyết định.</span>
+          </p>
+          <p class="ex-sent" data-sent="15">
+            <span class="ex-en">In this A2 Feelings & Mind passage, notice <mark class="vocab" data-word="decision">decision</mark><span class="ipa">/dɪˈsɪʒən/</span>, <mark class="vocab" data-word="power">power</mark><span class="ipa">/ˈpaʊɚ/</span>, <mark class="vocab" data-word="clear">clear</mark><span class="ipa">/klɪr/</span>, and <mark class="vocab" data-word="choice">choice</mark><span class="ipa">/ʧɔɪs/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Feelings &amp; Mind, hãy để ý quyết định, quyền lực, rõ ràng, và lựa chọn.</span>
+          </p>
+          <p class="ex-sent" data-sent="16">
+            <span class="ex-en">In this A2 Feelings & Mind passage, notice <mark class="vocab" data-word="to smell">smell</mark><span class="ipa">/smɛl/</span>, <mark class="vocab" data-word="to remind">remind</mark><span class="ipa">/rɪˈmaɪnd/</span>, and <mark class="vocab" data-word="danger">danger</mark><span class="ipa">/ˈdeɪnʤɚ/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Feelings &amp; Mind, hãy để ý ngửi, nhắc nhở, và nguy hiểm.</span>
+          </p>
+      </section>
+
+      <section class="ex-vocab">
+        <h2>Word checklist · 63</h2>
+        <ul class="ex-vocab-list">
+          <li><mark class="vocab">emotion</mark> <span class="ipa">/ɪˈmoʊʃən/</span> — cảm xúc</li>
+          <li><mark class="vocab">fear</mark> <span class="ipa">/fɪr/</span> — nỗi sợ</li>
+          <li><mark class="vocab">anger</mark> <span class="ipa">/ˈæŋɡɚ/</span> — sự tức giận</li>
+          <li><mark class="vocab">sadness</mark> <span class="ipa">/ˈsædnəs/</span> — nỗi buồn</li>
+          <li><mark class="vocab">happiness</mark> <span class="ipa">/ˈhæpiˌnəs/</span> — hạnh phúc</li>
+          <li><mark class="vocab">joy</mark> <span class="ipa">/ʤɔɪ/</span> — niềm vui</li>
+          <li><mark class="vocab">disgust</mark> <span class="ipa">/dɪsˈɡʌst/</span> — sự ghê tởm</li>
+          <li><mark class="vocab">surprise</mark> <span class="ipa">/sɚˈpraɪz/</span> — ngạc nhiên</li>
+          <li><mark class="vocab">trust</mark> <span class="ipa">/trʌst/</span> — niềm tin</li>
+          <li><mark class="vocab">shame</mark> <span class="ipa">/ʃeɪm/</span> — xấu hổ</li>
+          <li><mark class="vocab">hatred</mark> <span class="ipa">/ˈheɪtrɪd/</span> — sự căm thù</li>
+          <li><mark class="vocab">love</mark> <span class="ipa">/lʌv/</span> — tình yêu</li>
+          <li><mark class="vocab">kindness</mark> <span class="ipa">/ˈkaɪndnəs/</span> — lòng tốt</li>
+          <li><mark class="vocab">sympathy</mark> <span class="ipa">/ˈsɪmpəˌθi/</span> — sự thông cảm</li>
+          <li><mark class="vocab">amusement</mark> <span class="ipa">/əˈmjuzmənt/</span> — sự giải trí</li>
+          <li><mark class="vocab">confusion</mark> <span class="ipa">/kənˈfjuʒən/</span> — sự bối rối</li>
+          <li><mark class="vocab">laugh</mark> <span class="ipa">/læf/</span> — cười</li>
+          <li><mark class="vocab">cry</mark> <span class="ipa">/kraɪ/</span> — khóc</li>
+          <li><mark class="vocab">smile</mark> <span class="ipa">/smaɪl/</span> — cười</li>
+          <li><mark class="vocab">frown</mark> <span class="ipa">/fraʊn/</span> — nhíu mày</li>
+          <li><mark class="vocab">miss</mark> <span class="ipa">/mɪs/</span> — nhớ</li>
+          <li><mark class="vocab">worry</mark> <span class="ipa">/ˈwɝi/</span> — lo lắng</li>
+          <li><mark class="vocab">surprise</mark> <span class="ipa">/sɚˈpraɪz/</span> — làm ngạc nhiên</li>
+          <li><mark class="vocab">surprised</mark> <span class="ipa">/sərˈpraɪzd/</span> — ngạc nhiên</li>
+          <li><mark class="vocab">annoy</mark> <span class="ipa">/əˈnɔɪ/</span> — làm phiền</li>
+          <li><mark class="vocab">scared</mark> <span class="ipa">/skɛrd/</span> — sợ hãi</li>
+          <li><mark class="vocab">mind</mark> <span class="ipa">/maɪnd/</span> — tâm trí</li>
+          <li><mark class="vocab">mental</mark> <span class="ipa">/ˈmɛntəl/</span> — tâm thần</li>
+          <li><mark class="vocab">talent</mark> <span class="ipa">/ˈtælənt/</span> — tài năng</li>
+          <li><mark class="vocab">skill</mark> <span class="ipa">/skɪl/</span> — kỹ năng</li>
+          <li><mark class="vocab">knowledge</mark> <span class="ipa">/ˈnɑlɪʤ/</span> — kiến thức</li>
+          <li><mark class="vocab">guess</mark> <span class="ipa">/ɡɛs/</span> — phỏng đoán</li>
+          <li><mark class="vocab">guess</mark> <span class="ipa">/ɡɛs/</span> — đoán</li>
+          <li><mark class="vocab">believe</mark> <span class="ipa">/bəˈliv/</span> — tin</li>
+          <li><mark class="vocab">belief</mark> <span class="ipa">/bəˈlif/</span> — niềm tin</li>
+          <li><mark class="vocab">memory</mark> <span class="ipa">/ˈmɛməri/</span> — trí nhớ</li>
+          <li><mark class="vocab">remember</mark> <span class="ipa">/rɪˈmɛmbɚ/</span> — nhớ</li>
+          <li><mark class="vocab">forget</mark> <span class="ipa">/fɚˈɡɛt/</span> — quên</li>
+          <li><mark class="vocab">idea</mark> <span class="ipa">/aɪˈdiːə/</span> — ý tưởng</li>
+          <li><mark class="vocab">favorite</mark> <span class="ipa">/ˈfeɪvɚɪt/</span> — yêu thích</li>
+          <li><mark class="vocab">suggestion</mark> <span class="ipa">/səˈʤɛstʃən/</span> — đề xuất</li>
+          <li><mark class="vocab">suggest</mark> <span class="ipa">/səˈʤɛst/</span> — đề nghị</li>
+          <li><mark class="vocab">goal</mark> <span class="ipa">/ɡoʊl/</span> — mục tiêu</li>
+          <li><mark class="vocab">plan</mark> <span class="ipa">/plæn/</span> — kế hoạch</li>
+          <li><mark class="vocab">hope</mark> <span class="ipa">/hoʊp/</span> — hy vọng</li>
+          <li><mark class="vocab">hope</mark> <span class="ipa">/hoʊp/</span> — hy vọng</li>
+          <li><mark class="vocab">imagine</mark> <span class="ipa">/ɪˈmæʤən/</span> — tưởng tượng</li>
+          <li><mark class="vocab">dream</mark> <span class="ipa">/driːm/</span> — mơ</li>
+          <li><mark class="vocab">enjoy</mark> <span class="ipa">/ɪnˈʤɔɪ/</span> — thưởng thức</li>
+          <li><mark class="vocab">worried</mark> <span class="ipa">/ˈwɝid/</span> — lo lắng</li>
+          <li><mark class="vocab">nervous</mark> <span class="ipa">/ˈnɝvəs/</span> — lo lắng</li>
+          <li><mark class="vocab">calm</mark> <span class="ipa">/kɑm/</span> — bình tĩnh</li>
+          <li><mark class="vocab">afraid</mark> <span class="ipa">/əˈfreɪd/</span> — sợ hãi</li>
+          <li><mark class="vocab">experience</mark> <span class="ipa">/ɪkˈspɪriəns/</span> — kinh nghiệm</li>
+          <li><mark class="vocab">matter</mark> <span class="ipa">/ˈmætɚ/</span> — vấn đề</li>
+          <li><mark class="vocab">decide</mark> <span class="ipa">/dɪˈsaɪd/</span> — quyết định</li>
+          <li><mark class="vocab">decision</mark> <span class="ipa">/dɪˈsɪʒən/</span> — quyết định</li>
+          <li><mark class="vocab">power</mark> <span class="ipa">/ˈpaʊɚ/</span> — quyền lực</li>
+          <li><mark class="vocab">clear</mark> <span class="ipa">/klɪr/</span> — rõ ràng</li>
+          <li><mark class="vocab">choice</mark> <span class="ipa">/ʧɔɪs/</span> — lựa chọn</li>
+          <li><mark class="vocab">smell</mark> <span class="ipa">/smɛl/</span> — ngửi</li>
+          <li><mark class="vocab">remind</mark> <span class="ipa">/rɪˈmaɪnd/</span> — nhắc nhở</li>
+          <li><mark class="vocab">danger</mark> <span class="ipa">/ˈdeɪnʤɚ/</span> — nguy hiểm</li>
+        </ul>
+      </section>
+
+      <div class="docs-pager">
+        <a href="../">← Feelings &amp; Mind</a>
+        <a href="../../">All topics →</a>
+      </div>
+    </article>
+  </div>
+  <script src="../../../../js/docs.js"></script>
+  <script src="../../../../js/exercise.js"></script>
+</body>
+</html>

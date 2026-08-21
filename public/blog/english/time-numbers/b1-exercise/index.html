@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>B1 Exercise · Time &amp; Numbers — The Quiet Corner</title>
+  <meta name="description" content="B1 reading exercise for Time &amp; Numbers vocabulary with IPA and bilingual sentences.">
+  <link rel="icon" href="../../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../../"><span>✦</span> The Quiet Corner <span>✦</span></a>
+    <nav class="docs-series">
+      <a href="../../../../blog/web-security/">DevSecOps</a>
+      <a href="../../../../blog/kubestronaut/">Kubestronaut</a>
+      <a class="active" href="../../">English</a>
+    </nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-nav="english" data-docs-root="../../" data-active="time-numbers">
+      <div class="docs-nav-label">English</div>
+      <ul class="docs-nav" id="docsNav">
+        <li><a href="../../">All topics</a></li>
+        <li><a href="../">Time &amp; Numbers</a></li>
+        <li><a class="active" href="./">B1 Exercise</a></li>
+      </ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../../">Home</a>
+        <span>›</span>
+        <a href="../../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../../">English</a>
+        <span>›</span>
+        <a href="../">Time &amp; Numbers</a>
+        <span>›</span>
+        <span>B1 Exercise</span>
+      </div>
+
+      <div class="vocab-topic-hero">
+        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 72 72' fill='none'%3E%3Crect width='72' height='72' rx='14' fill='%230b1220'/%3E%3Crect x='16' y='14' width='40' height='46' rx='6' stroke='%2322d3ee' stroke-width='2.5'/%3E%3Cpath d='M24 28h24M24 36h24M24 44h16' stroke='%23e4e4e7' stroke-width='2.5' stroke-linecap='round'/%3E%3Cpath d='M48 48l6 2-2 6-8-8 4 0z' fill='%2322d3ee'/%3E%3C/svg%3E" alt="" width="112" height="112">
+        <div>
+          <h1>B1 Exercise · Time &amp; Numbers</h1>
+          <p class="lede">Reading passage with every new word from this level’s LanGeek lessons — IPA, highlights, sentence translation, and free TTS.</p>
+          <div class="docs-meta">
+            <span><strong>Words:</strong> 81</span>
+            <span><strong>Lessons:</strong> Quantities and Containers · Time</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="ex-toolbar" id="exToolbar">
+        <label class="ex-toggle"><input type="checkbox" id="togHighlight" checked> Highlights</label>
+        <label class="ex-toggle"><input type="checkbox" id="togIpa" checked> IPA</label>
+        <label class="ex-toggle"><input type="checkbox" id="togVi"> Dịch câu (VI)</label>
+        <span class="ex-sep"></span>
+        <label class="ex-voice">Voice
+          <select id="voiceSelect" aria-label="TTS voice"></select>
+        </label>
+        <label class="ex-voice">Speed
+          <input id="rateRange" type="range" min="0.7" max="1.15" step="0.05" value="0.95">
+          <span id="rateVal">0.95</span>
+        </label>
+        <button type="button" class="ex-btn primary" id="btnPlay">▶ Read passage</button>
+        <button type="button" class="ex-btn" id="btnStop">Stop</button>
+      </div>
+      
+      <section class="ex-passage" id="passage" data-tts-root>
+          <p class="ex-sent" data-sent="1">
+            <span class="ex-en">In this B1 Time & Numbers passage, notice <mark class="vocab" data-word="Fahrenheit">Fahrenheit</mark><span class="ipa">/ˈfærənˌhaɪt/</span>, <mark class="vocab" data-word="Celsius">Celsius</mark><span class="ipa">/sˈɛlsɪəs/</span>, <mark class="vocab" data-word="centigrade">centigrade</mark><span class="ipa">/ˈsɛntɪˌɡreɪd/</span>, and <mark class="vocab" data-word="dozen">dozen</mark><span class="ipa">/ˈdʌzən/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về Time &amp; Numbers, hãy để ý Fahrenheit, Celsius, bách phân, và tá.</span>
+          </p>
+          <p class="ex-sent" data-sent="2">
+            <span class="ex-en">In this B1 Time & Numbers passage, notice <mark class="vocab" data-word="ounce">ounce</mark><span class="ipa">/aʊns/</span>, <mark class="vocab" data-word="gallon">gallon</mark><span class="ipa">/ˈɡælən/</span>, <mark class="vocab" data-word="inch">inch</mark><span class="ipa">/ɪnʧ/</span>, and <mark class="vocab" data-word="scale">scale</mark><span class="ipa">/skeɪl/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về Time &amp; Numbers, hãy để ý aoxơ, ga-lông, inch, và quy mô.</span>
+          </p>
+          <p class="ex-sent" data-sent="3">
+            <span class="ex-en">In this B1 Time & Numbers passage, notice <mark class="vocab" data-word="piece">piece</mark><span class="ipa">/piːs/</span>, <mark class="vocab" data-word="slice">slice</mark><span class="ipa">/slaɪs/</span>, <mark class="vocab" data-word="loaf">loaf</mark><span class="ipa">/loʊf/</span>, and <mark class="vocab" data-word="bar">bar</mark><span class="ipa">/bɑr/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về Time &amp; Numbers, hãy để ý mảnh, lát, ổ bánh mì, và một thanh.</span>
+          </p>
+          <p class="ex-sent" data-sent="4">
+            <span class="ex-en">In this B1 Time & Numbers passage, notice <mark class="vocab" data-word="roll">roll</mark><span class="ipa">/roʊl/</span>, <mark class="vocab" data-word="number">number</mark><span class="ipa">/ˈnʌmbɚ/</span>, <mark class="vocab" data-word="bunch">bunch</mark><span class="ipa">/bʌnʧ/</span>, and <mark class="vocab" data-word="pile">pile</mark><span class="ipa">/paɪl/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về Time &amp; Numbers, hãy để ý cuộn, số lượng, bó, và đống.</span>
+          </p>
+          <p class="ex-sent" data-sent="5">
+            <span class="ex-en">In this B1 Time & Numbers passage, notice <mark class="vocab" data-word="row">row</mark><span class="ipa">/roʊ/</span>, <mark class="vocab" data-word="edge">edge</mark><span class="ipa">/ɛʤ/</span>, <mark class="vocab" data-word="container">container</mark><span class="ipa">/kənˈteɪnɚ/</span>, and <mark class="vocab" data-word="carton">carton</mark><span class="ipa">/ˈkɑrtən/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về Time &amp; Numbers, hãy để ý hàng, rìa, thùng chứa, và hộp các tông.</span>
+          </p>
+          <p class="ex-sent" data-sent="6">
+            <span class="ex-en">In this B1 Time & Numbers passage, notice <mark class="vocab" data-word="case">case</mark><span class="ipa">/keɪs/</span>, <mark class="vocab" data-word="pack">pack</mark><span class="ipa">/pæk/</span>, <mark class="vocab" data-word="packet">packet</mark><span class="ipa">/ˈpækɪt/</span>, and <mark class="vocab" data-word="package">package</mark><span class="ipa">/ˈpækɪdʒ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về Time &amp; Numbers, hãy để ý vali, gói, gói, và gói hàng.</span>
+          </p>
+          <p class="ex-sent" data-sent="7">
+            <span class="ex-en">In this B1 Time & Numbers passage, notice <mark class="vocab" data-word="mug">mug</mark><span class="ipa">/mʌɡ/</span>, <mark class="vocab" data-word="jug">jug</mark><span class="ipa">/dʒʌɡ/</span>, <mark class="vocab" data-word="jar">jar</mark><span class="ipa">/dʒɑr/</span>, and <mark class="vocab" data-word="tube">tube</mark><span class="ipa">/tuːb/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về Time &amp; Numbers, hãy để ý cốc, bình, lọ, và ống.</span>
+          </p>
+          <p class="ex-sent" data-sent="8">
+            <span class="ex-en">In this B1 Time & Numbers passage, notice <mark class="vocab" data-word="tray">tray</mark><span class="ipa">/treɪ/</span>, <mark class="vocab" data-word="can">can</mark><span class="ipa">/kæn/</span>, <mark class="vocab" data-word="basket">basket</mark><span class="ipa">/ˈbæskɪt/</span>, and <mark class="vocab" data-word="bucket">bucket</mark><span class="ipa">/ˈbʌkɪt/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về Time &amp; Numbers, hãy để ý khay, lon, giỏ, và xô.</span>
+          </p>
+          <p class="ex-sent" data-sent="9">
+            <span class="ex-en">In this B1 Time & Numbers passage, notice <mark class="vocab" data-word="extra">extra</mark><span class="ipa">/ˈɛkstrə/</span>, <mark class="vocab" data-word="maximum">maximum</mark><span class="ipa">/ˈmæksəməm/</span>, <mark class="vocab" data-word="minimum">minimum</mark><span class="ipa">/ˈmɪnəməm/</span>, and <mark class="vocab" data-word="limited">limited</mark><span class="ipa">/ˈlɪmɪtɪd/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về Time &amp; Numbers, hãy để ý thêm, tối đa, tối thiểu, và hạn chế.</span>
+          </p>
+          <p class="ex-sent" data-sent="10">
+            <span class="ex-en">In this B1 Time & Numbers passage, notice <mark class="vocab" data-word="double">double</mark><span class="ipa">/ˈdʌbəl/</span>, <mark class="vocab" data-word="half">half</mark><span class="ipa">/hæf/</span>, <mark class="vocab" data-word="enough">enough</mark><span class="ipa">/ɪˈnʌf/</span>, and <mark class="vocab" data-word="bit">bit</mark><span class="ipa">/bɪt/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về Time &amp; Numbers, hãy để ý gấp đôi, một nửa, đủ, và một chút.</span>
+          </p>
+          <p class="ex-sent" data-sent="11">
+            <span class="ex-en">In this B1 Time & Numbers passage, notice <mark class="vocab" data-word="pitcher">pitcher</mark><span class="ipa">/ˈpɪʧɚ/</span>, <mark class="vocab" data-word="period">period</mark><span class="ipa">/ˈpɪriəd/</span>, <mark class="vocab" data-word="term">term</mark><span class="ipa">/tɝm/</span>, and <mark class="vocab" data-word="while">while</mark><span class="ipa">/waɪl/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về Time &amp; Numbers, hãy để ý bình, thời kỳ, kỳ hạn, và lúc.</span>
+          </p>
+          <p class="ex-sent" data-sent="12">
+            <span class="ex-en">In this B1 Time & Numbers passage, notice <mark class="vocab" data-word="daytime">daytime</mark><span class="ipa">/ˈdeɪˌtaɪm/</span>, <mark class="vocab" data-word="nighttime">nighttime</mark><span class="ipa">/ˈnaɪtˌtaɪm/</span>, <mark class="vocab" data-word="daylight">daylight</mark><span class="ipa">/ˈdeɪˌlaɪt/</span>, and <mark class="vocab" data-word="midday">midday</mark><span class="ipa">/ˈmɪdˌdeɪ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về Time &amp; Numbers, hãy để ý ban ngày, đêm, ánh sáng ban ngày, và buổi trưa.</span>
+          </p>
+          <p class="ex-sent" data-sent="13">
+            <span class="ex-en">In this B1 Time & Numbers passage, notice <mark class="vocab" data-word="at times">at times</mark><span class="ipa">/æt ˈtaɪmz/</span>, <mark class="vocab" data-word="continuous">continuous</mark><span class="ipa">/kənˈtɪnjuəs/</span>, <mark class="vocab" data-word="continuously">continuously</mark><span class="ipa">/kənˈtɪnjuəsli/</span>, and <mark class="vocab" data-word="ahead of time">ahead of time</mark><span class="ipa">/əˈhɛd əv ˈtaɪm/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về Time &amp; Numbers, hãy để ý đôi khi, liên tục, liên tục, và ahead of time.</span>
+          </p>
+          <p class="ex-sent" data-sent="14">
+            <span class="ex-en">In this B1 Time & Numbers passage, notice <mark class="vocab" data-word="late">late</mark><span class="ipa">/leɪt/</span>, <mark class="vocab" data-word="to last">last</mark><span class="ipa">/læst/</span>, <mark class="vocab" data-word="to take">take</mark><span class="ipa">/teɪk/</span>, and <mark class="vocab" data-word="punctual">punctual</mark><span class="ipa">/ˈpʌŋktʃuəl/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về Time &amp; Numbers, hãy để ý muộn, kéo dài, cần, và đúng giờ.</span>
+          </p>
+          <p class="ex-sent" data-sent="15">
+            <span class="ex-en">In this B1 Time & Numbers passage, notice <mark class="vocab" data-word="throughout">throughout</mark><span class="ipa">/θruˈaʊt/</span>, <mark class="vocab" data-word="sudden">sudden</mark><span class="ipa">/ˈsʌdən/</span>, <mark class="vocab" data-word="regularly">regularly</mark><span class="ipa">/ˈrɛɡjʊlərli/</span>, and <mark class="vocab" data-word="regular">regular</mark><span class="ipa">/ˈrɛɡjʊlər/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về Time &amp; Numbers, hãy để ý suốt, đột ngột, đều đặn, và thường xuyên.</span>
+          </p>
+          <p class="ex-sent" data-sent="16">
+            <span class="ex-en">In this B1 Time & Numbers passage, notice <mark class="vocab" data-word="immediate">immediate</mark><span class="ipa">/ɪˈmiːdiət/</span>, <mark class="vocab" data-word="eventually">eventually</mark><span class="ipa">/ɪˈvɛnʧuəli/</span>, <mark class="vocab" data-word="afterward">afterward</mark><span class="ipa">/ˈæftɚwɚd/</span>, and <mark class="vocab" data-word="ago">ago</mark><span class="ipa">/əˈɡoʊ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về Time &amp; Numbers, hãy để ý tức thì, cuối cùng, sau đó, và trước đây.</span>
+          </p>
+          <p class="ex-sent" data-sent="17">
+            <span class="ex-en">In this B1 Time & Numbers passage, notice <mark class="vocab" data-word="all the time">all the time</mark><span class="ipa">/a:l ðə ˈtaɪm/</span>, <mark class="vocab" data-word="far">far</mark><span class="ipa">/fɑr/</span>, <mark class="vocab" data-word="hourly">hourly</mark><span class="ipa">/ˈaʊɚli/</span>, and <mark class="vocab" data-word="instantly">instantly</mark><span class="ipa">/ˈɪnstəntli/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về Time &amp; Numbers, hãy để ý mọi lúc, xa, hàng giờ, và ngay lập tức.</span>
+          </p>
+          <p class="ex-sent" data-sent="18">
+            <span class="ex-en">In this B1 Time & Numbers passage, notice <mark class="vocab" data-word="present">present</mark><span class="ipa">/ˈprɛzənt/</span>, <mark class="vocab" data-word="past">past</mark><span class="ipa">/pæst/</span>, <mark class="vocab" data-word="future">future</mark><span class="ipa">/ˈfjuʧɚ/</span>, and <mark class="vocab" data-word="already">already</mark><span class="ipa">/ɑːlˈredi/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về Time &amp; Numbers, hãy để ý hiện tại, quá khứ, tương lai, và đã.</span>
+          </p>
+          <p class="ex-sent" data-sent="19">
+            <span class="ex-en">In this B1 Time & Numbers passage, notice <mark class="vocab" data-word="currently">currently</mark><span class="ipa">/ˈkɝrəntli/</span>, <mark class="vocab" data-word="ever">ever</mark><span class="ipa">/ˈɛvɚ/</span>, <mark class="vocab" data-word="forever">forever</mark><span class="ipa">/fɔrˈɛvɚ/</span>, and <mark class="vocab" data-word="just">just</mark><span class="ipa">/ʤʌst/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về Time &amp; Numbers, hãy để ý hiện tại, đã từng, mãi mãi, và vừa mới.</span>
+          </p>
+          <p class="ex-sent" data-sent="20">
+            <span class="ex-en">In this B1 Time & Numbers passage, notice <mark class="vocab" data-word="meanwhile">meanwhile</mark><span class="ipa">/ˈminˌwaɪl/</span>, <mark class="vocab" data-word="previously">previously</mark><span class="ipa">/ˈpriːviəsli/</span>, <mark class="vocab" data-word="away">away</mark><span class="ipa">/əˈweɪ/</span>, and <mark class="vocab" data-word="near">near</mark><span class="ipa">/nɪr/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về Time &amp; Numbers, hãy để ý trong khi đó, trước đây, xa, và gần.</span>
+          </p>
+          <p class="ex-sent" data-sent="21">
+            <span class="ex-en">In this B1 Time & Numbers passage, notice <mark class="vocab" data-word="irregular">irregular</mark><span class="ipa">/ɪˈrɛɡjʊlər/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về Time &amp; Numbers, hãy để ý không đều.</span>
+          </p>
+      </section>
+
+      <section class="ex-vocab">
+        <h2>Word checklist · 81</h2>
+        <ul class="ex-vocab-list">
+          <li><mark class="vocab">Fahrenheit</mark> <span class="ipa">/ˈfærənˌhaɪt/</span> — Fahrenheit</li>
+          <li><mark class="vocab">Celsius</mark> <span class="ipa">/sˈɛlsɪəs/</span> — Celsius</li>
+          <li><mark class="vocab">centigrade</mark> <span class="ipa">/ˈsɛntɪˌɡreɪd/</span> — bách phân</li>
+          <li><mark class="vocab">dozen</mark> <span class="ipa">/ˈdʌzən/</span> — tá</li>
+          <li><mark class="vocab">ounce</mark> <span class="ipa">/aʊns/</span> — aoxơ</li>
+          <li><mark class="vocab">gallon</mark> <span class="ipa">/ˈɡælən/</span> — ga-lông</li>
+          <li><mark class="vocab">inch</mark> <span class="ipa">/ɪnʧ/</span> — inch</li>
+          <li><mark class="vocab">scale</mark> <span class="ipa">/skeɪl/</span> — quy mô</li>
+          <li><mark class="vocab">piece</mark> <span class="ipa">/piːs/</span> — mảnh</li>
+          <li><mark class="vocab">slice</mark> <span class="ipa">/slaɪs/</span> — lát</li>
+          <li><mark class="vocab">loaf</mark> <span class="ipa">/loʊf/</span> — ổ bánh mì</li>
+          <li><mark class="vocab">bar</mark> <span class="ipa">/bɑr/</span> — một thanh</li>
+          <li><mark class="vocab">roll</mark> <span class="ipa">/roʊl/</span> — cuộn</li>
+          <li><mark class="vocab">number</mark> <span class="ipa">/ˈnʌmbɚ/</span> — số lượng</li>
+          <li><mark class="vocab">bunch</mark> <span class="ipa">/bʌnʧ/</span> — bó</li>
+          <li><mark class="vocab">pile</mark> <span class="ipa">/paɪl/</span> — đống</li>
+          <li><mark class="vocab">row</mark> <span class="ipa">/roʊ/</span> — hàng</li>
+          <li><mark class="vocab">edge</mark> <span class="ipa">/ɛʤ/</span> — rìa</li>
+          <li><mark class="vocab">container</mark> <span class="ipa">/kənˈteɪnɚ/</span> — thùng chứa</li>
+          <li><mark class="vocab">carton</mark> <span class="ipa">/ˈkɑrtən/</span> — hộp các tông</li>
+          <li><mark class="vocab">case</mark> <span class="ipa">/keɪs/</span> — vali</li>
+          <li><mark class="vocab">pack</mark> <span class="ipa">/pæk/</span> — gói</li>
+          <li><mark class="vocab">packet</mark> <span class="ipa">/ˈpækɪt/</span> — gói</li>
+          <li><mark class="vocab">package</mark> <span class="ipa">/ˈpækɪdʒ/</span> — gói hàng</li>
+          <li><mark class="vocab">mug</mark> <span class="ipa">/mʌɡ/</span> — cốc</li>
+          <li><mark class="vocab">jug</mark> <span class="ipa">/dʒʌɡ/</span> — bình</li>
+          <li><mark class="vocab">jar</mark> <span class="ipa">/dʒɑr/</span> — lọ</li>
+          <li><mark class="vocab">tube</mark> <span class="ipa">/tuːb/</span> — ống</li>
+          <li><mark class="vocab">tray</mark> <span class="ipa">/treɪ/</span> — khay</li>
+          <li><mark class="vocab">can</mark> <span class="ipa">/kæn/</span> — lon</li>
+          <li><mark class="vocab">basket</mark> <span class="ipa">/ˈbæskɪt/</span> — giỏ</li>
+          <li><mark class="vocab">bucket</mark> <span class="ipa">/ˈbʌkɪt/</span> — xô</li>
+          <li><mark class="vocab">extra</mark> <span class="ipa">/ˈɛkstrə/</span> — thêm</li>
+          <li><mark class="vocab">maximum</mark> <span class="ipa">/ˈmæksəməm/</span> — tối đa</li>
+          <li><mark class="vocab">minimum</mark> <span class="ipa">/ˈmɪnəməm/</span> — tối thiểu</li>
+          <li><mark class="vocab">limited</mark> <span class="ipa">/ˈlɪmɪtɪd/</span> — hạn chế</li>
+          <li><mark class="vocab">double</mark> <span class="ipa">/ˈdʌbəl/</span> — gấp đôi</li>
+          <li><mark class="vocab">half</mark> <span class="ipa">/hæf/</span> — một nửa</li>
+          <li><mark class="vocab">enough</mark> <span class="ipa">/ɪˈnʌf/</span> — đủ</li>
+          <li><mark class="vocab">bit</mark> <span class="ipa">/bɪt/</span> — một chút</li>
+          <li><mark class="vocab">pitcher</mark> <span class="ipa">/ˈpɪʧɚ/</span> — bình</li>
+          <li><mark class="vocab">period</mark> <span class="ipa">/ˈpɪriəd/</span> — thời kỳ</li>
+          <li><mark class="vocab">term</mark> <span class="ipa">/tɝm/</span> — kỳ hạn</li>
+          <li><mark class="vocab">while</mark> <span class="ipa">/waɪl/</span> — lúc</li>
+          <li><mark class="vocab">daytime</mark> <span class="ipa">/ˈdeɪˌtaɪm/</span> — ban ngày</li>
+          <li><mark class="vocab">nighttime</mark> <span class="ipa">/ˈnaɪtˌtaɪm/</span> — đêm</li>
+          <li><mark class="vocab">daylight</mark> <span class="ipa">/ˈdeɪˌlaɪt/</span> — ánh sáng ban ngày</li>
+          <li><mark class="vocab">midday</mark> <span class="ipa">/ˈmɪdˌdeɪ/</span> — buổi trưa</li>
+          <li><mark class="vocab">at times</mark> <span class="ipa">/æt ˈtaɪmz/</span> — đôi khi</li>
+          <li><mark class="vocab">continuous</mark> <span class="ipa">/kənˈtɪnjuəs/</span> — liên tục</li>
+          <li><mark class="vocab">continuously</mark> <span class="ipa">/kənˈtɪnjuəsli/</span> — liên tục</li>
+          <li><mark class="vocab">ahead of time</mark> <span class="ipa">/əˈhɛd əv ˈtaɪm/</span></li>
+          <li><mark class="vocab">late</mark> <span class="ipa">/leɪt/</span> — muộn</li>
+          <li><mark class="vocab">last</mark> <span class="ipa">/læst/</span> — kéo dài</li>
+          <li><mark class="vocab">take</mark> <span class="ipa">/teɪk/</span> — cần</li>
+          <li><mark class="vocab">punctual</mark> <span class="ipa">/ˈpʌŋktʃuəl/</span> — đúng giờ</li>
+          <li><mark class="vocab">throughout</mark> <span class="ipa">/θruˈaʊt/</span> — suốt</li>
+          <li><mark class="vocab">sudden</mark> <span class="ipa">/ˈsʌdən/</span> — đột ngột</li>
+          <li><mark class="vocab">regularly</mark> <span class="ipa">/ˈrɛɡjʊlərli/</span> — đều đặn</li>
+          <li><mark class="vocab">regular</mark> <span class="ipa">/ˈrɛɡjʊlər/</span> — thường xuyên</li>
+          <li><mark class="vocab">immediate</mark> <span class="ipa">/ɪˈmiːdiət/</span> — tức thì</li>
+          <li><mark class="vocab">eventually</mark> <span class="ipa">/ɪˈvɛnʧuəli/</span> — cuối cùng</li>
+          <li><mark class="vocab">afterward</mark> <span class="ipa">/ˈæftɚwɚd/</span> — sau đó</li>
+          <li><mark class="vocab">ago</mark> <span class="ipa">/əˈɡoʊ/</span> — trước đây</li>
+          <li><mark class="vocab">all the time</mark> <span class="ipa">/a:l ðə ˈtaɪm/</span> — mọi lúc</li>
+          <li><mark class="vocab">far</mark> <span class="ipa">/fɑr/</span> — xa</li>
+          <li><mark class="vocab">hourly</mark> <span class="ipa">/ˈaʊɚli/</span> — hàng giờ</li>
+          <li><mark class="vocab">instantly</mark> <span class="ipa">/ˈɪnstəntli/</span> — ngay lập tức</li>
+          <li><mark class="vocab">present</mark> <span class="ipa">/ˈprɛzənt/</span> — hiện tại</li>
+          <li><mark class="vocab">past</mark> <span class="ipa">/pæst/</span> — quá khứ</li>
+          <li><mark class="vocab">future</mark> <span class="ipa">/ˈfjuʧɚ/</span> — tương lai</li>
+          <li><mark class="vocab">already</mark> <span class="ipa">/ɑːlˈredi/</span> — đã</li>
+          <li><mark class="vocab">currently</mark> <span class="ipa">/ˈkɝrəntli/</span> — hiện tại</li>
+          <li><mark class="vocab">ever</mark> <span class="ipa">/ˈɛvɚ/</span> — đã từng</li>
+          <li><mark class="vocab">forever</mark> <span class="ipa">/fɔrˈɛvɚ/</span> — mãi mãi</li>
+          <li><mark class="vocab">just</mark> <span class="ipa">/ʤʌst/</span> — vừa mới</li>
+          <li><mark class="vocab">meanwhile</mark> <span class="ipa">/ˈminˌwaɪl/</span> — trong khi đó</li>
+          <li><mark class="vocab">previously</mark> <span class="ipa">/ˈpriːviəsli/</span> — trước đây</li>
+          <li><mark class="vocab">away</mark> <span class="ipa">/əˈweɪ/</span> — xa</li>
+          <li><mark class="vocab">near</mark> <span class="ipa">/nɪr/</span> — gần</li>
+          <li><mark class="vocab">irregular</mark> <span class="ipa">/ɪˈrɛɡjʊlər/</span> — không đều</li>
+        </ul>
+      </section>
+
+      <div class="docs-pager">
+        <a href="../">← Time &amp; Numbers</a>
+        <a href="../../">All topics →</a>
+      </div>
+    </article>
+  </div>
+  <script src="../../../../js/docs.js"></script>
+  <script src="../../../../js/exercise.js"></script>
+</body>
+</html>

@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A2 Exercise · Food &amp; Drink — The Quiet Corner</title>
+  <meta name="description" content="A2 reading exercise for Food &amp; Drink vocabulary with IPA and bilingual sentences.">
+  <link rel="icon" href="../../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../../"><span>✦</span> The Quiet Corner <span>✦</span></a>
+    <nav class="docs-series">
+      <a href="../../../../blog/web-security/">DevSecOps</a>
+      <a href="../../../../blog/kubestronaut/">Kubestronaut</a>
+      <a class="active" href="../../">English</a>
+    </nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-nav="english" data-docs-root="../../" data-active="food-drink">
+      <div class="docs-nav-label">English</div>
+      <ul class="docs-nav" id="docsNav">
+        <li><a href="../../">All topics</a></li>
+        <li><a href="../">Food &amp; Drink</a></li>
+        <li><a class="active" href="./">A2 Exercise</a></li>
+      </ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../../">Home</a>
+        <span>›</span>
+        <a href="../../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../../">English</a>
+        <span>›</span>
+        <a href="../">Food &amp; Drink</a>
+        <span>›</span>
+        <span>A2 Exercise</span>
+      </div>
+
+      <div class="vocab-topic-hero">
+        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 72 72' fill='none'%3E%3Crect width='72' height='72' rx='14' fill='%230b1220'/%3E%3Crect x='16' y='14' width='40' height='46' rx='6' stroke='%2322d3ee' stroke-width='2.5'/%3E%3Cpath d='M24 28h24M24 36h24M24 44h16' stroke='%23e4e4e7' stroke-width='2.5' stroke-linecap='round'/%3E%3Cpath d='M48 48l6 2-2 6-8-8 4 0z' fill='%2322d3ee'/%3E%3C/svg%3E" alt="" width="112" height="112">
+        <div>
+          <h1>A2 Exercise · Food &amp; Drink</h1>
+          <p class="lede">Reading passage with every new word from this level’s LanGeek lessons — IPA, highlights, sentence translation, and free TTS.</p>
+          <div class="docs-meta">
+            <span><strong>Words:</strong> 89</span>
+            <span><strong>Lessons:</strong> Flowers, Fruits, and Nuts · Food · Restaurants and Food</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="ex-toolbar" id="exToolbar">
+        <label class="ex-toggle"><input type="checkbox" id="togHighlight" checked> Highlights</label>
+        <label class="ex-toggle"><input type="checkbox" id="togIpa" checked> IPA</label>
+        <label class="ex-toggle"><input type="checkbox" id="togVi"> Dịch câu (VI)</label>
+        <span class="ex-sep"></span>
+        <label class="ex-voice">Voice
+          <select id="voiceSelect" aria-label="TTS voice"></select>
+        </label>
+        <label class="ex-voice">Speed
+          <input id="rateRange" type="range" min="0.7" max="1.15" step="0.05" value="0.95">
+          <span id="rateVal">0.95</span>
+        </label>
+        <button type="button" class="ex-btn primary" id="btnPlay">▶ Read passage</button>
+        <button type="button" class="ex-btn" id="btnStop">Stop</button>
+      </div>
+      
+      <section class="ex-passage" id="passage" data-tts-root>
+          <p class="ex-sent" data-sent="1">
+            <span class="ex-en">A weekend cook wants better flavor than yesterday’s fast routine. In that moment you notice <mark class="vocab" data-word="farm">farm</mark><span class="ipa">/fɑrm/</span>, <mark class="vocab" data-word="farming">farming</mark><span class="ipa">/ˈfɑrmɪŋ/</span>, <mark class="vocab" data-word="to pick">pick</mark><span class="ipa">/pɪk/</span>, and <mark class="vocab" data-word="to plant">plant</mark><span class="ipa">/plænt/</span>.</span>
+            <span class="ex-vi">Người nấu cuối tuần muốn hương vị ngon hơn thói quen vội của hôm trước. Lúc ấy bạn để ý nông trại, nông nghiệp, hái, và trồng.</span>
+          </p>
+          <p class="ex-sent" data-sent="2">
+            <span class="ex-en">The restaurant board lists comfort plates beside lighter options. In that moment you notice <mark class="vocab" data-word="to water">water</mark><span class="ipa">/ˈwɑːtɚ/</span>, <mark class="vocab" data-word="to grow">grow</mark><span class="ipa">/ɡroʊ/</span>, <mark class="vocab" data-word="to produce">produce</mark><span class="ipa">/prəˈdus/</span>, and <mark class="vocab" data-word="to feed">feed</mark><span class="ipa">/fiːd/</span>.</span>
+            <span class="ex-vi">Bảng nhà hàng liệt kê món ấm bụng cạnh những lựa chọn nhẹ hơn. Lúc ấy bạn để ý tưới nước, trồng, sản xuất, và cho ăn.</span>
+          </p>
+          <p class="ex-sent" data-sent="3">
+            <span class="ex-en">Farm stalls add color with produce you can smell from the street. In that moment you notice <mark class="vocab" data-word="strawberry">strawberry</mark><span class="ipa">/ˈstrɔˌbɛri/</span>, <mark class="vocab" data-word="blueberry">blueberry</mark><span class="ipa">/ˈbluˌbɛri/</span>, <mark class="vocab" data-word="watermelon">watermelon</mark><span class="ipa">/ˈwɑtɚˌmɛlən/</span>, and <mark class="vocab" data-word="pear">pear</mark><span class="ipa">/pɛr/</span>.</span>
+            <span class="ex-vi">Quầy nông sản thêm màu sắc với nông sản thơm từ ngoài đường. Lúc ấy bạn để ý dâu tây, việt quất, dưa hấu, và lê.</span>
+          </p>
+          <p class="ex-sent" data-sent="4">
+            <span class="ex-en">After ordering, everyone compares what tasted fresh and what felt heavy. In that moment you notice <mark class="vocab" data-word="pineapple">pineapple</mark><span class="ipa">/ˈpaɪˌnæpəl/</span>, <mark class="vocab" data-word="mango">mango</mark><span class="ipa">/ˈmæŋˌɡoʊ/</span>, <mark class="vocab" data-word="kiwi">kiwi</mark><span class="ipa">/ˈkiːˌwiː/</span>, and <mark class="vocab" data-word="avocado">avocado</mark><span class="ipa">/ˌævəˈkɑdoʊ/</span>.</span>
+            <span class="ex-vi">Sau khi gọi món, mọi người so xem thứ gì tươi và thứ gì nặng bụng. Lúc ấy bạn để ý dứa, xoài, kiwi, và bơ.</span>
+          </p>
+          <p class="ex-sent" data-sent="5">
+            <span class="ex-en">A weekend cook wants better flavor than yesterday’s fast routine. In that moment you notice <mark class="vocab" data-word="grapefruit">grapefruit</mark><span class="ipa">/ˈɡreɪpˌfruːt/</span>, <mark class="vocab" data-word="rose">rose</mark><span class="ipa">/roʊz/</span>, <mark class="vocab" data-word="lily">lily</mark><span class="ipa">/ˈlɪli/</span>, and <mark class="vocab" data-word="orchid">orchid</mark><span class="ipa">/ˈɔrˌkɪd/</span>.</span>
+            <span class="ex-vi">Người nấu cuối tuần muốn hương vị ngon hơn thói quen vội của hôm trước. Lúc ấy bạn để ý bưởi, hoa hồng, hoa loa kèn, và hoa lan.</span>
+          </p>
+          <p class="ex-sent" data-sent="6">
+            <span class="ex-en">The restaurant board lists comfort plates beside lighter options. In that moment you notice <mark class="vocab" data-word="sunflower">sunflower</mark><span class="ipa">/ˈsʌnˌflaʊɚ/</span>, <mark class="vocab" data-word="cactus">cactus</mark><span class="ipa">/ˈkæktəs/</span>, <mark class="vocab" data-word="nut">nut</mark><span class="ipa">/nʌt/</span>, and <mark class="vocab" data-word="peanut">peanut</mark><span class="ipa">/ˈpiːˌnʌt/</span>.</span>
+            <span class="ex-vi">Bảng nhà hàng liệt kê món ấm bụng cạnh những lựa chọn nhẹ hơn. Lúc ấy bạn để ý hoa hướng dương, cây xương rồng, hạt, và đậu phộng.</span>
+          </p>
+          <p class="ex-sent" data-sent="7">
+            <span class="ex-en">Farm stalls add color with produce you can smell from the street. In that moment you notice <mark class="vocab" data-word="walnut">walnut</mark><span class="ipa">/ˈwɔlˌnʌt/</span>, <mark class="vocab" data-word="hazelnut">hazelnut</mark><span class="ipa">/ˈheɪzəlˌnʌt/</span>, <mark class="vocab" data-word="almond">almond</mark><span class="ipa">/ˈɑːlˌmənd/</span>, and <mark class="vocab" data-word="pecan">pecan</mark><span class="ipa">/pɪˈkæn/</span>.</span>
+            <span class="ex-vi">Quầy nông sản thêm màu sắc với nông sản thơm từ ngoài đường. Lúc ấy bạn để ý quả óc chó, hạt phỉ, hạnh nhân, và hạt hồ đào.</span>
+          </p>
+          <p class="ex-sent" data-sent="8">
+            <span class="ex-en">After ordering, everyone compares what tasted fresh and what felt heavy. In that moment you notice <mark class="vocab" data-word="hard">hard</mark><span class="ipa">/hɑrd/</span>, <mark class="vocab" data-word="soft">soft</mark><span class="ipa">/sɑft/</span>, <mark class="vocab" data-word="to smell">smell</mark><span class="ipa">/smɛl/</span>, and <mark class="vocab" data-word="to taste">taste</mark><span class="ipa">/teɪst/</span>.</span>
+            <span class="ex-vi">Sau khi gọi món, mọi người so xem thứ gì tươi và thứ gì nặng bụng. Lúc ấy bạn để ý cứng, mềm, có mùi, và nếm.</span>
+          </p>
+          <p class="ex-sent" data-sent="9">
+            <span class="ex-en">A weekend cook wants better flavor than yesterday’s fast routine. In that moment you notice <mark class="vocab" data-word="pork">pork</mark><span class="ipa">/pɔrk/</span>, <mark class="vocab" data-word="beef">beef</mark><span class="ipa">/bif/</span>, <mark class="vocab" data-word="lamb">lamb</mark><span class="ipa">/læm/</span>, and <mark class="vocab" data-word="tuna">tuna</mark><span class="ipa">/ˈtuːnə/</span>.</span>
+            <span class="ex-vi">Người nấu cuối tuần muốn hương vị ngon hơn thói quen vội của hôm trước. Lúc ấy bạn để ý thịt lợn, thịt bò, thịt cừu non, và cá ngừ.</span>
+          </p>
+          <p class="ex-sent" data-sent="10">
+            <span class="ex-en">The restaurant board lists comfort plates beside lighter options. In that moment you notice <mark class="vocab" data-word="omelet">omelet</mark><span class="ipa">/ˈɑmlɪt/</span>, <mark class="vocab" data-word="cookbook">cookbook</mark><span class="ipa">/ˈkʊkˌbʊk/</span>, <mark class="vocab" data-word="grocery">grocery</mark><span class="ipa">/ˈɡroʊsəri/</span>, and <mark class="vocab" data-word="tip">tip</mark><span class="ipa">/tɪp/</span>.</span>
+            <span class="ex-vi">Bảng nhà hàng liệt kê món ấm bụng cạnh những lựa chọn nhẹ hơn. Lúc ấy bạn để ý trứng ốp la, sách dạy nấu ăn, tạp hóa, và tiền boa.</span>
+          </p>
+          <p class="ex-sent" data-sent="11">
+            <span class="ex-en">Farm stalls add color with produce you can smell from the street. In that moment you notice <mark class="vocab" data-word="rest">rest</mark><span class="ipa">/rɛst/</span>, <mark class="vocab" data-word="leftovers">leftovers</mark><span class="ipa">/ˈlɛftˌoʊvɚz/</span>, <mark class="vocab" data-word="steak">steak</mark><span class="ipa">/steɪk/</span>, and <mark class="vocab" data-word="well-done">well-done</mark><span class="ipa">/ˈwɛl ˈdʌn/</span>.</span>
+            <span class="ex-vi">Quầy nông sản thêm màu sắc với nông sản thơm từ ngoài đường. Lúc ấy bạn để ý phần còn lại, đồ thừa, bít tết, và chín kỹ.</span>
+          </p>
+          <p class="ex-sent" data-sent="12">
+            <span class="ex-en">After ordering, everyone compares what tasted fresh and what felt heavy. In that moment you notice <mark class="vocab" data-word="medium">medium</mark><span class="ipa">/ˈmiːdiəm/</span>, <mark class="vocab" data-word="rare">rare</mark><span class="ipa">/rɛr/</span>, <mark class="vocab" data-word="watery">watery</mark><span class="ipa">/ˈwɑːtɚi/</span>, and <mark class="vocab" data-word="spicy">spicy</mark><span class="ipa">/ˈspaɪsi/</span>.</span>
+            <span class="ex-vi">Sau khi gọi món, mọi người so xem thứ gì tươi và thứ gì nặng bụng. Lúc ấy bạn để ý vừa, tái, loãng, và cay.</span>
+          </p>
+          <p class="ex-sent" data-sent="13">
+            <span class="ex-en">A weekend cook wants better flavor than yesterday’s fast routine. In that moment you notice <mark class="vocab" data-word="bitter">bitter</mark><span class="ipa">/ˈbɪtɚ/</span>, <mark class="vocab" data-word="vegetarian">vegetarian</mark><span class="ipa">/ˌvɛʤəˈtɛriən/</span>, <mark class="vocab" data-word="vegan">vegan</mark><span class="ipa">/ˈviːɡən/</span>, and <mark class="vocab" data-word="broccoli">broccoli</mark><span class="ipa">/ˈbrɑkəli/</span>.</span>
+            <span class="ex-vi">Người nấu cuối tuần muốn hương vị ngon hơn thói quen vội của hôm trước. Lúc ấy bạn để ý đắng, người ăn chay, người ăn chay thuần, và bông cải xanh.</span>
+          </p>
+          <p class="ex-sent" data-sent="14">
+            <span class="ex-en">The restaurant board lists comfort plates beside lighter options. In that moment you notice <mark class="vocab" data-word="celery">celery</mark><span class="ipa">/ˈsɛləri/</span>, <mark class="vocab" data-word="eggplant">eggplant</mark><span class="ipa">/ˈɛɡˌplænt/</span>, <mark class="vocab" data-word="cabbage">cabbage</mark><span class="ipa">/ˈkæbɪʤ/</span>, and <mark class="vocab" data-word="spinach">spinach</mark><span class="ipa">/ˈspɪnɪʧ/</span>.</span>
+            <span class="ex-vi">Bảng nhà hàng liệt kê món ấm bụng cạnh những lựa chọn nhẹ hơn. Lúc ấy bạn để ý cần tây, cà tím, bắp cải, và rau bina.</span>
+          </p>
+          <p class="ex-sent" data-sent="15">
+            <span class="ex-en">Farm stalls add color with produce you can smell from the street. In that moment you notice <mark class="vocab" data-word="to tip">tip</mark><span class="ipa">/tɪp/</span>, <mark class="vocab" data-word="menu">menu</mark><span class="ipa">/ˈmɛnjuː/</span>, <mark class="vocab" data-word="order">order</mark><span class="ipa">/ˈɔrdɚ/</span>, and <mark class="vocab" data-word="pasta">pasta</mark><span class="ipa">/ˈpɑːstə/</span>.</span>
+            <span class="ex-vi">Quầy nông sản thêm màu sắc với nông sản thơm từ ngoài đường. Lúc ấy bạn để ý cho tiền boa, thực đơn, đơn đặt hàng, và mì ống.</span>
+          </p>
+          <p class="ex-sent" data-sent="16">
+            <span class="ex-en">After ordering, everyone compares what tasted fresh and what felt heavy. In that moment you notice <mark class="vocab" data-word="fast food">fast food</mark><span class="ipa">/fæst fuːd/</span>, <mark class="vocab" data-word="hamburger">hamburger</mark><span class="ipa">/ˈhæmˌbɝːɡɚ/</span>, <mark class="vocab" data-word="hot dog">hot dog</mark><span class="ipa">/ˈhɑːt ˌdɔːɡ/</span>, and <mark class="vocab" data-word="sausage">sausage</mark><span class="ipa">/ˈsɑːsɪdʒ/</span>.</span>
+            <span class="ex-vi">Sau khi gọi món, mọi người so xem thứ gì tươi và thứ gì nặng bụng. Lúc ấy bạn để ý đồ ăn nhanh, bánh hamburger, bánh mỳ xúc xích, và xúc xích.</span>
+          </p>
+          <p class="ex-sent" data-sent="17">
+            <span class="ex-en">A weekend cook wants better flavor than yesterday’s fast routine. In that moment you notice <mark class="vocab" data-word="pea">pea</mark><span class="ipa">/piː/</span>, <mark class="vocab" data-word="bean">bean</mark><span class="ipa">/biːn/</span>, <mark class="vocab" data-word="mushroom">mushroom</mark><span class="ipa">/ˈmʌʃˌruːm/ , /ˈmʌʃˌrʊm/</span>, and <mark class="vocab" data-word="noodle">noodle</mark><span class="ipa">/ˈnuːdəl/</span>.</span>
+            <span class="ex-vi">Người nấu cuối tuần muốn hương vị ngon hơn thói quen vội của hôm trước. Lúc ấy bạn để ý đậu Hà Lan, đậu, nấm, và mì.</span>
+          </p>
+          <p class="ex-sent" data-sent="18">
+            <span class="ex-en">The restaurant board lists comfort plates beside lighter options. In that moment you notice <mark class="vocab" data-word="dessert">dessert</mark><span class="ipa">/dɪˈzɝːt/</span>, <mark class="vocab" data-word="hot chocolate">hot chocolate</mark><span class="ipa">/hɑːt ˈtʃɑːklɪt/</span>, <mark class="vocab" data-word="pie">pie</mark><span class="ipa">/paɪ/</span>, and <mark class="vocab" data-word="sauce">sauce</mark><span class="ipa">/sɔːs/</span>.</span>
+            <span class="ex-vi">Bảng nhà hàng liệt kê món ấm bụng cạnh những lựa chọn nhẹ hơn. Lúc ấy bạn để ý món tráng miệng, sô cô la nóng, bánh, và nước sốt.</span>
+          </p>
+          <p class="ex-sent" data-sent="19">
+            <span class="ex-en">Farm stalls add color with produce you can smell from the street. In that moment you notice <mark class="vocab" data-word="toast">toast</mark><span class="ipa">/toʊst/</span>, <mark class="vocab" data-word="delicious">delicious</mark><span class="ipa">/dɪˈlɪʃəs/</span>, <mark class="vocab" data-word="flavor">flavor</mark><span class="ipa">/ˈfleɪvɚ/</span>, and <mark class="vocab" data-word="fresh">fresh</mark><span class="ipa">/frɛʃ/</span>.</span>
+            <span class="ex-vi">Quầy nông sản thêm màu sắc với nông sản thơm từ ngoài đường. Lúc ấy bạn để ý bánh mì nướng, ngon, hương vị, và tươi.</span>
+          </p>
+          <p class="ex-sent" data-sent="20">
+            <span class="ex-en">After ordering, everyone compares what tasted fresh and what felt heavy. In that moment you notice <mark class="vocab" data-word="salty">salty</mark><span class="ipa">/ˈsɔːlti/</span>, <mark class="vocab" data-word="sweet">sweet</mark><span class="ipa">/swiːt/</span>, <mark class="vocab" data-word="junk food">junk food</mark><span class="ipa">/ˈdʒʌŋk fuːd/</span>, and <mark class="vocab" data-word="potato chip">potato chip</mark><span class="ipa">/pəˈteɪtoʊ ˈtʃɪp/</span>.</span>
+            <span class="ex-vi">Sau khi gọi món, mọi người so xem thứ gì tươi và thứ gì nặng bụng. Lúc ấy bạn để ý mặn, ngọt, đồ ăn vặt không lành mạnh, và khoai tây chiên.</span>
+          </p>
+          <p class="ex-sent" data-sent="21">
+            <span class="ex-en">A weekend cook wants better flavor than yesterday’s fast routine. In that moment you notice <mark class="vocab" data-word="French fries">French fries</mark><span class="ipa">/ˈfrɛntʃ ˌfraɪz/</span>, <mark class="vocab" data-word="snack">snack</mark><span class="ipa">/snæk/</span>, <mark class="vocab" data-word="to order">order</mark><span class="ipa">/ˈɔrdɚ/</span>, and <mark class="vocab" data-word="to serve">serve</mark><span class="ipa">/sɝːv/</span>.</span>
+            <span class="ex-vi">Người nấu cuối tuần muốn hương vị ngon hơn thói quen vội của hôm trước. Lúc ấy bạn để ý khoai tây chiên, đồ ăn nhẹ, gọi, và phục vụ.</span>
+          </p>
+          <p class="ex-sent" data-sent="22">
+            <span class="ex-en">The restaurant board lists comfort plates beside lighter options. In that moment you notice <mark class="vocab" data-word="taste">taste</mark><span class="ipa">/teɪst/</span>, <mark class="vocab" data-word="sour">sour</mark><span class="ipa">/ˈsaʊɚ/</span>, <mark class="vocab" data-word="to fry">fry</mark><span class="ipa">/fraɪ/</span>, and <mark class="vocab" data-word="dark chocolate">dark chocolate</mark><span class="ipa">/dɑːrk ˈtʃɑːklɪt/</span>.</span>
+            <span class="ex-vi">Bảng nhà hàng liệt kê món ấm bụng cạnh những lựa chọn nhẹ hơn. Lúc ấy bạn để ý vị, chua, chiên, và sô cô la đen.</span>
+          </p>
+          <p class="ex-sent" data-sent="23">
+            <span class="ex-en">Farm stalls add color with produce you can smell from the street. In that moment you notice <mark class="vocab" data-word="coffee shop">coffee shop</mark><span class="ipa">/ˈkɑːfi ˌʃɑːp/</span>.</span>
+            <span class="ex-vi">Quầy nông sản thêm màu sắc với nông sản thơm từ ngoài đường. Lúc ấy bạn để ý quán cà phê.</span>
+          </p>
+      </section>
+
+      <section class="ex-vocab">
+        <h2>Word checklist · 89</h2>
+        <ul class="ex-vocab-list">
+          <li><mark class="vocab">farm</mark> <span class="ipa">/fɑrm/</span> — nông trại</li>
+          <li><mark class="vocab">farming</mark> <span class="ipa">/ˈfɑrmɪŋ/</span> — nông nghiệp</li>
+          <li><mark class="vocab">pick</mark> <span class="ipa">/pɪk/</span> — hái</li>
+          <li><mark class="vocab">plant</mark> <span class="ipa">/plænt/</span> — trồng</li>
+          <li><mark class="vocab">water</mark> <span class="ipa">/ˈwɑːtɚ/</span> — tưới nước</li>
+          <li><mark class="vocab">grow</mark> <span class="ipa">/ɡroʊ/</span> — trồng</li>
+          <li><mark class="vocab">produce</mark> <span class="ipa">/prəˈdus/</span> — sản xuất</li>
+          <li><mark class="vocab">feed</mark> <span class="ipa">/fiːd/</span> — cho ăn</li>
+          <li><mark class="vocab">strawberry</mark> <span class="ipa">/ˈstrɔˌbɛri/</span> — dâu tây</li>
+          <li><mark class="vocab">blueberry</mark> <span class="ipa">/ˈbluˌbɛri/</span> — việt quất</li>
+          <li><mark class="vocab">watermelon</mark> <span class="ipa">/ˈwɑtɚˌmɛlən/</span> — dưa hấu</li>
+          <li><mark class="vocab">pear</mark> <span class="ipa">/pɛr/</span> — lê</li>
+          <li><mark class="vocab">pineapple</mark> <span class="ipa">/ˈpaɪˌnæpəl/</span> — dứa</li>
+          <li><mark class="vocab">mango</mark> <span class="ipa">/ˈmæŋˌɡoʊ/</span> — xoài</li>
+          <li><mark class="vocab">kiwi</mark> <span class="ipa">/ˈkiːˌwiː/</span> — kiwi</li>
+          <li><mark class="vocab">avocado</mark> <span class="ipa">/ˌævəˈkɑdoʊ/</span> — bơ</li>
+          <li><mark class="vocab">grapefruit</mark> <span class="ipa">/ˈɡreɪpˌfruːt/</span> — bưởi</li>
+          <li><mark class="vocab">rose</mark> <span class="ipa">/roʊz/</span> — hoa hồng</li>
+          <li><mark class="vocab">lily</mark> <span class="ipa">/ˈlɪli/</span> — hoa loa kèn</li>
+          <li><mark class="vocab">orchid</mark> <span class="ipa">/ˈɔrˌkɪd/</span> — hoa lan</li>
+          <li><mark class="vocab">sunflower</mark> <span class="ipa">/ˈsʌnˌflaʊɚ/</span> — hoa hướng dương</li>
+          <li><mark class="vocab">cactus</mark> <span class="ipa">/ˈkæktəs/</span> — cây xương rồng</li>
+          <li><mark class="vocab">nut</mark> <span class="ipa">/nʌt/</span> — hạt</li>
+          <li><mark class="vocab">peanut</mark> <span class="ipa">/ˈpiːˌnʌt/</span> — đậu phộng</li>
+          <li><mark class="vocab">walnut</mark> <span class="ipa">/ˈwɔlˌnʌt/</span> — quả óc chó</li>
+          <li><mark class="vocab">hazelnut</mark> <span class="ipa">/ˈheɪzəlˌnʌt/</span> — hạt phỉ</li>
+          <li><mark class="vocab">almond</mark> <span class="ipa">/ˈɑːlˌmənd/</span> — hạnh nhân</li>
+          <li><mark class="vocab">pecan</mark> <span class="ipa">/pɪˈkæn/</span> — hạt hồ đào</li>
+          <li><mark class="vocab">hard</mark> <span class="ipa">/hɑrd/</span> — cứng</li>
+          <li><mark class="vocab">soft</mark> <span class="ipa">/sɑft/</span> — mềm</li>
+          <li><mark class="vocab">smell</mark> <span class="ipa">/smɛl/</span> — có mùi</li>
+          <li><mark class="vocab">taste</mark> <span class="ipa">/teɪst/</span> — nếm</li>
+          <li><mark class="vocab">pork</mark> <span class="ipa">/pɔrk/</span> — thịt lợn</li>
+          <li><mark class="vocab">beef</mark> <span class="ipa">/bif/</span> — thịt bò</li>
+          <li><mark class="vocab">lamb</mark> <span class="ipa">/læm/</span> — thịt cừu non</li>
+          <li><mark class="vocab">tuna</mark> <span class="ipa">/ˈtuːnə/</span> — cá ngừ</li>
+          <li><mark class="vocab">omelet</mark> <span class="ipa">/ˈɑmlɪt/</span> — trứng ốp la</li>
+          <li><mark class="vocab">cookbook</mark> <span class="ipa">/ˈkʊkˌbʊk/</span> — sách dạy nấu ăn</li>
+          <li><mark class="vocab">grocery</mark> <span class="ipa">/ˈɡroʊsəri/</span> — tạp hóa</li>
+          <li><mark class="vocab">tip</mark> <span class="ipa">/tɪp/</span> — tiền boa</li>
+          <li><mark class="vocab">rest</mark> <span class="ipa">/rɛst/</span> — phần còn lại</li>
+          <li><mark class="vocab">leftovers</mark> <span class="ipa">/ˈlɛftˌoʊvɚz/</span> — đồ thừa</li>
+          <li><mark class="vocab">steak</mark> <span class="ipa">/steɪk/</span> — bít tết</li>
+          <li><mark class="vocab">well-done</mark> <span class="ipa">/ˈwɛl ˈdʌn/</span> — chín kỹ</li>
+          <li><mark class="vocab">medium</mark> <span class="ipa">/ˈmiːdiəm/</span> — vừa</li>
+          <li><mark class="vocab">rare</mark> <span class="ipa">/rɛr/</span> — tái</li>
+          <li><mark class="vocab">watery</mark> <span class="ipa">/ˈwɑːtɚi/</span> — loãng</li>
+          <li><mark class="vocab">spicy</mark> <span class="ipa">/ˈspaɪsi/</span> — cay</li>
+          <li><mark class="vocab">bitter</mark> <span class="ipa">/ˈbɪtɚ/</span> — đắng</li>
+          <li><mark class="vocab">vegetarian</mark> <span class="ipa">/ˌvɛʤəˈtɛriən/</span> — người ăn chay</li>
+          <li><mark class="vocab">vegan</mark> <span class="ipa">/ˈviːɡən/</span> — người ăn chay thuần</li>
+          <li><mark class="vocab">broccoli</mark> <span class="ipa">/ˈbrɑkəli/</span> — bông cải xanh</li>
+          <li><mark class="vocab">celery</mark> <span class="ipa">/ˈsɛləri/</span> — cần tây</li>
+          <li><mark class="vocab">eggplant</mark> <span class="ipa">/ˈɛɡˌplænt/</span> — cà tím</li>
+          <li><mark class="vocab">cabbage</mark> <span class="ipa">/ˈkæbɪʤ/</span> — bắp cải</li>
+          <li><mark class="vocab">spinach</mark> <span class="ipa">/ˈspɪnɪʧ/</span> — rau bina</li>
+          <li><mark class="vocab">tip</mark> <span class="ipa">/tɪp/</span> — cho tiền boa</li>
+          <li><mark class="vocab">menu</mark> <span class="ipa">/ˈmɛnjuː/</span> — thực đơn</li>
+          <li><mark class="vocab">order</mark> <span class="ipa">/ˈɔrdɚ/</span> — đơn đặt hàng</li>
+          <li><mark class="vocab">pasta</mark> <span class="ipa">/ˈpɑːstə/</span> — mì ống</li>
+          <li><mark class="vocab">fast food</mark> <span class="ipa">/fæst fuːd/</span> — đồ ăn nhanh</li>
+          <li><mark class="vocab">hamburger</mark> <span class="ipa">/ˈhæmˌbɝːɡɚ/</span> — bánh hamburger</li>
+          <li><mark class="vocab">hot dog</mark> <span class="ipa">/ˈhɑːt ˌdɔːɡ/</span> — bánh mỳ xúc xích</li>
+          <li><mark class="vocab">sausage</mark> <span class="ipa">/ˈsɑːsɪdʒ/</span> — xúc xích</li>
+          <li><mark class="vocab">pea</mark> <span class="ipa">/piː/</span> — đậu Hà Lan</li>
+          <li><mark class="vocab">bean</mark> <span class="ipa">/biːn/</span> — đậu</li>
+          <li><mark class="vocab">mushroom</mark> <span class="ipa">/ˈmʌʃˌruːm/ , /ˈmʌʃˌrʊm/</span> — nấm</li>
+          <li><mark class="vocab">noodle</mark> <span class="ipa">/ˈnuːdəl/</span> — mì</li>
+          <li><mark class="vocab">dessert</mark> <span class="ipa">/dɪˈzɝːt/</span> — món tráng miệng</li>
+          <li><mark class="vocab">hot chocolate</mark> <span class="ipa">/hɑːt ˈtʃɑːklɪt/</span> — sô cô la nóng</li>
+          <li><mark class="vocab">pie</mark> <span class="ipa">/paɪ/</span> — bánh</li>
+          <li><mark class="vocab">sauce</mark> <span class="ipa">/sɔːs/</span> — nước sốt</li>
+          <li><mark class="vocab">toast</mark> <span class="ipa">/toʊst/</span> — bánh mì nướng</li>
+          <li><mark class="vocab">delicious</mark> <span class="ipa">/dɪˈlɪʃəs/</span> — ngon</li>
+          <li><mark class="vocab">flavor</mark> <span class="ipa">/ˈfleɪvɚ/</span> — hương vị</li>
+          <li><mark class="vocab">fresh</mark> <span class="ipa">/frɛʃ/</span> — tươi</li>
+          <li><mark class="vocab">salty</mark> <span class="ipa">/ˈsɔːlti/</span> — mặn</li>
+          <li><mark class="vocab">sweet</mark> <span class="ipa">/swiːt/</span> — ngọt</li>
+          <li><mark class="vocab">junk food</mark> <span class="ipa">/ˈdʒʌŋk fuːd/</span> — đồ ăn vặt không lành mạnh</li>
+          <li><mark class="vocab">potato chip</mark> <span class="ipa">/pəˈteɪtoʊ ˈtʃɪp/</span> — khoai tây chiên</li>
+          <li><mark class="vocab">French fries</mark> <span class="ipa">/ˈfrɛntʃ ˌfraɪz/</span> — khoai tây chiên</li>
+          <li><mark class="vocab">snack</mark> <span class="ipa">/snæk/</span> — đồ ăn nhẹ</li>
+          <li><mark class="vocab">order</mark> <span class="ipa">/ˈɔrdɚ/</span> — gọi</li>
+          <li><mark class="vocab">serve</mark> <span class="ipa">/sɝːv/</span> — phục vụ</li>
+          <li><mark class="vocab">taste</mark> <span class="ipa">/teɪst/</span> — vị</li>
+          <li><mark class="vocab">sour</mark> <span class="ipa">/ˈsaʊɚ/</span> — chua</li>
+          <li><mark class="vocab">fry</mark> <span class="ipa">/fraɪ/</span> — chiên</li>
+          <li><mark class="vocab">dark chocolate</mark> <span class="ipa">/dɑːrk ˈtʃɑːklɪt/</span> — sô cô la đen</li>
+          <li><mark class="vocab">coffee shop</mark> <span class="ipa">/ˈkɑːfi ˌʃɑːp/</span> — quán cà phê</li>
+        </ul>
+      </section>
+
+      <div class="docs-pager">
+        <a href="../">← Food &amp; Drink</a>
+        <a href="../../">All topics →</a>
+      </div>
+    </article>
+  </div>
+  <script src="../../../../js/docs.js"></script>
+  <script src="../../../../js/exercise.js"></script>
+</body>
+</html>

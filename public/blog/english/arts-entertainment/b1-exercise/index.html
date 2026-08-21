@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>B1 Exercise · Arts &amp; Entertainment — The Quiet Corner</title>
+  <meta name="description" content="B1 reading exercise for Arts &amp; Entertainment vocabulary with IPA and bilingual sentences.">
+  <link rel="icon" href="../../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../../"><span>✦</span> The Quiet Corner <span>✦</span></a>
+    <nav class="docs-series">
+      <a href="../../../../blog/web-security/">DevSecOps</a>
+      <a href="../../../../blog/kubestronaut/">Kubestronaut</a>
+      <a class="active" href="../../">English</a>
+    </nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-nav="english" data-docs-root="../../" data-active="arts-entertainment">
+      <div class="docs-nav-label">English</div>
+      <ul class="docs-nav" id="docsNav">
+        <li><a href="../../">All topics</a></li>
+        <li><a href="../">Arts &amp; Entertainment</a></li>
+        <li><a class="active" href="./">B1 Exercise</a></li>
+      </ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../../">Home</a>
+        <span>›</span>
+        <a href="../../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../../">English</a>
+        <span>›</span>
+        <a href="../">Arts &amp; Entertainment</a>
+        <span>›</span>
+        <span>B1 Exercise</span>
+      </div>
+
+      <div class="vocab-topic-hero">
+        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 72 72' fill='none'%3E%3Crect width='72' height='72' rx='14' fill='%230b1220'/%3E%3Crect x='16' y='14' width='40' height='46' rx='6' stroke='%2322d3ee' stroke-width='2.5'/%3E%3Cpath d='M24 28h24M24 36h24M24 44h16' stroke='%23e4e4e7' stroke-width='2.5' stroke-linecap='round'/%3E%3Cpath d='M48 48l6 2-2 6-8-8 4 0z' fill='%2322d3ee'/%3E%3C/svg%3E" alt="" width="112" height="112">
+        <div>
+          <h1>B1 Exercise · Arts &amp; Entertainment</h1>
+          <p class="lede">Reading passage with every new word from this level’s LanGeek lessons — IPA, highlights, sentence translation, and free TTS.</p>
+          <div class="docs-meta">
+            <span><strong>Words:</strong> 117</span>
+            <span><strong>Lessons:</strong> Art · Literature · Movie and Theater · Music</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="ex-toolbar" id="exToolbar">
+        <label class="ex-toggle"><input type="checkbox" id="togHighlight" checked> Highlights</label>
+        <label class="ex-toggle"><input type="checkbox" id="togIpa" checked> IPA</label>
+        <label class="ex-toggle"><input type="checkbox" id="togVi"> Dịch câu (VI)</label>
+        <span class="ex-sep"></span>
+        <label class="ex-voice">Voice
+          <select id="voiceSelect" aria-label="TTS voice"></select>
+        </label>
+        <label class="ex-voice">Speed
+          <input id="rateRange" type="range" min="0.7" max="1.15" step="0.05" value="0.95">
+          <span id="rateVal">0.95</span>
+        </label>
+        <button type="button" class="ex-btn primary" id="btnPlay">▶ Read passage</button>
+        <button type="button" class="ex-btn" id="btnStop">Stop</button>
+      </div>
+      
+      <section class="ex-passage" id="passage" data-tts-root>
+          <p class="ex-sent" data-sent="1">
+            <span class="ex-en">In this B1 Arts & Entertainment passage, notice <mark class="vocab" data-word="artwork">artwork</mark><span class="ipa">/ˈɑrtˌwɝːk/</span>, <mark class="vocab" data-word="art form">art form</mark><span class="ipa">/ˈɑrt fɔrm/</span>, <mark class="vocab" data-word="architecture">architecture</mark><span class="ipa">/ˈɑrkɪˌtɛkʧɚ/</span>, and <mark class="vocab" data-word="sculpture">sculpture</mark><span class="ipa">/ˈskʌlpʧɚ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về Arts &amp; Entertainment, hãy để ý tác phẩm nghệ thuật, hình thức nghệ thuật, kiến trúc, và điêu khắc.</span>
+          </p>
+          <p class="ex-sent" data-sent="2">
+            <span class="ex-en">In this B1 Arts & Entertainment passage, notice <mark class="vocab" data-word="graphic arts">graphic arts</mark><span class="ipa">/ˈɡræfɪk ɑrts/</span>, <mark class="vocab" data-word="the performing arts">the performing arts</mark><span class="ipa">/pɚˈfɔrmɪŋ ɑrts/</span>, <mark class="vocab" data-word="to decorate">decorate</mark><span class="ipa">/ˈdɛkəˌreɪt/</span>, and <mark class="vocab" data-word="to design">design</mark><span class="ipa">/dɪˈzaɪn/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về Arts &amp; Entertainment, hãy để ý nghệ thuật đồ họa, nghệ thuật biểu diễn, trang trí, và thiết kế.</span>
+          </p>
+          <p class="ex-sent" data-sent="3">
+            <span class="ex-en">In this B1 Arts & Entertainment passage, notice <mark class="vocab" data-word="to <mark class="vocab" data-word="sketch">sketch</mark><span class="ipa">/skɛʧ/</span>">sketch</mark><span class="ipa">/skɛʧ/</span>, sketch, <mark class="vocab" data-word="exhibition">exhibition</mark><span class="ipa">/ˌɛksɪˈbɪʃən/</span>, and <mark class="vocab" data-word="fake">fake</mark><span class="ipa">/feɪk/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về Arts &amp; Entertainment, hãy để ý phác thảo, bản phác thảo, triển lãm, và giả.</span>
+          </p>
+          <p class="ex-sent" data-sent="4">
+            <span class="ex-en">In this B1 Arts & Entertainment passage, notice <mark class="vocab" data-word="finger-painting">finger-painting</mark><span class="ipa">/ˈfɪŋɡɚ ˈpeɪntɪŋ/</span>, <mark class="vocab" data-word="frame">frame</mark><span class="ipa">/freɪm/</span>, <mark class="vocab" data-word="graffiti">graffiti</mark><span class="ipa">/ɡrəˈfiːti/</span>, and <mark class="vocab" data-word="to illustrate">illustrate</mark><span class="ipa">/ˈɪləˌstreɪt/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về Arts &amp; Entertainment, hãy để ý vẽ bằng ngón tay, khung, bức vẽ graffiti, và minh họa.</span>
+          </p>
+          <p class="ex-sent" data-sent="5">
+            <span class="ex-en">In this B1 Arts & Entertainment passage, notice <mark class="vocab" data-word="illustration">illustration</mark><span class="ipa">/ˌɪləˈstreɪʃən/</span>, <mark class="vocab" data-word="to paint">paint</mark><span class="ipa">/peɪnt/</span>, <mark class="vocab" data-word="portrait">portrait</mark><span class="ipa">/ˈpɔrtrɪt/</span>, and <mark class="vocab" data-word="statue">statue</mark><span class="ipa">/ˈstæʧuː/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về Arts &amp; Entertainment, hãy để ý minh họa, vẽ, chân dung, và tượng.</span>
+          </p>
+          <p class="ex-sent" data-sent="6">
+            <span class="ex-en">In this B1 Arts & Entertainment passage, notice <mark class="vocab" data-word="studio">studio</mark><span class="ipa">/ˈstuːdiˌoʊ/</span>, <mark class="vocab" data-word="symbol">symbol</mark><span class="ipa">/ˈsɪmbəl/</span>, <mark class="vocab" data-word="master">master</mark><span class="ipa">/ˈmæstər/</span>, and <mark class="vocab" data-word="style">style</mark><span class="ipa">/staɪl/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về Arts &amp; Entertainment, hãy để ý xưởng vẽ, biểu tượng, bậc thầy, và phong cách.</span>
+          </p>
+          <p class="ex-sent" data-sent="7">
+            <span class="ex-en">In this B1 Arts & Entertainment passage, notice <mark class="vocab" data-word="collage">collage</mark><span class="ipa">/kəˈlɑʒ/</span>, <mark class="vocab" data-word="the visual arts">the visual arts</mark><span class="ipa">/ˈvɪʒuəl ɑrts/</span>, <mark class="vocab" data-word="author">author</mark><span class="ipa">/ˈɑːθɚ/</span>, and <mark class="vocab" data-word="bestseller">bestseller</mark><span class="ipa">/ˌbɛstˈsɛlɚ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về Arts &amp; Entertainment, hãy để ý cắt dán, nghệ thuật thị giác, tác giả, và sách bán chạy nhất.</span>
+          </p>
+          <p class="ex-sent" data-sent="8">
+            <span class="ex-en">In this B1 Arts & Entertainment passage, notice <mark class="vocab" data-word="biography">biography</mark><span class="ipa">/baɪˈɑɡɹəfi/</span>, <mark class="vocab" data-word="fairy tale">fairy tale</mark><span class="ipa">/ˈfɛri teɪl/</span>, <mark class="vocab" data-word="fiction">fiction</mark><span class="ipa">/ˈfɪkʃən/</span>, and <mark class="vocab" data-word="non-fiction">non-fiction</mark><span class="ipa">/nɑnˈfɪkʃən/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về Arts &amp; Entertainment, hãy để ý tiểu sử, truyện cổ tích, hư cấu, và phi hư cấu.</span>
+          </p>
+          <p class="ex-sent" data-sent="9">
+            <span class="ex-en">In this B1 Arts & Entertainment passage, notice <mark class="vocab" data-word="introduction">introduction</mark><span class="ipa">/ˌɪntrəˈdʌkʃən/</span>, <mark class="vocab" data-word="metaphor">metaphor</mark><span class="ipa">/ˈmɛtəˌfɔr/</span>, <mark class="vocab" data-word="mystery">mystery</mark><span class="ipa">/ˈmɪstəri/</span>, and <mark class="vocab" data-word="myth">myth</mark><span class="ipa">/mɪθ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về Arts &amp; Entertainment, hãy để ý giới thiệu, ẩn dụ, bí ẩn, và thần thoại.</span>
+          </p>
+          <p class="ex-sent" data-sent="10">
+            <span class="ex-en">In this B1 Arts & Entertainment passage, notice <mark class="vocab" data-word="plot">plot</mark><span class="ipa">/plɑt/</span>, <mark class="vocab" data-word="poem">poem</mark><span class="ipa">/ˈpoʊəm/</span>, <mark class="vocab" data-word="poetry">poetry</mark><span class="ipa">/ˈpoʊətri/</span>, and <mark class="vocab" data-word="quotation">quotation</mark><span class="ipa">/kwoʊˈteɪʃən/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về Arts &amp; Entertainment, hãy để ý cốt truyện, bài thơ, thơ ca, và trích dẫn.</span>
+          </p>
+          <p class="ex-sent" data-sent="11">
+            <span class="ex-en">In this B1 Arts & Entertainment passage, notice <mark class="vocab" data-word="to quote">quote</mark><span class="ipa">/kwoʊt/</span>, <mark class="vocab" data-word="to review">review</mark><span class="ipa">/rɪˈvjuː/</span>, <mark class="vocab" data-word="setting">setting</mark><span class="ipa">/ˈsɛtɪŋ/</span>, and <mark class="vocab" data-word="short story">short story</mark><span class="ipa">/ʃɔrt ˈstɔri/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về Arts &amp; Entertainment, hãy để ý trích dẫn, đánh giá, bối cảnh, và truyện ngắn.</span>
+          </p>
+          <p class="ex-sent" data-sent="12">
+            <span class="ex-en">In this B1 Arts & Entertainment passage, notice <mark class="vocab" data-word="storyline">storyline</mark><span class="ipa">/ˈstɔriˌlaɪn/</span>, <mark class="vocab" data-word="storyteller">storyteller</mark><span class="ipa">/ˈstɔriˌtɛlɚ/</span>, <mark class="vocab" data-word="tale">tale</mark><span class="ipa">/teɪl/</span>, and <mark class="vocab" data-word="title">title</mark><span class="ipa">/ˈtaɪtəl/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về Arts &amp; Entertainment, hãy để ý cốt truyện, người kể chuyện, truyện, và tiêu đề.</span>
+          </p>
+          <p class="ex-sent" data-sent="13">
+            <span class="ex-en">In this B1 Arts & Entertainment passage, notice <mark class="vocab" data-word="verse">verse</mark><span class="ipa">/vɝːs/</span>, <mark class="vocab" data-word="writing">writing</mark><span class="ipa">/ˈraɪtɪŋ/</span>, <mark class="vocab" data-word="Gothic">Gothic</mark><span class="ipa">/ˈɡɑːθɪk/</span>, and <mark class="vocab" data-word="literary">literary</mark><span class="ipa">/ˈlɪtəˌrɛri/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về Arts &amp; Entertainment, hãy để ý câu thơ, tác phẩm viết, gothic, và văn học.</span>
+          </p>
+          <p class="ex-sent" data-sent="14">
+            <span class="ex-en">In this B1 Arts & Entertainment passage, notice <mark class="vocab" data-word="poetic">poetic</mark><span class="ipa">/poʊˈɛtɪk/</span>, <mark class="vocab" data-word="young adult">young adult</mark><span class="ipa">/ˈjʌŋ əˈdʌlt/</span>, <mark class="vocab" data-word="play">play</mark><span class="ipa">/pleɪ/</span>, and <mark class="vocab" data-word="action movie">action movie</mark><span class="ipa">/ˈækʃən ˈmuːvi/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về Arts &amp; Entertainment, hãy để ý thơ mộng, người trưởng thành trẻ, vở kịch, và phim hành động.</span>
+          </p>
+          <p class="ex-sent" data-sent="15">
+            <span class="ex-en">In this B1 Arts & Entertainment passage, notice <mark class="vocab" data-word="animation">animation</mark><span class="ipa">/ˌænɪˈmeɪʃən/</span>, <mark class="vocab" data-word="audition">audition</mark><span class="ipa">/ɑˈdɪʃən/</span>, <mark class="vocab" data-word="box office">box office</mark><span class="ipa">/bɑks ˈɑːfɪs/</span>, and <mark class="vocab" data-word="cast">cast</mark><span class="ipa">/kæst/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về Arts &amp; Entertainment, hãy để ý hoạt hình, buổi thử giọng, quầy vé, và dàn diễn viên.</span>
+          </p>
+          <p class="ex-sent" data-sent="16">
+            <span class="ex-en">In this B1 Arts & Entertainment passage, notice <mark class="vocab" data-word="classic">classic</mark><span class="ipa">/ˈklæsɪk/</span>, <mark class="vocab" data-word="clown">clown</mark><span class="ipa">/klaʊn/</span>, <mark class="vocab" data-word="critic">critic</mark><span class="ipa">/ˈkrɪtɪk/</span>, and <mark class="vocab" data-word="criticism">criticism</mark><span class="ipa">/ˈkrɪtɪˌsɪzəm/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về Arts &amp; Entertainment, hãy để ý cổ điển, chú hề, nhà phê bình, và phê bình.</span>
+          </p>
+          <p class="ex-sent" data-sent="17">
+            <span class="ex-en">In this B1 Arts & Entertainment passage, notice <mark class="vocab" data-word="to direct">direct</mark><span class="ipa">/daɪˈrɛkt/ , /dəˈrɛkt/</span>, <mark class="vocab" data-word="dramatic">dramatic</mark><span class="ipa">/drəˈmætɪk/</span>, <mark class="vocab" data-word="to edit">edit</mark><span class="ipa">/ˈɛdɪt/</span>, and <mark class="vocab" data-word="editor">editor</mark><span class="ipa">/ˈɛdɪtɚ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về Arts &amp; Entertainment, hãy để ý đạo diễn, kịch tính, dựng phim, và biên tập viên.</span>
+          </p>
+          <p class="ex-sent" data-sent="18">
+            <span class="ex-en">In this B1 Arts & Entertainment passage, notice <mark class="vocab" data-word="entertaining">entertaining</mark><span class="ipa">/ˌɛntɚˈteɪnɪŋ/</span>, <mark class="vocab" data-word="film festival">film festival</mark><span class="ipa">/fɪlm ˈfɛstɪvəl/</span>, <mark class="vocab" data-word="genre">genre</mark><span class="ipa">/ˈʒɑnrə/</span>, and <mark class="vocab" data-word="part">part</mark><span class="ipa">/pɑːrt/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về Arts &amp; Entertainment, hãy để ý giải trí, liên hoan phim, thể loại, và vai trò.</span>
+          </p>
+          <p class="ex-sent" data-sent="19">
+            <span class="ex-en">In this B1 Arts & Entertainment passage, notice <mark class="vocab" data-word="to produce">produce</mark><span class="ipa">/prəˈdus/</span>, <mark class="vocab" data-word="melodrama">melodrama</mark><span class="ipa">/ˈmɛloʊˌdrɑmə/</span>, <mark class="vocab" data-word="movie maker">movie maker</mark><span class="ipa">/ˈmuːvi ˈmeɪkɚ/</span>, and <mark class="vocab" data-word="musical">musical</mark><span class="ipa">/ˈmjuːzɪkəl/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về Arts &amp; Entertainment, hãy để ý sản xuất, kịch lâm li, nhà làm phim, và nhạc kịch.</span>
+          </p>
+          <p class="ex-sent" data-sent="20">
+            <span class="ex-en">In this B1 Arts & Entertainment passage, notice <mark class="vocab" data-word="script">script</mark><span class="ipa">/skrɪpt/</span>, <mark class="vocab" data-word="scriptwriter">scriptwriter</mark><span class="ipa">/ˈskrɪptˌraɪtɚ/</span>, <mark class="vocab" data-word="silent movie">silent movie</mark><span class="ipa">/ˈsaɪlənt ˈmuːvi/</span>, and <mark class="vocab" data-word="special effects">special effects</mark><span class="ipa">/ˈspɛʃəl ɪˈfɛkts/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về Arts &amp; Entertainment, hãy để ý kịch bản, nhà biên kịch, phim câm, và hiệu ứng đặc biệt.</span>
+          </p>
+          <p class="ex-sent" data-sent="21">
+            <span class="ex-en">In this B1 Arts & Entertainment passage, notice <mark class="vocab" data-word="stage">stage</mark><span class="ipa">/steɪʤ/</span>, <mark class="vocab" data-word="star">star</mark><span class="ipa">/stɑr/</span>, <mark class="vocab" data-word="superhero">superhero</mark><span class="ipa">/ˈsuːpɚˌhɪroʊ/</span>, and <mark class="vocab" data-word="superstar">superstar</mark><span class="ipa">/ˈsuːpɚˌstɑr/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về Arts &amp; Entertainment, hãy để ý sân khấu, ngôi sao, siêu anh hùng, và siêu sao.</span>
+          </p>
+          <p class="ex-sent" data-sent="22">
+            <span class="ex-en">In this B1 Arts & Entertainment passage, notice <mark class="vocab" data-word="demigod">demigod</mark><span class="ipa">/ˈdɛmiˌɡɑd/</span>, <mark class="vocab" data-word="thriller">thriller</mark><span class="ipa">/ˈθrɪlɚ/</span>, <mark class="vocab" data-word="tragedy">tragedy</mark><span class="ipa">/ˈtræʤədi/</span>, and <mark class="vocab" data-word="trailer">trailer</mark><span class="ipa">/ˈtreɪlɚ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về Arts &amp; Entertainment, hãy để ý bán thần, phim ly kỳ, bi kịch, và trailer.</span>
+          </p>
+          <p class="ex-sent" data-sent="23">
+            <span class="ex-en">In this B1 Arts & Entertainment passage, notice <mark class="vocab" data-word="villain">villain</mark><span class="ipa">/ˈvɪlən/</span>, <mark class="vocab" data-word="Western">Western</mark><span class="ipa">/ˈwɛstɚn/</span>, <mark class="vocab" data-word="keyboard">keyboard</mark><span class="ipa">/ˈkiˌbɔrd/</span>, and <mark class="vocab" data-word="trumpet">trumpet</mark><span class="ipa">/ˈtrʌmpɪt/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về Arts &amp; Entertainment, hãy để ý kẻ phản diện, phim cao bồi, bàn phím, và kèn trumpet.</span>
+          </p>
+          <p class="ex-sent" data-sent="24">
+            <span class="ex-en">In this B1 Arts & Entertainment passage, notice <mark class="vocab" data-word="accordion">accordion</mark><span class="ipa">/əˈkɔrdiən/</span>, <mark class="vocab" data-word="cello">cello</mark><span class="ipa">/ˈʧɛloʊ/</span>, <mark class="vocab" data-word="clarinet">clarinet</mark><span class="ipa">/ˌklɛrəˈnɛt/</span>, and <mark class="vocab" data-word="flute">flute</mark><span class="ipa">/fluːt/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về Arts &amp; Entertainment, hãy để ý phong cầm, đàn cello, kèn clarinet, và sáo.</span>
+          </p>
+          <p class="ex-sent" data-sent="25">
+            <span class="ex-en">In this B1 Arts & Entertainment passage, notice <mark class="vocab" data-word="saxophone">saxophone</mark><span class="ipa">/ˈsæksəˌfoʊn/</span>, <mark class="vocab" data-word="band">band</mark><span class="ipa">/bænd/</span>, <mark class="vocab" data-word="choir">choir</mark><span class="ipa">/ˈkwaɪɚ/</span>, and <mark class="vocab" data-word="conductor">conductor</mark><span class="ipa">/kənˈdʌktɚ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về Arts &amp; Entertainment, hãy để ý kèn saxophone, ban nhạc, dàn hợp xướng, và nhạc trưởng.</span>
+          </p>
+          <p class="ex-sent" data-sent="26">
+            <span class="ex-en">In this B1 Arts & Entertainment passage, notice <mark class="vocab" data-word="performer">performer</mark><span class="ipa">/pɚˈfɔrmɚ/</span>, <mark class="vocab" data-word="pianist">pianist</mark><span class="ipa">/piˈænɪst/</span>, <mark class="vocab" data-word="violinist">violinist</mark><span class="ipa">/ˌvaɪəˈlɪnɪst/</span>, and <mark class="vocab" data-word="drummer">drummer</mark><span class="ipa">/ˈdrʌmɚ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về Arts &amp; Entertainment, hãy để ý nghệ sĩ biểu diễn, nghệ sĩ dương cầm, nghệ sĩ vĩ cầm, và người chơi trống.</span>
+          </p>
+          <p class="ex-sent" data-sent="27">
+            <span class="ex-en">In this B1 Arts & Entertainment passage, notice <mark class="vocab" data-word="album">album</mark><span class="ipa">/ˈælbəm/</span>, <mark class="vocab" data-word="tape">tape</mark><span class="ipa">/teɪp/</span>, <mark class="vocab" data-word="to tour">tour</mark><span class="ipa">/tʊr/</span>, and <mark class="vocab" data-word="to publish">publish</mark><span class="ipa">/ˈpʌblɪʃ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về Arts &amp; Entertainment, hãy để ý album, băng, lưu diễn, và phát hành.</span>
+          </p>
+          <p class="ex-sent" data-sent="28">
+            <span class="ex-en">In this B1 Arts & Entertainment passage, notice <mark class="vocab" data-word="chorus">chorus</mark><span class="ipa">/ˈkɔrəs/</span>, <mark class="vocab" data-word="beat">beat</mark><span class="ipa">/biːt/</span>, <mark class="vocab" data-word="lyric">lyric</mark><span class="ipa">/ˈlɪrɪk/</span>, and <mark class="vocab" data-word="MP3 player">MP3 player</mark><span class="ipa">/ˈɛmˌpiˌθri ˈpleɪɚ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về Arts &amp; Entertainment, hãy để ý điệp khúc, nhịp điệu, lời bài hát, và máy nghe nhạc MP3.</span>
+          </p>
+          <p class="ex-sent" data-sent="29">
+            <span class="ex-en">In this B1 Arts & Entertainment passage, notice <mark class="vocab" data-word="headphones">headphones</mark><span class="ipa">/ˈhɛdˌfoʊnz/</span>, <mark class="vocab" data-word="microphone">microphone</mark><span class="ipa">/ˈmaɪkrəˌfoʊn/</span>, <mark class="vocab" data-word="karaoke">karaoke</mark><span class="ipa">/ˌkæriˈoʊki/</span>, and <mark class="vocab" data-word="disc jockey">disc jockey</mark><span class="ipa">/dˈɪsk dʒˈɑːki/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về Arts &amp; Entertainment, hãy để ý tai nghe, micro, karaoke, và người phát thanh viên.</span>
+          </p>
+          <p class="ex-sent" data-sent="30">
+            <span class="ex-en">In this B1 Arts & Entertainment passage, notice <mark class="vocab" data-word="songwriter">songwriter</mark><span class="ipa">/ˈsɔŋˌraɪtɚ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về Arts &amp; Entertainment, hãy để ý nhạc sĩ.</span>
+          </p>
+      </section>
+
+      <section class="ex-vocab">
+        <h2>Word checklist · 117</h2>
+        <ul class="ex-vocab-list">
+          <li><mark class="vocab">artwork</mark> <span class="ipa">/ˈɑrtˌwɝːk/</span> — tác phẩm nghệ thuật</li>
+          <li><mark class="vocab">art form</mark> <span class="ipa">/ˈɑrt fɔrm/</span> — hình thức nghệ thuật</li>
+          <li><mark class="vocab">architecture</mark> <span class="ipa">/ˈɑrkɪˌtɛkʧɚ/</span> — kiến trúc</li>
+          <li><mark class="vocab">sculpture</mark> <span class="ipa">/ˈskʌlpʧɚ/</span> — điêu khắc</li>
+          <li><mark class="vocab">graphic arts</mark> <span class="ipa">/ˈɡræfɪk ɑrts/</span> — nghệ thuật đồ họa</li>
+          <li><mark class="vocab">the performing arts</mark> <span class="ipa">/pɚˈfɔrmɪŋ ɑrts/</span> — nghệ thuật biểu diễn</li>
+          <li><mark class="vocab">decorate</mark> <span class="ipa">/ˈdɛkəˌreɪt/</span> — trang trí</li>
+          <li><mark class="vocab">design</mark> <span class="ipa">/dɪˈzaɪn/</span> — thiết kế</li>
+          <li><mark class="vocab">sketch</mark> <span class="ipa">/skɛʧ/</span> — phác thảo</li>
+          <li><mark class="vocab">sketch</mark> <span class="ipa">/skɛʧ/</span> — bản phác thảo</li>
+          <li><mark class="vocab">exhibition</mark> <span class="ipa">/ˌɛksɪˈbɪʃən/</span> — triển lãm</li>
+          <li><mark class="vocab">fake</mark> <span class="ipa">/feɪk/</span> — giả</li>
+          <li><mark class="vocab">finger-painting</mark> <span class="ipa">/ˈfɪŋɡɚ ˈpeɪntɪŋ/</span> — vẽ bằng ngón tay</li>
+          <li><mark class="vocab">frame</mark> <span class="ipa">/freɪm/</span> — khung</li>
+          <li><mark class="vocab">graffiti</mark> <span class="ipa">/ɡrəˈfiːti/</span> — bức vẽ graffiti</li>
+          <li><mark class="vocab">illustrate</mark> <span class="ipa">/ˈɪləˌstreɪt/</span> — minh họa</li>
+          <li><mark class="vocab">illustration</mark> <span class="ipa">/ˌɪləˈstreɪʃən/</span> — minh họa</li>
+          <li><mark class="vocab">paint</mark> <span class="ipa">/peɪnt/</span> — vẽ</li>
+          <li><mark class="vocab">portrait</mark> <span class="ipa">/ˈpɔrtrɪt/</span> — chân dung</li>
+          <li><mark class="vocab">statue</mark> <span class="ipa">/ˈstæʧuː/</span> — tượng</li>
+          <li><mark class="vocab">studio</mark> <span class="ipa">/ˈstuːdiˌoʊ/</span> — xưởng vẽ</li>
+          <li><mark class="vocab">symbol</mark> <span class="ipa">/ˈsɪmbəl/</span> — biểu tượng</li>
+          <li><mark class="vocab">master</mark> <span class="ipa">/ˈmæstər/</span> — bậc thầy</li>
+          <li><mark class="vocab">style</mark> <span class="ipa">/staɪl/</span> — phong cách</li>
+          <li><mark class="vocab">collage</mark> <span class="ipa">/kəˈlɑʒ/</span> — cắt dán</li>
+          <li><mark class="vocab">the visual arts</mark> <span class="ipa">/ˈvɪʒuəl ɑrts/</span> — nghệ thuật thị giác</li>
+          <li><mark class="vocab">author</mark> <span class="ipa">/ˈɑːθɚ/</span> — tác giả</li>
+          <li><mark class="vocab">bestseller</mark> <span class="ipa">/ˌbɛstˈsɛlɚ/</span> — sách bán chạy nhất</li>
+          <li><mark class="vocab">biography</mark> <span class="ipa">/baɪˈɑɡɹəfi/</span> — tiểu sử</li>
+          <li><mark class="vocab">fairy tale</mark> <span class="ipa">/ˈfɛri teɪl/</span> — truyện cổ tích</li>
+          <li><mark class="vocab">fiction</mark> <span class="ipa">/ˈfɪkʃən/</span> — hư cấu</li>
+          <li><mark class="vocab">non-fiction</mark> <span class="ipa">/nɑnˈfɪkʃən/</span> — phi hư cấu</li>
+          <li><mark class="vocab">introduction</mark> <span class="ipa">/ˌɪntrəˈdʌkʃən/</span> — giới thiệu</li>
+          <li><mark class="vocab">metaphor</mark> <span class="ipa">/ˈmɛtəˌfɔr/</span> — ẩn dụ</li>
+          <li><mark class="vocab">mystery</mark> <span class="ipa">/ˈmɪstəri/</span> — bí ẩn</li>
+          <li><mark class="vocab">myth</mark> <span class="ipa">/mɪθ/</span> — thần thoại</li>
+          <li><mark class="vocab">plot</mark> <span class="ipa">/plɑt/</span> — cốt truyện</li>
+          <li><mark class="vocab">poem</mark> <span class="ipa">/ˈpoʊəm/</span> — bài thơ</li>
+          <li><mark class="vocab">poetry</mark> <span class="ipa">/ˈpoʊətri/</span> — thơ ca</li>
+          <li><mark class="vocab">quotation</mark> <span class="ipa">/kwoʊˈteɪʃən/</span> — trích dẫn</li>
+          <li><mark class="vocab">quote</mark> <span class="ipa">/kwoʊt/</span> — trích dẫn</li>
+          <li><mark class="vocab">review</mark> <span class="ipa">/rɪˈvjuː/</span> — đánh giá</li>
+          <li><mark class="vocab">setting</mark> <span class="ipa">/ˈsɛtɪŋ/</span> — bối cảnh</li>
+          <li><mark class="vocab">short story</mark> <span class="ipa">/ʃɔrt ˈstɔri/</span> — truyện ngắn</li>
+          <li><mark class="vocab">storyline</mark> <span class="ipa">/ˈstɔriˌlaɪn/</span> — cốt truyện</li>
+          <li><mark class="vocab">storyteller</mark> <span class="ipa">/ˈstɔriˌtɛlɚ/</span> — người kể chuyện</li>
+          <li><mark class="vocab">tale</mark> <span class="ipa">/teɪl/</span> — truyện</li>
+          <li><mark class="vocab">title</mark> <span class="ipa">/ˈtaɪtəl/</span> — tiêu đề</li>
+          <li><mark class="vocab">verse</mark> <span class="ipa">/vɝːs/</span> — câu thơ</li>
+          <li><mark class="vocab">writing</mark> <span class="ipa">/ˈraɪtɪŋ/</span> — tác phẩm viết</li>
+          <li><mark class="vocab">Gothic</mark> <span class="ipa">/ˈɡɑːθɪk/</span> — gothic</li>
+          <li><mark class="vocab">literary</mark> <span class="ipa">/ˈlɪtəˌrɛri/</span> — văn học</li>
+          <li><mark class="vocab">poetic</mark> <span class="ipa">/poʊˈɛtɪk/</span> — thơ mộng</li>
+          <li><mark class="vocab">young adult</mark> <span class="ipa">/ˈjʌŋ əˈdʌlt/</span> — người trưởng thành trẻ</li>
+          <li><mark class="vocab">play</mark> <span class="ipa">/pleɪ/</span> — vở kịch</li>
+          <li><mark class="vocab">action movie</mark> <span class="ipa">/ˈækʃən ˈmuːvi/</span> — phim hành động</li>
+          <li><mark class="vocab">animation</mark> <span class="ipa">/ˌænɪˈmeɪʃən/</span> — hoạt hình</li>
+          <li><mark class="vocab">audition</mark> <span class="ipa">/ɑˈdɪʃən/</span> — buổi thử giọng</li>
+          <li><mark class="vocab">box office</mark> <span class="ipa">/bɑks ˈɑːfɪs/</span> — quầy vé</li>
+          <li><mark class="vocab">cast</mark> <span class="ipa">/kæst/</span> — dàn diễn viên</li>
+          <li><mark class="vocab">classic</mark> <span class="ipa">/ˈklæsɪk/</span> — cổ điển</li>
+          <li><mark class="vocab">clown</mark> <span class="ipa">/klaʊn/</span> — chú hề</li>
+          <li><mark class="vocab">critic</mark> <span class="ipa">/ˈkrɪtɪk/</span> — nhà phê bình</li>
+          <li><mark class="vocab">criticism</mark> <span class="ipa">/ˈkrɪtɪˌsɪzəm/</span> — phê bình</li>
+          <li><mark class="vocab">direct</mark> <span class="ipa">/daɪˈrɛkt/ , /dəˈrɛkt/</span> — đạo diễn</li>
+          <li><mark class="vocab">dramatic</mark> <span class="ipa">/drəˈmætɪk/</span> — kịch tính</li>
+          <li><mark class="vocab">edit</mark> <span class="ipa">/ˈɛdɪt/</span> — dựng phim</li>
+          <li><mark class="vocab">editor</mark> <span class="ipa">/ˈɛdɪtɚ/</span> — biên tập viên</li>
+          <li><mark class="vocab">entertaining</mark> <span class="ipa">/ˌɛntɚˈteɪnɪŋ/</span> — giải trí</li>
+          <li><mark class="vocab">film festival</mark> <span class="ipa">/fɪlm ˈfɛstɪvəl/</span> — liên hoan phim</li>
+          <li><mark class="vocab">genre</mark> <span class="ipa">/ˈʒɑnrə/</span> — thể loại</li>
+          <li><mark class="vocab">part</mark> <span class="ipa">/pɑːrt/</span> — vai trò</li>
+          <li><mark class="vocab">produce</mark> <span class="ipa">/prəˈdus/</span> — sản xuất</li>
+          <li><mark class="vocab">melodrama</mark> <span class="ipa">/ˈmɛloʊˌdrɑmə/</span> — kịch lâm li</li>
+          <li><mark class="vocab">movie maker</mark> <span class="ipa">/ˈmuːvi ˈmeɪkɚ/</span> — nhà làm phim</li>
+          <li><mark class="vocab">musical</mark> <span class="ipa">/ˈmjuːzɪkəl/</span> — nhạc kịch</li>
+          <li><mark class="vocab">script</mark> <span class="ipa">/skrɪpt/</span> — kịch bản</li>
+          <li><mark class="vocab">scriptwriter</mark> <span class="ipa">/ˈskrɪptˌraɪtɚ/</span> — nhà biên kịch</li>
+          <li><mark class="vocab">silent movie</mark> <span class="ipa">/ˈsaɪlənt ˈmuːvi/</span> — phim câm</li>
+          <li><mark class="vocab">special effects</mark> <span class="ipa">/ˈspɛʃəl ɪˈfɛkts/</span> — hiệu ứng đặc biệt</li>
+          <li><mark class="vocab">stage</mark> <span class="ipa">/steɪʤ/</span> — sân khấu</li>
+          <li><mark class="vocab">star</mark> <span class="ipa">/stɑr/</span> — ngôi sao</li>
+          <li><mark class="vocab">superhero</mark> <span class="ipa">/ˈsuːpɚˌhɪroʊ/</span> — siêu anh hùng</li>
+          <li><mark class="vocab">superstar</mark> <span class="ipa">/ˈsuːpɚˌstɑr/</span> — siêu sao</li>
+          <li><mark class="vocab">demigod</mark> <span class="ipa">/ˈdɛmiˌɡɑd/</span> — bán thần</li>
+          <li><mark class="vocab">thriller</mark> <span class="ipa">/ˈθrɪlɚ/</span> — phim ly kỳ</li>
+          <li><mark class="vocab">tragedy</mark> <span class="ipa">/ˈtræʤədi/</span> — bi kịch</li>
+          <li><mark class="vocab">trailer</mark> <span class="ipa">/ˈtreɪlɚ/</span> — trailer</li>
+          <li><mark class="vocab">villain</mark> <span class="ipa">/ˈvɪlən/</span> — kẻ phản diện</li>
+          <li><mark class="vocab">Western</mark> <span class="ipa">/ˈwɛstɚn/</span> — phim cao bồi</li>
+          <li><mark class="vocab">keyboard</mark> <span class="ipa">/ˈkiˌbɔrd/</span> — bàn phím</li>
+          <li><mark class="vocab">trumpet</mark> <span class="ipa">/ˈtrʌmpɪt/</span> — kèn trumpet</li>
+          <li><mark class="vocab">accordion</mark> <span class="ipa">/əˈkɔrdiən/</span> — phong cầm</li>
+          <li><mark class="vocab">cello</mark> <span class="ipa">/ˈʧɛloʊ/</span> — đàn cello</li>
+          <li><mark class="vocab">clarinet</mark> <span class="ipa">/ˌklɛrəˈnɛt/</span> — kèn clarinet</li>
+          <li><mark class="vocab">flute</mark> <span class="ipa">/fluːt/</span> — sáo</li>
+          <li><mark class="vocab">saxophone</mark> <span class="ipa">/ˈsæksəˌfoʊn/</span> — kèn saxophone</li>
+          <li><mark class="vocab">band</mark> <span class="ipa">/bænd/</span> — ban nhạc</li>
+          <li><mark class="vocab">choir</mark> <span class="ipa">/ˈkwaɪɚ/</span> — dàn hợp xướng</li>
+          <li><mark class="vocab">conductor</mark> <span class="ipa">/kənˈdʌktɚ/</span> — nhạc trưởng</li>
+          <li><mark class="vocab">performer</mark> <span class="ipa">/pɚˈfɔrmɚ/</span> — nghệ sĩ biểu diễn</li>
+          <li><mark class="vocab">pianist</mark> <span class="ipa">/piˈænɪst/</span> — nghệ sĩ dương cầm</li>
+          <li><mark class="vocab">violinist</mark> <span class="ipa">/ˌvaɪəˈlɪnɪst/</span> — nghệ sĩ vĩ cầm</li>
+          <li><mark class="vocab">drummer</mark> <span class="ipa">/ˈdrʌmɚ/</span> — người chơi trống</li>
+          <li><mark class="vocab">album</mark> <span class="ipa">/ˈælbəm/</span> — album</li>
+          <li><mark class="vocab">tape</mark> <span class="ipa">/teɪp/</span> — băng</li>
+          <li><mark class="vocab">tour</mark> <span class="ipa">/tʊr/</span> — lưu diễn</li>
+          <li><mark class="vocab">publish</mark> <span class="ipa">/ˈpʌblɪʃ/</span> — phát hành</li>
+          <li><mark class="vocab">chorus</mark> <span class="ipa">/ˈkɔrəs/</span> — điệp khúc</li>
+          <li><mark class="vocab">beat</mark> <span class="ipa">/biːt/</span> — nhịp điệu</li>
+          <li><mark class="vocab">lyric</mark> <span class="ipa">/ˈlɪrɪk/</span> — lời bài hát</li>
+          <li><mark class="vocab">MP3 player</mark> <span class="ipa">/ˈɛmˌpiˌθri ˈpleɪɚ/</span> — máy nghe nhạc MP3</li>
+          <li><mark class="vocab">headphones</mark> <span class="ipa">/ˈhɛdˌfoʊnz/</span> — tai nghe</li>
+          <li><mark class="vocab">microphone</mark> <span class="ipa">/ˈmaɪkrəˌfoʊn/</span> — micro</li>
+          <li><mark class="vocab">karaoke</mark> <span class="ipa">/ˌkæriˈoʊki/</span> — karaoke</li>
+          <li><mark class="vocab">disc jockey</mark> <span class="ipa">/dˈɪsk dʒˈɑːki/</span> — người phát thanh viên</li>
+          <li><mark class="vocab">songwriter</mark> <span class="ipa">/ˈsɔŋˌraɪtɚ/</span> — nhạc sĩ</li>
+        </ul>
+      </section>
+
+      <div class="docs-pager">
+        <a href="../">← Arts &amp; Entertainment</a>
+        <a href="../../">All topics →</a>
+      </div>
+    </article>
+  </div>
+  <script src="../../../../js/docs.js"></script>
+  <script src="../../../../js/exercise.js"></script>
+</body>
+</html>

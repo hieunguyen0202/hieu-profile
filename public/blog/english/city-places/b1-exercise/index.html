@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>B1 Exercise · City &amp; Places — The Quiet Corner</title>
+  <meta name="description" content="B1 reading exercise for City &amp; Places vocabulary with IPA and bilingual sentences.">
+  <link rel="icon" href="../../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../../"><span>✦</span> The Quiet Corner <span>✦</span></a>
+    <nav class="docs-series">
+      <a href="../../../../blog/web-security/">DevSecOps</a>
+      <a href="../../../../blog/kubestronaut/">Kubestronaut</a>
+      <a class="active" href="../../">English</a>
+    </nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-nav="english" data-docs-root="../../" data-active="city-places">
+      <div class="docs-nav-label">English</div>
+      <ul class="docs-nav" id="docsNav">
+        <li><a href="../../">All topics</a></li>
+        <li><a href="../">City &amp; Places</a></li>
+        <li><a class="active" href="./">B1 Exercise</a></li>
+      </ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../../">Home</a>
+        <span>›</span>
+        <a href="../../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../../">English</a>
+        <span>›</span>
+        <a href="../">City &amp; Places</a>
+        <span>›</span>
+        <span>B1 Exercise</span>
+      </div>
+
+      <div class="vocab-topic-hero">
+        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 72 72' fill='none'%3E%3Crect width='72' height='72' rx='14' fill='%230b1220'/%3E%3Crect x='16' y='14' width='40' height='46' rx='6' stroke='%2322d3ee' stroke-width='2.5'/%3E%3Cpath d='M24 28h24M24 36h24M24 44h16' stroke='%23e4e4e7' stroke-width='2.5' stroke-linecap='round'/%3E%3Cpath d='M48 48l6 2-2 6-8-8 4 0z' fill='%2322d3ee'/%3E%3C/svg%3E" alt="" width="112" height="112">
+        <div>
+          <h1>B1 Exercise · City &amp; Places</h1>
+          <p class="lede">Reading passage with every new word from this level’s LanGeek lessons — IPA, highlights, sentence translation, and free TTS.</p>
+          <div class="docs-meta">
+            <span><strong>Words:</strong> 33</span>
+            <span><strong>Lessons:</strong> City and the Countryside</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="ex-toolbar" id="exToolbar">
+        <label class="ex-toggle"><input type="checkbox" id="togHighlight" checked> Highlights</label>
+        <label class="ex-toggle"><input type="checkbox" id="togIpa" checked> IPA</label>
+        <label class="ex-toggle"><input type="checkbox" id="togVi"> Dịch câu (VI)</label>
+        <span class="ex-sep"></span>
+        <label class="ex-voice">Voice
+          <select id="voiceSelect" aria-label="TTS voice"></select>
+        </label>
+        <label class="ex-voice">Speed
+          <input id="rateRange" type="range" min="0.7" max="1.15" step="0.05" value="0.95">
+          <span id="rateVal">0.95</span>
+        </label>
+        <button type="button" class="ex-btn primary" id="btnPlay">▶ Read passage</button>
+        <button type="button" class="ex-btn" id="btnStop">Stop</button>
+      </div>
+      
+      <section class="ex-passage" id="passage" data-tts-root>
+          <p class="ex-sent" data-sent="1">
+            <span class="ex-en">In this B1 City & Places passage, notice <mark class="vocab" data-word="cafe">cafe</mark><span class="ipa">/kæˈfeɪ/</span>, <mark class="vocab" data-word="gallery">gallery</mark><span class="ipa">/ˈɡæləri/</span>, <mark class="vocab" data-word="nightclub">nightclub</mark><span class="ipa">/ˈnaɪtˌklʌb/</span>, and <mark class="vocab" data-word="fire station">fire station</mark><span class="ipa">/ˈfaɪr ˌsteɪʃən/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về City &amp; Places, hãy để ý quán cà phê, phòng trưng bày, hộp đêm, và trạm cứu hỏa.</span>
+          </p>
+          <p class="ex-sent" data-sent="2">
+            <span class="ex-en">In this B1 City & Places passage, notice <mark class="vocab" data-word="gym">gym</mark><span class="ipa">/ʤɪm/</span>, <mark class="vocab" data-word="playground">playground</mark><span class="ipa">/ˈpleɪˌɡraʊnd/</span>, <mark class="vocab" data-word="barbershop">barbershop</mark><span class="ipa">/ˈbɑrbɚˌʃɑp/</span>, and <mark class="vocab" data-word="urban">urban</mark><span class="ipa">/ˈɝbən/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về City &amp; Places, hãy để ý phòng tập thể hình, sân chơi, tiệm cắt tóc nam, và đô thị.</span>
+          </p>
+          <p class="ex-sent" data-sent="3">
+            <span class="ex-en">In this B1 City & Places passage, notice <mark class="vocab" data-word="suburb">suburb</mark><span class="ipa">/ˈsʌbɝb/</span>, <mark class="vocab" data-word="outskirts">outskirts</mark><span class="ipa">/ˈaʊtˌskɝts/</span>, <mark class="vocab" data-word="uptown">uptown</mark><span class="ipa">/ˈʌpˌtaʊn/</span>, and <mark class="vocab" data-word="inner city">inner city</mark><span class="ipa">/ˈɪnɚ ˈsɪti/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về City &amp; Places, hãy để ý ngoại ô, ngoại ô, khu dân cư, và khu vực nội thành.</span>
+          </p>
+          <p class="ex-sent" data-sent="4">
+            <span class="ex-en">In this B1 City & Places passage, notice <mark class="vocab" data-word="community">community</mark><span class="ipa">/kəˈmjuːnɪti/</span>, <mark class="vocab" data-word="commuter">commuter</mark><span class="ipa">/kəˈmjuːtɚ/</span>, <mark class="vocab" data-word="population">population</mark><span class="ipa">/ˌpɑpjəˈleɪʃən/</span>, and <mark class="vocab" data-word="housing">housing</mark><span class="ipa">/ˈhaʊzɪŋ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về City &amp; Places, hãy để ý cộng đồng, người đi làm, dân số, và nhà ở.</span>
+          </p>
+          <p class="ex-sent" data-sent="5">
+            <span class="ex-en">In this B1 City & Places passage, notice <mark class="vocab" data-word="parking lot">parking lot</mark><span class="ipa">/ˈpɑrkɪŋ ˌlɑt/</span>, <mark class="vocab" data-word="road sign">road sign</mark><span class="ipa">/ˈroʊd ˌsaɪn/</span>, <mark class="vocab" data-word="pedestrian">pedestrian</mark><span class="ipa">/pəˈdɛstriən/</span>, and <mark class="vocab" data-word="street light">street light</mark><span class="ipa">/ˈstriːt ˌlaɪt/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về City &amp; Places, hãy để ý bãi đậu xe, biển báo giao thông, người đi bộ, và đèn đường.</span>
+          </p>
+          <p class="ex-sent" data-sent="6">
+            <span class="ex-en">In this B1 City & Places passage, notice <mark class="vocab" data-word="lane">lane</mark><span class="ipa">/leɪn/</span>, <mark class="vocab" data-word="overpass">overpass</mark><span class="ipa">/ˈoʊvɚˌpæs/</span>, <mark class="vocab" data-word="crossroad">crossroad</mark><span class="ipa">/ˈkrɑsˌroʊd/</span>, and <mark class="vocab" data-word="farmland">farmland</mark><span class="ipa">/ˈfɑrmˌlænd/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về City &amp; Places, hãy để ý lối nhỏ, cầu vượt, ngã tư, và đất canh tác.</span>
+          </p>
+          <p class="ex-sent" data-sent="7">
+            <span class="ex-en">In this B1 City & Places passage, notice <mark class="vocab" data-word="grassland">grassland</mark><span class="ipa">/ˈɡræsˌlænd/</span>, <mark class="vocab" data-word="county">county</mark><span class="ipa">/ˈkaʊnti/</span>, <mark class="vocab" data-word="orchard">orchard</mark><span class="ipa">/ˈɔrʧɚd/</span>, and <mark class="vocab" data-word="well">well</mark><span class="ipa">/wɛl/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về City &amp; Places, hãy để ý đồng cỏ, quận, vườn cây ăn quả, và giếng.</span>
+          </p>
+          <p class="ex-sent" data-sent="8">
+            <span class="ex-en">In this B1 City & Places passage, notice <mark class="vocab" data-word="pizzeria">pizzeria</mark><span class="ipa">/ˌpitsəˈriːə/</span>, <mark class="vocab" data-word="dam">dam</mark><span class="ipa">/dæm/</span>, <mark class="vocab" data-word="sidewalk">sidewalk</mark><span class="ipa">/ˈsaɪdˌwɑk/</span>, and <mark class="vocab" data-word="homeland">homeland</mark><span class="ipa">/ˈhoʊmˌlænd/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về City &amp; Places, hãy để ý tiệm bánh pizza, đập, vỉa hè, và quê hương.</span>
+          </p>
+          <p class="ex-sent" data-sent="9">
+            <span class="ex-en">In this B1 City & Places passage, notice <mark class="vocab" data-word="square">square</mark><span class="ipa">/skwɛr/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về City &amp; Places, hãy để ý quảng trường.</span>
+          </p>
+      </section>
+
+      <section class="ex-vocab">
+        <h2>Word checklist · 33</h2>
+        <ul class="ex-vocab-list">
+          <li><mark class="vocab">cafe</mark> <span class="ipa">/kæˈfeɪ/</span> — quán cà phê</li>
+          <li><mark class="vocab">gallery</mark> <span class="ipa">/ˈɡæləri/</span> — phòng trưng bày</li>
+          <li><mark class="vocab">nightclub</mark> <span class="ipa">/ˈnaɪtˌklʌb/</span> — hộp đêm</li>
+          <li><mark class="vocab">fire station</mark> <span class="ipa">/ˈfaɪr ˌsteɪʃən/</span> — trạm cứu hỏa</li>
+          <li><mark class="vocab">gym</mark> <span class="ipa">/ʤɪm/</span> — phòng tập thể hình</li>
+          <li><mark class="vocab">playground</mark> <span class="ipa">/ˈpleɪˌɡraʊnd/</span> — sân chơi</li>
+          <li><mark class="vocab">barbershop</mark> <span class="ipa">/ˈbɑrbɚˌʃɑp/</span> — tiệm cắt tóc nam</li>
+          <li><mark class="vocab">urban</mark> <span class="ipa">/ˈɝbən/</span> — đô thị</li>
+          <li><mark class="vocab">suburb</mark> <span class="ipa">/ˈsʌbɝb/</span> — ngoại ô</li>
+          <li><mark class="vocab">outskirts</mark> <span class="ipa">/ˈaʊtˌskɝts/</span> — ngoại ô</li>
+          <li><mark class="vocab">uptown</mark> <span class="ipa">/ˈʌpˌtaʊn/</span> — khu dân cư</li>
+          <li><mark class="vocab">inner city</mark> <span class="ipa">/ˈɪnɚ ˈsɪti/</span> — khu vực nội thành</li>
+          <li><mark class="vocab">community</mark> <span class="ipa">/kəˈmjuːnɪti/</span> — cộng đồng</li>
+          <li><mark class="vocab">commuter</mark> <span class="ipa">/kəˈmjuːtɚ/</span> — người đi làm</li>
+          <li><mark class="vocab">population</mark> <span class="ipa">/ˌpɑpjəˈleɪʃən/</span> — dân số</li>
+          <li><mark class="vocab">housing</mark> <span class="ipa">/ˈhaʊzɪŋ/</span> — nhà ở</li>
+          <li><mark class="vocab">parking lot</mark> <span class="ipa">/ˈpɑrkɪŋ ˌlɑt/</span> — bãi đậu xe</li>
+          <li><mark class="vocab">road sign</mark> <span class="ipa">/ˈroʊd ˌsaɪn/</span> — biển báo giao thông</li>
+          <li><mark class="vocab">pedestrian</mark> <span class="ipa">/pəˈdɛstriən/</span> — người đi bộ</li>
+          <li><mark class="vocab">street light</mark> <span class="ipa">/ˈstriːt ˌlaɪt/</span> — đèn đường</li>
+          <li><mark class="vocab">lane</mark> <span class="ipa">/leɪn/</span> — lối nhỏ</li>
+          <li><mark class="vocab">overpass</mark> <span class="ipa">/ˈoʊvɚˌpæs/</span> — cầu vượt</li>
+          <li><mark class="vocab">crossroad</mark> <span class="ipa">/ˈkrɑsˌroʊd/</span> — ngã tư</li>
+          <li><mark class="vocab">farmland</mark> <span class="ipa">/ˈfɑrmˌlænd/</span> — đất canh tác</li>
+          <li><mark class="vocab">grassland</mark> <span class="ipa">/ˈɡræsˌlænd/</span> — đồng cỏ</li>
+          <li><mark class="vocab">county</mark> <span class="ipa">/ˈkaʊnti/</span> — quận</li>
+          <li><mark class="vocab">orchard</mark> <span class="ipa">/ˈɔrʧɚd/</span> — vườn cây ăn quả</li>
+          <li><mark class="vocab">well</mark> <span class="ipa">/wɛl/</span> — giếng</li>
+          <li><mark class="vocab">pizzeria</mark> <span class="ipa">/ˌpitsəˈriːə/</span> — tiệm bánh pizza</li>
+          <li><mark class="vocab">dam</mark> <span class="ipa">/dæm/</span> — đập</li>
+          <li><mark class="vocab">sidewalk</mark> <span class="ipa">/ˈsaɪdˌwɑk/</span> — vỉa hè</li>
+          <li><mark class="vocab">homeland</mark> <span class="ipa">/ˈhoʊmˌlænd/</span> — quê hương</li>
+          <li><mark class="vocab">square</mark> <span class="ipa">/skwɛr/</span> — quảng trường</li>
+        </ul>
+      </section>
+
+      <div class="docs-pager">
+        <a href="../">← City &amp; Places</a>
+        <a href="../../">All topics →</a>
+      </div>
+    </article>
+  </div>
+  <script src="../../../../js/docs.js"></script>
+  <script src="../../../../js/exercise.js"></script>
+</body>
+</html>

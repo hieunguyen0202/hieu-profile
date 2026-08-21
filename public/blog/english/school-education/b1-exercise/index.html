@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>B1 Exercise · School &amp; Education — The Quiet Corner</title>
+  <meta name="description" content="B1 reading exercise for School &amp; Education vocabulary with IPA and bilingual sentences.">
+  <link rel="icon" href="../../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../../"><span>✦</span> The Quiet Corner <span>✦</span></a>
+    <nav class="docs-series">
+      <a href="../../../../blog/web-security/">DevSecOps</a>
+      <a href="../../../../blog/kubestronaut/">Kubestronaut</a>
+      <a class="active" href="../../">English</a>
+    </nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-nav="english" data-docs-root="../../" data-active="school-education">
+      <div class="docs-nav-label">English</div>
+      <ul class="docs-nav" id="docsNav">
+        <li><a href="../../">All topics</a></li>
+        <li><a href="../">School &amp; Education</a></li>
+        <li><a class="active" href="./">B1 Exercise</a></li>
+      </ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../../">Home</a>
+        <span>›</span>
+        <a href="../../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../../">English</a>
+        <span>›</span>
+        <a href="../">School &amp; Education</a>
+        <span>›</span>
+        <span>B1 Exercise</span>
+      </div>
+
+      <div class="vocab-topic-hero">
+        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 72 72' fill='none'%3E%3Crect width='72' height='72' rx='14' fill='%230b1220'/%3E%3Crect x='16' y='14' width='40' height='46' rx='6' stroke='%2322d3ee' stroke-width='2.5'/%3E%3Cpath d='M24 28h24M24 36h24M24 44h16' stroke='%23e4e4e7' stroke-width='2.5' stroke-linecap='round'/%3E%3Cpath d='M48 48l6 2-2 6-8-8 4 0z' fill='%2322d3ee'/%3E%3C/svg%3E" alt="" width="112" height="112">
+        <div>
+          <h1>B1 Exercise · School &amp; Education</h1>
+          <p class="lede">Reading passage with every new word from this level’s LanGeek lessons — IPA, highlights, sentence translation, and free TTS.</p>
+          <div class="docs-meta">
+            <span><strong>Words:</strong> 57</span>
+            <span><strong>Lessons:</strong> Education · Fields of Study</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="ex-toolbar" id="exToolbar">
+        <label class="ex-toggle"><input type="checkbox" id="togHighlight" checked> Highlights</label>
+        <label class="ex-toggle"><input type="checkbox" id="togIpa" checked> IPA</label>
+        <label class="ex-toggle"><input type="checkbox" id="togVi"> Dịch câu (VI)</label>
+        <span class="ex-sep"></span>
+        <label class="ex-voice">Voice
+          <select id="voiceSelect" aria-label="TTS voice"></select>
+        </label>
+        <label class="ex-voice">Speed
+          <input id="rateRange" type="range" min="0.7" max="1.15" step="0.05" value="0.95">
+          <span id="rateVal">0.95</span>
+        </label>
+        <button type="button" class="ex-btn primary" id="btnPlay">▶ Read passage</button>
+        <button type="button" class="ex-btn" id="btnStop">Stop</button>
+      </div>
+      
+      <section class="ex-passage" id="passage" data-tts-root>
+          <p class="ex-sent" data-sent="1">
+            <span class="ex-en">In this B1 School & <mark class="vocab" data-word="education">education</mark><span class="ipa">/ˌɛdʒʊˈkeɪʃən/</span> passage, notice education, <mark class="vocab" data-word="to educate">educate</mark><span class="ipa">/ˈɛdʒʊˌkeɪt/</span>, <mark class="vocab" data-word="educational">educational</mark><span class="ipa">/ˌɛdʒʊˈkeɪʃənəl/</span>, and <mark class="vocab" data-word="educated">educated</mark><span class="ipa">/ˈɛdʒʊˌkeɪtɪd/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về School &amp; Education, hãy để ý giáo dục, giáo dục, giáo dục, và có học thức.</span>
+          </p>
+          <p class="ex-sent" data-sent="2">
+            <span class="ex-en">In this B1 School & Education passage, notice <mark class="vocab" data-word="academic">academic</mark><span class="ipa">/ˌækəˈdɛmɪk/</span>, <mark class="vocab" data-word="assignment">assignment</mark><span class="ipa">/əˈsaɪnmənt/</span>, <mark class="vocab" data-word="classwork">classwork</mark><span class="ipa">/ˈklæsˌwɝk/</span>, and <mark class="vocab" data-word="campus">campus</mark><span class="ipa">/ˈkæmpəs/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về School &amp; Education, hãy để ý học thuật, bài tập, bài tập trên lớp, và khuôn viên trường.</span>
+          </p>
+          <p class="ex-sent" data-sent="3">
+            <span class="ex-en">In this B1 School & Education passage, notice <mark class="vocab" data-word="diploma">diploma</mark><span class="ipa">/dɪˈploʊmə/</span>, <mark class="vocab" data-word="adult education">adult education</mark><span class="ipa">/əˈdʌlt ˌɛdʒʊˈkeɪʃən/</span>, <mark class="vocab" data-word="higher education">higher education</mark><span class="ipa">/ˈhaɪɚ ˌɛdʒʊˈkeɪʃən/</span>, and <mark class="vocab" data-word="private">private</mark><span class="ipa">/ˈpraɪvɪt/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về School &amp; Education, hãy để ý bằng tốt nghiệp, giáo dục người lớn, giáo dục đại học, và riêng tư.</span>
+          </p>
+          <p class="ex-sent" data-sent="4">
+            <span class="ex-en">In this B1 School & Education passage, notice <mark class="vocab" data-word="private school">private school</mark><span class="ipa">/ˈpraɪvɪt ˌskuːl/</span>, <mark class="vocab" data-word="kindergarten">kindergarten</mark><span class="ipa">/ˈkɪndɚˌɡɑrtən/</span>, <mark class="vocab" data-word="grad">grad</mark><span class="ipa">/ɡræd/</span>, and <mark class="vocab" data-word="to graduate">graduate</mark><span class="ipa">/ˈɡrædʒuˌeɪt/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về School &amp; Education, hãy để ý trường tư, nhà trẻ, người tốt nghiệp, và tốt nghiệp.</span>
+          </p>
+          <p class="ex-sent" data-sent="5">
+            <span class="ex-en">In this B1 School & Education passage, notice <mark class="vocab" data-word="undergraduate">undergraduate</mark><span class="ipa">/ˌʌndɚˈɡrædʒuət/</span>, <mark class="vocab" data-word="graduation">graduation</mark><span class="ipa">/ˌɡrædʒuˈeɪʃən/</span>, <mark class="vocab" data-word="degree">degree</mark><span class="ipa">/dɪˈɡriː/</span>, and <mark class="vocab" data-word="lecturer">lecturer</mark><span class="ipa">/ˈlɛktʃɚɚ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về School &amp; Education, hãy để ý sinh viên đại học, tốt nghiệp, bằng cấp, và giảng viên.</span>
+          </p>
+          <p class="ex-sent" data-sent="6">
+            <span class="ex-en">In this B1 School & Education passage, notice <mark class="vocab" data-word="pupil">pupil</mark><span class="ipa">/ˈpjuːpɪl/</span>, <mark class="vocab" data-word="period">period</mark><span class="ipa">/ˈpɪriəd/</span>, <mark class="vocab" data-word="to review">review</mark><span class="ipa">/rɪˈvjuː/</span>, and <mark class="vocab" data-word="to attend">attend</mark><span class="ipa">/əˈtɛnd/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về School &amp; Education, hãy để ý học sinh, tiết học, ôn tập, và tham dự.</span>
+          </p>
+          <p class="ex-sent" data-sent="7">
+            <span class="ex-en">In this B1 School & Education passage, notice <mark class="vocab" data-word="to drop out">drop out</mark><span class="ipa">/ˈdrɑp ˌaʊt/</span>, <mark class="vocab" data-word="to examine">examine</mark><span class="ipa">/ɪɡˈzæmɪn/</span>, <mark class="vocab" data-word="exercise">exercise</mark><span class="ipa">/ˈɛksɚˌsaɪz/</span>, and <mark class="vocab" data-word="examination">examination</mark><span class="ipa">/ɪɡˌzæməˈneɪʃən/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về School &amp; Education, hãy để ý bỏ học, kiểm tra, bài tập, và kỳ thi.</span>
+          </p>
+          <p class="ex-sent" data-sent="8">
+            <span class="ex-en">In this B1 School & Education passage, notice <mark class="vocab" data-word="quiz">quiz</mark><span class="ipa">/kwɪz/</span>, <mark class="vocab" data-word="tuition">tuition</mark><span class="ipa">/tuˈɪʃən/</span>, <mark class="vocab" data-word="to [hit] the books">[hit] the books</mark><span class="ipa">/hɪt ðə ˈbʊks/</span>, and <mark class="vocab" data-word="genius">genius</mark><span class="ipa">/ˈdʒiːniəs/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về School &amp; Education, hãy để ý bài kiểm tra, học phí, lao vào học nghiêm túc, và thiên tài.</span>
+          </p>
+          <p class="ex-sent" data-sent="9">
+            <span class="ex-en">In this B1 School & Education passage, notice <mark class="vocab" data-word="accounting">accounting</mark><span class="ipa">/əˈkaʊntɪŋ/</span>, <mark class="vocab" data-word="art history">art history</mark><span class="ipa">/ɑrt ˈhɪstəri/</span>, <mark class="vocab" data-word="communication">communication</mark><span class="ipa">/kəˌmjuːnɪˈkeɪʃən/</span>, and <mark class="vocab" data-word="computer science">computer science</mark><span class="ipa">/kəmˈpjuːtɚ ˈsaɪəns/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về School &amp; Education, hãy để ý kế toán, lịch sử nghệ thuật, truyền thông, và khoa học máy tính.</span>
+          </p>
+          <p class="ex-sent" data-sent="10">
+            <span class="ex-en">In this B1 School & Education passage, notice <mark class="vocab" data-word="cultural studies">cultural studies</mark><span class="ipa">/ˈkʌlʧərəl ˈstʌdiz/</span>, <mark class="vocab" data-word="dentistry">dentistry</mark><span class="ipa">/ˈdɛntɪstri/</span>, <mark class="vocab" data-word="economics">economics</mark><span class="ipa">/ˌɛkəˈnɑmɪks/ , /ˌiːkəˈnɑmɪks/</span>, and <mark class="vocab" data-word="engineering">engineering</mark><span class="ipa">/ˌɛnʤɪˈnɪrɪŋ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về School &amp; Education, hãy để ý nghiên cứu văn hóa, nha khoa, kinh tế học, và kỹ thuật.</span>
+          </p>
+          <p class="ex-sent" data-sent="11">
+            <span class="ex-en">In this B1 School & Education passage, notice <mark class="vocab" data-word="finance">finance</mark><span class="ipa">/ˈfaɪnæns/ , /fɪˈnæns/</span>, <mark class="vocab" data-word="geology">geology</mark><span class="ipa">/ʤiˈɑlədʒi/</span>, <mark class="vocab" data-word="information technology">information technology</mark><span class="ipa">/ˌɪnfɚˈmeɪʃən tɛkˈnɑləʤi/</span>, and <mark class="vocab" data-word="law">law</mark><span class="ipa">/lɑ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về School &amp; Education, hãy để ý tài chính, địa chất học, công nghệ thông tin, và luật.</span>
+          </p>
+          <p class="ex-sent" data-sent="12">
+            <span class="ex-en">In this B1 School & Education passage, notice <mark class="vocab" data-word="linguistics">linguistics</mark><span class="ipa">/lɪŋˈɡwɪstɪks/</span>, <mark class="vocab" data-word="logic">logic</mark><span class="ipa">/ˈlɑʤɪk/</span>, <mark class="vocab" data-word="management">management</mark><span class="ipa">/ˈmænədʒmənt/, /ˈmænɪdʒmənt/</span>, and <mark class="vocab" data-word="medicine">medicine</mark><span class="ipa">/ˈmɛdɪsən/ , /ˈmɛdɪsɪn/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về School &amp; Education, hãy để ý ngôn ngữ học, logic, quản lý, và y học.</span>
+          </p>
+          <p class="ex-sent" data-sent="13">
+            <span class="ex-en">In this B1 School & Education passage, notice <mark class="vocab" data-word="nutrition">nutrition</mark><span class="ipa">/nuˈtrɪʃən/</span>, <mark class="vocab" data-word="philosophy">philosophy</mark><span class="ipa">/fəˈlɑsəfi/</span>, <mark class="vocab" data-word="physiology">physiology</mark><span class="ipa">/ˌfɪziˈɑlədʒi/</span>, and <mark class="vocab" data-word="political science">political science</mark><span class="ipa">/pəˈlɪtɪkəl ˈsaɪəns/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về School &amp; Education, hãy để ý dinh dưỡng, triết học, sinh lý học, và khoa học chính trị.</span>
+          </p>
+          <p class="ex-sent" data-sent="14">
+            <span class="ex-en">In this B1 School & Education passage, notice <mark class="vocab" data-word="psychiatry">psychiatry</mark><span class="ipa">/saɪˈkaɪətri/ , /sɪˈkaɪətri/</span>, <mark class="vocab" data-word="psychology">psychology</mark><span class="ipa">/saɪˈkɑlədʒi/</span>, <mark class="vocab" data-word="robotics">robotics</mark><span class="ipa">/roʊˈbɑtɪks/</span>, and <mark class="vocab" data-word="sociology">sociology</mark><span class="ipa">/ˌsoʊsiˈɑlədʒi/ , /ˌsoʊʃiˈɑlədʒi/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về School &amp; Education, hãy để ý tâm thần học, tâm lý học, ngành robot, và xã hội học.</span>
+          </p>
+          <p class="ex-sent" data-sent="15">
+            <span class="ex-en">In this B1 School & Education passage, notice <mark class="vocab" data-word="statistics">statistics</mark><span class="ipa">/stəˈtɪstɪks/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về School &amp; Education, hãy để ý thống kê.</span>
+          </p>
+      </section>
+
+      <section class="ex-vocab">
+        <h2>Word checklist · 57</h2>
+        <ul class="ex-vocab-list">
+          <li><mark class="vocab">education</mark> <span class="ipa">/ˌɛdʒʊˈkeɪʃən/</span> — giáo dục</li>
+          <li><mark class="vocab">educate</mark> <span class="ipa">/ˈɛdʒʊˌkeɪt/</span> — giáo dục</li>
+          <li><mark class="vocab">educational</mark> <span class="ipa">/ˌɛdʒʊˈkeɪʃənəl/</span> — giáo dục</li>
+          <li><mark class="vocab">educated</mark> <span class="ipa">/ˈɛdʒʊˌkeɪtɪd/</span> — có học thức</li>
+          <li><mark class="vocab">academic</mark> <span class="ipa">/ˌækəˈdɛmɪk/</span> — học thuật</li>
+          <li><mark class="vocab">assignment</mark> <span class="ipa">/əˈsaɪnmənt/</span> — bài tập</li>
+          <li><mark class="vocab">classwork</mark> <span class="ipa">/ˈklæsˌwɝk/</span> — bài tập trên lớp</li>
+          <li><mark class="vocab">campus</mark> <span class="ipa">/ˈkæmpəs/</span> — khuôn viên trường</li>
+          <li><mark class="vocab">diploma</mark> <span class="ipa">/dɪˈploʊmə/</span> — bằng tốt nghiệp</li>
+          <li><mark class="vocab">adult education</mark> <span class="ipa">/əˈdʌlt ˌɛdʒʊˈkeɪʃən/</span> — giáo dục người lớn</li>
+          <li><mark class="vocab">higher education</mark> <span class="ipa">/ˈhaɪɚ ˌɛdʒʊˈkeɪʃən/</span> — giáo dục đại học</li>
+          <li><mark class="vocab">private</mark> <span class="ipa">/ˈpraɪvɪt/</span> — riêng tư</li>
+          <li><mark class="vocab">private school</mark> <span class="ipa">/ˈpraɪvɪt ˌskuːl/</span> — trường tư</li>
+          <li><mark class="vocab">kindergarten</mark> <span class="ipa">/ˈkɪndɚˌɡɑrtən/</span> — nhà trẻ</li>
+          <li><mark class="vocab">grad</mark> <span class="ipa">/ɡræd/</span> — người tốt nghiệp</li>
+          <li><mark class="vocab">graduate</mark> <span class="ipa">/ˈɡrædʒuˌeɪt/</span> — tốt nghiệp</li>
+          <li><mark class="vocab">undergraduate</mark> <span class="ipa">/ˌʌndɚˈɡrædʒuət/</span> — sinh viên đại học</li>
+          <li><mark class="vocab">graduation</mark> <span class="ipa">/ˌɡrædʒuˈeɪʃən/</span> — tốt nghiệp</li>
+          <li><mark class="vocab">degree</mark> <span class="ipa">/dɪˈɡriː/</span> — bằng cấp</li>
+          <li><mark class="vocab">lecturer</mark> <span class="ipa">/ˈlɛktʃɚɚ/</span> — giảng viên</li>
+          <li><mark class="vocab">pupil</mark> <span class="ipa">/ˈpjuːpɪl/</span> — học sinh</li>
+          <li><mark class="vocab">period</mark> <span class="ipa">/ˈpɪriəd/</span> — tiết học</li>
+          <li><mark class="vocab">review</mark> <span class="ipa">/rɪˈvjuː/</span> — ôn tập</li>
+          <li><mark class="vocab">attend</mark> <span class="ipa">/əˈtɛnd/</span> — tham dự</li>
+          <li><mark class="vocab">drop out</mark> <span class="ipa">/ˈdrɑp ˌaʊt/</span> — bỏ học</li>
+          <li><mark class="vocab">examine</mark> <span class="ipa">/ɪɡˈzæmɪn/</span> — kiểm tra</li>
+          <li><mark class="vocab">exercise</mark> <span class="ipa">/ˈɛksɚˌsaɪz/</span> — bài tập</li>
+          <li><mark class="vocab">examination</mark> <span class="ipa">/ɪɡˌzæməˈneɪʃən/</span> — kỳ thi</li>
+          <li><mark class="vocab">quiz</mark> <span class="ipa">/kwɪz/</span> — bài kiểm tra</li>
+          <li><mark class="vocab">tuition</mark> <span class="ipa">/tuˈɪʃən/</span> — học phí</li>
+          <li><mark class="vocab">[hit] the books</mark> <span class="ipa">/hɪt ðə ˈbʊks/</span> — lao vào học nghiêm túc</li>
+          <li><mark class="vocab">genius</mark> <span class="ipa">/ˈdʒiːniəs/</span> — thiên tài</li>
+          <li><mark class="vocab">accounting</mark> <span class="ipa">/əˈkaʊntɪŋ/</span> — kế toán</li>
+          <li><mark class="vocab">art history</mark> <span class="ipa">/ɑrt ˈhɪstəri/</span> — lịch sử nghệ thuật</li>
+          <li><mark class="vocab">communication</mark> <span class="ipa">/kəˌmjuːnɪˈkeɪʃən/</span> — truyền thông</li>
+          <li><mark class="vocab">computer science</mark> <span class="ipa">/kəmˈpjuːtɚ ˈsaɪəns/</span> — khoa học máy tính</li>
+          <li><mark class="vocab">cultural studies</mark> <span class="ipa">/ˈkʌlʧərəl ˈstʌdiz/</span> — nghiên cứu văn hóa</li>
+          <li><mark class="vocab">dentistry</mark> <span class="ipa">/ˈdɛntɪstri/</span> — nha khoa</li>
+          <li><mark class="vocab">economics</mark> <span class="ipa">/ˌɛkəˈnɑmɪks/ , /ˌiːkəˈnɑmɪks/</span> — kinh tế học</li>
+          <li><mark class="vocab">engineering</mark> <span class="ipa">/ˌɛnʤɪˈnɪrɪŋ/</span> — kỹ thuật</li>
+          <li><mark class="vocab">finance</mark> <span class="ipa">/ˈfaɪnæns/ , /fɪˈnæns/</span> — tài chính</li>
+          <li><mark class="vocab">geology</mark> <span class="ipa">/ʤiˈɑlədʒi/</span> — địa chất học</li>
+          <li><mark class="vocab">information technology</mark> <span class="ipa">/ˌɪnfɚˈmeɪʃən tɛkˈnɑləʤi/</span> — công nghệ thông tin</li>
+          <li><mark class="vocab">law</mark> <span class="ipa">/lɑ/</span> — luật</li>
+          <li><mark class="vocab">linguistics</mark> <span class="ipa">/lɪŋˈɡwɪstɪks/</span> — ngôn ngữ học</li>
+          <li><mark class="vocab">logic</mark> <span class="ipa">/ˈlɑʤɪk/</span> — logic</li>
+          <li><mark class="vocab">management</mark> <span class="ipa">/ˈmænədʒmənt/, /ˈmænɪdʒmənt/</span> — quản lý</li>
+          <li><mark class="vocab">medicine</mark> <span class="ipa">/ˈmɛdɪsən/ , /ˈmɛdɪsɪn/</span> — y học</li>
+          <li><mark class="vocab">nutrition</mark> <span class="ipa">/nuˈtrɪʃən/</span> — dinh dưỡng</li>
+          <li><mark class="vocab">philosophy</mark> <span class="ipa">/fəˈlɑsəfi/</span> — triết học</li>
+          <li><mark class="vocab">physiology</mark> <span class="ipa">/ˌfɪziˈɑlədʒi/</span> — sinh lý học</li>
+          <li><mark class="vocab">political science</mark> <span class="ipa">/pəˈlɪtɪkəl ˈsaɪəns/</span> — khoa học chính trị</li>
+          <li><mark class="vocab">psychiatry</mark> <span class="ipa">/saɪˈkaɪətri/ , /sɪˈkaɪətri/</span> — tâm thần học</li>
+          <li><mark class="vocab">psychology</mark> <span class="ipa">/saɪˈkɑlədʒi/</span> — tâm lý học</li>
+          <li><mark class="vocab">robotics</mark> <span class="ipa">/roʊˈbɑtɪks/</span> — ngành robot</li>
+          <li><mark class="vocab">sociology</mark> <span class="ipa">/ˌsoʊsiˈɑlədʒi/ , /ˌsoʊʃiˈɑlədʒi/</span> — xã hội học</li>
+          <li><mark class="vocab">statistics</mark> <span class="ipa">/stəˈtɪstɪks/</span> — thống kê</li>
+        </ul>
+      </section>
+
+      <div class="docs-pager">
+        <a href="../">← School &amp; Education</a>
+        <a href="../../">All topics →</a>
+      </div>
+    </article>
+  </div>
+  <script src="../../../../js/docs.js"></script>
+  <script src="../../../../js/exercise.js"></script>
+</body>
+</html>

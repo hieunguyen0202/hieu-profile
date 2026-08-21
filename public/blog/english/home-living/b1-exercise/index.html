@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>B1 Exercise · Home &amp; Living — The Quiet Corner</title>
+  <meta name="description" content="B1 reading exercise for Home &amp; Living vocabulary with IPA and bilingual sentences.">
+  <link rel="icon" href="../../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../../"><span>✦</span> The Quiet Corner <span>✦</span></a>
+    <nav class="docs-series">
+      <a href="../../../../blog/web-security/">DevSecOps</a>
+      <a href="../../../../blog/kubestronaut/">Kubestronaut</a>
+      <a class="active" href="../../">English</a>
+    </nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-nav="english" data-docs-root="../../" data-active="home-living">
+      <div class="docs-nav-label">English</div>
+      <ul class="docs-nav" id="docsNav">
+        <li><a href="../../">All topics</a></li>
+        <li><a href="../">Home &amp; Living</a></li>
+        <li><a class="active" href="./">B1 Exercise</a></li>
+      </ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../../">Home</a>
+        <span>›</span>
+        <a href="../../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../../">English</a>
+        <span>›</span>
+        <a href="../">Home &amp; Living</a>
+        <span>›</span>
+        <span>B1 Exercise</span>
+      </div>
+
+      <div class="vocab-topic-hero">
+        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 72 72' fill='none'%3E%3Crect width='72' height='72' rx='14' fill='%230b1220'/%3E%3Crect x='16' y='14' width='40' height='46' rx='6' stroke='%2322d3ee' stroke-width='2.5'/%3E%3Cpath d='M24 28h24M24 36h24M24 44h16' stroke='%23e4e4e7' stroke-width='2.5' stroke-linecap='round'/%3E%3Cpath d='M48 48l6 2-2 6-8-8 4 0z' fill='%2322d3ee'/%3E%3C/svg%3E" alt="" width="112" height="112">
+        <div>
+          <h1>B1 Exercise · Home &amp; Living</h1>
+          <p class="lede">Reading passage with every new word from this level’s LanGeek lessons — IPA, highlights, sentence translation, and free TTS.</p>
+          <div class="docs-meta">
+            <span><strong>Words:</strong> 52</span>
+            <span><strong>Lessons:</strong> Home Appliances and Furniture · Houses and Buildings</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="ex-toolbar" id="exToolbar">
+        <label class="ex-toggle"><input type="checkbox" id="togHighlight" checked> Highlights</label>
+        <label class="ex-toggle"><input type="checkbox" id="togIpa" checked> IPA</label>
+        <label class="ex-toggle"><input type="checkbox" id="togVi"> Dịch câu (VI)</label>
+        <span class="ex-sep"></span>
+        <label class="ex-voice">Voice
+          <select id="voiceSelect" aria-label="TTS voice"></select>
+        </label>
+        <label class="ex-voice">Speed
+          <input id="rateRange" type="range" min="0.7" max="1.15" step="0.05" value="0.95">
+          <span id="rateVal">0.95</span>
+        </label>
+        <button type="button" class="ex-btn primary" id="btnPlay">▶ Read passage</button>
+        <button type="button" class="ex-btn" id="btnStop">Stop</button>
+      </div>
+      
+      <section class="ex-passage" id="passage" data-tts-root>
+          <p class="ex-sent" data-sent="1">
+            <span class="ex-en">In this B1 Home & Living passage, notice <mark class="vocab" data-word="bed sheet">bed sheet</mark><span class="ipa">/bɛd ʃiːt/</span>, <mark class="vocab" data-word="mattress">mattress</mark><span class="ipa">/ˈmætrəs/</span>, <mark class="vocab" data-word="radiator">radiator</mark><span class="ipa">/ˈreɪdiˌeɪtɚ/</span>, and <mark class="vocab" data-word="freezer">freezer</mark><span class="ipa">/ˈfriːzɚ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về Home &amp; Living, hãy để ý khăn trải giường, nệm, lò sưởi, và tủ đông.</span>
+          </p>
+          <p class="ex-sent" data-sent="2">
+            <span class="ex-en">In this B1 Home & Living passage, notice <mark class="vocab" data-word="kitchen hood">kitchen hood</mark><span class="ipa">/ˈkɪʧɪn hʊd/</span>, <mark class="vocab" data-word="garbage disposal">garbage disposal</mark><span class="ipa">/ˈɡɑrbɪʤ dɪˈspoʊzəl/</span>, <mark class="vocab" data-word="pressure cooker">pressure cooker</mark><span class="ipa">/ˈprɛʃɚ ˈkʊkɚ/</span>, and <mark class="vocab" data-word="food processor">food processor</mark><span class="ipa">/fuːd ˈprɑːsɛsɚ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về Home &amp; Living, hãy để ý máy hút mùi nhà bếp, máy nghiền rác, nồi áp suất, và máy xay thực phẩm.</span>
+          </p>
+          <p class="ex-sent" data-sent="3">
+            <span class="ex-en">In this B1 Home & Living passage, notice <mark class="vocab" data-word="juicer">juicer</mark><span class="ipa">/ˈʤuːsɚ/</span>, <mark class="vocab" data-word="flatware">flatware</mark><span class="ipa">/ˈflætˌwɛr/</span>, <mark class="vocab" data-word="chopstick">chopstick</mark><span class="ipa">/ˈʧɑːpˌstɪk/</span>, and <mark class="vocab" data-word="ladle">ladle</mark><span class="ipa">/ˈleɪdəl/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về Home &amp; Living, hãy để ý máy ép trái cây, bộ đồ ăn, đũa, và muỗng canh.</span>
+          </p>
+          <p class="ex-sent" data-sent="4">
+            <span class="ex-en">In this B1 Home & Living passage, notice <mark class="vocab" data-word="spatula">spatula</mark><span class="ipa">/ˈspætʃələ/</span>, <mark class="vocab" data-word="mower">mower</mark><span class="ipa">/ˈmoʊɚ/</span>, <mark class="vocab" data-word="faucet">faucet</mark><span class="ipa">/ˈfɑsɪt/</span>, and <mark class="vocab" data-word="vase">vase</mark><span class="ipa">/veɪs/ , /vɑz/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về Home &amp; Living, hãy để ý thìa trộn, máy cắt cỏ, vòi nước, và bình hoa.</span>
+          </p>
+          <p class="ex-sent" data-sent="5">
+            <span class="ex-en">In this B1 Home & Living passage, notice <mark class="vocab" data-word="blind">blind</mark><span class="ipa">/blaɪnd/</span>, <mark class="vocab" data-word="couch">couch</mark><span class="ipa">/kaʊʧ/</span>, <mark class="vocab" data-word="sofa bed">sofa bed</mark><span class="ipa">/ˈsoʊfə bɛd/</span>, and <mark class="vocab" data-word="hair straighteners">hair straighteners</mark><span class="ipa">/hɛr ˈstreɪtnɚz/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về Home &amp; Living, hãy để ý rèm, ghế sofa, ghế sofa giường, và máy duỗi tóc.</span>
+          </p>
+          <p class="ex-sent" data-sent="6">
+            <span class="ex-en">In this B1 Home & Living passage, notice <mark class="vocab" data-word="thermostat">thermostat</mark><span class="ipa">/ˈθɝːmoʊˌstæt/</span>, <mark class="vocab" data-word="pillow">pillow</mark><span class="ipa">/ˈpɪloʊ/</span>, <mark class="vocab" data-word="brush">brush</mark><span class="ipa">/brʌʃ/</span>, and <mark class="vocab" data-word="microwave">microwave</mark><span class="ipa">/ˈmaɪkroʊˌweɪv/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về Home &amp; Living, hãy để ý bộ điều nhiệt, gối, bàn chải, và lò vi sóng.</span>
+          </p>
+          <p class="ex-sent" data-sent="7">
+            <span class="ex-en">In this B1 Home & Living passage, notice <mark class="vocab" data-word="rug">rug</mark><span class="ipa">/rʌɡ/</span>, <mark class="vocab" data-word="palace">palace</mark><span class="ipa">/ˈpæləs/</span>, <mark class="vocab" data-word="cabin">cabin</mark><span class="ipa">/ˈkæbɪn/</span>, and <mark class="vocab" data-word="studio">studio</mark><span class="ipa">/ˈstuːdiˌoʊ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về Home &amp; Living, hãy để ý tấm thảm, cung điện, căn nhà gỗ nhỏ, và studio.</span>
+          </p>
+          <p class="ex-sent" data-sent="8">
+            <span class="ex-en">In this B1 Home & Living passage, notice <mark class="vocab" data-word="guest house">guest house</mark><span class="ipa">/ˈɡɛst ˌhaʊs/</span>, <mark class="vocab" data-word="apartment building">apartment building</mark><span class="ipa">/əˈpɑrtmənt ˈbɪldɪŋ/</span>, <mark class="vocab" data-word="country house">country house</mark><span class="ipa">/ˈkʌntri ˌhaʊs/</span>, and <mark class="vocab" data-word="floor">floor</mark><span class="ipa">/flɔːr/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về Home &amp; Living, hãy để ý nhà khách, tòa nhà chung cư, nhà ở nông thôn, và tầng.</span>
+          </p>
+          <p class="ex-sent" data-sent="9">
+            <span class="ex-en">In this B1 Home & Living passage, notice <mark class="vocab" data-word="step">step</mark><span class="ipa">/stɛp/</span>, <mark class="vocab" data-word="fireplace">fireplace</mark><span class="ipa">/ˈfaɪɚˌpleɪs/</span>, <mark class="vocab" data-word="chimney">chimney</mark><span class="ipa">/ˈʧɪmni/</span>, and <mark class="vocab" data-word="driveway">driveway</mark><span class="ipa">/ˈdraɪvˌweɪ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về Home &amp; Living, hãy để ý bậc, lò sưởi, ống khói, và lối vào.</span>
+          </p>
+          <p class="ex-sent" data-sent="10">
+            <span class="ex-en">In this B1 Home & Living passage, notice <mark class="vocab" data-word="corridor">corridor</mark><span class="ipa">/ˈkɔrɪˌdɔr/</span>, <mark class="vocab" data-word="drain">drain</mark><span class="ipa">/dreɪn/</span>, <mark class="vocab" data-word="walkway">walkway</mark><span class="ipa">/ˈwɔˌkweɪ/</span>, and <mark class="vocab" data-word="back door">back door</mark><span class="ipa">/ˈbæk ˌdɔr/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về Home &amp; Living, hãy để ý hành lang, ống thoát nước, lối đi bộ, và cửa sau.</span>
+          </p>
+          <p class="ex-sent" data-sent="11">
+            <span class="ex-en">In this B1 Home & Living passage, notice <mark class="vocab" data-word="front door">front door</mark><span class="ipa">/ˈfrʌnt ˌdɔr/</span>, <mark class="vocab" data-word="family room">family room</mark><span class="ipa">/ˈfæmɪli ˈrum/</span>, <mark class="vocab" data-word="guest room">guest room</mark><span class="ipa">/ˈɡɛst ˌrum/</span>, and <mark class="vocab" data-word="storeroom">storeroom</mark><span class="ipa">/ˈstɔrˌruːm/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về Home &amp; Living, hãy để ý cửa trước, phòng khách, phòng khách, và kho chứa đồ.</span>
+          </p>
+          <p class="ex-sent" data-sent="12">
+            <span class="ex-en">In this B1 Home & Living passage, notice <mark class="vocab" data-word="swimming pool">swimming pool</mark><span class="ipa">/ˈswɪmɪŋ ˌpul/</span>, <mark class="vocab" data-word="study">study</mark><span class="ipa">/ˈstʌdi/</span>, <mark class="vocab" data-word="shelf">shelf</mark><span class="ipa">/ʃɛlf/</span>, and <mark class="vocab" data-word="porch">porch</mark><span class="ipa">/pɔrtʃ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về Home &amp; Living, hãy để ý bể bơi, phòng học, kệ, và hiên nhà.</span>
+          </p>
+          <p class="ex-sent" data-sent="13">
+            <span class="ex-en">In this B1 Home & Living passage, notice <mark class="vocab" data-word="resident">resident</mark><span class="ipa">/ˈrɛzɪdənt/</span>, <mark class="vocab" data-word="accommodations">accommodations</mark><span class="ipa">/əˌkɑməˈdeɪʃənz/</span>, <mark class="vocab" data-word="<mark class="vocab" data-word="to rent">rent</mark><span class="ipa">/rɛnt/</span>">rent</mark><span class="ipa">/rɛnt/</span>, and rent.</span>
+            <span class="ex-vi">Trong đoạn B1 về Home &amp; Living, hãy để ý cư dân, chỗ ở, tiền thuê nhà, và cho thuê.</span>
+          </p>
+      </section>
+
+      <section class="ex-vocab">
+        <h2>Word checklist · 52</h2>
+        <ul class="ex-vocab-list">
+          <li><mark class="vocab">bed sheet</mark> <span class="ipa">/bɛd ʃiːt/</span> — khăn trải giường</li>
+          <li><mark class="vocab">mattress</mark> <span class="ipa">/ˈmætrəs/</span> — nệm</li>
+          <li><mark class="vocab">radiator</mark> <span class="ipa">/ˈreɪdiˌeɪtɚ/</span> — lò sưởi</li>
+          <li><mark class="vocab">freezer</mark> <span class="ipa">/ˈfriːzɚ/</span> — tủ đông</li>
+          <li><mark class="vocab">kitchen hood</mark> <span class="ipa">/ˈkɪʧɪn hʊd/</span> — máy hút mùi nhà bếp</li>
+          <li><mark class="vocab">garbage disposal</mark> <span class="ipa">/ˈɡɑrbɪʤ dɪˈspoʊzəl/</span> — máy nghiền rác</li>
+          <li><mark class="vocab">pressure cooker</mark> <span class="ipa">/ˈprɛʃɚ ˈkʊkɚ/</span> — nồi áp suất</li>
+          <li><mark class="vocab">food processor</mark> <span class="ipa">/fuːd ˈprɑːsɛsɚ/</span> — máy xay thực phẩm</li>
+          <li><mark class="vocab">juicer</mark> <span class="ipa">/ˈʤuːsɚ/</span> — máy ép trái cây</li>
+          <li><mark class="vocab">flatware</mark> <span class="ipa">/ˈflætˌwɛr/</span> — bộ đồ ăn</li>
+          <li><mark class="vocab">chopstick</mark> <span class="ipa">/ˈʧɑːpˌstɪk/</span> — đũa</li>
+          <li><mark class="vocab">ladle</mark> <span class="ipa">/ˈleɪdəl/</span> — muỗng canh</li>
+          <li><mark class="vocab">spatula</mark> <span class="ipa">/ˈspætʃələ/</span> — thìa trộn</li>
+          <li><mark class="vocab">mower</mark> <span class="ipa">/ˈmoʊɚ/</span> — máy cắt cỏ</li>
+          <li><mark class="vocab">faucet</mark> <span class="ipa">/ˈfɑsɪt/</span> — vòi nước</li>
+          <li><mark class="vocab">vase</mark> <span class="ipa">/veɪs/ , /vɑz/</span> — bình hoa</li>
+          <li><mark class="vocab">blind</mark> <span class="ipa">/blaɪnd/</span> — rèm</li>
+          <li><mark class="vocab">couch</mark> <span class="ipa">/kaʊʧ/</span> — ghế sofa</li>
+          <li><mark class="vocab">sofa bed</mark> <span class="ipa">/ˈsoʊfə bɛd/</span> — ghế sofa giường</li>
+          <li><mark class="vocab">hair straighteners</mark> <span class="ipa">/hɛr ˈstreɪtnɚz/</span> — máy duỗi tóc</li>
+          <li><mark class="vocab">thermostat</mark> <span class="ipa">/ˈθɝːmoʊˌstæt/</span> — bộ điều nhiệt</li>
+          <li><mark class="vocab">pillow</mark> <span class="ipa">/ˈpɪloʊ/</span> — gối</li>
+          <li><mark class="vocab">brush</mark> <span class="ipa">/brʌʃ/</span> — bàn chải</li>
+          <li><mark class="vocab">microwave</mark> <span class="ipa">/ˈmaɪkroʊˌweɪv/</span> — lò vi sóng</li>
+          <li><mark class="vocab">rug</mark> <span class="ipa">/rʌɡ/</span> — tấm thảm</li>
+          <li><mark class="vocab">palace</mark> <span class="ipa">/ˈpæləs/</span> — cung điện</li>
+          <li><mark class="vocab">cabin</mark> <span class="ipa">/ˈkæbɪn/</span> — căn nhà gỗ nhỏ</li>
+          <li><mark class="vocab">studio</mark> <span class="ipa">/ˈstuːdiˌoʊ/</span> — studio</li>
+          <li><mark class="vocab">guest house</mark> <span class="ipa">/ˈɡɛst ˌhaʊs/</span> — nhà khách</li>
+          <li><mark class="vocab">apartment building</mark> <span class="ipa">/əˈpɑrtmənt ˈbɪldɪŋ/</span> — tòa nhà chung cư</li>
+          <li><mark class="vocab">country house</mark> <span class="ipa">/ˈkʌntri ˌhaʊs/</span> — nhà ở nông thôn</li>
+          <li><mark class="vocab">floor</mark> <span class="ipa">/flɔːr/</span> — tầng</li>
+          <li><mark class="vocab">step</mark> <span class="ipa">/stɛp/</span> — bậc</li>
+          <li><mark class="vocab">fireplace</mark> <span class="ipa">/ˈfaɪɚˌpleɪs/</span> — lò sưởi</li>
+          <li><mark class="vocab">chimney</mark> <span class="ipa">/ˈʧɪmni/</span> — ống khói</li>
+          <li><mark class="vocab">driveway</mark> <span class="ipa">/ˈdraɪvˌweɪ/</span> — lối vào</li>
+          <li><mark class="vocab">corridor</mark> <span class="ipa">/ˈkɔrɪˌdɔr/</span> — hành lang</li>
+          <li><mark class="vocab">drain</mark> <span class="ipa">/dreɪn/</span> — ống thoát nước</li>
+          <li><mark class="vocab">walkway</mark> <span class="ipa">/ˈwɔˌkweɪ/</span> — lối đi bộ</li>
+          <li><mark class="vocab">back door</mark> <span class="ipa">/ˈbæk ˌdɔr/</span> — cửa sau</li>
+          <li><mark class="vocab">front door</mark> <span class="ipa">/ˈfrʌnt ˌdɔr/</span> — cửa trước</li>
+          <li><mark class="vocab">family room</mark> <span class="ipa">/ˈfæmɪli ˈrum/</span> — phòng khách</li>
+          <li><mark class="vocab">guest room</mark> <span class="ipa">/ˈɡɛst ˌrum/</span> — phòng khách</li>
+          <li><mark class="vocab">storeroom</mark> <span class="ipa">/ˈstɔrˌruːm/</span> — kho chứa đồ</li>
+          <li><mark class="vocab">swimming pool</mark> <span class="ipa">/ˈswɪmɪŋ ˌpul/</span> — bể bơi</li>
+          <li><mark class="vocab">study</mark> <span class="ipa">/ˈstʌdi/</span> — phòng học</li>
+          <li><mark class="vocab">shelf</mark> <span class="ipa">/ʃɛlf/</span> — kệ</li>
+          <li><mark class="vocab">porch</mark> <span class="ipa">/pɔrtʃ/</span> — hiên nhà</li>
+          <li><mark class="vocab">resident</mark> <span class="ipa">/ˈrɛzɪdənt/</span> — cư dân</li>
+          <li><mark class="vocab">accommodations</mark> <span class="ipa">/əˌkɑməˈdeɪʃənz/</span> — chỗ ở</li>
+          <li><mark class="vocab">rent</mark> <span class="ipa">/rɛnt/</span> — tiền thuê nhà</li>
+          <li><mark class="vocab">rent</mark> <span class="ipa">/rɛnt/</span> — cho thuê</li>
+        </ul>
+      </section>
+
+      <div class="docs-pager">
+        <a href="../">← Home &amp; Living</a>
+        <a href="../../">All topics →</a>
+      </div>
+    </article>
+  </div>
+  <script src="../../../../js/docs.js"></script>
+  <script src="../../../../js/exercise.js"></script>
+</body>
+</html>

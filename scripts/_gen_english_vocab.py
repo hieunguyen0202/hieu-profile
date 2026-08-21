@@ -120,7 +120,12 @@ def build_topic(topic: dict, all_topics: list[dict]) -> str:
         lessons = [x for x in topic["lessons"] if x["level"] == level]
         if not lessons:
             continue
-        cards = []
+        cards = [
+            f"""          <a class="vocab-lesson-card vocab-lesson-card--exercise" href="{level.lower()}-exercise/">
+            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 72 72' fill='none'%3E%3Crect width='72' height='72' rx='14' fill='%230b1220'/%3E%3Crect x='16' y='14' width='40' height='46' rx='6' stroke='%2322d3ee' stroke-width='2.5'/%3E%3Cpath d='M24 28h24M24 36h24M24 44h16' stroke='%23e4e4e7' stroke-width='2.5' stroke-linecap='round'/%3E%3Cpath d='M48 48l6 2-2 6-8-8z' fill='%2322d3ee'/%3E%3C/svg%3E" alt="" width="72" height="72" loading="lazy">
+            <span>{level} Exercise</span>
+          </a>"""
+        ]
         for les in lessons:
             cards.append(
                 f"""          <a class="vocab-lesson-card" href="{esc(les["url"])}" target="_blank" rel="noopener noreferrer">
@@ -132,7 +137,7 @@ def build_topic(topic: dict, all_topics: list[dict]) -> str:
             f"""      <section class="vocab-level" id="{level.lower()}">
         <div class="vocab-level__head">
           <span class="vocab-level__badge">{level}</span>
-          <h2>{level} · {len(lessons)} lesson{"s" if len(lessons) != 1 else ""}</h2>
+          <h2>{level} · {len(lessons)} lesson{"s" if len(lessons) != 1 else ""} + Exercise</h2>
         </div>
         <div class="vocab-lesson-grid">
 {chr(10).join(cards)}

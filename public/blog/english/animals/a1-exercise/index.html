@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A1 Exercise · Animals — The Quiet Corner</title>
+  <meta name="description" content="A1 reading exercise for Animals vocabulary with IPA and bilingual sentences.">
+  <link rel="icon" href="../../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../../"><span>✦</span> The Quiet Corner <span>✦</span></a>
+    <nav class="docs-series">
+      <a href="../../../../blog/web-security/">DevSecOps</a>
+      <a href="../../../../blog/kubestronaut/">Kubestronaut</a>
+      <a class="active" href="../../">English</a>
+    </nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-nav="english" data-docs-root="../../" data-active="animals">
+      <div class="docs-nav-label">English</div>
+      <ul class="docs-nav" id="docsNav">
+        <li><a href="../../">All topics</a></li>
+        <li><a href="../">Animals</a></li>
+        <li><a class="active" href="./">A1 Exercise</a></li>
+      </ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../../">Home</a>
+        <span>›</span>
+        <a href="../../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../../">English</a>
+        <span>›</span>
+        <a href="../">Animals</a>
+        <span>›</span>
+        <span>A1 Exercise</span>
+      </div>
+
+      <div class="vocab-topic-hero">
+        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 72 72' fill='none'%3E%3Crect width='72' height='72' rx='14' fill='%230b1220'/%3E%3Crect x='16' y='14' width='40' height='46' rx='6' stroke='%2322d3ee' stroke-width='2.5'/%3E%3Cpath d='M24 28h24M24 36h24M24 44h16' stroke='%23e4e4e7' stroke-width='2.5' stroke-linecap='round'/%3E%3Cpath d='M48 48l6 2-2 6-8-8 4 0z' fill='%2322d3ee'/%3E%3C/svg%3E" alt="" width="112" height="112">
+        <div>
+          <h1>A1 Exercise · Animals</h1>
+          <p class="lede">Reading passage with every new word from this level’s LanGeek lessons — IPA, highlights, sentence translation, and free TTS.</p>
+          <div class="docs-meta">
+            <span><strong>Words:</strong> 15</span>
+            <span><strong>Lessons:</strong> Animals</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="ex-toolbar" id="exToolbar">
+        <label class="ex-toggle"><input type="checkbox" id="togHighlight" checked> Highlights</label>
+        <label class="ex-toggle"><input type="checkbox" id="togIpa" checked> IPA</label>
+        <label class="ex-toggle"><input type="checkbox" id="togVi"> Dịch câu (VI)</label>
+        <span class="ex-sep"></span>
+        <label class="ex-voice">Voice
+          <select id="voiceSelect" aria-label="TTS voice"></select>
+        </label>
+        <label class="ex-voice">Speed
+          <input id="rateRange" type="range" min="0.7" max="1.15" step="0.05" value="0.95">
+          <span id="rateVal">0.95</span>
+        </label>
+        <button type="button" class="ex-btn primary" id="btnPlay">▶ Read passage</button>
+        <button type="button" class="ex-btn" id="btnStop">Stop</button>
+      </div>
+      
+      <section class="ex-passage" id="passage" data-tts-root>
+          <p class="ex-sent" data-sent="1">
+            <span class="ex-en">In this A1 Animals passage, notice <mark class="vocab" data-word="animal">animal</mark><span class="ipa">/ˈænɪməl/</span>, <mark class="vocab" data-word="cat">cat</mark><span class="ipa">/kæt/</span>, <mark class="vocab" data-word="dog">dog</mark><span class="ipa">/dɔːɡ/</span>, and <mark class="vocab" data-word="horse">horse</mark><span class="ipa">/hɔːrs/</span>.</span>
+            <span class="ex-vi">Trong đoạn A1 về Animals, hãy để ý động vật, mèo, chó, và ngựa.</span>
+          </p>
+          <p class="ex-sent" data-sent="2">
+            <span class="ex-en">In this A1 Animals passage, notice <mark class="vocab" data-word="sheep">sheep</mark><span class="ipa">/ʃiːp/</span>, <mark class="vocab" data-word="cow">cow</mark><span class="ipa">/kaʊ/</span>, <mark class="vocab" data-word="pig">pig</mark><span class="ipa">/pɪɡ/</span>, and <mark class="vocab" data-word="lion">lion</mark><span class="ipa">/ˈlaɪən/</span>.</span>
+            <span class="ex-vi">Trong đoạn A1 về Animals, hãy để ý cừu, bò cái, con lợn, và sư tử.</span>
+          </p>
+          <p class="ex-sent" data-sent="3">
+            <span class="ex-en">In this A1 Animals passage, notice <mark class="vocab" data-word="rabbit">rabbit</mark><span class="ipa">/ˈræbɪt/</span>, <mark class="vocab" data-word="mouse">mouse</mark><span class="ipa">/maʊs/</span>, <mark class="vocab" data-word="snake">snake</mark><span class="ipa">/sneɪk/</span>, and <mark class="vocab" data-word="fish">fish</mark><span class="ipa">/fɪʃ/</span>.</span>
+            <span class="ex-vi">Trong đoạn A1 về Animals, hãy để ý con thỏ, chuột, con rắn, và cá.</span>
+          </p>
+          <p class="ex-sent" data-sent="4">
+            <span class="ex-en">In this A1 Animals passage, notice <mark class="vocab" data-word="elephant">elephant</mark><span class="ipa">/ˈɛləfənt/</span>, <mark class="vocab" data-word="bird">bird</mark><span class="ipa">/bɜrd/</span>, and <mark class="vocab" data-word="chicken">chicken</mark><span class="ipa">/ˈtʃɪkən/</span>.</span>
+            <span class="ex-vi">Trong đoạn A1 về Animals, hãy để ý voi, chim, và gà.</span>
+          </p>
+      </section>
+
+      <section class="ex-vocab">
+        <h2>Word checklist · 15</h2>
+        <ul class="ex-vocab-list">
+          <li><mark class="vocab">animal</mark> <span class="ipa">/ˈænɪməl/</span> — động vật</li>
+          <li><mark class="vocab">cat</mark> <span class="ipa">/kæt/</span> — mèo</li>
+          <li><mark class="vocab">dog</mark> <span class="ipa">/dɔːɡ/</span> — chó</li>
+          <li><mark class="vocab">horse</mark> <span class="ipa">/hɔːrs/</span> — ngựa</li>
+          <li><mark class="vocab">sheep</mark> <span class="ipa">/ʃiːp/</span> — cừu</li>
+          <li><mark class="vocab">cow</mark> <span class="ipa">/kaʊ/</span> — bò cái</li>
+          <li><mark class="vocab">pig</mark> <span class="ipa">/pɪɡ/</span> — con lợn</li>
+          <li><mark class="vocab">lion</mark> <span class="ipa">/ˈlaɪən/</span> — sư tử</li>
+          <li><mark class="vocab">rabbit</mark> <span class="ipa">/ˈræbɪt/</span> — con thỏ</li>
+          <li><mark class="vocab">mouse</mark> <span class="ipa">/maʊs/</span> — chuột</li>
+          <li><mark class="vocab">snake</mark> <span class="ipa">/sneɪk/</span> — con rắn</li>
+          <li><mark class="vocab">fish</mark> <span class="ipa">/fɪʃ/</span> — cá</li>
+          <li><mark class="vocab">elephant</mark> <span class="ipa">/ˈɛləfənt/</span> — voi</li>
+          <li><mark class="vocab">bird</mark> <span class="ipa">/bɜrd/</span> — chim</li>
+          <li><mark class="vocab">chicken</mark> <span class="ipa">/ˈtʃɪkən/</span> — gà</li>
+        </ul>
+      </section>
+
+      <div class="docs-pager">
+        <a href="../">← Animals</a>
+        <a href="../../">All topics →</a>
+      </div>
+    </article>
+  </div>
+  <script src="../../../../js/docs.js"></script>
+  <script src="../../../../js/exercise.js"></script>
+</body>
+</html>

@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>B2 Exercise · Society &amp; Politics — The Quiet Corner</title>
+  <meta name="description" content="B2 reading exercise for Society &amp; Politics vocabulary with IPA and bilingual sentences.">
+  <link rel="icon" href="../../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../../"><span>✦</span> The Quiet Corner <span>✦</span></a>
+    <nav class="docs-series">
+      <a href="../../../../blog/web-security/">DevSecOps</a>
+      <a href="../../../../blog/kubestronaut/">Kubestronaut</a>
+      <a class="active" href="../../">English</a>
+    </nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-nav="english" data-docs-root="../../" data-active="society-politics">
+      <div class="docs-nav-label">English</div>
+      <ul class="docs-nav" id="docsNav">
+        <li><a href="../../">All topics</a></li>
+        <li><a href="../">Society &amp; Politics</a></li>
+        <li><a class="active" href="./">B2 Exercise</a></li>
+      </ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../../">Home</a>
+        <span>›</span>
+        <a href="../../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../../">English</a>
+        <span>›</span>
+        <a href="../">Society &amp; Politics</a>
+        <span>›</span>
+        <span>B2 Exercise</span>
+      </div>
+
+      <div class="vocab-topic-hero">
+        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 72 72' fill='none'%3E%3Crect width='72' height='72' rx='14' fill='%230b1220'/%3E%3Crect x='16' y='14' width='40' height='46' rx='6' stroke='%2322d3ee' stroke-width='2.5'/%3E%3Cpath d='M24 28h24M24 36h24M24 44h16' stroke='%23e4e4e7' stroke-width='2.5' stroke-linecap='round'/%3E%3Cpath d='M48 48l6 2-2 6-8-8 4 0z' fill='%2322d3ee'/%3E%3C/svg%3E" alt="" width="112" height="112">
+        <div>
+          <h1>B2 Exercise · Society &amp; Politics</h1>
+          <p class="lede">Reading passage with every new word from this level’s LanGeek lessons — IPA, highlights, sentence translation, and free TTS.</p>
+          <div class="docs-meta">
+            <span><strong>Words:</strong> 319</span>
+            <span><strong>Lessons:</strong> Crime and Violence · Law · Monarchy · Politics · Regulations and Requirements · Religion · Threats and Danger · War and Peace</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="ex-toolbar" id="exToolbar">
+        <label class="ex-toggle"><input type="checkbox" id="togHighlight" checked> Highlights</label>
+        <label class="ex-toggle"><input type="checkbox" id="togIpa" checked> IPA</label>
+        <label class="ex-toggle"><input type="checkbox" id="togVi"> Dịch câu (VI)</label>
+        <span class="ex-sep"></span>
+        <label class="ex-voice">Voice
+          <select id="voiceSelect" aria-label="TTS voice"></select>
+        </label>
+        <label class="ex-voice">Speed
+          <input id="rateRange" type="range" min="0.7" max="1.15" step="0.05" value="0.95">
+          <span id="rateVal">0.95</span>
+        </label>
+        <button type="button" class="ex-btn primary" id="btnPlay">▶ Read passage</button>
+        <button type="button" class="ex-btn" id="btnStop">Stop</button>
+      </div>
+      
+      <section class="ex-passage" id="passage" data-tts-root>
+          <p class="ex-sent" data-sent="1">
+            <span class="ex-en">In this B2 Society & Politics passage, notice <mark class="vocab" data-word="to capture">capture</mark><span class="ipa">/ˈkæptʃɝ/</span>, <mark class="vocab" data-word="to expose">expose</mark><span class="ipa">/ɪkˈspoʊz/</span>, <mark class="vocab" data-word="to get away with">get away with</mark><span class="ipa">/ɡɛt ɐwˈeɪ wɪð/</span>, and <mark class="vocab" data-word="to monitor">monitor</mark><span class="ipa">/ˈmɑnɪtər/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Society &amp; Politics, hãy để ý bắt giữ, tiết lộ, thoát tội, và theo dõi.</span>
+          </p>
+          <p class="ex-sent" data-sent="2">
+            <span class="ex-en">In this B2 Society & Politics passage, notice <mark class="vocab" data-word="to pursue">pursue</mark><span class="ipa">/pɝˈsu/</span>, <mark class="vocab" data-word="to resist">resist</mark><span class="ipa">/ɹiˈzɪst/, /ɹɪˈzɪst/</span>, <mark class="vocab" data-word="to sentence">sentence</mark><span class="ipa">/ˈsɛntəns/</span>, and <mark class="vocab" data-word="to traffic">traffic</mark><span class="ipa">/ˈtræfɪk/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Society &amp; Politics, hãy để ý theo đuổi, chống cự, kết án, và buôn bán bất hợp pháp.</span>
+          </p>
+          <p class="ex-sent" data-sent="3">
+            <span class="ex-en">In this B2 Society & Politics passage, notice <mark class="vocab" data-word="to witness">witness</mark><span class="ipa">/ˈwɪtnəs/</span>, <mark class="vocab" data-word="arrest">arrest</mark><span class="ipa">/əˈrɛst/</span>, <mark class="vocab" data-word="bulletproof vest">bulletproof vest</mark><span class="ipa">/bˈʊlɪtpɹˌuːf vˈɛst/</span>, and <mark class="vocab" data-word="community service">community service</mark><span class="ipa">/kəmjˈuːnɪɾi sˈɜːvɪs/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Society &amp; Politics, hãy để ý chứng kiến, bắt giữ, áo chống đạn, và dịch vụ cộng đồng.</span>
+          </p>
+          <p class="ex-sent" data-sent="4">
+            <span class="ex-en">In this B2 Society & Politics passage, notice <mark class="vocab" data-word="cell">cell</mark><span class="ipa">/ˈsɛɫ/</span>, <mark class="vocab" data-word="jail">jail</mark><span class="ipa">/ˈdʒeɪɫ/</span>, <mark class="vocab" data-word="life sentence">life sentence</mark><span class="ipa">/lˈaɪf sˈɛntəns/</span>, and <mark class="vocab" data-word="crime">crime</mark><span class="ipa">/ˈkɹaɪm/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Society &amp; Politics, hãy để ý xà lim, nhà tù, án chung thân, và tội phạm.</span>
+          </p>
+          <p class="ex-sent" data-sent="5">
+            <span class="ex-en">In this B2 Society & Politics passage, notice <mark class="vocab" data-word="eyewitness">eyewitness</mark><span class="ipa">/ˈaɪˈwɪtnəs/</span>, <mark class="vocab" data-word="offender">offender</mark><span class="ipa">/əˈfɛndɝ/</span>, <mark class="vocab" data-word="drug dealer">drug dealer</mark><span class="ipa">/dɹˈʌɡ dˈiːlɚ/</span>, and <mark class="vocab" data-word="fraud">fraud</mark><span class="ipa">/ˈfɹɔd/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Society &amp; Politics, hãy để ý nhân chứng, người phạm tội, kẻ buôn bán ma túy, và kẻ lừa đảo.</span>
+          </p>
+          <p class="ex-sent" data-sent="6">
+            <span class="ex-en">In this B2 Society & Politics passage, notice <mark class="vocab" data-word="gang">gang</mark><span class="ipa">/ˈɡæŋ/</span>, <mark class="vocab" data-word="pickpocket">pickpocket</mark><span class="ipa">/ˈpɪkˌpɑkət/</span>, <mark class="vocab" data-word="bombing">bombing</mark><span class="ipa">/ˈbɑmɪŋ/</span>, and <mark class="vocab" data-word="burglary">burglary</mark><span class="ipa">/ˈbɜːrɡləri/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Society &amp; Politics, hãy để ý băng đảng, kẻ móc túi, ném bom, và trộm cắp.</span>
+          </p>
+          <p class="ex-sent" data-sent="7">
+            <span class="ex-en">In this B2 Society & Politics passage, notice <mark class="vocab" data-word="drunk driving">drunk driving</mark><span class="ipa">/dɹˈʌŋk dɹˈaɪvɪŋ/</span>, <mark class="vocab" data-word="identity theft">identity theft</mark><span class="ipa">/aɪdˈɛntɪɾi θˈɛft/</span>, <mark class="vocab" data-word="robbery">robbery</mark><span class="ipa">/ˈɹɑbɝi/</span>, and <mark class="vocab" data-word="shooting">shooting</mark><span class="ipa">/ˈʃutɪŋ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Society &amp; Politics, hãy để ý lái xe khi say rượu, ăn cắp danh tính, vụ cướp, và vụ nổ súng.</span>
+          </p>
+          <p class="ex-sent" data-sent="8">
+            <span class="ex-en">In this B2 Society & Politics passage, notice <mark class="vocab" data-word="shoplifting">shoplifting</mark><span class="ipa">/ˈʃɑˌpɫɪftɪŋ/</span>, <mark class="vocab" data-word="terrorism">terrorism</mark><span class="ipa">/ˈterərɪzəm/</span>, <mark class="vocab" data-word="vandalism">vandalism</mark><span class="ipa">/ˈvændəɫɪzəm/</span>, and <mark class="vocab" data-word="violence">violence</mark><span class="ipa">/ˈvaɪəɫəns/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Society &amp; Politics, hãy để ý ăn cắp cửa hàng, khủng bố, hành vi phá hoại, và bạo lực.</span>
+          </p>
+          <p class="ex-sent" data-sent="9">
+            <span class="ex-en">In this B2 Society & Politics passage, notice <mark class="vocab" data-word="to <mark class="vocab" data-word="break">break</mark><span class="ipa">/breɪk/</span> out">break out</mark><span class="ipa">/bɹˈeɪk ˈaʊt/</span>, <mark class="vocab" data-word="to hang">hang</mark><span class="ipa">/hæŋ/</span>, break, and <mark class="vocab" data-word="grass">grass</mark><span class="ipa">/ɡræs/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Society &amp; Politics, hãy để ý trốn thoát, treo cổ, sự trốn thoát, và cỏ.</span>
+          </p>
+          <p class="ex-sent" data-sent="10">
+            <span class="ex-en">In this B2 Society & Politics passage, notice <mark class="vocab" data-word="narc">narc</mark><span class="ipa">/ˈnɑɹk/</span>, <mark class="vocab" data-word="stoned">stoned</mark><span class="ipa">/ˈstoʊnd/</span>, <mark class="vocab" data-word="to trip">trip</mark><span class="ipa">/trɪp/</span>, and <mark class="vocab" data-word="breathalyzer">breathalyzer</mark><span class="ipa">/bɹˈɛθɐlˌaɪzɚ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Society &amp; Politics, hãy để ý một cảnh sát ma túy, phê, phê, và máy đo nồng độ cồn.</span>
+          </p>
+          <p class="ex-sent" data-sent="11">
+            <span class="ex-en">In this B2 Society & Politics passage, notice <mark class="vocab" data-word="to disobey">disobey</mark><span class="ipa">/ˌdɪsəˈbeɪ/</span>, <mark class="vocab" data-word="to lock away">lock away</mark><span class="ipa">/lˈɑːk ɐwˈeɪ/</span>, <mark class="vocab" data-word="dead to rights">dead to rights</mark><span class="ipa">/dˈɛd tə ɹˈaɪts/</span>, and <mark class="vocab" data-word="scam">scam</mark><span class="ipa">/ˈskæm/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Society &amp; Politics, hãy để ý không tuân theo, nhốt, không còn đường chối, và lừa đảo.</span>
+          </p>
+          <p class="ex-sent" data-sent="12">
+            <span class="ex-en">In this B2 Society & Politics passage, notice <mark class="vocab" data-word="forensics">forensics</mark><span class="ipa">/ˌfɔˈɹɛnsɪks/, /fɝˈɛnsɪks/</span>, <mark class="vocab" data-word="to scam">scam</mark><span class="ipa">/ˈskæm/</span>, <mark class="vocab" data-word="to account">account</mark><span class="ipa">/əˈkaʊnt/</span>, and <mark class="vocab" data-word="to accuse">accuse</mark><span class="ipa">/əkˈjuz/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Society &amp; Politics, hãy để ý khoa học hình sự, lừa đảo, coi là, và buộc tội.</span>
+          </p>
+          <p class="ex-sent" data-sent="13">
+            <span class="ex-en">In this B2 Society & Politics passage, notice <mark class="vocab" data-word="to challenge">challenge</mark><span class="ipa">/ˈtʃæɫəndʒ/</span>, <mark class="vocab" data-word="to suspect">suspect</mark><span class="ipa">/ˈsəsˌpɛkt/, /səˈspɛkt/</span>, <mark class="vocab" data-word="case">case</mark><span class="ipa">/keɪs/</span>, and <mark class="vocab" data-word="family court">family court</mark><span class="ipa">/fˈæmɪli kˈoːɹt/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Society &amp; Politics, hãy để ý khiếu nại, nghi ngờ, vụ án, và tòa gia đình.</span>
+          </p>
+          <p class="ex-sent" data-sent="14">
+            <span class="ex-en">In this B2 Society & Politics passage, notice <mark class="vocab" data-word="jury">jury</mark><span class="ipa">/ˈdʒʊɹi/</span>, <mark class="vocab" data-word="trial">trial</mark><span class="ipa">/ˈtɹaɪəɫ/, /ˈtɹaɪɫ/</span>, <mark class="vocab" data-word="justice">justice</mark><span class="ipa">/ˈdʒəstəs/, /ˈdʒəstɪs/</span>, and <mark class="vocab" data-word="injustice">injustice</mark><span class="ipa">/ˌɪnˈdʒəstɪs/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Society &amp; Politics, hãy để ý ban giám khảo, phiên tòa, công lý, và sự bất công.</span>
+          </p>
+          <p class="ex-sent" data-sent="15">
+            <span class="ex-en">In this B2 Society & Politics passage, notice <mark class="vocab" data-word="strict">strict</mark><span class="ipa">/ˈstɹɪkt/</span>, <mark class="vocab" data-word="legal">legal</mark><span class="ipa">/ˈliːɡəl/</span>, <mark class="vocab" data-word="legally">legally</mark><span class="ipa">/ˈɫiɡəɫi/</span>, and <mark class="vocab" data-word="valid">valid</mark><span class="ipa">/ˈvæɫɪd/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Society &amp; Politics, hãy để ý nghiêm ngặt, pháp lý, hợp pháp, và hợp lệ.</span>
+          </p>
+          <p class="ex-sent" data-sent="16">
+            <span class="ex-en">In this B2 Society & Politics passage, notice <mark class="vocab" data-word="regulation">regulation</mark><span class="ipa">/ˌɹɛɡjəˈɫeɪʃən/</span>, <mark class="vocab" data-word="to judge">judge</mark><span class="ipa">/ʤʌdʒ/</span>, <mark class="vocab" data-word="authority">authority</mark><span class="ipa">/əˈθɔɹəti/</span>, and <mark class="vocab" data-word="inspector">inspector</mark><span class="ipa">/ˌɪnˈspɛktɝ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Society &amp; Politics, hãy để ý quy định, xét xử, quyền lực, và thanh tra.</span>
+          </p>
+          <p class="ex-sent" data-sent="17">
+            <span class="ex-en">In this B2 Society & Politics passage, notice <mark class="vocab" data-word="clause">clause</mark><span class="ipa">/klɔːz/</span>, <mark class="vocab" data-word="claim">claim</mark><span class="ipa">/kleɪm/</span>, <mark class="vocab" data-word="bill">bill</mark><span class="ipa">/bɪl/</span>, and <mark class="vocab" data-word="action">action</mark><span class="ipa">/ˈækʃən/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Society &amp; Politics, hãy để ý điều khoản, yêu cầu, dự luật, và kiện.</span>
+          </p>
+          <p class="ex-sent" data-sent="18">
+            <span class="ex-en">In this B2 Society & Politics passage, notice <mark class="vocab" data-word="to appeal">appeal</mark><span class="ipa">/əˈpiɫ/</span>, <mark class="vocab" data-word="bail">bail</mark><span class="ipa">/beɪl/</span>, <mark class="vocab" data-word="brief">brief</mark><span class="ipa">/briːf/</span>, and <mark class="vocab" data-word="charge">charge</mark><span class="ipa">/ʧɑrdʒ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Society &amp; Politics, hãy để ý kháng cáo, tiền bảo lãnh, bản tóm tắt, và cáo buộc.</span>
+          </p>
+          <p class="ex-sent" data-sent="19">
+            <span class="ex-en">In this B2 Society & Politics passage, notice <mark class="vocab" data-word="to charge">charge</mark><span class="ipa">/ʧɑrdʒ/</span>, <mark class="vocab" data-word="to defend">defend</mark><span class="ipa">/dɪˈfɛnd/</span>, <mark class="vocab" data-word="to file">file</mark><span class="ipa">/faɪl/</span>, and <mark class="vocab" data-word="to issue">issue</mark><span class="ipa">/ˈɪʃuː/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Society &amp; Politics, hãy để ý buộc tội, bảo vệ, nộp, và ban hành.</span>
+          </p>
+          <p class="ex-sent" data-sent="20">
+            <span class="ex-en">In this B2 Society & Politics passage, notice <mark class="vocab" data-word="to prohibit">prohibit</mark><span class="ipa">/pɹoʊˈhɪbət/</span>, <mark class="vocab" data-word="prohibition">prohibition</mark><span class="ipa">/ˌpɹoʊəˈbɪʃən/</span>, <mark class="vocab" data-word="to try">try</mark><span class="ipa">/traɪ/</span>, and <mark class="vocab" data-word="to break">break</mark><span class="ipa">/breɪk/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Society &amp; Politics, hãy để ý cấm, lệnh cấm, xét xử, và vi phạm.</span>
+          </p>
+          <p class="ex-sent" data-sent="21">
+            <span class="ex-en">In this B2 Society & Politics passage, notice <mark class="vocab" data-word="to chair">chair</mark><span class="ipa">/tʃɛr/</span>, <mark class="vocab" data-word="to get away">get away</mark><span class="ipa">/ɡɛt ɐwˈeɪ/</span>, <mark class="vocab" data-word="to require">require</mark><span class="ipa">/rɪˈkwaɪr/</span>, and <mark class="vocab" data-word="to disqualify">disqualify</mark><span class="ipa">/dɪˈskwɑləˌfaɪ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Society &amp; Politics, hãy để ý chủ trì, trốn thoát, yêu cầu, và loại bỏ.</span>
+          </p>
+          <p class="ex-sent" data-sent="22">
+            <span class="ex-en">In this B2 Society & Politics passage, notice <mark class="vocab" data-word="judgment">judgment</mark><span class="ipa">/ˈdʒədʒmənt/</span>, <mark class="vocab" data-word="criminal record">criminal record</mark><span class="ipa">/kɹˈɪmɪnəl ɹˈɛkɚd/</span>, <mark class="vocab" data-word="to border">border</mark><span class="ipa">/ˈbɔrdɚ/</span>, and <mark class="vocab" data-word="to honor">honor</mark><span class="ipa">/ˈɑnɝ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Society &amp; Politics, hãy để ý phán quyết, tiền án, Khu vực này giáp với sa mạc, và tôn vinh.</span>
+          </p>
+          <p class="ex-sent" data-sent="23">
+            <span class="ex-en">In this B2 Society & Politics passage, notice <mark class="vocab" data-word="aristocracy">aristocracy</mark><span class="ipa">/ˌɛɹəˈstɑkɹəsi/</span>, <mark class="vocab" data-word="dynasty">dynasty</mark><span class="ipa">/ˈdaɪnəsti/</span>, <mark class="vocab" data-word="empire">empire</mark><span class="ipa">/ˈɛmpaɪɝ/</span>, and <mark class="vocab" data-word="Renaissance">Renaissance</mark><span class="ipa">/ɹˈɛnəsˌɑːns/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Society &amp; Politics, hãy để ý tầng lớp quý tộc, triều đại, đế chế, và Phục hưng.</span>
+          </p>
+          <p class="ex-sent" data-sent="24">
+            <span class="ex-en">In this B2 Society & Politics passage, notice <mark class="vocab" data-word="the Middle Ages">the Middle Ages</mark><span class="ipa">/ðə mˈɪdəl ˈeɪdʒᵻz/</span>, <mark class="vocab" data-word="castle">castle</mark><span class="ipa">/ˈkæsəɫ/</span>, <mark class="vocab" data-word="fortress">fortress</mark><span class="ipa">/ˈfɔɹtɹəs/</span>, and <mark class="vocab" data-word="armor">armor</mark><span class="ipa">/ˈɑrmər/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Society &amp; Politics, hãy để ý thời Trung Cổ, lâu đài, pháo đài, và áo giáp.</span>
+          </p>
+          <p class="ex-sent" data-sent="25">
+            <span class="ex-en">In this B2 Society & Politics passage, notice <mark class="vocab" data-word="coat of arms">coat of arms</mark><span class="ipa">/kˈoʊt ʌv ˈɑːɹmz/</span>, <mark class="vocab" data-word="crown">crown</mark><span class="ipa">/ˈkɹaʊn/</span>, <mark class="vocab" data-word="arrow">arrow</mark><span class="ipa">/ˈæroʊ/, /ˈer.oʊ/</span>, and <mark class="vocab" data-word="sword">sword</mark><span class="ipa">/ˈsɔɹd/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Society &amp; Politics, hãy để ý huy hiệu, vương miện, mũi tên, và kiếm.</span>
+          </p>
+          <p class="ex-sent" data-sent="26">
+            <span class="ex-en">In this B2 Society & Politics passage, notice <mark class="vocab" data-word="emblem">emblem</mark><span class="ipa">/ˈɛmbɫəm/</span>, <mark class="vocab" data-word="royal">royal</mark><span class="ipa">/ˈɹɔɪəɫ/</span>, <mark class="vocab" data-word="royalty">royalty</mark><span class="ipa">/ˈɹɔɪəɫti/</span>, and <mark class="vocab" data-word="noble">noble</mark><span class="ipa">/ˈnoʊbəl/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Society &amp; Politics, hãy để ý huy hiệu, hoàng gia, hoàng gia, và quý tộc.</span>
+          </p>
+          <p class="ex-sent" data-sent="27">
+            <span class="ex-en">In this B2 Society & Politics passage, notice <mark class="vocab" data-word="nobility">nobility</mark><span class="ipa">/noʊˈbɪɫəti/</span>, <mark class="vocab" data-word="count">count</mark><span class="ipa">/kaʊnt/</span>, <mark class="vocab" data-word="countess">countess</mark><span class="ipa">/ˈkaʊntəs/</span>, and <mark class="vocab" data-word="knight">knight</mark><span class="ipa">/ˈnaɪt/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Society &amp; Politics, hãy để ý quý tộc, bá tước, nữ bá tước, và hiệp sĩ.</span>
+          </p>
+          <p class="ex-sent" data-sent="28">
+            <span class="ex-en">In this B2 Society & Politics passage, notice <mark class="vocab" data-word="duchess">duchess</mark><span class="ipa">/ˈdətʃəs/</span>, <mark class="vocab" data-word="king">king</mark><span class="ipa">/ˈkɪŋ/</span>, <mark class="vocab" data-word="queen">queen</mark><span class="ipa">/ˈkwin/</span>, and <mark class="vocab" data-word="kingdom">kingdom</mark><span class="ipa">/ˈkɪŋdəm/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Society &amp; Politics, hãy để ý nữ công tước, vua, nữ hoàng, và vương quốc.</span>
+          </p>
+          <p class="ex-sent" data-sent="29">
+            <span class="ex-en">In this B2 Society & Politics passage, notice <mark class="vocab" data-word="lady">lady</mark><span class="ipa">/ˈɫeɪdi/</span>, <mark class="vocab" data-word="majesty">majesty</mark><span class="ipa">/ˈmædʒəsti/</span>, <mark class="vocab" data-word="lord">lord</mark><span class="ipa">/ˈɫɔɹd/</span>, and <mark class="vocab" data-word="monarch">monarch</mark><span class="ipa">/ˈmɑˌnɑɹk/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Society &amp; Politics, hãy để ý quý bà, hoàng thượng, lãnh chúa, và quân chủ.</span>
+          </p>
+          <p class="ex-sent" data-sent="30">
+            <span class="ex-en">In this B2 Society & Politics passage, notice <mark class="vocab" data-word="prince">prince</mark><span class="ipa">/ˈpɹɪns/</span>, <mark class="vocab" data-word="princess">princess</mark><span class="ipa">/ˈpɹɪnsɛs/</span>, <mark class="vocab" data-word="Duke">Duke</mark><span class="ipa">/ˈduk/</span>, and <mark class="vocab" data-word="slavery">slavery</mark><span class="ipa">/ˈsɫeɪvɝi/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Society &amp; Politics, hãy để ý hoàng tử, công chúa, công tước, và chế độ nô lệ.</span>
+          </p>
+          <p class="ex-sent" data-sent="31">
+            <span class="ex-en">In this B2 Society & Politics passage, notice <mark class="vocab" data-word="domestic">domestic</mark><span class="ipa">/dəˈmɛstɪk/</span>, <mark class="vocab" data-word="federal">federal</mark><span class="ipa">/ˈfɛdɝəɫ/, /ˈfɛdɹəɫ/</span>, <mark class="vocab" data-word="independent">independent</mark><span class="ipa">/ˌɪndɪˈpɛndənt/</span>, and <mark class="vocab" data-word="official">official</mark><span class="ipa">/əˈfɪʃəl/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Society &amp; Politics, hãy để ý nội địa, liên bang, độc lập, và chính thức.</span>
+          </p>
+          <p class="ex-sent" data-sent="32">
+            <span class="ex-en">In this B2 Society & Politics passage, notice <mark class="vocab" data-word="presidential">presidential</mark><span class="ipa">/ˌpɹɛzəˈdɛnʃəɫ/</span>, <mark class="vocab" data-word="revolution">revolution</mark><span class="ipa">/ˌɹɛvəˈɫuʃən/</span>, <mark class="vocab" data-word="revolutionary">revolutionary</mark><span class="ipa">/ˌɹɛvəˈɫuʃəˌnɛɹi/</span>, and <mark class="vocab" data-word="congress">congress</mark><span class="ipa">/ˈkɑŋɡrəs/ , /ˈkɑŋɡrɛs/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Society &amp; Politics, hãy để ý thuộc tổng thống, cách mạng, cách mạng, và đại hội.</span>
+          </p>
+          <p class="ex-sent" data-sent="33">
+            <span class="ex-en">In this B2 Society & Politics passage, notice <mark class="vocab" data-word="conservative">conservative</mark><span class="ipa">/kənˈsɜrvətɪv/</span>, <mark class="vocab" data-word="Conservative Party">Conservative Party</mark><span class="ipa">/kənsˈɜːvətˌɪv pˈɑːɹɾi/</span>, <mark class="vocab" data-word="Republican Party">Republican Party</mark><span class="ipa">/ɹɪpˈʌblɪkən pˈɑːɹɾi/</span>, and <mark class="vocab" data-word="democrat">democrat</mark><span class="ipa">/ˈdɛməˌkɹæt/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Society &amp; Politics, hãy để ý người bảo thủ, Đảng Bảo thủ, Đảng Cộng hòa, và người dân chủ.</span>
+          </p>
+          <p class="ex-sent" data-sent="34">
+            <span class="ex-en">In this B2 Society & Politics passage, notice <mark class="vocab" data-word="Democratic Party">Democratic Party</mark><span class="ipa">/dˌɛməkɹˈæɾɪk pˈɑːɹɾi/</span>, <mark class="vocab" data-word="labor party">labor party</mark><span class="ipa">/lˈeɪbɚ pˈɑːɹɾi/</span>, <mark class="vocab" data-word="to back">back</mark><span class="ipa">/bæk/</span>, and <mark class="vocab" data-word="to debate">debate</mark><span class="ipa">/dəˈbeɪt/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Society &amp; Politics, hãy để ý Đảng Dân chủ, Đảng Lao động, ủng hộ, và tranh luận.</span>
+          </p>
+          <p class="ex-sent" data-sent="35">
+            <span class="ex-en">In this B2 Society & Politics passage, notice <mark class="vocab" data-word="to govern">govern</mark><span class="ipa">/ˈɡəvɝn/</span>, <mark class="vocab" data-word="government">government</mark><span class="ipa">/ˈɡʌvɚnmənt/</span>, <mark class="vocab" data-word="democracy">democracy</mark><span class="ipa">/dɪˈmɑkɹəsi/</span>, and <mark class="vocab" data-word="dictatorship">dictatorship</mark><span class="ipa">/dɪkˈteɪtɝˌʃɪp/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Society &amp; Politics, hãy để ý cai trị, chính phủ, dân chủ, và chế độ độc tài.</span>
+          </p>
+          <p class="ex-sent" data-sent="36">
+            <span class="ex-en">In this B2 Society & Politics passage, notice <mark class="vocab" data-word="monarchy">monarchy</mark><span class="ipa">/ˈmɑnɑɹki/</span>, <mark class="vocab" data-word="independence">independence</mark><span class="ipa">/ˌɪndɪˈpɛndəns/</span>, <mark class="vocab" data-word="human right">human right</mark><span class="ipa">/hjˈuːmən ɹˈaɪt/</span>, and <mark class="vocab" data-word="nation">nation</mark><span class="ipa">/ˈneɪʃən/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Society &amp; Politics, hãy để ý chế độ quân chủ, độc lập, quyền con người, và quốc gia.</span>
+          </p>
+          <p class="ex-sent" data-sent="37">
+            <span class="ex-en">In this B2 Society & Politics passage, notice <mark class="vocab" data-word="to plot">plot</mark><span class="ipa">/plɑt/</span>, <mark class="vocab" data-word="state">state</mark><span class="ipa">/steɪt/</span>, <mark class="vocab" data-word="majority">majority</mark><span class="ipa">/məˈdʒɔɹəti/</span>, and <mark class="vocab" data-word="minister">minister</mark><span class="ipa">/ˈmɪnəstɝ/, /ˈmɪnɪstɝ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Society &amp; Politics, hãy để ý âm mưu, nhà nước, đa số, và bộ trưởng.</span>
+          </p>
+          <p class="ex-sent" data-sent="38">
+            <span class="ex-en">In this B2 Society & Politics passage, notice <mark class="vocab" data-word="secretary">secretary</mark><span class="ipa">/ˈsɛkrɪˌtɛri/</span>, <mark class="vocab" data-word="spokesperson">spokesperson</mark><span class="ipa">/ˈspoʊkspɝsən/</span>, <mark class="vocab" data-word="negotiation">negotiation</mark><span class="ipa">/nɪˌɡoʊʃiˈeɪʃən/</span>, and <mark class="vocab" data-word="opposition">opposition</mark><span class="ipa">/ˌɑpəˈzɪʃən/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Society &amp; Politics, hãy để ý bộ trưởng, người phát ngôn, đàm phán, và đối lập.</span>
+          </p>
+          <p class="ex-sent" data-sent="39">
+            <span class="ex-en">In this B2 Society & Politics passage, notice <mark class="vocab" data-word="policy">policy</mark><span class="ipa">/ˈpɑɫəsi/</span>, <mark class="vocab" data-word="presidency">presidency</mark><span class="ipa">/ˈpɹɛzədənsi/</span>, <mark class="vocab" data-word="to run for">run for</mark><span class="ipa">/ɹˈʌn fɔːɹ/</span>, and <mark class="vocab" data-word="seat">seat</mark><span class="ipa">/siːt/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Society &amp; Politics, hãy để ý chính sách, nhiệm kỳ tổng thống, tranh cử, và ghế.</span>
+          </p>
+          <p class="ex-sent" data-sent="40">
+            <span class="ex-en">In this B2 Society & Politics passage, notice <mark class="vocab" data-word="voting">voting</mark><span class="ipa">/ˈvoʊtɪŋ/</span>, <mark class="vocab" data-word="territory">territory</mark><span class="ipa">/ˈtɛrɪˌtɔri/</span>, <mark class="vocab" data-word="to negotiate">negotiate</mark><span class="ipa">/nəˈɡoʊʃiˌeɪt/, /nɪˈɡoʊʃiˌeɪt/</span>, and <mark class="vocab" data-word="conspiracy">conspiracy</mark><span class="ipa">/kənˈspɪɹəsi/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Society &amp; Politics, hãy để ý bỏ phiếu, lãnh thổ, đàm phán, và âm mưu.</span>
+          </p>
+          <p class="ex-sent" data-sent="41">
+            <span class="ex-en">In this B2 Society & Politics passage, notice <mark class="vocab" data-word="crackdown">crackdown</mark><span class="ipa">/ˈkɹækˌdaʊn/</span>, <mark class="vocab" data-word="repression">repression</mark><span class="ipa">/ɹiˈpɹɛʃən/</span>, <mark class="vocab" data-word="prime minister">prime minister</mark><span class="ipa">/pɹˈaɪm mˈɪnɪstɚ/</span>, and <mark class="vocab" data-word="Department of Homeland Security">Department of Homeland Security</mark><span class="ipa">/dɪpˈɑːɹtmənt ʌv hˈoʊmlənd sɪkjˈʊɹɪɾi/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Society &amp; Politics, hãy để ý đàn áp, sự đàn áp, thủ tướng, và Department of Homeland Security.</span>
+          </p>
+          <p class="ex-sent" data-sent="42">
+            <span class="ex-en">In this B2 Society & Politics passage, notice <mark class="vocab" data-word="to [lead] astray">[lead] astray</mark><span class="ipa">/lˈiːd ɐstɹˈeɪ/</span>, <mark class="vocab" data-word="Senate">Senate</mark><span class="ipa">/ˈsɛnət/, /ˈsɛnɪt/</span>, <mark class="vocab" data-word="to acknowledge">acknowledge</mark><span class="ipa">/ækˈnɑɫɪdʒ/</span>, and <mark class="vocab" data-word="to aid">aid</mark><span class="ipa">/ˈeɪd/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Society &amp; Politics, hãy để ý [lead] astray, Thượng viện, thừa nhận, và giúp đỡ.</span>
+          </p>
+          <p class="ex-sent" data-sent="43">
+            <span class="ex-en">In this B2 Society & Politics passage, notice <mark class="vocab" data-word="age limit">age limit</mark><span class="ipa">/ˈeɪdʒ lˈɪmɪt/</span>, <mark class="vocab" data-word="ban">ban</mark><span class="ipa">/bæn/</span>, <mark class="vocab" data-word="to bar">bar</mark><span class="ipa">/bɑr/</span>, and <mark class="vocab" data-word="condition">condition</mark><span class="ipa">/kənˈdɪʃən/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Society &amp; Politics, hãy để ý giới hạn tuổi, lệnh cấm, ngăn cản, và điều kiện.</span>
+          </p>
+          <p class="ex-sent" data-sent="44">
+            <span class="ex-en">In this B2 Society & Politics passage, notice <mark class="vocab" data-word="to demand">demand</mark><span class="ipa">/dɪˈmænd/</span>, <mark class="vocab" data-word="to enable">enable</mark><span class="ipa">/ɛˈneɪbəɫ/, /ɪˈneɪbəɫ/</span>, <mark class="vocab" data-word="exception">exception</mark><span class="ipa">/ɪkˈsɛpʃən/</span>, and <mark class="vocab" data-word="guideline">guideline</mark><span class="ipa">/ˈɡaɪdˌɫaɪn/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Society &amp; Politics, hãy để ý yêu cầu, cho phép, ngoại lệ, và hướng dẫn.</span>
+          </p>
+          <p class="ex-sent" data-sent="45">
+            <span class="ex-en">In this B2 Society & Politics passage, notice <mark class="vocab" data-word="necessity">necessity</mark><span class="ipa">/nəˈsɛsəti/, /nəˈsɛsɪti/</span>, <mark class="vocab" data-word="<mark class="vocab" data-word="to permit">permit</mark><span class="ipa">/ˈpɝˌmɪt/, /pɝˈmɪt/</span>">permit</mark><span class="ipa">/ˈpɝˌmɪt/, /pɝˈmɪt/</span>, permit, and <mark class="vocab" data-word="obligation">obligation</mark><span class="ipa">/ˌɑbɫəˈɡeɪʃən/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Society &amp; Politics, hãy để ý sự cần thiết, giấy phép, cho phép, và nghĩa vụ.</span>
+          </p>
+          <p class="ex-sent" data-sent="46">
+            <span class="ex-en">In this B2 Society & Politics passage, notice <mark class="vocab" data-word="requirement">requirement</mark><span class="ipa">/ɹɪˈkwaɪɹmənt/</span>, <mark class="vocab" data-word="to restrict">restrict</mark><span class="ipa">/ɹiˈstɹɪkt/</span>, <mark class="vocab" data-word="restriction">restriction</mark><span class="ipa">/ɹiˈstɹɪkʃən/</span>, and <mark class="vocab" data-word="rule book">rule book</mark><span class="ipa">/ɹˈuːl bˈʊk/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Society &amp; Politics, hãy để ý yêu cầu, hạn chế, hạn chế, và sách quy tắc.</span>
+          </p>
+          <p class="ex-sent" data-sent="47">
+            <span class="ex-en">In this B2 Society & Politics passage, notice <mark class="vocab" data-word="to forbid">forbid</mark><span class="ipa">/fɝˈbɪd/, /fɔˈbɪd/</span>, <mark class="vocab" data-word="forbidden">forbidden</mark><span class="ipa">/ˈfɔɹbɪdən/, /fɝɹˈbɪdən/</span>, <mark class="vocab" data-word="acceptable">acceptable</mark><span class="ipa">/ækˈsɛptəbəɫ/, /əkˈsɛptəbəɫ/</span>, and <mark class="vocab" data-word="to grant">grant</mark><span class="ipa">/ˈɡɹænt/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Society &amp; Politics, hãy để ý cấm, bị cấm, chấp nhận được, và cấp.</span>
+          </p>
+          <p class="ex-sent" data-sent="48">
+            <span class="ex-en">In this B2 Society & Politics passage, notice <mark class="vocab" data-word="compulsory">compulsory</mark><span class="ipa">/kəmˈpəɫsɝi/</span>, <mark class="vocab" data-word="illegal">illegal</mark><span class="ipa">/ˌɪˈɫiɡəɫ/</span>, <mark class="vocab" data-word="mandatory">mandatory</mark><span class="ipa">/ˈmændəˌtɔɹi/</span>, and <mark class="vocab" data-word="to impose">impose</mark><span class="ipa">/ˌɪmˈpoʊz/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Society &amp; Politics, hãy để ý bắt buộc, bất hợp pháp, bắt buộc, và áp đặt.</span>
+          </p>
+          <p class="ex-sent" data-sent="49">
+            <span class="ex-en">In this B2 Society & Politics passage, notice <mark class="vocab" data-word="to insist">insist</mark><span class="ipa">/ˌɪnˈsɪst/</span>, <mark class="vocab" data-word="strictness">strictness</mark><span class="ipa">/stɹˈɪktnəs/</span>, <mark class="vocab" data-word="sanction">sanction</mark><span class="ipa">/ˈsæŋkʃən/</span>, and <mark class="vocab" data-word="provided that">provided that</mark><span class="ipa">/pɹəvˈaɪdᵻd ðˈæt/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Society &amp; Politics, hãy để ý nhấn mạnh, sự nghiêm khắc, lệnh trừng phạt, và với điều kiện là.</span>
+          </p>
+          <p class="ex-sent" data-sent="50">
+            <span class="ex-en">In this B2 Society & Politics passage, notice <mark class="vocab" data-word="to beg">beg</mark><span class="ipa">/ˈbɛɡ/</span>, <mark class="vocab" data-word="to [get] rid of {sb/sth}">[get] rid of {sb/sth}</mark><span class="ipa">/ɡɛt ɹˈɪd ʌv ˌɛsbˈiː slˈæʃ ˌɛstˌiːˈeɪtʃ/</span>, <mark class="vocab" data-word="objection">objection</mark><span class="ipa">/əbˈdʒɛkʃən/</span>, and <mark class="vocab" data-word="altar">altar</mark><span class="ipa">/ˈɔɫtɝ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Society &amp; Politics, hãy để ý xin, [get] rid of {sb/sth}, phản đối, và bàn thờ.</span>
+          </p>
+          <p class="ex-sent" data-sent="51">
+            <span class="ex-en">In this B2 Society & Politics passage, notice <mark class="vocab" data-word="cross">cross</mark><span class="ipa">/krɑːs/</span>, <mark class="vocab" data-word="atheism">atheism</mark><span class="ipa">/ˈeɪθiˌɪzəm/, /əˈθaɪsəm/</span>, <mark class="vocab" data-word="Buddhism">Buddhism</mark><span class="ipa">/ˈbudɪzəm/</span>, and <mark class="vocab" data-word="Christian">Christian</mark><span class="ipa">/ˈkɹɪstʃən/, /ˈkɹɪstʃɪn/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Society &amp; Politics, hãy để ý thập tự giá, chủ nghĩa vô thần, Phật giáo, và tín đồ Cơ đốc.</span>
+          </p>
+          <p class="ex-sent" data-sent="52">
+            <span class="ex-en">In this B2 Society & Politics passage, notice <mark class="vocab" data-word="Christianity">Christianity</mark><span class="ipa">/ˌkɹɪstʃiˈænɪti/</span>, <mark class="vocab" data-word="Hindu">Hindu</mark><span class="ipa">/ˈhɪnˌdu/</span>, <mark class="vocab" data-word="Jew">Jew</mark><span class="ipa">/ˈdʒu/</span>, and <mark class="vocab" data-word="Jewish">Jewish</mark><span class="ipa">/ˈdʒuɪʃ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Society &amp; Politics, hãy để ý Cơ Đốc giáo, người theo đạo Hindu, Người Do Thái, và Do Thái.</span>
+          </p>
+          <p class="ex-sent" data-sent="53">
+            <span class="ex-en">In this B2 Society & Politics passage, notice <mark class="vocab" data-word="Muslim">Muslim</mark><span class="ipa">/ˈməzɫəm/, /ˈməzɫɪm/</span>, <mark class="vocab" data-word="pagan">pagan</mark><span class="ipa">/ˈpeɪɡən/</span>, <mark class="vocab" data-word="the Lord">the Lord</mark><span class="ipa">/ˈɫɔɹd/</span>, and <mark class="vocab" data-word="Bible">Bible</mark><span class="ipa">/ˈbaɪbəɫ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Society &amp; Politics, hãy để ý Người Hồi giáo, người ngoại đạo, Chúa, và Kinh Thánh.</span>
+          </p>
+          <p class="ex-sent" data-sent="54">
+            <span class="ex-en">In this B2 Society & Politics passage, notice <mark class="vocab" data-word="Gospel">Gospel</mark><span class="ipa">/ˈɡɑspəɫ/, /ˈɡɔspəɫ/</span>, <mark class="vocab" data-word="heaven">heaven</mark><span class="ipa">/ˈhɛvən/</span>, <mark class="vocab" data-word="hell">hell</mark><span class="ipa">/ˈhɛɫ/</span>, and <mark class="vocab" data-word="sin">sin</mark><span class="ipa">/sɪn/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Society &amp; Politics, hãy để ý phúc âm, thiên đường, địa ngục, và tội lỗi.</span>
+          </p>
+          <p class="ex-sent" data-sent="55">
+            <span class="ex-en">In this B2 Society & Politics passage, notice <mark class="vocab" data-word="vice">vice</mark><span class="ipa">/ˈvaɪs/</span>, <mark class="vocab" data-word="grace">grace</mark><span class="ipa">/ˈɡɹeɪs/</span>, <mark class="vocab" data-word="pride">pride</mark><span class="ipa">/ˈpɹaɪd/</span>, and <mark class="vocab" data-word="greed">greed</mark><span class="ipa">/ˈɡɹid/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Society &amp; Politics, hãy để ý tật xấu, ân sủng, tính kiêu ngạo, và lòng tham.</span>
+          </p>
+          <p class="ex-sent" data-sent="56">
+            <span class="ex-en">In this B2 Society & Politics passage, notice <mark class="vocab" data-word="lust">lust</mark><span class="ipa">/lʌst/</span>, <mark class="vocab" data-word="envy">envy</mark><span class="ipa">/ˈɛnvi/</span>, <mark class="vocab" data-word="laziness">laziness</mark><span class="ipa">/ˈɫeɪzinəs/</span>, and <mark class="vocab" data-word="to confess">confess</mark><span class="ipa">/kənˈfɛs/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Society &amp; Politics, hãy để ý dâm dục, sự ghen tị, sự lười biếng, và xưng tội.</span>
+          </p>
+          <p class="ex-sent" data-sent="57">
+            <span class="ex-en">In this B2 Society & Politics passage, notice <mark class="vocab" data-word="to convert">convert</mark><span class="ipa">/ˈkɑnvərt/</span>, <mark class="vocab" data-word="to forgive">forgive</mark><span class="ipa">/fɝˈɡɪv/, /fɔɹˈɡɪv/</span>, <mark class="vocab" data-word="to trust">trust</mark><span class="ipa">/trʌst/</span>, and <mark class="vocab" data-word="devil">devil</mark><span class="ipa">/ˈdɛvəɫ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Society &amp; Politics, hãy để ý cải đạo, tha thứ, tin tưởng, và ma quỷ.</span>
+          </p>
+          <p class="ex-sent" data-sent="58">
+            <span class="ex-en">In this B2 Society & Politics passage, notice <mark class="vocab" data-word="prophet">prophet</mark><span class="ipa">/ˈpɹɑfət/</span>, <mark class="vocab" data-word="service">service</mark><span class="ipa">/ˈsɝːvɪs/</span>, <mark class="vocab" data-word="soul">soul</mark><span class="ipa">/soʊl/</span>, and <mark class="vocab" data-word="spiritual">spiritual</mark><span class="ipa">/ˈspɪɹɪˌtʃuəɫ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Society &amp; Politics, hãy để ý nhà tiên tri, lễ, linh hồn, và tâm linh.</span>
+          </p>
+          <p class="ex-sent" data-sent="59">
+            <span class="ex-en">In this B2 Society & Politics passage, notice <mark class="vocab" data-word="grave">grave</mark><span class="ipa">/ɡreɪv/</span>, <mark class="vocab" data-word="godchild">godchild</mark><span class="ipa">/ɡˈɑːdtʃaɪld/</span>, <mark class="vocab" data-word="devout">devout</mark><span class="ipa">/dɪˈvaʊt/</span>, and <mark class="vocab" data-word="godfather">godfather</mark><span class="ipa">/ˈɡɑdˌfɑðɝ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Society &amp; Politics, hãy để ý mộ, con đỡ đầu, mộ đạo, và cha đỡ đầu.</span>
+          </p>
+          <p class="ex-sent" data-sent="60">
+            <span class="ex-en">In this B2 Society & Politics passage, notice <mark class="vocab" data-word="godmother">godmother</mark><span class="ipa">/ˈɡɑdˌməðɝ/</span>, <mark class="vocab" data-word="karma">karma</mark><span class="ipa">/ˈkɑɹmə/</span>, <mark class="vocab" data-word="adventurous">adventurous</mark><span class="ipa">/ædˈvɛntʃɝəs/, /ədˈvɛntʃɝəs/</span>, and <mark class="vocab" data-word="to alarm">alarm</mark><span class="ipa">/əˈɫɑɹm/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Society &amp; Politics, hãy để ý mẹ đỡ đầu, nghiệp, phiêu lưu, và báo động.</span>
+          </p>
+          <p class="ex-sent" data-sent="61">
+            <span class="ex-en">In this B2 Society & Politics passage, notice <mark class="vocab" data-word="alarmed">alarmed</mark><span class="ipa">/əˈɫɑɹmd/</span>, <mark class="vocab" data-word="daring">daring</mark><span class="ipa">/ˈdɛɹɪŋ/</span>, <mark class="vocab" data-word="at-<mark class="vocab" data-word="risk">risk</mark><span class="ipa">/rɪsk/</span>">at-risk</mark><span class="ipa">/ætɹˈɪsk/</span>, and risk.</span>
+            <span class="ex-vi">Trong đoạn B2 về Society &amp; Politics, hãy để ý báo động, táo bạo, có nguy cơ, và rủi ro.</span>
+          </p>
+          <p class="ex-sent" data-sent="62">
+            <span class="ex-en">In this B2 Society & Politics passage, notice <mark class="vocab" data-word="critical">critical</mark><span class="ipa">/ˈkɹɪtɪkəɫ/</span>, <mark class="vocab" data-word="deadly">deadly</mark><span class="ipa">/ˈdɛdɫi/</span>, <mark class="vocab" data-word="desperate">desperate</mark><span class="ipa">/ˈdɛspɝɪt/, /ˈdɛspɹɪt/</span>, and <mark class="vocab" data-word="offensive">offensive</mark><span class="ipa">/əˈfɛnsɪv/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Society &amp; Politics, hãy để ý nghiêm trọng, chết người, tuyệt vọng, và xúc phạm.</span>
+          </p>
+          <p class="ex-sent" data-sent="63">
+            <span class="ex-en">In this B2 Society & Politics passage, notice <mark class="vocab" data-word="harmless">harmless</mark><span class="ipa">/ˈhɑɹmɫəs/</span>, <mark class="vocab" data-word="high-risk">high-risk</mark><span class="ipa">/hˈaɪɹˈɪsk/</span>, <mark class="vocab" data-word="low-risk">low-risk</mark><span class="ipa">/lˈoʊɹˈɪsk/</span>, and <mark class="vocab" data-word="secure">secure</mark><span class="ipa">/sɪˈkjʊr/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Society &amp; Politics, hãy để ý vô hại, rủi ro cao, rủi ro thấp, và an toàn.</span>
+          </p>
+          <p class="ex-sent" data-sent="64">
+            <span class="ex-en">In this B2 Society & Politics passage, notice <mark class="vocab" data-word="harmful">harmful</mark><span class="ipa">/ˈhɑɹmfəɫ/</span>, <mark class="vocab" data-word="insecure">insecure</mark><span class="ipa">/ˈɪnsəkjɝ/</span>, <mark class="vocab" data-word="sound">sound</mark><span class="ipa">/saʊnd/</span>, and <mark class="vocab" data-word="nasty">nasty</mark><span class="ipa">/ˈnæsti/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Society &amp; Politics, hãy để ý có hại, không an toàn, vững chắc, và nghiêm trọng.</span>
+          </p>
+          <p class="ex-sent" data-sent="65">
+            <span class="ex-en">In this B2 Society & Politics passage, notice <mark class="vocab" data-word="risky">risky</mark><span class="ipa">/ˈɹɪski/</span>, <mark class="vocab" data-word="to encounter">encounter</mark><span class="ipa">/ɪnˈkaʊnɝ/, /ɪnˈkaʊntɝ/</span>, <mark class="vocab" data-word="to endanger">endanger</mark><span class="ipa">/ɛnˈdeɪndʒɝ/</span>, and <mark class="vocab" data-word="to harm">harm</mark><span class="ipa">/ˈhɑɹm/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Society &amp; Politics, hãy để ý mạo hiểm, gặp phải, gây nguy hiểm, và làm hại.</span>
+          </p>
+          <p class="ex-sent" data-sent="66">
+            <span class="ex-en">In this B2 Society & Politics passage, notice <mark class="vocab" data-word="to pose">pose</mark><span class="ipa">/ˈpoʊz/</span>, <mark class="vocab" data-word="to threaten">threaten</mark><span class="ipa">/ˈθɹɛtən/</span>, <mark class="vocab" data-word="happening">happening</mark><span class="ipa">/ˈhæpənɪŋ/, /ˈhæpnɪŋ/</span>, and <mark class="vocab" data-word="to rescue">rescue</mark><span class="ipa">/ˈɹɛskju/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Society &amp; Politics, hãy để ý đặt ra, đe dọa, sự kiện, và giải cứu.</span>
+          </p>
+          <p class="ex-sent" data-sent="67">
+            <span class="ex-en">In this B2 Society & Politics passage, notice <mark class="vocab" data-word="rescuer">rescuer</mark><span class="ipa">/ˈɹɛsˌkjuɝ/</span>, <mark class="vocab" data-word="threat">threat</mark><span class="ipa">/ˈθɹɛt/</span>, <mark class="vocab" data-word="out of harm&#x27;s way">out of harm&#x27;s way</mark><span class="ipa">/ˌaʊɾəv hˈɑːɹmz wˈeɪ/</span>, and <mark class="vocab" data-word="to disturb">disturb</mark><span class="ipa">/dɪˈstɝb/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Society &amp; Politics, hãy để ý người giải cứu, mối đe dọa, ngoài vùng nguy hiểm, và làm phiền.</span>
+          </p>
+          <p class="ex-sent" data-sent="68">
+            <span class="ex-en">In this B2 Society & Politics passage, notice <mark class="vocab" data-word="to offend">offend</mark><span class="ipa">/əˈfɛnd/</span>, <mark class="vocab" data-word="off the hook">off the hook</mark><span class="ipa">/ˈɔf ðə hˈʊk/</span>, <mark class="vocab" data-word="to scream">scream</mark><span class="ipa">/ˈskɹim/</span>, and <mark class="vocab" data-word="neutral">neutral</mark><span class="ipa">/ˈnutɹəɫ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Society &amp; Politics, hãy để ý xúc phạm, thoát khỏi rắc rối, hét, và trung lập.</span>
+          </p>
+          <p class="ex-sent" data-sent="69">
+            <span class="ex-en">In this B2 Society & Politics passage, notice <mark class="vocab" data-word="to alert">alert</mark><span class="ipa">/əˈlɝt/</span>, <mark class="vocab" data-word="disrespectful">disrespectful</mark><span class="ipa">/ˌdɪsɹɪˈspɛktfəɫ/</span>, <mark class="vocab" data-word="on a razor&#x27;s edge">on a razor&#x27;s edge</mark><span class="ipa">/ˌɑːn ɐ ɹˈeɪzɚz ˈɛdʒ/</span>, and <mark class="vocab" data-word="fearsome">fearsome</mark><span class="ipa">/ˈfɪɹsəm/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Society &amp; Politics, hãy để ý cảnh báo, thiếu tôn trọng, trên bờ vực nguy hiểm, và đáng sợ.</span>
+          </p>
+          <p class="ex-sent" data-sent="70">
+            <span class="ex-en">In this B2 Society & Politics passage, notice <mark class="vocab" data-word="advance">advance</mark><span class="ipa">/ədˈvæns/</span>, <mark class="vocab" data-word="camp">camp</mark><span class="ipa">/kæmp/</span>, <mark class="vocab" data-word="military">military</mark><span class="ipa">/ˈmɪlɪˌtɛri/</span>, and <mark class="vocab" data-word="air force">air force</mark><span class="ipa">/ˈer fˈoːrs/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Society &amp; Politics, hãy để ý tiến lên, trại, quân sự, và không quân.</span>
+          </p>
+          <p class="ex-sent" data-sent="71">
+            <span class="ex-en">In this B2 Society & Politics passage, notice <mark class="vocab" data-word="navy">navy</mark><span class="ipa">/ˈneɪvi/</span>, <mark class="vocab" data-word="strategy">strategy</mark><span class="ipa">/ˈstɹætədʒi/</span>, <mark class="vocab" data-word="arms">arms</mark><span class="ipa">/ˈɑɹmz/</span>, and <mark class="vocab" data-word="grenade">grenade</mark><span class="ipa">/ɡɹəˈneɪd/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Society &amp; Politics, hãy để ý hải quân, chiến lược, vũ khí, và lựu đạn.</span>
+          </p>
+          <p class="ex-sent" data-sent="72">
+            <span class="ex-en">In this B2 Society & Politics passage, notice <mark class="vocab" data-word="handgun">handgun</mark><span class="ipa">/ˈhændˌɡən/</span>, <mark class="vocab" data-word="mine">mine</mark><span class="ipa">/maɪn/</span>, <mark class="vocab" data-word="campaign">campaign</mark><span class="ipa">/kæmˈpeɪn/</span>, and <mark class="vocab" data-word="to command">command</mark><span class="ipa">/kəˈmænd/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Society &amp; Politics, hãy để ý súng ngắn, mìn, chiến dịch, và chỉ huy.</span>
+          </p>
+          <p class="ex-sent" data-sent="73">
+            <span class="ex-en">In this B2 Society & Politics passage, notice <mark class="vocab" data-word="to desert">desert</mark><span class="ipa">/ˈdɛzɚt/</span>, <mark class="vocab" data-word="to dominate">dominate</mark><span class="ipa">/ˈdɑməˌneɪt/</span>, <mark class="vocab" data-word="to invade">invade</mark><span class="ipa">/ˌɪnˈveɪd/</span>, and <mark class="vocab" data-word="to recruit">recruit</mark><span class="ipa">/rɪˈkrut/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Society &amp; Politics, hãy để ý đào ngũ, thống trị, xâm lược, và tuyển quân.</span>
+          </p>
+          <p class="ex-sent" data-sent="74">
+            <span class="ex-en">In this B2 Society & Politics passage, notice <mark class="vocab" data-word="to strike">strike</mark><span class="ipa">/ˈstɹaɪk/</span>, <mark class="vocab" data-word="gunfight">gunfight</mark><span class="ipa">/ˈɡənˌfaɪt/</span>, <mark class="vocab" data-word="armed">armed</mark><span class="ipa">/ˈɑɹmd/</span>, and <mark class="vocab" data-word="civil">civil</mark><span class="ipa">/ˈsɪvəɫ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Society &amp; Politics, hãy để ý đánh, cuộc đấu súng, vũ trang, và dân sự.</span>
+          </p>
+          <p class="ex-sent" data-sent="75">
+            <span class="ex-en">In this B2 Society & Politics passage, notice <mark class="vocab" data-word="occupied">occupied</mark><span class="ipa">/ˈɑkjəˌpaɪd/</span>, <mark class="vocab" data-word="parade">parade</mark><span class="ipa">/pɝˈeɪd/</span>, <mark class="vocab" data-word="prisoner of war">prisoner of war</mark><span class="ipa">/pɹˈɪzənɚɹ ʌv wˈɔːɹ/</span>, and <mark class="vocab" data-word="rank">rank</mark><span class="ipa">/ˈɹæŋk/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Society &amp; Politics, hãy để ý bị chiếm đóng, diễu hành, prisoner of war, và cấp bậc.</span>
+          </p>
+          <p class="ex-sent" data-sent="76">
+            <span class="ex-en">In this B2 Society & Politics passage, notice <mark class="vocab" data-word="refugee">refugee</mark><span class="ipa">/ˈɹɛfjudʒi/</span>, <mark class="vocab" data-word="volunteer">volunteer</mark><span class="ipa">/ˌvɑɫənˈtɪɹ/</span>, <mark class="vocab" data-word="tank">tank</mark><span class="ipa">/ˈtæŋk/</span>, and <mark class="vocab" data-word="warship">warship</mark><span class="ipa">/ˈwɔɹˌʃɪp/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Society &amp; Politics, hãy để ý người tị nạn, tình nguyện viên, xe tăng, và tàu chiến.</span>
+          </p>
+          <p class="ex-sent" data-sent="77">
+            <span class="ex-en">In this B2 Society & Politics passage, notice <mark class="vocab" data-word="war crime">war crime</mark><span class="ipa">/wˈɔːɹ kɹˈaɪm/</span>, <mark class="vocab" data-word="nuclear submarine">nuclear submarine</mark><span class="ipa">/nˈuːklɪɹ sˈʌbmɚɹˌiːn/</span>, <mark class="vocab" data-word="target">target</mark><span class="ipa">/ˈtɑrɡɪt/</span>, and <mark class="vocab" data-word="to wreck">wreck</mark><span class="ipa">/ˈɹɛk/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Society &amp; Politics, hãy để ý tội ác chiến tranh, tàu ngầm hạt nhân, mục tiêu, và phá hủy.</span>
+          </p>
+          <p class="ex-sent" data-sent="78">
+            <span class="ex-en">In this B2 Society & Politics passage, notice <mark class="vocab" data-word="spoil">spoil</mark><span class="ipa">/ˈspɔɪɫ/</span>, <mark class="vocab" data-word="to wound">wound</mark><span class="ipa">/ˈwaʊnd/, /ˈwund/</span>, <mark class="vocab" data-word="ground-to-air missile">ground-to-air missile</mark><span class="ipa">/ɡɹˈaʊndtʊˈɛɹ mˈɪsəl/</span>, and <mark class="vocab" data-word="air-to-ground missile">air-to-ground missile</mark><span class="ipa">/ˈeɹɾəɡɹˈaʊnd mˈɪsəl/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Society &amp; Politics, hãy để ý chiến lợi phẩm, làm bị thương, tên lửa đất đối không, và tên lửa không đối đất.</span>
+          </p>
+          <p class="ex-sent" data-sent="79">
+            <span class="ex-en">In this B2 Society & Politics passage, notice <mark class="vocab" data-word="brass knuckles">brass knuckles</mark><span class="ipa">/bɹˈæs nˈʌkəlz/</span>, <mark class="vocab" data-word="dogfight">dogfight</mark><span class="ipa">/ˈdɑɡˌfaɪt/</span>, <mark class="vocab" data-word="marine">marine</mark><span class="ipa">/məˈrin/</span>, and <mark class="vocab" data-word="to gun down">gun down</mark><span class="ipa">/ɡˈʌn dˈaʊn/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Society &amp; Politics, hãy để ý vòng đấm sắt, không chiến, một thủy quân lục chiến, và bắn hạ.</span>
+          </p>
+          <p class="ex-sent" data-sent="80">
+            <span class="ex-en">In this B2 Society & Politics passage, notice <mark class="vocab" data-word="United States Marine Corps">United States Marine Corps</mark><span class="ipa">/juːnˈaɪɾᵻd stˈeɪts mɚɹˈiːn kˈɔːɹ/</span>, <mark class="vocab" data-word="sidearm">sidearm</mark><span class="ipa">/ˈsaɪdɑɹm/</span>, and <mark class="vocab" data-word="bulletproof">bulletproof</mark><span class="ipa">/ˈbʊɫətˌpɹuf/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Society &amp; Politics, hãy để ý United States Marine Corps, vũ khí bên hông, và chống đạn.</span>
+          </p>
+          <p class="ex-sent" data-sent="81">
+            <span class="ex-en">One more useful item is "<mark class="vocab" data-word="out of harm&#x27;s way">out of harm&#x27;s way</mark><span class="ipa">/ˌaʊɾəv hˈɑːɹmz wˈeɪ/</span>" in this topic.</span>
+            <span class="ex-vi">Một mục hữu ích nữa là &quot;ngoài vùng nguy hiểm&quot; trong chủ đề này.</span>
+          </p>
+          <p class="ex-sent" data-sent="82">
+            <span class="ex-en">One more useful item is "<mark class="vocab" data-word="on a razor&#x27;s edge">on a razor&#x27;s edge</mark><span class="ipa">/ˌɑːn ɐ ɹˈeɪzɚz ˈɛdʒ/</span>" in this topic.</span>
+            <span class="ex-vi">Một mục hữu ích nữa là &quot;trên bờ vực nguy hiểm&quot; trong chủ đề này.</span>
+          </p>
+          <p class="ex-sent" data-sent="83">
+            <span class="ex-en">Keep this form in mind: <mark class="vocab" data-word="out of harm's way">out of harm's way</mark><span class="ipa">/ˌaʊɾəv hˈɑːɹmz wˈeɪ/</span>.</span>
+            <span class="ex-vi">Hãy nhớ dạng từ này: ngoài vùng nguy hiểm.</span>
+          </p>
+          <p class="ex-sent" data-sent="84">
+            <span class="ex-en">Keep this form in mind: <mark class="vocab" data-word="on a razor's edge">on a razor's edge</mark><span class="ipa">/ˌɑːn ɐ ɹˈeɪzɚz ˈɛdʒ/</span>.</span>
+            <span class="ex-vi">Hãy nhớ dạng từ này: trên bờ vực nguy hiểm.</span>
+          </p>
+      </section>
+
+      <section class="ex-vocab">
+        <h2>Word checklist · 319</h2>
+        <ul class="ex-vocab-list">
+          <li><mark class="vocab">capture</mark> <span class="ipa">/ˈkæptʃɝ/</span> — bắt giữ</li>
+          <li><mark class="vocab">expose</mark> <span class="ipa">/ɪkˈspoʊz/</span> — tiết lộ</li>
+          <li><mark class="vocab">get away with</mark> <span class="ipa">/ɡɛt ɐwˈeɪ wɪð/</span> — thoát tội</li>
+          <li><mark class="vocab">monitor</mark> <span class="ipa">/ˈmɑnɪtər/</span> — theo dõi</li>
+          <li><mark class="vocab">pursue</mark> <span class="ipa">/pɝˈsu/</span> — theo đuổi</li>
+          <li><mark class="vocab">resist</mark> <span class="ipa">/ɹiˈzɪst/, /ɹɪˈzɪst/</span> — chống cự</li>
+          <li><mark class="vocab">sentence</mark> <span class="ipa">/ˈsɛntəns/</span> — kết án</li>
+          <li><mark class="vocab">traffic</mark> <span class="ipa">/ˈtræfɪk/</span> — buôn bán bất hợp pháp</li>
+          <li><mark class="vocab">witness</mark> <span class="ipa">/ˈwɪtnəs/</span> — chứng kiến</li>
+          <li><mark class="vocab">arrest</mark> <span class="ipa">/əˈrɛst/</span> — bắt giữ</li>
+          <li><mark class="vocab">bulletproof vest</mark> <span class="ipa">/bˈʊlɪtpɹˌuːf vˈɛst/</span> — áo chống đạn</li>
+          <li><mark class="vocab">community service</mark> <span class="ipa">/kəmjˈuːnɪɾi sˈɜːvɪs/</span> — dịch vụ cộng đồng</li>
+          <li><mark class="vocab">cell</mark> <span class="ipa">/ˈsɛɫ/</span> — xà lim</li>
+          <li><mark class="vocab">jail</mark> <span class="ipa">/ˈdʒeɪɫ/</span> — nhà tù</li>
+          <li><mark class="vocab">life sentence</mark> <span class="ipa">/lˈaɪf sˈɛntəns/</span> — án chung thân</li>
+          <li><mark class="vocab">crime</mark> <span class="ipa">/ˈkɹaɪm/</span> — tội phạm</li>
+          <li><mark class="vocab">eyewitness</mark> <span class="ipa">/ˈaɪˈwɪtnəs/</span> — nhân chứng</li>
+          <li><mark class="vocab">offender</mark> <span class="ipa">/əˈfɛndɝ/</span> — người phạm tội</li>
+          <li><mark class="vocab">drug dealer</mark> <span class="ipa">/dɹˈʌɡ dˈiːlɚ/</span> — kẻ buôn bán ma túy</li>
+          <li><mark class="vocab">fraud</mark> <span class="ipa">/ˈfɹɔd/</span> — kẻ lừa đảo</li>
+          <li><mark class="vocab">gang</mark> <span class="ipa">/ˈɡæŋ/</span> — băng đảng</li>
+          <li><mark class="vocab">pickpocket</mark> <span class="ipa">/ˈpɪkˌpɑkət/</span> — kẻ móc túi</li>
+          <li><mark class="vocab">bombing</mark> <span class="ipa">/ˈbɑmɪŋ/</span> — ném bom</li>
+          <li><mark class="vocab">burglary</mark> <span class="ipa">/ˈbɜːrɡləri/</span> — trộm cắp</li>
+          <li><mark class="vocab">drunk driving</mark> <span class="ipa">/dɹˈʌŋk dɹˈaɪvɪŋ/</span> — lái xe khi say rượu</li>
+          <li><mark class="vocab">identity theft</mark> <span class="ipa">/aɪdˈɛntɪɾi θˈɛft/</span> — ăn cắp danh tính</li>
+          <li><mark class="vocab">robbery</mark> <span class="ipa">/ˈɹɑbɝi/</span> — vụ cướp</li>
+          <li><mark class="vocab">shooting</mark> <span class="ipa">/ˈʃutɪŋ/</span> — vụ nổ súng</li>
+          <li><mark class="vocab">shoplifting</mark> <span class="ipa">/ˈʃɑˌpɫɪftɪŋ/</span> — ăn cắp cửa hàng</li>
+          <li><mark class="vocab">terrorism</mark> <span class="ipa">/ˈterərɪzəm/</span> — khủng bố</li>
+          <li><mark class="vocab">vandalism</mark> <span class="ipa">/ˈvændəɫɪzəm/</span> — hành vi phá hoại</li>
+          <li><mark class="vocab">violence</mark> <span class="ipa">/ˈvaɪəɫəns/</span> — bạo lực</li>
+          <li><mark class="vocab">break out</mark> <span class="ipa">/bɹˈeɪk ˈaʊt/</span> — trốn thoát</li>
+          <li><mark class="vocab">hang</mark> <span class="ipa">/hæŋ/</span> — treo cổ</li>
+          <li><mark class="vocab">break</mark> <span class="ipa">/breɪk/</span> — sự trốn thoát</li>
+          <li><mark class="vocab">grass</mark> <span class="ipa">/ɡræs/</span> — cỏ</li>
+          <li><mark class="vocab">narc</mark> <span class="ipa">/ˈnɑɹk/</span> — một cảnh sát ma túy</li>
+          <li><mark class="vocab">stoned</mark> <span class="ipa">/ˈstoʊnd/</span> — phê</li>
+          <li><mark class="vocab">trip</mark> <span class="ipa">/trɪp/</span> — phê</li>
+          <li><mark class="vocab">breathalyzer</mark> <span class="ipa">/bɹˈɛθɐlˌaɪzɚ/</span> — máy đo nồng độ cồn</li>
+          <li><mark class="vocab">disobey</mark> <span class="ipa">/ˌdɪsəˈbeɪ/</span> — không tuân theo</li>
+          <li><mark class="vocab">lock away</mark> <span class="ipa">/lˈɑːk ɐwˈeɪ/</span> — nhốt</li>
+          <li><mark class="vocab">dead to rights</mark> <span class="ipa">/dˈɛd tə ɹˈaɪts/</span> — không còn đường chối</li>
+          <li><mark class="vocab">scam</mark> <span class="ipa">/ˈskæm/</span> — lừa đảo</li>
+          <li><mark class="vocab">forensics</mark> <span class="ipa">/ˌfɔˈɹɛnsɪks/, /fɝˈɛnsɪks/</span> — khoa học hình sự</li>
+          <li><mark class="vocab">scam</mark> <span class="ipa">/ˈskæm/</span> — lừa đảo</li>
+          <li><mark class="vocab">account</mark> <span class="ipa">/əˈkaʊnt/</span> — coi là</li>
+          <li><mark class="vocab">accuse</mark> <span class="ipa">/əkˈjuz/</span> — buộc tội</li>
+          <li><mark class="vocab">challenge</mark> <span class="ipa">/ˈtʃæɫəndʒ/</span> — khiếu nại</li>
+          <li><mark class="vocab">suspect</mark> <span class="ipa">/ˈsəsˌpɛkt/, /səˈspɛkt/</span> — nghi ngờ</li>
+          <li><mark class="vocab">case</mark> <span class="ipa">/keɪs/</span> — vụ án</li>
+          <li><mark class="vocab">family court</mark> <span class="ipa">/fˈæmɪli kˈoːɹt/</span> — tòa gia đình</li>
+          <li><mark class="vocab">jury</mark> <span class="ipa">/ˈdʒʊɹi/</span> — ban giám khảo</li>
+          <li><mark class="vocab">trial</mark> <span class="ipa">/ˈtɹaɪəɫ/, /ˈtɹaɪɫ/</span> — phiên tòa</li>
+          <li><mark class="vocab">justice</mark> <span class="ipa">/ˈdʒəstəs/, /ˈdʒəstɪs/</span> — công lý</li>
+          <li><mark class="vocab">injustice</mark> <span class="ipa">/ˌɪnˈdʒəstɪs/</span> — sự bất công</li>
+          <li><mark class="vocab">strict</mark> <span class="ipa">/ˈstɹɪkt/</span> — nghiêm ngặt</li>
+          <li><mark class="vocab">legal</mark> <span class="ipa">/ˈliːɡəl/</span> — pháp lý</li>
+          <li><mark class="vocab">legally</mark> <span class="ipa">/ˈɫiɡəɫi/</span> — hợp pháp</li>
+          <li><mark class="vocab">valid</mark> <span class="ipa">/ˈvæɫɪd/</span> — hợp lệ</li>
+          <li><mark class="vocab">regulation</mark> <span class="ipa">/ˌɹɛɡjəˈɫeɪʃən/</span> — quy định</li>
+          <li><mark class="vocab">judge</mark> <span class="ipa">/ʤʌdʒ/</span> — xét xử</li>
+          <li><mark class="vocab">authority</mark> <span class="ipa">/əˈθɔɹəti/</span> — quyền lực</li>
+          <li><mark class="vocab">inspector</mark> <span class="ipa">/ˌɪnˈspɛktɝ/</span> — thanh tra</li>
+          <li><mark class="vocab">clause</mark> <span class="ipa">/klɔːz/</span> — điều khoản</li>
+          <li><mark class="vocab">claim</mark> <span class="ipa">/kleɪm/</span> — yêu cầu</li>
+          <li><mark class="vocab">bill</mark> <span class="ipa">/bɪl/</span> — dự luật</li>
+          <li><mark class="vocab">action</mark> <span class="ipa">/ˈækʃən/</span> — kiện</li>
+          <li><mark class="vocab">appeal</mark> <span class="ipa">/əˈpiɫ/</span> — kháng cáo</li>
+          <li><mark class="vocab">bail</mark> <span class="ipa">/beɪl/</span> — tiền bảo lãnh</li>
+          <li><mark class="vocab">brief</mark> <span class="ipa">/briːf/</span> — bản tóm tắt</li>
+          <li><mark class="vocab">charge</mark> <span class="ipa">/ʧɑrdʒ/</span> — cáo buộc</li>
+          <li><mark class="vocab">charge</mark> <span class="ipa">/ʧɑrdʒ/</span> — buộc tội</li>
+          <li><mark class="vocab">defend</mark> <span class="ipa">/dɪˈfɛnd/</span> — bảo vệ</li>
+          <li><mark class="vocab">file</mark> <span class="ipa">/faɪl/</span> — nộp</li>
+          <li><mark class="vocab">issue</mark> <span class="ipa">/ˈɪʃuː/</span> — ban hành</li>
+          <li><mark class="vocab">prohibit</mark> <span class="ipa">/pɹoʊˈhɪbət/</span> — cấm</li>
+          <li><mark class="vocab">prohibition</mark> <span class="ipa">/ˌpɹoʊəˈbɪʃən/</span> — lệnh cấm</li>
+          <li><mark class="vocab">try</mark> <span class="ipa">/traɪ/</span> — xét xử</li>
+          <li><mark class="vocab">break</mark> <span class="ipa">/breɪk/</span> — vi phạm</li>
+          <li><mark class="vocab">chair</mark> <span class="ipa">/tʃɛr/</span> — chủ trì</li>
+          <li><mark class="vocab">get away</mark> <span class="ipa">/ɡɛt ɐwˈeɪ/</span> — trốn thoát</li>
+          <li><mark class="vocab">require</mark> <span class="ipa">/rɪˈkwaɪr/</span> — yêu cầu</li>
+          <li><mark class="vocab">disqualify</mark> <span class="ipa">/dɪˈskwɑləˌfaɪ/</span> — loại bỏ</li>
+          <li><mark class="vocab">judgment</mark> <span class="ipa">/ˈdʒədʒmənt/</span> — phán quyết</li>
+          <li><mark class="vocab">criminal record</mark> <span class="ipa">/kɹˈɪmɪnəl ɹˈɛkɚd/</span> — tiền án</li>
+          <li><mark class="vocab">border</mark> <span class="ipa">/ˈbɔrdɚ/</span> — Khu vực này giáp với sa mạc</li>
+          <li><mark class="vocab">honor</mark> <span class="ipa">/ˈɑnɝ/</span> — tôn vinh</li>
+          <li><mark class="vocab">aristocracy</mark> <span class="ipa">/ˌɛɹəˈstɑkɹəsi/</span> — tầng lớp quý tộc</li>
+          <li><mark class="vocab">dynasty</mark> <span class="ipa">/ˈdaɪnəsti/</span> — triều đại</li>
+          <li><mark class="vocab">empire</mark> <span class="ipa">/ˈɛmpaɪɝ/</span> — đế chế</li>
+          <li><mark class="vocab">Renaissance</mark> <span class="ipa">/ɹˈɛnəsˌɑːns/</span> — Phục hưng</li>
+          <li><mark class="vocab">the Middle Ages</mark> <span class="ipa">/ðə mˈɪdəl ˈeɪdʒᵻz/</span> — thời Trung Cổ</li>
+          <li><mark class="vocab">castle</mark> <span class="ipa">/ˈkæsəɫ/</span> — lâu đài</li>
+          <li><mark class="vocab">fortress</mark> <span class="ipa">/ˈfɔɹtɹəs/</span> — pháo đài</li>
+          <li><mark class="vocab">armor</mark> <span class="ipa">/ˈɑrmər/</span> — áo giáp</li>
+          <li><mark class="vocab">coat of arms</mark> <span class="ipa">/kˈoʊt ʌv ˈɑːɹmz/</span> — huy hiệu</li>
+          <li><mark class="vocab">crown</mark> <span class="ipa">/ˈkɹaʊn/</span> — vương miện</li>
+          <li><mark class="vocab">arrow</mark> <span class="ipa">/ˈæroʊ/, /ˈer.oʊ/</span> — mũi tên</li>
+          <li><mark class="vocab">sword</mark> <span class="ipa">/ˈsɔɹd/</span> — kiếm</li>
+          <li><mark class="vocab">emblem</mark> <span class="ipa">/ˈɛmbɫəm/</span> — huy hiệu</li>
+          <li><mark class="vocab">royal</mark> <span class="ipa">/ˈɹɔɪəɫ/</span> — hoàng gia</li>
+          <li><mark class="vocab">royalty</mark> <span class="ipa">/ˈɹɔɪəɫti/</span> — hoàng gia</li>
+          <li><mark class="vocab">noble</mark> <span class="ipa">/ˈnoʊbəl/</span> — quý tộc</li>
+          <li><mark class="vocab">nobility</mark> <span class="ipa">/noʊˈbɪɫəti/</span> — quý tộc</li>
+          <li><mark class="vocab">count</mark> <span class="ipa">/kaʊnt/</span> — bá tước</li>
+          <li><mark class="vocab">countess</mark> <span class="ipa">/ˈkaʊntəs/</span> — nữ bá tước</li>
+          <li><mark class="vocab">knight</mark> <span class="ipa">/ˈnaɪt/</span> — hiệp sĩ</li>
+          <li><mark class="vocab">duchess</mark> <span class="ipa">/ˈdətʃəs/</span> — nữ công tước</li>
+          <li><mark class="vocab">king</mark> <span class="ipa">/ˈkɪŋ/</span> — vua</li>
+          <li><mark class="vocab">queen</mark> <span class="ipa">/ˈkwin/</span> — nữ hoàng</li>
+          <li><mark class="vocab">kingdom</mark> <span class="ipa">/ˈkɪŋdəm/</span> — vương quốc</li>
+          <li><mark class="vocab">lady</mark> <span class="ipa">/ˈɫeɪdi/</span> — quý bà</li>
+          <li><mark class="vocab">majesty</mark> <span class="ipa">/ˈmædʒəsti/</span> — hoàng thượng</li>
+          <li><mark class="vocab">lord</mark> <span class="ipa">/ˈɫɔɹd/</span> — lãnh chúa</li>
+          <li><mark class="vocab">monarch</mark> <span class="ipa">/ˈmɑˌnɑɹk/</span> — quân chủ</li>
+          <li><mark class="vocab">prince</mark> <span class="ipa">/ˈpɹɪns/</span> — hoàng tử</li>
+          <li><mark class="vocab">princess</mark> <span class="ipa">/ˈpɹɪnsɛs/</span> — công chúa</li>
+          <li><mark class="vocab">Duke</mark> <span class="ipa">/ˈduk/</span> — công tước</li>
+          <li><mark class="vocab">slavery</mark> <span class="ipa">/ˈsɫeɪvɝi/</span> — chế độ nô lệ</li>
+          <li><mark class="vocab">domestic</mark> <span class="ipa">/dəˈmɛstɪk/</span> — nội địa</li>
+          <li><mark class="vocab">federal</mark> <span class="ipa">/ˈfɛdɝəɫ/, /ˈfɛdɹəɫ/</span> — liên bang</li>
+          <li><mark class="vocab">independent</mark> <span class="ipa">/ˌɪndɪˈpɛndənt/</span> — độc lập</li>
+          <li><mark class="vocab">official</mark> <span class="ipa">/əˈfɪʃəl/</span> — chính thức</li>
+          <li><mark class="vocab">presidential</mark> <span class="ipa">/ˌpɹɛzəˈdɛnʃəɫ/</span> — thuộc tổng thống</li>
+          <li><mark class="vocab">revolution</mark> <span class="ipa">/ˌɹɛvəˈɫuʃən/</span> — cách mạng</li>
+          <li><mark class="vocab">revolutionary</mark> <span class="ipa">/ˌɹɛvəˈɫuʃəˌnɛɹi/</span> — cách mạng</li>
+          <li><mark class="vocab">congress</mark> <span class="ipa">/ˈkɑŋɡrəs/ , /ˈkɑŋɡrɛs/</span> — đại hội</li>
+          <li><mark class="vocab">conservative</mark> <span class="ipa">/kənˈsɜrvətɪv/</span> — người bảo thủ</li>
+          <li><mark class="vocab">Conservative Party</mark> <span class="ipa">/kənsˈɜːvətˌɪv pˈɑːɹɾi/</span> — Đảng Bảo thủ</li>
+          <li><mark class="vocab">Republican Party</mark> <span class="ipa">/ɹɪpˈʌblɪkən pˈɑːɹɾi/</span> — Đảng Cộng hòa</li>
+          <li><mark class="vocab">democrat</mark> <span class="ipa">/ˈdɛməˌkɹæt/</span> — người dân chủ</li>
+          <li><mark class="vocab">Democratic Party</mark> <span class="ipa">/dˌɛməkɹˈæɾɪk pˈɑːɹɾi/</span> — Đảng Dân chủ</li>
+          <li><mark class="vocab">labor party</mark> <span class="ipa">/lˈeɪbɚ pˈɑːɹɾi/</span> — Đảng Lao động</li>
+          <li><mark class="vocab">back</mark> <span class="ipa">/bæk/</span> — ủng hộ</li>
+          <li><mark class="vocab">debate</mark> <span class="ipa">/dəˈbeɪt/</span> — tranh luận</li>
+          <li><mark class="vocab">govern</mark> <span class="ipa">/ˈɡəvɝn/</span> — cai trị</li>
+          <li><mark class="vocab">government</mark> <span class="ipa">/ˈɡʌvɚnmənt/</span> — chính phủ</li>
+          <li><mark class="vocab">democracy</mark> <span class="ipa">/dɪˈmɑkɹəsi/</span> — dân chủ</li>
+          <li><mark class="vocab">dictatorship</mark> <span class="ipa">/dɪkˈteɪtɝˌʃɪp/</span> — chế độ độc tài</li>
+          <li><mark class="vocab">monarchy</mark> <span class="ipa">/ˈmɑnɑɹki/</span> — chế độ quân chủ</li>
+          <li><mark class="vocab">independence</mark> <span class="ipa">/ˌɪndɪˈpɛndəns/</span> — độc lập</li>
+          <li><mark class="vocab">human right</mark> <span class="ipa">/hjˈuːmən ɹˈaɪt/</span> — quyền con người</li>
+          <li><mark class="vocab">nation</mark> <span class="ipa">/ˈneɪʃən/</span> — quốc gia</li>
+          <li><mark class="vocab">plot</mark> <span class="ipa">/plɑt/</span> — âm mưu</li>
+          <li><mark class="vocab">state</mark> <span class="ipa">/steɪt/</span> — nhà nước</li>
+          <li><mark class="vocab">majority</mark> <span class="ipa">/məˈdʒɔɹəti/</span> — đa số</li>
+          <li><mark class="vocab">minister</mark> <span class="ipa">/ˈmɪnəstɝ/, /ˈmɪnɪstɝ/</span> — bộ trưởng</li>
+          <li><mark class="vocab">secretary</mark> <span class="ipa">/ˈsɛkrɪˌtɛri/</span> — bộ trưởng</li>
+          <li><mark class="vocab">spokesperson</mark> <span class="ipa">/ˈspoʊkspɝsən/</span> — người phát ngôn</li>
+          <li><mark class="vocab">negotiation</mark> <span class="ipa">/nɪˌɡoʊʃiˈeɪʃən/</span> — đàm phán</li>
+          <li><mark class="vocab">opposition</mark> <span class="ipa">/ˌɑpəˈzɪʃən/</span> — đối lập</li>
+          <li><mark class="vocab">policy</mark> <span class="ipa">/ˈpɑɫəsi/</span> — chính sách</li>
+          <li><mark class="vocab">presidency</mark> <span class="ipa">/ˈpɹɛzədənsi/</span> — nhiệm kỳ tổng thống</li>
+          <li><mark class="vocab">run for</mark> <span class="ipa">/ɹˈʌn fɔːɹ/</span> — tranh cử</li>
+          <li><mark class="vocab">seat</mark> <span class="ipa">/siːt/</span> — ghế</li>
+          <li><mark class="vocab">voting</mark> <span class="ipa">/ˈvoʊtɪŋ/</span> — bỏ phiếu</li>
+          <li><mark class="vocab">territory</mark> <span class="ipa">/ˈtɛrɪˌtɔri/</span> — lãnh thổ</li>
+          <li><mark class="vocab">negotiate</mark> <span class="ipa">/nəˈɡoʊʃiˌeɪt/, /nɪˈɡoʊʃiˌeɪt/</span> — đàm phán</li>
+          <li><mark class="vocab">conspiracy</mark> <span class="ipa">/kənˈspɪɹəsi/</span> — âm mưu</li>
+          <li><mark class="vocab">crackdown</mark> <span class="ipa">/ˈkɹækˌdaʊn/</span> — đàn áp</li>
+          <li><mark class="vocab">repression</mark> <span class="ipa">/ɹiˈpɹɛʃən/</span> — sự đàn áp</li>
+          <li><mark class="vocab">prime minister</mark> <span class="ipa">/pɹˈaɪm mˈɪnɪstɚ/</span> — thủ tướng</li>
+          <li><mark class="vocab">Department of Homeland Security</mark> <span class="ipa">/dɪpˈɑːɹtmənt ʌv hˈoʊmlənd sɪkjˈʊɹɪɾi/</span></li>
+          <li><mark class="vocab">[lead] astray</mark> <span class="ipa">/lˈiːd ɐstɹˈeɪ/</span></li>
+          <li><mark class="vocab">Senate</mark> <span class="ipa">/ˈsɛnət/, /ˈsɛnɪt/</span> — Thượng viện</li>
+          <li><mark class="vocab">acknowledge</mark> <span class="ipa">/ækˈnɑɫɪdʒ/</span> — thừa nhận</li>
+          <li><mark class="vocab">aid</mark> <span class="ipa">/ˈeɪd/</span> — giúp đỡ</li>
+          <li><mark class="vocab">age limit</mark> <span class="ipa">/ˈeɪdʒ lˈɪmɪt/</span> — giới hạn tuổi</li>
+          <li><mark class="vocab">ban</mark> <span class="ipa">/bæn/</span> — lệnh cấm</li>
+          <li><mark class="vocab">bar</mark> <span class="ipa">/bɑr/</span> — ngăn cản</li>
+          <li><mark class="vocab">condition</mark> <span class="ipa">/kənˈdɪʃən/</span> — điều kiện</li>
+          <li><mark class="vocab">demand</mark> <span class="ipa">/dɪˈmænd/</span> — yêu cầu</li>
+          <li><mark class="vocab">enable</mark> <span class="ipa">/ɛˈneɪbəɫ/, /ɪˈneɪbəɫ/</span> — cho phép</li>
+          <li><mark class="vocab">exception</mark> <span class="ipa">/ɪkˈsɛpʃən/</span> — ngoại lệ</li>
+          <li><mark class="vocab">guideline</mark> <span class="ipa">/ˈɡaɪdˌɫaɪn/</span> — hướng dẫn</li>
+          <li><mark class="vocab">necessity</mark> <span class="ipa">/nəˈsɛsəti/, /nəˈsɛsɪti/</span> — sự cần thiết</li>
+          <li><mark class="vocab">permit</mark> <span class="ipa">/ˈpɝˌmɪt/, /pɝˈmɪt/</span> — giấy phép</li>
+          <li><mark class="vocab">permit</mark> <span class="ipa">/ˈpɝˌmɪt/, /pɝˈmɪt/</span> — cho phép</li>
+          <li><mark class="vocab">obligation</mark> <span class="ipa">/ˌɑbɫəˈɡeɪʃən/</span> — nghĩa vụ</li>
+          <li><mark class="vocab">requirement</mark> <span class="ipa">/ɹɪˈkwaɪɹmənt/</span> — yêu cầu</li>
+          <li><mark class="vocab">restrict</mark> <span class="ipa">/ɹiˈstɹɪkt/</span> — hạn chế</li>
+          <li><mark class="vocab">restriction</mark> <span class="ipa">/ɹiˈstɹɪkʃən/</span> — hạn chế</li>
+          <li><mark class="vocab">rule book</mark> <span class="ipa">/ɹˈuːl bˈʊk/</span> — sách quy tắc</li>
+          <li><mark class="vocab">forbid</mark> <span class="ipa">/fɝˈbɪd/, /fɔˈbɪd/</span> — cấm</li>
+          <li><mark class="vocab">forbidden</mark> <span class="ipa">/ˈfɔɹbɪdən/, /fɝɹˈbɪdən/</span> — bị cấm</li>
+          <li><mark class="vocab">acceptable</mark> <span class="ipa">/ækˈsɛptəbəɫ/, /əkˈsɛptəbəɫ/</span> — chấp nhận được</li>
+          <li><mark class="vocab">grant</mark> <span class="ipa">/ˈɡɹænt/</span> — cấp</li>
+          <li><mark class="vocab">compulsory</mark> <span class="ipa">/kəmˈpəɫsɝi/</span> — bắt buộc</li>
+          <li><mark class="vocab">illegal</mark> <span class="ipa">/ˌɪˈɫiɡəɫ/</span> — bất hợp pháp</li>
+          <li><mark class="vocab">mandatory</mark> <span class="ipa">/ˈmændəˌtɔɹi/</span> — bắt buộc</li>
+          <li><mark class="vocab">impose</mark> <span class="ipa">/ˌɪmˈpoʊz/</span> — áp đặt</li>
+          <li><mark class="vocab">insist</mark> <span class="ipa">/ˌɪnˈsɪst/</span> — nhấn mạnh</li>
+          <li><mark class="vocab">strictness</mark> <span class="ipa">/stɹˈɪktnəs/</span> — sự nghiêm khắc</li>
+          <li><mark class="vocab">sanction</mark> <span class="ipa">/ˈsæŋkʃən/</span> — lệnh trừng phạt</li>
+          <li><mark class="vocab">provided that</mark> <span class="ipa">/pɹəvˈaɪdᵻd ðˈæt/</span> — với điều kiện là</li>
+          <li><mark class="vocab">beg</mark> <span class="ipa">/ˈbɛɡ/</span> — xin</li>
+          <li><mark class="vocab">[get] rid of {sb/sth}</mark> <span class="ipa">/ɡɛt ɹˈɪd ʌv ˌɛsbˈiː slˈæʃ ˌɛstˌiːˈeɪtʃ/</span></li>
+          <li><mark class="vocab">objection</mark> <span class="ipa">/əbˈdʒɛkʃən/</span> — phản đối</li>
+          <li><mark class="vocab">altar</mark> <span class="ipa">/ˈɔɫtɝ/</span> — bàn thờ</li>
+          <li><mark class="vocab">cross</mark> <span class="ipa">/krɑːs/</span> — thập tự giá</li>
+          <li><mark class="vocab">atheism</mark> <span class="ipa">/ˈeɪθiˌɪzəm/, /əˈθaɪsəm/</span> — chủ nghĩa vô thần</li>
+          <li><mark class="vocab">Buddhism</mark> <span class="ipa">/ˈbudɪzəm/</span> — Phật giáo</li>
+          <li><mark class="vocab">Christian</mark> <span class="ipa">/ˈkɹɪstʃən/, /ˈkɹɪstʃɪn/</span> — tín đồ Cơ đốc</li>
+          <li><mark class="vocab">Christianity</mark> <span class="ipa">/ˌkɹɪstʃiˈænɪti/</span> — Cơ Đốc giáo</li>
+          <li><mark class="vocab">Hindu</mark> <span class="ipa">/ˈhɪnˌdu/</span> — người theo đạo Hindu</li>
+          <li><mark class="vocab">Jew</mark> <span class="ipa">/ˈdʒu/</span> — Người Do Thái</li>
+          <li><mark class="vocab">Jewish</mark> <span class="ipa">/ˈdʒuɪʃ/</span> — Do Thái</li>
+          <li><mark class="vocab">Muslim</mark> <span class="ipa">/ˈməzɫəm/, /ˈməzɫɪm/</span> — Người Hồi giáo</li>
+          <li><mark class="vocab">pagan</mark> <span class="ipa">/ˈpeɪɡən/</span> — người ngoại đạo</li>
+          <li><mark class="vocab">the Lord</mark> <span class="ipa">/ˈɫɔɹd/</span> — Chúa</li>
+          <li><mark class="vocab">Bible</mark> <span class="ipa">/ˈbaɪbəɫ/</span> — Kinh Thánh</li>
+          <li><mark class="vocab">Gospel</mark> <span class="ipa">/ˈɡɑspəɫ/, /ˈɡɔspəɫ/</span> — phúc âm</li>
+          <li><mark class="vocab">heaven</mark> <span class="ipa">/ˈhɛvən/</span> — thiên đường</li>
+          <li><mark class="vocab">hell</mark> <span class="ipa">/ˈhɛɫ/</span> — địa ngục</li>
+          <li><mark class="vocab">sin</mark> <span class="ipa">/sɪn/</span> — tội lỗi</li>
+          <li><mark class="vocab">vice</mark> <span class="ipa">/ˈvaɪs/</span> — tật xấu</li>
+          <li><mark class="vocab">grace</mark> <span class="ipa">/ˈɡɹeɪs/</span> — ân sủng</li>
+          <li><mark class="vocab">pride</mark> <span class="ipa">/ˈpɹaɪd/</span> — tính kiêu ngạo</li>
+          <li><mark class="vocab">greed</mark> <span class="ipa">/ˈɡɹid/</span> — lòng tham</li>
+          <li><mark class="vocab">lust</mark> <span class="ipa">/lʌst/</span> — dâm dục</li>
+          <li><mark class="vocab">envy</mark> <span class="ipa">/ˈɛnvi/</span> — sự ghen tị</li>
+          <li><mark class="vocab">laziness</mark> <span class="ipa">/ˈɫeɪzinəs/</span> — sự lười biếng</li>
+          <li><mark class="vocab">confess</mark> <span class="ipa">/kənˈfɛs/</span> — xưng tội</li>
+          <li><mark class="vocab">convert</mark> <span class="ipa">/ˈkɑnvərt/</span> — cải đạo</li>
+          <li><mark class="vocab">forgive</mark> <span class="ipa">/fɝˈɡɪv/, /fɔɹˈɡɪv/</span> — tha thứ</li>
+          <li><mark class="vocab">trust</mark> <span class="ipa">/trʌst/</span> — tin tưởng</li>
+          <li><mark class="vocab">devil</mark> <span class="ipa">/ˈdɛvəɫ/</span> — ma quỷ</li>
+          <li><mark class="vocab">prophet</mark> <span class="ipa">/ˈpɹɑfət/</span> — nhà tiên tri</li>
+          <li><mark class="vocab">service</mark> <span class="ipa">/ˈsɝːvɪs/</span> — lễ</li>
+          <li><mark class="vocab">soul</mark> <span class="ipa">/soʊl/</span> — linh hồn</li>
+          <li><mark class="vocab">spiritual</mark> <span class="ipa">/ˈspɪɹɪˌtʃuəɫ/</span> — tâm linh</li>
+          <li><mark class="vocab">grave</mark> <span class="ipa">/ɡreɪv/</span> — mộ</li>
+          <li><mark class="vocab">godchild</mark> <span class="ipa">/ɡˈɑːdtʃaɪld/</span> — con đỡ đầu</li>
+          <li><mark class="vocab">devout</mark> <span class="ipa">/dɪˈvaʊt/</span> — mộ đạo</li>
+          <li><mark class="vocab">godfather</mark> <span class="ipa">/ˈɡɑdˌfɑðɝ/</span> — cha đỡ đầu</li>
+          <li><mark class="vocab">godmother</mark> <span class="ipa">/ˈɡɑdˌməðɝ/</span> — mẹ đỡ đầu</li>
+          <li><mark class="vocab">karma</mark> <span class="ipa">/ˈkɑɹmə/</span> — nghiệp</li>
+          <li><mark class="vocab">adventurous</mark> <span class="ipa">/ædˈvɛntʃɝəs/, /ədˈvɛntʃɝəs/</span> — phiêu lưu</li>
+          <li><mark class="vocab">alarm</mark> <span class="ipa">/əˈɫɑɹm/</span> — báo động</li>
+          <li><mark class="vocab">alarmed</mark> <span class="ipa">/əˈɫɑɹmd/</span> — báo động</li>
+          <li><mark class="vocab">daring</mark> <span class="ipa">/ˈdɛɹɪŋ/</span> — táo bạo</li>
+          <li><mark class="vocab">at-risk</mark> <span class="ipa">/ætɹˈɪsk/</span> — có nguy cơ</li>
+          <li><mark class="vocab">risk</mark> <span class="ipa">/rɪsk/</span> — rủi ro</li>
+          <li><mark class="vocab">critical</mark> <span class="ipa">/ˈkɹɪtɪkəɫ/</span> — nghiêm trọng</li>
+          <li><mark class="vocab">deadly</mark> <span class="ipa">/ˈdɛdɫi/</span> — chết người</li>
+          <li><mark class="vocab">desperate</mark> <span class="ipa">/ˈdɛspɝɪt/, /ˈdɛspɹɪt/</span> — tuyệt vọng</li>
+          <li><mark class="vocab">offensive</mark> <span class="ipa">/əˈfɛnsɪv/</span> — xúc phạm</li>
+          <li><mark class="vocab">harmless</mark> <span class="ipa">/ˈhɑɹmɫəs/</span> — vô hại</li>
+          <li><mark class="vocab">high-risk</mark> <span class="ipa">/hˈaɪɹˈɪsk/</span> — rủi ro cao</li>
+          <li><mark class="vocab">low-risk</mark> <span class="ipa">/lˈoʊɹˈɪsk/</span> — rủi ro thấp</li>
+          <li><mark class="vocab">secure</mark> <span class="ipa">/sɪˈkjʊr/</span> — an toàn</li>
+          <li><mark class="vocab">harmful</mark> <span class="ipa">/ˈhɑɹmfəɫ/</span> — có hại</li>
+          <li><mark class="vocab">insecure</mark> <span class="ipa">/ˈɪnsəkjɝ/</span> — không an toàn</li>
+          <li><mark class="vocab">sound</mark> <span class="ipa">/saʊnd/</span> — vững chắc</li>
+          <li><mark class="vocab">nasty</mark> <span class="ipa">/ˈnæsti/</span> — nghiêm trọng</li>
+          <li><mark class="vocab">risky</mark> <span class="ipa">/ˈɹɪski/</span> — mạo hiểm</li>
+          <li><mark class="vocab">encounter</mark> <span class="ipa">/ɪnˈkaʊnɝ/, /ɪnˈkaʊntɝ/</span> — gặp phải</li>
+          <li><mark class="vocab">endanger</mark> <span class="ipa">/ɛnˈdeɪndʒɝ/</span> — gây nguy hiểm</li>
+          <li><mark class="vocab">harm</mark> <span class="ipa">/ˈhɑɹm/</span> — làm hại</li>
+          <li><mark class="vocab">pose</mark> <span class="ipa">/ˈpoʊz/</span> — đặt ra</li>
+          <li><mark class="vocab">threaten</mark> <span class="ipa">/ˈθɹɛtən/</span> — đe dọa</li>
+          <li><mark class="vocab">happening</mark> <span class="ipa">/ˈhæpənɪŋ/, /ˈhæpnɪŋ/</span> — sự kiện</li>
+          <li><mark class="vocab">rescue</mark> <span class="ipa">/ˈɹɛskju/</span> — giải cứu</li>
+          <li><mark class="vocab">rescuer</mark> <span class="ipa">/ˈɹɛsˌkjuɝ/</span> — người giải cứu</li>
+          <li><mark class="vocab">threat</mark> <span class="ipa">/ˈθɹɛt/</span> — mối đe dọa</li>
+          <li><mark class="vocab">out of harm&#x27;s way</mark> <span class="ipa">/ˌaʊɾəv hˈɑːɹmz wˈeɪ/</span> — ngoài vùng nguy hiểm</li>
+          <li><mark class="vocab">disturb</mark> <span class="ipa">/dɪˈstɝb/</span> — làm phiền</li>
+          <li><mark class="vocab">offend</mark> <span class="ipa">/əˈfɛnd/</span> — xúc phạm</li>
+          <li><mark class="vocab">off the hook</mark> <span class="ipa">/ˈɔf ðə hˈʊk/</span> — thoát khỏi rắc rối</li>
+          <li><mark class="vocab">scream</mark> <span class="ipa">/ˈskɹim/</span> — hét</li>
+          <li><mark class="vocab">neutral</mark> <span class="ipa">/ˈnutɹəɫ/</span> — trung lập</li>
+          <li><mark class="vocab">alert</mark> <span class="ipa">/əˈlɝt/</span> — cảnh báo</li>
+          <li><mark class="vocab">disrespectful</mark> <span class="ipa">/ˌdɪsɹɪˈspɛktfəɫ/</span> — thiếu tôn trọng</li>
+          <li><mark class="vocab">on a razor&#x27;s edge</mark> <span class="ipa">/ˌɑːn ɐ ɹˈeɪzɚz ˈɛdʒ/</span> — trên bờ vực nguy hiểm</li>
+          <li><mark class="vocab">fearsome</mark> <span class="ipa">/ˈfɪɹsəm/</span> — đáng sợ</li>
+          <li><mark class="vocab">advance</mark> <span class="ipa">/ədˈvæns/</span> — tiến lên</li>
+          <li><mark class="vocab">camp</mark> <span class="ipa">/kæmp/</span> — trại</li>
+          <li><mark class="vocab">military</mark> <span class="ipa">/ˈmɪlɪˌtɛri/</span> — quân sự</li>
+          <li><mark class="vocab">air force</mark> <span class="ipa">/ˈer fˈoːrs/</span> — không quân</li>
+          <li><mark class="vocab">navy</mark> <span class="ipa">/ˈneɪvi/</span> — hải quân</li>
+          <li><mark class="vocab">strategy</mark> <span class="ipa">/ˈstɹætədʒi/</span> — chiến lược</li>
+          <li><mark class="vocab">arms</mark> <span class="ipa">/ˈɑɹmz/</span> — vũ khí</li>
+          <li><mark class="vocab">grenade</mark> <span class="ipa">/ɡɹəˈneɪd/</span> — lựu đạn</li>
+          <li><mark class="vocab">handgun</mark> <span class="ipa">/ˈhændˌɡən/</span> — súng ngắn</li>
+          <li><mark class="vocab">mine</mark> <span class="ipa">/maɪn/</span> — mìn</li>
+          <li><mark class="vocab">campaign</mark> <span class="ipa">/kæmˈpeɪn/</span> — chiến dịch</li>
+          <li><mark class="vocab">command</mark> <span class="ipa">/kəˈmænd/</span> — chỉ huy</li>
+          <li><mark class="vocab">desert</mark> <span class="ipa">/ˈdɛzɚt/</span> — đào ngũ</li>
+          <li><mark class="vocab">dominate</mark> <span class="ipa">/ˈdɑməˌneɪt/</span> — thống trị</li>
+          <li><mark class="vocab">invade</mark> <span class="ipa">/ˌɪnˈveɪd/</span> — xâm lược</li>
+          <li><mark class="vocab">recruit</mark> <span class="ipa">/rɪˈkrut/</span> — tuyển quân</li>
+          <li><mark class="vocab">strike</mark> <span class="ipa">/ˈstɹaɪk/</span> — đánh</li>
+          <li><mark class="vocab">gunfight</mark> <span class="ipa">/ˈɡənˌfaɪt/</span> — cuộc đấu súng</li>
+          <li><mark class="vocab">armed</mark> <span class="ipa">/ˈɑɹmd/</span> — vũ trang</li>
+          <li><mark class="vocab">civil</mark> <span class="ipa">/ˈsɪvəɫ/</span> — dân sự</li>
+          <li><mark class="vocab">occupied</mark> <span class="ipa">/ˈɑkjəˌpaɪd/</span> — bị chiếm đóng</li>
+          <li><mark class="vocab">parade</mark> <span class="ipa">/pɝˈeɪd/</span> — diễu hành</li>
+          <li><mark class="vocab">prisoner of war</mark> <span class="ipa">/pɹˈɪzənɚɹ ʌv wˈɔːɹ/</span></li>
+          <li><mark class="vocab">rank</mark> <span class="ipa">/ˈɹæŋk/</span> — cấp bậc</li>
+          <li><mark class="vocab">refugee</mark> <span class="ipa">/ˈɹɛfjudʒi/</span> — người tị nạn</li>
+          <li><mark class="vocab">volunteer</mark> <span class="ipa">/ˌvɑɫənˈtɪɹ/</span> — tình nguyện viên</li>
+          <li><mark class="vocab">tank</mark> <span class="ipa">/ˈtæŋk/</span> — xe tăng</li>
+          <li><mark class="vocab">warship</mark> <span class="ipa">/ˈwɔɹˌʃɪp/</span> — tàu chiến</li>
+          <li><mark class="vocab">war crime</mark> <span class="ipa">/wˈɔːɹ kɹˈaɪm/</span> — tội ác chiến tranh</li>
+          <li><mark class="vocab">nuclear submarine</mark> <span class="ipa">/nˈuːklɪɹ sˈʌbmɚɹˌiːn/</span> — tàu ngầm hạt nhân</li>
+          <li><mark class="vocab">target</mark> <span class="ipa">/ˈtɑrɡɪt/</span> — mục tiêu</li>
+          <li><mark class="vocab">wreck</mark> <span class="ipa">/ˈɹɛk/</span> — phá hủy</li>
+          <li><mark class="vocab">spoil</mark> <span class="ipa">/ˈspɔɪɫ/</span> — chiến lợi phẩm</li>
+          <li><mark class="vocab">wound</mark> <span class="ipa">/ˈwaʊnd/, /ˈwund/</span> — làm bị thương</li>
+          <li><mark class="vocab">ground-to-air missile</mark> <span class="ipa">/ɡɹˈaʊndtʊˈɛɹ mˈɪsəl/</span> — tên lửa đất đối không</li>
+          <li><mark class="vocab">air-to-ground missile</mark> <span class="ipa">/ˈeɹɾəɡɹˈaʊnd mˈɪsəl/</span> — tên lửa không đối đất</li>
+          <li><mark class="vocab">brass knuckles</mark> <span class="ipa">/bɹˈæs nˈʌkəlz/</span> — vòng đấm sắt</li>
+          <li><mark class="vocab">dogfight</mark> <span class="ipa">/ˈdɑɡˌfaɪt/</span> — không chiến</li>
+          <li><mark class="vocab">marine</mark> <span class="ipa">/məˈrin/</span> — một thủy quân lục chiến</li>
+          <li><mark class="vocab">gun down</mark> <span class="ipa">/ɡˈʌn dˈaʊn/</span> — bắn hạ</li>
+          <li><mark class="vocab">United States Marine Corps</mark> <span class="ipa">/juːnˈaɪɾᵻd stˈeɪts mɚɹˈiːn kˈɔːɹ/</span></li>
+          <li><mark class="vocab">sidearm</mark> <span class="ipa">/ˈsaɪdɑɹm/</span> — vũ khí bên hông</li>
+          <li><mark class="vocab">bulletproof</mark> <span class="ipa">/ˈbʊɫətˌpɹuf/</span> — chống đạn</li>
+        </ul>
+      </section>
+
+      <div class="docs-pager">
+        <a href="../">← Society &amp; Politics</a>
+        <a href="../../">All topics →</a>
+      </div>
+    </article>
+  </div>
+  <script src="../../../../js/docs.js"></script>
+  <script src="../../../../js/exercise.js"></script>
+</body>
+</html>

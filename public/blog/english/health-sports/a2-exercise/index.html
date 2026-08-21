@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A2 Exercise · Health &amp; Sports — The Quiet Corner</title>
+  <meta name="description" content="A2 reading exercise for Health &amp; Sports vocabulary with IPA and bilingual sentences.">
+  <link rel="icon" href="../../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../../"><span>✦</span> The Quiet Corner <span>✦</span></a>
+    <nav class="docs-series">
+      <a href="../../../../blog/web-security/">DevSecOps</a>
+      <a href="../../../../blog/kubestronaut/">Kubestronaut</a>
+      <a class="active" href="../../">English</a>
+    </nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-nav="english" data-docs-root="../../" data-active="health-sports">
+      <div class="docs-nav-label">English</div>
+      <ul class="docs-nav" id="docsNav">
+        <li><a href="../../">All topics</a></li>
+        <li><a href="../">Health &amp; Sports</a></li>
+        <li><a class="active" href="./">A2 Exercise</a></li>
+      </ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../../">Home</a>
+        <span>›</span>
+        <a href="../../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../../">English</a>
+        <span>›</span>
+        <a href="../">Health &amp; Sports</a>
+        <span>›</span>
+        <span>A2 Exercise</span>
+      </div>
+
+      <div class="vocab-topic-hero">
+        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 72 72' fill='none'%3E%3Crect width='72' height='72' rx='14' fill='%230b1220'/%3E%3Crect x='16' y='14' width='40' height='46' rx='6' stroke='%2322d3ee' stroke-width='2.5'/%3E%3Cpath d='M24 28h24M24 36h24M24 44h16' stroke='%23e4e4e7' stroke-width='2.5' stroke-linecap='round'/%3E%3Cpath d='M48 48l6 2-2 6-8-8 4 0z' fill='%2322d3ee'/%3E%3C/svg%3E" alt="" width="112" height="112">
+        <div>
+          <h1>A2 Exercise · Health &amp; Sports</h1>
+          <p class="lede">Reading passage with every new word from this level’s LanGeek lessons — IPA, highlights, sentence translation, and free TTS.</p>
+          <div class="docs-meta">
+            <span><strong>Words:</strong> 117</span>
+            <span><strong>Lessons:</strong> Exercise and Matches · Health and Sickness · Injuries and Sickness · Sports</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="ex-toolbar" id="exToolbar">
+        <label class="ex-toggle"><input type="checkbox" id="togHighlight" checked> Highlights</label>
+        <label class="ex-toggle"><input type="checkbox" id="togIpa" checked> IPA</label>
+        <label class="ex-toggle"><input type="checkbox" id="togVi"> Dịch câu (VI)</label>
+        <span class="ex-sep"></span>
+        <label class="ex-voice">Voice
+          <select id="voiceSelect" aria-label="TTS voice"></select>
+        </label>
+        <label class="ex-voice">Speed
+          <input id="rateRange" type="range" min="0.7" max="1.15" step="0.05" value="0.95">
+          <span id="rateVal">0.95</span>
+        </label>
+        <button type="button" class="ex-btn primary" id="btnPlay">▶ Read passage</button>
+        <button type="button" class="ex-btn" id="btnStop">Stop</button>
+      </div>
+      
+      <section class="ex-passage" id="passage" data-tts-root>
+          <p class="ex-sent" data-sent="1">
+            <span class="ex-en">In this A2 Health & Sports passage, notice <mark class="vocab" data-word="to exercise">exercise</mark><span class="ipa">/ˈɛksɚˌsaɪz/</span>, <mark class="vocab" data-word="to hike">hike</mark><span class="ipa">/haɪk/</span>, <mark class="vocab" data-word="race">race</mark><span class="ipa">/reɪs/</span>, and <mark class="vocab" data-word="point">point</mark><span class="ipa">/pɔɪnt/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Health &amp; Sports, hãy để ý tập thể dục, đi bộ đường dài, cuộc đua, và điểm.</span>
+          </p>
+          <p class="ex-sent" data-sent="2">
+            <span class="ex-en">In this A2 Health & Sports passage, notice <mark class="vocab" data-word="to score">score</mark><span class="ipa">/skɔr/</span>, <mark class="vocab" data-word="medal">medal</mark><span class="ipa">/ˈmɛdəl/</span>, <mark class="vocab" data-word="winner">winner</mark><span class="ipa">/ˈwɪnɚ/</span>, and <mark class="vocab" data-word="to win">win</mark><span class="ipa">/wɪn/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Health &amp; Sports, hãy để ý ghi bàn, huy chương, người chiến thắng, và thắng.</span>
+          </p>
+          <p class="ex-sent" data-sent="3">
+            <span class="ex-en">In this A2 Health & Sports passage, notice <mark class="vocab" data-word="loser">loser</mark><span class="ipa">/ˈluːzɚ/</span>, <mark class="vocab" data-word="to lose">lose</mark><span class="ipa">/luːz/</span>, <mark class="vocab" data-word="ski">ski</mark><span class="ipa">/skiː/</span>, and <mark class="vocab" data-word="skiing">skiing</mark><span class="ipa">/ˈskiːɪŋ/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Health &amp; Sports, hãy để ý kẻ thua cuộc, thua, ván trượt tuyết, và trượt tuyết.</span>
+          </p>
+          <p class="ex-sent" data-sent="4">
+            <span class="ex-en">In this A2 Health & Sports passage, notice <mark class="vocab" data-word="skate">skate</mark><span class="ipa">/skeɪt/</span>, <mark class="vocab" data-word="skating">skating</mark><span class="ipa">/ˈskeɪtɪŋ/</span>, <mark class="vocab" data-word="ice skate">ice skate</mark><span class="ipa">/aɪs skeɪt/</span>, and <mark class="vocab" data-word="ice skating">ice skating</mark><span class="ipa">/ˈaɪs ˈskeɪtɪŋ/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Health &amp; Sports, hãy để ý giày trượt, trượt băng, giày trượt băng, và trượt băng.</span>
+          </p>
+          <p class="ex-sent" data-sent="5">
+            <span class="ex-en">In this A2 Health & Sports passage, notice <mark class="vocab" data-word="snowboard">snowboard</mark><span class="ipa">/ˈsnoʊˌbɔrd/</span>, <mark class="vocab" data-word="snowboarding">snowboarding</mark><span class="ipa">/ˈsnoʊˌbɔrdɪŋ/</span>, <mark class="vocab" data-word="skateboard">skateboard</mark><span class="ipa">/ˈskeɪtˌbɔrd/</span>, and <mark class="vocab" data-word="skateboarding">skateboarding</mark><span class="ipa">/ˈskeɪtˌbɔrdɪŋ/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Health &amp; Sports, hãy để ý ván trượt tuyết, trượt ván tuyết, ván trượt, và trượt ván.</span>
+          </p>
+          <p class="ex-sent" data-sent="6">
+            <span class="ex-en">In this A2 Health & Sports passage, notice <mark class="vocab" data-word="surfboard">surfboard</mark><span class="ipa">/ˈsɝfˌbɔrd/</span>, <mark class="vocab" data-word="surfing">surfing</mark><span class="ipa">/ˈsɝfɪŋ/</span>, <mark class="vocab" data-word="registration">registration</mark><span class="ipa">/ˌrɛʤɪˈstreɪʃən/</span>, and <mark class="vocab" data-word="membership">membership</mark><span class="ipa">/ˈmɛmbɚˌʃɪp/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Health &amp; Sports, hãy để ý ván lướt sóng, lướt sóng, đăng ký, và tư cách thành viên.</span>
+          </p>
+          <p class="ex-sent" data-sent="7">
+            <span class="ex-en">In this A2 Health & Sports passage, notice <mark class="vocab" data-word="to practice">practice</mark><span class="ipa">/ˈpræktɪs/</span>, <mark class="vocab" data-word="team">team</mark><span class="ipa">/ˈtim/</span>, <mark class="vocab" data-word="fan">fan</mark><span class="ipa">/fæn/</span>, and <mark class="vocab" data-word="record">record</mark><span class="ipa">/ˈrɛkɚd/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Health &amp; Sports, hãy để ý luyện tập, đội, người hâm mộ, và kỷ lục.</span>
+          </p>
+          <p class="ex-sent" data-sent="8">
+            <span class="ex-en">In this A2 <mark class="vocab" data-word="health">health</mark><span class="ipa">/hɛlθ/</span> & Sports passage, notice <mark class="vocab" data-word="net">net</mark><span class="ipa">/nɛt/</span>, <mark class="vocab" data-word="prize">prize</mark><span class="ipa">/praɪz/</span>, health, and <mark class="vocab" data-word="life">life</mark><span class="ipa">/laɪf/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Health &amp; Sports, hãy để ý lưới, giải thưởng, sức khỏe, và cuộc sống.</span>
+          </p>
+          <p class="ex-sent" data-sent="9">
+            <span class="ex-en">In this A2 Health & Sports passage, notice <mark class="vocab" data-word="death">death</mark><span class="ipa">/dɛθ/</span>, <mark class="vocab" data-word="diet">diet</mark><span class="ipa">/ˈdaɪət/</span>, <mark class="vocab" data-word="energy">energy</mark><span class="ipa">/ˈɛnɚʤi/</span>, and <mark class="vocab" data-word="habit">habit</mark><span class="ipa">/ˈhæbɪt/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Health &amp; Sports, hãy để ý cái chết, chế độ ăn, năng lượng, và thói quen.</span>
+          </p>
+          <p class="ex-sent" data-sent="10">
+            <span class="ex-en">In this A2 Health & Sports passage, notice <mark class="vocab" data-word="illness">illness</mark><span class="ipa">/ˈɪlnəs/</span>, <mark class="vocab" data-word="disease">disease</mark><span class="ipa">/dɪˈziːz/</span>, <mark class="vocab" data-word="ache">ache</mark><span class="ipa">/eɪk/</span>, and <mark class="vocab" data-word="earache">earache</mark><span class="ipa">/ˈɪrˌeɪk/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Health &amp; Sports, hãy để ý bệnh tật, bệnh tật, đau nhức, và đau tai.</span>
+          </p>
+          <p class="ex-sent" data-sent="11">
+            <span class="ex-en">In this A2 Health & Sports passage, notice <mark class="vocab" data-word="headache">headache</mark><span class="ipa">/ˈhɛdˌeɪk/</span>, <mark class="vocab" data-word="backache">backache</mark><span class="ipa">/ˈbækˌeɪk/</span>, <mark class="vocab" data-word="toothache">toothache</mark><span class="ipa">/ˈtuːθˌeɪk/</span>, and <mark class="vocab" data-word="flu">flu</mark><span class="ipa">/fluː/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Health &amp; Sports, hãy để ý đau đầu, đau lưng, đau răng, và cúm.</span>
+          </p>
+          <p class="ex-sent" data-sent="12">
+            <span class="ex-en">In this A2 Health & Sports passage, notice <mark class="vocab" data-word="virus">virus</mark><span class="ipa">/ˈvaɪrəs/</span>, <mark class="vocab" data-word="effect">effect</mark><span class="ipa">/ɪˈfɛkt/</span>, <mark class="vocab" data-word="problem">problem</mark><span class="ipa">/ˈprɑːbləm/</span>, and <mark class="vocab" data-word="fever">fever</mark><span class="ipa">/ˈfiːvɚ/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Health &amp; Sports, hãy để ý vi rút, ảnh hưởng, vấn đề, và sốt.</span>
+          </p>
+          <p class="ex-sent" data-sent="13">
+            <span class="ex-en">In this A2 Health & Sports passage, notice <mark class="vocab" data-word="cough">cough</mark><span class="ipa">/kɑf/</span>, <mark class="vocab" data-word="sneeze">sneeze</mark><span class="ipa">/sniːz/</span>, <mark class="vocab" data-word="cold">cold</mark><span class="ipa">/koʊld/</span>, and <mark class="vocab" data-word="sore throat">sore throat</mark><span class="ipa">/sɔːr θroʊt/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Health &amp; Sports, hãy để ý ho, hắt hơi, cảm lạnh, và đau họng.</span>
+          </p>
+          <p class="ex-sent" data-sent="14">
+            <span class="ex-en">In this A2 Health & Sports passage, notice <mark class="vocab" data-word="medication">medication</mark><span class="ipa">/ˌmɛdɪˈkeɪʃən/</span>, <mark class="vocab" data-word="rest">rest</mark><span class="ipa">/rɛst/</span>, <mark class="vocab" data-word="pill">pill</mark><span class="ipa">/pɪl/</span>, and <mark class="vocab" data-word="patient">patient</mark><span class="ipa">/ˈpeɪʃənt/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Health &amp; Sports, hãy để ý thuốc, nghỉ ngơi, viên thuốc, và bệnh nhân.</span>
+          </p>
+          <p class="ex-sent" data-sent="15">
+            <span class="ex-en">In this A2 Health & Sports passage, notice <mark class="vocab" data-word="cure">cure</mark><span class="ipa">/kjʊr/</span>, <mark class="vocab" data-word="to live">live</mark><span class="ipa">/lɪv/</span>, <mark class="vocab" data-word="to die">die</mark><span class="ipa">/daɪ/</span>, and <mark class="vocab" data-word="need">need</mark><span class="ipa">/niːd/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Health &amp; Sports, hãy để ý phương pháp chữa trị, sống, chết, và nhu cầu.</span>
+          </p>
+          <p class="ex-sent" data-sent="16">
+            <span class="ex-en">In this A2 Health & Sports passage, notice <mark class="vocab" data-word="to [go] to bed">[go] to bed</mark><span class="ipa">/ɡoʊ tə bɛd/</span>, <mark class="vocab" data-word="stomachache">stomachache</mark><span class="ipa">/ˈstʌməkˌeɪk/</span>, <mark class="vocab" data-word="bad">bad</mark><span class="ipa">/bæd/</span>, and <mark class="vocab" data-word="sick">sick</mark><span class="ipa">/sɪk/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Health &amp; Sports, hãy để ý [go] to bed, đau bụng, ốm, và ốm.</span>
+          </p>
+          <p class="ex-sent" data-sent="17">
+            <span class="ex-en">In this A2 Health & Sports passage, notice <mark class="vocab" data-word="better">better</mark><span class="ipa">/ˈbɛtɚ/</span>, <mark class="vocab" data-word="broken">broken</mark><span class="ipa">/ˈbroʊkən/</span>, <mark class="vocab" data-word="serious">serious</mark><span class="ipa">/ˈsɪriəs/</span>, and <mark class="vocab" data-word="dangerous">dangerous</mark><span class="ipa">/ˈdeɪnʤərəs/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Health &amp; Sports, hãy để ý tốt hơn, bị vỡ, nghiêm trọng, và nguy hiểm.</span>
+          </p>
+          <p class="ex-sent" data-sent="18">
+            <span class="ex-en">In this A2 Health & Sports passage, notice <mark class="vocab" data-word="appointment">appointment</mark><span class="ipa">/əˈpɔɪntmənt/</span>, <mark class="vocab" data-word="sickness">sickness</mark><span class="ipa">/ˈsɪknəs/</span>, <mark class="vocab" data-word="pain">pain</mark><span class="ipa">/peɪn/</span>, and <mark class="vocab" data-word="accident">accident</mark><span class="ipa">/ˈæksɪdənt/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Health &amp; Sports, hãy để ý cuộc hẹn, bệnh tật, đau, và tai nạn.</span>
+          </p>
+          <p class="ex-sent" data-sent="19">
+            <span class="ex-en">In this A2 Health & Sports passage, notice <mark class="vocab" data-word="injury">injury</mark><span class="ipa">/ˈɪnʤəri/</span>, <mark class="vocab" data-word="to test">test</mark><span class="ipa">/tɛst/</span>, <mark class="vocab" data-word="to examine">examine</mark><span class="ipa">/ɪɡˈzæmɪn/</span>, and <mark class="vocab" data-word="to break">break</mark><span class="ipa">/breɪk/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Health &amp; Sports, hãy để ý chấn thương, kiểm tra, kiểm tra, và gãy.</span>
+          </p>
+          <p class="ex-sent" data-sent="20">
+            <span class="ex-en">In this A2 Health & Sports passage, notice <mark class="vocab" data-word="to cut">cut</mark><span class="ipa">/kʌt/</span>, <mark class="vocab" data-word="to hurt">hurt</mark><span class="ipa">/hɝt/</span>, <mark class="vocab" data-word="to injure">injure</mark><span class="ipa">/ˈɪndʒɝ/</span>, and <mark class="vocab" data-word="to hit">hit</mark><span class="ipa">/hɪt/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Health &amp; Sports, hãy để ý cắt, làm tổn thương, làm bị thương, và đập.</span>
+          </p>
+          <p class="ex-sent" data-sent="21">
+            <span class="ex-en">In this A2 Health & Sports passage, notice <mark class="vocab" data-word="to see">see</mark><span class="ipa">/siː/</span>, <mark class="vocab" data-word="to catch">catch</mark><span class="ipa">/kætʃ/</span>, <mark class="vocab" data-word="to prescribe">prescribe</mark><span class="ipa">/prɪˈskraɪb/</span>, and <mark class="vocab" data-word="to sneeze">sneeze</mark><span class="ipa">/sniːz/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Health &amp; Sports, hãy để ý gặp, nhiễm, kê đơn, và hắt hơi.</span>
+          </p>
+          <p class="ex-sent" data-sent="22">
+            <span class="ex-en">In this A2 Health & Sports passage, notice <mark class="vocab" data-word="to cough">cough</mark><span class="ipa">/kɑf/</span>, <mark class="vocab" data-word="to protect">protect</mark><span class="ipa">/prəˈtɛkt/</span>, <mark class="vocab" data-word="exercise">exercise</mark><span class="ipa">/ˈɛksɚˌsaɪz/</span>, and <mark class="vocab" data-word="field">field</mark><span class="ipa">/fild/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Health &amp; Sports, hãy để ý ho, bảo vệ, bài tập, và sân.</span>
+          </p>
+          <p class="ex-sent" data-sent="23">
+            <span class="ex-en">In this A2 Health & Sports passage, notice <mark class="vocab" data-word="football">football</mark><span class="ipa">/ˈfʊtˌbɔl/</span>, <mark class="vocab" data-word="to throw">throw</mark><span class="ipa">/θroʊ/</span>, <mark class="vocab" data-word="to kick">kick</mark><span class="ipa">/kɪk/</span>, and <mark class="vocab" data-word="basketball">basketball</mark><span class="ipa">/ˈbæskətˌbɔl/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Health &amp; Sports, hãy để ý bóng đá, ném, đá, và bóng rổ.</span>
+          </p>
+          <p class="ex-sent" data-sent="24">
+            <span class="ex-en">In this A2 Health & Sports passage, notice <mark class="vocab" data-word="baseball">baseball</mark><span class="ipa">/ˈbeɪsˌbɔl/</span>, <mark class="vocab" data-word="hockey">hockey</mark><span class="ipa">/ˈhɑki/</span>, <mark class="vocab" data-word="golf">golf</mark><span class="ipa">/ɡɑlf/</span>, and <mark class="vocab" data-word="rugby">rugby</mark><span class="ipa">/ˈrʌɡbi/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Health &amp; Sports, hãy để ý bóng chày, khúc côn cầu, gôn, và bóng bầu dục.</span>
+          </p>
+          <p class="ex-sent" data-sent="25">
+            <span class="ex-en">In this A2 Health & Sports passage, notice <mark class="vocab" data-word="cricket">cricket</mark><span class="ipa">/ˈkrɪkɪt/</span>, <mark class="vocab" data-word="field hockey">field hockey</mark><span class="ipa">/ˈfild ˈhɑki/</span>, <mark class="vocab" data-word="diving">diving</mark><span class="ipa">/ˈdaɪvɪŋ/</span>, and <mark class="vocab" data-word="to dive">dive</mark><span class="ipa">/daɪv/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Health &amp; Sports, hãy để ý cricket, khúc côn cầu trên cỏ, lặn, và lặn.</span>
+          </p>
+          <p class="ex-sent" data-sent="26">
+            <span class="ex-en">In this A2 Health & Sports passage, notice <mark class="vocab" data-word="training">training</mark><span class="ipa">/ˈtreɪnɪŋ/</span>, <mark class="vocab" data-word="to train">train</mark><span class="ipa">/treɪn/</span>, <mark class="vocab" data-word="competition">competition</mark><span class="ipa">/ˌkɑmpəˈtɪʃən/</span>, and <mark class="vocab" data-word="to compete">compete</mark><span class="ipa">/kəmˈpit/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Health &amp; Sports, hãy để ý huấn luyện, huấn luyện, cuộc thi, và thi đấu.</span>
+          </p>
+          <p class="ex-sent" data-sent="27">
+            <span class="ex-en">In this A2 Health & Sports passage, notice <mark class="vocab" data-word="jogging">jogging</mark><span class="ipa">/ˈdʒɑɡɪŋ/</span>, <mark class="vocab" data-word="to jog">jog</mark><span class="ipa">/dʒɑɡ/</span>, <mark class="vocab" data-word="climbing">climbing</mark><span class="ipa">/ˈklaɪmɪŋ/</span>, and <mark class="vocab" data-word="to climb">climb</mark><span class="ipa">/klaɪm/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Health &amp; Sports, hãy để ý chạy bộ, chạy bộ, leo núi, và leo trèo.</span>
+          </p>
+          <p class="ex-sent" data-sent="28">
+            <span class="ex-en">In this A2 Health & Sports passage, notice <mark class="vocab" data-word="game">game</mark><span class="ipa">/ɡeɪm/</span>, <mark class="vocab" data-word="player">player</mark><span class="ipa">/ˈpleɪɚ/</span>, <mark class="vocab" data-word="goal">goal</mark><span class="ipa">/ɡoʊl/</span>, and <mark class="vocab" data-word="score">score</mark><span class="ipa">/skɔr/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Health &amp; Sports, hãy để ý trận đấu, người chơi, bàn thắng, và điểm số.</span>
+          </p>
+          <p class="ex-sent" data-sent="29">
+            <span class="ex-en">In this A2 Health & Sports passage, notice <mark class="vocab" data-word="coach">coach</mark><span class="ipa">/koʊʧ/</span>, <mark class="vocab" data-word="athlete">athlete</mark><span class="ipa">/ˈæθˌlit/</span>, <mark class="vocab" data-word="cup">cup</mark><span class="ipa">/kʌp/</span>, and <mark class="vocab" data-word="tired">tired</mark><span class="ipa">/ˈtaɪɚd/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Health &amp; Sports, hãy để ý huấn luyện viên, vận động viên, cúp, và mệt mỏi.</span>
+          </p>
+          <p class="ex-sent" data-sent="30">
+            <span class="ex-en">In this A2 Health & Sports passage, notice <mark class="vocab" data-word="to join">join</mark><span class="ipa">/ʤɔɪn/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Health &amp; Sports, hãy để ý tham gia.</span>
+          </p>
+      </section>
+
+      <section class="ex-vocab">
+        <h2>Word checklist · 117</h2>
+        <ul class="ex-vocab-list">
+          <li><mark class="vocab">exercise</mark> <span class="ipa">/ˈɛksɚˌsaɪz/</span> — tập thể dục</li>
+          <li><mark class="vocab">hike</mark> <span class="ipa">/haɪk/</span> — đi bộ đường dài</li>
+          <li><mark class="vocab">race</mark> <span class="ipa">/reɪs/</span> — cuộc đua</li>
+          <li><mark class="vocab">point</mark> <span class="ipa">/pɔɪnt/</span> — điểm</li>
+          <li><mark class="vocab">score</mark> <span class="ipa">/skɔr/</span> — ghi bàn</li>
+          <li><mark class="vocab">medal</mark> <span class="ipa">/ˈmɛdəl/</span> — huy chương</li>
+          <li><mark class="vocab">winner</mark> <span class="ipa">/ˈwɪnɚ/</span> — người chiến thắng</li>
+          <li><mark class="vocab">win</mark> <span class="ipa">/wɪn/</span> — thắng</li>
+          <li><mark class="vocab">loser</mark> <span class="ipa">/ˈluːzɚ/</span> — kẻ thua cuộc</li>
+          <li><mark class="vocab">lose</mark> <span class="ipa">/luːz/</span> — thua</li>
+          <li><mark class="vocab">ski</mark> <span class="ipa">/skiː/</span> — ván trượt tuyết</li>
+          <li><mark class="vocab">skiing</mark> <span class="ipa">/ˈskiːɪŋ/</span> — trượt tuyết</li>
+          <li><mark class="vocab">skate</mark> <span class="ipa">/skeɪt/</span> — giày trượt</li>
+          <li><mark class="vocab">skating</mark> <span class="ipa">/ˈskeɪtɪŋ/</span> — trượt băng</li>
+          <li><mark class="vocab">ice skate</mark> <span class="ipa">/aɪs skeɪt/</span> — giày trượt băng</li>
+          <li><mark class="vocab">ice skating</mark> <span class="ipa">/ˈaɪs ˈskeɪtɪŋ/</span> — trượt băng</li>
+          <li><mark class="vocab">snowboard</mark> <span class="ipa">/ˈsnoʊˌbɔrd/</span> — ván trượt tuyết</li>
+          <li><mark class="vocab">snowboarding</mark> <span class="ipa">/ˈsnoʊˌbɔrdɪŋ/</span> — trượt ván tuyết</li>
+          <li><mark class="vocab">skateboard</mark> <span class="ipa">/ˈskeɪtˌbɔrd/</span> — ván trượt</li>
+          <li><mark class="vocab">skateboarding</mark> <span class="ipa">/ˈskeɪtˌbɔrdɪŋ/</span> — trượt ván</li>
+          <li><mark class="vocab">surfboard</mark> <span class="ipa">/ˈsɝfˌbɔrd/</span> — ván lướt sóng</li>
+          <li><mark class="vocab">surfing</mark> <span class="ipa">/ˈsɝfɪŋ/</span> — lướt sóng</li>
+          <li><mark class="vocab">registration</mark> <span class="ipa">/ˌrɛʤɪˈstreɪʃən/</span> — đăng ký</li>
+          <li><mark class="vocab">membership</mark> <span class="ipa">/ˈmɛmbɚˌʃɪp/</span> — tư cách thành viên</li>
+          <li><mark class="vocab">practice</mark> <span class="ipa">/ˈpræktɪs/</span> — luyện tập</li>
+          <li><mark class="vocab">team</mark> <span class="ipa">/ˈtim/</span> — đội</li>
+          <li><mark class="vocab">fan</mark> <span class="ipa">/fæn/</span> — người hâm mộ</li>
+          <li><mark class="vocab">record</mark> <span class="ipa">/ˈrɛkɚd/</span> — kỷ lục</li>
+          <li><mark class="vocab">net</mark> <span class="ipa">/nɛt/</span> — lưới</li>
+          <li><mark class="vocab">prize</mark> <span class="ipa">/praɪz/</span> — giải thưởng</li>
+          <li><mark class="vocab">health</mark> <span class="ipa">/hɛlθ/</span> — sức khỏe</li>
+          <li><mark class="vocab">life</mark> <span class="ipa">/laɪf/</span> — cuộc sống</li>
+          <li><mark class="vocab">death</mark> <span class="ipa">/dɛθ/</span> — cái chết</li>
+          <li><mark class="vocab">diet</mark> <span class="ipa">/ˈdaɪət/</span> — chế độ ăn</li>
+          <li><mark class="vocab">energy</mark> <span class="ipa">/ˈɛnɚʤi/</span> — năng lượng</li>
+          <li><mark class="vocab">habit</mark> <span class="ipa">/ˈhæbɪt/</span> — thói quen</li>
+          <li><mark class="vocab">illness</mark> <span class="ipa">/ˈɪlnəs/</span> — bệnh tật</li>
+          <li><mark class="vocab">disease</mark> <span class="ipa">/dɪˈziːz/</span> — bệnh tật</li>
+          <li><mark class="vocab">ache</mark> <span class="ipa">/eɪk/</span> — đau nhức</li>
+          <li><mark class="vocab">earache</mark> <span class="ipa">/ˈɪrˌeɪk/</span> — đau tai</li>
+          <li><mark class="vocab">headache</mark> <span class="ipa">/ˈhɛdˌeɪk/</span> — đau đầu</li>
+          <li><mark class="vocab">backache</mark> <span class="ipa">/ˈbækˌeɪk/</span> — đau lưng</li>
+          <li><mark class="vocab">toothache</mark> <span class="ipa">/ˈtuːθˌeɪk/</span> — đau răng</li>
+          <li><mark class="vocab">flu</mark> <span class="ipa">/fluː/</span> — cúm</li>
+          <li><mark class="vocab">virus</mark> <span class="ipa">/ˈvaɪrəs/</span> — vi rút</li>
+          <li><mark class="vocab">effect</mark> <span class="ipa">/ɪˈfɛkt/</span> — ảnh hưởng</li>
+          <li><mark class="vocab">problem</mark> <span class="ipa">/ˈprɑːbləm/</span> — vấn đề</li>
+          <li><mark class="vocab">fever</mark> <span class="ipa">/ˈfiːvɚ/</span> — sốt</li>
+          <li><mark class="vocab">cough</mark> <span class="ipa">/kɑf/</span> — ho</li>
+          <li><mark class="vocab">sneeze</mark> <span class="ipa">/sniːz/</span> — hắt hơi</li>
+          <li><mark class="vocab">cold</mark> <span class="ipa">/koʊld/</span> — cảm lạnh</li>
+          <li><mark class="vocab">sore throat</mark> <span class="ipa">/sɔːr θroʊt/</span> — đau họng</li>
+          <li><mark class="vocab">medication</mark> <span class="ipa">/ˌmɛdɪˈkeɪʃən/</span> — thuốc</li>
+          <li><mark class="vocab">rest</mark> <span class="ipa">/rɛst/</span> — nghỉ ngơi</li>
+          <li><mark class="vocab">pill</mark> <span class="ipa">/pɪl/</span> — viên thuốc</li>
+          <li><mark class="vocab">patient</mark> <span class="ipa">/ˈpeɪʃənt/</span> — bệnh nhân</li>
+          <li><mark class="vocab">cure</mark> <span class="ipa">/kjʊr/</span> — phương pháp chữa trị</li>
+          <li><mark class="vocab">live</mark> <span class="ipa">/lɪv/</span> — sống</li>
+          <li><mark class="vocab">die</mark> <span class="ipa">/daɪ/</span> — chết</li>
+          <li><mark class="vocab">need</mark> <span class="ipa">/niːd/</span> — nhu cầu</li>
+          <li><mark class="vocab">[go] to bed</mark> <span class="ipa">/ɡoʊ tə bɛd/</span></li>
+          <li><mark class="vocab">stomachache</mark> <span class="ipa">/ˈstʌməkˌeɪk/</span> — đau bụng</li>
+          <li><mark class="vocab">bad</mark> <span class="ipa">/bæd/</span> — ốm</li>
+          <li><mark class="vocab">sick</mark> <span class="ipa">/sɪk/</span> — ốm</li>
+          <li><mark class="vocab">better</mark> <span class="ipa">/ˈbɛtɚ/</span> — tốt hơn</li>
+          <li><mark class="vocab">broken</mark> <span class="ipa">/ˈbroʊkən/</span> — bị vỡ</li>
+          <li><mark class="vocab">serious</mark> <span class="ipa">/ˈsɪriəs/</span> — nghiêm trọng</li>
+          <li><mark class="vocab">dangerous</mark> <span class="ipa">/ˈdeɪnʤərəs/</span> — nguy hiểm</li>
+          <li><mark class="vocab">appointment</mark> <span class="ipa">/əˈpɔɪntmənt/</span> — cuộc hẹn</li>
+          <li><mark class="vocab">sickness</mark> <span class="ipa">/ˈsɪknəs/</span> — bệnh tật</li>
+          <li><mark class="vocab">pain</mark> <span class="ipa">/peɪn/</span> — đau</li>
+          <li><mark class="vocab">accident</mark> <span class="ipa">/ˈæksɪdənt/</span> — tai nạn</li>
+          <li><mark class="vocab">injury</mark> <span class="ipa">/ˈɪnʤəri/</span> — chấn thương</li>
+          <li><mark class="vocab">test</mark> <span class="ipa">/tɛst/</span> — kiểm tra</li>
+          <li><mark class="vocab">examine</mark> <span class="ipa">/ɪɡˈzæmɪn/</span> — kiểm tra</li>
+          <li><mark class="vocab">break</mark> <span class="ipa">/breɪk/</span> — gãy</li>
+          <li><mark class="vocab">cut</mark> <span class="ipa">/kʌt/</span> — cắt</li>
+          <li><mark class="vocab">hurt</mark> <span class="ipa">/hɝt/</span> — làm tổn thương</li>
+          <li><mark class="vocab">injure</mark> <span class="ipa">/ˈɪndʒɝ/</span> — làm bị thương</li>
+          <li><mark class="vocab">hit</mark> <span class="ipa">/hɪt/</span> — đập</li>
+          <li><mark class="vocab">see</mark> <span class="ipa">/siː/</span> — gặp</li>
+          <li><mark class="vocab">catch</mark> <span class="ipa">/kætʃ/</span> — nhiễm</li>
+          <li><mark class="vocab">prescribe</mark> <span class="ipa">/prɪˈskraɪb/</span> — kê đơn</li>
+          <li><mark class="vocab">sneeze</mark> <span class="ipa">/sniːz/</span> — hắt hơi</li>
+          <li><mark class="vocab">cough</mark> <span class="ipa">/kɑf/</span> — ho</li>
+          <li><mark class="vocab">protect</mark> <span class="ipa">/prəˈtɛkt/</span> — bảo vệ</li>
+          <li><mark class="vocab">exercise</mark> <span class="ipa">/ˈɛksɚˌsaɪz/</span> — bài tập</li>
+          <li><mark class="vocab">field</mark> <span class="ipa">/fild/</span> — sân</li>
+          <li><mark class="vocab">football</mark> <span class="ipa">/ˈfʊtˌbɔl/</span> — bóng đá</li>
+          <li><mark class="vocab">throw</mark> <span class="ipa">/θroʊ/</span> — ném</li>
+          <li><mark class="vocab">kick</mark> <span class="ipa">/kɪk/</span> — đá</li>
+          <li><mark class="vocab">basketball</mark> <span class="ipa">/ˈbæskətˌbɔl/</span> — bóng rổ</li>
+          <li><mark class="vocab">baseball</mark> <span class="ipa">/ˈbeɪsˌbɔl/</span> — bóng chày</li>
+          <li><mark class="vocab">hockey</mark> <span class="ipa">/ˈhɑki/</span> — khúc côn cầu</li>
+          <li><mark class="vocab">golf</mark> <span class="ipa">/ɡɑlf/</span> — gôn</li>
+          <li><mark class="vocab">rugby</mark> <span class="ipa">/ˈrʌɡbi/</span> — bóng bầu dục</li>
+          <li><mark class="vocab">cricket</mark> <span class="ipa">/ˈkrɪkɪt/</span> — cricket</li>
+          <li><mark class="vocab">field hockey</mark> <span class="ipa">/ˈfild ˈhɑki/</span> — khúc côn cầu trên cỏ</li>
+          <li><mark class="vocab">diving</mark> <span class="ipa">/ˈdaɪvɪŋ/</span> — lặn</li>
+          <li><mark class="vocab">dive</mark> <span class="ipa">/daɪv/</span> — lặn</li>
+          <li><mark class="vocab">training</mark> <span class="ipa">/ˈtreɪnɪŋ/</span> — huấn luyện</li>
+          <li><mark class="vocab">train</mark> <span class="ipa">/treɪn/</span> — huấn luyện</li>
+          <li><mark class="vocab">competition</mark> <span class="ipa">/ˌkɑmpəˈtɪʃən/</span> — cuộc thi</li>
+          <li><mark class="vocab">compete</mark> <span class="ipa">/kəmˈpit/</span> — thi đấu</li>
+          <li><mark class="vocab">jogging</mark> <span class="ipa">/ˈdʒɑɡɪŋ/</span> — chạy bộ</li>
+          <li><mark class="vocab">jog</mark> <span class="ipa">/dʒɑɡ/</span> — chạy bộ</li>
+          <li><mark class="vocab">climbing</mark> <span class="ipa">/ˈklaɪmɪŋ/</span> — leo núi</li>
+          <li><mark class="vocab">climb</mark> <span class="ipa">/klaɪm/</span> — leo trèo</li>
+          <li><mark class="vocab">game</mark> <span class="ipa">/ɡeɪm/</span> — trận đấu</li>
+          <li><mark class="vocab">player</mark> <span class="ipa">/ˈpleɪɚ/</span> — người chơi</li>
+          <li><mark class="vocab">goal</mark> <span class="ipa">/ɡoʊl/</span> — bàn thắng</li>
+          <li><mark class="vocab">score</mark> <span class="ipa">/skɔr/</span> — điểm số</li>
+          <li><mark class="vocab">coach</mark> <span class="ipa">/koʊʧ/</span> — huấn luyện viên</li>
+          <li><mark class="vocab">athlete</mark> <span class="ipa">/ˈæθˌlit/</span> — vận động viên</li>
+          <li><mark class="vocab">cup</mark> <span class="ipa">/kʌp/</span> — cúp</li>
+          <li><mark class="vocab">tired</mark> <span class="ipa">/ˈtaɪɚd/</span> — mệt mỏi</li>
+          <li><mark class="vocab">join</mark> <span class="ipa">/ʤɔɪn/</span> — tham gia</li>
+        </ul>
+      </section>
+
+      <div class="docs-pager">
+        <a href="../">← Health &amp; Sports</a>
+        <a href="../../">All topics →</a>
+      </div>
+    </article>
+  </div>
+  <script src="../../../../js/docs.js"></script>
+  <script src="../../../../js/exercise.js"></script>
+</body>
+</html>

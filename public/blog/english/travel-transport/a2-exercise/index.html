@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A2 Exercise · Travel &amp; Transport — The Quiet Corner</title>
+  <meta name="description" content="A2 reading exercise for Travel &amp; Transport vocabulary with IPA and bilingual sentences.">
+  <link rel="icon" href="../../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../../"><span>✦</span> The Quiet Corner <span>✦</span></a>
+    <nav class="docs-series">
+      <a href="../../../../blog/web-security/">DevSecOps</a>
+      <a href="../../../../blog/kubestronaut/">Kubestronaut</a>
+      <a class="active" href="../../">English</a>
+    </nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-nav="english" data-docs-root="../../" data-active="travel-transport">
+      <div class="docs-nav-label">English</div>
+      <ul class="docs-nav" id="docsNav">
+        <li><a href="../../">All topics</a></li>
+        <li><a href="../">Travel &amp; Transport</a></li>
+        <li><a class="active" href="./">A2 Exercise</a></li>
+      </ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../../">Home</a>
+        <span>›</span>
+        <a href="../../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../../">English</a>
+        <span>›</span>
+        <a href="../">Travel &amp; Transport</a>
+        <span>›</span>
+        <span>A2 Exercise</span>
+      </div>
+
+      <div class="vocab-topic-hero">
+        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 72 72' fill='none'%3E%3Crect width='72' height='72' rx='14' fill='%230b1220'/%3E%3Crect x='16' y='14' width='40' height='46' rx='6' stroke='%2322d3ee' stroke-width='2.5'/%3E%3Cpath d='M24 28h24M24 36h24M24 44h16' stroke='%23e4e4e7' stroke-width='2.5' stroke-linecap='round'/%3E%3Cpath d='M48 48l6 2-2 6-8-8 4 0z' fill='%2322d3ee'/%3E%3C/svg%3E" alt="" width="112" height="112">
+        <div>
+          <h1>A2 Exercise · Travel &amp; Transport</h1>
+          <p class="lede">Reading passage with every new word from this level’s LanGeek lessons — IPA, highlights, sentence translation, and free TTS.</p>
+          <div class="docs-meta">
+            <span><strong>Words:</strong> 67</span>
+            <span><strong>Lessons:</strong> Tourism · Travelling</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="ex-toolbar" id="exToolbar">
+        <label class="ex-toggle"><input type="checkbox" id="togHighlight" checked> Highlights</label>
+        <label class="ex-toggle"><input type="checkbox" id="togIpa" checked> IPA</label>
+        <label class="ex-toggle"><input type="checkbox" id="togVi"> Dịch câu (VI)</label>
+        <span class="ex-sep"></span>
+        <label class="ex-voice">Voice
+          <select id="voiceSelect" aria-label="TTS voice"></select>
+        </label>
+        <label class="ex-voice">Speed
+          <input id="rateRange" type="range" min="0.7" max="1.15" step="0.05" value="0.95">
+          <span id="rateVal">0.95</span>
+        </label>
+        <button type="button" class="ex-btn primary" id="btnPlay">▶ Read passage</button>
+        <button type="button" class="ex-btn" id="btnStop">Stop</button>
+      </div>
+      
+      <section class="ex-passage" id="passage" data-tts-root>
+          <p class="ex-sent" data-sent="1">
+            <span class="ex-en">In this A2 Travel & Transport passage, notice <mark class="vocab" data-word="tour">tour</mark><span class="ipa">/tʊr/</span>, <mark class="vocab" data-word="tourism">tourism</mark><span class="ipa">/ˈtʊrɪzəm/</span>, <mark class="vocab" data-word="tourist">tourist</mark><span class="ipa">/ˈtʊrɪst/</span>, and <mark class="vocab" data-word="sightseeing">sightseeing</mark><span class="ipa">/ˈsaɪtˌsiɪŋ/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Travel &amp; Transport, hãy để ý chuyến đi, du lịch, khách du lịch, và thăm quan.</span>
+          </p>
+          <p class="ex-sent" data-sent="2">
+            <span class="ex-en">In this A2 Travel & Transport passage, notice <mark class="vocab" data-word="guide">guide</mark><span class="ipa">/ɡaɪd/</span>, <mark class="vocab" data-word="passenger">passenger</mark><span class="ipa">/ˈpæsənʤɚ/</span>, <mark class="vocab" data-word="traveler">traveler</mark><span class="ipa">/ˈtrævəlɚ/</span>, and <mark class="vocab" data-word="suitcase">suitcase</mark><span class="ipa">/ˈsutˌkeɪs/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Travel &amp; Transport, hãy để ý hướng dẫn viên, hành khách, người du lịch, và vali.</span>
+          </p>
+          <p class="ex-sent" data-sent="3">
+            <span class="ex-en">In this A2 Travel & Transport passage, notice <mark class="vocab" data-word="baggage">baggage</mark><span class="ipa">/ˈbæɡɪʤ/</span>, <mark class="vocab" data-word="reception">reception</mark><span class="ipa">/rɪˈsɛpʃən/</span>, <mark class="vocab" data-word="twin bed">twin bed</mark><span class="ipa">/twɪn ˈbɛd/</span>, and <mark class="vocab" data-word="single bed">single bed</mark><span class="ipa">/ˈsɪŋɡəl ˈbɛd/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Travel &amp; Transport, hãy để ý hành lý, quầy tiếp tân, giường đơn, và giường đơn.</span>
+          </p>
+          <p class="ex-sent" data-sent="4">
+            <span class="ex-en">In this A2 Travel & Transport passage, notice <mark class="vocab" data-word="single room">single room</mark><span class="ipa">/ˈsɪŋɡəl ˈruːm/</span>, <mark class="vocab" data-word="double room">double room</mark><span class="ipa">/ˈdʌbəl ˈruːm/</span>, <mark class="vocab" data-word="airline">airline</mark><span class="ipa">/ˈɛrˌlaɪn/</span>, and <mark class="vocab" data-word="flight">flight</mark><span class="ipa">/flaɪt/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Travel &amp; Transport, hãy để ý phòng đơn, phòng đôi, hãng hàng không, và chuyến bay.</span>
+          </p>
+          <p class="ex-sent" data-sent="5">
+            <span class="ex-en">In this A2 Travel & Transport passage, notice <mark class="vocab" data-word="gate">gate</mark><span class="ipa">/ɡeɪt/</span>, <mark class="vocab" data-word="international">international</mark><span class="ipa">/ˌɪntɚˈnæʃənəl/</span>, <mark class="vocab" data-word="seat">seat</mark><span class="ipa">/siːt/</span>, and <mark class="vocab" data-word="boarding pass">boarding pass</mark><span class="ipa">/ˈbɔrdɪŋ ˈpæs/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Travel &amp; Transport, hãy để ý cổng, quốc tế, ghế, và thẻ lên tàu.</span>
+          </p>
+          <p class="ex-sent" data-sent="6">
+            <span class="ex-en">In this A2 Travel & Transport passage, notice <mark class="vocab" data-word="round-trip ticket">round-trip ticket</mark><span class="ipa">/raʊnd ˈtrɪp ˈtɪkɪt/</span>, <mark class="vocab" data-word="one-way ticket">one-way ticket</mark><span class="ipa">/wʌn ˈweɪ ˈtɪkɪt/</span>, <mark class="vocab" data-word="to book">book</mark><span class="ipa">/bʊk/</span>, and <mark class="vocab" data-word="public transportation">public transportation</mark><span class="ipa">/ˈpʌblɪk ˌtrænspɚˈteɪʃən/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Travel &amp; Transport, hãy để ý vé khứ hồi, vé một chiều, đặt, và giao thông công cộng.</span>
+          </p>
+          <p class="ex-sent" data-sent="7">
+            <span class="ex-en">In this A2 Travel & Transport passage, notice <mark class="vocab" data-word="platform">platform</mark><span class="ipa">/ˈplætˌfɔrm/</span>, <mark class="vocab" data-word="railroad">railroad</mark><span class="ipa">/ˈreɪlˌroʊd/</span>, <mark class="vocab" data-word="fare">fare</mark><span class="ipa">/fɛr/</span>, and <mark class="vocab" data-word="route">route</mark><span class="ipa">/ruːt/ , /raʊt/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Travel &amp; Transport, hãy để ý sân ga, đường sắt, giá vé, và tuyến đường.</span>
+          </p>
+          <p class="ex-sent" data-sent="8">
+            <span class="ex-en">In this A2 Travel & Transport passage, notice <mark class="vocab" data-word="to ride">ride</mark><span class="ipa">/raɪd/</span>, <mark class="vocab" data-word="to catch">catch</mark><span class="ipa">/kætʃ/</span>, <mark class="vocab" data-word="to miss">miss</mark><span class="ipa">/mɪs/</span>, and <mark class="vocab" data-word="to welcome">welcome</mark><span class="ipa">/ˈwɛlkəm/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Travel &amp; Transport, hãy để ý đi, bắt, bỏ lỡ, và chào đón.</span>
+          </p>
+          <p class="ex-sent" data-sent="9">
+            <span class="ex-en">In this A2 Travel & Transport passage, notice <mark class="vocab" data-word="way">way</mark><span class="ipa">/weɪ/</span>, <mark class="vocab" data-word="vacation">vacation</mark><span class="ipa">/veɪˈkeɪʃən/</span>, <mark class="vocab" data-word="adventure">adventure</mark><span class="ipa">/ədˈvɛnʧɚ/</span>, and <mark class="vocab" data-word="journey">journey</mark><span class="ipa">/ˈʤɝni/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Travel &amp; Transport, hãy để ý đường, kỳ nghỉ, cuộc phiêu lưu, và hành trình.</span>
+          </p>
+          <p class="ex-sent" data-sent="10">
+            <span class="ex-en">In this A2 Travel & Transport passage, notice <mark class="vocab" data-word="cruise">cruise</mark><span class="ipa">/kruːz/</span>, <mark class="vocab" data-word="trip">trip</mark><span class="ipa">/trɪp/</span>, <mark class="vocab" data-word="foreign">foreign</mark><span class="ipa">/ˈfɔrən/ ,  /ˈfɑrən/</span>, and <mark class="vocab" data-word="foreigner">foreigner</mark><span class="ipa">/ˈfɔrənɚ/ , /ˈfɑrənɚ/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Travel &amp; Transport, hãy để ý chuyến du lịch biển, chuyến đi, nước ngoài, và người nước ngoài.</span>
+          </p>
+          <p class="ex-sent" data-sent="11">
+            <span class="ex-en">In this A2 Travel & Transport passage, notice <mark class="vocab" data-word="motel">motel</mark><span class="ipa">/moʊˈtɛl/</span>, <mark class="vocab" data-word="cancelation">cancelation</mark><span class="ipa">/ˌkænsəˈleɪʃən/</span>, <mark class="vocab" data-word="reservation">reservation</mark><span class="ipa">/ˌrɛzɚˈveɪʃən/</span>, and <mark class="vocab" data-word="to reserve">reserve</mark><span class="ipa">/rɪˈzɝv/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Travel &amp; Transport, hãy để ý nhà nghỉ, hủy bỏ, đặt chỗ, và đặt trước.</span>
+          </p>
+          <p class="ex-sent" data-sent="12">
+            <span class="ex-en">In this A2 Travel & Transport passage, notice <mark class="vocab" data-word="visa">visa</mark><span class="ipa">/ˈviːzə/</span>, <mark class="vocab" data-word="to stay">stay</mark><span class="ipa">/steɪ/</span>, <mark class="vocab" data-word="postcard">postcard</mark><span class="ipa">/ˈpoʊstˌkɑrd/</span>, and <mark class="vocab" data-word="souvenir">souvenir</mark><span class="ipa">/ˌsuːvəˈnɪr/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Travel &amp; Transport, hãy để ý thị thực, ở lại, bưu thiếp, và quà lưu niệm.</span>
+          </p>
+          <p class="ex-sent" data-sent="13">
+            <span class="ex-en">In this A2 Travel & Transport passage, notice <mark class="vocab" data-word="to visit">visit</mark><span class="ipa">/ˈvɪzɪt/</span>, <mark class="vocab" data-word="to sightsee">sightsee</mark><span class="ipa">/ˈsaɪtˌsiː/</span>, <mark class="vocab" data-word="to check in">check in</mark><span class="ipa">/ʧɛk ˈɪn/</span>, and <mark class="vocab" data-word="to check out">check out</mark><span class="ipa">/ʧɛk ˈaʊt/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Travel &amp; Transport, hãy để ý thăm, tham quan các điểm tham quan, đăng ký, và trả phòng.</span>
+          </p>
+          <p class="ex-sent" data-sent="14">
+            <span class="ex-en">In this A2 Travel & Transport passage, notice <mark class="vocab" data-word="abroad">abroad</mark><span class="ipa">/əˈbrɔd/</span>, <mark class="vocab" data-word="to change">change</mark><span class="ipa">/tʃeɪndʒ/</span>, <mark class="vocab" data-word="to fly">fly</mark><span class="ipa">/flaɪ/</span>, and <mark class="vocab" data-word="to land">land</mark><span class="ipa">/lænd/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Travel &amp; Transport, hãy để ý ở nước ngoài, đổi, bay, và hạ cánh.</span>
+          </p>
+          <p class="ex-sent" data-sent="15">
+            <span class="ex-en">In this A2 Travel & Transport passage, notice <mark class="vocab" data-word="to take off">take off</mark><span class="ipa">/teɪk ɑːf/</span>, <mark class="vocab" data-word="schedule">schedule</mark><span class="ipa">/ˈskɛdʒul/</span>, <mark class="vocab" data-word="to wander">wander</mark><span class="ipa">/ˈwɑndɚ/</span>, and <mark class="vocab" data-word="arrival">arrival</mark><span class="ipa">/əˈraɪvəl/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Travel &amp; Transport, hãy để ý cất cánh, lịch trình, lang thang, và sự đến.</span>
+          </p>
+          <p class="ex-sent" data-sent="16">
+            <span class="ex-en">In this A2 Travel & Transport passage, notice <mark class="vocab" data-word="departure">departure</mark><span class="ipa">/dɪˈpɑrtʃɚ/</span>, <mark class="vocab" data-word="customs">customs</mark><span class="ipa">/ˈkʌstəmz/</span>, <mark class="vocab" data-word="ride">ride</mark><span class="ipa">/raɪd/</span>, and <mark class="vocab" data-word="to leave">leave</mark><span class="ipa">/liːv/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Travel &amp; Transport, hãy để ý khởi hành, hải quan, chuyến đi chơi, và rời đi.</span>
+          </p>
+          <p class="ex-sent" data-sent="17">
+            <span class="ex-en">In this A2 Travel & Transport passage, notice <mark class="vocab" data-word="to arrive">arrive</mark><span class="ipa">/əˈraɪv/</span>, <mark class="vocab" data-word="to cancel">cancel</mark><span class="ipa">/ˈkænsəl/</span>, and <mark class="vocab" data-word="to reach">reach</mark><span class="ipa">/riːʧ/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Travel &amp; Transport, hãy để ý đến, hủy bỏ, và đến.</span>
+          </p>
+      </section>
+
+      <section class="ex-vocab">
+        <h2>Word checklist · 67</h2>
+        <ul class="ex-vocab-list">
+          <li><mark class="vocab">tour</mark> <span class="ipa">/tʊr/</span> — chuyến đi</li>
+          <li><mark class="vocab">tourism</mark> <span class="ipa">/ˈtʊrɪzəm/</span> — du lịch</li>
+          <li><mark class="vocab">tourist</mark> <span class="ipa">/ˈtʊrɪst/</span> — khách du lịch</li>
+          <li><mark class="vocab">sightseeing</mark> <span class="ipa">/ˈsaɪtˌsiɪŋ/</span> — thăm quan</li>
+          <li><mark class="vocab">guide</mark> <span class="ipa">/ɡaɪd/</span> — hướng dẫn viên</li>
+          <li><mark class="vocab">passenger</mark> <span class="ipa">/ˈpæsənʤɚ/</span> — hành khách</li>
+          <li><mark class="vocab">traveler</mark> <span class="ipa">/ˈtrævəlɚ/</span> — người du lịch</li>
+          <li><mark class="vocab">suitcase</mark> <span class="ipa">/ˈsutˌkeɪs/</span> — vali</li>
+          <li><mark class="vocab">baggage</mark> <span class="ipa">/ˈbæɡɪʤ/</span> — hành lý</li>
+          <li><mark class="vocab">reception</mark> <span class="ipa">/rɪˈsɛpʃən/</span> — quầy tiếp tân</li>
+          <li><mark class="vocab">twin bed</mark> <span class="ipa">/twɪn ˈbɛd/</span> — giường đơn</li>
+          <li><mark class="vocab">single bed</mark> <span class="ipa">/ˈsɪŋɡəl ˈbɛd/</span> — giường đơn</li>
+          <li><mark class="vocab">single room</mark> <span class="ipa">/ˈsɪŋɡəl ˈruːm/</span> — phòng đơn</li>
+          <li><mark class="vocab">double room</mark> <span class="ipa">/ˈdʌbəl ˈruːm/</span> — phòng đôi</li>
+          <li><mark class="vocab">airline</mark> <span class="ipa">/ˈɛrˌlaɪn/</span> — hãng hàng không</li>
+          <li><mark class="vocab">flight</mark> <span class="ipa">/flaɪt/</span> — chuyến bay</li>
+          <li><mark class="vocab">gate</mark> <span class="ipa">/ɡeɪt/</span> — cổng</li>
+          <li><mark class="vocab">international</mark> <span class="ipa">/ˌɪntɚˈnæʃənəl/</span> — quốc tế</li>
+          <li><mark class="vocab">seat</mark> <span class="ipa">/siːt/</span> — ghế</li>
+          <li><mark class="vocab">boarding pass</mark> <span class="ipa">/ˈbɔrdɪŋ ˈpæs/</span> — thẻ lên tàu</li>
+          <li><mark class="vocab">round-trip ticket</mark> <span class="ipa">/raʊnd ˈtrɪp ˈtɪkɪt/</span> — vé khứ hồi</li>
+          <li><mark class="vocab">one-way ticket</mark> <span class="ipa">/wʌn ˈweɪ ˈtɪkɪt/</span> — vé một chiều</li>
+          <li><mark class="vocab">book</mark> <span class="ipa">/bʊk/</span> — đặt</li>
+          <li><mark class="vocab">public transportation</mark> <span class="ipa">/ˈpʌblɪk ˌtrænspɚˈteɪʃən/</span> — giao thông công cộng</li>
+          <li><mark class="vocab">platform</mark> <span class="ipa">/ˈplætˌfɔrm/</span> — sân ga</li>
+          <li><mark class="vocab">railroad</mark> <span class="ipa">/ˈreɪlˌroʊd/</span> — đường sắt</li>
+          <li><mark class="vocab">fare</mark> <span class="ipa">/fɛr/</span> — giá vé</li>
+          <li><mark class="vocab">route</mark> <span class="ipa">/ruːt/ , /raʊt/</span> — tuyến đường</li>
+          <li><mark class="vocab">ride</mark> <span class="ipa">/raɪd/</span> — đi</li>
+          <li><mark class="vocab">catch</mark> <span class="ipa">/kætʃ/</span> — bắt</li>
+          <li><mark class="vocab">miss</mark> <span class="ipa">/mɪs/</span> — bỏ lỡ</li>
+          <li><mark class="vocab">welcome</mark> <span class="ipa">/ˈwɛlkəm/</span> — chào đón</li>
+          <li><mark class="vocab">way</mark> <span class="ipa">/weɪ/</span> — đường</li>
+          <li><mark class="vocab">vacation</mark> <span class="ipa">/veɪˈkeɪʃən/</span> — kỳ nghỉ</li>
+          <li><mark class="vocab">adventure</mark> <span class="ipa">/ədˈvɛnʧɚ/</span> — cuộc phiêu lưu</li>
+          <li><mark class="vocab">journey</mark> <span class="ipa">/ˈʤɝni/</span> — hành trình</li>
+          <li><mark class="vocab">cruise</mark> <span class="ipa">/kruːz/</span> — chuyến du lịch biển</li>
+          <li><mark class="vocab">trip</mark> <span class="ipa">/trɪp/</span> — chuyến đi</li>
+          <li><mark class="vocab">foreign</mark> <span class="ipa">/ˈfɔrən/ ,  /ˈfɑrən/</span> — nước ngoài</li>
+          <li><mark class="vocab">foreigner</mark> <span class="ipa">/ˈfɔrənɚ/ , /ˈfɑrənɚ/</span> — người nước ngoài</li>
+          <li><mark class="vocab">motel</mark> <span class="ipa">/moʊˈtɛl/</span> — nhà nghỉ</li>
+          <li><mark class="vocab">cancelation</mark> <span class="ipa">/ˌkænsəˈleɪʃən/</span> — hủy bỏ</li>
+          <li><mark class="vocab">reservation</mark> <span class="ipa">/ˌrɛzɚˈveɪʃən/</span> — đặt chỗ</li>
+          <li><mark class="vocab">reserve</mark> <span class="ipa">/rɪˈzɝv/</span> — đặt trước</li>
+          <li><mark class="vocab">visa</mark> <span class="ipa">/ˈviːzə/</span> — thị thực</li>
+          <li><mark class="vocab">stay</mark> <span class="ipa">/steɪ/</span> — ở lại</li>
+          <li><mark class="vocab">postcard</mark> <span class="ipa">/ˈpoʊstˌkɑrd/</span> — bưu thiếp</li>
+          <li><mark class="vocab">souvenir</mark> <span class="ipa">/ˌsuːvəˈnɪr/</span> — quà lưu niệm</li>
+          <li><mark class="vocab">visit</mark> <span class="ipa">/ˈvɪzɪt/</span> — thăm</li>
+          <li><mark class="vocab">sightsee</mark> <span class="ipa">/ˈsaɪtˌsiː/</span> — tham quan các điểm tham quan</li>
+          <li><mark class="vocab">check in</mark> <span class="ipa">/ʧɛk ˈɪn/</span> — đăng ký</li>
+          <li><mark class="vocab">check out</mark> <span class="ipa">/ʧɛk ˈaʊt/</span> — trả phòng</li>
+          <li><mark class="vocab">abroad</mark> <span class="ipa">/əˈbrɔd/</span> — ở nước ngoài</li>
+          <li><mark class="vocab">change</mark> <span class="ipa">/tʃeɪndʒ/</span> — đổi</li>
+          <li><mark class="vocab">fly</mark> <span class="ipa">/flaɪ/</span> — bay</li>
+          <li><mark class="vocab">land</mark> <span class="ipa">/lænd/</span> — hạ cánh</li>
+          <li><mark class="vocab">take off</mark> <span class="ipa">/teɪk ɑːf/</span> — cất cánh</li>
+          <li><mark class="vocab">schedule</mark> <span class="ipa">/ˈskɛdʒul/</span> — lịch trình</li>
+          <li><mark class="vocab">wander</mark> <span class="ipa">/ˈwɑndɚ/</span> — lang thang</li>
+          <li><mark class="vocab">arrival</mark> <span class="ipa">/əˈraɪvəl/</span> — sự đến</li>
+          <li><mark class="vocab">departure</mark> <span class="ipa">/dɪˈpɑrtʃɚ/</span> — khởi hành</li>
+          <li><mark class="vocab">customs</mark> <span class="ipa">/ˈkʌstəmz/</span> — hải quan</li>
+          <li><mark class="vocab">ride</mark> <span class="ipa">/raɪd/</span> — chuyến đi chơi</li>
+          <li><mark class="vocab">leave</mark> <span class="ipa">/liːv/</span> — rời đi</li>
+          <li><mark class="vocab">arrive</mark> <span class="ipa">/əˈraɪv/</span> — đến</li>
+          <li><mark class="vocab">cancel</mark> <span class="ipa">/ˈkænsəl/</span> — hủy bỏ</li>
+          <li><mark class="vocab">reach</mark> <span class="ipa">/riːʧ/</span> — đến</li>
+        </ul>
+      </section>
+
+      <div class="docs-pager">
+        <a href="../">← Travel &amp; Transport</a>
+        <a href="../../">All topics →</a>
+      </div>
+    </article>
+  </div>
+  <script src="../../../../js/docs.js"></script>
+  <script src="../../../../js/exercise.js"></script>
+</body>
+</html>

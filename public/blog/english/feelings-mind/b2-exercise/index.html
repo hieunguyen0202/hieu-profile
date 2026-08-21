@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>B2 Exercise · Feelings &amp; Mind — The Quiet Corner</title>
+  <meta name="description" content="B2 reading exercise for Feelings &amp; Mind vocabulary with IPA and bilingual sentences.">
+  <link rel="icon" href="../../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../../"><span>✦</span> The Quiet Corner <span>✦</span></a>
+    <nav class="docs-series">
+      <a href="../../../../blog/web-security/">DevSecOps</a>
+      <a href="../../../../blog/kubestronaut/">Kubestronaut</a>
+      <a class="active" href="../../">English</a>
+    </nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-nav="english" data-docs-root="../../" data-active="feelings-mind">
+      <div class="docs-nav-label">English</div>
+      <ul class="docs-nav" id="docsNav">
+        <li><a href="../../">All topics</a></li>
+        <li><a href="../">Feelings &amp; Mind</a></li>
+        <li><a class="active" href="./">B2 Exercise</a></li>
+      </ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../../">Home</a>
+        <span>›</span>
+        <a href="../../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../../">English</a>
+        <span>›</span>
+        <a href="../">Feelings &amp; Mind</a>
+        <span>›</span>
+        <span>B2 Exercise</span>
+      </div>
+
+      <div class="vocab-topic-hero">
+        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 72 72' fill='none'%3E%3Crect width='72' height='72' rx='14' fill='%230b1220'/%3E%3Crect x='16' y='14' width='40' height='46' rx='6' stroke='%2322d3ee' stroke-width='2.5'/%3E%3Cpath d='M24 28h24M24 36h24M24 44h16' stroke='%23e4e4e7' stroke-width='2.5' stroke-linecap='round'/%3E%3Cpath d='M48 48l6 2-2 6-8-8 4 0z' fill='%2322d3ee'/%3E%3C/svg%3E" alt="" width="112" height="112">
+        <div>
+          <h1>B2 Exercise · Feelings &amp; Mind</h1>
+          <p class="lede">Reading passage with every new word from this level’s LanGeek lessons — IPA, highlights, sentence translation, and free TTS.</p>
+          <div class="docs-meta">
+            <span><strong>Words:</strong> 217</span>
+            <span><strong>Lessons:</strong> Assessment and Discourse · Certainty and Doubt · Change · Evaluation and Opinion · Feelings or States of Being · Preference</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="ex-toolbar" id="exToolbar">
+        <label class="ex-toggle"><input type="checkbox" id="togHighlight" checked> Highlights</label>
+        <label class="ex-toggle"><input type="checkbox" id="togIpa" checked> IPA</label>
+        <label class="ex-toggle"><input type="checkbox" id="togVi"> Dịch câu (VI)</label>
+        <span class="ex-sep"></span>
+        <label class="ex-voice">Voice
+          <select id="voiceSelect" aria-label="TTS voice"></select>
+        </label>
+        <label class="ex-voice">Speed
+          <input id="rateRange" type="range" min="0.7" max="1.15" step="0.05" value="0.95">
+          <span id="rateVal">0.95</span>
+        </label>
+        <button type="button" class="ex-btn primary" id="btnPlay">▶ Read passage</button>
+        <button type="button" class="ex-btn" id="btnStop">Stop</button>
+      </div>
+      
+      <section class="ex-passage" id="passage" data-tts-root>
+          <p class="ex-sent" data-sent="1">
+            <span class="ex-en">In this B2 Feelings & Mind passage, notice <mark class="vocab" data-word="to figure">figure</mark><span class="ipa">/ˈfɪgər/</span>, <mark class="vocab" data-word="to justify">justify</mark><span class="ipa">/ˈdʒəstəˌfaɪ/</span>, <mark class="vocab" data-word="in the first place">in the first place</mark><span class="ipa">/ɪnðə fˈɜːstplˌeɪs/</span>, and <mark class="vocab" data-word="to object">object</mark><span class="ipa">/ˈɑbdʒɛkt/, /əbˈdʒɛkt/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Feelings &amp; Mind, hãy để ý ước tính, biện minh, trước hết, và phản đối.</span>
+          </p>
+          <p class="ex-sent" data-sent="2">
+            <span class="ex-en">In this B2 Feelings & Mind passage, notice <mark class="vocab" data-word="objective">objective</mark><span class="ipa">/əbˈdʒɛktɪv/</span>, <mark class="vocab" data-word="subjective">subjective</mark><span class="ipa">/səbˈdʒɛktɪv/</span>, <mark class="vocab" data-word="to maintain">maintain</mark><span class="ipa">/meɪnˈteɪn/</span>, and <mark class="vocab" data-word="may">may</mark><span class="ipa">/meɪ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Feelings &amp; Mind, hãy để ý khách quan, chủ quan, khẳng định, và có thể.</span>
+          </p>
+          <p class="ex-sent" data-sent="3">
+            <span class="ex-en">In this B2 Feelings & Mind passage, notice <mark class="vocab" data-word="to name">name</mark><span class="ipa">/neɪm/</span>, <mark class="vocab" data-word="to oppose">oppose</mark><span class="ipa">/əˈpoʊz/</span>, <mark class="vocab" data-word="opposed">opposed</mark><span class="ipa">/əˈpoʊzd/</span>, and <mark class="vocab" data-word="to praise">praise</mark><span class="ipa">/ˈpɹeɪz/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Feelings &amp; Mind, hãy để ý đặt tên, phản đối, phản đối, và khen ngợi.</span>
+          </p>
+          <p class="ex-sent" data-sent="4">
+            <span class="ex-en">In this B2 Feelings & Mind passage, notice <mark class="vocab" data-word="to reckon">reckon</mark><span class="ipa">/ˈɹɛkən/</span>, <mark class="vocab" data-word="to regard">regard</mark><span class="ipa">/ɹɪˈɡɑɹd/</span>, <mark class="vocab" data-word="to remark">remark</mark><span class="ipa">/ɹiˈmɑɹk/, /ɹɪˈmɑɹk/</span>, and <mark class="vocab" data-word="to speculate">speculate</mark><span class="ipa">/ˈspɛkjəˌɫeɪt/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Feelings &amp; Mind, hãy để ý nghĩ, coi trọng, nhận xét, và suy đoán.</span>
+          </p>
+          <p class="ex-sent" data-sent="5">
+            <span class="ex-en">In this B2 Feelings & Mind passage, notice <mark class="vocab" data-word="speculation">speculation</mark><span class="ipa">/ˌspɛkjəˈɫeɪʃən/</span>, <mark class="vocab" data-word="stance">stance</mark><span class="ipa">/ˈstæns/</span>, <mark class="vocab" data-word="to stand">stand</mark><span class="ipa">/stænd/</span>, and <mark class="vocab" data-word="to sum up">sum up</mark><span class="ipa">/sʌm ʌp/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Feelings &amp; Mind, hãy để ý sự suy đoán, lập trường, đứng, và tóm tắt.</span>
+          </p>
+          <p class="ex-sent" data-sent="6">
+            <span class="ex-en">In this B2 Feelings & Mind passage, notice <mark class="vocab" data-word="misunderstanding">misunderstanding</mark><span class="ipa">/ˌmɪsəndɝˈstændɪŋ/</span>, <mark class="vocab" data-word="perception">perception</mark><span class="ipa">/pɝˈsɛpʃən/</span>, <mark class="vocab" data-word="position">position</mark><span class="ipa">/pəˈzɪʃən/</span>, and <mark class="vocab" data-word="proof">proof</mark><span class="ipa">/ˈpɹuf/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Feelings &amp; Mind, hãy để ý hiểu lầm, nhận thức, quan điểm, và bằng chứng.</span>
+          </p>
+          <p class="ex-sent" data-sent="7">
+            <span class="ex-en">In this B2 Feelings & Mind passage, notice <mark class="vocab" data-word="public opinion">public opinion</mark><span class="ipa">/pˈʌblɪk əpˈɪniən/</span>, <mark class="vocab" data-word="reason">reason</mark><span class="ipa">/ˈrizən/</span>, <mark class="vocab" data-word="remark">remark</mark><span class="ipa">/ɹiˈmɑɹk/, /ɹɪˈmɑɹk/</span>, and <mark class="vocab" data-word="reputation">reputation</mark><span class="ipa">/ˌɹɛpjəˈteɪʃən/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Feelings &amp; Mind, hãy để ý ý kiến công chúng, lý trí, nhận xét, và danh tiếng.</span>
+          </p>
+          <p class="ex-sent" data-sent="8">
+            <span class="ex-en">In this B2 Feelings & Mind passage, notice <mark class="vocab" data-word="right">right</mark><span class="ipa">/raɪt/</span>, <mark class="vocab" data-word="side">side</mark><span class="ipa">/saɪd/</span>, <mark class="vocab" data-word="while">while</mark><span class="ipa">/waɪl/</span>, and <mark class="vocab" data-word="to sign">sign</mark><span class="ipa">/saɪn/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Feelings &amp; Mind, hãy để ý Đúng rồi, bên, trong khi, và ký hiệu.</span>
+          </p>
+          <p class="ex-sent" data-sent="9">
+            <span class="ex-en">In this B2 Feelings & Mind passage, notice <mark class="vocab" data-word="in opposition to {sb/sth}">in opposition to {sb/sth}</mark><span class="ipa">/ɪn ˌɑːpəzˈɪʃən tʊ ˌɛsbˈiː slˈæʃ ˌɛstˌiːˈeɪtʃ/</span>, <mark class="vocab" data-word="likewise">likewise</mark><span class="ipa">/ˈɫaɪˌkwaɪz/</span>, <mark class="vocab" data-word="judgment">judgment</mark><span class="ipa">/ˈdʒədʒmənt/</span>, and <mark class="vocab" data-word="to assure">assure</mark><span class="ipa">/əˈʃʊɹ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Feelings &amp; Mind, hãy để ý phản đối ai đó hoặc cái gì đó, Tương tự !, phán đoán, và đảm bảo.</span>
+          </p>
+          <p class="ex-sent" data-sent="10">
+            <span class="ex-en">In this B2 Feelings & Mind passage, notice <mark class="vocab" data-word="to bet">bet</mark><span class="ipa">/ˈbet/</span>, <mark class="vocab" data-word="to ensure">ensure</mark><span class="ipa">/ɛnˈʃʊɹ/, /ɪnˈʃʊɹ/</span>, <mark class="vocab" data-word="to forecast">forecast</mark><span class="ipa">/ˈfɔrˌkæst/</span>, and <mark class="vocab" data-word="to guarantee">guarantee</mark><span class="ipa">/ˌɡɛɹənˈti/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Feelings &amp; Mind, hãy để ý cá, đảm bảo, dự đoán, và bảo đảm.</span>
+          </p>
+          <p class="ex-sent" data-sent="11">
+            <span class="ex-en">In this B2 Feelings & Mind passage, notice <mark class="vocab" data-word="to hesitate">hesitate</mark><span class="ipa">/ˈhɛzəˌteɪt/</span>, <mark class="vocab" data-word="ought to">ought to</mark><span class="ipa">/ˈɔːt tuː/</span>, <mark class="vocab" data-word="to recall">recall</mark><span class="ipa">/ˈɹiˌkɔɫ/, /ɹɪˈkɔɫ/</span>, and <mark class="vocab" data-word="should">should</mark><span class="ipa">/ʃʊd/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Feelings &amp; Mind, hãy để ý do dự, nên, nhớ lại, và nên.</span>
+          </p>
+          <p class="ex-sent" data-sent="12">
+            <span class="ex-en">In this B2 Feelings & Mind passage, notice <mark class="vocab" data-word="to suspect">suspect</mark><span class="ipa">/ˈsəsˌpɛkt/, /səˈspɛkt/</span>, <mark class="vocab" data-word="would">would</mark><span class="ipa">/wʊd/</span>, <mark class="vocab" data-word="bound">bound</mark><span class="ipa">/ˈbaʊnd/</span>, and <mark class="vocab" data-word="sure">sure</mark><span class="ipa">/ʃʊr/ , /ʃɔːr/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Feelings &amp; Mind, hãy để ý nghi ngờ, sẽ, có khả năng xảy ra, và chắc chắn.</span>
+          </p>
+          <p class="ex-sent" data-sent="13">
+            <span class="ex-en">In this B2 Feelings & Mind passage, notice <mark class="vocab" data-word="convinced">convinced</mark><span class="ipa">/kənˈvɪnst/</span>, <mark class="vocab" data-word="expected">expected</mark><span class="ipa">/ɪkˈspɛktəd/, /ɪkˈspɛktɪd/</span>, <mark class="vocab" data-word="inevitable">inevitable</mark><span class="ipa">/ˌɪˈnɛvətəbəɫ/</span>, and <mark class="vocab" data-word="rash">rash</mark><span class="ipa">/ræʃ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Feelings &amp; Mind, hãy để ý tin chắc, được mong đợi, không thể tránh khỏi, và hấp tấp.</span>
+          </p>
+          <p class="ex-sent" data-sent="14">
+            <span class="ex-en">In this B2 Feelings & Mind passage, notice <mark class="vocab" data-word="positive">positive</mark><span class="ipa">/ˈpɑzətɪv/</span>, <mark class="vocab" data-word="probable">probable</mark><span class="ipa">/ˈpɹɑbəbəɫ/</span>, <mark class="vocab" data-word="uncertain">uncertain</mark><span class="ipa">/ənˈsɝtən/</span>, and <mark class="vocab" data-word="unclear">unclear</mark><span class="ipa">/ənˈkɫɪɹ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Feelings &amp; Mind, hãy để ý chắc chắn, có khả năng, không chắc chắn, và không rõ ràng.</span>
+          </p>
+          <p class="ex-sent" data-sent="15">
+            <span class="ex-en">In this B2 Feelings & Mind passage, notice <mark class="vocab" data-word="no doubt">no doubt</mark><span class="ipa">/nˈoʊ dˈaʊt/</span>, <mark class="vocab" data-word="certainty">certainty</mark><span class="ipa">/ˈsɝtənti/</span>, <mark class="vocab" data-word="confidence">confidence</mark><span class="ipa">/ˈkɑnfədəns/</span>, and <mark class="vocab" data-word="confusion">confusion</mark><span class="ipa">/kənˈfjuʒən/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Feelings &amp; Mind, hãy để ý không nghi ngờ gì, sự chắc chắn, sự tin tưởng, và sự nhầm lẫn.</span>
+          </p>
+          <p class="ex-sent" data-sent="16">
+            <span class="ex-en">In this B2 Feelings & Mind passage, notice <mark class="vocab" data-word="probability">probability</mark><span class="ipa">/ˌpɹɑbəˈbɪɫəˌti/</span>, <mark class="vocab" data-word="to deceive">deceive</mark><span class="ipa">/dɪˈsiv/</span>, <mark class="vocab" data-word="somehow">somehow</mark><span class="ipa">/ˈsəmˌhaʊ/</span>, and <mark class="vocab" data-word="scheme">scheme</mark><span class="ipa">/ˈskim/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Feelings &amp; Mind, hãy để ý xác suất, lừa dối, bằng cách nào đó, và âm mưu.</span>
+          </p>
+          <p class="ex-sent" data-sent="17">
+            <span class="ex-en">In this B2 Feelings & Mind passage, notice <mark class="vocab" data-word="not necessarily">not necessarily</mark><span class="ipa">/nˌɑːt nˌɛsɪsˈɛɹəli/</span>, <mark class="vocab" data-word="you bet">you bet</mark><span class="ipa">/juː bˈɛt/</span>, <mark class="vocab" data-word="to check out">check out</mark><span class="ipa">/ʧɛk ˈaʊt/</span>, and <mark class="vocab" data-word="to [go] back on a (promise|deal|pledge)">[go] back on a (promise|deal|pledge)</mark><span class="ipa">/ɡˌoʊ bˈæk ˌɑːn ɐ pɹˈɑːmɪs ɔːɹ dˈiːl ɔːɹ plˈɛdʒ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Feelings &amp; Mind, hãy để ý not necessarily, chắc chắn rồi, kiểm tra, và [go] back on a (promise|deal|pledge).</span>
+          </p>
+          <p class="ex-sent" data-sent="18">
+            <span class="ex-en">In this B2 Feelings & Mind passage, notice <mark class="vocab" data-word="odds">odds</mark><span class="ipa">/ɑdz/</span>, <mark class="vocab" data-word="in stone">in stone</mark><span class="ipa">/ɪn stˈoʊn/</span>, <mark class="vocab" data-word="to palm off">palm off</mark><span class="ipa">/pˈɑːm ˈɔf/</span>, and <mark class="vocab" data-word="plastic">plastic</mark><span class="ipa">/ˈplæstɪk/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Feelings &amp; Mind, hãy để ý tỷ lệ cược, không thể thay đổi, tống khứ, và giả tạo.</span>
+          </p>
+          <p class="ex-sent" data-sent="19">
+            <span class="ex-en">In this B2 Feelings & Mind passage, notice <mark class="vocab" data-word="to [go] back on {one&#x27;s} word">[go] back on {one&#x27;s} word</mark><span class="ipa">/ɡˌoʊ bˈæk ˌɑːn wˈʌnz wˈɜːd/</span>, <mark class="vocab" data-word="to question">question</mark><span class="ipa">/ˈkwɛsʧən/</span>, <mark class="vocab" data-word="to account for">account for</mark><span class="ipa">/ɐkˈaʊnt fɔːɹ/</span>, and <mark class="vocab" data-word="to alter">alter</mark><span class="ipa">/ˈɔɫtɝ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Feelings &amp; Mind, hãy để ý [go] back on {one&#x27;s} word, chất vấn, giải thích, và thay đổi.</span>
+          </p>
+          <p class="ex-sent" data-sent="20">
+            <span class="ex-en">In this B2 Feelings & Mind passage, notice <mark class="vocab" data-word="to arise">arise</mark><span class="ipa">/ɝˈaɪz/</span>, <mark class="vocab" data-word="to boost">boost</mark><span class="ipa">/ˈbust/</span>, <mark class="vocab" data-word="to build up">build up</mark><span class="ipa">/bˈɪld ˈʌp/</span>, and <mark class="vocab" data-word="to climb">climb</mark><span class="ipa">/klaɪm/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Feelings &amp; Mind, hãy để ý phát sinh, tăng cường, tích tụ, và tăng lên.</span>
+          </p>
+          <p class="ex-sent" data-sent="21">
+            <span class="ex-en">In this B2 Feelings & Mind passage, notice <mark class="vocab" data-word="to contribute">contribute</mark><span class="ipa">/kənˈtɹɪbjut/</span>, <mark class="vocab" data-word="contribution">contribution</mark><span class="ipa">/ˌkɑntɹəbˈjuʃən/</span>, <mark class="vocab" data-word="to decline">decline</mark><span class="ipa">/dɪˈkɫaɪn/</span>, and <mark class="vocab" data-word="to enhance">enhance</mark><span class="ipa">/ɛnˈhæns/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Feelings &amp; Mind, hãy để ý đóng góp, đóng góp, giảm, và cải thiện.</span>
+          </p>
+          <p class="ex-sent" data-sent="22">
+            <span class="ex-en">In this B2 Feelings & Mind passage, notice <mark class="vocab" data-word="to extend">extend</mark><span class="ipa">/ɪkˈstɛnd/</span>, <mark class="vocab" data-word="to straighten">straighten</mark><span class="ipa">/ˈstɹeɪtən/</span>, <mark class="vocab" data-word="to gain">gain</mark><span class="ipa">/ˈɡeɪn/</span>, and <mark class="vocab" data-word="to jump">jump</mark><span class="ipa">/dʒʌmp/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Feelings &amp; Mind, hãy để ý mở rộng, làm thẳng, tăng, và nhảy vọt.</span>
+          </p>
+          <p class="ex-sent" data-sent="23">
+            <span class="ex-en">In this B2 Feelings & Mind passage, notice <mark class="vocab" data-word="to lower">lower</mark><span class="ipa">/ˈɫoʊɝ/</span>, <mark class="vocab" data-word="to modify">modify</mark><span class="ipa">/ˈmɑdəˌfaɪ/</span>, <mark class="vocab" data-word="to mount">mount</mark><span class="ipa">/ˈmaʊnt/</span>, and <mark class="vocab" data-word="to multiply">multiply</mark><span class="ipa">/ˈmʌltəˌplaɪ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Feelings &amp; Mind, hãy để ý giảm, sửa đổi, tăng lên, và nhân lên.</span>
+          </p>
+          <p class="ex-sent" data-sent="24">
+            <span class="ex-en">In this B2 Feelings & Mind passage, notice <mark class="vocab" data-word="to recover">recover</mark><span class="ipa">/rɪˈkʌvɚ/</span>, <mark class="vocab" data-word="to trigger">trigger</mark><span class="ipa">/ˈtɹɪɡɝ/</span>, <mark class="vocab" data-word="expansion">expansion</mark><span class="ipa">/ɪkˈspænʃən/, /ɪkˈspæntʃən/</span>, and <mark class="vocab" data-word="implication">implication</mark><span class="ipa">/ˌɪmpɫəˈkeɪʃən/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Feelings &amp; Mind, hãy để ý phục hồi, kích hoạt, sự mở rộng, và hàm ý.</span>
+          </p>
+          <p class="ex-sent" data-sent="25">
+            <span class="ex-en">In this B2 Feelings & Mind passage, notice <mark class="vocab" data-word="means">means</mark><span class="ipa">/ˈminz/</span>, <mark class="vocab" data-word="outcome">outcome</mark><span class="ipa">/ˈaʊtˌkəm/</span>, <mark class="vocab" data-word="product">product</mark><span class="ipa">/ˈprɑdʌkt/</span>, and <mark class="vocab" data-word="reduction">reduction</mark><span class="ipa">/ɹəˈdəkʃən/, /ɹiˈdəkʃən/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Feelings &amp; Mind, hãy để ý phương tiện, kết quả, sản phẩm, và giảm.</span>
+          </p>
+          <p class="ex-sent" data-sent="26">
+            <span class="ex-en">In this B2 Feelings & Mind passage, notice <mark class="vocab" data-word="root">root</mark><span class="ipa">/ˈɹut/</span>, <mark class="vocab" data-word="responsible">responsible</mark><span class="ipa">/rɪˈspɑnsɪbəl/</span>, <mark class="vocab" data-word="consequently">consequently</mark><span class="ipa">/ˈkɑnsəˌkwɛntɫi/, /ˈkɑnsəkwəntɫi/</span>, and <mark class="vocab" data-word="increasingly">increasingly</mark><span class="ipa">/ɪnˈkɹisɪŋɡɫi/, /ɪnˈkɹisɪŋɫi/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Feelings &amp; Mind, hãy để ý nguồn gốc, chịu trách nhiệm, do đó, và ngày càng.</span>
+          </p>
+          <p class="ex-sent" data-sent="27">
+            <span class="ex-en">In this B2 Feelings & Mind passage, notice <mark class="vocab" data-word="life-changing">life-changing</mark><span class="ipa">/ˈɫaɪfˌtʃeɪndʒɪŋ/</span>, <mark class="vocab" data-word="significant">significant</mark><span class="ipa">/səɡˈnɪfɪkənt/, /sɪɡˈnɪfɪkənt/</span>, <mark class="vocab" data-word="significantly">significantly</mark><span class="ipa">/sɪɡˈnɪfɪkəntɫi/</span>, and <mark class="vocab" data-word="following">following</mark><span class="ipa">/ˈfɑɫoʊɪŋ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Feelings &amp; Mind, hãy để ý thay đổi cuộc đời, quan trọng, đáng kể, và sau.</span>
+          </p>
+          <p class="ex-sent" data-sent="28">
+            <span class="ex-en">In this B2 Feelings & Mind passage, notice <mark class="vocab" data-word="hence">hence</mark><span class="ipa">/ˈhɛns/</span>, <mark class="vocab" data-word="thus">thus</mark><span class="ipa">/ˈðəs/</span>, <mark class="vocab" data-word="to inspire">inspire</mark><span class="ipa">/ˌɪnˈspaɪɹ/</span>, and <mark class="vocab" data-word="ground zero">ground zero</mark><span class="ipa">/ɡɹˈaʊnd zˈiəɹoʊ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Feelings &amp; Mind, hãy để ý do đó, do đó, truyền cảm hứng, và điểm không.</span>
+          </p>
+          <p class="ex-sent" data-sent="29">
+            <span class="ex-en">In this B2 Feelings & Mind passage, notice <mark class="vocab" data-word="account">account</mark><span class="ipa">/əˈkaʊnt/</span>, <mark class="vocab" data-word="to approve">approve</mark><span class="ipa">/əˈpɹuv/</span>, <mark class="vocab" data-word="approval">approval</mark><span class="ipa">/əˈpruːvəl/</span>, and <mark class="vocab" data-word="to assess">assess</mark><span class="ipa">/əˈsɛs/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Feelings &amp; Mind, hãy để ý bản tường thuật, phê duyệt, sự chấp thuận, và đánh giá.</span>
+          </p>
+          <p class="ex-sent" data-sent="30">
+            <span class="ex-en">In this B2 Feelings & Mind passage, notice <mark class="vocab" data-word="assessment">assessment</mark><span class="ipa">/əˈsɛsmənt/</span>, <mark class="vocab" data-word="to associate">associate</mark><span class="ipa">/əˈsoʊʃiˌeɪt/</span>, <mark class="vocab" data-word="to assume">assume</mark><span class="ipa">/əˈsum/</span>, and <mark class="vocab" data-word="case">case</mark><span class="ipa">/keɪs/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Feelings &amp; Mind, hãy để ý đánh giá, liên tưởng, giả định, và trường hợp.</span>
+          </p>
+          <p class="ex-sent" data-sent="31">
+            <span class="ex-en">In this B2 Feelings & Mind passage, notice <mark class="vocab" data-word="common sense">common sense</mark><span class="ipa">/kˈɑːmən sˈɛns/</span>, <mark class="vocab" data-word="conflict">conflict</mark><span class="ipa">/ˈkɑnflɪkt/</span>, <mark class="vocab" data-word="estimate">estimate</mark><span class="ipa">/ˈɛstəˌmeɪt/, /ˈɛstəmət/</span>, and <mark class="vocab" data-word="controversy">controversy</mark><span class="ipa">/ˈkɑntɹəˌvɝsi/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Feelings &amp; Mind, hãy để ý lẽ thường, xung đột, ước tính, và tranh cãi.</span>
+          </p>
+          <p class="ex-sent" data-sent="32">
+            <span class="ex-en">In this B2 Feelings & Mind passage, notice <mark class="vocab" data-word="controversial">controversial</mark><span class="ipa">/ˌkɑntɹəˈvɝʃəɫ/</span>, <mark class="vocab" data-word="consistent">consistent</mark><span class="ipa">/kənˈsɪstənt/</span>, <mark class="vocab" data-word="furthermore">furthermore</mark><span class="ipa">/ˈfɝðɝˌmɔɹ/</span>, and <mark class="vocab" data-word="forum">forum</mark><span class="ipa">/ˈfɔɹəm/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Feelings &amp; Mind, hãy để ý gây tranh cãi, kiên định, hơn nữa, và diễn đàn.</span>
+          </p>
+          <p class="ex-sent" data-sent="33">
+            <span class="ex-en">In this B2 Feelings & Mind passage, notice <mark class="vocab" data-word="counterargument">counterargument</mark><span class="ipa">/kˈaʊntɚɹˌɑːɹɡjuːmənt/</span>, <mark class="vocab" data-word="disagreement">disagreement</mark><span class="ipa">/dɪsəˈɡɹimənt/</span>, <mark class="vocab" data-word="incident">incident</mark><span class="ipa">/ˈɪnsədənt/</span>, and <mark class="vocab" data-word="to criticize">criticize</mark><span class="ipa">/ˈkɹɪtɪˌsaɪz/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Feelings &amp; Mind, hãy để ý luận điểm phản bác, bất đồng, sự cố, và phê bình.</span>
+          </p>
+          <p class="ex-sent" data-sent="34">
+            <span class="ex-en">In this B2 Feelings & Mind passage, notice <mark class="vocab" data-word="debate">debate</mark><span class="ipa">/dəˈbeɪt/</span>, <mark class="vocab" data-word="to defend">defend</mark><span class="ipa">/dɪˈfɛnd/</span>, <mark class="vocab" data-word="to differ">differ</mark><span class="ipa">/ˈdɪfɝ/</span>, and <mark class="vocab" data-word="to divide">divide</mark><span class="ipa">/dɪˈvaɪd/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Feelings &amp; Mind, hãy để ý tranh luận, bảo vệ, khác biệt, và chia rẽ.</span>
+          </p>
+          <p class="ex-sent" data-sent="35">
+            <span class="ex-en">In this B2 Feelings & Mind passage, notice <mark class="vocab" data-word="to emphasize">emphasize</mark><span class="ipa">/ˈɛmfəˌsaɪz/</span>, <mark class="vocab" data-word="to fall out">fall out</mark><span class="ipa">/fˈɔːl ˈaʊt/</span>, <mark class="vocab" data-word="to fit">fit</mark><span class="ipa">/fɪt/</span>, and <mark class="vocab" data-word="to hold">hold</mark><span class="ipa">/hoʊld/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Feelings &amp; Mind, hãy để ý nhấn mạnh, cãi nhau, phù hợp, và giữ.</span>
+          </p>
+          <p class="ex-sent" data-sent="36">
+            <span class="ex-en">In this B2 Feelings & Mind passage, notice <mark class="vocab" data-word="to infer">infer</mark><span class="ipa">/ˌɪnˈfɝ/</span>, <mark class="vocab" data-word="to appreciate">appreciate</mark><span class="ipa">/əˈpriːʃiˌeɪt/</span>, <mark class="vocab" data-word="to [take] {sb/sth} for granted">[take] {sb/sth} for granted</mark><span class="ipa">/tˈeɪk ˌɛsbˈiː slˈæʃ ˌɛstˌiːˈeɪtʃ fɔːɹ ɡɹˈæntᵻd/</span>, and <mark class="vocab" data-word="inference">inference</mark><span class="ipa">/ˈɪnfɝəns/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Feelings &amp; Mind, hãy để ý suy luận, đánh giá cao, coi là điều hiển nhiên, và suy luận.</span>
+          </p>
+          <p class="ex-sent" data-sent="37">
+            <span class="ex-en">In this B2 Feelings & Mind passage, notice <mark class="vocab" data-word="superficial">superficial</mark><span class="ipa">/ˌsuːpɚˈfɪʃəl/</span>, <mark class="vocab" data-word="(as|so) far as {sb} [is] concerned">(as|so) far as {sb} [is] concerned</mark><span class="ipa">/æz ɔːɹ sˈoʊ fˌɑːɹ æz ˌɛsbˈiː ɪz kənsˈɜːnd/</span>, <mark class="vocab" data-word="to [have] a problem with {sb/sth}">[have] a problem with {sb/sth}</mark><span class="ipa">/hæv ɐ pɹˈɑːbləm wɪð ˌɛsbˈiː slˈæʃ ˌɛstˌiːˈeɪtʃ/</span>, and <mark class="vocab" data-word="in a nutshell">in a nutshell</mark><span class="ipa">/ɪn ɐ nˈʌtʃɛl/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Feelings &amp; Mind, hãy để ý hời hợt, (as|so) far as {sb} [is] concerned, [have] a problem with {sb/sth}, và nói ngắn gọn.</span>
+          </p>
+          <p class="ex-sent" data-sent="38">
+            <span class="ex-en">In this B2 Feelings & Mind passage, notice <mark class="vocab" data-word="if you ask me">if you ask me</mark><span class="ipa">/ɪf juː ˈæsk mˌiː/</span>, <mark class="vocab" data-word="aggressive">aggressive</mark><span class="ipa">/əˈɡɹɛsɪv/</span>, <mark class="vocab" data-word="astonished">astonished</mark><span class="ipa">/əˈstɑnɪʃt/</span>, and <mark class="vocab" data-word="awkward">awkward</mark><span class="ipa">/ˈɑkwɚd/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Feelings &amp; Mind, hãy để ý if you ask me, hung hăng, ngạc nhiên, và lúng túng.</span>
+          </p>
+          <p class="ex-sent" data-sent="39">
+            <span class="ex-en">In this B2 Feelings & Mind passage, notice <mark class="vocab" data-word="bitter">bitter</mark><span class="ipa">/ˈbɪtɚ/</span>, <mark class="vocab" data-word="breathtaking">breathtaking</mark><span class="ipa">/ˈbreθˌteɪkɪŋ/</span>, <mark class="vocab" data-word="cheerless">cheerless</mark><span class="ipa">/tʃˈɪɹləs/</span>, and <mark class="vocab" data-word="delighted">delighted</mark><span class="ipa">/dɪˈɫaɪtəd/, /dɪˈɫaɪtɪd/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Feelings &amp; Mind, hãy để ý đắng cay, ngoạn mục, buồn tẻ, và vui mừng.</span>
+          </p>
+          <p class="ex-sent" data-sent="40">
+            <span class="ex-en">In this B2 Feelings & Mind passage, notice <mark class="vocab" data-word="depressing">depressing</mark><span class="ipa">/dɪˈpɹɛsɪŋ/</span>, <mark class="vocab" data-word="disgusting">disgusting</mark><span class="ipa">/dɪsˈɡəstɪŋ/</span>, <mark class="vocab" data-word="down">down</mark><span class="ipa">/daʊn/</span>, and <mark class="vocab" data-word="dreadful">dreadful</mark><span class="ipa">/ˈdɹɛdfəɫ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Feelings &amp; Mind, hãy để ý buồn bã, kinh tởm, buồn, và kinh khủng.</span>
+          </p>
+          <p class="ex-sent" data-sent="41">
+            <span class="ex-en">In this B2 Feelings & Mind passage, notice <mark class="vocab" data-word="dull">dull</mark><span class="ipa">/dʌl/</span>, <mark class="vocab" data-word="emotional">emotional</mark><span class="ipa">/ˈiˌmoʊʃənəɫ/, /ɪˈmoʊʃənəɫ/</span>, <mark class="vocab" data-word="empty">empty</mark><span class="ipa">/ˈɛmpti/</span>, and <mark class="vocab" data-word="fascinated">fascinated</mark><span class="ipa">/ˈfæsəˌneɪtəd/, /ˈfæsəˌneɪtɪd/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Feelings &amp; Mind, hãy để ý nhàm chán, cảm xúc, trống rỗng, và mê hoặc.</span>
+          </p>
+          <p class="ex-sent" data-sent="42">
+            <span class="ex-en">In this B2 Feelings & Mind passage, notice <mark class="vocab" data-word="exhausting">exhausting</mark><span class="ipa">/ɪɡˈzɔstɪŋ/</span>, <mark class="vocab" data-word="fearful">fearful</mark><span class="ipa">/ˈfɪɹfəɫ/</span>, <mark class="vocab" data-word="fed up">fed up</mark><span class="ipa">/fˈɛd ˈʌp/</span>, and <mark class="vocab" data-word="furious">furious</mark><span class="ipa">/ˈfjʊɹiəs/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Feelings &amp; Mind, hãy để ý mệt mỏi, sợ hãi, chán ngấy, và giận dữ.</span>
+          </p>
+          <p class="ex-sent" data-sent="43">
+            <span class="ex-en">In this B2 Feelings & Mind passage, notice <mark class="vocab" data-word="homesick">homesick</mark><span class="ipa">/ˈhoʊmˌsɪk/</span>, <mark class="vocab" data-word="irritated">irritated</mark><span class="ipa">/ˈɪɹəˌteɪtəd/</span>, <mark class="vocab" data-word="satisfied">satisfied</mark><span class="ipa">/ˈsætəsˌfaɪd/, /ˈsætɪsˌfaɪd/</span>, and <mark class="vocab" data-word="terrifying">terrifying</mark><span class="ipa">/ˈtɛɹəˌfaɪɪŋ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Feelings &amp; Mind, hãy để ý nhớ nhà, bực bội, hài lòng, và kinh khủng.</span>
+          </p>
+          <p class="ex-sent" data-sent="44">
+            <span class="ex-en">In this B2 Feelings & Mind passage, notice <mark class="vocab" data-word="uncomfortable">uncomfortable</mark><span class="ipa">/ʌnˈkʌmfɚtəbl/</span>, <mark class="vocab" data-word="to amaze">amaze</mark><span class="ipa">/əˈmeɪz/</span>, <mark class="vocab" data-word="to regret">regret</mark><span class="ipa">/ɹəˈɡɹɛt/, /ɹɪˈɡɹɛt/</span>, and <mark class="vocab" data-word="embarrassment">embarrassment</mark><span class="ipa">/ɪmˈbɛɹəsmənt/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Feelings &amp; Mind, hãy để ý khó chịu, làm kinh ngạc, hối tiếc, và sự xấu hổ.</span>
+          </p>
+          <p class="ex-sent" data-sent="45">
+            <span class="ex-en">In this B2 Feelings & Mind passage, notice <mark class="vocab" data-word="enthusiasm">enthusiasm</mark><span class="ipa">/ɪnˈθuziˌæzəm/</span>, <mark class="vocab" data-word="panic">panic</mark><span class="ipa">/ˈpænɪk/</span>, <mark class="vocab" data-word="pity">pity</mark><span class="ipa">/ˈpɪti/</span>, and <mark class="vocab" data-word="relief">relief</mark><span class="ipa">/ɹiˈɫif/, /ɹɪˈɫif/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Feelings &amp; Mind, hãy để ý nhiệt tình, hoảng loạn, lòng thương hại, và sự nhẹ nhõm.</span>
+          </p>
+          <p class="ex-sent" data-sent="46">
+            <span class="ex-en">In this B2 Feelings & Mind passage, notice <mark class="vocab" data-word="shock">shock</mark><span class="ipa">/ʃɑk/</span>, <mark class="vocab" data-word="stress">stress</mark><span class="ipa">/ˈstɹɛs/</span>, <mark class="vocab" data-word="terror">terror</mark><span class="ipa">/ˈtɛɹɝ/</span>, and <mark class="vocab" data-word="thrill">thrill</mark><span class="ipa">/ˈθɹɪɫ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Feelings &amp; Mind, hãy để ý cú sốc, căng thẳng, nỗi kinh hoàng, và sự phấn khích.</span>
+          </p>
+          <p class="ex-sent" data-sent="47">
+            <span class="ex-en">In this B2 Feelings & Mind passage, notice <mark class="vocab" data-word="wonder">wonder</mark><span class="ipa">/ˈwʌndɚ/</span>, <mark class="vocab" data-word="worry">worry</mark><span class="ipa">/ˈwɝi/</span>, <mark class="vocab" data-word="sheepish">sheepish</mark><span class="ipa">/ˈʃipɪʃ/</span>, and <mark class="vocab" data-word="depression">depression</mark><span class="ipa">/dɪˈpɹɛʃən/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Feelings &amp; Mind, hãy để ý sự ngạc nhiên, lo lắng, ngượng ngùng, và trầm cảm.</span>
+          </p>
+          <p class="ex-sent" data-sent="48">
+            <span class="ex-en">In this B2 Feelings & Mind passage, notice <mark class="vocab" data-word="rage">rage</mark><span class="ipa">/ˈɹeɪdʒ/</span>, <mark class="vocab" data-word="to appeal">appeal</mark><span class="ipa">/əˈpiɫ/</span>, <mark class="vocab" data-word="to consult">consult</mark><span class="ipa">/kənˈsəɫt/</span>, and <mark class="vocab" data-word="to contest">contest</mark><span class="ipa">/ˈkɑnˌtɛst/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Feelings &amp; Mind, hãy để ý cơn thịnh nộ, thu hút, tham khảo, và khiếu nại.</span>
+          </p>
+          <p class="ex-sent" data-sent="49">
+            <span class="ex-en">In this B2 Feelings & Mind passage, notice <mark class="vocab" data-word="to disgust">disgust</mark><span class="ipa">/dɪsˈɡʌst/</span>, <mark class="vocab" data-word="to favor">favor</mark><span class="ipa">/ˈfeɪvɝ/</span>, <mark class="vocab" data-word="favorite">favorite</mark><span class="ipa">/ˈfeɪvɚɪt/</span>, and <mark class="vocab" data-word="to go for">go for</mark><span class="ipa">/ɡˈoʊ fɔːɹ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Feelings &amp; Mind, hãy để ý làm kinh tởm, thích hơn, yêu thích, và chọn.</span>
+          </p>
+          <p class="ex-sent" data-sent="50">
+            <span class="ex-en">In this B2 Feelings & Mind passage, notice <mark class="vocab" data-word="to shy away from">shy away from</mark><span class="ipa">/ʃˈaɪ ɐwˈeɪ fɹʌm/</span>, <mark class="vocab" data-word="to [make] up {one&#x27;s} mind">[make] up {one&#x27;s} mind</mark><span class="ipa">/mˌeɪk ˌʌp wˈʌnz mˈaɪnd/</span>, <mark class="vocab" data-word="to pick out">pick out</mark><span class="ipa">/pˈɪk ˈaʊt/</span>, and <mark class="vocab" data-word="to put up with">put up with</mark><span class="ipa">/pˌʊt ˈʌp wɪð/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Feelings &amp; Mind, hãy để ý né tránh, quyết định dứt khoát, chọn, và chịu đựng.</span>
+          </p>
+          <p class="ex-sent" data-sent="51">
+            <span class="ex-en">In this B2 Feelings & Mind passage, notice <mark class="vocab" data-word="to think over">think over</mark><span class="ipa">/θˈɪŋk ˈoʊvɚ/</span>, <mark class="vocab" data-word="to [take] account of {sth}">[take] account of {sth}</mark><span class="ipa">/tˈeɪk ɐkˈaʊnt ʌv ˌɛstˌiːˈeɪtʃ/</span>, <mark class="vocab" data-word="to turn to">turn to</mark><span class="ipa">/tˈɜːn tuː/</span>, and <mark class="vocab" data-word="would rather">would rather</mark><span class="ipa">/wʊd ɹˈæðɚ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Feelings &amp; Mind, hãy để ý suy nghĩ kỹ về, [take] account of {sth}, tìm đến, và would rather.</span>
+          </p>
+          <p class="ex-sent" data-sent="52">
+            <span class="ex-en">In this B2 Feelings & Mind passage, notice <mark class="vocab" data-word="decision maker">decision maker</mark><span class="ipa">/dᵻsˈɪʒən mˈeɪkɚ/</span>, <mark class="vocab" data-word="dislike">dislike</mark><span class="ipa">/dɪsˈlaɪk/</span>, <mark class="vocab" data-word="preference">preference</mark><span class="ipa">/ˈpɹɛfɝəns/, /ˈpɹɛfɹəns/</span>, and <mark class="vocab" data-word="resolution">resolution</mark><span class="ipa">/ˌɹɛzəˈɫuʃən/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Feelings &amp; Mind, hãy để ý người ra quyết định, sự không thích, sở thích, và quyết tâm.</span>
+          </p>
+          <p class="ex-sent" data-sent="53">
+            <span class="ex-en">In this B2 Feelings & Mind passage, notice <mark class="vocab" data-word="taste">taste</mark><span class="ipa">/teɪst/</span>, <mark class="vocab" data-word="criteria">criteria</mark><span class="ipa">/kɹaɪˈtɪɹiə/</span>, <mark class="vocab" data-word="liking">liking</mark><span class="ipa">/ˈɫaɪkɪŋ/</span>, and <mark class="vocab" data-word="tendency">tendency</mark><span class="ipa">/ˈtɛndənsi/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Feelings &amp; Mind, hãy để ý gu, tiêu chí, sự thích thú, và xu hướng.</span>
+          </p>
+          <p class="ex-sent" data-sent="54">
+            <span class="ex-en">In this B2 Feelings & Mind passage, notice <mark class="vocab" data-word="alternatively">alternatively</mark><span class="ipa">/ɔɫˈtɝnətɪvɫi/</span>, <mark class="vocab" data-word="to please">please</mark><span class="ipa">/pliːz/</span>, <mark class="vocab" data-word="instead">instead</mark><span class="ipa">/ˌɪnˈstɛd/</span>, and <mark class="vocab" data-word="to disrespect">disrespect</mark><span class="ipa">/ˌdɪsɹɪˈspɛkt/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Feelings &amp; Mind, hãy để ý thay thế, làm hài lòng, thay vì, và thiếu tôn trọng.</span>
+          </p>
+          <p class="ex-sent" data-sent="55">
+            <span class="ex-en">In this B2 Feelings & Mind passage, notice <mark class="vocab" data-word="to die">die</mark><span class="ipa">/daɪ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Feelings &amp; Mind, hãy để ý thèm thuồng.</span>
+          </p>
+          <p class="ex-sent" data-sent="56">
+            <span class="ex-en">One more useful item is "to <mark class="vocab" data-word="to [go] back on {one&#x27;s} word">[go] back on {one&#x27;s} word</mark><span class="ipa">/ɡˌoʊ bˈæk ˌɑːn wˈʌnz wˈɜːd/</span>" in this topic.</span>
+            <span class="ex-vi">Một mục hữu ích nữa là &quot;to [go] back on {one&#x27;s} word&quot; trong chủ đề này.</span>
+          </p>
+          <p class="ex-sent" data-sent="57">
+            <span class="ex-en">One more useful item is "to <mark class="vocab" data-word="to [make] up {one&#x27;s} mind">[make] up {one&#x27;s} mind</mark><span class="ipa">/mˌeɪk ˌʌp wˈʌnz mˈaɪnd/</span>" in this topic.</span>
+            <span class="ex-vi">Một mục hữu ích nữa là &quot;quyết định dứt khoát&quot; trong chủ đề này.</span>
+          </p>
+          <p class="ex-sent" data-sent="58">
+            <span class="ex-en">Keep this form in mind: <mark class="vocab" data-word="to [go] back on {one's} word">to [go] back on {one's} word</mark><span class="ipa">/ɡˌoʊ bˈæk ˌɑːn wˈʌnz wˈɜːd/</span>.</span>
+            <span class="ex-vi">Hãy nhớ dạng từ này: to [go] back on {one&#x27;s} word.</span>
+          </p>
+          <p class="ex-sent" data-sent="59">
+            <span class="ex-en">Keep this form in mind: <mark class="vocab" data-word="to [make] up {one's} mind">to [make] up {one's} mind</mark><span class="ipa">/mˌeɪk ˌʌp wˈʌnz mˈaɪnd/</span>.</span>
+            <span class="ex-vi">Hãy nhớ dạng từ này: quyết định dứt khoát.</span>
+          </p>
+      </section>
+
+      <section class="ex-vocab">
+        <h2>Word checklist · 217</h2>
+        <ul class="ex-vocab-list">
+          <li><mark class="vocab">figure</mark> <span class="ipa">/ˈfɪgər/</span> — ước tính</li>
+          <li><mark class="vocab">justify</mark> <span class="ipa">/ˈdʒəstəˌfaɪ/</span> — biện minh</li>
+          <li><mark class="vocab">in the first place</mark> <span class="ipa">/ɪnðə fˈɜːstplˌeɪs/</span> — trước hết</li>
+          <li><mark class="vocab">object</mark> <span class="ipa">/ˈɑbdʒɛkt/, /əbˈdʒɛkt/</span> — phản đối</li>
+          <li><mark class="vocab">objective</mark> <span class="ipa">/əbˈdʒɛktɪv/</span> — khách quan</li>
+          <li><mark class="vocab">subjective</mark> <span class="ipa">/səbˈdʒɛktɪv/</span> — chủ quan</li>
+          <li><mark class="vocab">maintain</mark> <span class="ipa">/meɪnˈteɪn/</span> — khẳng định</li>
+          <li><mark class="vocab">may</mark> <span class="ipa">/meɪ/</span> — có thể</li>
+          <li><mark class="vocab">name</mark> <span class="ipa">/neɪm/</span> — đặt tên</li>
+          <li><mark class="vocab">oppose</mark> <span class="ipa">/əˈpoʊz/</span> — phản đối</li>
+          <li><mark class="vocab">opposed</mark> <span class="ipa">/əˈpoʊzd/</span> — phản đối</li>
+          <li><mark class="vocab">praise</mark> <span class="ipa">/ˈpɹeɪz/</span> — khen ngợi</li>
+          <li><mark class="vocab">reckon</mark> <span class="ipa">/ˈɹɛkən/</span> — nghĩ</li>
+          <li><mark class="vocab">regard</mark> <span class="ipa">/ɹɪˈɡɑɹd/</span> — coi trọng</li>
+          <li><mark class="vocab">remark</mark> <span class="ipa">/ɹiˈmɑɹk/, /ɹɪˈmɑɹk/</span> — nhận xét</li>
+          <li><mark class="vocab">speculate</mark> <span class="ipa">/ˈspɛkjəˌɫeɪt/</span> — suy đoán</li>
+          <li><mark class="vocab">speculation</mark> <span class="ipa">/ˌspɛkjəˈɫeɪʃən/</span> — sự suy đoán</li>
+          <li><mark class="vocab">stance</mark> <span class="ipa">/ˈstæns/</span> — lập trường</li>
+          <li><mark class="vocab">stand</mark> <span class="ipa">/stænd/</span> — đứng</li>
+          <li><mark class="vocab">sum up</mark> <span class="ipa">/sʌm ʌp/</span> — tóm tắt</li>
+          <li><mark class="vocab">misunderstanding</mark> <span class="ipa">/ˌmɪsəndɝˈstændɪŋ/</span> — hiểu lầm</li>
+          <li><mark class="vocab">perception</mark> <span class="ipa">/pɝˈsɛpʃən/</span> — nhận thức</li>
+          <li><mark class="vocab">position</mark> <span class="ipa">/pəˈzɪʃən/</span> — quan điểm</li>
+          <li><mark class="vocab">proof</mark> <span class="ipa">/ˈpɹuf/</span> — bằng chứng</li>
+          <li><mark class="vocab">public opinion</mark> <span class="ipa">/pˈʌblɪk əpˈɪniən/</span> — ý kiến công chúng</li>
+          <li><mark class="vocab">reason</mark> <span class="ipa">/ˈrizən/</span> — lý trí</li>
+          <li><mark class="vocab">remark</mark> <span class="ipa">/ɹiˈmɑɹk/, /ɹɪˈmɑɹk/</span> — nhận xét</li>
+          <li><mark class="vocab">reputation</mark> <span class="ipa">/ˌɹɛpjəˈteɪʃən/</span> — danh tiếng</li>
+          <li><mark class="vocab">right</mark> <span class="ipa">/raɪt/</span> — Đúng rồi</li>
+          <li><mark class="vocab">side</mark> <span class="ipa">/saɪd/</span> — bên</li>
+          <li><mark class="vocab">while</mark> <span class="ipa">/waɪl/</span> — trong khi</li>
+          <li><mark class="vocab">sign</mark> <span class="ipa">/saɪn/</span> — ký hiệu</li>
+          <li><mark class="vocab">in opposition to {sb/sth}</mark> <span class="ipa">/ɪn ˌɑːpəzˈɪʃən tʊ ˌɛsbˈiː slˈæʃ ˌɛstˌiːˈeɪtʃ/</span> — phản đối ai đó hoặc cái gì đó</li>
+          <li><mark class="vocab">likewise</mark> <span class="ipa">/ˈɫaɪˌkwaɪz/</span> — Tương tự !</li>
+          <li><mark class="vocab">judgment</mark> <span class="ipa">/ˈdʒədʒmənt/</span> — phán đoán</li>
+          <li><mark class="vocab">assure</mark> <span class="ipa">/əˈʃʊɹ/</span> — đảm bảo</li>
+          <li><mark class="vocab">bet</mark> <span class="ipa">/ˈbet/</span> — cá</li>
+          <li><mark class="vocab">ensure</mark> <span class="ipa">/ɛnˈʃʊɹ/, /ɪnˈʃʊɹ/</span> — đảm bảo</li>
+          <li><mark class="vocab">forecast</mark> <span class="ipa">/ˈfɔrˌkæst/</span> — dự đoán</li>
+          <li><mark class="vocab">guarantee</mark> <span class="ipa">/ˌɡɛɹənˈti/</span> — bảo đảm</li>
+          <li><mark class="vocab">hesitate</mark> <span class="ipa">/ˈhɛzəˌteɪt/</span> — do dự</li>
+          <li><mark class="vocab">ought to</mark> <span class="ipa">/ˈɔːt tuː/</span> — nên</li>
+          <li><mark class="vocab">recall</mark> <span class="ipa">/ˈɹiˌkɔɫ/, /ɹɪˈkɔɫ/</span> — nhớ lại</li>
+          <li><mark class="vocab">should</mark> <span class="ipa">/ʃʊd/</span> — nên</li>
+          <li><mark class="vocab">suspect</mark> <span class="ipa">/ˈsəsˌpɛkt/, /səˈspɛkt/</span> — nghi ngờ</li>
+          <li><mark class="vocab">would</mark> <span class="ipa">/wʊd/</span> — sẽ</li>
+          <li><mark class="vocab">bound</mark> <span class="ipa">/ˈbaʊnd/</span> — có khả năng xảy ra</li>
+          <li><mark class="vocab">sure</mark> <span class="ipa">/ʃʊr/ , /ʃɔːr/</span> — chắc chắn</li>
+          <li><mark class="vocab">convinced</mark> <span class="ipa">/kənˈvɪnst/</span> — tin chắc</li>
+          <li><mark class="vocab">expected</mark> <span class="ipa">/ɪkˈspɛktəd/, /ɪkˈspɛktɪd/</span> — được mong đợi</li>
+          <li><mark class="vocab">inevitable</mark> <span class="ipa">/ˌɪˈnɛvətəbəɫ/</span> — không thể tránh khỏi</li>
+          <li><mark class="vocab">rash</mark> <span class="ipa">/ræʃ/</span> — hấp tấp</li>
+          <li><mark class="vocab">positive</mark> <span class="ipa">/ˈpɑzətɪv/</span> — chắc chắn</li>
+          <li><mark class="vocab">probable</mark> <span class="ipa">/ˈpɹɑbəbəɫ/</span> — có khả năng</li>
+          <li><mark class="vocab">uncertain</mark> <span class="ipa">/ənˈsɝtən/</span> — không chắc chắn</li>
+          <li><mark class="vocab">unclear</mark> <span class="ipa">/ənˈkɫɪɹ/</span> — không rõ ràng</li>
+          <li><mark class="vocab">no doubt</mark> <span class="ipa">/nˈoʊ dˈaʊt/</span> — không nghi ngờ gì</li>
+          <li><mark class="vocab">certainty</mark> <span class="ipa">/ˈsɝtənti/</span> — sự chắc chắn</li>
+          <li><mark class="vocab">confidence</mark> <span class="ipa">/ˈkɑnfədəns/</span> — sự tin tưởng</li>
+          <li><mark class="vocab">confusion</mark> <span class="ipa">/kənˈfjuʒən/</span> — sự nhầm lẫn</li>
+          <li><mark class="vocab">probability</mark> <span class="ipa">/ˌpɹɑbəˈbɪɫəˌti/</span> — xác suất</li>
+          <li><mark class="vocab">deceive</mark> <span class="ipa">/dɪˈsiv/</span> — lừa dối</li>
+          <li><mark class="vocab">somehow</mark> <span class="ipa">/ˈsəmˌhaʊ/</span> — bằng cách nào đó</li>
+          <li><mark class="vocab">scheme</mark> <span class="ipa">/ˈskim/</span> — âm mưu</li>
+          <li><mark class="vocab">not necessarily</mark> <span class="ipa">/nˌɑːt nˌɛsɪsˈɛɹəli/</span></li>
+          <li><mark class="vocab">you bet</mark> <span class="ipa">/juː bˈɛt/</span> — chắc chắn rồi</li>
+          <li><mark class="vocab">check out</mark> <span class="ipa">/ʧɛk ˈaʊt/</span> — kiểm tra</li>
+          <li><mark class="vocab">[go] back on a (promise|deal|pledge)</mark> <span class="ipa">/ɡˌoʊ bˈæk ˌɑːn ɐ pɹˈɑːmɪs ɔːɹ dˈiːl ɔːɹ plˈɛdʒ/</span></li>
+          <li><mark class="vocab">odds</mark> <span class="ipa">/ɑdz/</span> — tỷ lệ cược</li>
+          <li><mark class="vocab">in stone</mark> <span class="ipa">/ɪn stˈoʊn/</span> — không thể thay đổi</li>
+          <li><mark class="vocab">palm off</mark> <span class="ipa">/pˈɑːm ˈɔf/</span> — tống khứ</li>
+          <li><mark class="vocab">plastic</mark> <span class="ipa">/ˈplæstɪk/</span> — giả tạo</li>
+          <li><mark class="vocab">[go] back on {one&#x27;s} word</mark> <span class="ipa">/ɡˌoʊ bˈæk ˌɑːn wˈʌnz wˈɜːd/</span></li>
+          <li><mark class="vocab">question</mark> <span class="ipa">/ˈkwɛsʧən/</span> — chất vấn</li>
+          <li><mark class="vocab">account for</mark> <span class="ipa">/ɐkˈaʊnt fɔːɹ/</span> — giải thích</li>
+          <li><mark class="vocab">alter</mark> <span class="ipa">/ˈɔɫtɝ/</span> — thay đổi</li>
+          <li><mark class="vocab">arise</mark> <span class="ipa">/ɝˈaɪz/</span> — phát sinh</li>
+          <li><mark class="vocab">boost</mark> <span class="ipa">/ˈbust/</span> — tăng cường</li>
+          <li><mark class="vocab">build up</mark> <span class="ipa">/bˈɪld ˈʌp/</span> — tích tụ</li>
+          <li><mark class="vocab">climb</mark> <span class="ipa">/klaɪm/</span> — tăng lên</li>
+          <li><mark class="vocab">contribute</mark> <span class="ipa">/kənˈtɹɪbjut/</span> — đóng góp</li>
+          <li><mark class="vocab">contribution</mark> <span class="ipa">/ˌkɑntɹəbˈjuʃən/</span> — đóng góp</li>
+          <li><mark class="vocab">decline</mark> <span class="ipa">/dɪˈkɫaɪn/</span> — giảm</li>
+          <li><mark class="vocab">enhance</mark> <span class="ipa">/ɛnˈhæns/</span> — cải thiện</li>
+          <li><mark class="vocab">extend</mark> <span class="ipa">/ɪkˈstɛnd/</span> — mở rộng</li>
+          <li><mark class="vocab">straighten</mark> <span class="ipa">/ˈstɹeɪtən/</span> — làm thẳng</li>
+          <li><mark class="vocab">gain</mark> <span class="ipa">/ˈɡeɪn/</span> — tăng</li>
+          <li><mark class="vocab">jump</mark> <span class="ipa">/dʒʌmp/</span> — nhảy vọt</li>
+          <li><mark class="vocab">lower</mark> <span class="ipa">/ˈɫoʊɝ/</span> — giảm</li>
+          <li><mark class="vocab">modify</mark> <span class="ipa">/ˈmɑdəˌfaɪ/</span> — sửa đổi</li>
+          <li><mark class="vocab">mount</mark> <span class="ipa">/ˈmaʊnt/</span> — tăng lên</li>
+          <li><mark class="vocab">multiply</mark> <span class="ipa">/ˈmʌltəˌplaɪ/</span> — nhân lên</li>
+          <li><mark class="vocab">recover</mark> <span class="ipa">/rɪˈkʌvɚ/</span> — phục hồi</li>
+          <li><mark class="vocab">trigger</mark> <span class="ipa">/ˈtɹɪɡɝ/</span> — kích hoạt</li>
+          <li><mark class="vocab">expansion</mark> <span class="ipa">/ɪkˈspænʃən/, /ɪkˈspæntʃən/</span> — sự mở rộng</li>
+          <li><mark class="vocab">implication</mark> <span class="ipa">/ˌɪmpɫəˈkeɪʃən/</span> — hàm ý</li>
+          <li><mark class="vocab">means</mark> <span class="ipa">/ˈminz/</span> — phương tiện</li>
+          <li><mark class="vocab">outcome</mark> <span class="ipa">/ˈaʊtˌkəm/</span> — kết quả</li>
+          <li><mark class="vocab">product</mark> <span class="ipa">/ˈprɑdʌkt/</span> — sản phẩm</li>
+          <li><mark class="vocab">reduction</mark> <span class="ipa">/ɹəˈdəkʃən/, /ɹiˈdəkʃən/</span> — giảm</li>
+          <li><mark class="vocab">root</mark> <span class="ipa">/ˈɹut/</span> — nguồn gốc</li>
+          <li><mark class="vocab">responsible</mark> <span class="ipa">/rɪˈspɑnsɪbəl/</span> — chịu trách nhiệm</li>
+          <li><mark class="vocab">consequently</mark> <span class="ipa">/ˈkɑnsəˌkwɛntɫi/, /ˈkɑnsəkwəntɫi/</span> — do đó</li>
+          <li><mark class="vocab">increasingly</mark> <span class="ipa">/ɪnˈkɹisɪŋɡɫi/, /ɪnˈkɹisɪŋɫi/</span> — ngày càng</li>
+          <li><mark class="vocab">life-changing</mark> <span class="ipa">/ˈɫaɪfˌtʃeɪndʒɪŋ/</span> — thay đổi cuộc đời</li>
+          <li><mark class="vocab">significant</mark> <span class="ipa">/səɡˈnɪfɪkənt/, /sɪɡˈnɪfɪkənt/</span> — quan trọng</li>
+          <li><mark class="vocab">significantly</mark> <span class="ipa">/sɪɡˈnɪfɪkəntɫi/</span> — đáng kể</li>
+          <li><mark class="vocab">following</mark> <span class="ipa">/ˈfɑɫoʊɪŋ/</span> — sau</li>
+          <li><mark class="vocab">hence</mark> <span class="ipa">/ˈhɛns/</span> — do đó</li>
+          <li><mark class="vocab">thus</mark> <span class="ipa">/ˈðəs/</span> — do đó</li>
+          <li><mark class="vocab">inspire</mark> <span class="ipa">/ˌɪnˈspaɪɹ/</span> — truyền cảm hứng</li>
+          <li><mark class="vocab">ground zero</mark> <span class="ipa">/ɡɹˈaʊnd zˈiəɹoʊ/</span> — điểm không</li>
+          <li><mark class="vocab">account</mark> <span class="ipa">/əˈkaʊnt/</span> — bản tường thuật</li>
+          <li><mark class="vocab">approve</mark> <span class="ipa">/əˈpɹuv/</span> — phê duyệt</li>
+          <li><mark class="vocab">approval</mark> <span class="ipa">/əˈpruːvəl/</span> — sự chấp thuận</li>
+          <li><mark class="vocab">assess</mark> <span class="ipa">/əˈsɛs/</span> — đánh giá</li>
+          <li><mark class="vocab">assessment</mark> <span class="ipa">/əˈsɛsmənt/</span> — đánh giá</li>
+          <li><mark class="vocab">associate</mark> <span class="ipa">/əˈsoʊʃiˌeɪt/</span> — liên tưởng</li>
+          <li><mark class="vocab">assume</mark> <span class="ipa">/əˈsum/</span> — giả định</li>
+          <li><mark class="vocab">case</mark> <span class="ipa">/keɪs/</span> — trường hợp</li>
+          <li><mark class="vocab">common sense</mark> <span class="ipa">/kˈɑːmən sˈɛns/</span> — lẽ thường</li>
+          <li><mark class="vocab">conflict</mark> <span class="ipa">/ˈkɑnflɪkt/</span> — xung đột</li>
+          <li><mark class="vocab">estimate</mark> <span class="ipa">/ˈɛstəˌmeɪt/, /ˈɛstəmət/</span> — ước tính</li>
+          <li><mark class="vocab">controversy</mark> <span class="ipa">/ˈkɑntɹəˌvɝsi/</span> — tranh cãi</li>
+          <li><mark class="vocab">controversial</mark> <span class="ipa">/ˌkɑntɹəˈvɝʃəɫ/</span> — gây tranh cãi</li>
+          <li><mark class="vocab">consistent</mark> <span class="ipa">/kənˈsɪstənt/</span> — kiên định</li>
+          <li><mark class="vocab">furthermore</mark> <span class="ipa">/ˈfɝðɝˌmɔɹ/</span> — hơn nữa</li>
+          <li><mark class="vocab">forum</mark> <span class="ipa">/ˈfɔɹəm/</span> — diễn đàn</li>
+          <li><mark class="vocab">counterargument</mark> <span class="ipa">/kˈaʊntɚɹˌɑːɹɡjuːmənt/</span> — luận điểm phản bác</li>
+          <li><mark class="vocab">disagreement</mark> <span class="ipa">/dɪsəˈɡɹimənt/</span> — bất đồng</li>
+          <li><mark class="vocab">incident</mark> <span class="ipa">/ˈɪnsədənt/</span> — sự cố</li>
+          <li><mark class="vocab">criticize</mark> <span class="ipa">/ˈkɹɪtɪˌsaɪz/</span> — phê bình</li>
+          <li><mark class="vocab">debate</mark> <span class="ipa">/dəˈbeɪt/</span> — tranh luận</li>
+          <li><mark class="vocab">defend</mark> <span class="ipa">/dɪˈfɛnd/</span> — bảo vệ</li>
+          <li><mark class="vocab">differ</mark> <span class="ipa">/ˈdɪfɝ/</span> — khác biệt</li>
+          <li><mark class="vocab">divide</mark> <span class="ipa">/dɪˈvaɪd/</span> — chia rẽ</li>
+          <li><mark class="vocab">emphasize</mark> <span class="ipa">/ˈɛmfəˌsaɪz/</span> — nhấn mạnh</li>
+          <li><mark class="vocab">fall out</mark> <span class="ipa">/fˈɔːl ˈaʊt/</span> — cãi nhau</li>
+          <li><mark class="vocab">fit</mark> <span class="ipa">/fɪt/</span> — phù hợp</li>
+          <li><mark class="vocab">hold</mark> <span class="ipa">/hoʊld/</span> — giữ</li>
+          <li><mark class="vocab">infer</mark> <span class="ipa">/ˌɪnˈfɝ/</span> — suy luận</li>
+          <li><mark class="vocab">appreciate</mark> <span class="ipa">/əˈpriːʃiˌeɪt/</span> — đánh giá cao</li>
+          <li><mark class="vocab">[take] {sb/sth} for granted</mark> <span class="ipa">/tˈeɪk ˌɛsbˈiː slˈæʃ ˌɛstˌiːˈeɪtʃ fɔːɹ ɡɹˈæntᵻd/</span> — coi là điều hiển nhiên</li>
+          <li><mark class="vocab">inference</mark> <span class="ipa">/ˈɪnfɝəns/</span> — suy luận</li>
+          <li><mark class="vocab">superficial</mark> <span class="ipa">/ˌsuːpɚˈfɪʃəl/</span> — hời hợt</li>
+          <li><mark class="vocab">(as|so) far as {sb} [is] concerned</mark> <span class="ipa">/æz ɔːɹ sˈoʊ fˌɑːɹ æz ˌɛsbˈiː ɪz kənsˈɜːnd/</span></li>
+          <li><mark class="vocab">[have] a problem with {sb/sth}</mark> <span class="ipa">/hæv ɐ pɹˈɑːbləm wɪð ˌɛsbˈiː slˈæʃ ˌɛstˌiːˈeɪtʃ/</span></li>
+          <li><mark class="vocab">in a nutshell</mark> <span class="ipa">/ɪn ɐ nˈʌtʃɛl/</span> — nói ngắn gọn</li>
+          <li><mark class="vocab">if you ask me</mark> <span class="ipa">/ɪf juː ˈæsk mˌiː/</span></li>
+          <li><mark class="vocab">aggressive</mark> <span class="ipa">/əˈɡɹɛsɪv/</span> — hung hăng</li>
+          <li><mark class="vocab">astonished</mark> <span class="ipa">/əˈstɑnɪʃt/</span> — ngạc nhiên</li>
+          <li><mark class="vocab">awkward</mark> <span class="ipa">/ˈɑkwɚd/</span> — lúng túng</li>
+          <li><mark class="vocab">bitter</mark> <span class="ipa">/ˈbɪtɚ/</span> — đắng cay</li>
+          <li><mark class="vocab">breathtaking</mark> <span class="ipa">/ˈbreθˌteɪkɪŋ/</span> — ngoạn mục</li>
+          <li><mark class="vocab">cheerless</mark> <span class="ipa">/tʃˈɪɹləs/</span> — buồn tẻ</li>
+          <li><mark class="vocab">delighted</mark> <span class="ipa">/dɪˈɫaɪtəd/, /dɪˈɫaɪtɪd/</span> — vui mừng</li>
+          <li><mark class="vocab">depressing</mark> <span class="ipa">/dɪˈpɹɛsɪŋ/</span> — buồn bã</li>
+          <li><mark class="vocab">disgusting</mark> <span class="ipa">/dɪsˈɡəstɪŋ/</span> — kinh tởm</li>
+          <li><mark class="vocab">down</mark> <span class="ipa">/daʊn/</span> — buồn</li>
+          <li><mark class="vocab">dreadful</mark> <span class="ipa">/ˈdɹɛdfəɫ/</span> — kinh khủng</li>
+          <li><mark class="vocab">dull</mark> <span class="ipa">/dʌl/</span> — nhàm chán</li>
+          <li><mark class="vocab">emotional</mark> <span class="ipa">/ˈiˌmoʊʃənəɫ/, /ɪˈmoʊʃənəɫ/</span> — cảm xúc</li>
+          <li><mark class="vocab">empty</mark> <span class="ipa">/ˈɛmpti/</span> — trống rỗng</li>
+          <li><mark class="vocab">fascinated</mark> <span class="ipa">/ˈfæsəˌneɪtəd/, /ˈfæsəˌneɪtɪd/</span> — mê hoặc</li>
+          <li><mark class="vocab">exhausting</mark> <span class="ipa">/ɪɡˈzɔstɪŋ/</span> — mệt mỏi</li>
+          <li><mark class="vocab">fearful</mark> <span class="ipa">/ˈfɪɹfəɫ/</span> — sợ hãi</li>
+          <li><mark class="vocab">fed up</mark> <span class="ipa">/fˈɛd ˈʌp/</span> — chán ngấy</li>
+          <li><mark class="vocab">furious</mark> <span class="ipa">/ˈfjʊɹiəs/</span> — giận dữ</li>
+          <li><mark class="vocab">homesick</mark> <span class="ipa">/ˈhoʊmˌsɪk/</span> — nhớ nhà</li>
+          <li><mark class="vocab">irritated</mark> <span class="ipa">/ˈɪɹəˌteɪtəd/</span> — bực bội</li>
+          <li><mark class="vocab">satisfied</mark> <span class="ipa">/ˈsætəsˌfaɪd/, /ˈsætɪsˌfaɪd/</span> — hài lòng</li>
+          <li><mark class="vocab">terrifying</mark> <span class="ipa">/ˈtɛɹəˌfaɪɪŋ/</span> — kinh khủng</li>
+          <li><mark class="vocab">uncomfortable</mark> <span class="ipa">/ʌnˈkʌmfɚtəbl/</span> — khó chịu</li>
+          <li><mark class="vocab">amaze</mark> <span class="ipa">/əˈmeɪz/</span> — làm kinh ngạc</li>
+          <li><mark class="vocab">regret</mark> <span class="ipa">/ɹəˈɡɹɛt/, /ɹɪˈɡɹɛt/</span> — hối tiếc</li>
+          <li><mark class="vocab">embarrassment</mark> <span class="ipa">/ɪmˈbɛɹəsmənt/</span> — sự xấu hổ</li>
+          <li><mark class="vocab">enthusiasm</mark> <span class="ipa">/ɪnˈθuziˌæzəm/</span> — nhiệt tình</li>
+          <li><mark class="vocab">panic</mark> <span class="ipa">/ˈpænɪk/</span> — hoảng loạn</li>
+          <li><mark class="vocab">pity</mark> <span class="ipa">/ˈpɪti/</span> — lòng thương hại</li>
+          <li><mark class="vocab">relief</mark> <span class="ipa">/ɹiˈɫif/, /ɹɪˈɫif/</span> — sự nhẹ nhõm</li>
+          <li><mark class="vocab">shock</mark> <span class="ipa">/ʃɑk/</span> — cú sốc</li>
+          <li><mark class="vocab">stress</mark> <span class="ipa">/ˈstɹɛs/</span> — căng thẳng</li>
+          <li><mark class="vocab">terror</mark> <span class="ipa">/ˈtɛɹɝ/</span> — nỗi kinh hoàng</li>
+          <li><mark class="vocab">thrill</mark> <span class="ipa">/ˈθɹɪɫ/</span> — sự phấn khích</li>
+          <li><mark class="vocab">wonder</mark> <span class="ipa">/ˈwʌndɚ/</span> — sự ngạc nhiên</li>
+          <li><mark class="vocab">worry</mark> <span class="ipa">/ˈwɝi/</span> — lo lắng</li>
+          <li><mark class="vocab">sheepish</mark> <span class="ipa">/ˈʃipɪʃ/</span> — ngượng ngùng</li>
+          <li><mark class="vocab">depression</mark> <span class="ipa">/dɪˈpɹɛʃən/</span> — trầm cảm</li>
+          <li><mark class="vocab">rage</mark> <span class="ipa">/ˈɹeɪdʒ/</span> — cơn thịnh nộ</li>
+          <li><mark class="vocab">appeal</mark> <span class="ipa">/əˈpiɫ/</span> — thu hút</li>
+          <li><mark class="vocab">consult</mark> <span class="ipa">/kənˈsəɫt/</span> — tham khảo</li>
+          <li><mark class="vocab">contest</mark> <span class="ipa">/ˈkɑnˌtɛst/</span> — khiếu nại</li>
+          <li><mark class="vocab">disgust</mark> <span class="ipa">/dɪsˈɡʌst/</span> — làm kinh tởm</li>
+          <li><mark class="vocab">favor</mark> <span class="ipa">/ˈfeɪvɝ/</span> — thích hơn</li>
+          <li><mark class="vocab">favorite</mark> <span class="ipa">/ˈfeɪvɚɪt/</span> — yêu thích</li>
+          <li><mark class="vocab">go for</mark> <span class="ipa">/ɡˈoʊ fɔːɹ/</span> — chọn</li>
+          <li><mark class="vocab">shy away from</mark> <span class="ipa">/ʃˈaɪ ɐwˈeɪ fɹʌm/</span> — né tránh</li>
+          <li><mark class="vocab">[make] up {one&#x27;s} mind</mark> <span class="ipa">/mˌeɪk ˌʌp wˈʌnz mˈaɪnd/</span> — quyết định dứt khoát</li>
+          <li><mark class="vocab">pick out</mark> <span class="ipa">/pˈɪk ˈaʊt/</span> — chọn</li>
+          <li><mark class="vocab">put up with</mark> <span class="ipa">/pˌʊt ˈʌp wɪð/</span> — chịu đựng</li>
+          <li><mark class="vocab">think over</mark> <span class="ipa">/θˈɪŋk ˈoʊvɚ/</span> — suy nghĩ kỹ về</li>
+          <li><mark class="vocab">[take] account of {sth}</mark> <span class="ipa">/tˈeɪk ɐkˈaʊnt ʌv ˌɛstˌiːˈeɪtʃ/</span></li>
+          <li><mark class="vocab">turn to</mark> <span class="ipa">/tˈɜːn tuː/</span> — tìm đến</li>
+          <li><mark class="vocab">would rather</mark> <span class="ipa">/wʊd ɹˈæðɚ/</span></li>
+          <li><mark class="vocab">decision maker</mark> <span class="ipa">/dᵻsˈɪʒən mˈeɪkɚ/</span> — người ra quyết định</li>
+          <li><mark class="vocab">dislike</mark> <span class="ipa">/dɪsˈlaɪk/</span> — sự không thích</li>
+          <li><mark class="vocab">preference</mark> <span class="ipa">/ˈpɹɛfɝəns/, /ˈpɹɛfɹəns/</span> — sở thích</li>
+          <li><mark class="vocab">resolution</mark> <span class="ipa">/ˌɹɛzəˈɫuʃən/</span> — quyết tâm</li>
+          <li><mark class="vocab">taste</mark> <span class="ipa">/teɪst/</span> — gu</li>
+          <li><mark class="vocab">criteria</mark> <span class="ipa">/kɹaɪˈtɪɹiə/</span> — tiêu chí</li>
+          <li><mark class="vocab">liking</mark> <span class="ipa">/ˈɫaɪkɪŋ/</span> — sự thích thú</li>
+          <li><mark class="vocab">tendency</mark> <span class="ipa">/ˈtɛndənsi/</span> — xu hướng</li>
+          <li><mark class="vocab">alternatively</mark> <span class="ipa">/ɔɫˈtɝnətɪvɫi/</span> — thay thế</li>
+          <li><mark class="vocab">please</mark> <span class="ipa">/pliːz/</span> — làm hài lòng</li>
+          <li><mark class="vocab">instead</mark> <span class="ipa">/ˌɪnˈstɛd/</span> — thay vì</li>
+          <li><mark class="vocab">disrespect</mark> <span class="ipa">/ˌdɪsɹɪˈspɛkt/</span> — thiếu tôn trọng</li>
+          <li><mark class="vocab">die</mark> <span class="ipa">/daɪ/</span> — thèm thuồng</li>
+        </ul>
+      </section>
+
+      <div class="docs-pager">
+        <a href="../">← Feelings &amp; Mind</a>
+        <a href="../../">All topics →</a>
+      </div>
+    </article>
+  </div>
+  <script src="../../../../js/docs.js"></script>
+  <script src="../../../../js/exercise.js"></script>
+</body>
+</html>

@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>B2 Exercise · Home &amp; Living — The Quiet Corner</title>
+  <meta name="description" content="B2 reading exercise for Home &amp; Living vocabulary with IPA and bilingual sentences.">
+  <link rel="icon" href="../../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../../"><span>✦</span> The Quiet Corner <span>✦</span></a>
+    <nav class="docs-series">
+      <a href="../../../../blog/web-security/">DevSecOps</a>
+      <a href="../../../../blog/kubestronaut/">Kubestronaut</a>
+      <a class="active" href="../../">English</a>
+    </nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-nav="english" data-docs-root="../../" data-active="home-living">
+      <div class="docs-nav-label">English</div>
+      <ul class="docs-nav" id="docsNav">
+        <li><a href="../../">All topics</a></li>
+        <li><a href="../">Home &amp; Living</a></li>
+        <li><a class="active" href="./">B2 Exercise</a></li>
+      </ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../../">Home</a>
+        <span>›</span>
+        <a href="../../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../../">English</a>
+        <span>›</span>
+        <a href="../">Home &amp; Living</a>
+        <span>›</span>
+        <span>B2 Exercise</span>
+      </div>
+
+      <div class="vocab-topic-hero">
+        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 72 72' fill='none'%3E%3Crect width='72' height='72' rx='14' fill='%230b1220'/%3E%3Crect x='16' y='14' width='40' height='46' rx='6' stroke='%2322d3ee' stroke-width='2.5'/%3E%3Cpath d='M24 28h24M24 36h24M24 44h16' stroke='%23e4e4e7' stroke-width='2.5' stroke-linecap='round'/%3E%3Cpath d='M48 48l6 2-2 6-8-8 4 0z' fill='%2322d3ee'/%3E%3C/svg%3E" alt="" width="112" height="112">
+        <div>
+          <h1>B2 Exercise · Home &amp; Living</h1>
+          <p class="lede">Reading passage with every new word from this level’s LanGeek lessons — IPA, highlights, sentence translation, and free TTS.</p>
+          <div class="docs-meta">
+            <span><strong>Words:</strong> 100</span>
+            <span><strong>Lessons:</strong> Buildings and Structures · City Structures · Tools</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="ex-toolbar" id="exToolbar">
+        <label class="ex-toggle"><input type="checkbox" id="togHighlight" checked> Highlights</label>
+        <label class="ex-toggle"><input type="checkbox" id="togIpa" checked> IPA</label>
+        <label class="ex-toggle"><input type="checkbox" id="togVi"> Dịch câu (VI)</label>
+        <span class="ex-sep"></span>
+        <label class="ex-voice">Voice
+          <select id="voiceSelect" aria-label="TTS voice"></select>
+        </label>
+        <label class="ex-voice">Speed
+          <input id="rateRange" type="range" min="0.7" max="1.15" step="0.05" value="0.95">
+          <span id="rateVal">0.95</span>
+        </label>
+        <button type="button" class="ex-btn primary" id="btnPlay">▶ Read passage</button>
+        <button type="button" class="ex-btn" id="btnStop">Stop</button>
+      </div>
+      
+      <section class="ex-passage" id="passage" data-tts-root>
+          <p class="ex-sent" data-sent="1">
+            <span class="ex-en">In this B2 Home & Living passage, notice <mark class="vocab" data-word="mortgage">mortgage</mark><span class="ipa">/ˈmɔɹɡədʒ/, /ˈmɔɹɡɪdʒ/</span>, <mark class="vocab" data-word="property">property</mark><span class="ipa">/ˈprɑpərti/</span>, <mark class="vocab" data-word="skyscraper">skyscraper</mark><span class="ipa">/ˈskaɪsˌkɹeɪpɝ/</span>, and <mark class="vocab" data-word="mansion">mansion</mark><span class="ipa">/ˈmænʃən/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Home &amp; Living, hãy để ý thế chấp, tài sản, nhà chọc trời, và biệt thự.</span>
+          </p>
+          <p class="ex-sent" data-sent="2">
+            <span class="ex-en">In this B2 Home & Living passage, notice <mark class="vocab" data-word="condominium">condominium</mark><span class="ipa">/ˌkɑndəˈmɪniəm/</span>, <mark class="vocab" data-word="penthouse">penthouse</mark><span class="ipa">/ˈpɛntˌhaʊs/</span>, <mark class="vocab" data-word="duplex">duplex</mark><span class="ipa">/ˈduˌpɫɛks/</span>, and <mark class="vocab" data-word="complex">complex</mark><span class="ipa">/ˈkɑmplɛks/ , /kəmˈplɛks/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Home &amp; Living, hãy để ý căn hộ chung cư, căn hộ penthouse, căn hộ hai tầng, và khu phức hợp.</span>
+          </p>
+          <p class="ex-sent" data-sent="3">
+            <span class="ex-en">In this B2 Home & Living passage, notice <mark class="vocab" data-word="housing development">housing development</mark><span class="ipa">/hˈaʊzɪŋ dɪvˈɛləpmənt/</span>, <mark class="vocab" data-word="row house">row house</mark><span class="ipa">/ɹˈoʊ hˈaʊs/</span>, <mark class="vocab" data-word="houseboat">houseboat</mark><span class="ipa">/ˈhaʊsˌboʊt/</span>, and <mark class="vocab" data-word="attic">attic</mark><span class="ipa">/ˈætɪk/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Home &amp; Living, hãy để ý khu phát triển nhà ở, nhà liền kề, nhà thuyền, và gác xép.</span>
+          </p>
+          <p class="ex-sent" data-sent="4">
+            <span class="ex-en">In this B2 Home & Living passage, notice <mark class="vocab" data-word="basement">basement</mark><span class="ipa">/ˈbeɪsmənt/</span>, <mark class="vocab" data-word="cellar">cellar</mark><span class="ipa">/ˈsɛɫɝ/</span>, <mark class="vocab" data-word="nursery">nursery</mark><span class="ipa">/ˈnɝsɝi/</span>, and <mark class="vocab" data-word="patio">patio</mark><span class="ipa">/ˈpætiˌoʊ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Home &amp; Living, hãy để ý tầng hầm, hầm, phòng trẻ em, và sân hiên.</span>
+          </p>
+          <p class="ex-sent" data-sent="5">
+            <span class="ex-en">In this B2 Home & Living passage, notice <mark class="vocab" data-word="rooftop">rooftop</mark><span class="ipa">/ˈɹufˌtɑp/</span>, <mark class="vocab" data-word="doorbell">doorbell</mark><span class="ipa">/ˈdɔɹˌbɛɫ/</span>, <mark class="vocab" data-word="doorstep">doorstep</mark><span class="ipa">/ˈdɔɹˌstɛp/</span>, and <mark class="vocab" data-word="doorway">doorway</mark><span class="ipa">/ˈdɔɹˌweɪ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Home &amp; Living, hãy để ý mái nhà, chuông cửa, ngưỡng cửa, và lối vào.</span>
+          </p>
+          <p class="ex-sent" data-sent="6">
+            <span class="ex-en">In this B2 Home & Living passage, notice <mark class="vocab" data-word="air conditioning">air conditioning</mark><span class="ipa">/ˈer kəndˈɪʃənɪŋ/</span>, <mark class="vocab" data-word="central heating">central heating</mark><span class="ipa">/sˈɛntɹəl hˈiːɾɪŋ/</span>, <mark class="vocab" data-word="smoke alarm">smoke alarm</mark><span class="ipa">/smˈoʊk ɐlˈɑːɹm/</span>, and <mark class="vocab" data-word="bureau">bureau</mark><span class="ipa">/ˈbjʊɹoʊ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Home &amp; Living, hãy để ý điều hòa không khí, hệ thống sưởi trung tâm, máy báo khói, và tủ có ngăn kéo.</span>
+          </p>
+          <p class="ex-sent" data-sent="7">
+            <span class="ex-en">In this B2 Home & Living passage, notice <mark class="vocab" data-word="drawer">drawer</mark><span class="ipa">/ˈdɹɔɹ/</span>, <mark class="vocab" data-word="garbage can">garbage can</mark><span class="ipa">/ɡˈɑːɹbɪdʒ kˈæn/</span>, <mark class="vocab" data-word="chore">chore</mark><span class="ipa">/ˈtʃɔɹ/</span>, and <mark class="vocab" data-word="to mop">mop</mark><span class="ipa">/ˈmɑp/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Home &amp; Living, hãy để ý ngăn kéo, thùng rác, công việc nhà, và lau.</span>
+          </p>
+          <p class="ex-sent" data-sent="8">
+            <span class="ex-en">In this B2 Home & Living passage, notice <mark class="vocab" data-word="to scrub">scrub</mark><span class="ipa">/ˈskɹəb/</span>, <mark class="vocab" data-word="to sweep">sweep</mark><span class="ipa">/ˈswip/</span>, <mark class="vocab" data-word="to vacuum">vacuum</mark><span class="ipa">/ˈvækjum/</span>, and <mark class="vocab" data-word="to wipe">wipe</mark><span class="ipa">/ˈwaɪp/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Home &amp; Living, hãy để ý chà, quét, hút bụi, và lau.</span>
+          </p>
+          <p class="ex-sent" data-sent="9">
+            <span class="ex-en">In this B2 Home & Living passage, notice <mark class="vocab" data-word="to furnish">furnish</mark><span class="ipa">/ˈfɝnɪʃ/</span>, <mark class="vocab" data-word="to coat">coat</mark><span class="ipa">/koʊt/</span>, <mark class="vocab" data-word="blueprint">blueprint</mark><span class="ipa">/ˈbɫuˌpɹɪnt/</span>, and <mark class="vocab" data-word="abandoned">abandoned</mark><span class="ipa">/əˈbændənd/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Home &amp; Living, hãy để ý trang bị nội thất, phủ, bản vẽ chi tiết, và bị bỏ hoang.</span>
+          </p>
+          <p class="ex-sent" data-sent="10">
+            <span class="ex-en">In this B2 Home & Living passage, notice <mark class="vocab" data-word="classical">classical</mark><span class="ipa">/ˈklæsɪkəl/</span>, <mark class="vocab" data-word="external">external</mark><span class="ipa">/ɪkˈstɝnəɫ/</span>, <mark class="vocab" data-word="industrial">industrial</mark><span class="ipa">/ˌɪnˈdəstɹiəɫ/</span>, and <mark class="vocab" data-word="open-plan">open-plan</mark><span class="ipa">/ˈoʊpənplˈæn/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Home &amp; Living, hãy để ý cổ điển, bên ngoài, công nghiệp, và mở.</span>
+          </p>
+          <p class="ex-sent" data-sent="11">
+            <span class="ex-en">In this B2 Home & Living passage, notice <mark class="vocab" data-word="spacious">spacious</mark><span class="ipa">/ˈspeɪʃəs/</span>, <mark class="vocab" data-word="to construct">construct</mark><span class="ipa">/ˈkɑnstɹəkt/, /kənˈstɹəkt/</span>, <mark class="vocab" data-word="brick">brick</mark><span class="ipa">/ˈbɹɪk/</span>, and <mark class="vocab" data-word="column">column</mark><span class="ipa">/ˈkɑɫəm/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Home &amp; Living, hãy để ý rộng rãi, xây dựng, gạch, và cột.</span>
+          </p>
+          <p class="ex-sent" data-sent="12">
+            <span class="ex-en">In this B2 Home & Living <mark class="vocab" data-word="passage">passage</mark><span class="ipa">/ˈpæsədʒ/, /ˈpæsɪdʒ/</span>, notice <mark class="vocab" data-word="concrete">concrete</mark><span class="ipa">/ˈkɑnkɹit/, /kənˈkɹit/</span>, <mark class="vocab" data-word="development">development</mark><span class="ipa">/dɪˈvɛɫəpmənt/</span>, <mark class="vocab" data-word="digger">digger</mark><span class="ipa">/ˈdɪɡɝ/</span>, and passage.</span>
+            <span class="ex-vi">Trong đoạn B2 về Home &amp; Living, hãy để ý bê tông, phát triển, máy đào, và hành lang.</span>
+          </p>
+          <p class="ex-sent" data-sent="13">
+            <span class="ex-en">In this B2 Home & Living passage, notice <mark class="vocab" data-word="exit">exit</mark><span class="ipa">/ˈɛɡzɪt/, /ˈɛksət/</span>, <mark class="vocab" data-word="hut">hut</mark><span class="ipa">/ˈhət/</span>, <mark class="vocab" data-word="to level">level</mark><span class="ipa">/ˈlevəl/</span>, and <mark class="vocab" data-word="to rebuild">rebuild</mark><span class="ipa">/ɹiˈbɪɫd/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Home &amp; Living, hãy để ý lối ra, túp lều, san bằng, và xây dựng lại.</span>
+          </p>
+          <p class="ex-sent" data-sent="14">
+            <span class="ex-en">In this B2 Home & Living passage, notice <mark class="vocab" data-word="ruin">ruin</mark><span class="ipa">/ˈɹuən/, /ˈɹuɪn/</span>, <mark class="vocab" data-word="curb">curb</mark><span class="ipa">/ˈkɝb/</span>, <mark class="vocab" data-word="landfill">landfill</mark><span class="ipa">/ˈɫændˌfɪɫ/</span>, and <mark class="vocab" data-word="sewer">sewer</mark><span class="ipa">/ˈsuɝ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Home &amp; Living, hãy để ý tàn tích, lề đường, bãi rác, và cống rãnh.</span>
+          </p>
+          <p class="ex-sent" data-sent="15">
+            <span class="ex-en">In this B2 Home & Living passage, notice <mark class="vocab" data-word="landmark">landmark</mark><span class="ipa">/ˈɫændˌmɑɹk/</span>, <mark class="vocab" data-word="monument">monument</mark><span class="ipa">/ˈmɑnjəmənt/, /ˈmɑnjumənt/</span>, <mark class="vocab" data-word="facility">facility</mark><span class="ipa">/fəˈsɪɫɪti/</span>, and <mark class="vocab" data-word="casino">casino</mark><span class="ipa">/kəˈsinoʊ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Home &amp; Living, hãy để ý danh thắng, tượng đài, facility, và sòng bạc.</span>
+          </p>
+          <p class="ex-sent" data-sent="16">
+            <span class="ex-en">In this B2 Home & Living passage, notice <mark class="vocab" data-word="courthouse">courthouse</mark><span class="ipa">/ˈkɔɹtˌhaʊs/</span>, <mark class="vocab" data-word="disco">disco</mark><span class="ipa">/ˈdɪskoʊ/</span>, <mark class="vocab" data-word="nursing home">nursing home</mark><span class="ipa">/nˈɜːsɪŋ hˈoʊm/</span>, and <mark class="vocab" data-word="schoolhouse">schoolhouse</mark><span class="ipa">/ˈskuɫˌhaʊs/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Home &amp; Living, hãy để ý tòa án, vũ trường, viện dưỡng lão, và trường học.</span>
+          </p>
+          <p class="ex-sent" data-sent="17">
+            <span class="ex-en">In this B2 Home & Living passage, notice <mark class="vocab" data-word="structure">structure</mark><span class="ipa">/ˈstɹəktʃɝ/</span>, <mark class="vocab" data-word="town hall">town hall</mark><span class="ipa">/tˈaʊn hˈɔːl/</span>, <mark class="vocab" data-word="funeral home">funeral home</mark><span class="ipa">/fjˈuːnɚɹəl hˈoʊm/</span>, and <mark class="vocab" data-word="graveyard">graveyard</mark><span class="ipa">/ˈɡɹeɪvˌjɑɹd/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Home &amp; Living, hãy để ý cấu trúc, tòa thị chính, nhà tang lễ, và nghĩa trang.</span>
+          </p>
+          <p class="ex-sent" data-sent="18">
+            <span class="ex-en">In this B2 Home & Living passage, notice <mark class="vocab" data-word="tomb">tomb</mark><span class="ipa">/ˈtum/</span>, <mark class="vocab" data-word="hammer">hammer</mark><span class="ipa">/ˈhæmɝ/</span>, <mark class="vocab" data-word="mallet">mallet</mark><span class="ipa">/ˈmæɫɪt/</span>, and <mark class="vocab" data-word="saw">saw</mark><span class="ipa">/ˈsɔ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Home &amp; Living, hãy để ý mộ, búa, búa gỗ, và cưa.</span>
+          </p>
+          <p class="ex-sent" data-sent="19">
+            <span class="ex-en">In this B2 Home & Living passage, notice <mark class="vocab" data-word="chainsaw">chainsaw</mark><span class="ipa">/ˈtʃeɪnˌsɔ/</span>, <mark class="vocab" data-word="drill">drill</mark><span class="ipa">/ˈdɹɪɫ/</span>, <mark class="vocab" data-word="wrench">wrench</mark><span class="ipa">/ˈɹɛntʃ/</span>, and <mark class="vocab" data-word="screw">screw</mark><span class="ipa">/skruː/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Home &amp; Living, hãy để ý máy cưa xích, máy khoan, cờ lê, và ốc vít.</span>
+          </p>
+          <p class="ex-sent" data-sent="20">
+            <span class="ex-en">In this B2 Home & Living passage, notice <mark class="vocab" data-word="screwdriver">screwdriver</mark><span class="ipa">/ˈskɹuˌdɹaɪvɝ/</span>, <mark class="vocab" data-word="nail">nail</mark><span class="ipa">/ˈneɪɫ/</span>, <mark class="vocab" data-word="glue">glue</mark><span class="ipa">/ˈɡɫu/</span>, and <mark class="vocab" data-word="file">file</mark><span class="ipa">/faɪl/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Home &amp; Living, hãy để ý tuốc nơ vít, đinh, keo dán, và cái giũa.</span>
+          </p>
+          <p class="ex-sent" data-sent="21">
+            <span class="ex-en">In this B2 Home & Living passage, notice <mark class="vocab" data-word="chisel">chisel</mark><span class="ipa">/ˈtʃɪzəɫ/</span>, <mark class="vocab" data-word="bolt">bolt</mark><span class="ipa">/ˈboʊɫt/</span>, <mark class="vocab" data-word="nut">nut</mark><span class="ipa">/nʌt/</span>, and <mark class="vocab" data-word="washer">washer</mark><span class="ipa">/ˈwɑʃɝ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Home &amp; Living, hãy để ý cái đục, bu lông, đai ốc, và vòng đệm.</span>
+          </p>
+          <p class="ex-sent" data-sent="22">
+            <span class="ex-en">In this B2 Home & Living passage, notice <mark class="vocab" data-word="fork">fork</mark><span class="ipa">/fɔːrk/</span>, <mark class="vocab" data-word="shovel">shovel</mark><span class="ipa">/ˈʃəvəɫ/</span>, <mark class="vocab" data-word="wheelbarrow">wheelbarrow</mark><span class="ipa">/ˈhwiɫˌbɛɹoʊ/, /ˈwiɫˌbɛɹoʊ/</span>, and <mark class="vocab" data-word="toolbox">toolbox</mark><span class="ipa">/ˈtuɫˌbɔks/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Home &amp; Living, hãy để ý cái chĩa, xẻng, xe cút kít, và hộp dụng cụ.</span>
+          </p>
+          <p class="ex-sent" data-sent="23">
+            <span class="ex-en">In this B2 Home & Living passage, notice <mark class="vocab" data-word="pliers">pliers</mark><span class="ipa">/ˈpɫaɪɝz/</span>, <mark class="vocab" data-word="wire cutter">wire cutter</mark><span class="ipa">/wˈaɪɚ kˈʌɾɚ/</span>, <mark class="vocab" data-word="duct tape">duct tape</mark><span class="ipa">/dˈʌkt tˈeɪp/</span>, and <mark class="vocab" data-word="plunger">plunger</mark><span class="ipa">/ˈpɫəndʒɝ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Home &amp; Living, hãy để ý kìm, kìm cắt dây, băng dính, và pít tông thông tắc.</span>
+          </p>
+          <p class="ex-sent" data-sent="24">
+            <span class="ex-en">In this B2 Home & Living passage, notice <mark class="vocab" data-word="crowbar">crowbar</mark><span class="ipa">/ˈkɹoʊˌbɑɹ/</span>, <mark class="vocab" data-word="staple gun">staple gun</mark><span class="ipa">/stˈeɪpəl ɡˈʌn/</span>, <mark class="vocab" data-word="box cutter">box cutter</mark><span class="ipa">/bˈɑːks kˈʌɾɚ/</span>, and <mark class="vocab" data-word="to function">function</mark><span class="ipa">/ˈfəŋkʃən/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Home &amp; Living, hãy để ý xà beng, súng bắn đinh ghim, dao rọc giấy, và hoạt động.</span>
+          </p>
+          <p class="ex-sent" data-sent="25">
+            <span class="ex-en">In this B2 Home & Living passage, notice <mark class="vocab" data-word="adjustable wrench">adjustable wrench</mark><span class="ipa">/ɐdʒˈʌstəbəl ɹˈɛntʃ/</span>, <mark class="vocab" data-word="tape measure">tape measure</mark><span class="ipa">/tˈeɪp mˈɛʒɚ/</span>, <mark class="vocab" data-word="sledgehammer">sledgehammer</mark><span class="ipa">/ˈsɫɛdʒˌhæmɝ/</span>, and <mark class="vocab" data-word="ax">ax</mark><span class="ipa">/æks/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Home &amp; Living, hãy để ý cờ lê điều chỉnh, thước dây, búa tạ, và rìu.</span>
+          </p>
+      </section>
+
+      <section class="ex-vocab">
+        <h2>Word checklist · 100</h2>
+        <ul class="ex-vocab-list">
+          <li><mark class="vocab">mortgage</mark> <span class="ipa">/ˈmɔɹɡədʒ/, /ˈmɔɹɡɪdʒ/</span> — thế chấp</li>
+          <li><mark class="vocab">property</mark> <span class="ipa">/ˈprɑpərti/</span> — tài sản</li>
+          <li><mark class="vocab">skyscraper</mark> <span class="ipa">/ˈskaɪsˌkɹeɪpɝ/</span> — nhà chọc trời</li>
+          <li><mark class="vocab">mansion</mark> <span class="ipa">/ˈmænʃən/</span> — biệt thự</li>
+          <li><mark class="vocab">condominium</mark> <span class="ipa">/ˌkɑndəˈmɪniəm/</span> — căn hộ chung cư</li>
+          <li><mark class="vocab">penthouse</mark> <span class="ipa">/ˈpɛntˌhaʊs/</span> — căn hộ penthouse</li>
+          <li><mark class="vocab">duplex</mark> <span class="ipa">/ˈduˌpɫɛks/</span> — căn hộ hai tầng</li>
+          <li><mark class="vocab">complex</mark> <span class="ipa">/ˈkɑmplɛks/ , /kəmˈplɛks/</span> — khu phức hợp</li>
+          <li><mark class="vocab">housing development</mark> <span class="ipa">/hˈaʊzɪŋ dɪvˈɛləpmənt/</span> — khu phát triển nhà ở</li>
+          <li><mark class="vocab">row house</mark> <span class="ipa">/ɹˈoʊ hˈaʊs/</span> — nhà liền kề</li>
+          <li><mark class="vocab">houseboat</mark> <span class="ipa">/ˈhaʊsˌboʊt/</span> — nhà thuyền</li>
+          <li><mark class="vocab">attic</mark> <span class="ipa">/ˈætɪk/</span> — gác xép</li>
+          <li><mark class="vocab">basement</mark> <span class="ipa">/ˈbeɪsmənt/</span> — tầng hầm</li>
+          <li><mark class="vocab">cellar</mark> <span class="ipa">/ˈsɛɫɝ/</span> — hầm</li>
+          <li><mark class="vocab">nursery</mark> <span class="ipa">/ˈnɝsɝi/</span> — phòng trẻ em</li>
+          <li><mark class="vocab">patio</mark> <span class="ipa">/ˈpætiˌoʊ/</span> — sân hiên</li>
+          <li><mark class="vocab">rooftop</mark> <span class="ipa">/ˈɹufˌtɑp/</span> — mái nhà</li>
+          <li><mark class="vocab">doorbell</mark> <span class="ipa">/ˈdɔɹˌbɛɫ/</span> — chuông cửa</li>
+          <li><mark class="vocab">doorstep</mark> <span class="ipa">/ˈdɔɹˌstɛp/</span> — ngưỡng cửa</li>
+          <li><mark class="vocab">doorway</mark> <span class="ipa">/ˈdɔɹˌweɪ/</span> — lối vào</li>
+          <li><mark class="vocab">air conditioning</mark> <span class="ipa">/ˈer kəndˈɪʃənɪŋ/</span> — điều hòa không khí</li>
+          <li><mark class="vocab">central heating</mark> <span class="ipa">/sˈɛntɹəl hˈiːɾɪŋ/</span> — hệ thống sưởi trung tâm</li>
+          <li><mark class="vocab">smoke alarm</mark> <span class="ipa">/smˈoʊk ɐlˈɑːɹm/</span> — máy báo khói</li>
+          <li><mark class="vocab">bureau</mark> <span class="ipa">/ˈbjʊɹoʊ/</span> — tủ có ngăn kéo</li>
+          <li><mark class="vocab">drawer</mark> <span class="ipa">/ˈdɹɔɹ/</span> — ngăn kéo</li>
+          <li><mark class="vocab">garbage can</mark> <span class="ipa">/ɡˈɑːɹbɪdʒ kˈæn/</span> — thùng rác</li>
+          <li><mark class="vocab">chore</mark> <span class="ipa">/ˈtʃɔɹ/</span> — công việc nhà</li>
+          <li><mark class="vocab">mop</mark> <span class="ipa">/ˈmɑp/</span> — lau</li>
+          <li><mark class="vocab">scrub</mark> <span class="ipa">/ˈskɹəb/</span> — chà</li>
+          <li><mark class="vocab">sweep</mark> <span class="ipa">/ˈswip/</span> — quét</li>
+          <li><mark class="vocab">vacuum</mark> <span class="ipa">/ˈvækjum/</span> — hút bụi</li>
+          <li><mark class="vocab">wipe</mark> <span class="ipa">/ˈwaɪp/</span> — lau</li>
+          <li><mark class="vocab">furnish</mark> <span class="ipa">/ˈfɝnɪʃ/</span> — trang bị nội thất</li>
+          <li><mark class="vocab">coat</mark> <span class="ipa">/koʊt/</span> — phủ</li>
+          <li><mark class="vocab">blueprint</mark> <span class="ipa">/ˈbɫuˌpɹɪnt/</span> — bản vẽ chi tiết</li>
+          <li><mark class="vocab">abandoned</mark> <span class="ipa">/əˈbændənd/</span> — bị bỏ hoang</li>
+          <li><mark class="vocab">classical</mark> <span class="ipa">/ˈklæsɪkəl/</span> — cổ điển</li>
+          <li><mark class="vocab">external</mark> <span class="ipa">/ɪkˈstɝnəɫ/</span> — bên ngoài</li>
+          <li><mark class="vocab">industrial</mark> <span class="ipa">/ˌɪnˈdəstɹiəɫ/</span> — công nghiệp</li>
+          <li><mark class="vocab">open-plan</mark> <span class="ipa">/ˈoʊpənplˈæn/</span> — mở</li>
+          <li><mark class="vocab">spacious</mark> <span class="ipa">/ˈspeɪʃəs/</span> — rộng rãi</li>
+          <li><mark class="vocab">construct</mark> <span class="ipa">/ˈkɑnstɹəkt/, /kənˈstɹəkt/</span> — xây dựng</li>
+          <li><mark class="vocab">brick</mark> <span class="ipa">/ˈbɹɪk/</span> — gạch</li>
+          <li><mark class="vocab">column</mark> <span class="ipa">/ˈkɑɫəm/</span> — cột</li>
+          <li><mark class="vocab">concrete</mark> <span class="ipa">/ˈkɑnkɹit/, /kənˈkɹit/</span> — bê tông</li>
+          <li><mark class="vocab">development</mark> <span class="ipa">/dɪˈvɛɫəpmənt/</span> — phát triển</li>
+          <li><mark class="vocab">digger</mark> <span class="ipa">/ˈdɪɡɝ/</span> — máy đào</li>
+          <li><mark class="vocab">passage</mark> <span class="ipa">/ˈpæsədʒ/, /ˈpæsɪdʒ/</span> — hành lang</li>
+          <li><mark class="vocab">exit</mark> <span class="ipa">/ˈɛɡzɪt/, /ˈɛksət/</span> — lối ra</li>
+          <li><mark class="vocab">hut</mark> <span class="ipa">/ˈhət/</span> — túp lều</li>
+          <li><mark class="vocab">level</mark> <span class="ipa">/ˈlevəl/</span> — san bằng</li>
+          <li><mark class="vocab">rebuild</mark> <span class="ipa">/ɹiˈbɪɫd/</span> — xây dựng lại</li>
+          <li><mark class="vocab">ruin</mark> <span class="ipa">/ˈɹuən/, /ˈɹuɪn/</span> — tàn tích</li>
+          <li><mark class="vocab">curb</mark> <span class="ipa">/ˈkɝb/</span> — lề đường</li>
+          <li><mark class="vocab">landfill</mark> <span class="ipa">/ˈɫændˌfɪɫ/</span> — bãi rác</li>
+          <li><mark class="vocab">sewer</mark> <span class="ipa">/ˈsuɝ/</span> — cống rãnh</li>
+          <li><mark class="vocab">landmark</mark> <span class="ipa">/ˈɫændˌmɑɹk/</span> — danh thắng</li>
+          <li><mark class="vocab">monument</mark> <span class="ipa">/ˈmɑnjəmənt/, /ˈmɑnjumənt/</span> — tượng đài</li>
+          <li><mark class="vocab">facility</mark> <span class="ipa">/fəˈsɪɫɪti/</span></li>
+          <li><mark class="vocab">casino</mark> <span class="ipa">/kəˈsinoʊ/</span> — sòng bạc</li>
+          <li><mark class="vocab">courthouse</mark> <span class="ipa">/ˈkɔɹtˌhaʊs/</span> — tòa án</li>
+          <li><mark class="vocab">disco</mark> <span class="ipa">/ˈdɪskoʊ/</span> — vũ trường</li>
+          <li><mark class="vocab">nursing home</mark> <span class="ipa">/nˈɜːsɪŋ hˈoʊm/</span> — viện dưỡng lão</li>
+          <li><mark class="vocab">schoolhouse</mark> <span class="ipa">/ˈskuɫˌhaʊs/</span> — trường học</li>
+          <li><mark class="vocab">structure</mark> <span class="ipa">/ˈstɹəktʃɝ/</span> — cấu trúc</li>
+          <li><mark class="vocab">town hall</mark> <span class="ipa">/tˈaʊn hˈɔːl/</span> — tòa thị chính</li>
+          <li><mark class="vocab">funeral home</mark> <span class="ipa">/fjˈuːnɚɹəl hˈoʊm/</span> — nhà tang lễ</li>
+          <li><mark class="vocab">graveyard</mark> <span class="ipa">/ˈɡɹeɪvˌjɑɹd/</span> — nghĩa trang</li>
+          <li><mark class="vocab">tomb</mark> <span class="ipa">/ˈtum/</span> — mộ</li>
+          <li><mark class="vocab">hammer</mark> <span class="ipa">/ˈhæmɝ/</span> — búa</li>
+          <li><mark class="vocab">mallet</mark> <span class="ipa">/ˈmæɫɪt/</span> — búa gỗ</li>
+          <li><mark class="vocab">saw</mark> <span class="ipa">/ˈsɔ/</span> — cưa</li>
+          <li><mark class="vocab">chainsaw</mark> <span class="ipa">/ˈtʃeɪnˌsɔ/</span> — máy cưa xích</li>
+          <li><mark class="vocab">drill</mark> <span class="ipa">/ˈdɹɪɫ/</span> — máy khoan</li>
+          <li><mark class="vocab">wrench</mark> <span class="ipa">/ˈɹɛntʃ/</span> — cờ lê</li>
+          <li><mark class="vocab">screw</mark> <span class="ipa">/skruː/</span> — ốc vít</li>
+          <li><mark class="vocab">screwdriver</mark> <span class="ipa">/ˈskɹuˌdɹaɪvɝ/</span> — tuốc nơ vít</li>
+          <li><mark class="vocab">nail</mark> <span class="ipa">/ˈneɪɫ/</span> — đinh</li>
+          <li><mark class="vocab">glue</mark> <span class="ipa">/ˈɡɫu/</span> — keo dán</li>
+          <li><mark class="vocab">file</mark> <span class="ipa">/faɪl/</span> — cái giũa</li>
+          <li><mark class="vocab">chisel</mark> <span class="ipa">/ˈtʃɪzəɫ/</span> — cái đục</li>
+          <li><mark class="vocab">bolt</mark> <span class="ipa">/ˈboʊɫt/</span> — bu lông</li>
+          <li><mark class="vocab">nut</mark> <span class="ipa">/nʌt/</span> — đai ốc</li>
+          <li><mark class="vocab">washer</mark> <span class="ipa">/ˈwɑʃɝ/</span> — vòng đệm</li>
+          <li><mark class="vocab">fork</mark> <span class="ipa">/fɔːrk/</span> — cái chĩa</li>
+          <li><mark class="vocab">shovel</mark> <span class="ipa">/ˈʃəvəɫ/</span> — xẻng</li>
+          <li><mark class="vocab">wheelbarrow</mark> <span class="ipa">/ˈhwiɫˌbɛɹoʊ/, /ˈwiɫˌbɛɹoʊ/</span> — xe cút kít</li>
+          <li><mark class="vocab">toolbox</mark> <span class="ipa">/ˈtuɫˌbɔks/</span> — hộp dụng cụ</li>
+          <li><mark class="vocab">pliers</mark> <span class="ipa">/ˈpɫaɪɝz/</span> — kìm</li>
+          <li><mark class="vocab">wire cutter</mark> <span class="ipa">/wˈaɪɚ kˈʌɾɚ/</span> — kìm cắt dây</li>
+          <li><mark class="vocab">duct tape</mark> <span class="ipa">/dˈʌkt tˈeɪp/</span> — băng dính</li>
+          <li><mark class="vocab">plunger</mark> <span class="ipa">/ˈpɫəndʒɝ/</span> — pít tông thông tắc</li>
+          <li><mark class="vocab">crowbar</mark> <span class="ipa">/ˈkɹoʊˌbɑɹ/</span> — xà beng</li>
+          <li><mark class="vocab">staple gun</mark> <span class="ipa">/stˈeɪpəl ɡˈʌn/</span> — súng bắn đinh ghim</li>
+          <li><mark class="vocab">box cutter</mark> <span class="ipa">/bˈɑːks kˈʌɾɚ/</span> — dao rọc giấy</li>
+          <li><mark class="vocab">function</mark> <span class="ipa">/ˈfəŋkʃən/</span> — hoạt động</li>
+          <li><mark class="vocab">adjustable wrench</mark> <span class="ipa">/ɐdʒˈʌstəbəl ɹˈɛntʃ/</span> — cờ lê điều chỉnh</li>
+          <li><mark class="vocab">tape measure</mark> <span class="ipa">/tˈeɪp mˈɛʒɚ/</span> — thước dây</li>
+          <li><mark class="vocab">sledgehammer</mark> <span class="ipa">/ˈsɫɛdʒˌhæmɝ/</span> — búa tạ</li>
+          <li><mark class="vocab">ax</mark> <span class="ipa">/æks/</span> — rìu</li>
+        </ul>
+      </section>
+
+      <div class="docs-pager">
+        <a href="../">← Home &amp; Living</a>
+        <a href="../../">All topics →</a>
+      </div>
+    </article>
+  </div>
+  <script src="../../../../js/docs.js"></script>
+  <script src="../../../../js/exercise.js"></script>
+</body>
+</html>

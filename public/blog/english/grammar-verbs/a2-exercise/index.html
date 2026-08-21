@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A2 Exercise · Grammar &amp; Verbs — The Quiet Corner</title>
+  <meta name="description" content="A2 reading exercise for Grammar &amp; Verbs vocabulary with IPA and bilingual sentences.">
+  <link rel="icon" href="../../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../../"><span>✦</span> The Quiet Corner <span>✦</span></a>
+    <nav class="docs-series">
+      <a href="../../../../blog/web-security/">DevSecOps</a>
+      <a href="../../../../blog/kubestronaut/">Kubestronaut</a>
+      <a class="active" href="../../">English</a>
+    </nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-nav="english" data-docs-root="../../" data-active="grammar-verbs">
+      <div class="docs-nav-label">English</div>
+      <ul class="docs-nav" id="docsNav">
+        <li><a href="../../">All topics</a></li>
+        <li><a href="../">Grammar &amp; Verbs</a></li>
+        <li><a class="active" href="./">A2 Exercise</a></li>
+      </ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../../">Home</a>
+        <span>›</span>
+        <a href="../../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../../">English</a>
+        <span>›</span>
+        <a href="../">Grammar &amp; Verbs</a>
+        <span>›</span>
+        <span>A2 Exercise</span>
+      </div>
+
+      <div class="vocab-topic-hero">
+        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 72 72' fill='none'%3E%3Crect width='72' height='72' rx='14' fill='%230b1220'/%3E%3Crect x='16' y='14' width='40' height='46' rx='6' stroke='%2322d3ee' stroke-width='2.5'/%3E%3Cpath d='M24 28h24M24 36h24M24 44h16' stroke='%23e4e4e7' stroke-width='2.5' stroke-linecap='round'/%3E%3Cpath d='M48 48l6 2-2 6-8-8 4 0z' fill='%2322d3ee'/%3E%3C/svg%3E" alt="" width="112" height="112">
+        <div>
+          <h1>A2 Exercise · Grammar &amp; Verbs</h1>
+          <p class="lede">Reading passage with every new word from this level’s LanGeek lessons — IPA, highlights, sentence translation, and free TTS.</p>
+          <div class="docs-meta">
+            <span><strong>Words:</strong> 310</span>
+            <span><strong>Lessons:</strong> Basic Phrasal Verbs · Common Verbs · Conjunctions and Prepositions · Essential Adverbs · Essential Opposite Adjectives · Essential Verbs · Modal and Other Verbs · Necessary Opposite Adjectives · Necessary Verbs · Pronouns and Determiners</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="ex-toolbar" id="exToolbar">
+        <label class="ex-toggle"><input type="checkbox" id="togHighlight" checked> Highlights</label>
+        <label class="ex-toggle"><input type="checkbox" id="togIpa" checked> IPA</label>
+        <label class="ex-toggle"><input type="checkbox" id="togVi"> Dịch câu (VI)</label>
+        <span class="ex-sep"></span>
+        <label class="ex-voice">Voice
+          <select id="voiceSelect" aria-label="TTS voice"></select>
+        </label>
+        <label class="ex-voice">Speed
+          <input id="rateRange" type="range" min="0.7" max="1.15" step="0.05" value="0.95">
+          <span id="rateVal">0.95</span>
+        </label>
+        <button type="button" class="ex-btn primary" id="btnPlay">▶ Read passage</button>
+        <button type="button" class="ex-btn" id="btnStop">Stop</button>
+      </div>
+      
+      <section class="ex-passage" id="passage" data-tts-root>
+          <p class="ex-sent" data-sent="1">
+            <span class="ex-en">In this A2 Grammar & Verbs passage, notice <mark class="vocab" data-word="to deal with">deal with</mark><span class="ipa">/ˈdiːl wɪð/</span>, <mark class="vocab" data-word="to go in">go in</mark><span class="ipa">/ɡoʊ ˈɪn/</span>, <mark class="vocab" data-word="to go out">go out</mark><span class="ipa">/ɡoʊ ˈaʊt/</span>, and <mark class="vocab" data-word="to get in">get in</mark><span class="ipa">/ɡɛt ˈɪn/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Grammar &amp; Verbs, hãy để ý giải quyết, đi vào, đi ra ngoài, và lên.</span>
+          </p>
+          <p class="ex-sent" data-sent="2">
+            <span class="ex-en">In this A2 Grammar & Verbs passage, notice <mark class="vocab" data-word="to get out">get out</mark><span class="ipa">/ɡɛt ˈaʊt/</span>, <mark class="vocab" data-word="to turn up">turn up</mark><span class="ipa">/ˈtɝn ˈʌp/</span>, <mark class="vocab" data-word="to turn down">turn down</mark><span class="ipa">/ˈtɝn ˈdaʊn/</span>, and <mark class="vocab" data-word="to go up">go up</mark><span class="ipa">/ɡoʊ ˈʌp/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Grammar &amp; Verbs, hãy để ý đi ra, vặn to, giảm, và đi lên.</span>
+          </p>
+          <p class="ex-sent" data-sent="3">
+            <span class="ex-en">In this A2 Grammar & Verbs passage, notice <mark class="vocab" data-word="to go down">go down</mark><span class="ipa">/ɡoʊ ˈdaʊn/</span>, <mark class="vocab" data-word="to get on">get on</mark><span class="ipa">/ɡɛt ˈɑn/</span>, <mark class="vocab" data-word="to get off">get off</mark><span class="ipa">/ɡɛt ˈɔf/</span>, and <mark class="vocab" data-word="to put down">put down</mark><span class="ipa">/pʊt ˈdaʊn/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Grammar &amp; Verbs, hãy để ý đi xuống, lên, xuống, và đặt xuống.</span>
+          </p>
+          <p class="ex-sent" data-sent="4">
+            <span class="ex-en">In this A2 Grammar & Verbs passage, notice <mark class="vocab" data-word="to pick up">pick up</mark><span class="ipa">/ˈpɪk ˈʌp/</span>, <mark class="vocab" data-word="to come in">come in</mark><span class="ipa">/kʌm ˈɪn/</span>, <mark class="vocab" data-word="to grow up">grow up</mark><span class="ipa">/ɡroʊ ˈʌp/</span>, and <mark class="vocab" data-word="to find out">find out</mark><span class="ipa">/faɪnd ˈaʊt/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Grammar &amp; Verbs, hãy để ý nhặt lên, vào, lớn lên, và khám phá.</span>
+          </p>
+          <p class="ex-sent" data-sent="5">
+            <span class="ex-en">In this A2 Grammar & Verbs passage, notice <mark class="vocab" data-word="to get up">get up</mark><span class="ipa">/ɡɛt ˈʌp/</span>, <mark class="vocab" data-word="to hurry up">hurry up</mark><span class="ipa">/ˈhɝi ˈʌp/</span>, <mark class="vocab" data-word="to throw out">throw out</mark><span class="ipa">/ˈθroʊ ˈaʊt/</span>, and <mark class="vocab" data-word="to calm down">calm down</mark><span class="ipa">/ˈkɑm ˈdaʊn/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Grammar &amp; Verbs, hãy để ý đứng dậy, nhanh lên, vứt bỏ, và bình tĩnh lại.</span>
+          </p>
+          <p class="ex-sent" data-sent="6">
+            <span class="ex-en">In this A2 Grammar & Verbs passage, notice <mark class="vocab" data-word="to slow down">slow down</mark><span class="ipa">/sloʊ ˈdaʊn/</span>, <mark class="vocab" data-word="to look around">look around</mark><span class="ipa">/lʊk əˈraʊnd/</span>, <mark class="vocab" data-word="to turn around">turn around</mark><span class="ipa">/ˈtɝn əˈraʊnd/</span>, and <mark class="vocab" data-word="to get back">get back</mark><span class="ipa">/ɡɛt ˈbæk/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Grammar &amp; Verbs, hãy để ý giảm tốc độ, nhìn xung quanh, quay lại, và trở lại.</span>
+          </p>
+          <p class="ex-sent" data-sent="7">
+            <span class="ex-en">In this A2 Grammar & Verbs passage, notice <mark class="vocab" data-word="to look up">look up</mark><span class="ipa">/lʊk ˈʌp/</span>, <mark class="vocab" data-word="to let in">let in</mark><span class="ipa">/ˈlɛt ˈɪn/</span>, <mark class="vocab" data-word="to try on">try on</mark><span class="ipa">/ˈtraɪ ˈɑn/</span>, and <mark class="vocab" data-word="to switch on">switch on</mark><span class="ipa">/ˈswɪʧ ˈɑn/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Grammar &amp; Verbs, hãy để ý tra cứu, cho vào, thử, và bật.</span>
+          </p>
+          <p class="ex-sent" data-sent="8">
+            <span class="ex-en">In this A2 Grammar & Verbs passage, notice <mark class="vocab" data-word="to switch off">switch off</mark><span class="ipa">/ˈswɪʧ ˈɔf/</span>, <mark class="vocab" data-word="to wake up">wake up</mark><span class="ipa">/ˈweɪk ˈʌp/</span>, <mark class="vocab" data-word="to raise">raise</mark><span class="ipa">/reɪz/</span>, and <mark class="vocab" data-word="to react">react</mark><span class="ipa">/riˈækt/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Grammar &amp; Verbs, hãy để ý tắt, đánh thức, nâng lên, và phản ứng.</span>
+          </p>
+          <p class="ex-sent" data-sent="9">
+            <span class="ex-en">In this A2 Grammar & Verbs passage, notice <mark class="vocab" data-word="to realize">realize</mark><span class="ipa">/ˈriəˌlaɪz/</span>, <mark class="vocab" data-word="to recognize">recognize</mark><span class="ipa">/ˈrɛkəɡˌnaɪz/</span>, <mark class="vocab" data-word="to recommend">recommend</mark><span class="ipa">/ˌrɛkəˈmɛnd/</span>, and <mark class="vocab" data-word="to record">record</mark><span class="ipa">/rɪˈkɔːrd/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Grammar &amp; Verbs, hãy để ý nhận ra, nhận ra, giới thiệu, và ghi lại.</span>
+          </p>
+          <p class="ex-sent" data-sent="10">
+            <span class="ex-en">In this A2 Grammar & Verbs passage, notice <mark class="vocab" data-word="to refer">refer</mark><span class="ipa">/rəˈfɜr/</span>, <mark class="vocab" data-word="to remove">remove</mark><span class="ipa">/rɪˈmuv/</span>, <mark class="vocab" data-word="to replace">replace</mark><span class="ipa">/rɪˈpleɪs/</span>, and <mark class="vocab" data-word="to report">report</mark><span class="ipa">/rɪˈpɔrt/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Grammar &amp; Verbs, hãy để ý giới thiệu, loại bỏ, thay thế, và báo cáo.</span>
+          </p>
+          <p class="ex-sent" data-sent="11">
+            <span class="ex-en">In this A2 Grammar & Verbs passage, notice <mark class="vocab" data-word="to respond">respond</mark><span class="ipa">/rɪˈspɑnd/</span>, <mark class="vocab" data-word="to rise">rise</mark><span class="ipa">/raɪz/</span>, <mark class="vocab" data-word="to sail">sail</mark><span class="ipa">/seɪl/</span>, and <mark class="vocab" data-word="to save">save</mark><span class="ipa">/seɪv/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Grammar &amp; Verbs, hãy để ý trả lời, lên, đi thuyền, và cứu.</span>
+          </p>
+          <p class="ex-sent" data-sent="12">
+            <span class="ex-en">In this A2 Grammar & Verbs passage, notice <mark class="vocab" data-word="to seem">seem</mark><span class="ipa">/siːm/</span>, <mark class="vocab" data-word="to shake">shake</mark><span class="ipa">/ʃeɪk/</span>, <mark class="vocab" data-word="to shout">shout</mark><span class="ipa">/ʃaʊt/</span>, and <mark class="vocab" data-word="to sign">sign</mark><span class="ipa">/saɪn/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Grammar &amp; Verbs, hãy để ý có vẻ, lắc, hét, và ký tên.</span>
+          </p>
+          <p class="ex-sent" data-sent="13">
+            <span class="ex-en">In this A2 Grammar & Verbs passage, notice <mark class="vocab" data-word="to ski">ski</mark><span class="ipa">/skiː/</span>, <mark class="vocab" data-word="to star">star</mark><span class="ipa">/stɑr/</span>, <mark class="vocab" data-word="to steal">steal</mark><span class="ipa">/stiːl/</span>, and <mark class="vocab" data-word="to suppose">suppose</mark><span class="ipa">/səˈpoʊz/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Grammar &amp; Verbs, hãy để ý trượt tuyết, đóng vai chính, ăn cắp, và giả sử.</span>
+          </p>
+          <p class="ex-sent" data-sent="14">
+            <span class="ex-en">In this A2 Grammar & Verbs passage, <mark class="vocab" data-word="to notice">notice</mark><span class="ipa">/ˈnoʊtɪs/</span> <mark class="vocab" data-word="to text">text</mark><span class="ipa">/tɛkst/</span>, <mark class="vocab" data-word="to tie">tie</mark><span class="ipa">/taɪ/</span>, notice, and <mark class="vocab" data-word="to attend">attend</mark><span class="ipa">/əˈtɛnd/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Grammar &amp; Verbs, hãy để ý nhắn tin, buộc, nhận thấy, và tham dự.</span>
+          </p>
+          <p class="ex-sent" data-sent="15">
+            <span class="ex-en">In this A2 Grammar & Verbs passage, notice <mark class="vocab" data-word="to attack">attack</mark><span class="ipa">/əˈtæk/</span>, <mark class="vocab" data-word="to provide">provide</mark><span class="ipa">/prəˈvaɪd/</span>, <mark class="vocab" data-word="to search">search</mark><span class="ipa">/sɝʧ/</span>, and <mark class="vocab" data-word="to keep">keep</mark><span class="ipa">/kiːp/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Grammar &amp; Verbs, hãy để ý tấn công, cung cấp, tìm kiếm, và giữ.</span>
+          </p>
+          <p class="ex-sent" data-sent="16">
+            <span class="ex-en">In this A2 Grammar & Verbs passage, notice <mark class="vocab" data-word="to pull">pull</mark><span class="ipa">/pʊl/</span>, <mark class="vocab" data-word="to push">push</mark><span class="ipa">/pʊʃ/</span>, <mark class="vocab" data-word="and">and</mark><span class="ipa">/ænd/</span>, and <mark class="vocab" data-word="or">or</mark><span class="ipa">/ɔːr/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Grammar &amp; Verbs, hãy để ý kéo, đẩy, và, và hoặc.</span>
+          </p>
+          <p class="ex-sent" data-sent="17">
+            <span class="ex-en">In this A2 Grammar & Verbs passage, notice <mark class="vocab" data-word="but">but</mark><span class="ipa">/bʌt/</span>, <mark class="vocab" data-word="if">if</mark><span class="ipa">/ɪf/</span>, <mark class="vocab" data-word="as">as</mark><span class="ipa">/æz/</span>, and <mark class="vocab" data-word="because">because</mark><span class="ipa">/bɪˈkʌz/ , /bɪˈkɑːz/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Grammar &amp; Verbs, hãy để ý nhưng, nếu, khi, và bởi vì.</span>
+          </p>
+          <p class="ex-sent" data-sent="18">
+            <span class="ex-en">In this A2 Grammar & Verbs passage, notice <mark class="vocab" data-word="so">so</mark><span class="ipa">/soʊ/</span>, <mark class="vocab" data-word="since">since</mark><span class="ipa">/sɪns/</span>, <mark class="vocab" data-word="now">now</mark><span class="ipa">/naʊ/</span>, and <mark class="vocab" data-word="after">after</mark><span class="ipa">/ˈæftɚ/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Grammar &amp; Verbs, hãy để ý vì vậy, từ, bây giờ mà, và sau khi.</span>
+          </p>
+          <p class="ex-sent" data-sent="19">
+            <span class="ex-en">In this A2 Grammar & Verbs passage, notice <mark class="vocab" data-word="before">before</mark><span class="ipa">/bɪˈfɔːr/</span>, <mark class="vocab" data-word="once">once</mark><span class="ipa">/wʌns/</span>, <mark class="vocab" data-word="although">although</mark><span class="ipa">/ˌɔːlˈðoʊ/</span>, and <mark class="vocab" data-word="though">though</mark><span class="ipa">/ðoʊ/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Grammar &amp; Verbs, hãy để ý trước khi, một khi, mặc dù, và mặc dù.</span>
+          </p>
+          <p class="ex-sent" data-sent="20">
+            <span class="ex-en">In this A2 Grammar & Verbs passage, notice <mark class="vocab" data-word="that">that</mark><span class="ipa">/ðæt/</span>, <mark class="vocab" data-word="yet">yet</mark><span class="ipa">/jɛt/</span>, <mark class="vocab" data-word="when">when</mark><span class="ipa">/wɛn/</span>, and <mark class="vocab" data-word="whenever">whenever</mark><span class="ipa">/wɛnˈɛvɚ/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Grammar &amp; Verbs, hãy để ý rằng, tuy nhiên, khi, và bất cứ khi nào.</span>
+          </p>
+          <p class="ex-sent" data-sent="21">
+            <span class="ex-en">In this A2 Grammar & Verbs passage, notice <mark class="vocab" data-word="where">where</mark><span class="ipa">/wɛr/</span>, <mark class="vocab" data-word="whereas">whereas</mark><span class="ipa">/ˈwɛrˌæz/</span>, <mark class="vocab" data-word="whether">whether</mark><span class="ipa">/ˈwɛðɚ/</span>, and <mark class="vocab" data-word="during">during</mark><span class="ipa">/ˈdʊrɪŋ/ , /ˈdjʊrɪŋ/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Grammar &amp; Verbs, hãy để ý nơi, trong khi, liệu, và trong suốt.</span>
+          </p>
+          <p class="ex-sent" data-sent="22">
+            <span class="ex-en">In this A2 Grammar & Verbs passage, notice <mark class="vocab" data-word="until">until</mark><span class="ipa">/ʌnˈtɪl/</span>, <mark class="vocab" data-word="from">from</mark><span class="ipa">/frʌm/</span>, <mark class="vocab" data-word="of">of</mark><span class="ipa">/ʌv/ , /əv/</span>, and <mark class="vocab" data-word="through">through</mark><span class="ipa">/θruː/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Grammar &amp; Verbs, hãy để ý cho đến, từ, của, và xuyên qua.</span>
+          </p>
+          <p class="ex-sent" data-sent="23">
+            <span class="ex-en">In this A2 Grammar & Verbs passage, notice <mark class="vocab" data-word="except">except</mark><span class="ipa">/ɪkˈsɛpt/</span>, <mark class="vocab" data-word="apart from">apart from</mark><span class="ipa">/əˈpɑːrt frʌm/</span>, <mark class="vocab" data-word="around">around</mark><span class="ipa">/əˈraʊnd/</span>, and <mark class="vocab" data-word="by">by</mark><span class="ipa">/baɪ/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Grammar &amp; Verbs, hãy để ý ngoại trừ, ngoại trừ, xung quanh, và bằng.</span>
+          </p>
+          <p class="ex-sent" data-sent="24">
+            <span class="ex-en">In this A2 Grammar & Verbs passage, notice <mark class="vocab" data-word="outside">outside</mark><span class="ipa">/ˌaʊtˈsaɪd/</span>, <mark class="vocab" data-word="inside">inside</mark><span class="ipa">/ˌɪnˈsaɪd/</span>, <mark class="vocab" data-word="nor">nor</mark><span class="ipa">/nɔːr/</span>, and <mark class="vocab" data-word="for">for</mark><span class="ipa">/fɔːr/ , /fɚ/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Grammar &amp; Verbs, hãy để ý bên ngoài, bên trong, cũng không, và cho.</span>
+          </p>
+          <p class="ex-sent" data-sent="25">
+            <span class="ex-en">In this A2 Grammar & Verbs passage, notice <mark class="vocab" data-word="about">about</mark><span class="ipa">/əˈbaʊt/</span>, <mark class="vocab" data-word="against">against</mark><span class="ipa">/əˈɡɛnst/ , /əˈɡeɪnst/</span>, <mark class="vocab" data-word="than">than</mark><span class="ipa">/ðæn/</span>, and <mark class="vocab" data-word="like">like</mark><span class="ipa">/laɪk/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Grammar &amp; Verbs, hãy để ý về, chống lại, hơn, và như.</span>
+          </p>
+          <p class="ex-sent" data-sent="26">
+            <span class="ex-en"><mark class="vocab" data-word="in">in</mark><span class="ipa">/ɪn/</span> this A2 Grammar & Verbs passage, notice <mark class="vocab" data-word="maybe">maybe</mark><span class="ipa">/ˈmeɪbi/</span>, <mark class="vocab" data-word="probably">probably</mark><span class="ipa">/ˈprɑbəbli/</span>, <mark class="vocab" data-word="out">out</mark><span class="ipa">/aʊt/</span>, and in.</span>
+            <span class="ex-vi">Trong đoạn A2 về Grammar &amp; Verbs, hãy để ý có lẽ, có lẽ, ngoài, và vào trong.</span>
+          </p>
+          <p class="ex-sent" data-sent="27">
+            <span class="ex-en">In this A2 Grammar & Verbs passage, notice <mark class="vocab" data-word="also">also</mark><span class="ipa">/ˈɔlsoʊ/</span>, <mark class="vocab" data-word="actually">actually</mark><span class="ipa">/ˈækʧuəli/ , /ˈækʃəli/</span>, <mark class="vocab" data-word="exactly">exactly</mark><span class="ipa">/ɪɡˈzæktli/</span>, and <mark class="vocab" data-word="almost">almost</mark><span class="ipa">/ˈɔlˌmoʊst/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Grammar &amp; Verbs, hãy để ý cũng, thực ra, chính xác, và gần như.</span>
+          </p>
+          <p class="ex-sent" data-sent="28">
+            <span class="ex-en">In this A2 Grammar & Verbs passage, notice <mark class="vocab" data-word="greatly">greatly</mark><span class="ipa">/ˈɡreɪtli/</span>, <mark class="vocab" data-word="especially">especially</mark><span class="ipa">/ɪˈspɛʃəli/</span>, <mark class="vocab" data-word="generally">generally</mark><span class="ipa">/ˈʤɛnɚəli/</span>, and <mark class="vocab" data-word="finally">finally</mark><span class="ipa">/ˈfaɪnəli/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Grammar &amp; Verbs, hãy để ý rất nhiều, đặc biệt là, thông thường, và cuối cùng.</span>
+          </p>
+          <p class="ex-sent" data-sent="29">
+            <span class="ex-en">In this A2 Grammar & Verbs passage, notice <mark class="vocab" data-word="only">only</mark><span class="ipa">/ˈoʊnli/</span>, <mark class="vocab" data-word="just">just</mark><span class="ipa">/ʤʌst/</span>, <mark class="vocab" data-word="over">over</mark><span class="ipa">/ˈoʊvɚ/</span>, and <mark class="vocab" data-word="at least">at least</mark><span class="ipa">/ət ˈliːst/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Grammar &amp; Verbs, hãy để ý chỉ, chỉ, qua, và ít nhất.</span>
+          </p>
+          <p class="ex-sent" data-sent="30">
+            <span class="ex-en">In this A2 Grammar & Verbs passage, notice <mark class="vocab" data-word="at last">at last</mark><span class="ipa">/ət ˈlæst/</span>, <mark class="vocab" data-word="ahead">ahead</mark><span class="ipa">/əˈhɛd/</span>, <mark class="vocab" data-word="past">past</mark><span class="ipa">/pæst/</span>, and <mark class="vocab" data-word="easily">easily</mark><span class="ipa">/ˈiːzəli/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Grammar &amp; Verbs, hãy để ý cuối cùng, phía trước, qua, và dễ dàng.</span>
+          </p>
+          <p class="ex-sent" data-sent="31">
+            <span class="ex-en">In this A2 Grammar & Verbs passage, notice <mark class="vocab" data-word="carefully">carefully</mark><span class="ipa">/ˈkɛrfəli/</span>, <mark class="vocab" data-word="well">well</mark><span class="ipa">/wɛl/</span>, <mark class="vocab" data-word="still">still</mark><span class="ipa">/stɪl/</span>, and <mark class="vocab" data-word="then">then</mark><span class="ipa">/ðɛn/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Grammar &amp; Verbs, hãy để ý cẩn thận, tốt, vẫn, và sau đó.</span>
+          </p>
+          <p class="ex-sent" data-sent="32">
+            <span class="ex-en">In this A2 Grammar & Verbs passage, notice <mark class="vocab" data-word="sadly">sadly</mark><span class="ipa">/ˈsædli/</span>, <mark class="vocab" data-word="slowly">slowly</mark><span class="ipa">/ˈsloʊli/</span>, <mark class="vocab" data-word="twice">twice</mark><span class="ipa">/twaɪs/</span>, and <mark class="vocab" data-word="anytime">anytime</mark><span class="ipa">/ˈɛniˌtaɪm/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Grammar &amp; Verbs, hãy để ý một cách buồn bã, chậm rãi, hai lần, và bất cứ lúc nào.</span>
+          </p>
+          <p class="ex-sent" data-sent="33">
+            <span class="ex-en">In this A2 Grammar & Verbs passage, notice <mark class="vocab" data-word="fast">fast</mark><span class="ipa">/fæst/</span>, <mark class="vocab" data-word="full">full</mark><span class="ipa">/fʊl/</span>, <mark class="vocab" data-word="empty">empty</mark><span class="ipa">/ˈɛmpti/</span>, and <mark class="vocab" data-word="necessary">necessary</mark><span class="ipa">/ˈnɛsəˌsɛri/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Grammar &amp; Verbs, hãy để ý nhanh, đầy, trống rỗng, và cần thiết.</span>
+          </p>
+          <p class="ex-sent" data-sent="34">
+            <span class="ex-en">In this A2 Grammar & Verbs passage, notice <mark class="vocab" data-word="unnecessary">unnecessary</mark><span class="ipa">/ʌnˈnɛsəˌsɛri/</span>, <mark class="vocab" data-word="simple">simple</mark><span class="ipa">/ˈsɪmpəl/</span>, <mark class="vocab" data-word="hard">hard</mark><span class="ipa">/hɑrd/</span>, and <mark class="vocab" data-word="maximum">maximum</mark><span class="ipa">/ˈmæksəməm/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Grammar &amp; Verbs, hãy để ý không cần thiết, đơn giản, khó, và tối đa.</span>
+          </p>
+          <p class="ex-sent" data-sent="35">
+            <span class="ex-en">In this A2 Grammar & Verbs passage, notice <mark class="vocab" data-word="minimum">minimum</mark><span class="ipa">/ˈmɪnəməm/</span>, <mark class="vocab" data-word="near">near</mark><span class="ipa">/nɪr/</span>, <mark class="vocab" data-word="far">far</mark><span class="ipa">/fɑr/</span>, and <mark class="vocab" data-word="common">common</mark><span class="ipa">/ˈkɑmən/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Grammar &amp; Verbs, hãy để ý tối thiểu, gần, xa, và thông thường.</span>
+          </p>
+          <p class="ex-sent" data-sent="36">
+            <span class="ex-en">In this A2 Grammar & Verbs passage, notice <mark class="vocab" data-word="uncommon">uncommon</mark><span class="ipa">/ʌnˈkɑmən/</span>, <mark class="vocab" data-word="busy">busy</mark><span class="ipa">/ˈbɪzi/</span>, <mark class="vocab" data-word="free">free</mark><span class="ipa">/friː/</span>, and <mark class="vocab" data-word="lazy">lazy</mark><span class="ipa">/ˈleɪzi/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Grammar &amp; Verbs, hãy để ý không phổ biến, bận rộn, rảnh rỗi, và lười biếng.</span>
+          </p>
+          <p class="ex-sent" data-sent="37">
+            <span class="ex-en">In this A2 Grammar & Verbs passage, notice <mark class="vocab" data-word="hardworking">hardworking</mark><span class="ipa">/ˈhɑrdˌwɝkɪŋ/</span>, <mark class="vocab" data-word="relaxing">relaxing</mark><span class="ipa">/rɪˈlæksɪŋ/</span>, <mark class="vocab" data-word="stressful">stressful</mark><span class="ipa">/ˈstrɛsfəl/</span>, and <mark class="vocab" data-word="dumb">dumb</mark><span class="ipa">/dʌm/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Grammar &amp; Verbs, hãy để ý chăm chỉ, thư giãn, căng thẳng, và ngu ngốc.</span>
+          </p>
+          <p class="ex-sent" data-sent="38">
+            <span class="ex-en">In this A2 Grammar & Verbs passage, notice <mark class="vocab" data-word="comfortable">comfortable</mark><span class="ipa">/ˈkʌmfɚtəbl/</span>, <mark class="vocab" data-word="uncomfortable">uncomfortable</mark><span class="ipa">/ʌnˈkʌmfɚtəbl/</span>, <mark class="vocab" data-word="direct">direct</mark><span class="ipa">/daɪˈrɛkt/ , /dəˈrɛkt/</span>, and <mark class="vocab" data-word="indirect">indirect</mark><span class="ipa">/ˌɪndəˈrɛkt/ , /ˌɪndaɪˈrɛkt/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Grammar &amp; Verbs, hãy để ý thoải mái, không thoải mái, trực tiếp, và gián tiếp.</span>
+          </p>
+          <p class="ex-sent" data-sent="39">
+            <span class="ex-en">In this A2 Grammar & Verbs passage, notice <mark class="vocab" data-word="special">special</mark><span class="ipa">/ˈspɛʃəl/</span>, <mark class="vocab" data-word="ordinary">ordinary</mark><span class="ipa">/ˈɔrdəˌnɛri/</span>, <mark class="vocab" data-word="famous">famous</mark><span class="ipa">/ˈfeɪməs/</span>, and <mark class="vocab" data-word="unknown">unknown</mark><span class="ipa">/ˌʌnˈnoʊn/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Grammar &amp; Verbs, hãy để ý đặc biệt, thông thường, nổi tiếng, và không xác định.</span>
+          </p>
+          <p class="ex-sent" data-sent="40">
+            <span class="ex-en">In this A2 Grammar & Verbs passage, notice <mark class="vocab" data-word="deep">deep</mark><span class="ipa">/dip/</span>, <mark class="vocab" data-word="shallow">shallow</mark><span class="ipa">/ˈʃæloʊ/</span>, <mark class="vocab" data-word="to hold">hold</mark><span class="ipa">/hoʊld/</span>, and <mark class="vocab" data-word="to identify">identify</mark><span class="ipa">/aɪˈdɛntəˌfaɪ/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Grammar &amp; Verbs, hãy để ý sâu, nông, cầm, và nhận dạng.</span>
+          </p>
+          <p class="ex-sent" data-sent="41">
+            <span class="ex-en">In this A2 Grammar & Verbs passage, notice <mark class="vocab" data-word="to involve">involve</mark><span class="ipa">/ɪnˈvɑlv/</span>, <mark class="vocab" data-word="to joke">joke</mark><span class="ipa">/dʒoʊk/</span>, <mark class="vocab" data-word="to knock">knock</mark><span class="ipa">/nɑk/</span>, and <mark class="vocab" data-word="to lead">lead</mark><span class="ipa">/liːd/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Grammar &amp; Verbs, hãy để ý liên quan, đùa, gõ, và dẫn dắt.</span>
+          </p>
+          <p class="ex-sent" data-sent="42">
+            <span class="ex-en">In this A2 Grammar & Verbs passage, notice <mark class="vocab" data-word="to lift">lift</mark><span class="ipa">/lɪft/</span>, <mark class="vocab" data-word="to light">light</mark><span class="ipa">/laɪt/</span>, <mark class="vocab" data-word="to link">link</mark><span class="ipa">/lɪŋk/</span>, and <mark class="vocab" data-word="to lock">lock</mark><span class="ipa">/lɑk/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Grammar &amp; Verbs, hãy để ý nâng lên, đốt, kết nối, và khóa.</span>
+          </p>
+          <p class="ex-sent" data-sent="43">
+            <span class="ex-en">In this A2 Grammar & Verbs passage, notice <mark class="vocab" data-word="to mark">mark</mark><span class="ipa">/mɑrk/</span>, <mark class="vocab" data-word="to matter">matter</mark><span class="ipa">/ˈmætɚ/</span>, <mark class="vocab" data-word="to mention">mention</mark><span class="ipa">/ˈmɛnʃən/</span>, and <mark class="vocab" data-word="to mind">mind</mark><span class="ipa">/maɪnd/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Grammar &amp; Verbs, hãy để ý đánh dấu, quan trọng, đề cập, và phiền.</span>
+          </p>
+          <p class="ex-sent" data-sent="44">
+            <span class="ex-en">In this A2 Grammar & Verbs passage, notice <mark class="vocab" data-word="to number">number</mark><span class="ipa">/ˈnʌmbɚ/</span>, <mark class="vocab" data-word="to organize">organize</mark><span class="ipa">/ˈɔrɡəˌnaɪz/</span>, <mark class="vocab" data-word="to own">own</mark><span class="ipa">/oʊn/</span>, and <mark class="vocab" data-word="to pack">pack</mark><span class="ipa">/pæk/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Grammar &amp; Verbs, hãy để ý đánh số, tổ chức, sở hữu, và đóng gói.</span>
+          </p>
+          <p class="ex-sent" data-sent="45">
+            <span class="ex-en">In this A2 Grammar & Verbs passage, notice <mark class="vocab" data-word="to photograph">photograph</mark><span class="ipa">/ˈfoʊtəˌɡræf/</span>, <mark class="vocab" data-word="to predict">predict</mark><span class="ipa">/prɪˈdɪkt/</span>, <mark class="vocab" data-word="to present">present</mark><span class="ipa">/prɪˈzɛnt/</span>, and <mark class="vocab" data-word="to prevent">prevent</mark><span class="ipa">/prɪˈvɛnt/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Grammar &amp; Verbs, hãy để ý chụp ảnh, dự đoán, tặng, và ngăn cản.</span>
+          </p>
+          <p class="ex-sent" data-sent="46">
+            <span class="ex-en">In this A2 Grammar & Verbs passage, notice <mark class="vocab" data-word="to print">print</mark><span class="ipa">/prɪnt/</span>, <mark class="vocab" data-word="to promise">promise</mark><span class="ipa">/ˈprɑmɪs/</span>, <mark class="vocab" data-word="to race">race</mark><span class="ipa">/reɪs/</span>, and <mark class="vocab" data-word="to shut">shut</mark><span class="ipa">/ʃʌt/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Grammar &amp; Verbs, hãy để ý in, hứa, đua, và đóng.</span>
+          </p>
+          <p class="ex-sent" data-sent="47">
+            <span class="ex-en">In this A2 Grammar & Verbs passage, notice <mark class="vocab" data-word="to guide">guide</mark><span class="ipa">/ɡaɪd/</span>, <mark class="vocab" data-word="to kill">kill</mark><span class="ipa">/kɪl/</span>, <mark class="vocab" data-word="to set">set</mark><span class="ipa">/sɛt/</span>, and <mark class="vocab" data-word="to park">park</mark><span class="ipa">/pɑrk/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Grammar &amp; Verbs, hãy để ý hướng dẫn, giết, điều chỉnh, và đỗ xe.</span>
+          </p>
+          <p class="ex-sent" data-sent="48">
+            <span class="ex-en">In this A2 Grammar & Verbs passage, notice <mark class="vocab" data-word="can">can</mark><span class="ipa">/kæn/</span>, <mark class="vocab" data-word="may">may</mark><span class="ipa">/meɪ/</span>, <mark class="vocab" data-word="must">must</mark><span class="ipa">/mʌst/</span>, and <mark class="vocab" data-word="will">will</mark><span class="ipa">/wɪl/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Grammar &amp; Verbs, hãy để ý có thể, có thể, phải, và sẽ.</span>
+          </p>
+          <p class="ex-sent" data-sent="49">
+            <span class="ex-en">In this A2 Grammar & Verbs passage, notice <mark class="vocab" data-word="could">could</mark><span class="ipa">/kʊd/</span>, <mark class="vocab" data-word="might">might</mark><span class="ipa">/maɪt/</span>, <mark class="vocab" data-word="would">would</mark><span class="ipa">/wʊd/</span>, and <mark class="vocab" data-word="should">should</mark><span class="ipa">/ʃʊd/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Grammar &amp; Verbs, hãy để ý Bạn có thể, có thể, sẽ, và nên.</span>
+          </p>
+          <p class="ex-sent" data-sent="50">
+            <span class="ex-en">In this A2 Grammar & Verbs passage, notice <mark class="vocab" data-word="used to">used to</mark><span class="ipa">/ˈjuːst ˌtu/</span>, <mark class="vocab" data-word="to mean">mean</mark><span class="ipa">/miːn/</span>, <mark class="vocab" data-word="to check">check</mark><span class="ipa">/ʧɛk/</span>, and <mark class="vocab" data-word="to carry">carry</mark><span class="ipa">/ˈkæri/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Grammar &amp; Verbs, hãy để ý đã từng, có nghĩa là, kiểm tra, và mang.</span>
+          </p>
+          <p class="ex-sent" data-sent="51">
+            <span class="ex-en">In this A2 Grammar & Verbs passage, notice <mark class="vocab" data-word="to wait">wait</mark><span class="ipa">/weɪt/</span>, <mark class="vocab" data-word="to compare">compare</mark><span class="ipa">/kəmˈpɛr/</span>, <mark class="vocab" data-word="to improve">improve</mark><span class="ipa">/ɪmˈpruv/</span>, and <mark class="vocab" data-word="to try">try</mark><span class="ipa">/traɪ/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Grammar &amp; Verbs, hãy để ý chờ, so sánh, cải thiện, và cố gắng.</span>
+          </p>
+          <p class="ex-sent" data-sent="52">
+            <span class="ex-en">In this A2 Grammar & Verbs passage, notice <mark class="vocab" data-word="to prefer">prefer</mark><span class="ipa">/prəˈfɝ/</span>, <mark class="vocab" data-word="to repeat">repeat</mark><span class="ipa">/rɪˈpiːt/</span>, <mark class="vocab" data-word="to follow">follow</mark><span class="ipa">/ˈfɑloʊ/</span>, and <mark class="vocab" data-word="to allow">allow</mark><span class="ipa">/əˈlaʊ/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Grammar &amp; Verbs, hãy để ý thích hơn, lặp lại, theo dõi, và cho phép.</span>
+          </p>
+          <p class="ex-sent" data-sent="53">
+            <span class="ex-en">In this A2 Grammar & Verbs passage, notice <mark class="vocab" data-word="to hurry">hurry</mark><span class="ipa">/ˈhɝi/</span>, <mark class="vocab" data-word="to change">change</mark><span class="ipa">/tʃeɪndʒ/</span>, <mark class="vocab" data-word="to complete">complete</mark><span class="ipa">/kəmˈplit/</span>, and <mark class="vocab" data-word="to pick">pick</mark><span class="ipa">/pɪk/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Grammar &amp; Verbs, hãy để ý vội vàng, thay đổi, hoàn thành, và chọn.</span>
+          </p>
+          <p class="ex-sent" data-sent="54">
+            <span class="ex-en">In this A2 Grammar & Verbs passage, notice <mark class="vocab" data-word="to drop">drop</mark><span class="ipa">/drɑp/</span>, <mark class="vocab" data-word="to reduce">reduce</mark><span class="ipa">/rɪˈdus/</span>, <mark class="vocab" data-word="to continue">continue</mark><span class="ipa">/kənˈtɪnju/</span>, and <mark class="vocab" data-word="to stay">stay</mark><span class="ipa">/steɪ/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Grammar &amp; Verbs, hãy để ý thả, giảm, tiếp tục, và ở lại.</span>
+          </p>
+          <p class="ex-sent" data-sent="55">
+            <span class="ex-en">In this A2 Grammar & Verbs passage, notice <mark class="vocab" data-word="to point">point</mark><span class="ipa">/pɔɪnt/</span>, <mark class="vocab" data-word="to enter">enter</mark><span class="ipa">/ˈɛnˌtɚ/</span>, <mark class="vocab" data-word="to refuse">refuse</mark><span class="ipa">/rɪˈfjuz/</span>, and <mark class="vocab" data-word="to return">return</mark><span class="ipa">/rɪˈtɝn/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Grammar &amp; Verbs, hãy để ý chỉ, vào, từ chối, và trở về.</span>
+          </p>
+          <p class="ex-sent" data-sent="56">
+            <span class="ex-en">In this A2 Grammar & Verbs passage, notice <mark class="vocab" data-word="have to">have to</mark><span class="ipa">/hæv ˈtu/</span>, <mark class="vocab" data-word="to break">break</mark><span class="ipa">/breɪk/</span>, <mark class="vocab" data-word="take care">take care</mark><span class="ipa">/tˈeɪk kˈɛɹ/</span>, and <mark class="vocab" data-word="to worsen">worsen</mark><span class="ipa">/ˈwɝsən/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Grammar &amp; Verbs, hãy để ý phải, gãy, Bảo trọng, và xấu đi.</span>
+          </p>
+          <p class="ex-sent" data-sent="57">
+            <span class="ex-en">In this A2 Grammar & Verbs passage, notice <mark class="vocab" data-word="intelligent">intelligent</mark><span class="ipa">/ɪnˈtɛlədʒənt/</span>, <mark class="vocab" data-word="unintelligent">unintelligent</mark><span class="ipa">/ˌʌnɪnˈtɛlədʒənt/</span>, <mark class="vocab" data-word="pleasant">pleasant</mark><span class="ipa">/ˈplɛzənt/</span>, and <mark class="vocab" data-word="unpleasant">unpleasant</mark><span class="ipa">/ʌnˈplɛzənt/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Grammar &amp; Verbs, hãy để ý thông minh, không thông minh, dễ chịu, và khó chịu.</span>
+          </p>
+          <p class="ex-sent" data-sent="58">
+            <span class="ex-en">In this A2 Grammar & Verbs passage, notice <mark class="vocab" data-word="careful">careful</mark><span class="ipa">/ˈkɛrfəl/</span>, <mark class="vocab" data-word="careless">careless</mark><span class="ipa">/ˈkɛrləs/</span>, <mark class="vocab" data-word="polite">polite</mark><span class="ipa">/pəˈlaɪt/</span>, and <mark class="vocab" data-word="impolite">impolite</mark><span class="ipa">/ˌɪmpəˈlaɪt/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Grammar &amp; Verbs, hãy để ý cẩn thận, bất cẩn, lịch sự, và bất lịch sự.</span>
+          </p>
+          <p class="ex-sent" data-sent="59">
+            <span class="ex-en">In this A2 Grammar & Verbs passage, notice <mark class="vocab" data-word="friendly">friendly</mark><span class="ipa">/ˈfrɛndli/</span>, <mark class="vocab" data-word="unfriendly">unfriendly</mark><span class="ipa">/ˌʌnˈfrɛndli/</span>, <mark class="vocab" data-word="usual">usual</mark><span class="ipa">/ˈjuʒəwəl/</span>, and <mark class="vocab" data-word="unusual">unusual</mark><span class="ipa">/ʌnˈjuʒəwəl/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Grammar &amp; Verbs, hãy để ý thân thiện, không thân thiện, thông thường, và khác thường.</span>
+          </p>
+          <p class="ex-sent" data-sent="60">
+            <span class="ex-en">In this A2 Grammar & Verbs passage, notice <mark class="vocab" data-word="lucky">lucky</mark><span class="ipa">/ˈlʌki/</span>, <mark class="vocab" data-word="unlucky">unlucky</mark><span class="ipa">/ʌnˈlʌki/</span>, <mark class="vocab" data-word="complete">complete</mark><span class="ipa">/kəmˈplit/</span>, and <mark class="vocab" data-word="incomplete">incomplete</mark><span class="ipa">/ˌɪnkəmˈplit/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Grammar &amp; Verbs, hãy để ý may mắn, không may mắn, đầy đủ, và không đầy đủ.</span>
+          </p>
+          <p class="ex-sent" data-sent="61">
+            <span class="ex-en">In this A2 Grammar & Verbs passage, notice <mark class="vocab" data-word="healthy">healthy</mark><span class="ipa">/ˈhɛlθi/</span>, <mark class="vocab" data-word="unhealthy">unhealthy</mark><span class="ipa">/ʌnˈhɛlθi/</span>, <mark class="vocab" data-word="popular">popular</mark><span class="ipa">/ˈpɑpjələr/</span>, and <mark class="vocab" data-word="unpopular">unpopular</mark><span class="ipa">/ʌnˈpɑpjələr/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Grammar &amp; Verbs, hãy để ý khỏe mạnh, không lành mạnh, phổ biến, và không được ưa chuộng.</span>
+          </p>
+          <p class="ex-sent" data-sent="62">
+            <span class="ex-en">In this A2 Grammar & Verbs passage, notice <mark class="vocab" data-word="safe">safe</mark><span class="ipa">/seɪf/</span>, <mark class="vocab" data-word="unsafe">unsafe</mark><span class="ipa">/ʌnˈseɪf/</span>, <mark class="vocab" data-word="unwell">unwell</mark><span class="ipa">/ʌnˈwɛl/</span>, and <mark class="vocab" data-word="important">important</mark><span class="ipa">/ɪmˈpɔrtənt/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Grammar &amp; Verbs, hãy để ý an toàn, nguy hiểm, ốm, và quan trọng.</span>
+          </p>
+          <p class="ex-sent" data-sent="63">
+            <span class="ex-en">In this A2 Grammar & Verbs passage, notice <mark class="vocab" data-word="unimportant">unimportant</mark><span class="ipa">/ˌʌnɪmˈpɔrtənt/</span>, <mark class="vocab" data-word="possible">possible</mark><span class="ipa">/ˈpɑsəbəl/</span>, <mark class="vocab" data-word="impossible">impossible</mark><span class="ipa">/ɪmˈpɑsəbəl/</span>, and <mark class="vocab" data-word="formal">formal</mark><span class="ipa">/ˈfɔrməl/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Grammar &amp; Verbs, hãy để ý không quan trọng, có thể, không thể, và trang trọng.</span>
+          </p>
+          <p class="ex-sent" data-sent="64">
+            <span class="ex-en">In this A2 Grammar & Verbs passage, notice <mark class="vocab" data-word="informal">informal</mark><span class="ipa">/ɪnˈfɔrməl/</span>, <mark class="vocab" data-word="dead">dead</mark><span class="ipa">/dɛd/</span>, <mark class="vocab" data-word="alive">alive</mark><span class="ipa">/əˈlaɪv/</span>, and <mark class="vocab" data-word="to act">act</mark><span class="ipa">/ækt/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Grammar &amp; Verbs, hãy để ý không chính thức, chết, sống, và hành động.</span>
+          </p>
+          <p class="ex-sent" data-sent="65">
+            <span class="ex-en">In this A2 Grammar & Verbs passage, notice <mark class="vocab" data-word="to affect">affect</mark><span class="ipa">/əˈfɛkt/</span>, <mark class="vocab" data-word="to analyze">analyze</mark><span class="ipa">/ˈænəˌlaɪz/</span>, <mark class="vocab" data-word="to apply">apply</mark><span class="ipa">/əˈplaɪ/</span>, and <mark class="vocab" data-word="to arrange">arrange</mark><span class="ipa">/əˈreɪndʒ/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Grammar &amp; Verbs, hãy để ý ảnh hưởng, phân tích, nộp đơn, và sắp xếp.</span>
+          </p>
+          <p class="ex-sent" data-sent="66">
+            <span class="ex-en">In this A2 Grammar & Verbs passage, notice <mark class="vocab" data-word="to avoid">avoid</mark><span class="ipa">/əˈvɔɪd/</span>, <mark class="vocab" data-word="to beat">beat</mark><span class="ipa">/biːt/</span>, <mark class="vocab" data-word="to behave">behave</mark><span class="ipa">/bɪˈheɪv/</span>, and <mark class="vocab" data-word="to blow">blow</mark><span class="ipa">/bloʊ/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Grammar &amp; Verbs, hãy để ý tránh, đánh bại, cư xử, và thổi.</span>
+          </p>
+          <p class="ex-sent" data-sent="67">
+            <span class="ex-en">In this A2 Grammar & Verbs passage, notice <mark class="vocab" data-word="to boil">boil</mark><span class="ipa">/bɔɪl/</span>, <mark class="vocab" data-word="to burn">burn</mark><span class="ipa">/bɝn/</span>, <mark class="vocab" data-word="to cause">cause</mark><span class="ipa">/kɑz/ , /kɔz/</span>, and <mark class="vocab" data-word="to collect">collect</mark><span class="ipa">/kəˈlɛkt/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Grammar &amp; Verbs, hãy để ý đun sôi, cháy, gây ra, và thu thập.</span>
+          </p>
+          <p class="ex-sent" data-sent="68">
+            <span class="ex-en">In this A2 Grammar & Verbs passage, notice <mark class="vocab" data-word="to connect">connect</mark><span class="ipa">/kəˈnɛkt/</span>, <mark class="vocab" data-word="to consider">consider</mark><span class="ipa">/kənˈsɪdɚ/</span>, <mark class="vocab" data-word="to control">control</mark><span class="ipa">/kənˈtroʊl/</span>, and <mark class="vocab" data-word="to cover">cover</mark><span class="ipa">/ˈkʌvɚ/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Grammar &amp; Verbs, hãy để ý kết nối, xem xét, kiểm soát, và che phủ.</span>
+          </p>
+          <p class="ex-sent" data-sent="69">
+            <span class="ex-en">In this A2 Grammar & Verbs passage, notice <mark class="vocab" data-word="to depend">depend</mark><span class="ipa">/dɪˈpɛnd/</span>, <mark class="vocab" data-word="to destroy">destroy</mark><span class="ipa">/dɪˈstrɔɪ/</span>, <mark class="vocab" data-word="to develop">develop</mark><span class="ipa">/dɪˈvɛləp/</span>, and <mark class="vocab" data-word="to dry">dry</mark><span class="ipa">/draɪ/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Grammar &amp; Verbs, hãy để ý phụ thuộc, phá hủy, phát triển, và làm khô.</span>
+          </p>
+          <p class="ex-sent" data-sent="70">
+            <span class="ex-en">In this A2 Grammar & Verbs passage, notice <mark class="vocab" data-word="to exist">exist</mark><span class="ipa">/ɪɡˈzɪst/</span>, <mark class="vocab" data-word="to expect">expect</mark><span class="ipa">/ɪkˈspɛkt/</span>, <mark class="vocab" data-word="to express">express</mark><span class="ipa">/ɪkˈsprɛs/</span>, and <mark class="vocab" data-word="to fight">fight</mark><span class="ipa">/faɪt/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Grammar &amp; Verbs, hãy để ý tồn tại, mong đợi, biểu lộ, và chiến đấu.</span>
+          </p>
+          <p class="ex-sent" data-sent="71">
+            <span class="ex-en">In this A2 Grammar & Verbs passage, notice <mark class="vocab" data-word="to fix">fix</mark><span class="ipa">/fɪks/</span>, <mark class="vocab" data-word="to greet">greet</mark><span class="ipa">/ɡriːt/</span>, <mark class="vocab" data-word="to carry out">carry out</mark><span class="ipa">/ˈkæri ˈaʊt/</span>, and <mark class="vocab" data-word="to look">look</mark><span class="ipa">/lʊk/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Grammar &amp; Verbs, hãy để ý sửa chữa, chào, thực hiện, và tìm kiếm.</span>
+          </p>
+          <p class="ex-sent" data-sent="72">
+            <span class="ex-en">In this A2 Grammar & Verbs passage, notice <mark class="vocab" data-word="to stop">stop</mark><span class="ipa">/stɑp/</span>, <mark class="vocab" data-word="to disappear">disappear</mark><span class="ipa">/ˌdɪsəˈpɪr/</span>, <mark class="vocab" data-word="to name">name</mark><span class="ipa">/neɪm/</span>, and <mark class="vocab" data-word="everyone">everyone</mark><span class="ipa">/ˈɛvriˌwʌn/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Grammar &amp; Verbs, hãy để ý dừng lại, biến mất, đặt tên, và mọi người.</span>
+          </p>
+          <p class="ex-sent" data-sent="73">
+            <span class="ex-en">In this A2 Grammar & Verbs passage, notice <mark class="vocab" data-word="everything">everything</mark><span class="ipa">/ˈɛvriˌθɪŋ/</span>, <mark class="vocab" data-word="everywhere">everywhere</mark><span class="ipa">/ˈɛvriˌwɛr/</span>, <mark class="vocab" data-word="someone">someone</mark><span class="ipa">/ˈsʌmˌwʌn/</span>, and <mark class="vocab" data-word="something">something</mark><span class="ipa">/ˈsʌmˌθɪŋ/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Grammar &amp; Verbs, hãy để ý mọi thứ, khắp nơi, ai đó, và cái gì đó.</span>
+          </p>
+          <p class="ex-sent" data-sent="74">
+            <span class="ex-en">In this A2 Grammar & Verbs passage, notice <mark class="vocab" data-word="somewhere">somewhere</mark><span class="ipa">/ˈsʌmˌwɛr/</span>, <mark class="vocab" data-word="someplace">someplace</mark><span class="ipa">/ˈsʌmˌpleɪs/</span>, <mark class="vocab" data-word="no one">no one</mark><span class="ipa">/ˈnoʊ ˌwʌn/</span>, and <mark class="vocab" data-word="nothing">nothing</mark><span class="ipa">/ˈnʌθɪŋ/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Grammar &amp; Verbs, hãy để ý nơi nào đó, nơi nào đó, không ai, và không có gì.</span>
+          </p>
+          <p class="ex-sent" data-sent="75">
+            <span class="ex-en">In this A2 Grammar & Verbs passage, notice <mark class="vocab" data-word="nowhere">nowhere</mark><span class="ipa">/ˈnoʊˌwɛr/</span>, <mark class="vocab" data-word="anyone">anyone</mark><span class="ipa">/ˈɛniˌwʌn/</span>, <mark class="vocab" data-word="anything">anything</mark><span class="ipa">/ˈɛniˌθɪŋ/</span>, and <mark class="vocab" data-word="anywhere">anywhere</mark><span class="ipa">/ˈɛniˌwɛr/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Grammar &amp; Verbs, hãy để ý không nơi nào, ai đó, gì đó, và bất cứ đâu.</span>
+          </p>
+          <p class="ex-sent" data-sent="76">
+            <span class="ex-en">In this A2 Grammar & Verbs passage, notice <mark class="vocab" data-word="other">other</mark><span class="ipa">/ˈʌðɚ/</span>, <mark class="vocab" data-word="no">no</mark><span class="ipa">/noʊ/</span>, <mark class="vocab" data-word="any">any</mark><span class="ipa">/ˈɛni/</span>, and <mark class="vocab" data-word="none">none</mark><span class="ipa">/nʌn/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Grammar &amp; Verbs, hãy để ý khác, không có, bất kỳ, và không ai.</span>
+          </p>
+          <p class="ex-sent" data-sent="77">
+            <span class="ex-en">In this A2 Grammar & Verbs passage, notice <mark class="vocab" data-word="some">some</mark><span class="ipa">/sʌm/</span>, <mark class="vocab" data-word="every">every</mark><span class="ipa">/ˈɛvri/</span>, <mark class="vocab" data-word="either">either</mark><span class="ipa">/ˈiðɚ/ , /ˈaɪðɚ/</span>, and <mark class="vocab" data-word="several">several</mark><span class="ipa">/ˈsɛvɚəl/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Grammar &amp; Verbs, hãy để ý Một số, mỗi, một trong hai, và nhiều.</span>
+          </p>
+          <p class="ex-sent" data-sent="78">
+            <span class="ex-en">In this A2 Grammar & Verbs passage, notice <mark class="vocab" data-word="whose">whose</mark><span class="ipa">/huːz/</span>, and <mark class="vocab" data-word="which">which</mark><span class="ipa">/wɪʧ/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Grammar &amp; Verbs, hãy để ý của ai, và cái nào.</span>
+          </p>
+      </section>
+
+      <section class="ex-vocab">
+        <h2>Word checklist · 310</h2>
+        <ul class="ex-vocab-list">
+          <li><mark class="vocab">deal with</mark> <span class="ipa">/ˈdiːl wɪð/</span> — giải quyết</li>
+          <li><mark class="vocab">go in</mark> <span class="ipa">/ɡoʊ ˈɪn/</span> — đi vào</li>
+          <li><mark class="vocab">go out</mark> <span class="ipa">/ɡoʊ ˈaʊt/</span> — đi ra ngoài</li>
+          <li><mark class="vocab">get in</mark> <span class="ipa">/ɡɛt ˈɪn/</span> — lên</li>
+          <li><mark class="vocab">get out</mark> <span class="ipa">/ɡɛt ˈaʊt/</span> — đi ra</li>
+          <li><mark class="vocab">turn up</mark> <span class="ipa">/ˈtɝn ˈʌp/</span> — vặn to</li>
+          <li><mark class="vocab">turn down</mark> <span class="ipa">/ˈtɝn ˈdaʊn/</span> — giảm</li>
+          <li><mark class="vocab">go up</mark> <span class="ipa">/ɡoʊ ˈʌp/</span> — đi lên</li>
+          <li><mark class="vocab">go down</mark> <span class="ipa">/ɡoʊ ˈdaʊn/</span> — đi xuống</li>
+          <li><mark class="vocab">get on</mark> <span class="ipa">/ɡɛt ˈɑn/</span> — lên</li>
+          <li><mark class="vocab">get off</mark> <span class="ipa">/ɡɛt ˈɔf/</span> — xuống</li>
+          <li><mark class="vocab">put down</mark> <span class="ipa">/pʊt ˈdaʊn/</span> — đặt xuống</li>
+          <li><mark class="vocab">pick up</mark> <span class="ipa">/ˈpɪk ˈʌp/</span> — nhặt lên</li>
+          <li><mark class="vocab">come in</mark> <span class="ipa">/kʌm ˈɪn/</span> — vào</li>
+          <li><mark class="vocab">grow up</mark> <span class="ipa">/ɡroʊ ˈʌp/</span> — lớn lên</li>
+          <li><mark class="vocab">find out</mark> <span class="ipa">/faɪnd ˈaʊt/</span> — khám phá</li>
+          <li><mark class="vocab">get up</mark> <span class="ipa">/ɡɛt ˈʌp/</span> — đứng dậy</li>
+          <li><mark class="vocab">hurry up</mark> <span class="ipa">/ˈhɝi ˈʌp/</span> — nhanh lên</li>
+          <li><mark class="vocab">throw out</mark> <span class="ipa">/ˈθroʊ ˈaʊt/</span> — vứt bỏ</li>
+          <li><mark class="vocab">calm down</mark> <span class="ipa">/ˈkɑm ˈdaʊn/</span> — bình tĩnh lại</li>
+          <li><mark class="vocab">slow down</mark> <span class="ipa">/sloʊ ˈdaʊn/</span> — giảm tốc độ</li>
+          <li><mark class="vocab">look around</mark> <span class="ipa">/lʊk əˈraʊnd/</span> — nhìn xung quanh</li>
+          <li><mark class="vocab">turn around</mark> <span class="ipa">/ˈtɝn əˈraʊnd/</span> — quay lại</li>
+          <li><mark class="vocab">get back</mark> <span class="ipa">/ɡɛt ˈbæk/</span> — trở lại</li>
+          <li><mark class="vocab">look up</mark> <span class="ipa">/lʊk ˈʌp/</span> — tra cứu</li>
+          <li><mark class="vocab">let in</mark> <span class="ipa">/ˈlɛt ˈɪn/</span> — cho vào</li>
+          <li><mark class="vocab">try on</mark> <span class="ipa">/ˈtraɪ ˈɑn/</span> — thử</li>
+          <li><mark class="vocab">switch on</mark> <span class="ipa">/ˈswɪʧ ˈɑn/</span> — bật</li>
+          <li><mark class="vocab">switch off</mark> <span class="ipa">/ˈswɪʧ ˈɔf/</span> — tắt</li>
+          <li><mark class="vocab">wake up</mark> <span class="ipa">/ˈweɪk ˈʌp/</span> — đánh thức</li>
+          <li><mark class="vocab">raise</mark> <span class="ipa">/reɪz/</span> — nâng lên</li>
+          <li><mark class="vocab">react</mark> <span class="ipa">/riˈækt/</span> — phản ứng</li>
+          <li><mark class="vocab">realize</mark> <span class="ipa">/ˈriəˌlaɪz/</span> — nhận ra</li>
+          <li><mark class="vocab">recognize</mark> <span class="ipa">/ˈrɛkəɡˌnaɪz/</span> — nhận ra</li>
+          <li><mark class="vocab">recommend</mark> <span class="ipa">/ˌrɛkəˈmɛnd/</span> — giới thiệu</li>
+          <li><mark class="vocab">record</mark> <span class="ipa">/rɪˈkɔːrd/</span> — ghi lại</li>
+          <li><mark class="vocab">refer</mark> <span class="ipa">/rəˈfɜr/</span> — giới thiệu</li>
+          <li><mark class="vocab">remove</mark> <span class="ipa">/rɪˈmuv/</span> — loại bỏ</li>
+          <li><mark class="vocab">replace</mark> <span class="ipa">/rɪˈpleɪs/</span> — thay thế</li>
+          <li><mark class="vocab">report</mark> <span class="ipa">/rɪˈpɔrt/</span> — báo cáo</li>
+          <li><mark class="vocab">respond</mark> <span class="ipa">/rɪˈspɑnd/</span> — trả lời</li>
+          <li><mark class="vocab">rise</mark> <span class="ipa">/raɪz/</span> — lên</li>
+          <li><mark class="vocab">sail</mark> <span class="ipa">/seɪl/</span> — đi thuyền</li>
+          <li><mark class="vocab">save</mark> <span class="ipa">/seɪv/</span> — cứu</li>
+          <li><mark class="vocab">seem</mark> <span class="ipa">/siːm/</span> — có vẻ</li>
+          <li><mark class="vocab">shake</mark> <span class="ipa">/ʃeɪk/</span> — lắc</li>
+          <li><mark class="vocab">shout</mark> <span class="ipa">/ʃaʊt/</span> — hét</li>
+          <li><mark class="vocab">sign</mark> <span class="ipa">/saɪn/</span> — ký tên</li>
+          <li><mark class="vocab">ski</mark> <span class="ipa">/skiː/</span> — trượt tuyết</li>
+          <li><mark class="vocab">star</mark> <span class="ipa">/stɑr/</span> — đóng vai chính</li>
+          <li><mark class="vocab">steal</mark> <span class="ipa">/stiːl/</span> — ăn cắp</li>
+          <li><mark class="vocab">suppose</mark> <span class="ipa">/səˈpoʊz/</span> — giả sử</li>
+          <li><mark class="vocab">text</mark> <span class="ipa">/tɛkst/</span> — nhắn tin</li>
+          <li><mark class="vocab">tie</mark> <span class="ipa">/taɪ/</span> — buộc</li>
+          <li><mark class="vocab">notice</mark> <span class="ipa">/ˈnoʊtɪs/</span> — nhận thấy</li>
+          <li><mark class="vocab">attend</mark> <span class="ipa">/əˈtɛnd/</span> — tham dự</li>
+          <li><mark class="vocab">attack</mark> <span class="ipa">/əˈtæk/</span> — tấn công</li>
+          <li><mark class="vocab">provide</mark> <span class="ipa">/prəˈvaɪd/</span> — cung cấp</li>
+          <li><mark class="vocab">search</mark> <span class="ipa">/sɝʧ/</span> — tìm kiếm</li>
+          <li><mark class="vocab">keep</mark> <span class="ipa">/kiːp/</span> — giữ</li>
+          <li><mark class="vocab">pull</mark> <span class="ipa">/pʊl/</span> — kéo</li>
+          <li><mark class="vocab">push</mark> <span class="ipa">/pʊʃ/</span> — đẩy</li>
+          <li><mark class="vocab">and</mark> <span class="ipa">/ænd/</span> — và</li>
+          <li><mark class="vocab">or</mark> <span class="ipa">/ɔːr/</span> — hoặc</li>
+          <li><mark class="vocab">but</mark> <span class="ipa">/bʌt/</span> — nhưng</li>
+          <li><mark class="vocab">if</mark> <span class="ipa">/ɪf/</span> — nếu</li>
+          <li><mark class="vocab">as</mark> <span class="ipa">/æz/</span> — khi</li>
+          <li><mark class="vocab">because</mark> <span class="ipa">/bɪˈkʌz/ , /bɪˈkɑːz/</span> — bởi vì</li>
+          <li><mark class="vocab">so</mark> <span class="ipa">/soʊ/</span> — vì vậy</li>
+          <li><mark class="vocab">since</mark> <span class="ipa">/sɪns/</span> — từ</li>
+          <li><mark class="vocab">now</mark> <span class="ipa">/naʊ/</span> — bây giờ mà</li>
+          <li><mark class="vocab">after</mark> <span class="ipa">/ˈæftɚ/</span> — sau khi</li>
+          <li><mark class="vocab">before</mark> <span class="ipa">/bɪˈfɔːr/</span> — trước khi</li>
+          <li><mark class="vocab">once</mark> <span class="ipa">/wʌns/</span> — một khi</li>
+          <li><mark class="vocab">although</mark> <span class="ipa">/ˌɔːlˈðoʊ/</span> — mặc dù</li>
+          <li><mark class="vocab">though</mark> <span class="ipa">/ðoʊ/</span> — mặc dù</li>
+          <li><mark class="vocab">that</mark> <span class="ipa">/ðæt/</span> — rằng</li>
+          <li><mark class="vocab">yet</mark> <span class="ipa">/jɛt/</span> — tuy nhiên</li>
+          <li><mark class="vocab">when</mark> <span class="ipa">/wɛn/</span> — khi</li>
+          <li><mark class="vocab">whenever</mark> <span class="ipa">/wɛnˈɛvɚ/</span> — bất cứ khi nào</li>
+          <li><mark class="vocab">where</mark> <span class="ipa">/wɛr/</span> — nơi</li>
+          <li><mark class="vocab">whereas</mark> <span class="ipa">/ˈwɛrˌæz/</span> — trong khi</li>
+          <li><mark class="vocab">whether</mark> <span class="ipa">/ˈwɛðɚ/</span> — liệu</li>
+          <li><mark class="vocab">during</mark> <span class="ipa">/ˈdʊrɪŋ/ , /ˈdjʊrɪŋ/</span> — trong suốt</li>
+          <li><mark class="vocab">until</mark> <span class="ipa">/ʌnˈtɪl/</span> — cho đến</li>
+          <li><mark class="vocab">from</mark> <span class="ipa">/frʌm/</span> — từ</li>
+          <li><mark class="vocab">of</mark> <span class="ipa">/ʌv/ , /əv/</span> — của</li>
+          <li><mark class="vocab">through</mark> <span class="ipa">/θruː/</span> — xuyên qua</li>
+          <li><mark class="vocab">except</mark> <span class="ipa">/ɪkˈsɛpt/</span> — ngoại trừ</li>
+          <li><mark class="vocab">apart from</mark> <span class="ipa">/əˈpɑːrt frʌm/</span> — ngoại trừ</li>
+          <li><mark class="vocab">around</mark> <span class="ipa">/əˈraʊnd/</span> — xung quanh</li>
+          <li><mark class="vocab">by</mark> <span class="ipa">/baɪ/</span> — bằng</li>
+          <li><mark class="vocab">outside</mark> <span class="ipa">/ˌaʊtˈsaɪd/</span> — bên ngoài</li>
+          <li><mark class="vocab">inside</mark> <span class="ipa">/ˌɪnˈsaɪd/</span> — bên trong</li>
+          <li><mark class="vocab">nor</mark> <span class="ipa">/nɔːr/</span> — cũng không</li>
+          <li><mark class="vocab">for</mark> <span class="ipa">/fɔːr/ , /fɚ/</span> — cho</li>
+          <li><mark class="vocab">about</mark> <span class="ipa">/əˈbaʊt/</span> — về</li>
+          <li><mark class="vocab">against</mark> <span class="ipa">/əˈɡɛnst/ , /əˈɡeɪnst/</span> — chống lại</li>
+          <li><mark class="vocab">than</mark> <span class="ipa">/ðæn/</span> — hơn</li>
+          <li><mark class="vocab">like</mark> <span class="ipa">/laɪk/</span> — như</li>
+          <li><mark class="vocab">maybe</mark> <span class="ipa">/ˈmeɪbi/</span> — có lẽ</li>
+          <li><mark class="vocab">probably</mark> <span class="ipa">/ˈprɑbəbli/</span> — có lẽ</li>
+          <li><mark class="vocab">out</mark> <span class="ipa">/aʊt/</span> — ngoài</li>
+          <li><mark class="vocab">in</mark> <span class="ipa">/ɪn/</span> — vào trong</li>
+          <li><mark class="vocab">also</mark> <span class="ipa">/ˈɔlsoʊ/</span> — cũng</li>
+          <li><mark class="vocab">actually</mark> <span class="ipa">/ˈækʧuəli/ , /ˈækʃəli/</span> — thực ra</li>
+          <li><mark class="vocab">exactly</mark> <span class="ipa">/ɪɡˈzæktli/</span> — chính xác</li>
+          <li><mark class="vocab">almost</mark> <span class="ipa">/ˈɔlˌmoʊst/</span> — gần như</li>
+          <li><mark class="vocab">greatly</mark> <span class="ipa">/ˈɡreɪtli/</span> — rất nhiều</li>
+          <li><mark class="vocab">especially</mark> <span class="ipa">/ɪˈspɛʃəli/</span> — đặc biệt là</li>
+          <li><mark class="vocab">generally</mark> <span class="ipa">/ˈʤɛnɚəli/</span> — thông thường</li>
+          <li><mark class="vocab">finally</mark> <span class="ipa">/ˈfaɪnəli/</span> — cuối cùng</li>
+          <li><mark class="vocab">only</mark> <span class="ipa">/ˈoʊnli/</span> — chỉ</li>
+          <li><mark class="vocab">just</mark> <span class="ipa">/ʤʌst/</span> — chỉ</li>
+          <li><mark class="vocab">over</mark> <span class="ipa">/ˈoʊvɚ/</span> — qua</li>
+          <li><mark class="vocab">at least</mark> <span class="ipa">/ət ˈliːst/</span> — ít nhất</li>
+          <li><mark class="vocab">at last</mark> <span class="ipa">/ət ˈlæst/</span> — cuối cùng</li>
+          <li><mark class="vocab">ahead</mark> <span class="ipa">/əˈhɛd/</span> — phía trước</li>
+          <li><mark class="vocab">past</mark> <span class="ipa">/pæst/</span> — qua</li>
+          <li><mark class="vocab">easily</mark> <span class="ipa">/ˈiːzəli/</span> — dễ dàng</li>
+          <li><mark class="vocab">carefully</mark> <span class="ipa">/ˈkɛrfəli/</span> — cẩn thận</li>
+          <li><mark class="vocab">well</mark> <span class="ipa">/wɛl/</span> — tốt</li>
+          <li><mark class="vocab">still</mark> <span class="ipa">/stɪl/</span> — vẫn</li>
+          <li><mark class="vocab">then</mark> <span class="ipa">/ðɛn/</span> — sau đó</li>
+          <li><mark class="vocab">sadly</mark> <span class="ipa">/ˈsædli/</span> — một cách buồn bã</li>
+          <li><mark class="vocab">slowly</mark> <span class="ipa">/ˈsloʊli/</span> — chậm rãi</li>
+          <li><mark class="vocab">twice</mark> <span class="ipa">/twaɪs/</span> — hai lần</li>
+          <li><mark class="vocab">anytime</mark> <span class="ipa">/ˈɛniˌtaɪm/</span> — bất cứ lúc nào</li>
+          <li><mark class="vocab">fast</mark> <span class="ipa">/fæst/</span> — nhanh</li>
+          <li><mark class="vocab">full</mark> <span class="ipa">/fʊl/</span> — đầy</li>
+          <li><mark class="vocab">empty</mark> <span class="ipa">/ˈɛmpti/</span> — trống rỗng</li>
+          <li><mark class="vocab">necessary</mark> <span class="ipa">/ˈnɛsəˌsɛri/</span> — cần thiết</li>
+          <li><mark class="vocab">unnecessary</mark> <span class="ipa">/ʌnˈnɛsəˌsɛri/</span> — không cần thiết</li>
+          <li><mark class="vocab">simple</mark> <span class="ipa">/ˈsɪmpəl/</span> — đơn giản</li>
+          <li><mark class="vocab">hard</mark> <span class="ipa">/hɑrd/</span> — khó</li>
+          <li><mark class="vocab">maximum</mark> <span class="ipa">/ˈmæksəməm/</span> — tối đa</li>
+          <li><mark class="vocab">minimum</mark> <span class="ipa">/ˈmɪnəməm/</span> — tối thiểu</li>
+          <li><mark class="vocab">near</mark> <span class="ipa">/nɪr/</span> — gần</li>
+          <li><mark class="vocab">far</mark> <span class="ipa">/fɑr/</span> — xa</li>
+          <li><mark class="vocab">common</mark> <span class="ipa">/ˈkɑmən/</span> — thông thường</li>
+          <li><mark class="vocab">uncommon</mark> <span class="ipa">/ʌnˈkɑmən/</span> — không phổ biến</li>
+          <li><mark class="vocab">busy</mark> <span class="ipa">/ˈbɪzi/</span> — bận rộn</li>
+          <li><mark class="vocab">free</mark> <span class="ipa">/friː/</span> — rảnh rỗi</li>
+          <li><mark class="vocab">lazy</mark> <span class="ipa">/ˈleɪzi/</span> — lười biếng</li>
+          <li><mark class="vocab">hardworking</mark> <span class="ipa">/ˈhɑrdˌwɝkɪŋ/</span> — chăm chỉ</li>
+          <li><mark class="vocab">relaxing</mark> <span class="ipa">/rɪˈlæksɪŋ/</span> — thư giãn</li>
+          <li><mark class="vocab">stressful</mark> <span class="ipa">/ˈstrɛsfəl/</span> — căng thẳng</li>
+          <li><mark class="vocab">dumb</mark> <span class="ipa">/dʌm/</span> — ngu ngốc</li>
+          <li><mark class="vocab">comfortable</mark> <span class="ipa">/ˈkʌmfɚtəbl/</span> — thoải mái</li>
+          <li><mark class="vocab">uncomfortable</mark> <span class="ipa">/ʌnˈkʌmfɚtəbl/</span> — không thoải mái</li>
+          <li><mark class="vocab">direct</mark> <span class="ipa">/daɪˈrɛkt/ , /dəˈrɛkt/</span> — trực tiếp</li>
+          <li><mark class="vocab">indirect</mark> <span class="ipa">/ˌɪndəˈrɛkt/ , /ˌɪndaɪˈrɛkt/</span> — gián tiếp</li>
+          <li><mark class="vocab">special</mark> <span class="ipa">/ˈspɛʃəl/</span> — đặc biệt</li>
+          <li><mark class="vocab">ordinary</mark> <span class="ipa">/ˈɔrdəˌnɛri/</span> — thông thường</li>
+          <li><mark class="vocab">famous</mark> <span class="ipa">/ˈfeɪməs/</span> — nổi tiếng</li>
+          <li><mark class="vocab">unknown</mark> <span class="ipa">/ˌʌnˈnoʊn/</span> — không xác định</li>
+          <li><mark class="vocab">deep</mark> <span class="ipa">/dip/</span> — sâu</li>
+          <li><mark class="vocab">shallow</mark> <span class="ipa">/ˈʃæloʊ/</span> — nông</li>
+          <li><mark class="vocab">hold</mark> <span class="ipa">/hoʊld/</span> — cầm</li>
+          <li><mark class="vocab">identify</mark> <span class="ipa">/aɪˈdɛntəˌfaɪ/</span> — nhận dạng</li>
+          <li><mark class="vocab">involve</mark> <span class="ipa">/ɪnˈvɑlv/</span> — liên quan</li>
+          <li><mark class="vocab">joke</mark> <span class="ipa">/dʒoʊk/</span> — đùa</li>
+          <li><mark class="vocab">knock</mark> <span class="ipa">/nɑk/</span> — gõ</li>
+          <li><mark class="vocab">lead</mark> <span class="ipa">/liːd/</span> — dẫn dắt</li>
+          <li><mark class="vocab">lift</mark> <span class="ipa">/lɪft/</span> — nâng lên</li>
+          <li><mark class="vocab">light</mark> <span class="ipa">/laɪt/</span> — đốt</li>
+          <li><mark class="vocab">link</mark> <span class="ipa">/lɪŋk/</span> — kết nối</li>
+          <li><mark class="vocab">lock</mark> <span class="ipa">/lɑk/</span> — khóa</li>
+          <li><mark class="vocab">mark</mark> <span class="ipa">/mɑrk/</span> — đánh dấu</li>
+          <li><mark class="vocab">matter</mark> <span class="ipa">/ˈmætɚ/</span> — quan trọng</li>
+          <li><mark class="vocab">mention</mark> <span class="ipa">/ˈmɛnʃən/</span> — đề cập</li>
+          <li><mark class="vocab">mind</mark> <span class="ipa">/maɪnd/</span> — phiền</li>
+          <li><mark class="vocab">number</mark> <span class="ipa">/ˈnʌmbɚ/</span> — đánh số</li>
+          <li><mark class="vocab">organize</mark> <span class="ipa">/ˈɔrɡəˌnaɪz/</span> — tổ chức</li>
+          <li><mark class="vocab">own</mark> <span class="ipa">/oʊn/</span> — sở hữu</li>
+          <li><mark class="vocab">pack</mark> <span class="ipa">/pæk/</span> — đóng gói</li>
+          <li><mark class="vocab">photograph</mark> <span class="ipa">/ˈfoʊtəˌɡræf/</span> — chụp ảnh</li>
+          <li><mark class="vocab">predict</mark> <span class="ipa">/prɪˈdɪkt/</span> — dự đoán</li>
+          <li><mark class="vocab">present</mark> <span class="ipa">/prɪˈzɛnt/</span> — tặng</li>
+          <li><mark class="vocab">prevent</mark> <span class="ipa">/prɪˈvɛnt/</span> — ngăn cản</li>
+          <li><mark class="vocab">print</mark> <span class="ipa">/prɪnt/</span> — in</li>
+          <li><mark class="vocab">promise</mark> <span class="ipa">/ˈprɑmɪs/</span> — hứa</li>
+          <li><mark class="vocab">race</mark> <span class="ipa">/reɪs/</span> — đua</li>
+          <li><mark class="vocab">shut</mark> <span class="ipa">/ʃʌt/</span> — đóng</li>
+          <li><mark class="vocab">guide</mark> <span class="ipa">/ɡaɪd/</span> — hướng dẫn</li>
+          <li><mark class="vocab">kill</mark> <span class="ipa">/kɪl/</span> — giết</li>
+          <li><mark class="vocab">set</mark> <span class="ipa">/sɛt/</span> — điều chỉnh</li>
+          <li><mark class="vocab">park</mark> <span class="ipa">/pɑrk/</span> — đỗ xe</li>
+          <li><mark class="vocab">can</mark> <span class="ipa">/kæn/</span> — có thể</li>
+          <li><mark class="vocab">may</mark> <span class="ipa">/meɪ/</span> — có thể</li>
+          <li><mark class="vocab">must</mark> <span class="ipa">/mʌst/</span> — phải</li>
+          <li><mark class="vocab">will</mark> <span class="ipa">/wɪl/</span> — sẽ</li>
+          <li><mark class="vocab">could</mark> <span class="ipa">/kʊd/</span> — Bạn có thể</li>
+          <li><mark class="vocab">might</mark> <span class="ipa">/maɪt/</span> — có thể</li>
+          <li><mark class="vocab">would</mark> <span class="ipa">/wʊd/</span> — sẽ</li>
+          <li><mark class="vocab">should</mark> <span class="ipa">/ʃʊd/</span> — nên</li>
+          <li><mark class="vocab">used to</mark> <span class="ipa">/ˈjuːst ˌtu/</span> — đã từng</li>
+          <li><mark class="vocab">mean</mark> <span class="ipa">/miːn/</span> — có nghĩa là</li>
+          <li><mark class="vocab">check</mark> <span class="ipa">/ʧɛk/</span> — kiểm tra</li>
+          <li><mark class="vocab">carry</mark> <span class="ipa">/ˈkæri/</span> — mang</li>
+          <li><mark class="vocab">wait</mark> <span class="ipa">/weɪt/</span> — chờ</li>
+          <li><mark class="vocab">compare</mark> <span class="ipa">/kəmˈpɛr/</span> — so sánh</li>
+          <li><mark class="vocab">improve</mark> <span class="ipa">/ɪmˈpruv/</span> — cải thiện</li>
+          <li><mark class="vocab">try</mark> <span class="ipa">/traɪ/</span> — cố gắng</li>
+          <li><mark class="vocab">prefer</mark> <span class="ipa">/prəˈfɝ/</span> — thích hơn</li>
+          <li><mark class="vocab">repeat</mark> <span class="ipa">/rɪˈpiːt/</span> — lặp lại</li>
+          <li><mark class="vocab">follow</mark> <span class="ipa">/ˈfɑloʊ/</span> — theo dõi</li>
+          <li><mark class="vocab">allow</mark> <span class="ipa">/əˈlaʊ/</span> — cho phép</li>
+          <li><mark class="vocab">hurry</mark> <span class="ipa">/ˈhɝi/</span> — vội vàng</li>
+          <li><mark class="vocab">change</mark> <span class="ipa">/tʃeɪndʒ/</span> — thay đổi</li>
+          <li><mark class="vocab">complete</mark> <span class="ipa">/kəmˈplit/</span> — hoàn thành</li>
+          <li><mark class="vocab">pick</mark> <span class="ipa">/pɪk/</span> — chọn</li>
+          <li><mark class="vocab">drop</mark> <span class="ipa">/drɑp/</span> — thả</li>
+          <li><mark class="vocab">reduce</mark> <span class="ipa">/rɪˈdus/</span> — giảm</li>
+          <li><mark class="vocab">continue</mark> <span class="ipa">/kənˈtɪnju/</span> — tiếp tục</li>
+          <li><mark class="vocab">stay</mark> <span class="ipa">/steɪ/</span> — ở lại</li>
+          <li><mark class="vocab">point</mark> <span class="ipa">/pɔɪnt/</span> — chỉ</li>
+          <li><mark class="vocab">enter</mark> <span class="ipa">/ˈɛnˌtɚ/</span> — vào</li>
+          <li><mark class="vocab">refuse</mark> <span class="ipa">/rɪˈfjuz/</span> — từ chối</li>
+          <li><mark class="vocab">return</mark> <span class="ipa">/rɪˈtɝn/</span> — trở về</li>
+          <li><mark class="vocab">have to</mark> <span class="ipa">/hæv ˈtu/</span> — phải</li>
+          <li><mark class="vocab">break</mark> <span class="ipa">/breɪk/</span> — gãy</li>
+          <li><mark class="vocab">take care</mark> <span class="ipa">/tˈeɪk kˈɛɹ/</span> — Bảo trọng</li>
+          <li><mark class="vocab">worsen</mark> <span class="ipa">/ˈwɝsən/</span> — xấu đi</li>
+          <li><mark class="vocab">intelligent</mark> <span class="ipa">/ɪnˈtɛlədʒənt/</span> — thông minh</li>
+          <li><mark class="vocab">unintelligent</mark> <span class="ipa">/ˌʌnɪnˈtɛlədʒənt/</span> — không thông minh</li>
+          <li><mark class="vocab">pleasant</mark> <span class="ipa">/ˈplɛzənt/</span> — dễ chịu</li>
+          <li><mark class="vocab">unpleasant</mark> <span class="ipa">/ʌnˈplɛzənt/</span> — khó chịu</li>
+          <li><mark class="vocab">careful</mark> <span class="ipa">/ˈkɛrfəl/</span> — cẩn thận</li>
+          <li><mark class="vocab">careless</mark> <span class="ipa">/ˈkɛrləs/</span> — bất cẩn</li>
+          <li><mark class="vocab">polite</mark> <span class="ipa">/pəˈlaɪt/</span> — lịch sự</li>
+          <li><mark class="vocab">impolite</mark> <span class="ipa">/ˌɪmpəˈlaɪt/</span> — bất lịch sự</li>
+          <li><mark class="vocab">friendly</mark> <span class="ipa">/ˈfrɛndli/</span> — thân thiện</li>
+          <li><mark class="vocab">unfriendly</mark> <span class="ipa">/ˌʌnˈfrɛndli/</span> — không thân thiện</li>
+          <li><mark class="vocab">usual</mark> <span class="ipa">/ˈjuʒəwəl/</span> — thông thường</li>
+          <li><mark class="vocab">unusual</mark> <span class="ipa">/ʌnˈjuʒəwəl/</span> — khác thường</li>
+          <li><mark class="vocab">lucky</mark> <span class="ipa">/ˈlʌki/</span> — may mắn</li>
+          <li><mark class="vocab">unlucky</mark> <span class="ipa">/ʌnˈlʌki/</span> — không may mắn</li>
+          <li><mark class="vocab">complete</mark> <span class="ipa">/kəmˈplit/</span> — đầy đủ</li>
+          <li><mark class="vocab">incomplete</mark> <span class="ipa">/ˌɪnkəmˈplit/</span> — không đầy đủ</li>
+          <li><mark class="vocab">healthy</mark> <span class="ipa">/ˈhɛlθi/</span> — khỏe mạnh</li>
+          <li><mark class="vocab">unhealthy</mark> <span class="ipa">/ʌnˈhɛlθi/</span> — không lành mạnh</li>
+          <li><mark class="vocab">popular</mark> <span class="ipa">/ˈpɑpjələr/</span> — phổ biến</li>
+          <li><mark class="vocab">unpopular</mark> <span class="ipa">/ʌnˈpɑpjələr/</span> — không được ưa chuộng</li>
+          <li><mark class="vocab">safe</mark> <span class="ipa">/seɪf/</span> — an toàn</li>
+          <li><mark class="vocab">unsafe</mark> <span class="ipa">/ʌnˈseɪf/</span> — nguy hiểm</li>
+          <li><mark class="vocab">unwell</mark> <span class="ipa">/ʌnˈwɛl/</span> — ốm</li>
+          <li><mark class="vocab">important</mark> <span class="ipa">/ɪmˈpɔrtənt/</span> — quan trọng</li>
+          <li><mark class="vocab">unimportant</mark> <span class="ipa">/ˌʌnɪmˈpɔrtənt/</span> — không quan trọng</li>
+          <li><mark class="vocab">possible</mark> <span class="ipa">/ˈpɑsəbəl/</span> — có thể</li>
+          <li><mark class="vocab">impossible</mark> <span class="ipa">/ɪmˈpɑsəbəl/</span> — không thể</li>
+          <li><mark class="vocab">formal</mark> <span class="ipa">/ˈfɔrməl/</span> — trang trọng</li>
+          <li><mark class="vocab">informal</mark> <span class="ipa">/ɪnˈfɔrməl/</span> — không chính thức</li>
+          <li><mark class="vocab">dead</mark> <span class="ipa">/dɛd/</span> — chết</li>
+          <li><mark class="vocab">alive</mark> <span class="ipa">/əˈlaɪv/</span> — sống</li>
+          <li><mark class="vocab">act</mark> <span class="ipa">/ækt/</span> — hành động</li>
+          <li><mark class="vocab">affect</mark> <span class="ipa">/əˈfɛkt/</span> — ảnh hưởng</li>
+          <li><mark class="vocab">analyze</mark> <span class="ipa">/ˈænəˌlaɪz/</span> — phân tích</li>
+          <li><mark class="vocab">apply</mark> <span class="ipa">/əˈplaɪ/</span> — nộp đơn</li>
+          <li><mark class="vocab">arrange</mark> <span class="ipa">/əˈreɪndʒ/</span> — sắp xếp</li>
+          <li><mark class="vocab">avoid</mark> <span class="ipa">/əˈvɔɪd/</span> — tránh</li>
+          <li><mark class="vocab">beat</mark> <span class="ipa">/biːt/</span> — đánh bại</li>
+          <li><mark class="vocab">behave</mark> <span class="ipa">/bɪˈheɪv/</span> — cư xử</li>
+          <li><mark class="vocab">blow</mark> <span class="ipa">/bloʊ/</span> — thổi</li>
+          <li><mark class="vocab">boil</mark> <span class="ipa">/bɔɪl/</span> — đun sôi</li>
+          <li><mark class="vocab">burn</mark> <span class="ipa">/bɝn/</span> — cháy</li>
+          <li><mark class="vocab">cause</mark> <span class="ipa">/kɑz/ , /kɔz/</span> — gây ra</li>
+          <li><mark class="vocab">collect</mark> <span class="ipa">/kəˈlɛkt/</span> — thu thập</li>
+          <li><mark class="vocab">connect</mark> <span class="ipa">/kəˈnɛkt/</span> — kết nối</li>
+          <li><mark class="vocab">consider</mark> <span class="ipa">/kənˈsɪdɚ/</span> — xem xét</li>
+          <li><mark class="vocab">control</mark> <span class="ipa">/kənˈtroʊl/</span> — kiểm soát</li>
+          <li><mark class="vocab">cover</mark> <span class="ipa">/ˈkʌvɚ/</span> — che phủ</li>
+          <li><mark class="vocab">depend</mark> <span class="ipa">/dɪˈpɛnd/</span> — phụ thuộc</li>
+          <li><mark class="vocab">destroy</mark> <span class="ipa">/dɪˈstrɔɪ/</span> — phá hủy</li>
+          <li><mark class="vocab">develop</mark> <span class="ipa">/dɪˈvɛləp/</span> — phát triển</li>
+          <li><mark class="vocab">dry</mark> <span class="ipa">/draɪ/</span> — làm khô</li>
+          <li><mark class="vocab">exist</mark> <span class="ipa">/ɪɡˈzɪst/</span> — tồn tại</li>
+          <li><mark class="vocab">expect</mark> <span class="ipa">/ɪkˈspɛkt/</span> — mong đợi</li>
+          <li><mark class="vocab">express</mark> <span class="ipa">/ɪkˈsprɛs/</span> — biểu lộ</li>
+          <li><mark class="vocab">fight</mark> <span class="ipa">/faɪt/</span> — chiến đấu</li>
+          <li><mark class="vocab">fix</mark> <span class="ipa">/fɪks/</span> — sửa chữa</li>
+          <li><mark class="vocab">greet</mark> <span class="ipa">/ɡriːt/</span> — chào</li>
+          <li><mark class="vocab">carry out</mark> <span class="ipa">/ˈkæri ˈaʊt/</span> — thực hiện</li>
+          <li><mark class="vocab">look</mark> <span class="ipa">/lʊk/</span> — tìm kiếm</li>
+          <li><mark class="vocab">stop</mark> <span class="ipa">/stɑp/</span> — dừng lại</li>
+          <li><mark class="vocab">disappear</mark> <span class="ipa">/ˌdɪsəˈpɪr/</span> — biến mất</li>
+          <li><mark class="vocab">name</mark> <span class="ipa">/neɪm/</span> — đặt tên</li>
+          <li><mark class="vocab">everyone</mark> <span class="ipa">/ˈɛvriˌwʌn/</span> — mọi người</li>
+          <li><mark class="vocab">everything</mark> <span class="ipa">/ˈɛvriˌθɪŋ/</span> — mọi thứ</li>
+          <li><mark class="vocab">everywhere</mark> <span class="ipa">/ˈɛvriˌwɛr/</span> — khắp nơi</li>
+          <li><mark class="vocab">someone</mark> <span class="ipa">/ˈsʌmˌwʌn/</span> — ai đó</li>
+          <li><mark class="vocab">something</mark> <span class="ipa">/ˈsʌmˌθɪŋ/</span> — cái gì đó</li>
+          <li><mark class="vocab">somewhere</mark> <span class="ipa">/ˈsʌmˌwɛr/</span> — nơi nào đó</li>
+          <li><mark class="vocab">someplace</mark> <span class="ipa">/ˈsʌmˌpleɪs/</span> — nơi nào đó</li>
+          <li><mark class="vocab">no one</mark> <span class="ipa">/ˈnoʊ ˌwʌn/</span> — không ai</li>
+          <li><mark class="vocab">nothing</mark> <span class="ipa">/ˈnʌθɪŋ/</span> — không có gì</li>
+          <li><mark class="vocab">nowhere</mark> <span class="ipa">/ˈnoʊˌwɛr/</span> — không nơi nào</li>
+          <li><mark class="vocab">anyone</mark> <span class="ipa">/ˈɛniˌwʌn/</span> — ai đó</li>
+          <li><mark class="vocab">anything</mark> <span class="ipa">/ˈɛniˌθɪŋ/</span> — gì đó</li>
+          <li><mark class="vocab">anywhere</mark> <span class="ipa">/ˈɛniˌwɛr/</span> — bất cứ đâu</li>
+          <li><mark class="vocab">other</mark> <span class="ipa">/ˈʌðɚ/</span> — khác</li>
+          <li><mark class="vocab">no</mark> <span class="ipa">/noʊ/</span> — không có</li>
+          <li><mark class="vocab">any</mark> <span class="ipa">/ˈɛni/</span> — bất kỳ</li>
+          <li><mark class="vocab">none</mark> <span class="ipa">/nʌn/</span> — không ai</li>
+          <li><mark class="vocab">some</mark> <span class="ipa">/sʌm/</span> — Một số</li>
+          <li><mark class="vocab">every</mark> <span class="ipa">/ˈɛvri/</span> — mỗi</li>
+          <li><mark class="vocab">either</mark> <span class="ipa">/ˈiðɚ/ , /ˈaɪðɚ/</span> — một trong hai</li>
+          <li><mark class="vocab">several</mark> <span class="ipa">/ˈsɛvɚəl/</span> — nhiều</li>
+          <li><mark class="vocab">whose</mark> <span class="ipa">/huːz/</span> — của ai</li>
+          <li><mark class="vocab">which</mark> <span class="ipa">/wɪʧ/</span> — cái nào</li>
+        </ul>
+      </section>
+
+      <div class="docs-pager">
+        <a href="../">← Grammar &amp; Verbs</a>
+        <a href="../../">All topics →</a>
+      </div>
+    </article>
+  </div>
+  <script src="../../../../js/docs.js"></script>
+  <script src="../../../../js/exercise.js"></script>
+</body>
+</html>

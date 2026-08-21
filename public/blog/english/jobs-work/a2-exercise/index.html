@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A2 Exercise · Jobs &amp; Work — The Quiet Corner</title>
+  <meta name="description" content="A2 reading exercise for Jobs &amp; Work vocabulary with IPA and bilingual sentences.">
+  <link rel="icon" href="../../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../../"><span>✦</span> The Quiet Corner <span>✦</span></a>
+    <nav class="docs-series">
+      <a href="../../../../blog/web-security/">DevSecOps</a>
+      <a href="../../../../blog/kubestronaut/">Kubestronaut</a>
+      <a class="active" href="../../">English</a>
+    </nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-nav="english" data-docs-root="../../" data-active="jobs-work">
+      <div class="docs-nav-label">English</div>
+      <ul class="docs-nav" id="docsNav">
+        <li><a href="../../">All topics</a></li>
+        <li><a href="../">Jobs &amp; Work</a></li>
+        <li><a class="active" href="./">A2 Exercise</a></li>
+      </ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../../">Home</a>
+        <span>›</span>
+        <a href="../../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../../">English</a>
+        <span>›</span>
+        <a href="../">Jobs &amp; Work</a>
+        <span>›</span>
+        <span>A2 Exercise</span>
+      </div>
+
+      <div class="vocab-topic-hero">
+        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 72 72' fill='none'%3E%3Crect width='72' height='72' rx='14' fill='%230b1220'/%3E%3Crect x='16' y='14' width='40' height='46' rx='6' stroke='%2322d3ee' stroke-width='2.5'/%3E%3Cpath d='M24 28h24M24 36h24M24 44h16' stroke='%23e4e4e7' stroke-width='2.5' stroke-linecap='round'/%3E%3Cpath d='M48 48l6 2-2 6-8-8 4 0z' fill='%2322d3ee'/%3E%3C/svg%3E" alt="" width="112" height="112">
+        <div>
+          <h1>A2 Exercise · Jobs &amp; Work</h1>
+          <p class="lede">Reading passage with every new word from this level’s LanGeek lessons — IPA, highlights, sentence translation, and free TTS.</p>
+          <div class="docs-meta">
+            <span><strong>Words:</strong> 65</span>
+            <span><strong>Lessons:</strong> Employment and Occupations · Jobs and Work</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="ex-toolbar" id="exToolbar">
+        <label class="ex-toggle"><input type="checkbox" id="togHighlight" checked> Highlights</label>
+        <label class="ex-toggle"><input type="checkbox" id="togIpa" checked> IPA</label>
+        <label class="ex-toggle"><input type="checkbox" id="togVi"> Dịch câu (VI)</label>
+        <span class="ex-sep"></span>
+        <label class="ex-voice">Voice
+          <select id="voiceSelect" aria-label="TTS voice"></select>
+        </label>
+        <label class="ex-voice">Speed
+          <input id="rateRange" type="range" min="0.7" max="1.15" step="0.05" value="0.95">
+          <span id="rateVal">0.95</span>
+        </label>
+        <button type="button" class="ex-btn primary" id="btnPlay">▶ Read passage</button>
+        <button type="button" class="ex-btn" id="btnStop">Stop</button>
+      </div>
+      
+      <section class="ex-passage" id="passage" data-tts-root>
+          <p class="ex-sent" data-sent="1">
+            <span class="ex-en">In this A2 Jobs & Work passage, notice <mark class="vocab" data-word="fashion designer">fashion designer</mark><span class="ipa">/fˈæʃən dɪzˈaɪnɚ/</span>, <mark class="vocab" data-word="farmer">farmer</mark><span class="ipa">/ˈfɑɹmɝ/</span>, <mark class="vocab" data-word="soldier">soldier</mark><span class="ipa">/ˈsoʊɫdʒɝ/</span>, and <mark class="vocab" data-word="officer">officer</mark><span class="ipa">/ˈɑfɪsɚ/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Jobs &amp; Work, hãy để ý nhà thiết kế thời trang, nông dân, lính, và sĩ quan.</span>
+          </p>
+          <p class="ex-sent" data-sent="2">
+            <span class="ex-en">In this A2 Jobs & Work passage, notice <mark class="vocab" data-word="hairstylist">hairstylist</mark><span class="ipa">/hˈɛɹstɪlˌɪst/</span>, <mark class="vocab" data-word="scientist">scientist</mark><span class="ipa">/ˈsaɪəntɪst/</span>, <mark class="vocab" data-word="head">head</mark><span class="ipa">/hɛd/</span>, and <mark class="vocab" data-word="politician">politician</mark><span class="ipa">/ˌpɑɫəˈtɪʃən/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Jobs &amp; Work, hãy để ý thợ làm tóc, nhà khoa học, trưởng, và chính trị gia.</span>
+          </p>
+          <p class="ex-sent" data-sent="3">
+            <span class="ex-en">In this A2 Jobs & Work passage, notice <mark class="vocab" data-word="organization">organization</mark><span class="ipa">/ˌɔɹɡənəˈzeɪʃən/</span>, <mark class="vocab" data-word="title">title</mark><span class="ipa">/ˈtaɪtəl/</span>, <mark class="vocab" data-word="staff">staff</mark><span class="ipa">/ˈstæf/</span>, and <mark class="vocab" data-word="salary">salary</mark><span class="ipa">/ˈsæɫɝi/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Jobs &amp; Work, hãy để ý tổ chức, danh hiệu, nhân viên, và lương.</span>
+          </p>
+          <p class="ex-sent" data-sent="4">
+            <span class="ex-en">In this A2 Jobs & Work passage, notice <mark class="vocab" data-word="raise">raise</mark><span class="ipa">/reɪz/</span>, <mark class="vocab" data-word="overtime">overtime</mark><span class="ipa">/ˈoʊvɝˌtaɪm/</span>, <mark class="vocab" data-word="promotion">promotion</mark><span class="ipa">/prəˈmoʊʃən/</span>, and <mark class="vocab" data-word="recommendation">recommendation</mark><span class="ipa">/ˌɹɛkəmənˈdeɪʃən/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Jobs &amp; Work, hãy để ý tăng lương, làm thêm giờ, sự thăng chức, và giới thiệu.</span>
+          </p>
+          <p class="ex-sent" data-sent="5">
+            <span class="ex-en">In this A2 Jobs & Work passage, notice <mark class="vocab" data-word="meeting">meeting</mark><span class="ipa">/ˈmitɪŋ/</span>, <mark class="vocab" data-word="break">break</mark><span class="ipa">/breɪk/</span>, <mark class="vocab" data-word="job interview">job interview</mark><span class="ipa">/dʒˈɑːb ˈɪntɚvjˌuː/</span>, and <mark class="vocab" data-word="apprentice">apprentice</mark><span class="ipa">/əˈpɹɛntəs/, /əˈpɹɛntɪs/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Jobs &amp; Work, hãy để ý cuộc họp, nghỉ ngơi, phỏng vấn xin việc, và người học việc.</span>
+          </p>
+          <p class="ex-sent" data-sent="6">
+            <span class="ex-en">In this A2 Jobs & Work passage, notice <mark class="vocab" data-word="full-time">full-time</mark><span class="ipa">/ˈfʊɫˌtaɪm/</span>, <mark class="vocab" data-word="part-time">part-time</mark><span class="ipa">/ˈpɑɹtˈtaɪm/</span>, <mark class="vocab" data-word="retired">retired</mark><span class="ipa">/ɹiˈtaɪɝd/, /ɹiˈtaɪɹd/, /ɹɪˈtaɪɹd/</span>, and <mark class="vocab" data-word="to hire">hire</mark><span class="ipa">/ˈhaɪɝ/, /ˈhaɪɹ/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Jobs &amp; Work, hãy để ý toàn thời gian, bán thời gian, đã nghỉ hưu, và thuê.</span>
+          </p>
+          <p class="ex-sent" data-sent="7">
+            <span class="ex-en">In this A2 Jobs & Work passage, notice <mark class="vocab" data-word="to fire">fire</mark><span class="ipa">/ˈfaɪɚ/</span>, <mark class="vocab" data-word="to earn">earn</mark><span class="ipa">/ˈɝn/</span>, <mark class="vocab" data-word="to quit">quit</mark><span class="ipa">/kwɪt/</span>, and <mark class="vocab" data-word="employee">employee</mark><span class="ipa">/ɛmˈpɫɔɪi/, /ɪmˈpɫɔɪi/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Jobs &amp; Work, hãy để ý sa thải, kiếm, nghỉ việc, và nhân viên.</span>
+          </p>
+          <p class="ex-sent" data-sent="8">
+            <span class="ex-en">In this A2 Jobs & Work passage, notice <mark class="vocab" data-word="dancer">dancer</mark><span class="ipa">/ˈdænsɚ/</span>, <mark class="vocab" data-word="pay">pay</mark><span class="ipa">/peɪ/</span>, <mark class="vocab" data-word="resume">resume</mark><span class="ipa">/ɹˈɛzuːmˌeɪ/</span>, and <mark class="vocab" data-word="pilot">pilot</mark><span class="ipa">/ˈpaɪlət/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Jobs &amp; Work, hãy để ý vũ công, lương, sơ yếu lý lịch, và phi công.</span>
+          </p>
+          <p class="ex-sent" data-sent="9">
+            <span class="ex-en">In this A2 Jobs & Work passage, notice <mark class="vocab" data-word="boss">boss</mark><span class="ipa">/bɔs/</span>, <mark class="vocab" data-word="business">business</mark><span class="ipa">/ˈbɪznɪs/</span>, <mark class="vocab" data-word="businessman">businessman</mark><span class="ipa">/ˈbɪznɪsˌmæn/</span>, and <mark class="vocab" data-word="businesswoman">businesswoman</mark><span class="ipa">/ˈbɪznɪsˌwʊmən/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Jobs &amp; Work, hãy để ý ông chủ, kinh doanh, doanh nhân, và nữ doanh nhân.</span>
+          </p>
+          <p class="ex-sent" data-sent="10">
+            <span class="ex-en">In this A2 Jobs & Work passage, notice <mark class="vocab" data-word="expert">expert</mark><span class="ipa">/ˈɛkspɝt/</span>, <mark class="vocab" data-word="manager">manager</mark><span class="ipa">/ˈmænɪdʒɚ/</span>, <mark class="vocab" data-word="assistant">assistant</mark><span class="ipa">/əˈsɪstənt/</span>, and <mark class="vocab" data-word="receptionist">receptionist</mark><span class="ipa">/rɪˈsɛpʃənɪst/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Jobs &amp; Work, hãy để ý chuyên gia, quản lý, trợ lý, và lễ tân.</span>
+          </p>
+          <p class="ex-sent" data-sent="11">
+            <span class="ex-en">In this A2 Jobs & Work passage, notice <mark class="vocab" data-word="detective">detective</mark><span class="ipa">/dɪˈtɛktɪv/</span>, <mark class="vocab" data-word="model">model</mark><span class="ipa">/ˈmɑdəl/</span>, <mark class="vocab" data-word="cook">cook</mark><span class="ipa">/kʊk/</span>, and <mark class="vocab" data-word="pharmacist">pharmacist</mark><span class="ipa">/ˈfɑrməsɪst/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Jobs &amp; Work, hãy để ý thám tử, người mẫu, đầu bếp, và dược sĩ.</span>
+          </p>
+          <p class="ex-sent" data-sent="12">
+            <span class="ex-en">In this A2 Jobs & Work passage, notice <mark class="vocab" data-word="journalist">journalist</mark><span class="ipa">/ˈdʒɝnəlɪst/</span>, <mark class="vocab" data-word="writer">writer</mark><span class="ipa">/ˈraɪtɚ/</span>, <mark class="vocab" data-word="singer">singer</mark><span class="ipa">/ˈsɪŋɚ/</span>, and <mark class="vocab" data-word="professor">professor</mark><span class="ipa">/prəˈfɛsɚ/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Jobs &amp; Work, hãy để ý nhà báo, nhà văn, ca sĩ, và giáo sư.</span>
+          </p>
+          <p class="ex-sent" data-sent="13">
+            <span class="ex-en">In this A2 Jobs & Work passage, notice <mark class="vocab" data-word="researcher">researcher</mark><span class="ipa">/ˈriˌsɝʧɚ/</span>, <mark class="vocab" data-word="hairdresser">hairdresser</mark><span class="ipa">/ˈhɛrˌdrɛsɚ/</span>, <mark class="vocab" data-word="designer">designer</mark><span class="ipa">/dɪˈzaɪnɚ/</span>, and <mark class="vocab" data-word="cleaner">cleaner</mark><span class="ipa">/ˈklinɚ/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Jobs &amp; Work, hãy để ý nhà nghiên cứu, thợ làm tóc, nhà thiết kế, và người dọn dẹp.</span>
+          </p>
+          <p class="ex-sent" data-sent="14">
+            <span class="ex-en">In this A2 Jobs & Work passage, notice <mark class="vocab" data-word="painter">painter</mark><span class="ipa">/ˈpeɪntɚ/</span>, <mark class="vocab" data-word="instructor">instructor</mark><span class="ipa">/ɪnˈstrʌktɚ/</span>, <mark class="vocab" data-word="employment">employment</mark><span class="ipa">/ɪmˈplɔɪmənt/</span>, and <mark class="vocab" data-word="department">department</mark><span class="ipa">/dɪˈpɑrtmənt/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Jobs &amp; Work, hãy để ý thợ sơn, người hướng dẫn, việc làm, và bộ phận.</span>
+          </p>
+          <p class="ex-sent" data-sent="15">
+            <span class="ex-en">In this A2 Jobs & Work passage, notice <mark class="vocab" data-word="payment">payment</mark><span class="ipa">/ˈpeɪmənt/</span>, <mark class="vocab" data-word="shift">shift</mark><span class="ipa">/ʃɪft/</span>, <mark class="vocab" data-word="bonus">bonus</mark><span class="ipa">/ˈboʊnəs/</span>, and <mark class="vocab" data-word="to employ">employ</mark><span class="ipa">/ɪmˈplɔɪ/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Jobs &amp; Work, hãy để ý thanh toán, ca, tiền thưởng, và thuê.</span>
+          </p>
+          <p class="ex-sent" data-sent="16">
+            <span class="ex-en">In this A2 Jobs & Work passage, notice <mark class="vocab" data-word="to retire">retire</mark><span class="ipa">/rɪˈtaɪɚ/</span>, <mark class="vocab" data-word="successful">successful</mark><span class="ipa">/səkˈsɛsfəl/</span>, <mark class="vocab" data-word="employer">employer</mark><span class="ipa">/ɪmˈplɔɪɚ/</span>, and <mark class="vocab" data-word="company">company</mark><span class="ipa">/ˈkʌmpəni/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Jobs &amp; Work, hãy để ý nghỉ hưu, thành công, người sử dụng lao động, và công ty.</span>
+          </p>
+          <p class="ex-sent" data-sent="17">
+            <span class="ex-en">In this A2 Jobs & Work passage, notice <mark class="vocab" data-word="factory">factory</mark><span class="ipa">/ˈfæktɚi/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Jobs &amp; Work, hãy để ý nhà máy.</span>
+          </p>
+      </section>
+
+      <section class="ex-vocab">
+        <h2>Word checklist · 65</h2>
+        <ul class="ex-vocab-list">
+          <li><mark class="vocab">fashion designer</mark> <span class="ipa">/fˈæʃən dɪzˈaɪnɚ/</span> — nhà thiết kế thời trang</li>
+          <li><mark class="vocab">farmer</mark> <span class="ipa">/ˈfɑɹmɝ/</span> — nông dân</li>
+          <li><mark class="vocab">soldier</mark> <span class="ipa">/ˈsoʊɫdʒɝ/</span> — lính</li>
+          <li><mark class="vocab">officer</mark> <span class="ipa">/ˈɑfɪsɚ/</span> — sĩ quan</li>
+          <li><mark class="vocab">hairstylist</mark> <span class="ipa">/hˈɛɹstɪlˌɪst/</span> — thợ làm tóc</li>
+          <li><mark class="vocab">scientist</mark> <span class="ipa">/ˈsaɪəntɪst/</span> — nhà khoa học</li>
+          <li><mark class="vocab">head</mark> <span class="ipa">/hɛd/</span> — trưởng</li>
+          <li><mark class="vocab">politician</mark> <span class="ipa">/ˌpɑɫəˈtɪʃən/</span> — chính trị gia</li>
+          <li><mark class="vocab">organization</mark> <span class="ipa">/ˌɔɹɡənəˈzeɪʃən/</span> — tổ chức</li>
+          <li><mark class="vocab">title</mark> <span class="ipa">/ˈtaɪtəl/</span> — danh hiệu</li>
+          <li><mark class="vocab">staff</mark> <span class="ipa">/ˈstæf/</span> — nhân viên</li>
+          <li><mark class="vocab">salary</mark> <span class="ipa">/ˈsæɫɝi/</span> — lương</li>
+          <li><mark class="vocab">raise</mark> <span class="ipa">/reɪz/</span> — tăng lương</li>
+          <li><mark class="vocab">overtime</mark> <span class="ipa">/ˈoʊvɝˌtaɪm/</span> — làm thêm giờ</li>
+          <li><mark class="vocab">promotion</mark> <span class="ipa">/prəˈmoʊʃən/</span> — sự thăng chức</li>
+          <li><mark class="vocab">recommendation</mark> <span class="ipa">/ˌɹɛkəmənˈdeɪʃən/</span> — giới thiệu</li>
+          <li><mark class="vocab">meeting</mark> <span class="ipa">/ˈmitɪŋ/</span> — cuộc họp</li>
+          <li><mark class="vocab">break</mark> <span class="ipa">/breɪk/</span> — nghỉ ngơi</li>
+          <li><mark class="vocab">job interview</mark> <span class="ipa">/dʒˈɑːb ˈɪntɚvjˌuː/</span> — phỏng vấn xin việc</li>
+          <li><mark class="vocab">apprentice</mark> <span class="ipa">/əˈpɹɛntəs/, /əˈpɹɛntɪs/</span> — người học việc</li>
+          <li><mark class="vocab">full-time</mark> <span class="ipa">/ˈfʊɫˌtaɪm/</span> — toàn thời gian</li>
+          <li><mark class="vocab">part-time</mark> <span class="ipa">/ˈpɑɹtˈtaɪm/</span> — bán thời gian</li>
+          <li><mark class="vocab">retired</mark> <span class="ipa">/ɹiˈtaɪɝd/, /ɹiˈtaɪɹd/, /ɹɪˈtaɪɹd/</span> — đã nghỉ hưu</li>
+          <li><mark class="vocab">hire</mark> <span class="ipa">/ˈhaɪɝ/, /ˈhaɪɹ/</span> — thuê</li>
+          <li><mark class="vocab">fire</mark> <span class="ipa">/ˈfaɪɚ/</span> — sa thải</li>
+          <li><mark class="vocab">earn</mark> <span class="ipa">/ˈɝn/</span> — kiếm</li>
+          <li><mark class="vocab">quit</mark> <span class="ipa">/kwɪt/</span> — nghỉ việc</li>
+          <li><mark class="vocab">employee</mark> <span class="ipa">/ɛmˈpɫɔɪi/, /ɪmˈpɫɔɪi/</span> — nhân viên</li>
+          <li><mark class="vocab">dancer</mark> <span class="ipa">/ˈdænsɚ/</span> — vũ công</li>
+          <li><mark class="vocab">pay</mark> <span class="ipa">/peɪ/</span> — lương</li>
+          <li><mark class="vocab">resume</mark> <span class="ipa">/ɹˈɛzuːmˌeɪ/</span> — sơ yếu lý lịch</li>
+          <li><mark class="vocab">pilot</mark> <span class="ipa">/ˈpaɪlət/</span> — phi công</li>
+          <li><mark class="vocab">boss</mark> <span class="ipa">/bɔs/</span> — ông chủ</li>
+          <li><mark class="vocab">business</mark> <span class="ipa">/ˈbɪznɪs/</span> — kinh doanh</li>
+          <li><mark class="vocab">businessman</mark> <span class="ipa">/ˈbɪznɪsˌmæn/</span> — doanh nhân</li>
+          <li><mark class="vocab">businesswoman</mark> <span class="ipa">/ˈbɪznɪsˌwʊmən/</span> — nữ doanh nhân</li>
+          <li><mark class="vocab">expert</mark> <span class="ipa">/ˈɛkspɝt/</span> — chuyên gia</li>
+          <li><mark class="vocab">manager</mark> <span class="ipa">/ˈmænɪdʒɚ/</span> — quản lý</li>
+          <li><mark class="vocab">assistant</mark> <span class="ipa">/əˈsɪstənt/</span> — trợ lý</li>
+          <li><mark class="vocab">receptionist</mark> <span class="ipa">/rɪˈsɛpʃənɪst/</span> — lễ tân</li>
+          <li><mark class="vocab">detective</mark> <span class="ipa">/dɪˈtɛktɪv/</span> — thám tử</li>
+          <li><mark class="vocab">model</mark> <span class="ipa">/ˈmɑdəl/</span> — người mẫu</li>
+          <li><mark class="vocab">cook</mark> <span class="ipa">/kʊk/</span> — đầu bếp</li>
+          <li><mark class="vocab">pharmacist</mark> <span class="ipa">/ˈfɑrməsɪst/</span> — dược sĩ</li>
+          <li><mark class="vocab">journalist</mark> <span class="ipa">/ˈdʒɝnəlɪst/</span> — nhà báo</li>
+          <li><mark class="vocab">writer</mark> <span class="ipa">/ˈraɪtɚ/</span> — nhà văn</li>
+          <li><mark class="vocab">singer</mark> <span class="ipa">/ˈsɪŋɚ/</span> — ca sĩ</li>
+          <li><mark class="vocab">professor</mark> <span class="ipa">/prəˈfɛsɚ/</span> — giáo sư</li>
+          <li><mark class="vocab">researcher</mark> <span class="ipa">/ˈriˌsɝʧɚ/</span> — nhà nghiên cứu</li>
+          <li><mark class="vocab">hairdresser</mark> <span class="ipa">/ˈhɛrˌdrɛsɚ/</span> — thợ làm tóc</li>
+          <li><mark class="vocab">designer</mark> <span class="ipa">/dɪˈzaɪnɚ/</span> — nhà thiết kế</li>
+          <li><mark class="vocab">cleaner</mark> <span class="ipa">/ˈklinɚ/</span> — người dọn dẹp</li>
+          <li><mark class="vocab">painter</mark> <span class="ipa">/ˈpeɪntɚ/</span> — thợ sơn</li>
+          <li><mark class="vocab">instructor</mark> <span class="ipa">/ɪnˈstrʌktɚ/</span> — người hướng dẫn</li>
+          <li><mark class="vocab">employment</mark> <span class="ipa">/ɪmˈplɔɪmənt/</span> — việc làm</li>
+          <li><mark class="vocab">department</mark> <span class="ipa">/dɪˈpɑrtmənt/</span> — bộ phận</li>
+          <li><mark class="vocab">payment</mark> <span class="ipa">/ˈpeɪmənt/</span> — thanh toán</li>
+          <li><mark class="vocab">shift</mark> <span class="ipa">/ʃɪft/</span> — ca</li>
+          <li><mark class="vocab">bonus</mark> <span class="ipa">/ˈboʊnəs/</span> — tiền thưởng</li>
+          <li><mark class="vocab">employ</mark> <span class="ipa">/ɪmˈplɔɪ/</span> — thuê</li>
+          <li><mark class="vocab">retire</mark> <span class="ipa">/rɪˈtaɪɚ/</span> — nghỉ hưu</li>
+          <li><mark class="vocab">successful</mark> <span class="ipa">/səkˈsɛsfəl/</span> — thành công</li>
+          <li><mark class="vocab">employer</mark> <span class="ipa">/ɪmˈplɔɪɚ/</span> — người sử dụng lao động</li>
+          <li><mark class="vocab">company</mark> <span class="ipa">/ˈkʌmpəni/</span> — công ty</li>
+          <li><mark class="vocab">factory</mark> <span class="ipa">/ˈfæktɚi/</span> — nhà máy</li>
+        </ul>
+      </section>
+
+      <div class="docs-pager">
+        <a href="../">← Jobs &amp; Work</a>
+        <a href="../../">All topics →</a>
+      </div>
+    </article>
+  </div>
+  <script src="../../../../js/docs.js"></script>
+  <script src="../../../../js/exercise.js"></script>
+</body>
+</html>

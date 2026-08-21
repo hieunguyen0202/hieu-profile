@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>B2 Exercise · People &amp; Family — The Quiet Corner</title>
+  <meta name="description" content="B2 reading exercise for People &amp; Family vocabulary with IPA and bilingual sentences.">
+  <link rel="icon" href="../../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../../"><span>✦</span> The Quiet Corner <span>✦</span></a>
+    <nav class="docs-series">
+      <a href="../../../../blog/web-security/">DevSecOps</a>
+      <a href="../../../../blog/kubestronaut/">Kubestronaut</a>
+      <a class="active" href="../../">English</a>
+    </nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-nav="english" data-docs-root="../../" data-active="people-family">
+      <div class="docs-nav-label">English</div>
+      <ul class="docs-nav" id="docsNav">
+        <li><a href="../../">All topics</a></li>
+        <li><a href="../">People &amp; Family</a></li>
+        <li><a class="active" href="./">B2 Exercise</a></li>
+      </ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../../">Home</a>
+        <span>›</span>
+        <a href="../../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../../">English</a>
+        <span>›</span>
+        <a href="../">People &amp; Family</a>
+        <span>›</span>
+        <span>B2 Exercise</span>
+      </div>
+
+      <div class="vocab-topic-hero">
+        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 72 72' fill='none'%3E%3Crect width='72' height='72' rx='14' fill='%230b1220'/%3E%3Crect x='16' y='14' width='40' height='46' rx='6' stroke='%2322d3ee' stroke-width='2.5'/%3E%3Cpath d='M24 28h24M24 36h24M24 44h16' stroke='%23e4e4e7' stroke-width='2.5' stroke-linecap='round'/%3E%3Cpath d='M48 48l6 2-2 6-8-8 4 0z' fill='%2322d3ee'/%3E%3C/svg%3E" alt="" width="112" height="112">
+        <div>
+          <h1>B2 Exercise · People &amp; Family</h1>
+          <p class="lede">Reading passage with every new word from this level’s LanGeek lessons — IPA, highlights, sentence translation, and free TTS.</p>
+          <div class="docs-meta">
+            <span><strong>Words:</strong> 127</span>
+            <span><strong>Lessons:</strong> Family and Relationships · Love and Romance · People and Society · Wedding Ceremony</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="ex-toolbar" id="exToolbar">
+        <label class="ex-toggle"><input type="checkbox" id="togHighlight" checked> Highlights</label>
+        <label class="ex-toggle"><input type="checkbox" id="togIpa" checked> IPA</label>
+        <label class="ex-toggle"><input type="checkbox" id="togVi"> Dịch câu (VI)</label>
+        <span class="ex-sep"></span>
+        <label class="ex-voice">Voice
+          <select id="voiceSelect" aria-label="TTS voice"></select>
+        </label>
+        <label class="ex-voice">Speed
+          <input id="rateRange" type="range" min="0.7" max="1.15" step="0.05" value="0.95">
+          <span id="rateVal">0.95</span>
+        </label>
+        <button type="button" class="ex-btn primary" id="btnPlay">▶ Read passage</button>
+        <button type="button" class="ex-btn" id="btnStop">Stop</button>
+      </div>
+      
+      <section class="ex-passage" id="passage" data-tts-root>
+          <p class="ex-sent" data-sent="1">
+            <span class="ex-en">In this B2 People & Family passage, notice <mark class="vocab" data-word="affair">affair</mark><span class="ipa">/əˈfɛɹ/</span>, <mark class="vocab" data-word="bond">bond</mark><span class="ipa">/bɑnd/</span>, <mark class="vocab" data-word="household">household</mark><span class="ipa">/ˈhaʊsˌhoʊɫd/</span>, and <mark class="vocab" data-word="divorce">divorce</mark><span class="ipa">/dɪˈvɔɹs/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về People &amp; Family, hãy để ý cuộc tình, mối liên kết, hộ gia đình, và ly hôn.</span>
+          </p>
+          <p class="ex-sent" data-sent="2">
+            <span class="ex-en">In this B2 People & Family passage, notice <mark class="vocab" data-word="to divorce">divorce</mark><span class="ipa">/dɪˈvɔɹs/</span>, <mark class="vocab" data-word="lineage">lineage</mark><span class="ipa">/ˈɫɪniədʒ/</span>, <mark class="vocab" data-word="ancestor">ancestor</mark><span class="ipa">/ˈænˌsɛstɝ/</span>, and <mark class="vocab" data-word="ex">ex</mark><span class="ipa">/ˈɛks/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về People &amp; Family, hãy để ý ly hôn, dòng dõi, tổ tiên, và người yêu cũ.</span>
+          </p>
+          <p class="ex-sent" data-sent="3">
+            <span class="ex-en">In this B2 People & Family passage, notice <mark class="vocab" data-word="extended family">extended family</mark><span class="ipa">/ɛkstˈɛndᵻd fˈæmɪli/</span>, <mark class="vocab" data-word="folks">folks</mark><span class="ipa">/ˈfoʊks/</span>, <mark class="vocab" data-word="foster parent">foster parent</mark><span class="ipa">/fˈɑːstɚ pˈɛɹənt/</span>, and <mark class="vocab" data-word="identical twin">identical twin</mark><span class="ipa">/aɪdˈɛntɪkəl twˈɪn/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về People &amp; Family, hãy để ý gia đình mở rộng, bố mẹ, cha mẹ nuôi, và sinh đôi cùng trứng.</span>
+          </p>
+          <p class="ex-sent" data-sent="4">
+            <span class="ex-en">In this B2 People & Family passage, notice <mark class="vocab" data-word="in-law">in-law</mark><span class="ipa">/ɪnˈɫɔ/</span>, <mark class="vocab" data-word="sibling">sibling</mark><span class="ipa">/ˈsɪbɫɪŋ/</span>, <mark class="vocab" data-word="stepbrother">stepbrother</mark><span class="ipa">/stˈɛpbɹʌðɚ/</span>, and <mark class="vocab" data-word="stepchild">stepchild</mark><span class="ipa">/ˈstɛpˌtʃaɪɫd/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về People &amp; Family, hãy để ý bố mẹ vợ/chồng, anh chị em, anh trai kế, và con riêng.</span>
+          </p>
+          <p class="ex-sent" data-sent="5">
+            <span class="ex-en">In this B2 People & Family passage, notice <mark class="vocab" data-word="stepdaughter">stepdaughter</mark><span class="ipa">/ˈstɛpˌdɔtɝ/</span>, <mark class="vocab" data-word="stepfather">stepfather</mark><span class="ipa">/ˈstɛpˌfɑðɝ/</span>, <mark class="vocab" data-word="stepmother">stepmother</mark><span class="ipa">/ˈstɛpˌməðɝ/</span>, and <mark class="vocab" data-word="stepsister">stepsister</mark><span class="ipa">/ˈstɛpˌsɪstɝ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về People &amp; Family, hãy để ý con gái riêng của vợ/chồng, cha dượng, mẹ kế, và chị em kế.</span>
+          </p>
+          <p class="ex-sent" data-sent="6">
+            <span class="ex-en">In this B2 People & Family passage, notice <mark class="vocab" data-word="stepson">stepson</mark><span class="ipa">/ˈstɛpˌsən/</span>, <mark class="vocab" data-word="separation">separation</mark><span class="ipa">/ˌsɛpɝˈeɪʃən/</span>, <mark class="vocab" data-word="adoption">adoption</mark><span class="ipa">/əˈdɑpʃən/</span>, and <mark class="vocab" data-word="brotherly">brotherly</mark><span class="ipa">/ˈbɹəðɝɫi/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về People &amp; Family, hãy để ý con trai riêng của vợ/chồng, ly thân, nhận nuôi, và anh em.</span>
+          </p>
+          <p class="ex-sent" data-sent="7">
+            <span class="ex-en">In this B2 People & Family passage, notice <mark class="vocab" data-word="close-knit">close-knit</mark><span class="ipa">/klˈoʊsnˈɪt/</span>, <mark class="vocab" data-word="to adopt">adopt</mark><span class="ipa">/əˈdɑpt/</span>, <mark class="vocab" data-word="to cheat on">cheat on</mark><span class="ipa">/tʃˈiːt ˈɑːn/</span>, and <mark class="vocab" data-word="to inherit">inherit</mark><span class="ipa">/ˌɪnˈhɛɹət/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về People &amp; Family, hãy để ý gắn bó, nhận nuôi, ngoại tình, và thừa kế.</span>
+          </p>
+          <p class="ex-sent" data-sent="8">
+            <span class="ex-en">In this B2 People & Family passage, notice <mark class="vocab" data-word="to stand by">stand by</mark><span class="ipa">/stˈænd bˈaɪ/</span>, <mark class="vocab" data-word="to take after">take after</mark><span class="ipa">/tˈeɪk ˈæftɚ/</span>, <mark class="vocab" data-word="to [sing] {sb} to sleep">[sing] {sb} to sleep</mark><span class="ipa">/sˈɪŋ ˌɛsbˈiː tə slˈiːp/</span>, and <mark class="vocab" data-word="closely related">closely related</mark><span class="ipa">/klˈoʊsli ɹɪlˈeɪɾᵻd/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về People &amp; Family, hãy để ý đứng về phía, giống, [sing] {sb} to sleep, và closely related.</span>
+          </p>
+          <p class="ex-sent" data-sent="9">
+            <span class="ex-en">In this B2 People & Family passage, notice <mark class="vocab" data-word="adorable">adorable</mark><span class="ipa">/əˈdɔɹəbəɫ/</span>, <mark class="vocab" data-word="beloved">beloved</mark><span class="ipa">/bɪˈɫəvd/, /bɪˈɫəvəd/</span>, <mark class="vocab" data-word="committed">committed</mark><span class="ipa">/kəˈmɪtɪd/</span>, and <mark class="vocab" data-word="enchanted">enchanted</mark><span class="ipa">/ɛnˈtʃænɪd/, /ɛnˈtʃæntɪd/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về People &amp; Family, hãy để ý đáng yêu, được yêu mến, cam kết, và mê hoặc.</span>
+          </p>
+          <p class="ex-sent" data-sent="10">
+            <span class="ex-en">In this B2 People & Family passage, notice <mark class="vocab" data-word="hot">hot</mark><span class="ipa">/hɑːt/</span>, <mark class="vocab" data-word="loved">loved</mark><span class="ipa">/ˈɫəvd/</span>, <mark class="vocab" data-word="loving">loving</mark><span class="ipa">/ˈɫəvɪŋ/</span>, and <mark class="vocab" data-word="lovesick">lovesick</mark><span class="ipa">/lˈʌvsɪk/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về People &amp; Family, hãy để ý nóng bỏng, được yêu thương, yêu thương, và tương tư.</span>
+          </p>
+          <p class="ex-sent" data-sent="11">
+            <span class="ex-en">In this B2 People & Family passage, notice <mark class="vocab" data-word="admirer">admirer</mark><span class="ipa">/ædˈmaɪɹɝ/</span>, <mark class="vocab" data-word="(other|better) half">(other|better) half</mark><span class="ipa">/ˈʌðɚɹ ɔːɹ bˈɛɾɚ hˈæf/</span>, <mark class="vocab" data-word="lovebirds">lovebirds</mark><span class="ipa">/ˈlʌvˌbɝdz/</span>, and <mark class="vocab" data-word="significant other">significant other</mark><span class="ipa">/sɪɡnˈɪfɪkənt ˈʌðɚ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về People &amp; Family, hãy để ý người hâm mộ, nửa kia, cặp đôi yêu nhau, và người bạn đời.</span>
+          </p>
+          <p class="ex-sent" data-sent="12">
+            <span class="ex-en">In this B2 People & Family passage, notice <mark class="vocab" data-word="anniversary">anniversary</mark><span class="ipa">/ˌænəˈvɝsɝi/</span>, <mark class="vocab" data-word="bridegroom">bridegroom</mark><span class="ipa">/ˈbɹaɪdˌɡɹum/</span>, <mark class="vocab" data-word="to propose">propose</mark><span class="ipa">/prəˈpoʊz/</span>, and <mark class="vocab" data-word="proposal">proposal</mark><span class="ipa">/pɹəˈpoʊzəɫ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về People &amp; Family, hãy để ý ngày kỷ niệm, chú rể, cầu hôn, và lời cầu hôn.</span>
+          </p>
+          <p class="ex-sent" data-sent="13">
+            <span class="ex-en">In this B2 People & Family passage, notice <mark class="vocab" data-word="broken heart">broken heart</mark><span class="ipa">/bɹˈoʊkən hˈɑːɹt/</span>, <mark class="vocab" data-word="date">date</mark><span class="ipa">/deɪt/</span>, <mark class="vocab" data-word="eye candy">eye candy</mark><span class="ipa">/ˈaɪ kˈændi/</span>, and <mark class="vocab" data-word="Prince Charming">Prince Charming</mark><span class="ipa">/pɹˈɪns tʃˈɑːɹmɪŋ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về People &amp; Family, hãy để ý trái tim tan vỡ, cuộc hẹn hò, thứ đẹp mắt, và Hoàng Tử Charming.</span>
+          </p>
+          <p class="ex-sent" data-sent="14">
+            <span class="ex-en">In this B2 People & Family passage, notice <mark class="vocab" data-word="love affair">love affair</mark><span class="ipa">/lˈʌv ɐfˈɛɹ/</span>, <mark class="vocab" data-word="passion">passion</mark><span class="ipa">/ˈpæʃən/</span>, <mark class="vocab" data-word="puppy love">puppy love</mark><span class="ipa">/pˈʌpi lˈʌv/</span>, and <mark class="vocab" data-word="Valentine">Valentine</mark><span class="ipa">/ˈvælənˌtaɪn/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về People &amp; Family, hãy để ý mối tình lãng mạn, đam mê, tình yêu tuổi mới lớn, và một bức thư tình.</span>
+          </p>
+          <p class="ex-sent" data-sent="15">
+            <span class="ex-en">In this B2 People & Family passage, notice <mark class="vocab" data-word="to adore">adore</mark><span class="ipa">/əˈdɔɹ/</span>, <mark class="vocab" data-word="to ask out">ask out</mark><span class="ipa">/ˈæsk ˈaʊt/</span>, <mark class="vocab" data-word="to [fall] in love">[fall] in love</mark><span class="ipa">/fˈɔːl ɪn lˈʌv/</span>, and <mark class="vocab" data-word="to go out">go out</mark><span class="ipa">/ɡoʊ ˈaʊt/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về People &amp; Family, hãy để ý yêu quý, mời đi chơi, [fall] in love, và hẹn hò.</span>
+          </p>
+          <p class="ex-sent" data-sent="16">
+            <span class="ex-en">In this B2 People & Family passage, notice <mark class="vocab" data-word="to woo">woo</mark><span class="ipa">/ˈwu/</span>, <mark class="vocab" data-word="to hook up">hook up</mark><span class="ipa">/hˈʊk ˈʌp/</span>, <mark class="vocab" data-word="to [have] a crush on {sb}">[have] a crush on {sb}</mark><span class="ipa">/hæv ɐ kɹˈʌʃ ˌɑːn ˌɛsbˈiː/</span>, and <mark class="vocab" data-word="hickey">hickey</mark><span class="ipa">/ˈhɪki/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về People &amp; Family, hãy để ý tán tỉnh, quan hệ, [have] a crush on {sb}, và vết hôn.</span>
+          </p>
+          <p class="ex-sent" data-sent="17">
+            <span class="ex-en">In this B2 People & Family passage, notice <mark class="vocab" data-word="aid">aid</mark><span class="ipa">/ˈeɪd/</span>, <mark class="vocab" data-word="to beg">beg</mark><span class="ipa">/ˈbɛɡ/</span>, <mark class="vocab" data-word="bias">bias</mark><span class="ipa">/ˈbaɪəs/</span>, and <mark class="vocab" data-word="biased">biased</mark><span class="ipa">/ˈbaɪəst/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về People &amp; Family, hãy để ý viện trợ, ăn xin, định kiến, và thiên vị.</span>
+          </p>
+          <p class="ex-sent" data-sent="18">
+            <span class="ex-en">In this B2 People & Family passage, notice <mark class="vocab" data-word="consequence">consequence</mark><span class="ipa">/ˈkɑnsəkwəns/</span>, <mark class="vocab" data-word="to contribute">contribute</mark><span class="ipa">/kənˈtɹɪbjut/</span>, <mark class="vocab" data-word="hunger">hunger</mark><span class="ipa">/ˈhʌŋɡɚ/</span>, and <mark class="vocab" data-word="relationship">relationship</mark><span class="ipa">/rɪˈleɪʃənˌʃɪp/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về People &amp; Family, hãy để ý hậu quả, đóng góp, đói, và mối quan hệ.</span>
+          </p>
+          <p class="ex-sent" data-sent="19">
+            <span class="ex-en">In this B2 People & Family passage, notice <mark class="vocab" data-word="to dismiss">dismiss</mark><span class="ipa">/dɪsˈmɪs/</span>, <mark class="vocab" data-word="donation">donation</mark><span class="ipa">/doʊˈneɪʃən/</span>, <mark class="vocab" data-word="equal">equal</mark><span class="ipa">/ˈiːkwəl/</span>, and <mark class="vocab" data-word="majority">majority</mark><span class="ipa">/məˈdʒɔɹəti/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về People &amp; Family, hãy để ý sa thải, quyên góp, bình đẳng, và đa số.</span>
+          </p>
+          <p class="ex-sent" data-sent="20">
+            <span class="ex-en">In this B2 People & Family passage, notice <mark class="vocab" data-word="minority">minority</mark><span class="ipa">/maɪˈnɔɹəti/, /məˈnɔɹəti/</span>, <mark class="vocab" data-word="noncitizen">noncitizen</mark><span class="ipa">/nˌɑːnsˈɪɾɪzən/</span>, <mark class="vocab" data-word="protester">protester</mark><span class="ipa">/ˈpɹoʊˌtɛstɝ/</span>, and <mark class="vocab" data-word="racist">racist</mark><span class="ipa">/ˈɹeɪsɪst/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về People &amp; Family, hãy để ý thiểu số, người không phải là công dân, người biểu tình, và người phân biệt chủng tộc.</span>
+          </p>
+          <p class="ex-sent" data-sent="21">
+            <span class="ex-en">In this B2 People & Family passage, notice <mark class="vocab" data-word="sexist">sexist</mark><span class="ipa">/ˈsɛksɪst/</span>, <mark class="vocab" data-word="minimum wage">minimum wage</mark><span class="ipa">/mˈɪnɪməm wˈeɪdʒ/</span>, <mark class="vocab" data-word="quality of life">quality of life</mark><span class="ipa">/kwˈɑːlɪɾi ʌv lˈaɪf/</span>, and <mark class="vocab" data-word="social class">social class</mark><span class="ipa">/sˈoʊʃəl klˈæs/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về People &amp; Family, hãy để ý người phân biệt giới tính, lương tối thiểu, quality of life, và tầng lớp xã hội.</span>
+          </p>
+          <p class="ex-sent" data-sent="22">
+            <span class="ex-en">In this B2 People & Family passage, notice <mark class="vocab" data-word="slum">slum</mark><span class="ipa">/ˈsɫəm/</span>, <mark class="vocab" data-word="shelter">shelter</mark><span class="ipa">/ˈʃɛɫtɝ/</span>, <mark class="vocab" data-word="to blame">blame</mark><span class="ipa">/ˈbɫeɪm/</span>, and <mark class="vocab" data-word="to march">march</mark><span class="ipa">/mɑrtʃ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về People &amp; Family, hãy để ý khu ổ chuột, nơi trú ẩn, đổ lỗi, và diễu hành.</span>
+          </p>
+          <p class="ex-sent" data-sent="23">
+            <span class="ex-en">In this B2 People & Family passage, notice <mark class="vocab" data-word="to starve">starve</mark><span class="ipa">/ˈstɑɹv/</span>, <mark class="vocab" data-word="to strike">strike</mark><span class="ipa">/ˈstɹaɪk/</span>, <mark class="vocab" data-word="honor">honor</mark><span class="ipa">/ˈɑnɝ/</span>, and <mark class="vocab" data-word="to get together">get together</mark><span class="ipa">/ɡɛt təɡˈɛðɚ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về People &amp; Family, hãy để ý chết đói, đình công, danh dự, và gặp gỡ.</span>
+          </p>
+          <p class="ex-sent" data-sent="24">
+            <span class="ex-en">In this B2 People & Family passage, notice <mark class="vocab" data-word="disrespect">disrespect</mark><span class="ipa">/ˌdɪsɹɪˈspɛkt/</span>, <mark class="vocab" data-word="beggar">beggar</mark><span class="ipa">/ˈbeɡər/</span>, <mark class="vocab" data-word="homeless">homeless</mark><span class="ipa">/ˈhoʊmɫəs/</span>, and <mark class="vocab" data-word="child labor">child labor</mark><span class="ipa">/tʃˈaɪld lˈeɪbɚ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về People &amp; Family, hãy để ý sự thiếu tôn trọng, người ăn xin, người vô gia cư, và lao động trẻ em.</span>
+          </p>
+          <p class="ex-sent" data-sent="25">
+            <span class="ex-en">In this B2 People & Family passage, notice <mark class="vocab" data-word="alcohol abuse">alcohol abuse</mark><span class="ipa">/ˈælkəhˌɑːl ɐbjˈuːs/</span>, <mark class="vocab" data-word="Alcoholics Anonymous">Alcoholics Anonymous</mark><span class="ipa">/ˌælkəhˈɑːlɪks ɐnˈɑːnəməs/</span>, <mark class="vocab" data-word="alcoholic">alcoholic</mark><span class="ipa">/ˌælkəˈhɑlɪk/</span>, and <mark class="vocab" data-word="prostitution">prostitution</mark><span class="ipa">/ˌpɹɑstəˈtuʃən/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về People &amp; Family, hãy để ý lạm dụng rượu, Những Người Nặc Danh Nghiện Rượu, người nghiện rượu, và mại dâm.</span>
+          </p>
+          <p class="ex-sent" data-sent="26">
+            <span class="ex-en">In this B2 People & Family passage, notice <mark class="vocab" data-word="bachelor party">bachelor party</mark><span class="ipa">/bˈætʃəlɚ pˈɑːɹɾi/</span>, <mark class="vocab" data-word="bachelorette party">bachelorette party</mark><span class="ipa">/bˌɑːkɪloːɹˈɛt pˈɑːɹɾi/</span>, <mark class="vocab" data-word="best man">best man</mark><span class="ipa">/bˈɛst mˈæn/</span>, and <mark class="vocab" data-word="bridesmaid">bridesmaid</mark><span class="ipa">/ˈbɹaɪdzˌmeɪd/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về People &amp; Family, hãy để ý tiệc độc thân, tiệc độc thân, phù rể, và phù dâu.</span>
+          </p>
+          <p class="ex-sent" data-sent="27">
+            <span class="ex-en">In this B2 People & Family passage, notice <mark class="vocab" data-word="fiance">fiance</mark><span class="ipa">/ˌfiˌɑnˈseɪ/, /fiˈɑnˌseɪ/</span>, <mark class="vocab" data-word="fiancee">fiancee</mark><span class="ipa">/fiˈænsi/</span>, <mark class="vocab" data-word="flower girl">flower girl</mark><span class="ipa">/flˈaʊɚ ɡˈɜːl/</span>, and <mark class="vocab" data-word="maid of honor">maid of honor</mark><span class="ipa">/mˈeɪd ʌv ˈɑːnɚ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về People &amp; Family, hãy để ý hôn phu, vị hôn thê, cô bé rải hoa, và maid of honor.</span>
+          </p>
+          <p class="ex-sent" data-sent="28">
+            <span class="ex-en">In this B2 People & Family passage, notice <mark class="vocab" data-word="bouquet">bouquet</mark><span class="ipa">/buˈkeɪ/</span>, <mark class="vocab" data-word="reception">reception</mark><span class="ipa">/rɪˈsɛpʃən/</span>, <mark class="vocab" data-word="speech">speech</mark><span class="ipa">/ˈspitʃ/</span>, and <mark class="vocab" data-word="toast">toast</mark><span class="ipa">/toʊst/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về People &amp; Family, hãy để ý bó hoa, tiệc chiêu đãi, bài diễn văn, và chúc mừng.</span>
+          </p>
+          <p class="ex-sent" data-sent="29">
+            <span class="ex-en">In this B2 People & Family passage, notice <mark class="vocab" data-word="engagement ring">engagement ring</mark><span class="ipa">/ɛnɡˈeɪdʒmənt ɹˈɪŋ/</span>, <mark class="vocab" data-word="wedding ring">wedding ring</mark><span class="ipa">/wˈɛdɪŋ ɹˈɪŋ/</span>, <mark class="vocab" data-word="wedding gown">wedding gown</mark><span class="ipa">/wˈɛdɪŋ ɡˈaʊn/</span>, and <mark class="vocab" data-word="veil">veil</mark><span class="ipa">/ˈveɪɫ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về People &amp; Family, hãy để ý nhẫn đính hôn, nhẫn cưới, váy cưới, và mạng che mặt.</span>
+          </p>
+          <p class="ex-sent" data-sent="30">
+            <span class="ex-en">In this B2 People & Family passage, notice <mark class="vocab" data-word="tuxedo">tuxedo</mark><span class="ipa">/ˌtəkˈsidoʊ/</span>, <mark class="vocab" data-word="aisle">aisle</mark><span class="ipa">/ˈaɪəɫ/, /ˈaɪɫ/</span>, <mark class="vocab" data-word="confetti">confetti</mark><span class="ipa">/kənˈfɛti/</span>, and <mark class="vocab" data-word="to elope">elope</mark><span class="ipa">/ɪˈɫoʊp/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về People &amp; Family, hãy để ý một bộ lễ phục, lối đi, hoa giấy, và bỏ trốn.</span>
+          </p>
+          <p class="ex-sent" data-sent="31">
+            <span class="ex-en">In this B2 People & Family passage, notice <mark class="vocab" data-word="to exchange">exchange</mark><span class="ipa">/ɪksˈʧeɪnʤ/</span>, <mark class="vocab" data-word="vow">vow</mark><span class="ipa">/vaʊ/</span>, <mark class="vocab" data-word="bell">bell</mark><span class="ipa">/bel/</span>, and <mark class="vocab" data-word="dance floor">dance floor</mark><span class="ipa">/dˈæns flˈoːɹ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về People &amp; Family, hãy để ý trao đổi, lời thề, chuông, và sàn nhảy.</span>
+          </p>
+          <p class="ex-sent" data-sent="32">
+            <span class="ex-en">In this B2 People & Family passage, notice <mark class="vocab" data-word="honeymoon">honeymoon</mark><span class="ipa">/ˈhəniˌmun/</span>, <mark class="vocab" data-word="newlywed">newlywed</mark><span class="ipa">/ˈnuɫiˌwɛd/</span>, and <mark class="vocab" data-word="pregnant">pregnant</mark><span class="ipa">/ˈpɹɛɡnənt/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về People &amp; Family, hãy để ý tuần trăng mật, người mới cưới, và có thai.</span>
+          </p>
+      </section>
+
+      <section class="ex-vocab">
+        <h2>Word checklist · 127</h2>
+        <ul class="ex-vocab-list">
+          <li><mark class="vocab">affair</mark> <span class="ipa">/əˈfɛɹ/</span> — cuộc tình</li>
+          <li><mark class="vocab">bond</mark> <span class="ipa">/bɑnd/</span> — mối liên kết</li>
+          <li><mark class="vocab">household</mark> <span class="ipa">/ˈhaʊsˌhoʊɫd/</span> — hộ gia đình</li>
+          <li><mark class="vocab">divorce</mark> <span class="ipa">/dɪˈvɔɹs/</span> — ly hôn</li>
+          <li><mark class="vocab">divorce</mark> <span class="ipa">/dɪˈvɔɹs/</span> — ly hôn</li>
+          <li><mark class="vocab">lineage</mark> <span class="ipa">/ˈɫɪniədʒ/</span> — dòng dõi</li>
+          <li><mark class="vocab">ancestor</mark> <span class="ipa">/ˈænˌsɛstɝ/</span> — tổ tiên</li>
+          <li><mark class="vocab">ex</mark> <span class="ipa">/ˈɛks/</span> — người yêu cũ</li>
+          <li><mark class="vocab">extended family</mark> <span class="ipa">/ɛkstˈɛndᵻd fˈæmɪli/</span> — gia đình mở rộng</li>
+          <li><mark class="vocab">folks</mark> <span class="ipa">/ˈfoʊks/</span> — bố mẹ</li>
+          <li><mark class="vocab">foster parent</mark> <span class="ipa">/fˈɑːstɚ pˈɛɹənt/</span> — cha mẹ nuôi</li>
+          <li><mark class="vocab">identical twin</mark> <span class="ipa">/aɪdˈɛntɪkəl twˈɪn/</span> — sinh đôi cùng trứng</li>
+          <li><mark class="vocab">in-law</mark> <span class="ipa">/ɪnˈɫɔ/</span> — bố mẹ vợ/chồng</li>
+          <li><mark class="vocab">sibling</mark> <span class="ipa">/ˈsɪbɫɪŋ/</span> — anh chị em</li>
+          <li><mark class="vocab">stepbrother</mark> <span class="ipa">/stˈɛpbɹʌðɚ/</span> — anh trai kế</li>
+          <li><mark class="vocab">stepchild</mark> <span class="ipa">/ˈstɛpˌtʃaɪɫd/</span> — con riêng</li>
+          <li><mark class="vocab">stepdaughter</mark> <span class="ipa">/ˈstɛpˌdɔtɝ/</span> — con gái riêng của vợ/chồng</li>
+          <li><mark class="vocab">stepfather</mark> <span class="ipa">/ˈstɛpˌfɑðɝ/</span> — cha dượng</li>
+          <li><mark class="vocab">stepmother</mark> <span class="ipa">/ˈstɛpˌməðɝ/</span> — mẹ kế</li>
+          <li><mark class="vocab">stepsister</mark> <span class="ipa">/ˈstɛpˌsɪstɝ/</span> — chị em kế</li>
+          <li><mark class="vocab">stepson</mark> <span class="ipa">/ˈstɛpˌsən/</span> — con trai riêng của vợ/chồng</li>
+          <li><mark class="vocab">separation</mark> <span class="ipa">/ˌsɛpɝˈeɪʃən/</span> — ly thân</li>
+          <li><mark class="vocab">adoption</mark> <span class="ipa">/əˈdɑpʃən/</span> — nhận nuôi</li>
+          <li><mark class="vocab">brotherly</mark> <span class="ipa">/ˈbɹəðɝɫi/</span> — anh em</li>
+          <li><mark class="vocab">close-knit</mark> <span class="ipa">/klˈoʊsnˈɪt/</span> — gắn bó</li>
+          <li><mark class="vocab">adopt</mark> <span class="ipa">/əˈdɑpt/</span> — nhận nuôi</li>
+          <li><mark class="vocab">cheat on</mark> <span class="ipa">/tʃˈiːt ˈɑːn/</span> — ngoại tình</li>
+          <li><mark class="vocab">inherit</mark> <span class="ipa">/ˌɪnˈhɛɹət/</span> — thừa kế</li>
+          <li><mark class="vocab">stand by</mark> <span class="ipa">/stˈænd bˈaɪ/</span> — đứng về phía</li>
+          <li><mark class="vocab">take after</mark> <span class="ipa">/tˈeɪk ˈæftɚ/</span> — giống</li>
+          <li><mark class="vocab">[sing] {sb} to sleep</mark> <span class="ipa">/sˈɪŋ ˌɛsbˈiː tə slˈiːp/</span></li>
+          <li><mark class="vocab">closely related</mark> <span class="ipa">/klˈoʊsli ɹɪlˈeɪɾᵻd/</span></li>
+          <li><mark class="vocab">adorable</mark> <span class="ipa">/əˈdɔɹəbəɫ/</span> — đáng yêu</li>
+          <li><mark class="vocab">beloved</mark> <span class="ipa">/bɪˈɫəvd/, /bɪˈɫəvəd/</span> — được yêu mến</li>
+          <li><mark class="vocab">committed</mark> <span class="ipa">/kəˈmɪtɪd/</span> — cam kết</li>
+          <li><mark class="vocab">enchanted</mark> <span class="ipa">/ɛnˈtʃænɪd/, /ɛnˈtʃæntɪd/</span> — mê hoặc</li>
+          <li><mark class="vocab">hot</mark> <span class="ipa">/hɑːt/</span> — nóng bỏng</li>
+          <li><mark class="vocab">loved</mark> <span class="ipa">/ˈɫəvd/</span> — được yêu thương</li>
+          <li><mark class="vocab">loving</mark> <span class="ipa">/ˈɫəvɪŋ/</span> — yêu thương</li>
+          <li><mark class="vocab">lovesick</mark> <span class="ipa">/lˈʌvsɪk/</span> — tương tư</li>
+          <li><mark class="vocab">admirer</mark> <span class="ipa">/ædˈmaɪɹɝ/</span> — người hâm mộ</li>
+          <li><mark class="vocab">(other|better) half</mark> <span class="ipa">/ˈʌðɚɹ ɔːɹ bˈɛɾɚ hˈæf/</span> — nửa kia</li>
+          <li><mark class="vocab">lovebirds</mark> <span class="ipa">/ˈlʌvˌbɝdz/</span> — cặp đôi yêu nhau</li>
+          <li><mark class="vocab">significant other</mark> <span class="ipa">/sɪɡnˈɪfɪkənt ˈʌðɚ/</span> — người bạn đời</li>
+          <li><mark class="vocab">anniversary</mark> <span class="ipa">/ˌænəˈvɝsɝi/</span> — ngày kỷ niệm</li>
+          <li><mark class="vocab">bridegroom</mark> <span class="ipa">/ˈbɹaɪdˌɡɹum/</span> — chú rể</li>
+          <li><mark class="vocab">propose</mark> <span class="ipa">/prəˈpoʊz/</span> — cầu hôn</li>
+          <li><mark class="vocab">proposal</mark> <span class="ipa">/pɹəˈpoʊzəɫ/</span> — lời cầu hôn</li>
+          <li><mark class="vocab">broken heart</mark> <span class="ipa">/bɹˈoʊkən hˈɑːɹt/</span> — trái tim tan vỡ</li>
+          <li><mark class="vocab">date</mark> <span class="ipa">/deɪt/</span> — cuộc hẹn hò</li>
+          <li><mark class="vocab">eye candy</mark> <span class="ipa">/ˈaɪ kˈændi/</span> — thứ đẹp mắt</li>
+          <li><mark class="vocab">Prince Charming</mark> <span class="ipa">/pɹˈɪns tʃˈɑːɹmɪŋ/</span> — Hoàng Tử Charming</li>
+          <li><mark class="vocab">love affair</mark> <span class="ipa">/lˈʌv ɐfˈɛɹ/</span> — mối tình lãng mạn</li>
+          <li><mark class="vocab">passion</mark> <span class="ipa">/ˈpæʃən/</span> — đam mê</li>
+          <li><mark class="vocab">puppy love</mark> <span class="ipa">/pˈʌpi lˈʌv/</span> — tình yêu tuổi mới lớn</li>
+          <li><mark class="vocab">Valentine</mark> <span class="ipa">/ˈvælənˌtaɪn/</span> — một bức thư tình</li>
+          <li><mark class="vocab">adore</mark> <span class="ipa">/əˈdɔɹ/</span> — yêu quý</li>
+          <li><mark class="vocab">ask out</mark> <span class="ipa">/ˈæsk ˈaʊt/</span> — mời đi chơi</li>
+          <li><mark class="vocab">[fall] in love</mark> <span class="ipa">/fˈɔːl ɪn lˈʌv/</span></li>
+          <li><mark class="vocab">go out</mark> <span class="ipa">/ɡoʊ ˈaʊt/</span> — hẹn hò</li>
+          <li><mark class="vocab">woo</mark> <span class="ipa">/ˈwu/</span> — tán tỉnh</li>
+          <li><mark class="vocab">hook up</mark> <span class="ipa">/hˈʊk ˈʌp/</span> — quan hệ</li>
+          <li><mark class="vocab">[have] a crush on {sb}</mark> <span class="ipa">/hæv ɐ kɹˈʌʃ ˌɑːn ˌɛsbˈiː/</span></li>
+          <li><mark class="vocab">hickey</mark> <span class="ipa">/ˈhɪki/</span> — vết hôn</li>
+          <li><mark class="vocab">aid</mark> <span class="ipa">/ˈeɪd/</span> — viện trợ</li>
+          <li><mark class="vocab">beg</mark> <span class="ipa">/ˈbɛɡ/</span> — ăn xin</li>
+          <li><mark class="vocab">bias</mark> <span class="ipa">/ˈbaɪəs/</span> — định kiến</li>
+          <li><mark class="vocab">biased</mark> <span class="ipa">/ˈbaɪəst/</span> — thiên vị</li>
+          <li><mark class="vocab">consequence</mark> <span class="ipa">/ˈkɑnsəkwəns/</span> — hậu quả</li>
+          <li><mark class="vocab">contribute</mark> <span class="ipa">/kənˈtɹɪbjut/</span> — đóng góp</li>
+          <li><mark class="vocab">hunger</mark> <span class="ipa">/ˈhʌŋɡɚ/</span> — đói</li>
+          <li><mark class="vocab">relationship</mark> <span class="ipa">/rɪˈleɪʃənˌʃɪp/</span> — mối quan hệ</li>
+          <li><mark class="vocab">dismiss</mark> <span class="ipa">/dɪsˈmɪs/</span> — sa thải</li>
+          <li><mark class="vocab">donation</mark> <span class="ipa">/doʊˈneɪʃən/</span> — quyên góp</li>
+          <li><mark class="vocab">equal</mark> <span class="ipa">/ˈiːkwəl/</span> — bình đẳng</li>
+          <li><mark class="vocab">majority</mark> <span class="ipa">/məˈdʒɔɹəti/</span> — đa số</li>
+          <li><mark class="vocab">minority</mark> <span class="ipa">/maɪˈnɔɹəti/, /məˈnɔɹəti/</span> — thiểu số</li>
+          <li><mark class="vocab">noncitizen</mark> <span class="ipa">/nˌɑːnsˈɪɾɪzən/</span> — người không phải là công dân</li>
+          <li><mark class="vocab">protester</mark> <span class="ipa">/ˈpɹoʊˌtɛstɝ/</span> — người biểu tình</li>
+          <li><mark class="vocab">racist</mark> <span class="ipa">/ˈɹeɪsɪst/</span> — người phân biệt chủng tộc</li>
+          <li><mark class="vocab">sexist</mark> <span class="ipa">/ˈsɛksɪst/</span> — người phân biệt giới tính</li>
+          <li><mark class="vocab">minimum wage</mark> <span class="ipa">/mˈɪnɪməm wˈeɪdʒ/</span> — lương tối thiểu</li>
+          <li><mark class="vocab">quality of life</mark> <span class="ipa">/kwˈɑːlɪɾi ʌv lˈaɪf/</span></li>
+          <li><mark class="vocab">social class</mark> <span class="ipa">/sˈoʊʃəl klˈæs/</span> — tầng lớp xã hội</li>
+          <li><mark class="vocab">slum</mark> <span class="ipa">/ˈsɫəm/</span> — khu ổ chuột</li>
+          <li><mark class="vocab">shelter</mark> <span class="ipa">/ˈʃɛɫtɝ/</span> — nơi trú ẩn</li>
+          <li><mark class="vocab">blame</mark> <span class="ipa">/ˈbɫeɪm/</span> — đổ lỗi</li>
+          <li><mark class="vocab">march</mark> <span class="ipa">/mɑrtʃ/</span> — diễu hành</li>
+          <li><mark class="vocab">starve</mark> <span class="ipa">/ˈstɑɹv/</span> — chết đói</li>
+          <li><mark class="vocab">strike</mark> <span class="ipa">/ˈstɹaɪk/</span> — đình công</li>
+          <li><mark class="vocab">honor</mark> <span class="ipa">/ˈɑnɝ/</span> — danh dự</li>
+          <li><mark class="vocab">get together</mark> <span class="ipa">/ɡɛt təɡˈɛðɚ/</span> — gặp gỡ</li>
+          <li><mark class="vocab">disrespect</mark> <span class="ipa">/ˌdɪsɹɪˈspɛkt/</span> — sự thiếu tôn trọng</li>
+          <li><mark class="vocab">beggar</mark> <span class="ipa">/ˈbeɡər/</span> — người ăn xin</li>
+          <li><mark class="vocab">homeless</mark> <span class="ipa">/ˈhoʊmɫəs/</span> — người vô gia cư</li>
+          <li><mark class="vocab">child labor</mark> <span class="ipa">/tʃˈaɪld lˈeɪbɚ/</span> — lao động trẻ em</li>
+          <li><mark class="vocab">alcohol abuse</mark> <span class="ipa">/ˈælkəhˌɑːl ɐbjˈuːs/</span> — lạm dụng rượu</li>
+          <li><mark class="vocab">Alcoholics Anonymous</mark> <span class="ipa">/ˌælkəhˈɑːlɪks ɐnˈɑːnəməs/</span> — Những Người Nặc Danh Nghiện Rượu</li>
+          <li><mark class="vocab">alcoholic</mark> <span class="ipa">/ˌælkəˈhɑlɪk/</span> — người nghiện rượu</li>
+          <li><mark class="vocab">prostitution</mark> <span class="ipa">/ˌpɹɑstəˈtuʃən/</span> — mại dâm</li>
+          <li><mark class="vocab">bachelor party</mark> <span class="ipa">/bˈætʃəlɚ pˈɑːɹɾi/</span> — tiệc độc thân</li>
+          <li><mark class="vocab">bachelorette party</mark> <span class="ipa">/bˌɑːkɪloːɹˈɛt pˈɑːɹɾi/</span> — tiệc độc thân</li>
+          <li><mark class="vocab">best man</mark> <span class="ipa">/bˈɛst mˈæn/</span> — phù rể</li>
+          <li><mark class="vocab">bridesmaid</mark> <span class="ipa">/ˈbɹaɪdzˌmeɪd/</span> — phù dâu</li>
+          <li><mark class="vocab">fiance</mark> <span class="ipa">/ˌfiˌɑnˈseɪ/, /fiˈɑnˌseɪ/</span> — hôn phu</li>
+          <li><mark class="vocab">fiancee</mark> <span class="ipa">/fiˈænsi/</span> — vị hôn thê</li>
+          <li><mark class="vocab">flower girl</mark> <span class="ipa">/flˈaʊɚ ɡˈɜːl/</span> — cô bé rải hoa</li>
+          <li><mark class="vocab">maid of honor</mark> <span class="ipa">/mˈeɪd ʌv ˈɑːnɚ/</span></li>
+          <li><mark class="vocab">bouquet</mark> <span class="ipa">/buˈkeɪ/</span> — bó hoa</li>
+          <li><mark class="vocab">reception</mark> <span class="ipa">/rɪˈsɛpʃən/</span> — tiệc chiêu đãi</li>
+          <li><mark class="vocab">speech</mark> <span class="ipa">/ˈspitʃ/</span> — bài diễn văn</li>
+          <li><mark class="vocab">toast</mark> <span class="ipa">/toʊst/</span> — chúc mừng</li>
+          <li><mark class="vocab">engagement ring</mark> <span class="ipa">/ɛnɡˈeɪdʒmənt ɹˈɪŋ/</span> — nhẫn đính hôn</li>
+          <li><mark class="vocab">wedding ring</mark> <span class="ipa">/wˈɛdɪŋ ɹˈɪŋ/</span> — nhẫn cưới</li>
+          <li><mark class="vocab">wedding gown</mark> <span class="ipa">/wˈɛdɪŋ ɡˈaʊn/</span> — váy cưới</li>
+          <li><mark class="vocab">veil</mark> <span class="ipa">/ˈveɪɫ/</span> — mạng che mặt</li>
+          <li><mark class="vocab">tuxedo</mark> <span class="ipa">/ˌtəkˈsidoʊ/</span> — một bộ lễ phục</li>
+          <li><mark class="vocab">aisle</mark> <span class="ipa">/ˈaɪəɫ/, /ˈaɪɫ/</span> — lối đi</li>
+          <li><mark class="vocab">confetti</mark> <span class="ipa">/kənˈfɛti/</span> — hoa giấy</li>
+          <li><mark class="vocab">elope</mark> <span class="ipa">/ɪˈɫoʊp/</span> — bỏ trốn</li>
+          <li><mark class="vocab">exchange</mark> <span class="ipa">/ɪksˈʧeɪnʤ/</span> — trao đổi</li>
+          <li><mark class="vocab">vow</mark> <span class="ipa">/vaʊ/</span> — lời thề</li>
+          <li><mark class="vocab">bell</mark> <span class="ipa">/bel/</span> — chuông</li>
+          <li><mark class="vocab">dance floor</mark> <span class="ipa">/dˈæns flˈoːɹ/</span> — sàn nhảy</li>
+          <li><mark class="vocab">honeymoon</mark> <span class="ipa">/ˈhəniˌmun/</span> — tuần trăng mật</li>
+          <li><mark class="vocab">newlywed</mark> <span class="ipa">/ˈnuɫiˌwɛd/</span> — người mới cưới</li>
+          <li><mark class="vocab">pregnant</mark> <span class="ipa">/ˈpɹɛɡnənt/</span> — có thai</li>
+        </ul>
+      </section>
+
+      <div class="docs-pager">
+        <a href="../">← People &amp; Family</a>
+        <a href="../../">All topics →</a>
+      </div>
+    </article>
+  </div>
+  <script src="../../../../js/docs.js"></script>
+  <script src="../../../../js/exercise.js"></script>
+</body>
+</html>

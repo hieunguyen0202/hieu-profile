@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A2 Exercise · Clothes &amp; Fashion — The Quiet Corner</title>
+  <meta name="description" content="A2 reading exercise for Clothes &amp; Fashion vocabulary with IPA and bilingual sentences.">
+  <link rel="icon" href="../../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../../"><span>✦</span> The Quiet Corner <span>✦</span></a>
+    <nav class="docs-series">
+      <a href="../../../../blog/web-security/">DevSecOps</a>
+      <a href="../../../../blog/kubestronaut/">Kubestronaut</a>
+      <a class="active" href="../../">English</a>
+    </nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-nav="english" data-docs-root="../../" data-active="clothes-fashion">
+      <div class="docs-nav-label">English</div>
+      <ul class="docs-nav" id="docsNav">
+        <li><a href="../../">All topics</a></li>
+        <li><a href="../">Clothes &amp; Fashion</a></li>
+        <li><a class="active" href="./">A2 Exercise</a></li>
+      </ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../../">Home</a>
+        <span>›</span>
+        <a href="../../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../../">English</a>
+        <span>›</span>
+        <a href="../">Clothes &amp; Fashion</a>
+        <span>›</span>
+        <span>A2 Exercise</span>
+      </div>
+
+      <div class="vocab-topic-hero">
+        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 72 72' fill='none'%3E%3Crect width='72' height='72' rx='14' fill='%230b1220'/%3E%3Crect x='16' y='14' width='40' height='46' rx='6' stroke='%2322d3ee' stroke-width='2.5'/%3E%3Cpath d='M24 28h24M24 36h24M24 44h16' stroke='%23e4e4e7' stroke-width='2.5' stroke-linecap='round'/%3E%3Cpath d='M48 48l6 2-2 6-8-8 4 0z' fill='%2322d3ee'/%3E%3C/svg%3E" alt="" width="112" height="112">
+        <div>
+          <h1>A2 Exercise · Clothes &amp; Fashion</h1>
+          <p class="lede">Reading passage with every new word from this level’s LanGeek lessons — IPA, highlights, sentence translation, and free TTS.</p>
+          <div class="docs-meta">
+            <span><strong>Words:</strong> 31</span>
+            <span><strong>Lessons:</strong> Clothes and Accessories</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="ex-toolbar" id="exToolbar">
+        <label class="ex-toggle"><input type="checkbox" id="togHighlight" checked> Highlights</label>
+        <label class="ex-toggle"><input type="checkbox" id="togIpa" checked> IPA</label>
+        <label class="ex-toggle"><input type="checkbox" id="togVi"> Dịch câu (VI)</label>
+        <span class="ex-sep"></span>
+        <label class="ex-voice">Voice
+          <select id="voiceSelect" aria-label="TTS voice"></select>
+        </label>
+        <label class="ex-voice">Speed
+          <input id="rateRange" type="range" min="0.7" max="1.15" step="0.05" value="0.95">
+          <span id="rateVal">0.95</span>
+        </label>
+        <button type="button" class="ex-btn primary" id="btnPlay">▶ Read passage</button>
+        <button type="button" class="ex-btn" id="btnStop">Stop</button>
+      </div>
+      
+      <section class="ex-passage" id="passage" data-tts-root>
+          <p class="ex-sent" data-sent="1">
+            <span class="ex-en">In this A2 Clothes & <mark class="vocab" data-word="fashion">fashion</mark><span class="ipa">/ˈfæʃən/</span> passage, notice fashion, <mark class="vocab" data-word="clothing">clothing</mark><span class="ipa">/ˈkloʊðɪŋ/</span>, <mark class="vocab" data-word="blouse">blouse</mark><span class="ipa">/blaʊs/</span>, and <mark class="vocab" data-word="shorts">shorts</mark><span class="ipa">/ʃɔːrts/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Clothes &amp; Fashion, hãy để ý thời trang, quần áo, áo blouse, và quần đùi.</span>
+          </p>
+          <p class="ex-sent" data-sent="2">
+            <span class="ex-en">In this A2 Clothes & Fashion passage, notice <mark class="vocab" data-word="pocket">pocket</mark><span class="ipa">/ˈpɑːkɪt/</span>, <mark class="vocab" data-word="button">button</mark><span class="ipa">/ˈbʌtən/</span>, <mark class="vocab" data-word="uniform">uniform</mark><span class="ipa">/ˈjuːnɪˌfɔːrm/</span>, and <mark class="vocab" data-word="umbrella">umbrella</mark><span class="ipa">/ʌmˈbrɛlə/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Clothes &amp; Fashion, hãy để ý túi, nút, đồng phục, và ô.</span>
+          </p>
+          <p class="ex-sent" data-sent="3">
+            <span class="ex-en">In this A2 Clothes & Fashion passage, notice <mark class="vocab" data-word="accessory">accessory</mark><span class="ipa">/ækˈsɛsɚi/ , /əkˈsɛsɚi/</span>, <mark class="vocab" data-word="watch">watch</mark><span class="ipa">/wɑːtʃ/</span>, <mark class="vocab" data-word="glasses">glasses</mark><span class="ipa">/ˈɡlæsɪz/</span>, and <mark class="vocab" data-word="sunglasses">sunglasses</mark><span class="ipa">/ˈsʌnˌɡlæsɪz/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Clothes &amp; Fashion, hãy để ý phụ kiện, đồng hồ, kính mắt, và kính râm.</span>
+          </p>
+          <p class="ex-sent" data-sent="4">
+            <span class="ex-en">In this A2 Clothes & Fashion passage, notice <mark class="vocab" data-word="briefcase">briefcase</mark><span class="ipa">/ˈbriːfˌkeɪs/</span>, <mark class="vocab" data-word="cap">cap</mark><span class="ipa">/kæp/</span>, <mark class="vocab" data-word="bracelet">bracelet</mark><span class="ipa">/ˈbreɪslɪt/</span>, and <mark class="vocab" data-word="wallet">wallet</mark><span class="ipa">/ˈwɑːlɪt/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Clothes &amp; Fashion, hãy để ý cặp tài liệu, mũ lưỡi trai, vòng tay, và ví.</span>
+          </p>
+          <p class="ex-sent" data-sent="5">
+            <span class="ex-en">In this A2 Clothes & Fashion passage, notice <mark class="vocab" data-word="chain">chain</mark><span class="ipa">/tʃeɪn/</span>, <mark class="vocab" data-word="earring">earring</mark><span class="ipa">/ˈɪrɪŋ/</span>, <mark class="vocab" data-word="ring">ring</mark><span class="ipa">/rɪŋ/</span>, and <mark class="vocab" data-word="necklace">necklace</mark><span class="ipa">/ˈnɛkləs/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Clothes &amp; Fashion, hãy để ý dây chuyền, bông tai, nhẫn, và vòng cổ.</span>
+          </p>
+          <p class="ex-sent" data-sent="6">
+            <span class="ex-en">In this A2 Clothes & Fashion passage, notice <mark class="vocab" data-word="jewelry">jewelry</mark><span class="ipa">/ˈdʒuːəlri/</span>, <mark class="vocab" data-word="perfume">perfume</mark><span class="ipa">/ˈpɝːˌfjuːm/</span>, <mark class="vocab" data-word="loose">loose</mark><span class="ipa">/luːs/</span>, and <mark class="vocab" data-word="tight">tight</mark><span class="ipa">/taɪt/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Clothes &amp; Fashion, hãy để ý trang sức, nước hoa, rộng, và chật.</span>
+          </p>
+          <p class="ex-sent" data-sent="7">
+            <span class="ex-en">In this A2 Clothes & Fashion passage, notice <mark class="vocab" data-word="to fit">fit</mark><span class="ipa">/fɪt/</span>, <mark class="vocab" data-word="to try on">try on</mark><span class="ipa">/ˈtraɪ ˈɑn/</span>, <mark class="vocab" data-word="to put on">put on</mark><span class="ipa">/pʊt ɑːn/</span>, and <mark class="vocab" data-word="to take off">take off</mark><span class="ipa">/teɪk ɑːf/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Clothes &amp; Fashion, hãy để ý vừa, thử, mặc, và cởi ra.</span>
+          </p>
+          <p class="ex-sent" data-sent="8">
+            <span class="ex-en">In this A2 Clothes & Fashion passage, notice <mark class="vocab" data-word="to change">change</mark><span class="ipa">/tʃeɪndʒ/</span>, <mark class="vocab" data-word="worn-out">worn-out</mark><span class="ipa">/ˈwɔːrn ˈaʊt/</span>, and <mark class="vocab" data-word="belt">belt</mark><span class="ipa">/bɛlt/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Clothes &amp; Fashion, hãy để ý thay đổi, mòn, và dây lưng.</span>
+          </p>
+      </section>
+
+      <section class="ex-vocab">
+        <h2>Word checklist · 31</h2>
+        <ul class="ex-vocab-list">
+          <li><mark class="vocab">fashion</mark> <span class="ipa">/ˈfæʃən/</span> — thời trang</li>
+          <li><mark class="vocab">clothing</mark> <span class="ipa">/ˈkloʊðɪŋ/</span> — quần áo</li>
+          <li><mark class="vocab">blouse</mark> <span class="ipa">/blaʊs/</span> — áo blouse</li>
+          <li><mark class="vocab">shorts</mark> <span class="ipa">/ʃɔːrts/</span> — quần đùi</li>
+          <li><mark class="vocab">pocket</mark> <span class="ipa">/ˈpɑːkɪt/</span> — túi</li>
+          <li><mark class="vocab">button</mark> <span class="ipa">/ˈbʌtən/</span> — nút</li>
+          <li><mark class="vocab">uniform</mark> <span class="ipa">/ˈjuːnɪˌfɔːrm/</span> — đồng phục</li>
+          <li><mark class="vocab">umbrella</mark> <span class="ipa">/ʌmˈbrɛlə/</span> — ô</li>
+          <li><mark class="vocab">accessory</mark> <span class="ipa">/ækˈsɛsɚi/ , /əkˈsɛsɚi/</span> — phụ kiện</li>
+          <li><mark class="vocab">watch</mark> <span class="ipa">/wɑːtʃ/</span> — đồng hồ</li>
+          <li><mark class="vocab">glasses</mark> <span class="ipa">/ˈɡlæsɪz/</span> — kính mắt</li>
+          <li><mark class="vocab">sunglasses</mark> <span class="ipa">/ˈsʌnˌɡlæsɪz/</span> — kính râm</li>
+          <li><mark class="vocab">briefcase</mark> <span class="ipa">/ˈbriːfˌkeɪs/</span> — cặp tài liệu</li>
+          <li><mark class="vocab">cap</mark> <span class="ipa">/kæp/</span> — mũ lưỡi trai</li>
+          <li><mark class="vocab">bracelet</mark> <span class="ipa">/ˈbreɪslɪt/</span> — vòng tay</li>
+          <li><mark class="vocab">wallet</mark> <span class="ipa">/ˈwɑːlɪt/</span> — ví</li>
+          <li><mark class="vocab">chain</mark> <span class="ipa">/tʃeɪn/</span> — dây chuyền</li>
+          <li><mark class="vocab">earring</mark> <span class="ipa">/ˈɪrɪŋ/</span> — bông tai</li>
+          <li><mark class="vocab">ring</mark> <span class="ipa">/rɪŋ/</span> — nhẫn</li>
+          <li><mark class="vocab">necklace</mark> <span class="ipa">/ˈnɛkləs/</span> — vòng cổ</li>
+          <li><mark class="vocab">jewelry</mark> <span class="ipa">/ˈdʒuːəlri/</span> — trang sức</li>
+          <li><mark class="vocab">perfume</mark> <span class="ipa">/ˈpɝːˌfjuːm/</span> — nước hoa</li>
+          <li><mark class="vocab">loose</mark> <span class="ipa">/luːs/</span> — rộng</li>
+          <li><mark class="vocab">tight</mark> <span class="ipa">/taɪt/</span> — chật</li>
+          <li><mark class="vocab">fit</mark> <span class="ipa">/fɪt/</span> — vừa</li>
+          <li><mark class="vocab">try on</mark> <span class="ipa">/ˈtraɪ ˈɑn/</span> — thử</li>
+          <li><mark class="vocab">put on</mark> <span class="ipa">/pʊt ɑːn/</span> — mặc</li>
+          <li><mark class="vocab">take off</mark> <span class="ipa">/teɪk ɑːf/</span> — cởi ra</li>
+          <li><mark class="vocab">change</mark> <span class="ipa">/tʃeɪndʒ/</span> — thay đổi</li>
+          <li><mark class="vocab">worn-out</mark> <span class="ipa">/ˈwɔːrn ˈaʊt/</span> — mòn</li>
+          <li><mark class="vocab">belt</mark> <span class="ipa">/bɛlt/</span> — dây lưng</li>
+        </ul>
+      </section>
+
+      <div class="docs-pager">
+        <a href="../">← Clothes &amp; Fashion</a>
+        <a href="../../">All topics →</a>
+      </div>
+    </article>
+  </div>
+  <script src="../../../../js/docs.js"></script>
+  <script src="../../../../js/exercise.js"></script>
+</body>
+</html>

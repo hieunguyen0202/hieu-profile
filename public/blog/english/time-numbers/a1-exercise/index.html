@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A1 Exercise · Time &amp; Numbers — The Quiet Corner</title>
+  <meta name="description" content="A1 reading exercise for Time &amp; Numbers vocabulary with IPA and bilingual sentences.">
+  <link rel="icon" href="../../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../../"><span>✦</span> The Quiet Corner <span>✦</span></a>
+    <nav class="docs-series">
+      <a href="../../../../blog/web-security/">DevSecOps</a>
+      <a href="../../../../blog/kubestronaut/">Kubestronaut</a>
+      <a class="active" href="../../">English</a>
+    </nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-nav="english" data-docs-root="../../" data-active="time-numbers">
+      <div class="docs-nav-label">English</div>
+      <ul class="docs-nav" id="docsNav">
+        <li><a href="../../">All topics</a></li>
+        <li><a href="../">Time &amp; Numbers</a></li>
+        <li><a class="active" href="./">A1 Exercise</a></li>
+      </ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../../">Home</a>
+        <span>›</span>
+        <a href="../../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../../">English</a>
+        <span>›</span>
+        <a href="../">Time &amp; Numbers</a>
+        <span>›</span>
+        <span>A1 Exercise</span>
+      </div>
+
+      <div class="vocab-topic-hero">
+        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 72 72' fill='none'%3E%3Crect width='72' height='72' rx='14' fill='%230b1220'/%3E%3Crect x='16' y='14' width='40' height='46' rx='6' stroke='%2322d3ee' stroke-width='2.5'/%3E%3Cpath d='M24 28h24M24 36h24M24 44h16' stroke='%23e4e4e7' stroke-width='2.5' stroke-linecap='round'/%3E%3Cpath d='M48 48l6 2-2 6-8-8 4 0z' fill='%2322d3ee'/%3E%3C/svg%3E" alt="" width="112" height="112">
+        <div>
+          <h1>A1 Exercise · Time &amp; Numbers</h1>
+          <p class="lede">Reading passage with every new word from this level’s LanGeek lessons — IPA, highlights, sentence translation, and free TTS.</p>
+          <div class="docs-meta">
+            <span><strong>Words:</strong> 71</span>
+            <span><strong>Lessons:</strong> Months and Seasons · Numbers 0 to 100 · Time and Date</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="ex-toolbar" id="exToolbar">
+        <label class="ex-toggle"><input type="checkbox" id="togHighlight" checked> Highlights</label>
+        <label class="ex-toggle"><input type="checkbox" id="togIpa" checked> IPA</label>
+        <label class="ex-toggle"><input type="checkbox" id="togVi"> Dịch câu (VI)</label>
+        <span class="ex-sep"></span>
+        <label class="ex-voice">Voice
+          <select id="voiceSelect" aria-label="TTS voice"></select>
+        </label>
+        <label class="ex-voice">Speed
+          <input id="rateRange" type="range" min="0.7" max="1.15" step="0.05" value="0.95">
+          <span id="rateVal">0.95</span>
+        </label>
+        <button type="button" class="ex-btn primary" id="btnPlay">▶ Read passage</button>
+        <button type="button" class="ex-btn" id="btnStop">Stop</button>
+      </div>
+      
+      <section class="ex-passage" id="passage" data-tts-root>
+          <p class="ex-sent" data-sent="1">
+            <span class="ex-en">In this A1 Time & Numbers passage, notice <mark class="vocab" data-word="month">month</mark><span class="ipa">/mʌnθ/</span>, <mark class="vocab" data-word="January">January</mark><span class="ipa">/ˈdʒænjuˌɛri/</span>, <mark class="vocab" data-word="February">February</mark><span class="ipa">/ˈfɛbjuˌɛri/</span>, and <mark class="vocab" data-word="March">March</mark><span class="ipa">/mɑrtʃ/</span>.</span>
+            <span class="ex-vi">Trong đoạn A1 về Time &amp; Numbers, hãy để ý tháng, tháng một, tháng hai, và tháng ba.</span>
+          </p>
+          <p class="ex-sent" data-sent="2">
+            <span class="ex-en">In this A1 Time & Numbers passage, notice <mark class="vocab" data-word="April">April</mark><span class="ipa">/ˈeɪprəl/</span>, <mark class="vocab" data-word="May">May</mark><span class="ipa">/meɪ/</span>, <mark class="vocab" data-word="June">June</mark><span class="ipa">/dʒuːn/</span>, and <mark class="vocab" data-word="July">July</mark><span class="ipa">/dʒuˈlaɪ/</span>.</span>
+            <span class="ex-vi">Trong đoạn A1 về Time &amp; Numbers, hãy để ý tháng Tư, tháng Năm, tháng sáu, và tháng Bảy.</span>
+          </p>
+          <p class="ex-sent" data-sent="3">
+            <span class="ex-en">In this A1 Time & Numbers passage, notice <mark class="vocab" data-word="August">August</mark><span class="ipa">/ˈɔːɡəst/</span>, <mark class="vocab" data-word="September">September</mark><span class="ipa">/sɛpˈtɛmbɚ/</span>, <mark class="vocab" data-word="October">October</mark><span class="ipa">/ɑkˈtoʊbɚ/</span>, and <mark class="vocab" data-word="November">November</mark><span class="ipa">/noʊˈvɛmbɚ/</span>.</span>
+            <span class="ex-vi">Trong đoạn A1 về Time &amp; Numbers, hãy để ý tháng Tám, tháng chín, tháng Mười, và tháng mười một.</span>
+          </p>
+          <p class="ex-sent" data-sent="4">
+            <span class="ex-en">In this A1 Time & Numbers passage, notice <mark class="vocab" data-word="December">December</mark><span class="ipa">/dɪˈsɛmbɚ/</span>, <mark class="vocab" data-word="season">season</mark><span class="ipa">/ˈsiːzən/</span>, <mark class="vocab" data-word="spring">spring</mark><span class="ipa">/sprɪŋ/</span>, and <mark class="vocab" data-word="summer">summer</mark><span class="ipa">/ˈsʌmɚ/</span>.</span>
+            <span class="ex-vi">Trong đoạn A1 về Time &amp; Numbers, hãy để ý tháng Mười Hai, mùa, mùa xuân, và mùa hè.</span>
+          </p>
+          <p class="ex-sent" data-sent="5">
+            <span class="ex-en">In this A1 Time & Numbers passage, notice <mark class="vocab" data-word="fall">fall</mark><span class="ipa">/fɑl/</span>, <mark class="vocab" data-word="winter">winter</mark><span class="ipa">/ˈwɪntɚ/</span>, <mark class="vocab" data-word="zero">zero</mark><span class="ipa">/ˈziːroʊ/</span>, and <mark class="vocab" data-word="one">one</mark><span class="ipa">/wʌn/</span>.</span>
+            <span class="ex-vi">Trong đoạn A1 về Time &amp; Numbers, hãy để ý mùa thu, mùa đông, số không, và một.</span>
+          </p>
+          <p class="ex-sent" data-sent="6">
+            <span class="ex-en">In this A1 Time & Numbers passage, notice <mark class="vocab" data-word="two">two</mark><span class="ipa">/tuː/</span>, <mark class="vocab" data-word="three">three</mark><span class="ipa">/θriː/</span>, <mark class="vocab" data-word="four">four</mark><span class="ipa">/fɔːr/</span>, and <mark class="vocab" data-word="five">five</mark><span class="ipa">/faɪv/</span>.</span>
+            <span class="ex-vi">Trong đoạn A1 về Time &amp; Numbers, hãy để ý hai, ba, bốn, và năm.</span>
+          </p>
+          <p class="ex-sent" data-sent="7">
+            <span class="ex-en">In this A1 Time & Numbers passage, notice <mark class="vocab" data-word="six">six</mark><span class="ipa">/sɪks/</span>, <mark class="vocab" data-word="seven">seven</mark><span class="ipa">/ˈsɛvən/</span>, <mark class="vocab" data-word="eight">eight</mark><span class="ipa">/eɪt/</span>, and <mark class="vocab" data-word="nine">nine</mark><span class="ipa">/naɪn/</span>.</span>
+            <span class="ex-vi">Trong đoạn A1 về Time &amp; Numbers, hãy để ý sáu, bảy, tám, và chín.</span>
+          </p>
+          <p class="ex-sent" data-sent="8">
+            <span class="ex-en">In this A1 Time & Numbers passage, notice <mark class="vocab" data-word="ten">ten</mark><span class="ipa">/tɛn/</span>, <mark class="vocab" data-word="eleven">eleven</mark><span class="ipa">/ɪˈlɛvən/</span>, <mark class="vocab" data-word="twelve">twelve</mark><span class="ipa">/twɛlv/</span>, and <mark class="vocab" data-word="thirteen">thirteen</mark><span class="ipa">/ˈθɜrtiːn/</span>.</span>
+            <span class="ex-vi">Trong đoạn A1 về Time &amp; Numbers, hãy để ý mười, mười một, mười hai,số mười hai, và mười ba.</span>
+          </p>
+          <p class="ex-sent" data-sent="9">
+            <span class="ex-en">In this A1 Time & Numbers passage, notice <mark class="vocab" data-word="fourteen">fourteen</mark><span class="ipa">/ˈfɔrtiːn/</span>, <mark class="vocab" data-word="fifteen">fifteen</mark><span class="ipa">/ˈfɪftiːn/</span>, <mark class="vocab" data-word="sixteen">sixteen</mark><span class="ipa">/ˈsɪkstiːn/</span>, and <mark class="vocab" data-word="seventeen">seventeen</mark><span class="ipa">/ˈsɛvntiːn/</span>.</span>
+            <span class="ex-vi">Trong đoạn A1 về Time &amp; Numbers, hãy để ý mười bốn, mười lăm, mười sáu, và mười bảy.</span>
+          </p>
+          <p class="ex-sent" data-sent="10">
+            <span class="ex-en">In this A1 Time & Numbers passage, notice <mark class="vocab" data-word="eighteen">eighteen</mark><span class="ipa">/ˈeɪtiːn/</span>, <mark class="vocab" data-word="nineteen">nineteen</mark><span class="ipa">/ˈnaɪntiːn/</span>, <mark class="vocab" data-word="twenty">twenty</mark><span class="ipa">/ˈtwɛnti/</span>, and <mark class="vocab" data-word="thirty">thirty</mark><span class="ipa">/ˈθɜrti/</span>.</span>
+            <span class="ex-vi">Trong đoạn A1 về Time &amp; Numbers, hãy để ý mười tám, mười chín, hai mươi, và ba mươi.</span>
+          </p>
+          <p class="ex-sent" data-sent="11">
+            <span class="ex-en">In this A1 Time & Numbers passage, notice <mark class="vocab" data-word="forty">forty</mark><span class="ipa">/ˈfɔrti/</span>, <mark class="vocab" data-word="fifty">fifty</mark><span class="ipa">/ˈfɪfti/</span>, <mark class="vocab" data-word="sixty">sixty</mark><span class="ipa">/ˈsɪksti/</span>, and <mark class="vocab" data-word="seventy">seventy</mark><span class="ipa">/ˈsɛvnti/</span>.</span>
+            <span class="ex-vi">Trong đoạn A1 về Time &amp; Numbers, hãy để ý bốn mươi, năm mươi, sáu mươi, và bảy mươi.</span>
+          </p>
+          <p class="ex-sent" data-sent="12">
+            <span class="ex-en">In this A1 Time & Numbers passage, notice <mark class="vocab" data-word="eighty">eighty</mark><span class="ipa">/ˈeɪti/</span>, <mark class="vocab" data-word="ninety">ninety</mark><span class="ipa">/ˈnaɪnti/</span>, <mark class="vocab" data-word="hundred">hundred</mark><span class="ipa">/ˈhʌndrəd/</span>, and <mark class="vocab" data-word="clock">clock</mark><span class="ipa">/klɑk/</span>.</span>
+            <span class="ex-vi">Trong đoạn A1 về Time &amp; Numbers, hãy để ý tám mươi, chín mươi, trăm, và đồng hồ.</span>
+          </p>
+          <p class="ex-sent" data-sent="13">
+            <span class="ex-en">In this A1 <mark class="vocab" data-word="time">time</mark><span class="ipa">/taɪm/</span> & Numbers passage, notice <mark class="vocab" data-word="year">year</mark><span class="ipa">/jɪr/</span>, time, <mark class="vocab" data-word="date">date</mark><span class="ipa">/deɪt/</span>, and <mark class="vocab" data-word="day">day</mark><span class="ipa">/deɪ/</span>.</span>
+            <span class="ex-vi">Trong đoạn A1 về Time &amp; Numbers, hãy để ý năm, thời gian, ngày, và ngày.</span>
+          </p>
+          <p class="ex-sent" data-sent="14">
+            <span class="ex-en">In this A1 Time & Numbers passage, notice <mark class="vocab" data-word="hour">hour</mark><span class="ipa">/aʊɚ/</span>, <mark class="vocab" data-word="o&#x27;clock">o&#x27;clock</mark><span class="ipa">/əˈklɑk/</span>, <mark class="vocab" data-word="minute">minute</mark><span class="ipa">/ˈmɪnɪt/</span>, and <mark class="vocab" data-word="second">second</mark><span class="ipa">/ˈsɛkənd/</span>.</span>
+            <span class="ex-vi">Trong đoạn A1 về Time &amp; Numbers, hãy để ý giờ, giờ, phút, và giây.</span>
+          </p>
+          <p class="ex-sent" data-sent="15">
+            <span class="ex-en">In this A1 Time & Numbers passage, notice <mark class="vocab" data-word="morning">morning</mark><span class="ipa">/ˈmɔrnɪŋ/</span>, <mark class="vocab" data-word="afternoon">afternoon</mark><span class="ipa">/ˌæftɚˈnuːn/</span>, <mark class="vocab" data-word="evening">evening</mark><span class="ipa">/ˈivnɪŋ/</span>, and <mark class="vocab" data-word="night">night</mark><span class="ipa">/naɪt/</span>.</span>
+            <span class="ex-vi">Trong đoạn A1 về Time &amp; Numbers, hãy để ý buổi sáng, buổi chiều, buổi tối, và đêm.</span>
+          </p>
+          <p class="ex-sent" data-sent="16">
+            <span class="ex-en">In this A1 Time & Numbers passage, notice <mark class="vocab" data-word="week">week</mark><span class="ipa">/wiːk/</span>, <mark class="vocab" data-word="Sunday">Sunday</mark><span class="ipa">/ˈsʌnˌdeɪ/</span>, <mark class="vocab" data-word="Monday">Monday</mark><span class="ipa">/ˈmʌnˌdeɪ/</span>, and <mark class="vocab" data-word="Tuesday">Tuesday</mark><span class="ipa">/ˈtuːzˌdeɪ/</span>.</span>
+            <span class="ex-vi">Trong đoạn A1 về Time &amp; Numbers, hãy để ý tuần, Chủ nhật, thứ Hai, và Thứ Ba.</span>
+          </p>
+          <p class="ex-sent" data-sent="17">
+            <span class="ex-en">In this A1 Time & Numbers passage, notice <mark class="vocab" data-word="Wednesday">Wednesday</mark><span class="ipa">/ˈwɛnzˌdeɪ/</span>, <mark class="vocab" data-word="Thursday">Thursday</mark><span class="ipa">/ˈθɝzˌdeɪ/</span>, <mark class="vocab" data-word="Friday">Friday</mark><span class="ipa">/ˈfraɪˌdeɪ/</span>, and <mark class="vocab" data-word="Saturday">Saturday</mark><span class="ipa">/ˈsæˌtɝˌdeɪ/</span>.</span>
+            <span class="ex-vi">Trong đoạn A1 về Time &amp; Numbers, hãy để ý Thứ Tư, Thứ Năm, thứ Sáu, và thứ bảy.</span>
+          </p>
+          <p class="ex-sent" data-sent="18">
+            <span class="ex-en">In this A1 Time & Numbers passage, notice <mark class="vocab" data-word="weekend">weekend</mark><span class="ipa">/ˈwiːkˌɛnd/</span>, <mark class="vocab" data-word="next">next</mark><span class="ipa">/nɛkst/</span>, and <mark class="vocab" data-word="half">half</mark><span class="ipa">/hæf/</span>.</span>
+            <span class="ex-vi">Trong đoạn A1 về Time &amp; Numbers, hãy để ý cuối tuần, tiếp theo, và một nửa.</span>
+          </p>
+          <p class="ex-sent" data-sent="19">
+            <span class="ex-en">One more useful item is "<mark class="vocab" data-word="o&#x27;clock">o&#x27;clock</mark><span class="ipa">/əˈklɑk/</span>" in this topic.</span>
+            <span class="ex-vi">Một mục hữu ích nữa là &quot;giờ&quot; trong chủ đề này.</span>
+          </p>
+          <p class="ex-sent" data-sent="20">
+            <span class="ex-en">Keep this form in mind: <mark class="vocab" data-word="o'clock">o'clock</mark><span class="ipa">/əˈklɑk/</span>.</span>
+            <span class="ex-vi">Hãy nhớ dạng từ này: giờ.</span>
+          </p>
+      </section>
+
+      <section class="ex-vocab">
+        <h2>Word checklist · 71</h2>
+        <ul class="ex-vocab-list">
+          <li><mark class="vocab">month</mark> <span class="ipa">/mʌnθ/</span> — tháng</li>
+          <li><mark class="vocab">January</mark> <span class="ipa">/ˈdʒænjuˌɛri/</span> — tháng một</li>
+          <li><mark class="vocab">February</mark> <span class="ipa">/ˈfɛbjuˌɛri/</span> — tháng hai</li>
+          <li><mark class="vocab">March</mark> <span class="ipa">/mɑrtʃ/</span> — tháng ba</li>
+          <li><mark class="vocab">April</mark> <span class="ipa">/ˈeɪprəl/</span> — tháng Tư</li>
+          <li><mark class="vocab">May</mark> <span class="ipa">/meɪ/</span> — tháng Năm</li>
+          <li><mark class="vocab">June</mark> <span class="ipa">/dʒuːn/</span> — tháng sáu</li>
+          <li><mark class="vocab">July</mark> <span class="ipa">/dʒuˈlaɪ/</span> — tháng Bảy</li>
+          <li><mark class="vocab">August</mark> <span class="ipa">/ˈɔːɡəst/</span> — tháng Tám</li>
+          <li><mark class="vocab">September</mark> <span class="ipa">/sɛpˈtɛmbɚ/</span> — tháng chín</li>
+          <li><mark class="vocab">October</mark> <span class="ipa">/ɑkˈtoʊbɚ/</span> — tháng Mười</li>
+          <li><mark class="vocab">November</mark> <span class="ipa">/noʊˈvɛmbɚ/</span> — tháng mười một</li>
+          <li><mark class="vocab">December</mark> <span class="ipa">/dɪˈsɛmbɚ/</span> — tháng Mười Hai</li>
+          <li><mark class="vocab">season</mark> <span class="ipa">/ˈsiːzən/</span> — mùa</li>
+          <li><mark class="vocab">spring</mark> <span class="ipa">/sprɪŋ/</span> — mùa xuân</li>
+          <li><mark class="vocab">summer</mark> <span class="ipa">/ˈsʌmɚ/</span> — mùa hè</li>
+          <li><mark class="vocab">fall</mark> <span class="ipa">/fɑl/</span> — mùa thu</li>
+          <li><mark class="vocab">winter</mark> <span class="ipa">/ˈwɪntɚ/</span> — mùa đông</li>
+          <li><mark class="vocab">zero</mark> <span class="ipa">/ˈziːroʊ/</span> — số không</li>
+          <li><mark class="vocab">one</mark> <span class="ipa">/wʌn/</span> — một</li>
+          <li><mark class="vocab">two</mark> <span class="ipa">/tuː/</span> — hai</li>
+          <li><mark class="vocab">three</mark> <span class="ipa">/θriː/</span> — ba</li>
+          <li><mark class="vocab">four</mark> <span class="ipa">/fɔːr/</span> — bốn</li>
+          <li><mark class="vocab">five</mark> <span class="ipa">/faɪv/</span> — năm</li>
+          <li><mark class="vocab">six</mark> <span class="ipa">/sɪks/</span> — sáu</li>
+          <li><mark class="vocab">seven</mark> <span class="ipa">/ˈsɛvən/</span> — bảy</li>
+          <li><mark class="vocab">eight</mark> <span class="ipa">/eɪt/</span> — tám</li>
+          <li><mark class="vocab">nine</mark> <span class="ipa">/naɪn/</span> — chín</li>
+          <li><mark class="vocab">ten</mark> <span class="ipa">/tɛn/</span> — mười</li>
+          <li><mark class="vocab">eleven</mark> <span class="ipa">/ɪˈlɛvən/</span> — mười một</li>
+          <li><mark class="vocab">twelve</mark> <span class="ipa">/twɛlv/</span> — mười hai,số mười hai</li>
+          <li><mark class="vocab">thirteen</mark> <span class="ipa">/ˈθɜrtiːn/</span> — mười ba</li>
+          <li><mark class="vocab">fourteen</mark> <span class="ipa">/ˈfɔrtiːn/</span> — mười bốn</li>
+          <li><mark class="vocab">fifteen</mark> <span class="ipa">/ˈfɪftiːn/</span> — mười lăm</li>
+          <li><mark class="vocab">sixteen</mark> <span class="ipa">/ˈsɪkstiːn/</span> — mười sáu</li>
+          <li><mark class="vocab">seventeen</mark> <span class="ipa">/ˈsɛvntiːn/</span> — mười bảy</li>
+          <li><mark class="vocab">eighteen</mark> <span class="ipa">/ˈeɪtiːn/</span> — mười tám</li>
+          <li><mark class="vocab">nineteen</mark> <span class="ipa">/ˈnaɪntiːn/</span> — mười chín</li>
+          <li><mark class="vocab">twenty</mark> <span class="ipa">/ˈtwɛnti/</span> — hai mươi</li>
+          <li><mark class="vocab">thirty</mark> <span class="ipa">/ˈθɜrti/</span> — ba mươi</li>
+          <li><mark class="vocab">forty</mark> <span class="ipa">/ˈfɔrti/</span> — bốn mươi</li>
+          <li><mark class="vocab">fifty</mark> <span class="ipa">/ˈfɪfti/</span> — năm mươi</li>
+          <li><mark class="vocab">sixty</mark> <span class="ipa">/ˈsɪksti/</span> — sáu mươi</li>
+          <li><mark class="vocab">seventy</mark> <span class="ipa">/ˈsɛvnti/</span> — bảy mươi</li>
+          <li><mark class="vocab">eighty</mark> <span class="ipa">/ˈeɪti/</span> — tám mươi</li>
+          <li><mark class="vocab">ninety</mark> <span class="ipa">/ˈnaɪnti/</span> — chín mươi</li>
+          <li><mark class="vocab">hundred</mark> <span class="ipa">/ˈhʌndrəd/</span> — trăm</li>
+          <li><mark class="vocab">clock</mark> <span class="ipa">/klɑk/</span> — đồng hồ</li>
+          <li><mark class="vocab">year</mark> <span class="ipa">/jɪr/</span> — năm</li>
+          <li><mark class="vocab">time</mark> <span class="ipa">/taɪm/</span> — thời gian</li>
+          <li><mark class="vocab">date</mark> <span class="ipa">/deɪt/</span> — ngày</li>
+          <li><mark class="vocab">day</mark> <span class="ipa">/deɪ/</span> — ngày</li>
+          <li><mark class="vocab">hour</mark> <span class="ipa">/aʊɚ/</span> — giờ</li>
+          <li><mark class="vocab">o&#x27;clock</mark> <span class="ipa">/əˈklɑk/</span> — giờ</li>
+          <li><mark class="vocab">minute</mark> <span class="ipa">/ˈmɪnɪt/</span> — phút</li>
+          <li><mark class="vocab">second</mark> <span class="ipa">/ˈsɛkənd/</span> — giây</li>
+          <li><mark class="vocab">morning</mark> <span class="ipa">/ˈmɔrnɪŋ/</span> — buổi sáng</li>
+          <li><mark class="vocab">afternoon</mark> <span class="ipa">/ˌæftɚˈnuːn/</span> — buổi chiều</li>
+          <li><mark class="vocab">evening</mark> <span class="ipa">/ˈivnɪŋ/</span> — buổi tối</li>
+          <li><mark class="vocab">night</mark> <span class="ipa">/naɪt/</span> — đêm</li>
+          <li><mark class="vocab">week</mark> <span class="ipa">/wiːk/</span> — tuần</li>
+          <li><mark class="vocab">Sunday</mark> <span class="ipa">/ˈsʌnˌdeɪ/</span> — Chủ nhật</li>
+          <li><mark class="vocab">Monday</mark> <span class="ipa">/ˈmʌnˌdeɪ/</span> — thứ Hai</li>
+          <li><mark class="vocab">Tuesday</mark> <span class="ipa">/ˈtuːzˌdeɪ/</span> — Thứ Ba</li>
+          <li><mark class="vocab">Wednesday</mark> <span class="ipa">/ˈwɛnzˌdeɪ/</span> — Thứ Tư</li>
+          <li><mark class="vocab">Thursday</mark> <span class="ipa">/ˈθɝzˌdeɪ/</span> — Thứ Năm</li>
+          <li><mark class="vocab">Friday</mark> <span class="ipa">/ˈfraɪˌdeɪ/</span> — thứ Sáu</li>
+          <li><mark class="vocab">Saturday</mark> <span class="ipa">/ˈsæˌtɝˌdeɪ/</span> — thứ bảy</li>
+          <li><mark class="vocab">weekend</mark> <span class="ipa">/ˈwiːkˌɛnd/</span> — cuối tuần</li>
+          <li><mark class="vocab">next</mark> <span class="ipa">/nɛkst/</span> — tiếp theo</li>
+          <li><mark class="vocab">half</mark> <span class="ipa">/hæf/</span> — một nửa</li>
+        </ul>
+      </section>
+
+      <div class="docs-pager">
+        <a href="../">← Time &amp; Numbers</a>
+        <a href="../../">All topics →</a>
+      </div>
+    </article>
+  </div>
+  <script src="../../../../js/docs.js"></script>
+  <script src="../../../../js/exercise.js"></script>
+</body>
+</html>

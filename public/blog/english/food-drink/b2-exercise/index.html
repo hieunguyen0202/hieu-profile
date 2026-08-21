@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>B2 Exercise · Food &amp; Drink — The Quiet Corner</title>
+  <meta name="description" content="B2 reading exercise for Food &amp; Drink vocabulary with IPA and bilingual sentences.">
+  <link rel="icon" href="../../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../../"><span>✦</span> The Quiet Corner <span>✦</span></a>
+    <nav class="docs-series">
+      <a href="../../../../blog/web-security/">DevSecOps</a>
+      <a href="../../../../blog/kubestronaut/">Kubestronaut</a>
+      <a class="active" href="../../">English</a>
+    </nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-nav="english" data-docs-root="../../" data-active="food-drink">
+      <div class="docs-nav-label">English</div>
+      <ul class="docs-nav" id="docsNav">
+        <li><a href="../../">All topics</a></li>
+        <li><a href="../">Food &amp; Drink</a></li>
+        <li><a class="active" href="./">B2 Exercise</a></li>
+      </ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../../">Home</a>
+        <span>›</span>
+        <a href="../../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../../">English</a>
+        <span>›</span>
+        <a href="../">Food &amp; Drink</a>
+        <span>›</span>
+        <span>B2 Exercise</span>
+      </div>
+
+      <div class="vocab-topic-hero">
+        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 72 72' fill='none'%3E%3Crect width='72' height='72' rx='14' fill='%230b1220'/%3E%3Crect x='16' y='14' width='40' height='46' rx='6' stroke='%2322d3ee' stroke-width='2.5'/%3E%3Cpath d='M24 28h24M24 36h24M24 44h16' stroke='%23e4e4e7' stroke-width='2.5' stroke-linecap='round'/%3E%3Cpath d='M48 48l6 2-2 6-8-8 4 0z' fill='%2322d3ee'/%3E%3C/svg%3E" alt="" width="112" height="112">
+        <div>
+          <h1>B2 Exercise · Food &amp; Drink</h1>
+          <p class="lede">Reading passage with every new word from this level’s LanGeek lessons — IPA, highlights, sentence translation, and free TTS.</p>
+          <div class="docs-meta">
+            <span><strong>Words:</strong> 87</span>
+            <span><strong>Lessons:</strong> Cooking · Drinks · Foods</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="ex-toolbar" id="exToolbar">
+        <label class="ex-toggle"><input type="checkbox" id="togHighlight" checked> Highlights</label>
+        <label class="ex-toggle"><input type="checkbox" id="togIpa" checked> IPA</label>
+        <label class="ex-toggle"><input type="checkbox" id="togVi"> Dịch câu (VI)</label>
+        <span class="ex-sep"></span>
+        <label class="ex-voice">Voice
+          <select id="voiceSelect" aria-label="TTS voice"></select>
+        </label>
+        <label class="ex-voice">Speed
+          <input id="rateRange" type="range" min="0.7" max="1.15" step="0.05" value="0.95">
+          <span id="rateVal">0.95</span>
+        </label>
+        <button type="button" class="ex-btn primary" id="btnPlay">▶ Read passage</button>
+        <button type="button" class="ex-btn" id="btnStop">Stop</button>
+      </div>
+      
+      <section class="ex-passage" id="passage" data-tts-root>
+          <p class="ex-sent" data-sent="1">
+            <span class="ex-en">A food writer drafts notes on cuisine, technique, and modern plates. In that moment you notice <mark class="vocab" data-word="recipe">recipe</mark><span class="ipa">/ˈɹɛsəpi/</span>, <mark class="vocab" data-word="ingredient">ingredient</mark><span class="ipa">/ˌɪnˈɡɹidiənt/</span>, <mark class="vocab" data-word="to beat">beat</mark><span class="ipa">/biːt/</span>, and <mark class="vocab" data-word="to chop">chop</mark><span class="ipa">/ˈtʃɑp/</span>.</span>
+            <span class="ex-vi">Một cây viết ẩm thực phác thảo ghi chú về cuisine, kỹ thuật và đĩa món hiện đại. Lúc ấy bạn để ý công thức, nguyên liệu, đánh, và băm.</span>
+          </p>
+          <p class="ex-sent" data-sent="2">
+            <span class="ex-en">In the test kitchen, knives move fast through careful prep steps. In that moment you notice <mark class="vocab" data-word="to garnish">garnish</mark><span class="ipa">/ˈɡɑɹnɪʃ/</span>, <mark class="vocab" data-word="to grill">grill</mark><span class="ipa">/ˈɡɹɪɫ/</span>, <mark class="vocab" data-word="to heat">heat</mark><span class="ipa">/hit/</span>, and <mark class="vocab" data-word="to marinate">marinate</mark><span class="ipa">/ˈmɛɹəˌneɪt/</span>.</span>
+            <span class="ex-vi">Trong bếp thử nghiệm, dao chuyển động nhanh qua các bước sơ chế cẩn thận. Lúc ấy bạn để ý trang trí, nướng, đun nóng, và ướp.</span>
+          </p>
+          <p class="ex-sent" data-sent="3">
+            <span class="ex-en">Drinks get the same care as food — cold, slow, and intentional. In that moment you notice <mark class="vocab" data-word="to peel">peel</mark><span class="ipa">/ˈpiɫ/</span>, <mark class="vocab" data-word="to poach">poach</mark><span class="ipa">/ˈpoʊtʃ/</span>, <mark class="vocab" data-word="to roast">roast</mark><span class="ipa">/ˈɹoʊst/</span>, and <mark class="vocab" data-word="to slice">slice</mark><span class="ipa">/slaɪs/</span>.</span>
+            <span class="ex-vi">Đồ uống được chăm như món ăn — mát, chậm, và có chủ đích. Lúc ấy bạn để ý gọt, luộc, nướng, và cắt lát.</span>
+          </p>
+          <p class="ex-sent" data-sent="4">
+            <span class="ex-en">The final paragraph connects recipes to everyday appetite and habit. In that moment you notice <mark class="vocab" data-word="to stir">stir</mark><span class="ipa">/ˈstɝ/</span>, <mark class="vocab" data-word="to toast">toast</mark><span class="ipa">/toʊst/</span>, <mark class="vocab" data-word="counter">counter</mark><span class="ipa">/ˈkaʊntər/</span>, and <mark class="vocab" data-word="utensil">utensil</mark><span class="ipa">/juˈtɛnsəɫ/</span>.</span>
+            <span class="ex-vi">Đoạn cuối nối công thức với sự thèm ăn và thói quen hằng ngày. Lúc ấy bạn để ý khuấy, nướng, tủ bếp, và dụng cụ.</span>
+          </p>
+          <p class="ex-sent" data-sent="5">
+            <span class="ex-en">A food writer drafts notes on cuisine, technique, and modern plates. In that moment you notice <mark class="vocab" data-word="barbecue">barbecue</mark><span class="ipa">/ˈbɑːrbɪˌkjuː/</span>, <mark class="vocab" data-word="blender">blender</mark><span class="ipa">/ˈbɫɛndɝ/</span>, <mark class="vocab" data-word="frying pan">frying pan</mark><span class="ipa">/fɹˈaɪɪŋ pˈæn/</span>, and <mark class="vocab" data-word="wok">wok</mark><span class="ipa">/ˈwɑk/</span>.</span>
+            <span class="ex-vi">Một cây viết ẩm thực phác thảo ghi chú về cuisine, kỹ thuật và đĩa món hiện đại. Lúc ấy bạn để ý bếp nướng, máy xay, chảo rán, và wok.</span>
+          </p>
+          <p class="ex-sent" data-sent="6">
+            <span class="ex-en">In the test kitchen, knives move fast through careful prep steps. In that moment you notice <mark class="vocab" data-word="mixer">mixer</mark><span class="ipa">/ˈmɪksɝ/</span>, <mark class="vocab" data-word="lid">lid</mark><span class="ipa">/ˈɫɪd/</span>, <mark class="vocab" data-word="mixing bowl">mixing bowl</mark><span class="ipa">/mˈɪksɪŋ bˈoʊl/</span>, and <mark class="vocab" data-word="wooden spoon">wooden spoon</mark><span class="ipa">/wˈʊdən spˈuːn/</span>.</span>
+            <span class="ex-vi">Trong bếp thử nghiệm, dao chuyển động nhanh qua các bước sơ chế cẩn thận. Lúc ấy bạn để ý máy trộn, nắp, tô trộn, và muỗng gỗ.</span>
+          </p>
+          <p class="ex-sent" data-sent="7">
+            <span class="ex-en">Drinks get the same care as food — cold, slow, and intentional. In that moment you notice <mark class="vocab" data-word="scale">scale</mark><span class="ipa">/skeɪl/</span>, <mark class="vocab" data-word="pinch">pinch</mark><span class="ipa">/ˈpɪntʃ/</span>, <mark class="vocab" data-word="cupful">cupful</mark><span class="ipa">/kˈʌpfəl/</span>, and <mark class="vocab" data-word="spoonful">spoonful</mark><span class="ipa">/ˈspunˌfʊɫ/</span>.</span>
+            <span class="ex-vi">Đồ uống được chăm như món ăn — mát, chậm, và có chủ đích. Lúc ấy bạn để ý cân, một nhúm, cốc, và thìa đầy.</span>
+          </p>
+          <p class="ex-sent" data-sent="8">
+            <span class="ex-en">The final paragraph connects recipes to everyday appetite and habit. In that moment you notice <mark class="vocab" data-word="to sip">sip</mark><span class="ipa">/ˈsɪp/</span>, <mark class="vocab" data-word="to sober up">sober up</mark><span class="ipa">/sˈoʊbɚɹ ˈʌp/</span>, <mark class="vocab" data-word="thirst">thirst</mark><span class="ipa">/ˈθɝst/</span>, and <mark class="vocab" data-word="ice cube">ice cube</mark><span class="ipa">/ˈaɪs kjˈuːb/</span>.</span>
+            <span class="ex-vi">Đoạn cuối nối công thức với sự thèm ăn và thói quen hằng ngày. Lúc ấy bạn để ý nhấp nháp, tỉnh rượu, cơn khát, và viên đá.</span>
+          </p>
+          <p class="ex-sent" data-sent="9">
+            <span class="ex-en">A food writer drafts notes on cuisine, technique, and modern plates. In that moment you notice <mark class="vocab" data-word="straw">straw</mark><span class="ipa">/ˈstɹɔ/</span>, <mark class="vocab" data-word="liquor store">liquor store</mark><span class="ipa">/lˈɪkɚ stˈoːɹ/</span>, <mark class="vocab" data-word="booze">booze</mark><span class="ipa">/ˈbuz/</span>, and <mark class="vocab" data-word="Bloody Mary">Bloody Mary</mark><span class="ipa">/blˈʌdi mˈɛɹi/</span>.</span>
+            <span class="ex-vi">Một cây viết ẩm thực phác thảo ghi chú về cuisine, kỹ thuật và đĩa món hiện đại. Lúc ấy bạn để ý ống hút, cửa hàng rượu, rượu, và Bloody Mary.</span>
+          </p>
+          <p class="ex-sent" data-sent="10">
+            <span class="ex-en">In the test kitchen, knives move fast through careful prep steps. In that moment you notice <mark class="vocab" data-word="Bourbon">Bourbon</mark><span class="ipa">/ˈbɝbən/</span>, <mark class="vocab" data-word="cider">cider</mark><span class="ipa">/ˈsaɪdɝ/</span>, <mark class="vocab" data-word="gin">gin</mark><span class="ipa">/ˈdʒɪn/</span>, and <mark class="vocab" data-word="ginger ale">ginger ale</mark><span class="ipa">/dʒˈɪndʒɚɹ ˈeɪl/</span>.</span>
+            <span class="ex-vi">Trong bếp thử nghiệm, dao chuyển động nhanh qua các bước sơ chế cẩn thận. Lúc ấy bạn để ý Bourbon, rượu táo, rượu gin, và ginger ale.</span>
+          </p>
+          <p class="ex-sent" data-sent="11">
+            <span class="ex-en">Drinks get the same care as food — cold, slow, and intentional. In that moment you notice <mark class="vocab" data-word="ice tea">ice tea</mark><span class="ipa">/ˈaɪs tˈiː/</span>, <mark class="vocab" data-word="liquor">liquor</mark><span class="ipa">/ˈɫɪkɝ/</span>, <mark class="vocab" data-word="margarita">margarita</mark><span class="ipa">/ˌmɑɹɡɝˈitə/</span>, and <mark class="vocab" data-word="martini">martini</mark><span class="ipa">/mɑɹˈtini/</span>.</span>
+            <span class="ex-vi">Đồ uống được chăm như món ăn — mát, chậm, và có chủ đích. Lúc ấy bạn để ý trà đá, rượu mạnh, margarita, và martini.</span>
+          </p>
+          <p class="ex-sent" data-sent="12">
+            <span class="ex-en">The final paragraph connects recipes to everyday appetite and habit. In that moment you notice <mark class="vocab" data-word="mojito">mojito</mark><span class="ipa">/moʊhˈiːɾoʊ/</span>, <mark class="vocab" data-word="refill">refill</mark><span class="ipa">/ˈɹifɪɫ/, /ɹiˈfɪɫ/</span>, <mark class="vocab" data-word="punch">punch</mark><span class="ipa">/pʌntʃ/</span>, and <mark class="vocab" data-word="cappuccino">cappuccino</mark><span class="ipa">/ˌkæˌpuˈtʃinoʊ/</span>.</span>
+            <span class="ex-vi">Đoạn cuối nối công thức với sự thèm ăn và thói quen hằng ngày. Lúc ấy bạn để ý mojito, làm đầy lại, punch, và cappuccino.</span>
+          </p>
+          <p class="ex-sent" data-sent="13">
+            <span class="ex-en">A food writer drafts notes on <mark class="vocab" data-word="cuisine">cuisine</mark><span class="ipa">/kwɪˈzin/</span>, technique, and modern plates. In that moment you notice <mark class="vocab" data-word="herbal tea">herbal tea</mark><span class="ipa">/hˈɜːbəl tˈiː/</span>, <mark class="vocab" data-word="skim milk">skim milk</mark><span class="ipa">/skˈɪm mˈɪlk/</span>, cuisine, and <mark class="vocab" data-word="carbohydrate">carbohydrate</mark><span class="ipa">/ˌkɑɹboʊˈhaɪˌdɹeɪt/, /ˌkɑɹboʊˈhaɪdɹət/</span>.</span>
+            <span class="ex-vi">Một cây viết ẩm thực phác thảo ghi chú về cuisine, kỹ thuật và đĩa món hiện đại. Lúc ấy bạn để ý trà thảo mộc, sữa gầy, ẩm thực, và carbohydrate.</span>
+          </p>
+          <p class="ex-sent" data-sent="14">
+            <span class="ex-en">In the test kitchen, knives move fast through careful prep steps. In that moment you notice <mark class="vocab" data-word="bagel">bagel</mark><span class="ipa">/ˈbeɪɡəɫ/</span>, <mark class="vocab" data-word="baguette">baguette</mark><span class="ipa">/ˌbæˈɡɛt/</span>, <mark class="vocab" data-word="cereal">cereal</mark><span class="ipa">/ˈsɪɹiəɫ/</span>, and <mark class="vocab" data-word="pastry">pastry</mark><span class="ipa">/ˈpeɪstɹi/</span>.</span>
+            <span class="ex-vi">Trong bếp thử nghiệm, dao chuyển động nhanh qua các bước sơ chế cẩn thận. Lúc ấy bạn để ý bánh mì vòng, bánh mì baguette, ngũ cốc, và bánh ngọt.</span>
+          </p>
+          <p class="ex-sent" data-sent="15">
+            <span class="ex-en">Drinks get the same care as food — cold, slow, and intentional. In that moment you notice <mark class="vocab" data-word="herb">herb</mark><span class="ipa">/ˈɝb/, /ˈhɝb/</span>, <mark class="vocab" data-word="beet">beet</mark><span class="ipa">/ˈbit/</span>, <mark class="vocab" data-word="green pepper">green pepper</mark><span class="ipa">/ɡɹˈiːn pˈɛpɚ/</span>, and <mark class="vocab" data-word="red pepper">red pepper</mark><span class="ipa">/ɹˈɛd pˈɛpɚ/</span>.</span>
+            <span class="ex-vi">Đồ uống được chăm như món ăn — mát, chậm, và có chủ đích. Lúc ấy bạn để ý thảo mộc, củ cải đường, ớt chuông xanh, và ớt đỏ.</span>
+          </p>
+          <p class="ex-sent" data-sent="16">
+            <span class="ex-en">The final paragraph connects recipes to everyday appetite and habit. In that moment you notice <mark class="vocab" data-word="goat cheese">goat cheese</mark><span class="ipa">/ɡˈoʊt tʃˈiːz/</span>, <mark class="vocab" data-word="margarine">margarine</mark><span class="ipa">/ˈmɑɹdʒɝən/</span>, <mark class="vocab" data-word="sour cream">sour cream</mark><span class="ipa">/sˈaɪʊɹ kɹˈiːm/</span>, and <mark class="vocab" data-word="raspberry">raspberry</mark><span class="ipa">/ˈɹæzˌbɛɹi/</span>.</span>
+            <span class="ex-vi">Đoạn cuối nối công thức với sự thèm ăn và thói quen hằng ngày. Lúc ấy bạn để ý phô mai dê, bơ thực vật, kem chua, và quả mâm xôi.</span>
+          </p>
+          <p class="ex-sent" data-sent="17">
+            <span class="ex-en">A food writer drafts notes on cuisine, technique, and modern plates. In that moment you notice <mark class="vocab" data-word="spice">spice</mark><span class="ipa">/ˈspaɪs/</span>, <mark class="vocab" data-word="sweet potato">sweet potato</mark><span class="ipa">/swˈiːt pətˈeɪɾoʊ/</span>, <mark class="vocab" data-word="zucchini">zucchini</mark><span class="ipa">/zuˈkini/</span>, and <mark class="vocab" data-word="wheat">wheat</mark><span class="ipa">/ˈhwit/, /ˈwit/</span>.</span>
+            <span class="ex-vi">Một cây viết ẩm thực phác thảo ghi chú về cuisine, kỹ thuật và đĩa món hiện đại. Lúc ấy bạn để ý gia vị, khoai lang, bí ngòi, và lúa mì.</span>
+          </p>
+          <p class="ex-sent" data-sent="18">
+            <span class="ex-en">In the test kitchen, knives move fast through careful prep steps. In that moment you notice <mark class="vocab" data-word="beefsteak">beefsteak</mark><span class="ipa">/ˈbifˌsteɪk/</span>, <mark class="vocab" data-word="kebab">kebab</mark><span class="ipa">/kəˈbɑb/</span>, <mark class="vocab" data-word="meatloaf">meatloaf</mark><span class="ipa">/ˈmitɫoʊf/</span>, and <mark class="vocab" data-word="mayonnaise">mayonnaise</mark><span class="ipa">/ˈmeɪəˌneɪz/</span>.</span>
+            <span class="ex-vi">Trong bếp thử nghiệm, dao chuyển động nhanh qua các bước sơ chế cẩn thận. Lúc ấy bạn để ý bít tết, kebab, bánh mì thịt, và sốt mayonnaise.</span>
+          </p>
+          <p class="ex-sent" data-sent="19">
+            <span class="ex-en">Drinks get the same care as food — cold, slow, and intentional. In that moment you notice <mark class="vocab" data-word="mustard">mustard</mark><span class="ipa">/ˈməstɝd/</span>, <mark class="vocab" data-word="soy sauce">soy sauce</mark><span class="ipa">/sˈɔɪ sˈɔːs/</span>, <mark class="vocab" data-word="ketchup">ketchup</mark><span class="ipa">/ˈkɛtʃəp/</span>, and <mark class="vocab" data-word="vinegar">vinegar</mark><span class="ipa">/ˈvɪnəɡɝ/</span>.</span>
+            <span class="ex-vi">Đồ uống được chăm như món ăn — mát, chậm, và có chủ đích. Lúc ấy bạn để ý mù tạt, nước tương, tương cà, và giấm.</span>
+          </p>
+          <p class="ex-sent" data-sent="20">
+            <span class="ex-en">The final paragraph connects recipes to everyday appetite and habit. In that moment you notice <mark class="vocab" data-word="white sauce">white sauce</mark><span class="ipa">/wˈaɪt sˈɔːs/</span>, <mark class="vocab" data-word="chewing gum">chewing gum</mark><span class="ipa">/tʃjˈuːɪŋ ɡˈʌm/</span>, <mark class="vocab" data-word="hard candy">hard candy</mark><span class="ipa">/hˈɑːɹd kˈændi/</span>, and <mark class="vocab" data-word="lollipop">lollipop</mark><span class="ipa">/ˈɫɑɫiˌpɑp/</span>.</span>
+            <span class="ex-vi">Đoạn cuối nối công thức với sự thèm ăn và thói quen hằng ngày. Lúc ấy bạn để ý nước sốt trắng, kẹo cao su, kẹo cứng, và kẹo mút.</span>
+          </p>
+          <p class="ex-sent" data-sent="21">
+            <span class="ex-en">A food writer drafts notes on cuisine, technique, and modern plates. In that moment you notice <mark class="vocab" data-word="popsicle">popsicle</mark><span class="ipa">/ˈpɑpsɪkəɫ/</span>, <mark class="vocab" data-word="pudding">pudding</mark><span class="ipa">/ˈpʊdɪŋ/</span>, <mark class="vocab" data-word="portion">portion</mark><span class="ipa">/ˈpɔɹʃən/</span>, and <mark class="vocab" data-word="supper">supper</mark><span class="ipa">/ˈsəpɝ/</span>.</span>
+            <span class="ex-vi">Một cây viết ẩm thực phác thảo ghi chú về cuisine, kỹ thuật và đĩa món hiện đại. Lúc ấy bạn để ý kem que, bánh pudding, phần, và bữa tối nhẹ.</span>
+          </p>
+          <p class="ex-sent" data-sent="22">
+            <span class="ex-en">In the test kitchen, knives move fast through careful prep steps. In that moment you notice <mark class="vocab" data-word="takeout">takeout</mark><span class="ipa">/ˈteɪˌkaʊt/</span>, <mark class="vocab" data-word="roll">roll</mark><span class="ipa">/roʊl/</span>, and <mark class="vocab" data-word="tomato paste">tomato paste</mark><span class="ipa">/təmˈeɪɾoʊ pˈeɪst/</span>.</span>
+            <span class="ex-vi">Trong bếp thử nghiệm, dao chuyển động nhanh qua các bước sơ chế cẩn thận. Lúc ấy bạn để ý mang về, ổ bánh mì nhỏ, và cà chua cô đặc.</span>
+          </p>
+      </section>
+
+      <section class="ex-vocab">
+        <h2>Word checklist · 87</h2>
+        <ul class="ex-vocab-list">
+          <li><mark class="vocab">recipe</mark> <span class="ipa">/ˈɹɛsəpi/</span> — công thức</li>
+          <li><mark class="vocab">ingredient</mark> <span class="ipa">/ˌɪnˈɡɹidiənt/</span> — nguyên liệu</li>
+          <li><mark class="vocab">beat</mark> <span class="ipa">/biːt/</span> — đánh</li>
+          <li><mark class="vocab">chop</mark> <span class="ipa">/ˈtʃɑp/</span> — băm</li>
+          <li><mark class="vocab">garnish</mark> <span class="ipa">/ˈɡɑɹnɪʃ/</span> — trang trí</li>
+          <li><mark class="vocab">grill</mark> <span class="ipa">/ˈɡɹɪɫ/</span> — nướng</li>
+          <li><mark class="vocab">heat</mark> <span class="ipa">/hit/</span> — đun nóng</li>
+          <li><mark class="vocab">marinate</mark> <span class="ipa">/ˈmɛɹəˌneɪt/</span> — ướp</li>
+          <li><mark class="vocab">peel</mark> <span class="ipa">/ˈpiɫ/</span> — gọt</li>
+          <li><mark class="vocab">poach</mark> <span class="ipa">/ˈpoʊtʃ/</span> — luộc</li>
+          <li><mark class="vocab">roast</mark> <span class="ipa">/ˈɹoʊst/</span> — nướng</li>
+          <li><mark class="vocab">slice</mark> <span class="ipa">/slaɪs/</span> — cắt lát</li>
+          <li><mark class="vocab">stir</mark> <span class="ipa">/ˈstɝ/</span> — khuấy</li>
+          <li><mark class="vocab">toast</mark> <span class="ipa">/toʊst/</span> — nướng</li>
+          <li><mark class="vocab">counter</mark> <span class="ipa">/ˈkaʊntər/</span> — tủ bếp</li>
+          <li><mark class="vocab">utensil</mark> <span class="ipa">/juˈtɛnsəɫ/</span> — dụng cụ</li>
+          <li><mark class="vocab">barbecue</mark> <span class="ipa">/ˈbɑːrbɪˌkjuː/</span> — bếp nướng</li>
+          <li><mark class="vocab">blender</mark> <span class="ipa">/ˈbɫɛndɝ/</span> — máy xay</li>
+          <li><mark class="vocab">frying pan</mark> <span class="ipa">/fɹˈaɪɪŋ pˈæn/</span> — chảo rán</li>
+          <li><mark class="vocab">wok</mark> <span class="ipa">/ˈwɑk/</span> — wok</li>
+          <li><mark class="vocab">mixer</mark> <span class="ipa">/ˈmɪksɝ/</span> — máy trộn</li>
+          <li><mark class="vocab">lid</mark> <span class="ipa">/ˈɫɪd/</span> — nắp</li>
+          <li><mark class="vocab">mixing bowl</mark> <span class="ipa">/mˈɪksɪŋ bˈoʊl/</span> — tô trộn</li>
+          <li><mark class="vocab">wooden spoon</mark> <span class="ipa">/wˈʊdən spˈuːn/</span> — muỗng gỗ</li>
+          <li><mark class="vocab">scale</mark> <span class="ipa">/skeɪl/</span> — cân</li>
+          <li><mark class="vocab">pinch</mark> <span class="ipa">/ˈpɪntʃ/</span> — một nhúm</li>
+          <li><mark class="vocab">cupful</mark> <span class="ipa">/kˈʌpfəl/</span> — cốc</li>
+          <li><mark class="vocab">spoonful</mark> <span class="ipa">/ˈspunˌfʊɫ/</span> — thìa đầy</li>
+          <li><mark class="vocab">sip</mark> <span class="ipa">/ˈsɪp/</span> — nhấp nháp</li>
+          <li><mark class="vocab">sober up</mark> <span class="ipa">/sˈoʊbɚɹ ˈʌp/</span> — tỉnh rượu</li>
+          <li><mark class="vocab">thirst</mark> <span class="ipa">/ˈθɝst/</span> — cơn khát</li>
+          <li><mark class="vocab">ice cube</mark> <span class="ipa">/ˈaɪs kjˈuːb/</span> — viên đá</li>
+          <li><mark class="vocab">straw</mark> <span class="ipa">/ˈstɹɔ/</span> — ống hút</li>
+          <li><mark class="vocab">liquor store</mark> <span class="ipa">/lˈɪkɚ stˈoːɹ/</span> — cửa hàng rượu</li>
+          <li><mark class="vocab">booze</mark> <span class="ipa">/ˈbuz/</span> — rượu</li>
+          <li><mark class="vocab">Bloody Mary</mark> <span class="ipa">/blˈʌdi mˈɛɹi/</span> — Bloody Mary</li>
+          <li><mark class="vocab">Bourbon</mark> <span class="ipa">/ˈbɝbən/</span> — Bourbon</li>
+          <li><mark class="vocab">cider</mark> <span class="ipa">/ˈsaɪdɝ/</span> — rượu táo</li>
+          <li><mark class="vocab">gin</mark> <span class="ipa">/ˈdʒɪn/</span> — rượu gin</li>
+          <li><mark class="vocab">ginger ale</mark> <span class="ipa">/dʒˈɪndʒɚɹ ˈeɪl/</span> — ginger ale</li>
+          <li><mark class="vocab">ice tea</mark> <span class="ipa">/ˈaɪs tˈiː/</span> — trà đá</li>
+          <li><mark class="vocab">liquor</mark> <span class="ipa">/ˈɫɪkɝ/</span> — rượu mạnh</li>
+          <li><mark class="vocab">margarita</mark> <span class="ipa">/ˌmɑɹɡɝˈitə/</span> — margarita</li>
+          <li><mark class="vocab">martini</mark> <span class="ipa">/mɑɹˈtini/</span> — martini</li>
+          <li><mark class="vocab">mojito</mark> <span class="ipa">/moʊhˈiːɾoʊ/</span> — mojito</li>
+          <li><mark class="vocab">refill</mark> <span class="ipa">/ˈɹifɪɫ/, /ɹiˈfɪɫ/</span> — làm đầy lại</li>
+          <li><mark class="vocab">punch</mark> <span class="ipa">/pʌntʃ/</span> — punch</li>
+          <li><mark class="vocab">cappuccino</mark> <span class="ipa">/ˌkæˌpuˈtʃinoʊ/</span> — cappuccino</li>
+          <li><mark class="vocab">herbal tea</mark> <span class="ipa">/hˈɜːbəl tˈiː/</span> — trà thảo mộc</li>
+          <li><mark class="vocab">skim milk</mark> <span class="ipa">/skˈɪm mˈɪlk/</span> — sữa gầy</li>
+          <li><mark class="vocab">cuisine</mark> <span class="ipa">/kwɪˈzin/</span> — ẩm thực</li>
+          <li><mark class="vocab">carbohydrate</mark> <span class="ipa">/ˌkɑɹboʊˈhaɪˌdɹeɪt/, /ˌkɑɹboʊˈhaɪdɹət/</span> — carbohydrate</li>
+          <li><mark class="vocab">bagel</mark> <span class="ipa">/ˈbeɪɡəɫ/</span> — bánh mì vòng</li>
+          <li><mark class="vocab">baguette</mark> <span class="ipa">/ˌbæˈɡɛt/</span> — bánh mì baguette</li>
+          <li><mark class="vocab">cereal</mark> <span class="ipa">/ˈsɪɹiəɫ/</span> — ngũ cốc</li>
+          <li><mark class="vocab">pastry</mark> <span class="ipa">/ˈpeɪstɹi/</span> — bánh ngọt</li>
+          <li><mark class="vocab">herb</mark> <span class="ipa">/ˈɝb/, /ˈhɝb/</span> — thảo mộc</li>
+          <li><mark class="vocab">beet</mark> <span class="ipa">/ˈbit/</span> — củ cải đường</li>
+          <li><mark class="vocab">green pepper</mark> <span class="ipa">/ɡɹˈiːn pˈɛpɚ/</span> — ớt chuông xanh</li>
+          <li><mark class="vocab">red pepper</mark> <span class="ipa">/ɹˈɛd pˈɛpɚ/</span> — ớt đỏ</li>
+          <li><mark class="vocab">goat cheese</mark> <span class="ipa">/ɡˈoʊt tʃˈiːz/</span> — phô mai dê</li>
+          <li><mark class="vocab">margarine</mark> <span class="ipa">/ˈmɑɹdʒɝən/</span> — bơ thực vật</li>
+          <li><mark class="vocab">sour cream</mark> <span class="ipa">/sˈaɪʊɹ kɹˈiːm/</span> — kem chua</li>
+          <li><mark class="vocab">raspberry</mark> <span class="ipa">/ˈɹæzˌbɛɹi/</span> — quả mâm xôi</li>
+          <li><mark class="vocab">spice</mark> <span class="ipa">/ˈspaɪs/</span> — gia vị</li>
+          <li><mark class="vocab">sweet potato</mark> <span class="ipa">/swˈiːt pətˈeɪɾoʊ/</span> — khoai lang</li>
+          <li><mark class="vocab">zucchini</mark> <span class="ipa">/zuˈkini/</span> — bí ngòi</li>
+          <li><mark class="vocab">wheat</mark> <span class="ipa">/ˈhwit/, /ˈwit/</span> — lúa mì</li>
+          <li><mark class="vocab">beefsteak</mark> <span class="ipa">/ˈbifˌsteɪk/</span> — bít tết</li>
+          <li><mark class="vocab">kebab</mark> <span class="ipa">/kəˈbɑb/</span> — kebab</li>
+          <li><mark class="vocab">meatloaf</mark> <span class="ipa">/ˈmitɫoʊf/</span> — bánh mì thịt</li>
+          <li><mark class="vocab">mayonnaise</mark> <span class="ipa">/ˈmeɪəˌneɪz/</span> — sốt mayonnaise</li>
+          <li><mark class="vocab">mustard</mark> <span class="ipa">/ˈməstɝd/</span> — mù tạt</li>
+          <li><mark class="vocab">soy sauce</mark> <span class="ipa">/sˈɔɪ sˈɔːs/</span> — nước tương</li>
+          <li><mark class="vocab">ketchup</mark> <span class="ipa">/ˈkɛtʃəp/</span> — tương cà</li>
+          <li><mark class="vocab">vinegar</mark> <span class="ipa">/ˈvɪnəɡɝ/</span> — giấm</li>
+          <li><mark class="vocab">white sauce</mark> <span class="ipa">/wˈaɪt sˈɔːs/</span> — nước sốt trắng</li>
+          <li><mark class="vocab">chewing gum</mark> <span class="ipa">/tʃjˈuːɪŋ ɡˈʌm/</span> — kẹo cao su</li>
+          <li><mark class="vocab">hard candy</mark> <span class="ipa">/hˈɑːɹd kˈændi/</span> — kẹo cứng</li>
+          <li><mark class="vocab">lollipop</mark> <span class="ipa">/ˈɫɑɫiˌpɑp/</span> — kẹo mút</li>
+          <li><mark class="vocab">popsicle</mark> <span class="ipa">/ˈpɑpsɪkəɫ/</span> — kem que</li>
+          <li><mark class="vocab">pudding</mark> <span class="ipa">/ˈpʊdɪŋ/</span> — bánh pudding</li>
+          <li><mark class="vocab">portion</mark> <span class="ipa">/ˈpɔɹʃən/</span> — phần</li>
+          <li><mark class="vocab">supper</mark> <span class="ipa">/ˈsəpɝ/</span> — bữa tối nhẹ</li>
+          <li><mark class="vocab">takeout</mark> <span class="ipa">/ˈteɪˌkaʊt/</span> — mang về</li>
+          <li><mark class="vocab">roll</mark> <span class="ipa">/roʊl/</span> — ổ bánh mì nhỏ</li>
+          <li><mark class="vocab">tomato paste</mark> <span class="ipa">/təmˈeɪɾoʊ pˈeɪst/</span> — cà chua cô đặc</li>
+        </ul>
+      </section>
+
+      <div class="docs-pager">
+        <a href="../">← Food &amp; Drink</a>
+        <a href="../../">All topics →</a>
+      </div>
+    </article>
+  </div>
+  <script src="../../../../js/docs.js"></script>
+  <script src="../../../../js/exercise.js"></script>
+</body>
+</html>

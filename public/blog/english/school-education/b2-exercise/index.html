@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>B2 Exercise · School &amp; Education — The Quiet Corner</title>
+  <meta name="description" content="B2 reading exercise for School &amp; Education vocabulary with IPA and bilingual sentences.">
+  <link rel="icon" href="../../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../../"><span>✦</span> The Quiet Corner <span>✦</span></a>
+    <nav class="docs-series">
+      <a href="../../../../blog/web-security/">DevSecOps</a>
+      <a href="../../../../blog/kubestronaut/">Kubestronaut</a>
+      <a class="active" href="../../">English</a>
+    </nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-nav="english" data-docs-root="../../" data-active="school-education">
+      <div class="docs-nav-label">English</div>
+      <ul class="docs-nav" id="docsNav">
+        <li><a href="../../">All topics</a></li>
+        <li><a href="../">School &amp; Education</a></li>
+        <li><a class="active" href="./">B2 Exercise</a></li>
+      </ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../../">Home</a>
+        <span>›</span>
+        <a href="../../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../../">English</a>
+        <span>›</span>
+        <a href="../">School &amp; Education</a>
+        <span>›</span>
+        <span>B2 Exercise</span>
+      </div>
+
+      <div class="vocab-topic-hero">
+        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 72 72' fill='none'%3E%3Crect width='72' height='72' rx='14' fill='%230b1220'/%3E%3Crect x='16' y='14' width='40' height='46' rx='6' stroke='%2322d3ee' stroke-width='2.5'/%3E%3Cpath d='M24 28h24M24 36h24M24 44h16' stroke='%23e4e4e7' stroke-width='2.5' stroke-linecap='round'/%3E%3Cpath d='M48 48l6 2-2 6-8-8 4 0z' fill='%2322d3ee'/%3E%3C/svg%3E" alt="" width="112" height="112">
+        <div>
+          <h1>B2 Exercise · School &amp; Education</h1>
+          <p class="lede">Reading passage with every new word from this level’s LanGeek lessons — IPA, highlights, sentence translation, and free TTS.</p>
+          <div class="docs-meta">
+            <span><strong>Words:</strong> 142</span>
+            <span><strong>Lessons:</strong> Grammar · School and Education · Scientific Research · World of Science</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="ex-toolbar" id="exToolbar">
+        <label class="ex-toggle"><input type="checkbox" id="togHighlight" checked> Highlights</label>
+        <label class="ex-toggle"><input type="checkbox" id="togIpa" checked> IPA</label>
+        <label class="ex-toggle"><input type="checkbox" id="togVi"> Dịch câu (VI)</label>
+        <span class="ex-sep"></span>
+        <label class="ex-voice">Voice
+          <select id="voiceSelect" aria-label="TTS voice"></select>
+        </label>
+        <label class="ex-voice">Speed
+          <input id="rateRange" type="range" min="0.7" max="1.15" step="0.05" value="0.95">
+          <span id="rateVal">0.95</span>
+        </label>
+        <button type="button" class="ex-btn primary" id="btnPlay">▶ Read passage</button>
+        <button type="button" class="ex-btn" id="btnStop">Stop</button>
+      </div>
+      
+      <section class="ex-passage" id="passage" data-tts-root>
+          <p class="ex-sent" data-sent="1">
+            <span class="ex-en">In this B2 School & Education passage, notice <mark class="vocab" data-word="abbreviation">abbreviation</mark><span class="ipa">/əˌbɹiviˈeɪʃən/</span>, <mark class="vocab" data-word="article">article</mark><span class="ipa">/ˈɑːrtɪkəl/</span>, <mark class="vocab" data-word="auxiliary verb">auxiliary verb</mark><span class="ipa">/ɔːksˈɪliəɹi vˈɜːb/</span>, and <mark class="vocab" data-word="conjunction">conjunction</mark><span class="ipa">/kənˈdʒəŋkʃən/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về School &amp; Education, hãy để ý chữ viết tắt, mạo từ, động từ trợ giúp, và liên từ.</span>
+          </p>
+          <p class="ex-sent" data-sent="2">
+            <span class="ex-en">In this B2 School & Education passage, notice <mark class="vocab" data-word="preposition">preposition</mark><span class="ipa">/pɹˌɛpəzˈɪʃən/</span>, <mark class="vocab" data-word="proper noun">proper noun</mark><span class="ipa">/pɹˈɑːpɚ nˈaʊn/</span>, <mark class="vocab" data-word="pronoun">pronoun</mark><span class="ipa">/ˈpɹoʊnaʊn/</span>, and <mark class="vocab" data-word="prefix">prefix</mark><span class="ipa">/ˈpɹifɪks/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về School &amp; Education, hãy để ý giới từ, danh từ riêng, đại từ, và tiền tố.</span>
+          </p>
+          <p class="ex-sent" data-sent="3">
+            <span class="ex-en">In this B2 School & Education passage, notice <mark class="vocab" data-word="suffix">suffix</mark><span class="ipa">/ˈsəfɪks/</span>, <mark class="vocab" data-word="active">active</mark><span class="ipa">/ˈæktɪv/</span>, <mark class="vocab" data-word="passive">passive</mark><span class="ipa">/ˈpæsɪv/</span>, and <mark class="vocab" data-word="comparative">comparative</mark><span class="ipa">/kəmˈpɛɹətɪv/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về School &amp; Education, hãy để ý hậu tố, chủ động, bị động, và so sánh.</span>
+          </p>
+          <p class="ex-sent" data-sent="4">
+            <span class="ex-en">In this B2 School & Education passage, notice <mark class="vocab" data-word="superlative">superlative</mark><span class="ipa">/sʊˈpɝɫətɪv/</span>, <mark class="vocab" data-word="plural">plural</mark><span class="ipa">/ˈpɫʊɹəɫ/</span>, <mark class="vocab" data-word="singular">singular</mark><span class="ipa">/ˈsɪŋɡjəɫɝ/</span>, and <mark class="vocab" data-word="grammatical">grammatical</mark><span class="ipa">/ɡɹəˈmætəkəɫ/, /ɡɹəˈmætɪkəɫ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về School &amp; Education, hãy để ý so sánh nhất, số nhiều, số ít, và ngữ pháp.</span>
+          </p>
+          <p class="ex-sent" data-sent="5">
+            <span class="ex-en">In this B2 School & Education passage, notice <mark class="vocab" data-word="irregular">irregular</mark><span class="ipa">/ɪˈrɛɡjʊlər/</span>, <mark class="vocab" data-word="modal">modal</mark><span class="ipa">/ˈmoʊdəɫ/</span>, <mark class="vocab" data-word="conditional">conditional</mark><span class="ipa">/kənˈdɪʃənəɫ/</span>, and <mark class="vocab" data-word="perfect">perfect</mark><span class="ipa">/ˈpɝfɪkt/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về School &amp; Education, hãy để ý bất quy tắc, động từ khuyết thiếu, có điều kiện, và hoàn thành.</span>
+          </p>
+          <p class="ex-sent" data-sent="6">
+            <span class="ex-en">In this B2 School & Education passage, notice <mark class="vocab" data-word="past participle">past participle</mark><span class="ipa">/pˈæst pɑːɹtˈɪsɪpəl/</span>, <mark class="vocab" data-word="continuous">continuous</mark><span class="ipa">/kənˈtɪnjuəs/</span>, <mark class="vocab" data-word="progressive">progressive</mark><span class="ipa">/pɹəˈɡɹɛsɪv/</span>, and <mark class="vocab" data-word="collocation">collocation</mark><span class="ipa">/kɑɫəˈkeɪʃən/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về School &amp; Education, hãy để ý quá khứ phân từ, liên tục, tiếp diễn, và kết hợp từ.</span>
+          </p>
+          <p class="ex-sent" data-sent="7">
+            <span class="ex-en">In this B2 School & Education passage, notice <mark class="vocab" data-word="possessive">possessive</mark><span class="ipa">/pəˈzɛsɪv/</span>, <mark class="vocab" data-word="pronunciation">pronunciation</mark><span class="ipa">/pɹəˌnənsiˈeɪʃən/, /pɹoʊˌnənsiˈeɪʃən/</span>, <mark class="vocab" data-word="consonant">consonant</mark><span class="ipa">/ˈkɑnsənənt/</span>, and <mark class="vocab" data-word="vowel">vowel</mark><span class="ipa">/ˈvaʊəɫ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về School &amp; Education, hãy để ý sở hữu, phát âm, phụ âm, và nguyên âm.</span>
+          </p>
+          <p class="ex-sent" data-sent="8">
+            <span class="ex-en">In this B2 School & Education passage, notice <mark class="vocab" data-word="stress">stress</mark><span class="ipa">/ˈstɹɛs/</span>, <mark class="vocab" data-word="tag question">tag question</mark><span class="ipa">/tˈæɡ kwˈɛstʃən/</span>, <mark class="vocab" data-word="punctuation">punctuation</mark><span class="ipa">/ˌpəŋktʃuˈeɪʃən/</span>, and <mark class="vocab" data-word="exclamation point">exclamation point</mark><span class="ipa">/ɛksklɐmˈeɪʃən pˈɔɪnt/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về School &amp; Education, hãy để ý trọng âm, câu hỏi đuôi, dấu câu, và dấu chấm than.</span>
+          </p>
+          <p class="ex-sent" data-sent="9">
+            <span class="ex-en">In this B2 School & Education passage, notice <mark class="vocab" data-word="question mark">question mark</mark><span class="ipa">/kwˈɛstʃən mˈɑːɹk/</span>, <mark class="vocab" data-word="comma">comma</mark><span class="ipa">/ˈkɑmə/</span>, <mark class="vocab" data-word="to spell">spell</mark><span class="ipa">/spɛl/</span>, and <mark class="vocab" data-word="double negative">double negative</mark><span class="ipa">/dˈʌbəl nˈɛɡətˌɪv/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về School &amp; Education, hãy để ý dấu hỏi, dấu phẩy, đánh vần, và phủ định kép.</span>
+          </p>
+          <p class="ex-sent" data-sent="10">
+            <span class="ex-en">In this B2 School & Education passage, notice <mark class="vocab" data-word="institution">institution</mark><span class="ipa">/ˌɪnstɪˈtuʃən/</span>, <mark class="vocab" data-word="grade school">grade school</mark><span class="ipa">/ɡɹˈeɪd skˈuːl/</span>, <mark class="vocab" data-word="graduate school">graduate school</mark><span class="ipa">/ɡɹˈædʒuːət skˈuːl/</span>, and <mark class="vocab" data-word="junior high school">junior high school</mark><span class="ipa">/dʒˈuːnjɚ hˈaɪ skˈuːl/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về School &amp; Education, hãy để ý tổ chức, trường tiểu học, trường sau đại học, và trường trung học cơ sở.</span>
+          </p>
+          <p class="ex-sent" data-sent="11">
+            <span class="ex-en">In this B2 School & Education passage, notice <mark class="vocab" data-word="senior high school">senior high school</mark><span class="ipa">/sˈiːnjɚ hˈaɪ skˈuːl/</span>, <mark class="vocab" data-word="summer school">summer school</mark><span class="ipa">/sˈʌmɚ skˈuːl/</span>, <mark class="vocab" data-word="prom">prom</mark><span class="ipa">/ˈpɹɑm/</span>, and <mark class="vocab" data-word="to enroll">enroll</mark><span class="ipa">/ɛnˈɹoʊɫ/, /ɪnˈɹoʊɫ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về School &amp; Education, hãy để ý trường trung học phổ thông, trường hè, vũ hội tốt nghiệp, và đăng ký.</span>
+          </p>
+          <p class="ex-sent" data-sent="12">
+            <span class="ex-en">In this B2 School & Education passage, notice <mark class="vocab" data-word="to register">register</mark><span class="ipa">/ˈrɛʤɪstɚ/</span>, <mark class="vocab" data-word="locker">locker</mark><span class="ipa">/ˈɫɑkɝ/</span>, <mark class="vocab" data-word="roommate">roommate</mark><span class="ipa">/ˈɹuˌmeɪt/</span>, and <mark class="vocab" data-word="discipline">discipline</mark><span class="ipa">/ˈdɪsəpɫən/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về School &amp; Education, hãy để ý đăng ký, tủ đồ, bạn cùng phòng, và kỷ luật.</span>
+          </p>
+          <p class="ex-sent" data-sent="13">
+            <span class="ex-en">In this B2 School & Education passage, notice <mark class="vocab" data-word="major">major</mark><span class="ipa">/ˈmeɪdʒɚ/</span>, <mark class="vocab" data-word="certificate">certificate</mark><span class="ipa">/sɝˈtɪfɪkət/</span>, <mark class="vocab" data-word="<mark class="vocab" data-word="to master">master</mark><span class="ipa">/ˈmæstər/</span>">master</mark><span class="ipa">/ˈmæstər/</span>, and master.</span>
+            <span class="ex-vi">Trong đoạn B2 về School &amp; Education, hãy để ý sinh viên chuyên ngành, chứng chỉ, thạc sĩ, và thành thạo.</span>
+          </p>
+          <p class="ex-sent" data-sent="14">
+            <span class="ex-en">In this B2 School & Education passage, notice <mark class="vocab" data-word="Doctor of Philosophy">Doctor of Philosophy</mark><span class="ipa">/dˈɑːktɚɹ ʌv fɪlˈɑːsəfi/</span>, <mark class="vocab" data-word="postgraduate">postgraduate</mark><span class="ipa">/pˈoʊstɡɹɐdʒˌuːeɪt/</span>, <mark class="vocab" data-word="sponsor">sponsor</mark><span class="ipa">/ˈspɑnsɝ/</span>, and <mark class="vocab" data-word="trainee">trainee</mark><span class="ipa">/ˈtɹeɪˈni/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về School &amp; Education, hãy để ý Doctor of Philosophy, sinh viên sau đại học, nhà tài trợ, và thực tập sinh.</span>
+          </p>
+          <p class="ex-sent" data-sent="15">
+            <span class="ex-en">In this B2 School & Education passage, notice <mark class="vocab" data-word="to tutor">tutor</mark><span class="ipa">/ˈtuːtɚ/</span>, <mark class="vocab" data-word="thesis">thesis</mark><span class="ipa">/ˈθisɪs/</span>, <mark class="vocab" data-word="scholarship">scholarship</mark><span class="ipa">/ˈskɑɫɝˌʃɪp/</span>, and <mark class="vocab" data-word="seminar">seminar</mark><span class="ipa">/ˈsɛməˌnɑɹ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về School &amp; Education, hãy để ý dạy kèm, luận văn, học bổng, và hội thảo.</span>
+          </p>
+          <p class="ex-sent" data-sent="16">
+            <span class="ex-en">In this B2 School & Education passage, notice <mark class="vocab" data-word="curriculum">curriculum</mark><span class="ipa">/kɝˈɪkjəɫəm/</span>, <mark class="vocab" data-word="optional">optional</mark><span class="ipa">/ˈɑpʃənəɫ/, /ˈɔpʃənəɫ/</span>, <mark class="vocab" data-word="to grade">grade</mark><span class="ipa">/ɡreɪd/</span>, and <mark class="vocab" data-word="coursework">coursework</mark><span class="ipa">/ˈkɔɹsˌwɝk/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về School &amp; Education, hãy để ý chương trình giảng dạy, tùy chọn, chấm điểm, và bài tập khóa học.</span>
+          </p>
+          <p class="ex-sent" data-sent="17">
+            <span class="ex-en">In this B2 School & Education passage, notice <mark class="vocab" data-word="textbook">textbook</mark><span class="ipa">/ˈtɛkstˌbʊk/</span>, <mark class="vocab" data-word="workbook">workbook</mark><span class="ipa">/ˈwɝkˌbʊk/</span>, <mark class="vocab" data-word="multiple-choice">multiple-choice</mark><span class="ipa">/mˈʌltɪpəltʃˈɔɪs/</span>, and <mark class="vocab" data-word="tutorial">tutorial</mark><span class="ipa">/tuˈtɔɹiəɫ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về School &amp; Education, hãy để ý sách giáo khoa, sách bài tập, trắc nghiệm, và hướng dẫn.</span>
+          </p>
+          <p class="ex-sent" data-sent="18">
+            <span class="ex-en">In this B2 School & Education passage, notice <mark class="vocab" data-word="dormitory">dormitory</mark><span class="ipa">/ˈdɔɹməˌtɔɹi/</span>, <mark class="vocab" data-word="buttery">buttery</mark><span class="ipa">/ˈbətɝi/</span>, <mark class="vocab" data-word="analytical">analytical</mark><span class="ipa">/ˌænəˈɫɪtɪkəɫ/</span>, and <mark class="vocab" data-word="descriptive">descriptive</mark><span class="ipa">/dɪsˈkɹɪptɪv/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về School &amp; Education, hãy để ý ký túc xá, quán cà phê, phân tích, và mô tả.</span>
+          </p>
+          <p class="ex-sent" data-sent="19">
+            <span class="ex-en">In this B2 School & Education passage, notice <mark class="vocab" data-word="to cite">cite</mark><span class="ipa">/ˈsaɪt/</span>, <mark class="vocab" data-word="to classify">classify</mark><span class="ipa">/ˈkɫæsəˌfaɪ/</span>, <mark class="vocab" data-word="to compile">compile</mark><span class="ipa">/kəmˈpaɪɫ/</span>, and <mark class="vocab" data-word="to conduct">conduct</mark><span class="ipa">/ˈkɑndəkt/, /kɑnˈdəkt/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về School &amp; Education, hãy để ý trích dẫn, phân loại, biên soạn, và chỉ đạo.</span>
+          </p>
+          <p class="ex-sent" data-sent="20">
+            <span class="ex-en">In this B2 School & Education passage, notice <mark class="vocab" data-word="to demonstrate">demonstrate</mark><span class="ipa">/ˈdɛmənˌstɹeɪt/</span>, <mark class="vocab" data-word="to derive">derive</mark><span class="ipa">/dɝˈaɪv/</span>, <mark class="vocab" data-word="to detect">detect</mark><span class="ipa">/dɪˈtɛkt/</span>, and <mark class="vocab" data-word="to document">document</mark><span class="ipa">/ˈdɑːkjəmənt/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về School &amp; Education, hãy để ý chứng minh, suy ra, phát hiện, và tài liệu hóa.</span>
+          </p>
+          <p class="ex-sent" data-sent="21">
+            <span class="ex-en">In this B2 School & Education passage, notice <mark class="vocab" data-word="to estimate">estimate</mark><span class="ipa">/ˈɛstəˌmeɪt/, /ˈɛstəmət/</span>, <mark class="vocab" data-word="to evaluate">evaluate</mark><span class="ipa">/iˈvæɫjuˌeɪt/, /ɪˈvæɫjuˌeɪt/</span>, <mark class="vocab" data-word="to imply">imply</mark><span class="ipa">/ˌɪmˈpɫaɪ/</span>, and <mark class="vocab" data-word="to interpret">interpret</mark><span class="ipa">/ˌɪnˈtɝpɹət/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về School &amp; Education, hãy để ý ước tính, đánh giá, ám chỉ, và giải thích.</span>
+          </p>
+          <p class="ex-sent" data-sent="22">
+            <span class="ex-en">In this B2 School & Education passage, notice <mark class="vocab" data-word="to observe">observe</mark><span class="ipa">/əbˈzɜrv/</span>, <mark class="vocab" data-word="to outline">outline</mark><span class="ipa">/ˈaʊtˌɫaɪn/</span>, <mark class="vocab" data-word="to survey">survey</mark><span class="ipa">/ˈsɝˌveɪ/, /sɝˈveɪ/</span>, and <mark class="vocab" data-word="case study">case study</mark><span class="ipa">/kˈeɪs stˈʌdi/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về School &amp; Education, hãy để ý quan sát, phác thảo, khảo sát, và nghiên cứu tình huống.</span>
+          </p>
+          <p class="ex-sent" data-sent="23">
+            <span class="ex-en">In this B2 School & Education passage, notice <mark class="vocab" data-word="chart">chart</mark><span class="ipa">/ˈtʃɑɹt/</span>, <mark class="vocab" data-word="diagram">diagram</mark><span class="ipa">/ˈdaɪəˌɡɹæm/</span>, <mark class="vocab" data-word="document">document</mark><span class="ipa">/ˈdɑːkjəmənt/</span>, and <mark class="vocab" data-word="evaluation">evaluation</mark><span class="ipa">/iˌvæɫjuˈeɪʃən/, /ɪˌvæɫjuˈeɪʃən/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về School &amp; Education, hãy để ý biểu đồ, biểu đồ, tài liệu, và đánh giá.</span>
+          </p>
+          <p class="ex-sent" data-sent="24">
+            <span class="ex-en">In this B2 School & Education passage, notice <mark class="vocab" data-word="hypothesis">hypothesis</mark><span class="ipa">/haɪˈpɑθəsəs/</span>, <mark class="vocab" data-word="experiment">experiment</mark><span class="ipa">/ɪkˈspɛɹəmənt/</span>, <mark class="vocab" data-word="sample">sample</mark><span class="ipa">/ˈsæmpəɫ/</span>, and <mark class="vocab" data-word="variable">variable</mark><span class="ipa">/ˈvɛɹiəbəɫ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về School &amp; Education, hãy để ý giả thuyết, thí nghiệm, mẫu, và biến số.</span>
+          </p>
+          <p class="ex-sent" data-sent="25">
+            <span class="ex-en">In this B2 School & Education passage, notice <mark class="vocab" data-word="instrument">instrument</mark><span class="ipa">/ˈɪnstrəmənt/</span>, <mark class="vocab" data-word="questionnaire">questionnaire</mark><span class="ipa">/ˌkwɛstʃəˈnɛɹ/</span>, <mark class="vocab" data-word="reference">reference</mark><span class="ipa">/ˈrɛfərəns/</span>, and <mark class="vocab" data-word="trial">trial</mark><span class="ipa">/ˈtɹaɪəɫ/, /ˈtɹaɪɫ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về School &amp; Education, hãy để ý dụng cụ, bảng câu hỏi, tham khảo, và thử nghiệm.</span>
+          </p>
+          <p class="ex-sent" data-sent="26">
+            <span class="ex-en">In this B2 School & Education passage, notice <mark class="vocab" data-word="trial and error">trial and error</mark><span class="ipa">/tɹˈaɪəl ænd ˈɛɹɚ/</span>, <mark class="vocab" data-word="finding">finding</mark><span class="ipa">/ˈfaɪndɪŋ/</span>, <mark class="vocab" data-word="law">law</mark><span class="ipa">/lɑ/</span>, and <mark class="vocab" data-word="model">model</mark><span class="ipa">/ˈmɑdəl/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về School &amp; Education, hãy để ý trial and error, phát hiện, luật, và mô hình.</span>
+          </p>
+          <p class="ex-sent" data-sent="27">
+            <span class="ex-en">In this B2 School & Education passage, notice <mark class="vocab" data-word="principle">principle</mark><span class="ipa">/ˈpɹɪnsəpəɫ/</span>, <mark class="vocab" data-word="procedure">procedure</mark><span class="ipa">/pɹəˈsidʒɝ/, /pɹoʊˈsidʒɝ/</span>, <mark class="vocab" data-word="proof">proof</mark><span class="ipa">/ˈpɹuf/</span>, and <mark class="vocab" data-word="biochemistry">biochemistry</mark><span class="ipa">/ˌbaɪoʊˈkɛməstɹi/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về School &amp; Education, hãy để ý nguyên tắc, quy trình, bằng chứng, và hóa sinh.</span>
+          </p>
+          <p class="ex-sent" data-sent="28">
+            <span class="ex-en">In this B2 School & Education passage, notice <mark class="vocab" data-word="biological">biological</mark><span class="ipa">/ˌbaɪəˈɫɑdʒɪkəɫ/</span>, <mark class="vocab" data-word="artificial">artificial</mark><span class="ipa">/ˌɑɹtəˈfɪʃəɫ/</span>, <mark class="vocab" data-word="bacteria">bacteria</mark><span class="ipa">/bækˈtɪɹiə/</span>, and <mark class="vocab" data-word="being">being</mark><span class="ipa">/ˈbiɪŋ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về School &amp; Education, hãy để ý sinh học, nhân tạo, vi khuẩn, và sinh vật.</span>
+          </p>
+          <p class="ex-sent" data-sent="29">
+            <span class="ex-en">In this B2 School & Education passage, notice <mark class="vocab" data-word="cycle">cycle</mark><span class="ipa">/ˈsaɪkəɫ/</span>, <mark class="vocab" data-word="DNA">DNA</mark><span class="ipa">/dˌiːˌɛnˈeɪ/</span>, <mark class="vocab" data-word="genetics">genetics</mark><span class="ipa">/dʒəˈnɛtɪks/</span>, and <mark class="vocab" data-word="to evolve">evolve</mark><span class="ipa">/iˈvɑɫv/, /ɪˈvɑɫv/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về School &amp; Education, hãy để ý chu kỳ, DNA, di truyền học, và tiến hóa.</span>
+          </p>
+          <p class="ex-sent" data-sent="30">
+            <span class="ex-en">In this B2 School & Education passage, notice <mark class="vocab" data-word="compound">compound</mark><span class="ipa">/ˈkɑmpaʊnd/, /kəmˈpaʊnd/</span>, <mark class="vocab" data-word="element">element</mark><span class="ipa">/ˈɛɫəmənt/</span>, <mark class="vocab" data-word="matter">matter</mark><span class="ipa">/ˈmætɚ/</span>, and <mark class="vocab" data-word="mineral">mineral</mark><span class="ipa">/ˈmɪnɝəɫ/, /ˈmɪnɹəɫ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về School &amp; Education, hãy để ý hợp chất, nguyên tố, vật chất, và khoáng chất.</span>
+          </p>
+          <p class="ex-sent" data-sent="31">
+            <span class="ex-en">In this B2 School & Education passage, notice <mark class="vocab" data-word="molecule">molecule</mark><span class="ipa">/ˈmɑɫəkˌjuɫ/</span>, <mark class="vocab" data-word="solution">solution</mark><span class="ipa">/səˈluʃən/</span>, <mark class="vocab" data-word="boiling point">boiling point</mark><span class="ipa">/bˈɔɪlɪŋ pˈɔɪnt/</span>, and <mark class="vocab" data-word="freezing point">freezing point</mark><span class="ipa">/fɹˈiːzɪŋ pˈɔɪnt/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về School &amp; Education, hãy để ý phân tử, dung dịch, điểm sôi, và điểm đóng băng.</span>
+          </p>
+          <p class="ex-sent" data-sent="32">
+            <span class="ex-en">In this B2 School & Education passage, notice <mark class="vocab" data-word="radiation">radiation</mark><span class="ipa">/ˌɹeɪdiˈeɪʃən/</span>, <mark class="vocab" data-word="to advance">advance</mark><span class="ipa">/ədˈvæns/</span>, <mark class="vocab" data-word="to absorb">absorb</mark><span class="ipa">/əbˈzɔɹb/</span>, and <mark class="vocab" data-word="to activate">activate</mark><span class="ipa">/ˈæktəˌveɪt/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về School &amp; Education, hãy để ý bức xạ, tiến bộ, hấp thụ, và kích hoạt.</span>
+          </p>
+          <p class="ex-sent" data-sent="33">
+            <span class="ex-en">In this B2 School & Education passage, notice <mark class="vocab" data-word="to generate">generate</mark><span class="ipa">/ˈdʒɛnɝˌeɪt/</span>, <mark class="vocab" data-word="industry">industry</mark><span class="ipa">/ˈɪndəstɹi/</span>, <mark class="vocab" data-word="civil engineering">civil engineering</mark><span class="ipa">/sˈɪvəl ˌɛndʒɪnˈɪɹɪŋ/</span>, and <mark class="vocab" data-word="sensor">sensor</mark><span class="ipa">/ˈsɛnsɝ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về School &amp; Education, hãy để ý sản xuất, ngành công nghiệp, kỹ thuật xây dựng dân dụng, và cảm biến.</span>
+          </p>
+          <p class="ex-sent" data-sent="34">
+            <span class="ex-en">In this B2 School & Education passage, notice <mark class="vocab" data-word="circuit">circuit</mark><span class="ipa">/ˈsɝkət/</span>, <mark class="vocab" data-word="field">field</mark><span class="ipa">/fild/</span>, <mark class="vocab" data-word="wire">wire</mark><span class="ipa">/ˈwaɪr/</span>, and <mark class="vocab" data-word="live wire">live wire</mark><span class="ipa">/lˈaɪv wˈaɪɚ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về School &amp; Education, hãy để ý mạch, trường, dây, và dây điện có điện.</span>
+          </p>
+          <p class="ex-sent" data-sent="35">
+            <span class="ex-en">In this B2 School & Education passage, notice <mark class="vocab" data-word="motion">motion</mark><span class="ipa">/ˈmoʊʃən/</span>, <mark class="vocab" data-word="to monitor">monitor</mark><span class="ipa">/ˈmɑnɪtər/</span>, <mark class="vocab" data-word="motor">motor</mark><span class="ipa">/ˈmoʊtɝ/</span>, and <mark class="vocab" data-word="rate">rate</mark><span class="ipa">/ˈɹeɪt/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về School &amp; Education, hãy để ý chuyển động, giám sát, động cơ, và tỷ lệ.</span>
+          </p>
+          <p class="ex-sent" data-sent="36">
+            <span class="ex-en">In this B2 School & Education passage, notice <mark class="vocab" data-word="weathering">weathering</mark><span class="ipa">/ˈwɛðɝɪŋ/</span>, and <mark class="vocab" data-word="impervious">impervious</mark><span class="ipa">/ˌɪmˈpɝviəs/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về School &amp; Education, hãy để ý phong hóa, và không thấm.</span>
+          </p>
+      </section>
+
+      <section class="ex-vocab">
+        <h2>Word checklist · 142</h2>
+        <ul class="ex-vocab-list">
+          <li><mark class="vocab">abbreviation</mark> <span class="ipa">/əˌbɹiviˈeɪʃən/</span> — chữ viết tắt</li>
+          <li><mark class="vocab">article</mark> <span class="ipa">/ˈɑːrtɪkəl/</span> — mạo từ</li>
+          <li><mark class="vocab">auxiliary verb</mark> <span class="ipa">/ɔːksˈɪliəɹi vˈɜːb/</span> — động từ trợ giúp</li>
+          <li><mark class="vocab">conjunction</mark> <span class="ipa">/kənˈdʒəŋkʃən/</span> — liên từ</li>
+          <li><mark class="vocab">preposition</mark> <span class="ipa">/pɹˌɛpəzˈɪʃən/</span> — giới từ</li>
+          <li><mark class="vocab">proper noun</mark> <span class="ipa">/pɹˈɑːpɚ nˈaʊn/</span> — danh từ riêng</li>
+          <li><mark class="vocab">pronoun</mark> <span class="ipa">/ˈpɹoʊnaʊn/</span> — đại từ</li>
+          <li><mark class="vocab">prefix</mark> <span class="ipa">/ˈpɹifɪks/</span> — tiền tố</li>
+          <li><mark class="vocab">suffix</mark> <span class="ipa">/ˈsəfɪks/</span> — hậu tố</li>
+          <li><mark class="vocab">active</mark> <span class="ipa">/ˈæktɪv/</span> — chủ động</li>
+          <li><mark class="vocab">passive</mark> <span class="ipa">/ˈpæsɪv/</span> — bị động</li>
+          <li><mark class="vocab">comparative</mark> <span class="ipa">/kəmˈpɛɹətɪv/</span> — so sánh</li>
+          <li><mark class="vocab">superlative</mark> <span class="ipa">/sʊˈpɝɫətɪv/</span> — so sánh nhất</li>
+          <li><mark class="vocab">plural</mark> <span class="ipa">/ˈpɫʊɹəɫ/</span> — số nhiều</li>
+          <li><mark class="vocab">singular</mark> <span class="ipa">/ˈsɪŋɡjəɫɝ/</span> — số ít</li>
+          <li><mark class="vocab">grammatical</mark> <span class="ipa">/ɡɹəˈmætəkəɫ/, /ɡɹəˈmætɪkəɫ/</span> — ngữ pháp</li>
+          <li><mark class="vocab">irregular</mark> <span class="ipa">/ɪˈrɛɡjʊlər/</span> — bất quy tắc</li>
+          <li><mark class="vocab">modal</mark> <span class="ipa">/ˈmoʊdəɫ/</span> — động từ khuyết thiếu</li>
+          <li><mark class="vocab">conditional</mark> <span class="ipa">/kənˈdɪʃənəɫ/</span> — có điều kiện</li>
+          <li><mark class="vocab">perfect</mark> <span class="ipa">/ˈpɝfɪkt/</span> — hoàn thành</li>
+          <li><mark class="vocab">past participle</mark> <span class="ipa">/pˈæst pɑːɹtˈɪsɪpəl/</span> — quá khứ phân từ</li>
+          <li><mark class="vocab">continuous</mark> <span class="ipa">/kənˈtɪnjuəs/</span> — liên tục</li>
+          <li><mark class="vocab">progressive</mark> <span class="ipa">/pɹəˈɡɹɛsɪv/</span> — tiếp diễn</li>
+          <li><mark class="vocab">collocation</mark> <span class="ipa">/kɑɫəˈkeɪʃən/</span> — kết hợp từ</li>
+          <li><mark class="vocab">possessive</mark> <span class="ipa">/pəˈzɛsɪv/</span> — sở hữu</li>
+          <li><mark class="vocab">pronunciation</mark> <span class="ipa">/pɹəˌnənsiˈeɪʃən/, /pɹoʊˌnənsiˈeɪʃən/</span> — phát âm</li>
+          <li><mark class="vocab">consonant</mark> <span class="ipa">/ˈkɑnsənənt/</span> — phụ âm</li>
+          <li><mark class="vocab">vowel</mark> <span class="ipa">/ˈvaʊəɫ/</span> — nguyên âm</li>
+          <li><mark class="vocab">stress</mark> <span class="ipa">/ˈstɹɛs/</span> — trọng âm</li>
+          <li><mark class="vocab">tag question</mark> <span class="ipa">/tˈæɡ kwˈɛstʃən/</span> — câu hỏi đuôi</li>
+          <li><mark class="vocab">punctuation</mark> <span class="ipa">/ˌpəŋktʃuˈeɪʃən/</span> — dấu câu</li>
+          <li><mark class="vocab">exclamation point</mark> <span class="ipa">/ɛksklɐmˈeɪʃən pˈɔɪnt/</span> — dấu chấm than</li>
+          <li><mark class="vocab">question mark</mark> <span class="ipa">/kwˈɛstʃən mˈɑːɹk/</span> — dấu hỏi</li>
+          <li><mark class="vocab">comma</mark> <span class="ipa">/ˈkɑmə/</span> — dấu phẩy</li>
+          <li><mark class="vocab">spell</mark> <span class="ipa">/spɛl/</span> — đánh vần</li>
+          <li><mark class="vocab">double negative</mark> <span class="ipa">/dˈʌbəl nˈɛɡətˌɪv/</span> — phủ định kép</li>
+          <li><mark class="vocab">institution</mark> <span class="ipa">/ˌɪnstɪˈtuʃən/</span> — tổ chức</li>
+          <li><mark class="vocab">grade school</mark> <span class="ipa">/ɡɹˈeɪd skˈuːl/</span> — trường tiểu học</li>
+          <li><mark class="vocab">graduate school</mark> <span class="ipa">/ɡɹˈædʒuːət skˈuːl/</span> — trường sau đại học</li>
+          <li><mark class="vocab">junior high school</mark> <span class="ipa">/dʒˈuːnjɚ hˈaɪ skˈuːl/</span> — trường trung học cơ sở</li>
+          <li><mark class="vocab">senior high school</mark> <span class="ipa">/sˈiːnjɚ hˈaɪ skˈuːl/</span> — trường trung học phổ thông</li>
+          <li><mark class="vocab">summer school</mark> <span class="ipa">/sˈʌmɚ skˈuːl/</span> — trường hè</li>
+          <li><mark class="vocab">prom</mark> <span class="ipa">/ˈpɹɑm/</span> — vũ hội tốt nghiệp</li>
+          <li><mark class="vocab">enroll</mark> <span class="ipa">/ɛnˈɹoʊɫ/, /ɪnˈɹoʊɫ/</span> — đăng ký</li>
+          <li><mark class="vocab">register</mark> <span class="ipa">/ˈrɛʤɪstɚ/</span> — đăng ký</li>
+          <li><mark class="vocab">locker</mark> <span class="ipa">/ˈɫɑkɝ/</span> — tủ đồ</li>
+          <li><mark class="vocab">roommate</mark> <span class="ipa">/ˈɹuˌmeɪt/</span> — bạn cùng phòng</li>
+          <li><mark class="vocab">discipline</mark> <span class="ipa">/ˈdɪsəpɫən/</span> — kỷ luật</li>
+          <li><mark class="vocab">major</mark> <span class="ipa">/ˈmeɪdʒɚ/</span> — sinh viên chuyên ngành</li>
+          <li><mark class="vocab">certificate</mark> <span class="ipa">/sɝˈtɪfɪkət/</span> — chứng chỉ</li>
+          <li><mark class="vocab">master</mark> <span class="ipa">/ˈmæstər/</span> — thạc sĩ</li>
+          <li><mark class="vocab">master</mark> <span class="ipa">/ˈmæstər/</span> — thành thạo</li>
+          <li><mark class="vocab">Doctor of Philosophy</mark> <span class="ipa">/dˈɑːktɚɹ ʌv fɪlˈɑːsəfi/</span></li>
+          <li><mark class="vocab">postgraduate</mark> <span class="ipa">/pˈoʊstɡɹɐdʒˌuːeɪt/</span> — sinh viên sau đại học</li>
+          <li><mark class="vocab">sponsor</mark> <span class="ipa">/ˈspɑnsɝ/</span> — nhà tài trợ</li>
+          <li><mark class="vocab">trainee</mark> <span class="ipa">/ˈtɹeɪˈni/</span> — thực tập sinh</li>
+          <li><mark class="vocab">tutor</mark> <span class="ipa">/ˈtuːtɚ/</span> — dạy kèm</li>
+          <li><mark class="vocab">thesis</mark> <span class="ipa">/ˈθisɪs/</span> — luận văn</li>
+          <li><mark class="vocab">scholarship</mark> <span class="ipa">/ˈskɑɫɝˌʃɪp/</span> — học bổng</li>
+          <li><mark class="vocab">seminar</mark> <span class="ipa">/ˈsɛməˌnɑɹ/</span> — hội thảo</li>
+          <li><mark class="vocab">curriculum</mark> <span class="ipa">/kɝˈɪkjəɫəm/</span> — chương trình giảng dạy</li>
+          <li><mark class="vocab">optional</mark> <span class="ipa">/ˈɑpʃənəɫ/, /ˈɔpʃənəɫ/</span> — tùy chọn</li>
+          <li><mark class="vocab">grade</mark> <span class="ipa">/ɡreɪd/</span> — chấm điểm</li>
+          <li><mark class="vocab">coursework</mark> <span class="ipa">/ˈkɔɹsˌwɝk/</span> — bài tập khóa học</li>
+          <li><mark class="vocab">textbook</mark> <span class="ipa">/ˈtɛkstˌbʊk/</span> — sách giáo khoa</li>
+          <li><mark class="vocab">workbook</mark> <span class="ipa">/ˈwɝkˌbʊk/</span> — sách bài tập</li>
+          <li><mark class="vocab">multiple-choice</mark> <span class="ipa">/mˈʌltɪpəltʃˈɔɪs/</span> — trắc nghiệm</li>
+          <li><mark class="vocab">tutorial</mark> <span class="ipa">/tuˈtɔɹiəɫ/</span> — hướng dẫn</li>
+          <li><mark class="vocab">dormitory</mark> <span class="ipa">/ˈdɔɹməˌtɔɹi/</span> — ký túc xá</li>
+          <li><mark class="vocab">buttery</mark> <span class="ipa">/ˈbətɝi/</span> — quán cà phê</li>
+          <li><mark class="vocab">analytical</mark> <span class="ipa">/ˌænəˈɫɪtɪkəɫ/</span> — phân tích</li>
+          <li><mark class="vocab">descriptive</mark> <span class="ipa">/dɪsˈkɹɪptɪv/</span> — mô tả</li>
+          <li><mark class="vocab">cite</mark> <span class="ipa">/ˈsaɪt/</span> — trích dẫn</li>
+          <li><mark class="vocab">classify</mark> <span class="ipa">/ˈkɫæsəˌfaɪ/</span> — phân loại</li>
+          <li><mark class="vocab">compile</mark> <span class="ipa">/kəmˈpaɪɫ/</span> — biên soạn</li>
+          <li><mark class="vocab">conduct</mark> <span class="ipa">/ˈkɑndəkt/, /kɑnˈdəkt/</span> — chỉ đạo</li>
+          <li><mark class="vocab">demonstrate</mark> <span class="ipa">/ˈdɛmənˌstɹeɪt/</span> — chứng minh</li>
+          <li><mark class="vocab">derive</mark> <span class="ipa">/dɝˈaɪv/</span> — suy ra</li>
+          <li><mark class="vocab">detect</mark> <span class="ipa">/dɪˈtɛkt/</span> — phát hiện</li>
+          <li><mark class="vocab">document</mark> <span class="ipa">/ˈdɑːkjəmənt/</span> — tài liệu hóa</li>
+          <li><mark class="vocab">estimate</mark> <span class="ipa">/ˈɛstəˌmeɪt/, /ˈɛstəmət/</span> — ước tính</li>
+          <li><mark class="vocab">evaluate</mark> <span class="ipa">/iˈvæɫjuˌeɪt/, /ɪˈvæɫjuˌeɪt/</span> — đánh giá</li>
+          <li><mark class="vocab">imply</mark> <span class="ipa">/ˌɪmˈpɫaɪ/</span> — ám chỉ</li>
+          <li><mark class="vocab">interpret</mark> <span class="ipa">/ˌɪnˈtɝpɹət/</span> — giải thích</li>
+          <li><mark class="vocab">observe</mark> <span class="ipa">/əbˈzɜrv/</span> — quan sát</li>
+          <li><mark class="vocab">outline</mark> <span class="ipa">/ˈaʊtˌɫaɪn/</span> — phác thảo</li>
+          <li><mark class="vocab">survey</mark> <span class="ipa">/ˈsɝˌveɪ/, /sɝˈveɪ/</span> — khảo sát</li>
+          <li><mark class="vocab">case study</mark> <span class="ipa">/kˈeɪs stˈʌdi/</span> — nghiên cứu tình huống</li>
+          <li><mark class="vocab">chart</mark> <span class="ipa">/ˈtʃɑɹt/</span> — biểu đồ</li>
+          <li><mark class="vocab">diagram</mark> <span class="ipa">/ˈdaɪəˌɡɹæm/</span> — biểu đồ</li>
+          <li><mark class="vocab">document</mark> <span class="ipa">/ˈdɑːkjəmənt/</span> — tài liệu</li>
+          <li><mark class="vocab">evaluation</mark> <span class="ipa">/iˌvæɫjuˈeɪʃən/, /ɪˌvæɫjuˈeɪʃən/</span> — đánh giá</li>
+          <li><mark class="vocab">hypothesis</mark> <span class="ipa">/haɪˈpɑθəsəs/</span> — giả thuyết</li>
+          <li><mark class="vocab">experiment</mark> <span class="ipa">/ɪkˈspɛɹəmənt/</span> — thí nghiệm</li>
+          <li><mark class="vocab">sample</mark> <span class="ipa">/ˈsæmpəɫ/</span> — mẫu</li>
+          <li><mark class="vocab">variable</mark> <span class="ipa">/ˈvɛɹiəbəɫ/</span> — biến số</li>
+          <li><mark class="vocab">instrument</mark> <span class="ipa">/ˈɪnstrəmənt/</span> — dụng cụ</li>
+          <li><mark class="vocab">questionnaire</mark> <span class="ipa">/ˌkwɛstʃəˈnɛɹ/</span> — bảng câu hỏi</li>
+          <li><mark class="vocab">reference</mark> <span class="ipa">/ˈrɛfərəns/</span> — tham khảo</li>
+          <li><mark class="vocab">trial</mark> <span class="ipa">/ˈtɹaɪəɫ/, /ˈtɹaɪɫ/</span> — thử nghiệm</li>
+          <li><mark class="vocab">trial and error</mark> <span class="ipa">/tɹˈaɪəl ænd ˈɛɹɚ/</span></li>
+          <li><mark class="vocab">finding</mark> <span class="ipa">/ˈfaɪndɪŋ/</span> — phát hiện</li>
+          <li><mark class="vocab">law</mark> <span class="ipa">/lɑ/</span> — luật</li>
+          <li><mark class="vocab">model</mark> <span class="ipa">/ˈmɑdəl/</span> — mô hình</li>
+          <li><mark class="vocab">principle</mark> <span class="ipa">/ˈpɹɪnsəpəɫ/</span> — nguyên tắc</li>
+          <li><mark class="vocab">procedure</mark> <span class="ipa">/pɹəˈsidʒɝ/, /pɹoʊˈsidʒɝ/</span> — quy trình</li>
+          <li><mark class="vocab">proof</mark> <span class="ipa">/ˈpɹuf/</span> — bằng chứng</li>
+          <li><mark class="vocab">biochemistry</mark> <span class="ipa">/ˌbaɪoʊˈkɛməstɹi/</span> — hóa sinh</li>
+          <li><mark class="vocab">biological</mark> <span class="ipa">/ˌbaɪəˈɫɑdʒɪkəɫ/</span> — sinh học</li>
+          <li><mark class="vocab">artificial</mark> <span class="ipa">/ˌɑɹtəˈfɪʃəɫ/</span> — nhân tạo</li>
+          <li><mark class="vocab">bacteria</mark> <span class="ipa">/bækˈtɪɹiə/</span> — vi khuẩn</li>
+          <li><mark class="vocab">being</mark> <span class="ipa">/ˈbiɪŋ/</span> — sinh vật</li>
+          <li><mark class="vocab">cycle</mark> <span class="ipa">/ˈsaɪkəɫ/</span> — chu kỳ</li>
+          <li><mark class="vocab">DNA</mark> <span class="ipa">/dˌiːˌɛnˈeɪ/</span> — DNA</li>
+          <li><mark class="vocab">genetics</mark> <span class="ipa">/dʒəˈnɛtɪks/</span> — di truyền học</li>
+          <li><mark class="vocab">evolve</mark> <span class="ipa">/iˈvɑɫv/, /ɪˈvɑɫv/</span> — tiến hóa</li>
+          <li><mark class="vocab">compound</mark> <span class="ipa">/ˈkɑmpaʊnd/, /kəmˈpaʊnd/</span> — hợp chất</li>
+          <li><mark class="vocab">element</mark> <span class="ipa">/ˈɛɫəmənt/</span> — nguyên tố</li>
+          <li><mark class="vocab">matter</mark> <span class="ipa">/ˈmætɚ/</span> — vật chất</li>
+          <li><mark class="vocab">mineral</mark> <span class="ipa">/ˈmɪnɝəɫ/, /ˈmɪnɹəɫ/</span> — khoáng chất</li>
+          <li><mark class="vocab">molecule</mark> <span class="ipa">/ˈmɑɫəkˌjuɫ/</span> — phân tử</li>
+          <li><mark class="vocab">solution</mark> <span class="ipa">/səˈluʃən/</span> — dung dịch</li>
+          <li><mark class="vocab">boiling point</mark> <span class="ipa">/bˈɔɪlɪŋ pˈɔɪnt/</span> — điểm sôi</li>
+          <li><mark class="vocab">freezing point</mark> <span class="ipa">/fɹˈiːzɪŋ pˈɔɪnt/</span> — điểm đóng băng</li>
+          <li><mark class="vocab">radiation</mark> <span class="ipa">/ˌɹeɪdiˈeɪʃən/</span> — bức xạ</li>
+          <li><mark class="vocab">advance</mark> <span class="ipa">/ədˈvæns/</span> — tiến bộ</li>
+          <li><mark class="vocab">absorb</mark> <span class="ipa">/əbˈzɔɹb/</span> — hấp thụ</li>
+          <li><mark class="vocab">activate</mark> <span class="ipa">/ˈæktəˌveɪt/</span> — kích hoạt</li>
+          <li><mark class="vocab">generate</mark> <span class="ipa">/ˈdʒɛnɝˌeɪt/</span> — sản xuất</li>
+          <li><mark class="vocab">industry</mark> <span class="ipa">/ˈɪndəstɹi/</span> — ngành công nghiệp</li>
+          <li><mark class="vocab">civil engineering</mark> <span class="ipa">/sˈɪvəl ˌɛndʒɪnˈɪɹɪŋ/</span> — kỹ thuật xây dựng dân dụng</li>
+          <li><mark class="vocab">sensor</mark> <span class="ipa">/ˈsɛnsɝ/</span> — cảm biến</li>
+          <li><mark class="vocab">circuit</mark> <span class="ipa">/ˈsɝkət/</span> — mạch</li>
+          <li><mark class="vocab">field</mark> <span class="ipa">/fild/</span> — trường</li>
+          <li><mark class="vocab">wire</mark> <span class="ipa">/ˈwaɪr/</span> — dây</li>
+          <li><mark class="vocab">live wire</mark> <span class="ipa">/lˈaɪv wˈaɪɚ/</span> — dây điện có điện</li>
+          <li><mark class="vocab">motion</mark> <span class="ipa">/ˈmoʊʃən/</span> — chuyển động</li>
+          <li><mark class="vocab">monitor</mark> <span class="ipa">/ˈmɑnɪtər/</span> — giám sát</li>
+          <li><mark class="vocab">motor</mark> <span class="ipa">/ˈmoʊtɝ/</span> — động cơ</li>
+          <li><mark class="vocab">rate</mark> <span class="ipa">/ˈɹeɪt/</span> — tỷ lệ</li>
+          <li><mark class="vocab">weathering</mark> <span class="ipa">/ˈwɛðɝɪŋ/</span> — phong hóa</li>
+          <li><mark class="vocab">impervious</mark> <span class="ipa">/ˌɪmˈpɝviəs/</span> — không thấm</li>
+        </ul>
+      </section>
+
+      <div class="docs-pager">
+        <a href="../">← School &amp; Education</a>
+        <a href="../../">All topics →</a>
+      </div>
+    </article>
+  </div>
+  <script src="../../../../js/docs.js"></script>
+  <script src="../../../../js/exercise.js"></script>
+</body>
+</html>

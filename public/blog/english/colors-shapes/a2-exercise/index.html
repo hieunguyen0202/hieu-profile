@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A2 Exercise · Colors &amp; Shapes — The Quiet Corner</title>
+  <meta name="description" content="A2 reading exercise for Colors &amp; Shapes vocabulary with IPA and bilingual sentences.">
+  <link rel="icon" href="../../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../../"><span>✦</span> The Quiet Corner <span>✦</span></a>
+    <nav class="docs-series">
+      <a href="../../../../blog/web-security/">DevSecOps</a>
+      <a href="../../../../blog/kubestronaut/">Kubestronaut</a>
+      <a class="active" href="../../">English</a>
+    </nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-nav="english" data-docs-root="../../" data-active="colors-shapes">
+      <div class="docs-nav-label">English</div>
+      <ul class="docs-nav" id="docsNav">
+        <li><a href="../../">All topics</a></li>
+        <li><a href="../">Colors &amp; Shapes</a></li>
+        <li><a class="active" href="./">A2 Exercise</a></li>
+      </ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../../">Home</a>
+        <span>›</span>
+        <a href="../../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../../">English</a>
+        <span>›</span>
+        <a href="../">Colors &amp; Shapes</a>
+        <span>›</span>
+        <span>A2 Exercise</span>
+      </div>
+
+      <div class="vocab-topic-hero">
+        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 72 72' fill='none'%3E%3Crect width='72' height='72' rx='14' fill='%230b1220'/%3E%3Crect x='16' y='14' width='40' height='46' rx='6' stroke='%2322d3ee' stroke-width='2.5'/%3E%3Cpath d='M24 28h24M24 36h24M24 44h16' stroke='%23e4e4e7' stroke-width='2.5' stroke-linecap='round'/%3E%3Cpath d='M48 48l6 2-2 6-8-8 4 0z' fill='%2322d3ee'/%3E%3C/svg%3E" alt="" width="112" height="112">
+        <div>
+          <h1>A2 Exercise · Colors &amp; Shapes</h1>
+          <p class="lede">Reading passage with every new word from this level’s LanGeek lessons — IPA, highlights, sentence translation, and free TTS.</p>
+          <div class="docs-meta">
+            <span><strong>Words:</strong> 29</span>
+            <span><strong>Lessons:</strong> Colors and Shapes</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="ex-toolbar" id="exToolbar">
+        <label class="ex-toggle"><input type="checkbox" id="togHighlight" checked> Highlights</label>
+        <label class="ex-toggle"><input type="checkbox" id="togIpa" checked> IPA</label>
+        <label class="ex-toggle"><input type="checkbox" id="togVi"> Dịch câu (VI)</label>
+        <span class="ex-sep"></span>
+        <label class="ex-voice">Voice
+          <select id="voiceSelect" aria-label="TTS voice"></select>
+        </label>
+        <label class="ex-voice">Speed
+          <input id="rateRange" type="range" min="0.7" max="1.15" step="0.05" value="0.95">
+          <span id="rateVal">0.95</span>
+        </label>
+        <button type="button" class="ex-btn primary" id="btnPlay">▶ Read passage</button>
+        <button type="button" class="ex-btn" id="btnStop">Stop</button>
+      </div>
+      
+      <section class="ex-passage" id="passage" data-tts-root>
+          <p class="ex-sent" data-sent="1">
+            <span class="ex-en">In this A2 Colors & Shapes passage, notice <mark class="vocab" data-word="darkness">darkness</mark><span class="ipa">/ˈdɑːrkˌnɪs/</span>, <mark class="vocab" data-word="brightness">brightness</mark><span class="ipa">/ˈbraɪtˌnɪs/</span>, <mark class="vocab" data-word="lightness">lightness</mark><span class="ipa">/ˈlaɪtˌnɪs/</span>, and <mark class="vocab" data-word="golden">golden</mark><span class="ipa">/ˈɡoʊldən/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Colors &amp; Shapes, hãy để ý bóng tối, độ sáng, sự nhẹ nhàng, và vàng.</span>
+          </p>
+          <p class="ex-sent" data-sent="2">
+            <span class="ex-en">In this A2 Colors & Shapes passage, notice <mark class="vocab" data-word="gold">gold</mark><span class="ipa">/ɡoʊld/</span>, <mark class="vocab" data-word="silver">silver</mark><span class="ipa">/ˈsɪlvɚ/</span>, <mark class="vocab" data-word="pale">pale</mark><span class="ipa">/peɪl/</span>, and <mark class="vocab" data-word="bright">bright</mark><span class="ipa">/braɪt/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Colors &amp; Shapes, hãy để ý vàng, bạc, nhạt, và rực rỡ.</span>
+          </p>
+          <p class="ex-sent" data-sent="3">
+            <span class="ex-en">In this A2 Colors & Shapes passage, notice <mark class="vocab" data-word="colorful">colorful</mark><span class="ipa">/ˈkʌlərˌfʊl/</span>, <mark class="vocab" data-word="colored">colored</mark><span class="ipa">/ˈkʌlɚd/</span>, <mark class="vocab" data-word="cream">cream</mark><span class="ipa">/kriːm/</span>, and <mark class="vocab" data-word="shape">shape</mark><span class="ipa">/ʃeɪp/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Colors &amp; Shapes, hãy để ý đầy màu sắc, có màu, kem, và hình dạng.</span>
+          </p>
+          <p class="ex-sent" data-sent="4">
+            <span class="ex-en">In this A2 Colors & Shapes passage, notice <mark class="vocab" data-word="center">center</mark><span class="ipa">/ˈsɛntɚ/</span>, <mark class="vocab" data-word="circle">circle</mark><span class="ipa">/ˈsɝːkəl/</span>, <mark class="vocab" data-word="cross">cross</mark><span class="ipa">/krɑːs/</span>, and <mark class="vocab" data-word="square">square</mark><span class="ipa">/skwɛr/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Colors &amp; Shapes, hãy để ý trung tâm, hình tròn, dấu thập, và hình vuông.</span>
+          </p>
+          <p class="ex-sent" data-sent="5">
+            <span class="ex-en">In this A2 Colors & Shapes passage, notice <mark class="vocab" data-word="diamond">diamond</mark><span class="ipa">/ˈdaɪmənd/</span>, <mark class="vocab" data-word="star">star</mark><span class="ipa">/stɑr/</span>, <mark class="vocab" data-word="line">line</mark><span class="ipa">/laɪn/</span>, and <mark class="vocab" data-word="dot">dot</mark><span class="ipa">/dɑːt/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Colors &amp; Shapes, hãy để ý hình thoi, ngôi sao, đường kẻ, và chấm.</span>
+          </p>
+          <p class="ex-sent" data-sent="6">
+            <span class="ex-en">In this A2 Colors & Shapes passage, notice <mark class="vocab" data-word="side">side</mark><span class="ipa">/saɪd/</span>, <mark class="vocab" data-word="surface">surface</mark><span class="ipa">/ˈsɝːfɪs/</span>, <mark class="vocab" data-word="straight">straight</mark><span class="ipa">/streɪt/</span>, and <mark class="vocab" data-word="flat">flat</mark><span class="ipa">/flæt/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Colors &amp; Shapes, hãy để ý bên, bề mặt, thẳng, và phẳng.</span>
+          </p>
+          <p class="ex-sent" data-sent="7">
+            <span class="ex-en">In this A2 Colors & Shapes passage, notice <mark class="vocab" data-word="round">round</mark><span class="ipa">/raʊnd/</span>, <mark class="vocab" data-word="to draw">draw</mark><span class="ipa">/drɔː/</span>, <mark class="vocab" data-word="to color">color</mark><span class="ipa">/ˈkʌlɚ/</span>, and <mark class="vocab" data-word="whole">whole</mark><span class="ipa">/hoʊl/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Colors &amp; Shapes, hãy để ý tròn, vẽ, tô màu, và toàn bộ.</span>
+          </p>
+          <p class="ex-sent" data-sent="8">
+            <span class="ex-en">In this A2 Colors & Shapes passage, notice <mark class="vocab" data-word="paint">paint</mark><span class="ipa">/peɪnt/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Colors &amp; Shapes, hãy để ý sơn.</span>
+          </p>
+      </section>
+
+      <section class="ex-vocab">
+        <h2>Word checklist · 29</h2>
+        <ul class="ex-vocab-list">
+          <li><mark class="vocab">darkness</mark> <span class="ipa">/ˈdɑːrkˌnɪs/</span> — bóng tối</li>
+          <li><mark class="vocab">brightness</mark> <span class="ipa">/ˈbraɪtˌnɪs/</span> — độ sáng</li>
+          <li><mark class="vocab">lightness</mark> <span class="ipa">/ˈlaɪtˌnɪs/</span> — sự nhẹ nhàng</li>
+          <li><mark class="vocab">golden</mark> <span class="ipa">/ˈɡoʊldən/</span> — vàng</li>
+          <li><mark class="vocab">gold</mark> <span class="ipa">/ɡoʊld/</span> — vàng</li>
+          <li><mark class="vocab">silver</mark> <span class="ipa">/ˈsɪlvɚ/</span> — bạc</li>
+          <li><mark class="vocab">pale</mark> <span class="ipa">/peɪl/</span> — nhạt</li>
+          <li><mark class="vocab">bright</mark> <span class="ipa">/braɪt/</span> — rực rỡ</li>
+          <li><mark class="vocab">colorful</mark> <span class="ipa">/ˈkʌlərˌfʊl/</span> — đầy màu sắc</li>
+          <li><mark class="vocab">colored</mark> <span class="ipa">/ˈkʌlɚd/</span> — có màu</li>
+          <li><mark class="vocab">cream</mark> <span class="ipa">/kriːm/</span> — kem</li>
+          <li><mark class="vocab">shape</mark> <span class="ipa">/ʃeɪp/</span> — hình dạng</li>
+          <li><mark class="vocab">center</mark> <span class="ipa">/ˈsɛntɚ/</span> — trung tâm</li>
+          <li><mark class="vocab">circle</mark> <span class="ipa">/ˈsɝːkəl/</span> — hình tròn</li>
+          <li><mark class="vocab">cross</mark> <span class="ipa">/krɑːs/</span> — dấu thập</li>
+          <li><mark class="vocab">square</mark> <span class="ipa">/skwɛr/</span> — hình vuông</li>
+          <li><mark class="vocab">diamond</mark> <span class="ipa">/ˈdaɪmənd/</span> — hình thoi</li>
+          <li><mark class="vocab">star</mark> <span class="ipa">/stɑr/</span> — ngôi sao</li>
+          <li><mark class="vocab">line</mark> <span class="ipa">/laɪn/</span> — đường kẻ</li>
+          <li><mark class="vocab">dot</mark> <span class="ipa">/dɑːt/</span> — chấm</li>
+          <li><mark class="vocab">side</mark> <span class="ipa">/saɪd/</span> — bên</li>
+          <li><mark class="vocab">surface</mark> <span class="ipa">/ˈsɝːfɪs/</span> — bề mặt</li>
+          <li><mark class="vocab">straight</mark> <span class="ipa">/streɪt/</span> — thẳng</li>
+          <li><mark class="vocab">flat</mark> <span class="ipa">/flæt/</span> — phẳng</li>
+          <li><mark class="vocab">round</mark> <span class="ipa">/raʊnd/</span> — tròn</li>
+          <li><mark class="vocab">draw</mark> <span class="ipa">/drɔː/</span> — vẽ</li>
+          <li><mark class="vocab">color</mark> <span class="ipa">/ˈkʌlɚ/</span> — tô màu</li>
+          <li><mark class="vocab">whole</mark> <span class="ipa">/hoʊl/</span> — toàn bộ</li>
+          <li><mark class="vocab">paint</mark> <span class="ipa">/peɪnt/</span> — sơn</li>
+        </ul>
+      </section>
+
+      <div class="docs-pager">
+        <a href="../">← Colors &amp; Shapes</a>
+        <a href="../../">All topics →</a>
+      </div>
+    </article>
+  </div>
+  <script src="../../../../js/docs.js"></script>
+  <script src="../../../../js/exercise.js"></script>
+</body>
+</html>

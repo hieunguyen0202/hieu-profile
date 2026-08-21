@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A2 Exercise · People &amp; Family — The Quiet Corner</title>
+  <meta name="description" content="A2 reading exercise for People &amp; Family vocabulary with IPA and bilingual sentences.">
+  <link rel="icon" href="../../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../../"><span>✦</span> The Quiet Corner <span>✦</span></a>
+    <nav class="docs-series">
+      <a href="../../../../blog/web-security/">DevSecOps</a>
+      <a href="../../../../blog/kubestronaut/">Kubestronaut</a>
+      <a class="active" href="../../">English</a>
+    </nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-nav="english" data-docs-root="../../" data-active="people-family">
+      <div class="docs-nav-label">English</div>
+      <ul class="docs-nav" id="docsNav">
+        <li><a href="../../">All topics</a></li>
+        <li><a href="../">People &amp; Family</a></li>
+        <li><a class="active" href="./">A2 Exercise</a></li>
+      </ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../../">Home</a>
+        <span>›</span>
+        <a href="../../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../../">English</a>
+        <span>›</span>
+        <a href="../">People &amp; Family</a>
+        <span>›</span>
+        <span>A2 Exercise</span>
+      </div>
+
+      <div class="vocab-topic-hero">
+        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 72 72' fill='none'%3E%3Crect width='72' height='72' rx='14' fill='%230b1220'/%3E%3Crect x='16' y='14' width='40' height='46' rx='6' stroke='%2322d3ee' stroke-width='2.5'/%3E%3Cpath d='M24 28h24M24 36h24M24 44h16' stroke='%23e4e4e7' stroke-width='2.5' stroke-linecap='round'/%3E%3Cpath d='M48 48l6 2-2 6-8-8 4 0z' fill='%2322d3ee'/%3E%3C/svg%3E" alt="" width="112" height="112">
+        <div>
+          <h1>A2 Exercise · People &amp; Family</h1>
+          <p class="lede">Reading passage with every new word from this level’s LanGeek lessons — IPA, highlights, sentence translation, and free TTS.</p>
+          <div class="docs-meta">
+            <span><strong>Words:</strong> 56</span>
+            <span><strong>Lessons:</strong> Countries and Nationalities · Family and Friends</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="ex-toolbar" id="exToolbar">
+        <label class="ex-toggle"><input type="checkbox" id="togHighlight" checked> Highlights</label>
+        <label class="ex-toggle"><input type="checkbox" id="togIpa" checked> IPA</label>
+        <label class="ex-toggle"><input type="checkbox" id="togVi"> Dịch câu (VI)</label>
+        <span class="ex-sep"></span>
+        <label class="ex-voice">Voice
+          <select id="voiceSelect" aria-label="TTS voice"></select>
+        </label>
+        <label class="ex-voice">Speed
+          <input id="rateRange" type="range" min="0.7" max="1.15" step="0.05" value="0.95">
+          <span id="rateVal">0.95</span>
+        </label>
+        <button type="button" class="ex-btn primary" id="btnPlay">▶ Read passage</button>
+        <button type="button" class="ex-btn" id="btnStop">Stop</button>
+      </div>
+      
+      <section class="ex-passage" id="passage" data-tts-root>
+          <p class="ex-sent" data-sent="1">
+            <span class="ex-en">In this A2 People & Family passage, notice <mark class="vocab" data-word="Australia">Australia</mark><span class="ipa">/ɔˈstreɪljə/</span>, <mark class="vocab" data-word="Australian">Australian</mark><span class="ipa">/ɔˈstreɪljən/</span>, <mark class="vocab" data-word="Switzerland">Switzerland</mark><span class="ipa">/ˈswɪtsɚˌlænd/</span>, and <mark class="vocab" data-word="Swiss">Swiss</mark><span class="ipa">/swɪs/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về People &amp; Family, hãy để ý Úc, thuộc Australia, Thụy Sĩ, và Thụy Sĩ.</span>
+          </p>
+          <p class="ex-sent" data-sent="2">
+            <span class="ex-en">In this A2 People & Family passage, notice <mark class="vocab" data-word="Austria">Austria</mark><span class="ipa">/ˈɔstriə/</span>, <mark class="vocab" data-word="Austrian">Austrian</mark><span class="ipa">/ˈɔstriən/</span>, <mark class="vocab" data-word="the Netherlands">the Netherlands</mark><span class="ipa">/ˈnɛðɚləndz/</span>, and <mark class="vocab" data-word="Dutch">Dutch</mark><span class="ipa">/dʌʧ/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về People &amp; Family, hãy để ý Áo, Áo, Hà Lan, và Hà Lan.</span>
+          </p>
+          <p class="ex-sent" data-sent="3">
+            <span class="ex-en">In this A2 People & Family passage, notice <mark class="vocab" data-word="Norway">Norway</mark><span class="ipa">/ˈnɔrˌweɪ/</span>, <mark class="vocab" data-word="Norwegian">Norwegian</mark><span class="ipa">/nɔrˈwiːdʒən/</span>, <mark class="vocab" data-word="Sweden">Sweden</mark><span class="ipa">/ˈswiːdən/</span>, and <mark class="vocab" data-word="Swedish">Swedish</mark><span class="ipa">/ˈswiːdɪʃ/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về People &amp; Family, hãy để ý Na Uy, Na Uy, Thụy Điển, và Thuộc Thụy Điển.</span>
+          </p>
+          <p class="ex-sent" data-sent="4">
+            <span class="ex-en">In this A2 People & Family passage, notice <mark class="vocab" data-word="Poland">Poland</mark><span class="ipa">/ˈpoʊlənd/</span>, <mark class="vocab" data-word="polish">polish</mark><span class="ipa">/ˈpoʊlɪʃ/</span>, <mark class="vocab" data-word="Egypt">Egypt</mark><span class="ipa">/ˈiːdʒɪpt/</span>, and <mark class="vocab" data-word="Egyptian">Egyptian</mark><span class="ipa">/ɪˈdʒɪpʃən/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về People &amp; Family, hãy để ý Ba Lan, Ba Lan, Ai Cập, và Ai Cập.</span>
+          </p>
+          <p class="ex-sent" data-sent="5">
+            <span class="ex-en">In this A2 People & Family passage, notice <mark class="vocab" data-word="Turkey">Turkey</mark><span class="ipa">/tˈɜːki/</span>, <mark class="vocab" data-word="Turkish">Turkish</mark><span class="ipa">/ˈtɝkɪʃ/</span>, <mark class="vocab" data-word="Greece">Greece</mark><span class="ipa">/ɡriːs/</span>, and <mark class="vocab" data-word="Greek">Greek</mark><span class="ipa">/ɡriːk/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về People &amp; Family, hãy để ý Thổ Nhĩ Kỳ, Thổ Nhĩ Kỳ, Hy Lạp, và Hy Lạp.</span>
+          </p>
+          <p class="ex-sent" data-sent="6">
+            <span class="ex-en">In this A2 People & Family passage, notice <mark class="vocab" data-word="Vietnam">Vietnam</mark><span class="ipa">/ˌviˌɛtˈnɑm/</span>, <mark class="vocab" data-word="Vietnamese">Vietnamese</mark><span class="ipa">/ˌviˌɛtˌnɑˈmiz/</span>, <mark class="vocab" data-word="<mark class="vocab" data-word="Saudi">Saudi</mark><span class="ipa">/ˈsaʊdi/</span> Arabia">Saudi Arabia</mark><span class="ipa">/ˈsaʊdi əˈreɪbiə/</span>, and Saudi.</span>
+            <span class="ex-vi">Trong đoạn A2 về People &amp; Family, hãy để ý Việt Nam, Việt Nam, Ả Rập Xê Út, và Ả Rập Xê-út.</span>
+          </p>
+          <p class="ex-sent" data-sent="7">
+            <span class="ex-en">In this A2 People & Family passage, notice <mark class="vocab" data-word="Afghanistan">Afghanistan</mark><span class="ipa">/æfˈɡænəˌstæn/</span>, <mark class="vocab" data-word="Afghan">Afghan</mark><span class="ipa">/ˈæfɡæn/</span>, <mark class="vocab" data-word="Israel">Israel</mark><span class="ipa">/ˈɪzreɪəl/</span>, and <mark class="vocab" data-word="Israeli">Israeli</mark><span class="ipa">/ɪzˈreɪli/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về People &amp; Family, hãy để ý Afghanistan, Afghan, Israel, và thuộc Israel.</span>
+          </p>
+          <p class="ex-sent" data-sent="8">
+            <span class="ex-en">In this A2 People & Family passage, notice <mark class="vocab" data-word="daddy">daddy</mark><span class="ipa">/ˈdædi/</span>, <mark class="vocab" data-word="mommy">mommy</mark><span class="ipa">/ˈmɑːmi/</span>, <mark class="vocab" data-word="grandparent">grandparent</mark><span class="ipa">/ˈɡrændˌpɛrənt/</span>, and <mark class="vocab" data-word="grandpa">grandpa</mark><span class="ipa">/ˈɡrændpɑː/ , /ˈɡrænpɑː/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về People &amp; Family, hãy để ý bố, mẹ, ông, và ông.</span>
+          </p>
+          <p class="ex-sent" data-sent="9">
+            <span class="ex-en">In this A2 People & Family passage, notice <mark class="vocab" data-word="grandma">grandma</mark><span class="ipa">/ˈɡrændmɑː/ , /ˈɡrænmɑː/</span>, <mark class="vocab" data-word="granddaughter">granddaughter</mark><span class="ipa">/ˈɡrændˌdɔːtɚ/</span>, <mark class="vocab" data-word="grandson">grandson</mark><span class="ipa">/ˈɡrændˌsʌn/</span>, and <mark class="vocab" data-word="group">group</mark><span class="ipa">/ɡruːp/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về People &amp; Family, hãy để ý bà, cháu gái, cháu trai, và nhóm.</span>
+          </p>
+          <p class="ex-sent" data-sent="10">
+            <span class="ex-en">In this A2 People & Family passage, notice <mark class="vocab" data-word="guest">guest</mark><span class="ipa">/ɡɛst/</span>, <mark class="vocab" data-word="dude">dude</mark><span class="ipa">/duːd/ , /djuːd/</span>, <mark class="vocab" data-word="guy">guy</mark><span class="ipa">/ɡaɪ/</span>, and <mark class="vocab" data-word="neighbor">neighbor</mark><span class="ipa">/ˈneɪbɚ/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về People &amp; Family, hãy để ý khách, anh bạn, anh chàng, và hàng xóm.</span>
+          </p>
+          <p class="ex-sent" data-sent="11">
+            <span class="ex-en">In this A2 People & Family passage, notice <mark class="vocab" data-word="surname">surname</mark><span class="ipa">/ˈsɝːˌneɪm/</span>, <mark class="vocab" data-word="family name">family name</mark><span class="ipa">/ˈfæməli ˌneɪm/</span>, <mark class="vocab" data-word="background">background</mark><span class="ipa">/ˈbækˌɡraʊnd/</span>, and <mark class="vocab" data-word="couple">couple</mark><span class="ipa">/ˈkʌpəl/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về People &amp; Family, hãy để ý họ, họ, lý lịch, và cặp đôi.</span>
+          </p>
+          <p class="ex-sent" data-sent="12">
+            <span class="ex-en">In this A2 People & Family passage, notice <mark class="vocab" data-word="partner">partner</mark><span class="ipa">/ˈpɑːrtnɚ/</span>, <mark class="vocab" data-word="twin">twin</mark><span class="ipa">/twɪn/</span>, <mark class="vocab" data-word="kid">kid</mark><span class="ipa">/kɪd/</span>, and <mark class="vocab" data-word="member">member</mark><span class="ipa">/ˈmɛmbɚ/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về People &amp; Family, hãy để ý đối tác, sinh đôi, con, và thành viên.</span>
+          </p>
+          <p class="ex-sent" data-sent="13">
+            <span class="ex-en">In this A2 People & Family passage, notice <mark class="vocab" data-word="to date">date</mark><span class="ipa">/deɪt/</span>, <mark class="vocab" data-word="to care">care</mark><span class="ipa">/kɛr/</span>, <mark class="vocab" data-word="to marry">marry</mark><span class="ipa">/ˈmæri/</span>, and <mark class="vocab" data-word="to break up">break up</mark><span class="ipa">/breɪk ʌp/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về People &amp; Family, hãy để ý hẹn hò, quan tâm, kết hôn, và chia tay.</span>
+          </p>
+          <p class="ex-sent" data-sent="14">
+            <span class="ex-en">In this A2 People & Family passage, notice <mark class="vocab" data-word="to grow">grow</mark><span class="ipa">/ɡroʊ/</span>, <mark class="vocab" data-word="wedding">wedding</mark><span class="ipa">/ˈwɛdɪŋ/</span>, <mark class="vocab" data-word="to raise">raise</mark><span class="ipa">/reɪz/</span>, and <mark class="vocab" data-word="middle name">middle name</mark><span class="ipa">/ˈmɪdl ˌneɪm/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về People &amp; Family, hãy để ý lớn lên, đám cưới, nuôi dưỡng, và tên đệm.</span>
+          </p>
+      </section>
+
+      <section class="ex-vocab">
+        <h2>Word checklist · 56</h2>
+        <ul class="ex-vocab-list">
+          <li><mark class="vocab">Australia</mark> <span class="ipa">/ɔˈstreɪljə/</span> — Úc</li>
+          <li><mark class="vocab">Australian</mark> <span class="ipa">/ɔˈstreɪljən/</span> — thuộc Australia</li>
+          <li><mark class="vocab">Switzerland</mark> <span class="ipa">/ˈswɪtsɚˌlænd/</span> — Thụy Sĩ</li>
+          <li><mark class="vocab">Swiss</mark> <span class="ipa">/swɪs/</span> — Thụy Sĩ</li>
+          <li><mark class="vocab">Austria</mark> <span class="ipa">/ˈɔstriə/</span> — Áo</li>
+          <li><mark class="vocab">Austrian</mark> <span class="ipa">/ˈɔstriən/</span> — Áo</li>
+          <li><mark class="vocab">the Netherlands</mark> <span class="ipa">/ˈnɛðɚləndz/</span> — Hà Lan</li>
+          <li><mark class="vocab">Dutch</mark> <span class="ipa">/dʌʧ/</span> — Hà Lan</li>
+          <li><mark class="vocab">Norway</mark> <span class="ipa">/ˈnɔrˌweɪ/</span> — Na Uy</li>
+          <li><mark class="vocab">Norwegian</mark> <span class="ipa">/nɔrˈwiːdʒən/</span> — Na Uy</li>
+          <li><mark class="vocab">Sweden</mark> <span class="ipa">/ˈswiːdən/</span> — Thụy Điển</li>
+          <li><mark class="vocab">Swedish</mark> <span class="ipa">/ˈswiːdɪʃ/</span> — Thuộc Thụy Điển</li>
+          <li><mark class="vocab">Poland</mark> <span class="ipa">/ˈpoʊlənd/</span> — Ba Lan</li>
+          <li><mark class="vocab">polish</mark> <span class="ipa">/ˈpoʊlɪʃ/</span> — Ba Lan</li>
+          <li><mark class="vocab">Egypt</mark> <span class="ipa">/ˈiːdʒɪpt/</span> — Ai Cập</li>
+          <li><mark class="vocab">Egyptian</mark> <span class="ipa">/ɪˈdʒɪpʃən/</span> — Ai Cập</li>
+          <li><mark class="vocab">Turkey</mark> <span class="ipa">/tˈɜːki/</span> — Thổ Nhĩ Kỳ</li>
+          <li><mark class="vocab">Turkish</mark> <span class="ipa">/ˈtɝkɪʃ/</span> — Thổ Nhĩ Kỳ</li>
+          <li><mark class="vocab">Greece</mark> <span class="ipa">/ɡriːs/</span> — Hy Lạp</li>
+          <li><mark class="vocab">Greek</mark> <span class="ipa">/ɡriːk/</span> — Hy Lạp</li>
+          <li><mark class="vocab">Vietnam</mark> <span class="ipa">/ˌviˌɛtˈnɑm/</span> — Việt Nam</li>
+          <li><mark class="vocab">Vietnamese</mark> <span class="ipa">/ˌviˌɛtˌnɑˈmiz/</span> — Việt Nam</li>
+          <li><mark class="vocab">Saudi Arabia</mark> <span class="ipa">/ˈsaʊdi əˈreɪbiə/</span> — Ả Rập Xê Út</li>
+          <li><mark class="vocab">Saudi</mark> <span class="ipa">/ˈsaʊdi/</span> — Ả Rập Xê-út</li>
+          <li><mark class="vocab">Afghanistan</mark> <span class="ipa">/æfˈɡænəˌstæn/</span> — Afghanistan</li>
+          <li><mark class="vocab">Afghan</mark> <span class="ipa">/ˈæfɡæn/</span> — Afghan</li>
+          <li><mark class="vocab">Israel</mark> <span class="ipa">/ˈɪzreɪəl/</span> — Israel</li>
+          <li><mark class="vocab">Israeli</mark> <span class="ipa">/ɪzˈreɪli/</span> — thuộc Israel</li>
+          <li><mark class="vocab">daddy</mark> <span class="ipa">/ˈdædi/</span> — bố</li>
+          <li><mark class="vocab">mommy</mark> <span class="ipa">/ˈmɑːmi/</span> — mẹ</li>
+          <li><mark class="vocab">grandparent</mark> <span class="ipa">/ˈɡrændˌpɛrənt/</span> — ông</li>
+          <li><mark class="vocab">grandpa</mark> <span class="ipa">/ˈɡrændpɑː/ , /ˈɡrænpɑː/</span> — ông</li>
+          <li><mark class="vocab">grandma</mark> <span class="ipa">/ˈɡrændmɑː/ , /ˈɡrænmɑː/</span> — bà</li>
+          <li><mark class="vocab">granddaughter</mark> <span class="ipa">/ˈɡrændˌdɔːtɚ/</span> — cháu gái</li>
+          <li><mark class="vocab">grandson</mark> <span class="ipa">/ˈɡrændˌsʌn/</span> — cháu trai</li>
+          <li><mark class="vocab">group</mark> <span class="ipa">/ɡruːp/</span> — nhóm</li>
+          <li><mark class="vocab">guest</mark> <span class="ipa">/ɡɛst/</span> — khách</li>
+          <li><mark class="vocab">dude</mark> <span class="ipa">/duːd/ , /djuːd/</span> — anh bạn</li>
+          <li><mark class="vocab">guy</mark> <span class="ipa">/ɡaɪ/</span> — anh chàng</li>
+          <li><mark class="vocab">neighbor</mark> <span class="ipa">/ˈneɪbɚ/</span> — hàng xóm</li>
+          <li><mark class="vocab">surname</mark> <span class="ipa">/ˈsɝːˌneɪm/</span> — họ</li>
+          <li><mark class="vocab">family name</mark> <span class="ipa">/ˈfæməli ˌneɪm/</span> — họ</li>
+          <li><mark class="vocab">background</mark> <span class="ipa">/ˈbækˌɡraʊnd/</span> — lý lịch</li>
+          <li><mark class="vocab">couple</mark> <span class="ipa">/ˈkʌpəl/</span> — cặp đôi</li>
+          <li><mark class="vocab">partner</mark> <span class="ipa">/ˈpɑːrtnɚ/</span> — đối tác</li>
+          <li><mark class="vocab">twin</mark> <span class="ipa">/twɪn/</span> — sinh đôi</li>
+          <li><mark class="vocab">kid</mark> <span class="ipa">/kɪd/</span> — con</li>
+          <li><mark class="vocab">member</mark> <span class="ipa">/ˈmɛmbɚ/</span> — thành viên</li>
+          <li><mark class="vocab">date</mark> <span class="ipa">/deɪt/</span> — hẹn hò</li>
+          <li><mark class="vocab">care</mark> <span class="ipa">/kɛr/</span> — quan tâm</li>
+          <li><mark class="vocab">marry</mark> <span class="ipa">/ˈmæri/</span> — kết hôn</li>
+          <li><mark class="vocab">break up</mark> <span class="ipa">/breɪk ʌp/</span> — chia tay</li>
+          <li><mark class="vocab">grow</mark> <span class="ipa">/ɡroʊ/</span> — lớn lên</li>
+          <li><mark class="vocab">wedding</mark> <span class="ipa">/ˈwɛdɪŋ/</span> — đám cưới</li>
+          <li><mark class="vocab">raise</mark> <span class="ipa">/reɪz/</span> — nuôi dưỡng</li>
+          <li><mark class="vocab">middle name</mark> <span class="ipa">/ˈmɪdl ˌneɪm/</span> — tên đệm</li>
+        </ul>
+      </section>
+
+      <div class="docs-pager">
+        <a href="../">← People &amp; Family</a>
+        <a href="../../">All topics →</a>
+      </div>
+    </article>
+  </div>
+  <script src="../../../../js/docs.js"></script>
+  <script src="../../../../js/exercise.js"></script>
+</body>
+</html>

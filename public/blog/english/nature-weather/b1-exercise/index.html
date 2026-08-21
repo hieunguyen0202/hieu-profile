@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>B1 Exercise · Nature &amp; Weather — The Quiet Corner</title>
+  <meta name="description" content="B1 reading exercise for Nature &amp; Weather vocabulary with IPA and bilingual sentences.">
+  <link rel="icon" href="../../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../../"><span>✦</span> The Quiet Corner <span>✦</span></a>
+    <nav class="docs-series">
+      <a href="../../../../blog/web-security/">DevSecOps</a>
+      <a href="../../../../blog/kubestronaut/">Kubestronaut</a>
+      <a class="active" href="../../">English</a>
+    </nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-nav="english" data-docs-root="../../" data-active="nature-weather">
+      <div class="docs-nav-label">English</div>
+      <ul class="docs-nav" id="docsNav">
+        <li><a href="../../">All topics</a></li>
+        <li><a href="../">Nature &amp; Weather</a></li>
+        <li><a class="active" href="./">B1 Exercise</a></li>
+      </ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../../">Home</a>
+        <span>›</span>
+        <a href="../../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../../">English</a>
+        <span>›</span>
+        <a href="../">Nature &amp; Weather</a>
+        <span>›</span>
+        <span>B1 Exercise</span>
+      </div>
+
+      <div class="vocab-topic-hero">
+        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 72 72' fill='none'%3E%3Crect width='72' height='72' rx='14' fill='%230b1220'/%3E%3Crect x='16' y='14' width='40' height='46' rx='6' stroke='%2322d3ee' stroke-width='2.5'/%3E%3Cpath d='M24 28h24M24 36h24M24 44h16' stroke='%23e4e4e7' stroke-width='2.5' stroke-linecap='round'/%3E%3Cpath d='M48 48l6 2-2 6-8-8 4 0z' fill='%2322d3ee'/%3E%3C/svg%3E" alt="" width="112" height="112">
+        <div>
+          <h1>B1 Exercise · Nature &amp; Weather</h1>
+          <p class="lede">Reading passage with every new word from this level’s LanGeek lessons — IPA, highlights, sentence translation, and free TTS.</p>
+          <div class="docs-meta">
+            <span><strong>Words:</strong> 118</span>
+            <span><strong>Lessons:</strong> Farming · Nature and Regions · The Environment and Energy · The Weather</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="ex-toolbar" id="exToolbar">
+        <label class="ex-toggle"><input type="checkbox" id="togHighlight" checked> Highlights</label>
+        <label class="ex-toggle"><input type="checkbox" id="togIpa" checked> IPA</label>
+        <label class="ex-toggle"><input type="checkbox" id="togVi"> Dịch câu (VI)</label>
+        <span class="ex-sep"></span>
+        <label class="ex-voice">Voice
+          <select id="voiceSelect" aria-label="TTS voice"></select>
+        </label>
+        <label class="ex-voice">Speed
+          <input id="rateRange" type="range" min="0.7" max="1.15" step="0.05" value="0.95">
+          <span id="rateVal">0.95</span>
+        </label>
+        <button type="button" class="ex-btn primary" id="btnPlay">▶ Read passage</button>
+        <button type="button" class="ex-btn" id="btnStop">Stop</button>
+      </div>
+      
+      <section class="ex-passage" id="passage" data-tts-root>
+          <p class="ex-sent" data-sent="1">
+            <span class="ex-en">In this B1 Nature & Weather passage, notice <mark class="vocab" data-word="agriculture">agriculture</mark><span class="ipa">/ˈæɡrɪˌkʌlʧɚ/</span>, <mark class="vocab" data-word="barn">barn</mark><span class="ipa">/bɑrn/</span>, <mark class="vocab" data-word="cattle">cattle</mark><span class="ipa">/ˈkætl/</span>, and <mark class="vocab" data-word="crop">crop</mark><span class="ipa">/krɑp/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về Nature &amp; Weather, hãy để ý nông nghiệp, chuồng trại, gia súc, và cây trồng.</span>
+          </p>
+          <p class="ex-sent" data-sent="2">
+            <span class="ex-en">In this B1 Nature & Weather passage, notice <mark class="vocab" data-word="farmhouse">farmhouse</mark><span class="ipa">/ˈfɑrmˌhaʊs/</span>, <mark class="vocab" data-word="fish farm">fish farm</mark><span class="ipa">/fɪʃ fɑrm/</span>, <mark class="vocab" data-word="grain">grain</mark><span class="ipa">/ɡreɪn/</span>, and <mark class="vocab" data-word="greenhouse">greenhouse</mark><span class="ipa">/ˈɡriːnˌhaʊs/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về Nature &amp; Weather, hãy để ý nhà nông trại, trại nuôi cá, hạt, và nhà kính.</span>
+          </p>
+          <p class="ex-sent" data-sent="3">
+            <span class="ex-en">In this B1 Nature & Weather passage, notice <mark class="vocab" data-word="to harvest">harvest</mark><span class="ipa">/ˈhɑrvɪst/</span>, <mark class="vocab" data-word="land">land</mark><span class="ipa">/lænd/</span>, <mark class="vocab" data-word="to milk">milk</mark><span class="ipa">/mɪlk/</span>, and <mark class="vocab" data-word="organic">organic</mark><span class="ipa">/ɔrˈɡænɪk/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về Nature &amp; Weather, hãy để ý thu hoạch, đất, vắt sữa, và hữu cơ.</span>
+          </p>
+          <p class="ex-sent" data-sent="4">
+            <span class="ex-en">In this B1 Nature & Weather passage, notice <mark class="vocab" data-word="pest">pest</mark><span class="ipa">/pɛst/</span>, <mark class="vocab" data-word="plow">plow</mark><span class="ipa">/plaʊ/</span>, <mark class="vocab" data-word="ranch">ranch</mark><span class="ipa">/ræntʃ/</span>, and <mark class="vocab" data-word="scarecrow">scarecrow</mark><span class="ipa">/ˈskɛrˌkroʊ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về Nature &amp; Weather, hãy để ý sâu bệnh, cái cày, trang trại, và bù nhìn.</span>
+          </p>
+          <p class="ex-sent" data-sent="5">
+            <span class="ex-en">In this B1 Nature & Weather passage, notice <mark class="vocab" data-word="seed">seed</mark><span class="ipa">/siːd/</span>, <mark class="vocab" data-word="shepherd">shepherd</mark><span class="ipa">/ˈʃɛpɚd/</span>, <mark class="vocab" data-word="to sow">sow</mark><span class="ipa">/soʊ/</span>, and <mark class="vocab" data-word="stable">stable</mark><span class="ipa">/ˈsteɪbəl/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về Nature &amp; Weather, hãy để ý hạt giống, người chăn cừu, gieo, và chuồng ngựa.</span>
+          </p>
+          <p class="ex-sent" data-sent="6">
+            <span class="ex-en">In this B1 Nature & Weather passage, notice <mark class="vocab" data-word="tractor">tractor</mark><span class="ipa">/ˈtræktɚ/</span>, <mark class="vocab" data-word="vineyard">vineyard</mark><span class="ipa">/ˈvɪnjɚd/</span>, <mark class="vocab" data-word="windmill">windmill</mark><span class="ipa">/ˈwɪndˌmɪl/</span>, and <mark class="vocab" data-word="region">region</mark><span class="ipa">/ˈriːdʒən/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về Nature &amp; Weather, hãy để ý máy kéo, vườn nho, cối xay gió, và vùng.</span>
+          </p>
+          <p class="ex-sent" data-sent="7">
+            <span class="ex-en">In this B1 Nature & Weather passage, notice <mark class="vocab" data-word="highland">highland</mark><span class="ipa">/ˈhaɪˌlənd/</span>, <mark class="vocab" data-word="woodland">woodland</mark><span class="ipa">/ˈwʊdˌlənd/</span>, <mark class="vocab" data-word="jungle">jungle</mark><span class="ipa">/ˈʤʌŋɡəl/</span>, and <mark class="vocab" data-word="meadow">meadow</mark><span class="ipa">/ˈmɛdoʊ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về Nature &amp; Weather, hãy để ý cao nguyên, rừng, rừng rậm, và đồng cỏ.</span>
+          </p>
+          <p class="ex-sent" data-sent="8">
+            <span class="ex-en">In this B1 Nature & Weather passage, notice <mark class="vocab" data-word="mountain range">mountain range</mark><span class="ipa">/ˈmaʊntən ˌreɪndʒ/</span>, <mark class="vocab" data-word="cave">cave</mark><span class="ipa">/keɪv/</span>, <mark class="vocab" data-word="cliff">cliff</mark><span class="ipa">/klɪf/</span>, and <mark class="vocab" data-word="mountainous">mountainous</mark><span class="ipa">/ˈmaʊntənəs/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về Nature &amp; Weather, hãy để ý dãy núi, hang động, vách đá, và núi non.</span>
+          </p>
+          <p class="ex-sent" data-sent="9">
+            <span class="ex-en">In this B1 Nature & Weather passage, notice <mark class="vocab" data-word="rocky">rocky</mark><span class="ipa">/ˈrɑki/</span>, <mark class="vocab" data-word="canyon">canyon</mark><span class="ipa">/ˈkænjən/</span>, <mark class="vocab" data-word="waterfall">waterfall</mark><span class="ipa">/ˈwɑtɚˌfɑl/</span>, and <mark class="vocab" data-word="bank">bank</mark><span class="ipa">/bænk/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về Nature &amp; Weather, hãy để ý đá, hẻm núi, thác nước, và bờ.</span>
+          </p>
+          <p class="ex-sent" data-sent="10">
+            <span class="ex-en">In this B1 Nature & Weather passage, notice <mark class="vocab" data-word="coastline">coastline</mark><span class="ipa">/ˈkoʊstˌlaɪn/</span>, <mark class="vocab" data-word="sand">sand</mark><span class="ipa">/sænd/</span>, <mark class="vocab" data-word="canal">canal</mark><span class="ipa">/kəˈnæl/</span>, and <mark class="vocab" data-word="channel">channel</mark><span class="ipa">/ˈʧænəl/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về Nature &amp; Weather, hãy để ý bờ biển, cát, kênh đào, và kênh.</span>
+          </p>
+          <p class="ex-sent" data-sent="11">
+            <span class="ex-en">In this B1 Nature & Weather passage, notice <mark class="vocab" data-word="sea level">sea level</mark><span class="ipa">/ˈsiː ˌlɛvəl/</span>, <mark class="vocab" data-word="mud">mud</mark><span class="ipa">/mʌd/</span>, <mark class="vocab" data-word="national park">national park</mark><span class="ipa">/ˈnæʃənəl ˌpɑrk/</span>, and <mark class="vocab" data-word="Antarctic">Antarctic</mark><span class="ipa">/ænˈtɑrktɪk/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về Nature &amp; Weather, hãy để ý mực nước biển, bùn, vườn quốc gia, và thuộc Nam Cực.</span>
+          </p>
+          <p class="ex-sent" data-sent="12">
+            <span class="ex-en">In this B1 Nature & Weather passage, notice <mark class="vocab" data-word="Arctic">Arctic</mark><span class="ipa">/ˈɑrktɪk/</span>, <mark class="vocab" data-word="volcano">volcano</mark><span class="ipa">/vɑlˈkeɪnoʊ/</span>, <mark class="vocab" data-word="location">location</mark><span class="ipa">/loʊˈkeɪʃən/</span>, and <mark class="vocab" data-word="planet">planet</mark><span class="ipa">/ˈplænɪt/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về Nature &amp; Weather, hãy để ý Bắc Cực, núi lửa, vị trí, và hành tinh.</span>
+          </p>
+          <p class="ex-sent" data-sent="13">
+            <span class="ex-en">In this B1 Nature & Weather passage, notice <mark class="vocab" data-word="atmosphere">atmosphere</mark><span class="ipa">/ˈætməsˌfɪr/</span>, <mark class="vocab" data-word="habitat">habitat</mark><span class="ipa">/ˈhæbɪˌtæt/</span>, <mark class="vocab" data-word="resource">resource</mark><span class="ipa">/ˈriˌsɔrs/</span>, and <mark class="vocab" data-word="power">power</mark><span class="ipa">/ˈpaʊɚ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về Nature &amp; Weather, hãy để ý khí quyển, môi trường sống, tài nguyên, và năng lượng.</span>
+          </p>
+          <p class="ex-sent" data-sent="14">
+            <span class="ex-en">In this B1 Nature & Weather passage, notice <mark class="vocab" data-word="fuel">fuel</mark><span class="ipa">/ˈfjuːəl/</span>, <mark class="vocab" data-word="fossil fuel">fossil fuel</mark><span class="ipa">/ˈfɑsəl ˈfjuːəl/</span>, <mark class="vocab" data-word="coal">coal</mark><span class="ipa">/koʊl/</span>, and <mark class="vocab" data-word="oil">oil</mark><span class="ipa">/ɔɪl/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về Nature &amp; Weather, hãy để ý nhiên liệu, nhiên liệu hóa thạch, than, và dầu mỏ.</span>
+          </p>
+          <p class="ex-sent" data-sent="15">
+            <span class="ex-en">In this B1 Nature & Weather passage, notice <mark class="vocab" data-word="energy">energy</mark><span class="ipa">/ˈɛnɚʤi/</span>, <mark class="vocab" data-word="atomic energy">atomic energy</mark><span class="ipa">/əˈtɑmɪk ˈɛnɚʤi/</span>, <mark class="vocab" data-word="carbon footprint">carbon footprint</mark><span class="ipa">/ˈkɑrbən ˈfʊtˌprɪnt/</span>, and <mark class="vocab" data-word="carbon dioxide">carbon dioxide</mark><span class="ipa">/ˈkɑrbən daɪˈɑksaɪd/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về Nature &amp; Weather, hãy để ý năng lượng, năng lượng nguyên tử, dấu chân carbon, và điôxít cacbon.</span>
+          </p>
+          <p class="ex-sent" data-sent="16">
+            <span class="ex-en">In this B1 Nature & Weather passage, notice <mark class="vocab" data-word="clean">clean</mark><span class="ipa">/kliːn/</span>, <mark class="vocab" data-word="cleanup">cleanup</mark><span class="ipa">/ˈkliːnˌʌp/</span>, <mark class="vocab" data-word="eco-friendly">eco-friendly</mark><span class="ipa">/ˌiːkoʊˈfrɛndli/ , /ˌɛkoʊˈfrɛndli/</span>, and <mark class="vocab" data-word="green">green</mark><span class="ipa">/ɡriːn/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về Nature &amp; Weather, hãy để ý sạch, dọn dẹp, thân thiện với môi trường, và xanh.</span>
+          </p>
+          <p class="ex-sent" data-sent="17">
+            <span class="ex-en">In this B1 Nature & Weather passage, notice <mark class="vocab" data-word="to pollute">pollute</mark><span class="ipa">/pəˈluːt/</span>, <mark class="vocab" data-word="to consume">consume</mark><span class="ipa">/kənˈsuːm/</span>, <mark class="vocab" data-word="climate crisis">climate crisis</mark><span class="ipa">/ˈklaɪmət ˈkraɪsɪs/</span>, and <mark class="vocab" data-word="natural disaster">natural disaster</mark><span class="ipa">/ˈnætʃrəl dɪˈzæstɚ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về Nature &amp; Weather, hãy để ý gây ô nhiễm, tiêu thụ, khủng hoảng khí hậu, và thảm họa thiên nhiên.</span>
+          </p>
+          <p class="ex-sent" data-sent="18">
+            <span class="ex-en">In this B1 Nature & Weather passage, notice <mark class="vocab" data-word="volcanic eruption">volcanic eruption</mark><span class="ipa">/vɑlˈkænɪk ɪˈrʌpʃən/</span>, <mark class="vocab" data-word="garbage">garbage</mark><span class="ipa">/ˈɡɑrbɪʤ/</span>, <mark class="vocab" data-word="waste">waste</mark><span class="ipa">/weɪst/</span>, and <mark class="vocab" data-word="greenhouse gas">greenhouse gas</mark><span class="ipa">/ˈɡriːnˌhaʊs ɡæs/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về Nature &amp; Weather, hãy để ý sự phun trào núi lửa, rác, chất thải, và khí nhà kính.</span>
+          </p>
+          <p class="ex-sent" data-sent="19">
+            <span class="ex-en">In this B1 Nature & Weather passage, notice <mark class="vocab" data-word="greenhouse effect">greenhouse effect</mark><span class="ipa">/ˈɡriːnˌhaʊs ɪˈfɛkt/</span>, <mark class="vocab" data-word="toxic">toxic</mark><span class="ipa">/ˈtɑksɪk/</span>, <mark class="vocab" data-word="poisonous">poisonous</mark><span class="ipa">/ˈpɔɪzənəs/</span>, and <mark class="vocab" data-word="air pollution">air pollution</mark><span class="ipa">/ɛr pəˈluːʃən/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về Nature &amp; Weather, hãy để ý hiệu ứng nhà kính, độc hại, độc hại, và ô nhiễm không khí.</span>
+          </p>
+          <p class="ex-sent" data-sent="20">
+            <span class="ex-en">In this B1 Nature & Weather passage, notice <mark class="vocab" data-word="smoke">smoke</mark><span class="ipa">/smoʊk/</span>, <mark class="vocab" data-word="power plant">power plant</mark><span class="ipa">/ˈpaʊɚ plænt/</span>, <mark class="vocab" data-word="to recycle">recycle</mark><span class="ipa">/riˈsaɪkəl/</span>, and <mark class="vocab" data-word="recycling">recycling</mark><span class="ipa">/riˈsaɪklɪŋ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về Nature &amp; Weather, hãy để ý khói, nhà máy điện, tái chế, và tái chế.</span>
+          </p>
+          <p class="ex-sent" data-sent="21">
+            <span class="ex-en">In this B1 Nature & Weather passage, notice <mark class="vocab" data-word="renewable">renewable</mark><span class="ipa">/rɪˈnuːəbəl/ , /rɪˈnjuːəbəl/</span>, <mark class="vocab" data-word="emergency">emergency</mark><span class="ipa">/ɪˈmɝːʤənsi/</span>, <mark class="vocab" data-word="to rot">rot</mark><span class="ipa">/rɑt/</span>, and <mark class="vocab" data-word="filth">filth</mark><span class="ipa">/fɪlθ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về Nature &amp; Weather, hãy để ý có thể tái tạo, tình trạng khẩn cấp, thối rữa, và bẩn thỉu.</span>
+          </p>
+          <p class="ex-sent" data-sent="22">
+            <span class="ex-en">In this B1 Nature & Weather passage, notice <mark class="vocab" data-word="sunrise">sunrise</mark><span class="ipa">/ˈsʌnˌraɪz/</span>, <mark class="vocab" data-word="sunset">sunset</mark><span class="ipa">/ˈsʌnˌsɛt/</span>, <mark class="vocab" data-word="sunshine">sunshine</mark><span class="ipa">/ˈsʌnˌʃaɪn/</span>, and <mark class="vocab" data-word="shade">shade</mark><span class="ipa">/ʃeɪd/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về Nature &amp; Weather, hãy để ý bình minh, hoàng hôn, ánh nắng mặt trời, và bóng râm.</span>
+          </p>
+          <p class="ex-sent" data-sent="23">
+            <span class="ex-en">In this B1 Nature & Weather passage, notice <mark class="vocab" data-word="thunder">thunder</mark><span class="ipa">/ˈθʌndɚ/</span>, <mark class="vocab" data-word="lightning">lightning</mark><span class="ipa">/ˈlaɪtnɪŋ/</span>, <mark class="vocab" data-word="rainfall">rainfall</mark><span class="ipa">/ˈreɪnfɑːl/</span>, and <mark class="vocab" data-word="snowfall">snowfall</mark><span class="ipa">/ˈsnoʊˌfɑ:l/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về Nature &amp; Weather, hãy để ý sấm, tia chớp, lượng mưa, và tuyết rơi.</span>
+          </p>
+          <p class="ex-sent" data-sent="24">
+            <span class="ex-en">In this B1 Nature & Weather passage, notice <mark class="vocab" data-word="shower">shower</mark><span class="ipa">/ˈʃaʊɚ/</span>, <mark class="vocab" data-word="rainstorm">rainstorm</mark><span class="ipa">/ˈreɪnˌstɔrm/</span>, <mark class="vocab" data-word="snowstorm">snowstorm</mark><span class="ipa">/ˈsnoʊˌstɔrm/</span>, and <mark class="vocab" data-word="rainwater">rainwater</mark><span class="ipa">/ˈreɪnˌwɑtɚ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về Nature &amp; Weather, hãy để ý cơn mưa rào, cơn mưa dông, bão tuyết, và nước mưa.</span>
+          </p>
+          <p class="ex-sent" data-sent="25">
+            <span class="ex-en">In this B1 Nature & Weather passage, notice <mark class="vocab" data-word="raindrop">raindrop</mark><span class="ipa">/ˈreɪnˌdrɑp/</span>, <mark class="vocab" data-word="snowflake">snowflake</mark><span class="ipa">/ˈsnoʊˌfleɪk/</span>, <mark class="vocab" data-word="to pour">pour</mark><span class="ipa">/pɔr/</span>, and <mark class="vocab" data-word="to flood">flood</mark><span class="ipa">/flʌd/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về Nature &amp; Weather, hãy để ý giọt mưa, bông tuyết, đổ, và tràn ngập.</span>
+          </p>
+          <p class="ex-sent" data-sent="26">
+            <span class="ex-en">In this B1 Nature & Weather passage, notice <mark class="vocab" data-word="humid">humid</mark><span class="ipa">/ˈhjuːmɪd/</span>, <mark class="vocab" data-word="damp">damp</mark><span class="ipa">/dæmp/</span>, <mark class="vocab" data-word="frozen">frozen</mark><span class="ipa">/ˈfroʊzən/</span>, and <mark class="vocab" data-word="heat wave">heat wave</mark><span class="ipa">/ˈhiːt ˌweɪv/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về Nature &amp; Weather, hãy để ý ẩm ướt, ẩm ướt, đóng băng, và đợt nóng.</span>
+          </p>
+          <p class="ex-sent" data-sent="27">
+            <span class="ex-en">In this B1 Nature & Weather passage, notice <mark class="vocab" data-word="fine">fine</mark><span class="ipa">/faɪn/</span>, <mark class="vocab" data-word="calm">calm</mark><span class="ipa">/kɑm/</span>, <mark class="vocab" data-word="hailstorm">hailstorm</mark><span class="ipa">/ˈheɪlˌstɔrm/</span>, and <mark class="vocab" data-word="icy">icy</mark><span class="ipa">/ˈaɪsi/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về Nature &amp; Weather, hãy để ý đẹp, yên tĩnh, cơn mưa đá, và lạnh buốt.</span>
+          </p>
+          <p class="ex-sent" data-sent="28">
+            <span class="ex-en">In this B1 Nature & Weather passage, notice <mark class="vocab" data-word="forecast">forecast</mark><span class="ipa">/ˈfɔrˌkæst/</span>, <mark class="vocab" data-word="to set">set</mark><span class="ipa">/sɛt/</span>, <mark class="vocab" data-word="to rise">rise</mark><span class="ipa">/raɪz/</span>, and <mark class="vocab" data-word="to freeze">freeze</mark><span class="ipa">/friːz/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về Nature &amp; Weather, hãy để ý dự báo, lặn, mọc, và đóng băng.</span>
+          </p>
+          <p class="ex-sent" data-sent="29">
+            <span class="ex-en">In this B1 Nature & Weather passage, notice <mark class="vocab" data-word="to melt">melt</mark><span class="ipa">/mɛlt/</span>, <mark class="vocab" data-word="to shine">shine</mark><span class="ipa">/ʃaɪn/</span>, <mark class="vocab" data-word="acid rain">acid rain</mark><span class="ipa">/ˈæsɪd ˌreɪn/</span>, and <mark class="vocab" data-word="sandstorm">sandstorm</mark><span class="ipa">/ˈsændˌstɔrm/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về Nature &amp; Weather, hãy để ý tan chảy, chiếu sáng, mưa axit, và bão cát.</span>
+          </p>
+          <p class="ex-sent" data-sent="30">
+            <span class="ex-en">In this B1 Nature & Weather passage, notice <mark class="vocab" data-word="windstorm">windstorm</mark><span class="ipa">/ˈwɪndˌstɔrm/</span>, and <mark class="vocab" data-word="bright">bright</mark><span class="ipa">/braɪt/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về Nature &amp; Weather, hãy để ý bão gió, và sáng sủa.</span>
+          </p>
+      </section>
+
+      <section class="ex-vocab">
+        <h2>Word checklist · 118</h2>
+        <ul class="ex-vocab-list">
+          <li><mark class="vocab">agriculture</mark> <span class="ipa">/ˈæɡrɪˌkʌlʧɚ/</span> — nông nghiệp</li>
+          <li><mark class="vocab">barn</mark> <span class="ipa">/bɑrn/</span> — chuồng trại</li>
+          <li><mark class="vocab">cattle</mark> <span class="ipa">/ˈkætl/</span> — gia súc</li>
+          <li><mark class="vocab">crop</mark> <span class="ipa">/krɑp/</span> — cây trồng</li>
+          <li><mark class="vocab">farmhouse</mark> <span class="ipa">/ˈfɑrmˌhaʊs/</span> — nhà nông trại</li>
+          <li><mark class="vocab">fish farm</mark> <span class="ipa">/fɪʃ fɑrm/</span> — trại nuôi cá</li>
+          <li><mark class="vocab">grain</mark> <span class="ipa">/ɡreɪn/</span> — hạt</li>
+          <li><mark class="vocab">greenhouse</mark> <span class="ipa">/ˈɡriːnˌhaʊs/</span> — nhà kính</li>
+          <li><mark class="vocab">harvest</mark> <span class="ipa">/ˈhɑrvɪst/</span> — thu hoạch</li>
+          <li><mark class="vocab">land</mark> <span class="ipa">/lænd/</span> — đất</li>
+          <li><mark class="vocab">milk</mark> <span class="ipa">/mɪlk/</span> — vắt sữa</li>
+          <li><mark class="vocab">organic</mark> <span class="ipa">/ɔrˈɡænɪk/</span> — hữu cơ</li>
+          <li><mark class="vocab">pest</mark> <span class="ipa">/pɛst/</span> — sâu bệnh</li>
+          <li><mark class="vocab">plow</mark> <span class="ipa">/plaʊ/</span> — cái cày</li>
+          <li><mark class="vocab">ranch</mark> <span class="ipa">/ræntʃ/</span> — trang trại</li>
+          <li><mark class="vocab">scarecrow</mark> <span class="ipa">/ˈskɛrˌkroʊ/</span> — bù nhìn</li>
+          <li><mark class="vocab">seed</mark> <span class="ipa">/siːd/</span> — hạt giống</li>
+          <li><mark class="vocab">shepherd</mark> <span class="ipa">/ˈʃɛpɚd/</span> — người chăn cừu</li>
+          <li><mark class="vocab">sow</mark> <span class="ipa">/soʊ/</span> — gieo</li>
+          <li><mark class="vocab">stable</mark> <span class="ipa">/ˈsteɪbəl/</span> — chuồng ngựa</li>
+          <li><mark class="vocab">tractor</mark> <span class="ipa">/ˈtræktɚ/</span> — máy kéo</li>
+          <li><mark class="vocab">vineyard</mark> <span class="ipa">/ˈvɪnjɚd/</span> — vườn nho</li>
+          <li><mark class="vocab">windmill</mark> <span class="ipa">/ˈwɪndˌmɪl/</span> — cối xay gió</li>
+          <li><mark class="vocab">region</mark> <span class="ipa">/ˈriːdʒən/</span> — vùng</li>
+          <li><mark class="vocab">highland</mark> <span class="ipa">/ˈhaɪˌlənd/</span> — cao nguyên</li>
+          <li><mark class="vocab">woodland</mark> <span class="ipa">/ˈwʊdˌlənd/</span> — rừng</li>
+          <li><mark class="vocab">jungle</mark> <span class="ipa">/ˈʤʌŋɡəl/</span> — rừng rậm</li>
+          <li><mark class="vocab">meadow</mark> <span class="ipa">/ˈmɛdoʊ/</span> — đồng cỏ</li>
+          <li><mark class="vocab">mountain range</mark> <span class="ipa">/ˈmaʊntən ˌreɪndʒ/</span> — dãy núi</li>
+          <li><mark class="vocab">cave</mark> <span class="ipa">/keɪv/</span> — hang động</li>
+          <li><mark class="vocab">cliff</mark> <span class="ipa">/klɪf/</span> — vách đá</li>
+          <li><mark class="vocab">mountainous</mark> <span class="ipa">/ˈmaʊntənəs/</span> — núi non</li>
+          <li><mark class="vocab">rocky</mark> <span class="ipa">/ˈrɑki/</span> — đá</li>
+          <li><mark class="vocab">canyon</mark> <span class="ipa">/ˈkænjən/</span> — hẻm núi</li>
+          <li><mark class="vocab">waterfall</mark> <span class="ipa">/ˈwɑtɚˌfɑl/</span> — thác nước</li>
+          <li><mark class="vocab">bank</mark> <span class="ipa">/bænk/</span> — bờ</li>
+          <li><mark class="vocab">coastline</mark> <span class="ipa">/ˈkoʊstˌlaɪn/</span> — bờ biển</li>
+          <li><mark class="vocab">sand</mark> <span class="ipa">/sænd/</span> — cát</li>
+          <li><mark class="vocab">canal</mark> <span class="ipa">/kəˈnæl/</span> — kênh đào</li>
+          <li><mark class="vocab">channel</mark> <span class="ipa">/ˈʧænəl/</span> — kênh</li>
+          <li><mark class="vocab">sea level</mark> <span class="ipa">/ˈsiː ˌlɛvəl/</span> — mực nước biển</li>
+          <li><mark class="vocab">mud</mark> <span class="ipa">/mʌd/</span> — bùn</li>
+          <li><mark class="vocab">national park</mark> <span class="ipa">/ˈnæʃənəl ˌpɑrk/</span> — vườn quốc gia</li>
+          <li><mark class="vocab">Antarctic</mark> <span class="ipa">/ænˈtɑrktɪk/</span> — thuộc Nam Cực</li>
+          <li><mark class="vocab">Arctic</mark> <span class="ipa">/ˈɑrktɪk/</span> — Bắc Cực</li>
+          <li><mark class="vocab">volcano</mark> <span class="ipa">/vɑlˈkeɪnoʊ/</span> — núi lửa</li>
+          <li><mark class="vocab">location</mark> <span class="ipa">/loʊˈkeɪʃən/</span> — vị trí</li>
+          <li><mark class="vocab">planet</mark> <span class="ipa">/ˈplænɪt/</span> — hành tinh</li>
+          <li><mark class="vocab">atmosphere</mark> <span class="ipa">/ˈætməsˌfɪr/</span> — khí quyển</li>
+          <li><mark class="vocab">habitat</mark> <span class="ipa">/ˈhæbɪˌtæt/</span> — môi trường sống</li>
+          <li><mark class="vocab">resource</mark> <span class="ipa">/ˈriˌsɔrs/</span> — tài nguyên</li>
+          <li><mark class="vocab">power</mark> <span class="ipa">/ˈpaʊɚ/</span> — năng lượng</li>
+          <li><mark class="vocab">fuel</mark> <span class="ipa">/ˈfjuːəl/</span> — nhiên liệu</li>
+          <li><mark class="vocab">fossil fuel</mark> <span class="ipa">/ˈfɑsəl ˈfjuːəl/</span> — nhiên liệu hóa thạch</li>
+          <li><mark class="vocab">coal</mark> <span class="ipa">/koʊl/</span> — than</li>
+          <li><mark class="vocab">oil</mark> <span class="ipa">/ɔɪl/</span> — dầu mỏ</li>
+          <li><mark class="vocab">energy</mark> <span class="ipa">/ˈɛnɚʤi/</span> — năng lượng</li>
+          <li><mark class="vocab">atomic energy</mark> <span class="ipa">/əˈtɑmɪk ˈɛnɚʤi/</span> — năng lượng nguyên tử</li>
+          <li><mark class="vocab">carbon footprint</mark> <span class="ipa">/ˈkɑrbən ˈfʊtˌprɪnt/</span> — dấu chân carbon</li>
+          <li><mark class="vocab">carbon dioxide</mark> <span class="ipa">/ˈkɑrbən daɪˈɑksaɪd/</span> — điôxít cacbon</li>
+          <li><mark class="vocab">clean</mark> <span class="ipa">/kliːn/</span> — sạch</li>
+          <li><mark class="vocab">cleanup</mark> <span class="ipa">/ˈkliːnˌʌp/</span> — dọn dẹp</li>
+          <li><mark class="vocab">eco-friendly</mark> <span class="ipa">/ˌiːkoʊˈfrɛndli/ , /ˌɛkoʊˈfrɛndli/</span> — thân thiện với môi trường</li>
+          <li><mark class="vocab">green</mark> <span class="ipa">/ɡriːn/</span> — xanh</li>
+          <li><mark class="vocab">pollute</mark> <span class="ipa">/pəˈluːt/</span> — gây ô nhiễm</li>
+          <li><mark class="vocab">consume</mark> <span class="ipa">/kənˈsuːm/</span> — tiêu thụ</li>
+          <li><mark class="vocab">climate crisis</mark> <span class="ipa">/ˈklaɪmət ˈkraɪsɪs/</span> — khủng hoảng khí hậu</li>
+          <li><mark class="vocab">natural disaster</mark> <span class="ipa">/ˈnætʃrəl dɪˈzæstɚ/</span> — thảm họa thiên nhiên</li>
+          <li><mark class="vocab">volcanic eruption</mark> <span class="ipa">/vɑlˈkænɪk ɪˈrʌpʃən/</span> — sự phun trào núi lửa</li>
+          <li><mark class="vocab">garbage</mark> <span class="ipa">/ˈɡɑrbɪʤ/</span> — rác</li>
+          <li><mark class="vocab">waste</mark> <span class="ipa">/weɪst/</span> — chất thải</li>
+          <li><mark class="vocab">greenhouse gas</mark> <span class="ipa">/ˈɡriːnˌhaʊs ɡæs/</span> — khí nhà kính</li>
+          <li><mark class="vocab">greenhouse effect</mark> <span class="ipa">/ˈɡriːnˌhaʊs ɪˈfɛkt/</span> — hiệu ứng nhà kính</li>
+          <li><mark class="vocab">toxic</mark> <span class="ipa">/ˈtɑksɪk/</span> — độc hại</li>
+          <li><mark class="vocab">poisonous</mark> <span class="ipa">/ˈpɔɪzənəs/</span> — độc hại</li>
+          <li><mark class="vocab">air pollution</mark> <span class="ipa">/ɛr pəˈluːʃən/</span> — ô nhiễm không khí</li>
+          <li><mark class="vocab">smoke</mark> <span class="ipa">/smoʊk/</span> — khói</li>
+          <li><mark class="vocab">power plant</mark> <span class="ipa">/ˈpaʊɚ plænt/</span> — nhà máy điện</li>
+          <li><mark class="vocab">recycle</mark> <span class="ipa">/riˈsaɪkəl/</span> — tái chế</li>
+          <li><mark class="vocab">recycling</mark> <span class="ipa">/riˈsaɪklɪŋ/</span> — tái chế</li>
+          <li><mark class="vocab">renewable</mark> <span class="ipa">/rɪˈnuːəbəl/ , /rɪˈnjuːəbəl/</span> — có thể tái tạo</li>
+          <li><mark class="vocab">emergency</mark> <span class="ipa">/ɪˈmɝːʤənsi/</span> — tình trạng khẩn cấp</li>
+          <li><mark class="vocab">rot</mark> <span class="ipa">/rɑt/</span> — thối rữa</li>
+          <li><mark class="vocab">filth</mark> <span class="ipa">/fɪlθ/</span> — bẩn thỉu</li>
+          <li><mark class="vocab">sunrise</mark> <span class="ipa">/ˈsʌnˌraɪz/</span> — bình minh</li>
+          <li><mark class="vocab">sunset</mark> <span class="ipa">/ˈsʌnˌsɛt/</span> — hoàng hôn</li>
+          <li><mark class="vocab">sunshine</mark> <span class="ipa">/ˈsʌnˌʃaɪn/</span> — ánh nắng mặt trời</li>
+          <li><mark class="vocab">shade</mark> <span class="ipa">/ʃeɪd/</span> — bóng râm</li>
+          <li><mark class="vocab">thunder</mark> <span class="ipa">/ˈθʌndɚ/</span> — sấm</li>
+          <li><mark class="vocab">lightning</mark> <span class="ipa">/ˈlaɪtnɪŋ/</span> — tia chớp</li>
+          <li><mark class="vocab">rainfall</mark> <span class="ipa">/ˈreɪnfɑːl/</span> — lượng mưa</li>
+          <li><mark class="vocab">snowfall</mark> <span class="ipa">/ˈsnoʊˌfɑ:l/</span> — tuyết rơi</li>
+          <li><mark class="vocab">shower</mark> <span class="ipa">/ˈʃaʊɚ/</span> — cơn mưa rào</li>
+          <li><mark class="vocab">rainstorm</mark> <span class="ipa">/ˈreɪnˌstɔrm/</span> — cơn mưa dông</li>
+          <li><mark class="vocab">snowstorm</mark> <span class="ipa">/ˈsnoʊˌstɔrm/</span> — bão tuyết</li>
+          <li><mark class="vocab">rainwater</mark> <span class="ipa">/ˈreɪnˌwɑtɚ/</span> — nước mưa</li>
+          <li><mark class="vocab">raindrop</mark> <span class="ipa">/ˈreɪnˌdrɑp/</span> — giọt mưa</li>
+          <li><mark class="vocab">snowflake</mark> <span class="ipa">/ˈsnoʊˌfleɪk/</span> — bông tuyết</li>
+          <li><mark class="vocab">pour</mark> <span class="ipa">/pɔr/</span> — đổ</li>
+          <li><mark class="vocab">flood</mark> <span class="ipa">/flʌd/</span> — tràn ngập</li>
+          <li><mark class="vocab">humid</mark> <span class="ipa">/ˈhjuːmɪd/</span> — ẩm ướt</li>
+          <li><mark class="vocab">damp</mark> <span class="ipa">/dæmp/</span> — ẩm ướt</li>
+          <li><mark class="vocab">frozen</mark> <span class="ipa">/ˈfroʊzən/</span> — đóng băng</li>
+          <li><mark class="vocab">heat wave</mark> <span class="ipa">/ˈhiːt ˌweɪv/</span> — đợt nóng</li>
+          <li><mark class="vocab">fine</mark> <span class="ipa">/faɪn/</span> — đẹp</li>
+          <li><mark class="vocab">calm</mark> <span class="ipa">/kɑm/</span> — yên tĩnh</li>
+          <li><mark class="vocab">hailstorm</mark> <span class="ipa">/ˈheɪlˌstɔrm/</span> — cơn mưa đá</li>
+          <li><mark class="vocab">icy</mark> <span class="ipa">/ˈaɪsi/</span> — lạnh buốt</li>
+          <li><mark class="vocab">forecast</mark> <span class="ipa">/ˈfɔrˌkæst/</span> — dự báo</li>
+          <li><mark class="vocab">set</mark> <span class="ipa">/sɛt/</span> — lặn</li>
+          <li><mark class="vocab">rise</mark> <span class="ipa">/raɪz/</span> — mọc</li>
+          <li><mark class="vocab">freeze</mark> <span class="ipa">/friːz/</span> — đóng băng</li>
+          <li><mark class="vocab">melt</mark> <span class="ipa">/mɛlt/</span> — tan chảy</li>
+          <li><mark class="vocab">shine</mark> <span class="ipa">/ʃaɪn/</span> — chiếu sáng</li>
+          <li><mark class="vocab">acid rain</mark> <span class="ipa">/ˈæsɪd ˌreɪn/</span> — mưa axit</li>
+          <li><mark class="vocab">sandstorm</mark> <span class="ipa">/ˈsændˌstɔrm/</span> — bão cát</li>
+          <li><mark class="vocab">windstorm</mark> <span class="ipa">/ˈwɪndˌstɔrm/</span> — bão gió</li>
+          <li><mark class="vocab">bright</mark> <span class="ipa">/braɪt/</span> — sáng sủa</li>
+        </ul>
+      </section>
+
+      <div class="docs-pager">
+        <a href="../">← Nature &amp; Weather</a>
+        <a href="../../">All topics →</a>
+      </div>
+    </article>
+  </div>
+  <script src="../../../../js/docs.js"></script>
+  <script src="../../../../js/exercise.js"></script>
+</body>
+</html>

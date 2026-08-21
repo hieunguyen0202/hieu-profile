@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A1 Exercise · Jobs &amp; Work — The Quiet Corner</title>
+  <meta name="description" content="A1 reading exercise for Jobs &amp; Work vocabulary with IPA and bilingual sentences.">
+  <link rel="icon" href="../../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../../"><span>✦</span> The Quiet Corner <span>✦</span></a>
+    <nav class="docs-series">
+      <a href="../../../../blog/web-security/">DevSecOps</a>
+      <a href="../../../../blog/kubestronaut/">Kubestronaut</a>
+      <a class="active" href="../../">English</a>
+    </nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-nav="english" data-docs-root="../../" data-active="jobs-work">
+      <div class="docs-nav-label">English</div>
+      <ul class="docs-nav" id="docsNav">
+        <li><a href="../../">All topics</a></li>
+        <li><a href="../">Jobs &amp; Work</a></li>
+        <li><a class="active" href="./">A1 Exercise</a></li>
+      </ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../../">Home</a>
+        <span>›</span>
+        <a href="../../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../../">English</a>
+        <span>›</span>
+        <a href="../">Jobs &amp; Work</a>
+        <span>›</span>
+        <span>A1 Exercise</span>
+      </div>
+
+      <div class="vocab-topic-hero">
+        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 72 72' fill='none'%3E%3Crect width='72' height='72' rx='14' fill='%230b1220'/%3E%3Crect x='16' y='14' width='40' height='46' rx='6' stroke='%2322d3ee' stroke-width='2.5'/%3E%3Cpath d='M24 28h24M24 36h24M24 44h16' stroke='%23e4e4e7' stroke-width='2.5' stroke-linecap='round'/%3E%3Cpath d='M48 48l6 2-2 6-8-8 4 0z' fill='%2322d3ee'/%3E%3C/svg%3E" alt="" width="112" height="112">
+        <div>
+          <h1>A1 Exercise · Jobs &amp; Work</h1>
+          <p class="lede">Reading passage with every new word from this level’s LanGeek lessons — IPA, highlights, sentence translation, and free TTS.</p>
+          <div class="docs-meta">
+            <span><strong>Words:</strong> 14</span>
+            <span><strong>Lessons:</strong> Jobs</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="ex-toolbar" id="exToolbar">
+        <label class="ex-toggle"><input type="checkbox" id="togHighlight" checked> Highlights</label>
+        <label class="ex-toggle"><input type="checkbox" id="togIpa" checked> IPA</label>
+        <label class="ex-toggle"><input type="checkbox" id="togVi"> Dịch câu (VI)</label>
+        <span class="ex-sep"></span>
+        <label class="ex-voice">Voice
+          <select id="voiceSelect" aria-label="TTS voice"></select>
+        </label>
+        <label class="ex-voice">Speed
+          <input id="rateRange" type="range" min="0.7" max="1.15" step="0.05" value="0.95">
+          <span id="rateVal">0.95</span>
+        </label>
+        <button type="button" class="ex-btn primary" id="btnPlay">▶ Read passage</button>
+        <button type="button" class="ex-btn" id="btnStop">Stop</button>
+      </div>
+      
+      <section class="ex-passage" id="passage" data-tts-root>
+          <p class="ex-sent" data-sent="1">
+            <span class="ex-en">In this A1 Jobs & <mark class="vocab" data-word="work">work</mark><span class="ipa">/wɝːk/</span> passage, notice <mark class="vocab" data-word="money">money</mark><span class="ipa">/ˈmʌni/</span>, <mark class="vocab" data-word="job">job</mark><span class="ipa">/dʒɑːb/</span>, work, and <mark class="vocab" data-word="doctor">doctor</mark><span class="ipa">/ˈdɑːktɚ/</span>.</span>
+            <span class="ex-vi">Trong đoạn A1 về Jobs &amp; Work, hãy để ý tiền, công việc, công việc, và bác sĩ.</span>
+          </p>
+          <p class="ex-sent" data-sent="2">
+            <span class="ex-en">In this A1 Jobs & Work passage, notice <mark class="vocab" data-word="dentist">dentist</mark><span class="ipa">/ˈdɛntɪst/</span>, <mark class="vocab" data-word="nurse">nurse</mark><span class="ipa">/nɝːs/</span>, <mark class="vocab" data-word="teacher">teacher</mark><span class="ipa">/ˈtiːtʃɚ/</span>, and <mark class="vocab" data-word="engineer">engineer</mark><span class="ipa">/ˌɛnʤɪˈnɪr/</span>.</span>
+            <span class="ex-vi">Trong đoạn A1 về Jobs &amp; Work, hãy để ý nha sĩ, y tá nam, giáo viên, và kỹ sư.</span>
+          </p>
+          <p class="ex-sent" data-sent="3">
+            <span class="ex-en">In this A1 Jobs & Work passage, notice <mark class="vocab" data-word="actor">actor</mark><span class="ipa">/ˈæktɚ/</span>, <mark class="vocab" data-word="actress">actress</mark><span class="ipa">/ˈæktrəs/</span>, <mark class="vocab" data-word="police officer">police officer</mark><span class="ipa">/pəˈliːs ˈɑːfɪsɚ/</span>, and <mark class="vocab" data-word="waiter">waiter</mark><span class="ipa">/ˈweɪtɚ/</span>.</span>
+            <span class="ex-vi">Trong đoạn A1 về Jobs &amp; Work, hãy để ý diễn viên, nữ diễn viên, cảnh sát viên, và bồi bàn.</span>
+          </p>
+          <p class="ex-sent" data-sent="4">
+            <span class="ex-en">In this A1 Jobs & Work passage, notice <mark class="vocab" data-word="waitress">waitress</mark><span class="ipa">/ˈweɪtrəs/</span>, and <mark class="vocab" data-word="driver">driver</mark><span class="ipa">/ˈdraɪvɚ/</span>.</span>
+            <span class="ex-vi">Trong đoạn A1 về Jobs &amp; Work, hãy để ý nữ phục vụ, và tài xế.</span>
+          </p>
+      </section>
+
+      <section class="ex-vocab">
+        <h2>Word checklist · 14</h2>
+        <ul class="ex-vocab-list">
+          <li><mark class="vocab">money</mark> <span class="ipa">/ˈmʌni/</span> — tiền</li>
+          <li><mark class="vocab">job</mark> <span class="ipa">/dʒɑːb/</span> — công việc</li>
+          <li><mark class="vocab">work</mark> <span class="ipa">/wɝːk/</span> — công việc</li>
+          <li><mark class="vocab">doctor</mark> <span class="ipa">/ˈdɑːktɚ/</span> — bác sĩ</li>
+          <li><mark class="vocab">dentist</mark> <span class="ipa">/ˈdɛntɪst/</span> — nha sĩ</li>
+          <li><mark class="vocab">nurse</mark> <span class="ipa">/nɝːs/</span> — y tá nam</li>
+          <li><mark class="vocab">teacher</mark> <span class="ipa">/ˈtiːtʃɚ/</span> — giáo viên</li>
+          <li><mark class="vocab">engineer</mark> <span class="ipa">/ˌɛnʤɪˈnɪr/</span> — kỹ sư</li>
+          <li><mark class="vocab">actor</mark> <span class="ipa">/ˈæktɚ/</span> — diễn viên</li>
+          <li><mark class="vocab">actress</mark> <span class="ipa">/ˈæktrəs/</span> — nữ diễn viên</li>
+          <li><mark class="vocab">police officer</mark> <span class="ipa">/pəˈliːs ˈɑːfɪsɚ/</span> — cảnh sát viên</li>
+          <li><mark class="vocab">waiter</mark> <span class="ipa">/ˈweɪtɚ/</span> — bồi bàn</li>
+          <li><mark class="vocab">waitress</mark> <span class="ipa">/ˈweɪtrəs/</span> — nữ phục vụ</li>
+          <li><mark class="vocab">driver</mark> <span class="ipa">/ˈdraɪvɚ/</span> — tài xế</li>
+        </ul>
+      </section>
+
+      <div class="docs-pager">
+        <a href="../">← Jobs &amp; Work</a>
+        <a href="../../">All topics →</a>
+      </div>
+    </article>
+  </div>
+  <script src="../../../../js/docs.js"></script>
+  <script src="../../../../js/exercise.js"></script>
+</body>
+</html>

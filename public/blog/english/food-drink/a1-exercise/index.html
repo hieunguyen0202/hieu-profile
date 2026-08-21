@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A1 Exercise · Food &amp; Drink — The Quiet Corner</title>
+  <meta name="description" content="A1 reading exercise for Food &amp; Drink vocabulary with IPA and bilingual sentences.">
+  <link rel="icon" href="../../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../../"><span>✦</span> The Quiet Corner <span>✦</span></a>
+    <nav class="docs-series">
+      <a href="../../../../blog/web-security/">DevSecOps</a>
+      <a href="../../../../blog/kubestronaut/">Kubestronaut</a>
+      <a class="active" href="../../">English</a>
+    </nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-nav="english" data-docs-root="../../" data-active="food-drink">
+      <div class="docs-nav-label">English</div>
+      <ul class="docs-nav" id="docsNav">
+        <li><a href="../../">All topics</a></li>
+        <li><a href="../">Food &amp; Drink</a></li>
+        <li><a class="active" href="./">A1 Exercise</a></li>
+      </ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../../">Home</a>
+        <span>›</span>
+        <a href="../../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../../">English</a>
+        <span>›</span>
+        <a href="../">Food &amp; Drink</a>
+        <span>›</span>
+        <span>A1 Exercise</span>
+      </div>
+
+      <div class="vocab-topic-hero">
+        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 72 72' fill='none'%3E%3Crect width='72' height='72' rx='14' fill='%230b1220'/%3E%3Crect x='16' y='14' width='40' height='46' rx='6' stroke='%2322d3ee' stroke-width='2.5'/%3E%3Cpath d='M24 28h24M24 36h24M24 44h16' stroke='%23e4e4e7' stroke-width='2.5' stroke-linecap='round'/%3E%3Cpath d='M48 48l6 2-2 6-8-8 4 0z' fill='%2322d3ee'/%3E%3C/svg%3E" alt="" width="112" height="112">
+        <div>
+          <h1>A1 Exercise · Food &amp; Drink</h1>
+          <p class="lede">Reading passage with every new word from this level’s LanGeek lessons — IPA, highlights, sentence translation, and free TTS.</p>
+          <div class="docs-meta">
+            <span><strong>Words:</strong> 45</span>
+            <span><strong>Lessons:</strong> Food and Drinks · Food and Ingredients</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="ex-toolbar" id="exToolbar">
+        <label class="ex-toggle"><input type="checkbox" id="togHighlight" checked> Highlights</label>
+        <label class="ex-toggle"><input type="checkbox" id="togIpa" checked> IPA</label>
+        <label class="ex-toggle"><input type="checkbox" id="togVi"> Dịch câu (VI)</label>
+        <span class="ex-sep"></span>
+        <label class="ex-voice">Voice
+          <select id="voiceSelect" aria-label="TTS voice"></select>
+        </label>
+        <label class="ex-voice">Speed
+          <input id="rateRange" type="range" min="0.7" max="1.15" step="0.05" value="0.95">
+          <span id="rateVal">0.95</span>
+        </label>
+        <button type="button" class="ex-btn primary" id="btnPlay">▶ Read passage</button>
+        <button type="button" class="ex-btn" id="btnStop">Stop</button>
+      </div>
+      
+      <section class="ex-passage" id="passage" data-tts-root>
+          <p class="ex-sent" data-sent="1">
+            <span class="ex-en">Mia opens the fridge and plans a simple day of eating. In that moment you notice <mark class="vocab" data-word="meal">meal</mark><span class="ipa">/miːl/</span>, <mark class="vocab" data-word="breakfast">breakfast</mark><span class="ipa">/ˈbrekfəst/</span>, <mark class="vocab" data-word="lunch">lunch</mark><span class="ipa">/lʌntʃ/</span>, and <mark class="vocab" data-word="dinner">dinner</mark><span class="ipa">/ˈdɪnɚ/</span>.</span>
+            <span class="ex-vi">Mia mở tủ lạnh và lên kế hoạch ăn uống đơn giản trong ngày. Lúc ấy bạn để ý bữa ăn, bữa sáng, bữa trưa, và bữa tối.</span>
+          </p>
+          <p class="ex-sent" data-sent="2">
+            <span class="ex-en">At the market she chooses basic ingredients without a long list. In that moment you notice <mark class="vocab" data-word="tea">tea</mark><span class="ipa">/tiː/</span>, <mark class="vocab" data-word="coffee">coffee</mark><span class="ipa">/ˈkɑːfi/, /ˈkɔːfi/</span>, <mark class="vocab" data-word="cake">cake</mark><span class="ipa">/keɪk/</span>, and <mark class="vocab" data-word="cookie">cookie</mark><span class="ipa">/ˈkʊki/</span>.</span>
+            <span class="ex-vi">Ở chợ cô chọn nguyên liệu cơ bản mà không cần danh sách dài. Lúc ấy bạn để ý trà, cà phê, bánh, và bánh quy.</span>
+          </p>
+          <p class="ex-sent" data-sent="3">
+            <span class="ex-en">Back home, lunch is quiet, then dinner brings the family together. In that moment you notice <mark class="vocab" data-word="bread">bread</mark><span class="ipa">/brɛd/</span>, <mark class="vocab" data-word="honey">honey</mark><span class="ipa">/ˈhʌni/</span>, <mark class="vocab" data-word="jam">jam</mark><span class="ipa">/dʒæm/</span>, and <mark class="vocab" data-word="juice">juice</mark><span class="ipa">/dʒuːs/</span>.</span>
+            <span class="ex-vi">Về nhà, bữa trưa yên ắng, rồi bữa tối kéo cả nhà lại gần nhau. Lúc ấy bạn để ý bánh mì, mật ong, mứt, và nước ép.</span>
+          </p>
+          <p class="ex-sent" data-sent="4">
+            <span class="ex-en">Drinks and small sweets finish the evening on the table. In that moment you notice <mark class="vocab" data-word="ice cream">ice cream</mark><span class="ipa">/ˈaɪs ˌkriːm/</span>, <mark class="vocab" data-word="water">water</mark><span class="ipa">/ˈwɑːtɚ/</span>, <mark class="vocab" data-word="rice">rice</mark><span class="ipa">/raɪs/</span>, and <mark class="vocab" data-word="chocolate milk">chocolate milk</mark><span class="ipa">/ˈʧɔːklət ˈmɪlk/</span>.</span>
+            <span class="ex-vi">Đồ uống và chút đồ ngọt kết thúc buổi tối trên bàn. Lúc ấy bạn để ý kem, nước, gạo, và sữa sô cô la.</span>
+          </p>
+          <p class="ex-sent" data-sent="5">
+            <span class="ex-en">Mia opens the fridge and plans a simple day of eating. In that moment you notice <mark class="vocab" data-word="soup">soup</mark><span class="ipa">/suːp/</span>, <mark class="vocab" data-word="salad">salad</mark><span class="ipa">/ˈsæləd/</span>, <mark class="vocab" data-word="pizza">pizza</mark><span class="ipa">/ˈpiːtsə/</span>, and <mark class="vocab" data-word="sandwich">sandwich</mark><span class="ipa">/ˈsændwɪʧ/</span>.</span>
+            <span class="ex-vi">Mia mở tủ lạnh và lên kế hoạch ăn uống đơn giản trong ngày. Lúc ấy bạn để ý súp, salad, bánh pizza, và bánh mì kẹp.</span>
+          </p>
+          <p class="ex-sent" data-sent="6">
+            <span class="ex-en">At the market she chooses basic ingredients without a long list. In that moment you notice <mark class="vocab" data-word="sugar">sugar</mark><span class="ipa">/ˈʃʊɡɚ/</span>, <mark class="vocab" data-word="salt">salt</mark><span class="ipa">/sɔːlt/</span>, <mark class="vocab" data-word="food">food</mark><span class="ipa">/fuːd/</span>, and <mark class="vocab" data-word="meat">meat</mark><span class="ipa">/miːt/</span>.</span>
+            <span class="ex-vi">Ở chợ cô chọn nguyên liệu cơ bản mà không cần danh sách dài. Lúc ấy bạn để ý đường, muối, thức ăn, và thịt.</span>
+          </p>
+          <p class="ex-sent" data-sent="7">
+            <span class="ex-en">Back home, lunch is quiet, then dinner brings the family together. In that moment you notice <mark class="vocab" data-word="fish">fish</mark><span class="ipa">/fɪʃ/</span>, <mark class="vocab" data-word="chicken">chicken</mark><span class="ipa">/ˈtʃɪkən/</span>, <mark class="vocab" data-word="vegetable">vegetable</mark><span class="ipa">/ˈvɛdʒtəbl/</span>, and <mark class="vocab" data-word="cucumber">cucumber</mark><span class="ipa">/ˈkjuːˌkʌmbɚ/</span>.</span>
+            <span class="ex-vi">Về nhà, bữa trưa yên ắng, rồi bữa tối kéo cả nhà lại gần nhau. Lúc ấy bạn để ý cá, gà, rau, và dưa chuột.</span>
+          </p>
+          <p class="ex-sent" data-sent="8">
+            <span class="ex-en">Drinks and small sweets finish the evening on the table. In that moment you notice <mark class="vocab" data-word="potato">potato</mark><span class="ipa">/pəˈteɪtoʊ/</span>, <mark class="vocab" data-word="onion">onion</mark><span class="ipa">/ˈʌnjən/</span>, <mark class="vocab" data-word="tomato">tomato</mark><span class="ipa">/təˈmeɪtoʊ/</span>, and <mark class="vocab" data-word="carrot">carrot</mark><span class="ipa">/ˈkærət/</span>.</span>
+            <span class="ex-vi">Đồ uống và chút đồ ngọt kết thúc buổi tối trên bàn. Lúc ấy bạn để ý khoai tây, hành tây, cà chua, và cà rốt.</span>
+          </p>
+          <p class="ex-sent" data-sent="9">
+            <span class="ex-en">Mia opens the fridge and plans a simple day of eating. In that moment you notice <mark class="vocab" data-word="pepper">pepper</mark><span class="ipa">/ˈpɛpɚ/</span>, <mark class="vocab" data-word="fruit">fruit</mark><span class="ipa">/fruːt/</span>, <mark class="vocab" data-word="apple">apple</mark><span class="ipa">/ˈæpəl/</span>, and <mark class="vocab" data-word="orange">orange</mark><span class="ipa">/ˈɔːrɪndʒ/</span>.</span>
+            <span class="ex-vi">Mia mở tủ lạnh và lên kế hoạch ăn uống đơn giản trong ngày. Lúc ấy bạn để ý tiêu, trái cây, táo, và cam.</span>
+          </p>
+          <p class="ex-sent" data-sent="10">
+            <span class="ex-en">At the market she chooses basic ingredients without a long list. In that moment you notice <mark class="vocab" data-word="grape">grape</mark><span class="ipa">/ɡreɪp/</span>, <mark class="vocab" data-word="banana">banana</mark><span class="ipa">/bəˈnænə/</span>, <mark class="vocab" data-word="peach">peach</mark><span class="ipa">/piːtʃ/</span>, and <mark class="vocab" data-word="lemon">lemon</mark><span class="ipa">/ˈlɛmən/</span>.</span>
+            <span class="ex-vi">Ở chợ cô chọn nguyên liệu cơ bản mà không cần danh sách dài. Lúc ấy bạn để ý nho, chuối, đào, và chanh.</span>
+          </p>
+          <p class="ex-sent" data-sent="11">
+            <span class="ex-en">Back home, lunch is quiet, then dinner brings the family together. In that moment you notice <mark class="vocab" data-word="milk">milk</mark><span class="ipa">/mɪlk/</span>, <mark class="vocab" data-word="cheese">cheese</mark><span class="ipa">/tʃiːz/</span>, <mark class="vocab" data-word="butter">butter</mark><span class="ipa">/ˈbʌtɚ/</span>, and <mark class="vocab" data-word="egg">egg</mark><span class="ipa">/ɛɡ/</span>.</span>
+            <span class="ex-vi">Về nhà, bữa trưa yên ắng, rồi bữa tối kéo cả nhà lại gần nhau. Lúc ấy bạn để ý sữa, phô mai, bơ, và trứng.</span>
+          </p>
+          <p class="ex-sent" data-sent="12">
+            <span class="ex-en">Drinks and small sweets finish the evening on the table. In that moment you notice <mark class="vocab" data-word="cream">cream</mark><span class="ipa">/kriːm/</span>.</span>
+            <span class="ex-vi">Đồ uống và chút đồ ngọt kết thúc buổi tối trên bàn. Lúc ấy bạn để ý kem.</span>
+          </p>
+      </section>
+
+      <section class="ex-vocab">
+        <h2>Word checklist · 45</h2>
+        <ul class="ex-vocab-list">
+          <li><mark class="vocab">meal</mark> <span class="ipa">/miːl/</span> — bữa ăn</li>
+          <li><mark class="vocab">breakfast</mark> <span class="ipa">/ˈbrekfəst/</span> — bữa sáng</li>
+          <li><mark class="vocab">lunch</mark> <span class="ipa">/lʌntʃ/</span> — bữa trưa</li>
+          <li><mark class="vocab">dinner</mark> <span class="ipa">/ˈdɪnɚ/</span> — bữa tối</li>
+          <li><mark class="vocab">tea</mark> <span class="ipa">/tiː/</span> — trà</li>
+          <li><mark class="vocab">coffee</mark> <span class="ipa">/ˈkɑːfi/, /ˈkɔːfi/</span> — cà phê</li>
+          <li><mark class="vocab">cake</mark> <span class="ipa">/keɪk/</span> — bánh</li>
+          <li><mark class="vocab">cookie</mark> <span class="ipa">/ˈkʊki/</span> — bánh quy</li>
+          <li><mark class="vocab">bread</mark> <span class="ipa">/brɛd/</span> — bánh mì</li>
+          <li><mark class="vocab">honey</mark> <span class="ipa">/ˈhʌni/</span> — mật ong</li>
+          <li><mark class="vocab">jam</mark> <span class="ipa">/dʒæm/</span> — mứt</li>
+          <li><mark class="vocab">juice</mark> <span class="ipa">/dʒuːs/</span> — nước ép</li>
+          <li><mark class="vocab">ice cream</mark> <span class="ipa">/ˈaɪs ˌkriːm/</span> — kem</li>
+          <li><mark class="vocab">water</mark> <span class="ipa">/ˈwɑːtɚ/</span> — nước</li>
+          <li><mark class="vocab">rice</mark> <span class="ipa">/raɪs/</span> — gạo</li>
+          <li><mark class="vocab">chocolate milk</mark> <span class="ipa">/ˈʧɔːklət ˈmɪlk/</span> — sữa sô cô la</li>
+          <li><mark class="vocab">soup</mark> <span class="ipa">/suːp/</span> — súp</li>
+          <li><mark class="vocab">salad</mark> <span class="ipa">/ˈsæləd/</span> — salad</li>
+          <li><mark class="vocab">pizza</mark> <span class="ipa">/ˈpiːtsə/</span> — bánh pizza</li>
+          <li><mark class="vocab">sandwich</mark> <span class="ipa">/ˈsændwɪʧ/</span> — bánh mì kẹp</li>
+          <li><mark class="vocab">sugar</mark> <span class="ipa">/ˈʃʊɡɚ/</span> — đường</li>
+          <li><mark class="vocab">salt</mark> <span class="ipa">/sɔːlt/</span> — muối</li>
+          <li><mark class="vocab">food</mark> <span class="ipa">/fuːd/</span> — thức ăn</li>
+          <li><mark class="vocab">meat</mark> <span class="ipa">/miːt/</span> — thịt</li>
+          <li><mark class="vocab">fish</mark> <span class="ipa">/fɪʃ/</span> — cá</li>
+          <li><mark class="vocab">chicken</mark> <span class="ipa">/ˈtʃɪkən/</span> — gà</li>
+          <li><mark class="vocab">vegetable</mark> <span class="ipa">/ˈvɛdʒtəbl/</span> — rau</li>
+          <li><mark class="vocab">cucumber</mark> <span class="ipa">/ˈkjuːˌkʌmbɚ/</span> — dưa chuột</li>
+          <li><mark class="vocab">potato</mark> <span class="ipa">/pəˈteɪtoʊ/</span> — khoai tây</li>
+          <li><mark class="vocab">onion</mark> <span class="ipa">/ˈʌnjən/</span> — hành tây</li>
+          <li><mark class="vocab">tomato</mark> <span class="ipa">/təˈmeɪtoʊ/</span> — cà chua</li>
+          <li><mark class="vocab">carrot</mark> <span class="ipa">/ˈkærət/</span> — cà rốt</li>
+          <li><mark class="vocab">pepper</mark> <span class="ipa">/ˈpɛpɚ/</span> — tiêu</li>
+          <li><mark class="vocab">fruit</mark> <span class="ipa">/fruːt/</span> — trái cây</li>
+          <li><mark class="vocab">apple</mark> <span class="ipa">/ˈæpəl/</span> — táo</li>
+          <li><mark class="vocab">orange</mark> <span class="ipa">/ˈɔːrɪndʒ/</span> — cam</li>
+          <li><mark class="vocab">grape</mark> <span class="ipa">/ɡreɪp/</span> — nho</li>
+          <li><mark class="vocab">banana</mark> <span class="ipa">/bəˈnænə/</span> — chuối</li>
+          <li><mark class="vocab">peach</mark> <span class="ipa">/piːtʃ/</span> — đào</li>
+          <li><mark class="vocab">lemon</mark> <span class="ipa">/ˈlɛmən/</span> — chanh</li>
+          <li><mark class="vocab">milk</mark> <span class="ipa">/mɪlk/</span> — sữa</li>
+          <li><mark class="vocab">cheese</mark> <span class="ipa">/tʃiːz/</span> — phô mai</li>
+          <li><mark class="vocab">butter</mark> <span class="ipa">/ˈbʌtɚ/</span> — bơ</li>
+          <li><mark class="vocab">egg</mark> <span class="ipa">/ɛɡ/</span> — trứng</li>
+          <li><mark class="vocab">cream</mark> <span class="ipa">/kriːm/</span> — kem</li>
+        </ul>
+      </section>
+
+      <div class="docs-pager">
+        <a href="../">← Food &amp; Drink</a>
+        <a href="../../">All topics →</a>
+      </div>
+    </article>
+  </div>
+  <script src="../../../../js/docs.js"></script>
+  <script src="../../../../js/exercise.js"></script>
+</body>
+</html>

@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>B2 Exercise · Money &amp; Shopping — The Quiet Corner</title>
+  <meta name="description" content="B2 reading exercise for Money &amp; Shopping vocabulary with IPA and bilingual sentences.">
+  <link rel="icon" href="../../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../../"><span>✦</span> The Quiet Corner <span>✦</span></a>
+    <nav class="docs-series">
+      <a href="../../../../blog/web-security/">DevSecOps</a>
+      <a href="../../../../blog/kubestronaut/">Kubestronaut</a>
+      <a class="active" href="../../">English</a>
+    </nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-nav="english" data-docs-root="../../" data-active="money-shopping">
+      <div class="docs-nav-label">English</div>
+      <ul class="docs-nav" id="docsNav">
+        <li><a href="../../">All topics</a></li>
+        <li><a href="../">Money &amp; Shopping</a></li>
+        <li><a class="active" href="./">B2 Exercise</a></li>
+      </ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../../">Home</a>
+        <span>›</span>
+        <a href="../../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../../">English</a>
+        <span>›</span>
+        <a href="../">Money &amp; Shopping</a>
+        <span>›</span>
+        <span>B2 Exercise</span>
+      </div>
+
+      <div class="vocab-topic-hero">
+        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 72 72' fill='none'%3E%3Crect width='72' height='72' rx='14' fill='%230b1220'/%3E%3Crect x='16' y='14' width='40' height='46' rx='6' stroke='%2322d3ee' stroke-width='2.5'/%3E%3Cpath d='M24 28h24M24 36h24M24 44h16' stroke='%23e4e4e7' stroke-width='2.5' stroke-linecap='round'/%3E%3Cpath d='M48 48l6 2-2 6-8-8 4 0z' fill='%2322d3ee'/%3E%3C/svg%3E" alt="" width="112" height="112">
+        <div>
+          <h1>B2 Exercise · Money &amp; Shopping</h1>
+          <p class="lede">Reading passage with every new word from this level’s LanGeek lessons — IPA, highlights, sentence translation, and free TTS.</p>
+          <div class="docs-meta">
+            <span><strong>Words:</strong> 39</span>
+            <span><strong>Lessons:</strong> Money</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="ex-toolbar" id="exToolbar">
+        <label class="ex-toggle"><input type="checkbox" id="togHighlight" checked> Highlights</label>
+        <label class="ex-toggle"><input type="checkbox" id="togIpa" checked> IPA</label>
+        <label class="ex-toggle"><input type="checkbox" id="togVi"> Dịch câu (VI)</label>
+        <span class="ex-sep"></span>
+        <label class="ex-voice">Voice
+          <select id="voiceSelect" aria-label="TTS voice"></select>
+        </label>
+        <label class="ex-voice">Speed
+          <input id="rateRange" type="range" min="0.7" max="1.15" step="0.05" value="0.95">
+          <span id="rateVal">0.95</span>
+        </label>
+        <button type="button" class="ex-btn primary" id="btnPlay">▶ Read passage</button>
+        <button type="button" class="ex-btn" id="btnStop">Stop</button>
+      </div>
+      
+      <section class="ex-passage" id="passage" data-tts-root>
+          <p class="ex-sent" data-sent="1">
+            <span class="ex-en">In this B2 Money & Shopping passage, notice <mark class="vocab" data-word="to credit">credit</mark><span class="ipa">/ˈkrɛdɪt/</span>, <mark class="vocab" data-word="economy">economy</mark><span class="ipa">/iˈkɑnəmi/, /ɪˈkɑnəmi/</span>, <mark class="vocab" data-word="economic">economic</mark><span class="ipa">/ˌɛkəˈnɑmɪk/, /ˌikəˈnɑmɪk/</span>, and <mark class="vocab" data-word="accounting">accounting</mark><span class="ipa">/əˈkaʊntɪŋ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Money &amp; Shopping, hãy để ý ghi có, kinh tế, kinh tế, và kế toán.</span>
+          </p>
+          <p class="ex-sent" data-sent="2">
+            <span class="ex-en">In this B2 Money & Shopping passage, notice <mark class="vocab" data-word="asset">asset</mark><span class="ipa">/ˈæˌsɛt/</span>, <mark class="vocab" data-word="budget">budget</mark><span class="ipa">/ˈbʌdʒɪt/</span>, <mark class="vocab" data-word="capital">capital</mark><span class="ipa">/ˈkæpətəɫ/, /ˈkæpɪtəɫ/</span>, and <mark class="vocab" data-word="debit">debit</mark><span class="ipa">/ˈdɛbɪt/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Money &amp; Shopping, hãy để ý tài sản, ngân sách, vốn, và ghi nợ.</span>
+          </p>
+          <p class="ex-sent" data-sent="3">
+            <span class="ex-en">In this B2 Money & Shopping passage, notice <mark class="vocab" data-word="finance">finance</mark><span class="ipa">/ˈfaɪnæns/ , /fɪˈnæns/</span>, <mark class="vocab" data-word="investment">investment</mark><span class="ipa">/ˌɪnˈvɛsmənt/, /ˌɪnˈvɛstmənt/</span>, <mark class="vocab" data-word="financing">financing</mark><span class="ipa">/faɪˈnænsɪŋ/, /fəˈnænsɪŋ/, /fɪˈnænsɪŋ/</span>, and <mark class="vocab" data-word="borrowing">borrowing</mark><span class="ipa">/ˈbɑɹoʊɪŋ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Money &amp; Shopping, hãy để ý tài chính, đầu tư, tài trợ, và vay mượn.</span>
+          </p>
+          <p class="ex-sent" data-sent="4">
+            <span class="ex-en">In this B2 Money & Shopping passage, notice <mark class="vocab" data-word="debt">debt</mark><span class="ipa">/dɛt/</span>, <mark class="vocab" data-word="grant">grant</mark><span class="ipa">/ˈɡɹænt/</span>, <mark class="vocab" data-word="loan">loan</mark><span class="ipa">/ˈɫoʊn/</span>, and <mark class="vocab" data-word="to possess">possess</mark><span class="ipa">/pəˈzɛs/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Money &amp; Shopping, hãy để ý nợ, trợ cấp, khoản vay, và sở hữu.</span>
+          </p>
+          <p class="ex-sent" data-sent="5">
+            <span class="ex-en">In this B2 Money & Shopping passage, notice <mark class="vocab" data-word="distribution">distribution</mark><span class="ipa">/ˌdɪstɹəbˈjuʃən/</span>, <mark class="vocab" data-word="inflation">inflation</mark><span class="ipa">/ˌɪnˈfɫeɪʃən/</span>, <mark class="vocab" data-word="welfare">welfare</mark><span class="ipa">/ˈwɛlˌfɛr/</span>, and <mark class="vocab" data-word="profit">profit</mark><span class="ipa">/ˈpɹɑfət/, /ˈpɹɑfɪt/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Money &amp; Shopping, hãy để ý phân phối, lạm phát, phúc lợi, và lợi nhuận.</span>
+          </p>
+          <p class="ex-sent" data-sent="6">
+            <span class="ex-en">In this B2 Money & Shopping passage, notice <mark class="vocab" data-word="standard of living">standard of living</mark><span class="ipa">/stˈændɚd ʌv lˈɪvɪŋ/</span>, <mark class="vocab" data-word="balance">balance</mark><span class="ipa">/ˈbæləns/</span>, <mark class="vocab" data-word="bank statement">bank statement</mark><span class="ipa">/bˈæŋk stˈeɪtmənt/</span>, and <mark class="vocab" data-word="collapse">collapse</mark><span class="ipa">/kəˈlæps/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Money &amp; Shopping, hãy để ý standard of living, số dư, sao kê ngân hàng, và sự sụp đổ.</span>
+          </p>
+          <p class="ex-sent" data-sent="7">
+            <span class="ex-en">In this B2 Money & Shopping passage, notice <mark class="vocab" data-word="to collapse">collapse</mark><span class="ipa">/kəˈlæps/</span>, <mark class="vocab" data-word="decrease">decrease</mark><span class="ipa">/dɪˈkriːs/</span>, <mark class="vocab" data-word="loss">loss</mark><span class="ipa">/ˈɫɔs/</span>, and <mark class="vocab" data-word="analyst">analyst</mark><span class="ipa">/ˈænəɫɪst/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Money &amp; Shopping, hãy để ý sụp đổ, sự giảm, mất mát, và nhà phân tích.</span>
+          </p>
+          <p class="ex-sent" data-sent="8">
+            <span class="ex-en">In this B2 Money & Shopping passage, notice <mark class="vocab" data-word="banker">banker</mark><span class="ipa">/ˈbæŋkɝ/</span>, <mark class="vocab" data-word="to price">price</mark><span class="ipa">/praɪs/</span>, <mark class="vocab" data-word="to purchase">purchase</mark><span class="ipa">/ˈpɝtʃəs/</span>, and <mark class="vocab" data-word="rate">rate</mark><span class="ipa">/ˈɹeɪt/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Money &amp; Shopping, hãy để ý chủ ngân hàng, định giá, mua, và tỷ lệ.</span>
+          </p>
+          <p class="ex-sent" data-sent="9">
+            <span class="ex-en">In this B2 Money & Shopping passage, notice <mark class="vocab" data-word="to rip off">rip off</mark><span class="ipa">/ɹˈɪp ˈɔf/</span>, <mark class="vocab" data-word="rip-off">rip-off</mark><span class="ipa">/ɹˈɪpˈɔf/</span>, <mark class="vocab" data-word="bull">bull</mark><span class="ipa">/bʊl/</span>, and <mark class="vocab" data-word="bear">bear</mark><span class="ipa">/bɛr/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Money &amp; Shopping, hãy để ý lừa đảo, lừa đảo, nhà đầu tư lạc quan, và gấu.</span>
+          </p>
+          <p class="ex-sent" data-sent="10">
+            <span class="ex-en">In this B2 Money & Shopping passage, notice <mark class="vocab" data-word="to run out">run out</mark><span class="ipa">/ɹˈʌn ˈaʊt/</span>, <mark class="vocab" data-word="automated teller machine">automated teller machine</mark><span class="ipa">/ˌɔːɾəmˈæɾɪk tˈɛlɚ məʃˈiːn/</span>, and <mark class="vocab" data-word="refund">refund</mark><span class="ipa">/ˈɹiˌfənd/, /ɹɪˈfənd/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Money &amp; Shopping, hãy để ý hết sạch, máy rút tiền tự động, và hoàn tiền.</span>
+          </p>
+      </section>
+
+      <section class="ex-vocab">
+        <h2>Word checklist · 39</h2>
+        <ul class="ex-vocab-list">
+          <li><mark class="vocab">credit</mark> <span class="ipa">/ˈkrɛdɪt/</span> — ghi có</li>
+          <li><mark class="vocab">economy</mark> <span class="ipa">/iˈkɑnəmi/, /ɪˈkɑnəmi/</span> — kinh tế</li>
+          <li><mark class="vocab">economic</mark> <span class="ipa">/ˌɛkəˈnɑmɪk/, /ˌikəˈnɑmɪk/</span> — kinh tế</li>
+          <li><mark class="vocab">accounting</mark> <span class="ipa">/əˈkaʊntɪŋ/</span> — kế toán</li>
+          <li><mark class="vocab">asset</mark> <span class="ipa">/ˈæˌsɛt/</span> — tài sản</li>
+          <li><mark class="vocab">budget</mark> <span class="ipa">/ˈbʌdʒɪt/</span> — ngân sách</li>
+          <li><mark class="vocab">capital</mark> <span class="ipa">/ˈkæpətəɫ/, /ˈkæpɪtəɫ/</span> — vốn</li>
+          <li><mark class="vocab">debit</mark> <span class="ipa">/ˈdɛbɪt/</span> — ghi nợ</li>
+          <li><mark class="vocab">finance</mark> <span class="ipa">/ˈfaɪnæns/ , /fɪˈnæns/</span> — tài chính</li>
+          <li><mark class="vocab">investment</mark> <span class="ipa">/ˌɪnˈvɛsmənt/, /ˌɪnˈvɛstmənt/</span> — đầu tư</li>
+          <li><mark class="vocab">financing</mark> <span class="ipa">/faɪˈnænsɪŋ/, /fəˈnænsɪŋ/, /fɪˈnænsɪŋ/</span> — tài trợ</li>
+          <li><mark class="vocab">borrowing</mark> <span class="ipa">/ˈbɑɹoʊɪŋ/</span> — vay mượn</li>
+          <li><mark class="vocab">debt</mark> <span class="ipa">/dɛt/</span> — nợ</li>
+          <li><mark class="vocab">grant</mark> <span class="ipa">/ˈɡɹænt/</span> — trợ cấp</li>
+          <li><mark class="vocab">loan</mark> <span class="ipa">/ˈɫoʊn/</span> — khoản vay</li>
+          <li><mark class="vocab">possess</mark> <span class="ipa">/pəˈzɛs/</span> — sở hữu</li>
+          <li><mark class="vocab">distribution</mark> <span class="ipa">/ˌdɪstɹəbˈjuʃən/</span> — phân phối</li>
+          <li><mark class="vocab">inflation</mark> <span class="ipa">/ˌɪnˈfɫeɪʃən/</span> — lạm phát</li>
+          <li><mark class="vocab">welfare</mark> <span class="ipa">/ˈwɛlˌfɛr/</span> — phúc lợi</li>
+          <li><mark class="vocab">profit</mark> <span class="ipa">/ˈpɹɑfət/, /ˈpɹɑfɪt/</span> — lợi nhuận</li>
+          <li><mark class="vocab">standard of living</mark> <span class="ipa">/stˈændɚd ʌv lˈɪvɪŋ/</span></li>
+          <li><mark class="vocab">balance</mark> <span class="ipa">/ˈbæləns/</span> — số dư</li>
+          <li><mark class="vocab">bank statement</mark> <span class="ipa">/bˈæŋk stˈeɪtmənt/</span> — sao kê ngân hàng</li>
+          <li><mark class="vocab">collapse</mark> <span class="ipa">/kəˈlæps/</span> — sự sụp đổ</li>
+          <li><mark class="vocab">collapse</mark> <span class="ipa">/kəˈlæps/</span> — sụp đổ</li>
+          <li><mark class="vocab">decrease</mark> <span class="ipa">/dɪˈkriːs/</span> — sự giảm</li>
+          <li><mark class="vocab">loss</mark> <span class="ipa">/ˈɫɔs/</span> — mất mát</li>
+          <li><mark class="vocab">analyst</mark> <span class="ipa">/ˈænəɫɪst/</span> — nhà phân tích</li>
+          <li><mark class="vocab">banker</mark> <span class="ipa">/ˈbæŋkɝ/</span> — chủ ngân hàng</li>
+          <li><mark class="vocab">price</mark> <span class="ipa">/praɪs/</span> — định giá</li>
+          <li><mark class="vocab">purchase</mark> <span class="ipa">/ˈpɝtʃəs/</span> — mua</li>
+          <li><mark class="vocab">rate</mark> <span class="ipa">/ˈɹeɪt/</span> — tỷ lệ</li>
+          <li><mark class="vocab">rip off</mark> <span class="ipa">/ɹˈɪp ˈɔf/</span> — lừa đảo</li>
+          <li><mark class="vocab">rip-off</mark> <span class="ipa">/ɹˈɪpˈɔf/</span> — lừa đảo</li>
+          <li><mark class="vocab">bull</mark> <span class="ipa">/bʊl/</span> — nhà đầu tư lạc quan</li>
+          <li><mark class="vocab">bear</mark> <span class="ipa">/bɛr/</span> — gấu</li>
+          <li><mark class="vocab">run out</mark> <span class="ipa">/ɹˈʌn ˈaʊt/</span> — hết sạch</li>
+          <li><mark class="vocab">automated teller machine</mark> <span class="ipa">/ˌɔːɾəmˈæɾɪk tˈɛlɚ məʃˈiːn/</span> — máy rút tiền tự động</li>
+          <li><mark class="vocab">refund</mark> <span class="ipa">/ˈɹiˌfənd/, /ɹɪˈfənd/</span> — hoàn tiền</li>
+        </ul>
+      </section>
+
+      <div class="docs-pager">
+        <a href="../">← Money &amp; Shopping</a>
+        <a href="../../">All topics →</a>
+      </div>
+    </article>
+  </div>
+  <script src="../../../../js/docs.js"></script>
+  <script src="../../../../js/exercise.js"></script>
+</body>
+</html>

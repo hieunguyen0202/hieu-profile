@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A1 Exercise · School &amp; Education — The Quiet Corner</title>
+  <meta name="description" content="A1 reading exercise for School &amp; Education vocabulary with IPA and bilingual sentences.">
+  <link rel="icon" href="../../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../../"><span>✦</span> The Quiet Corner <span>✦</span></a>
+    <nav class="docs-series">
+      <a href="../../../../blog/web-security/">DevSecOps</a>
+      <a href="../../../../blog/kubestronaut/">Kubestronaut</a>
+      <a class="active" href="../../">English</a>
+    </nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-nav="english" data-docs-root="../../" data-active="school-education">
+      <div class="docs-nav-label">English</div>
+      <ul class="docs-nav" id="docsNav">
+        <li><a href="../../">All topics</a></li>
+        <li><a href="../">School &amp; Education</a></li>
+        <li><a class="active" href="./">A1 Exercise</a></li>
+      </ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../../">Home</a>
+        <span>›</span>
+        <a href="../../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../../">English</a>
+        <span>›</span>
+        <a href="../">School &amp; Education</a>
+        <span>›</span>
+        <span>A1 Exercise</span>
+      </div>
+
+      <div class="vocab-topic-hero">
+        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 72 72' fill='none'%3E%3Crect width='72' height='72' rx='14' fill='%230b1220'/%3E%3Crect x='16' y='14' width='40' height='46' rx='6' stroke='%2322d3ee' stroke-width='2.5'/%3E%3Cpath d='M24 28h24M24 36h24M24 44h16' stroke='%23e4e4e7' stroke-width='2.5' stroke-linecap='round'/%3E%3Cpath d='M48 48l6 2-2 6-8-8 4 0z' fill='%2322d3ee'/%3E%3C/svg%3E" alt="" width="112" height="112">
+        <div>
+          <h1>A1 Exercise · School &amp; Education</h1>
+          <p class="lede">Reading passage with every new word from this level’s LanGeek lessons — IPA, highlights, sentence translation, and free TTS.</p>
+          <div class="docs-meta">
+            <span><strong>Words:</strong> 18</span>
+            <span><strong>Lessons:</strong> School</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="ex-toolbar" id="exToolbar">
+        <label class="ex-toggle"><input type="checkbox" id="togHighlight" checked> Highlights</label>
+        <label class="ex-toggle"><input type="checkbox" id="togIpa" checked> IPA</label>
+        <label class="ex-toggle"><input type="checkbox" id="togVi"> Dịch câu (VI)</label>
+        <span class="ex-sep"></span>
+        <label class="ex-voice">Voice
+          <select id="voiceSelect" aria-label="TTS voice"></select>
+        </label>
+        <label class="ex-voice">Speed
+          <input id="rateRange" type="range" min="0.7" max="1.15" step="0.05" value="0.95">
+          <span id="rateVal">0.95</span>
+        </label>
+        <button type="button" class="ex-btn primary" id="btnPlay">▶ Read passage</button>
+        <button type="button" class="ex-btn" id="btnStop">Stop</button>
+      </div>
+      
+      <section class="ex-passage" id="passage" data-tts-root>
+          <p class="ex-sent" data-sent="1">
+            <span class="ex-en">In this A1 <mark class="vocab" data-word="school">school</mark><span class="ipa">/skuːl/</span> & Education passage, notice school, <mark class="vocab" data-word="college">college</mark><span class="ipa">/ˈkɑːlɪdʒ/</span>, <mark class="vocab" data-word="university">university</mark><span class="ipa">/ˌjuːnɪˈvɝːsɪti/</span>, and <mark class="vocab" data-word="preschool">preschool</mark><span class="ipa">/ˈpriːˌskuːl/</span>.</span>
+            <span class="ex-vi">Trong đoạn A1 về School &amp; Education, hãy để ý trường học, đại học, đại học, và trường mẫu giáo.</span>
+          </p>
+          <p class="ex-sent" data-sent="2">
+            <span class="ex-en">In this A1 School & Education passage, notice <mark class="vocab" data-word="classroom">classroom</mark><span class="ipa">/ˈklæsˌruːm/</span>, <mark class="vocab" data-word="student">student</mark><span class="ipa">/ˈstuːdnt/</span>, <mark class="vocab" data-word="book">book</mark><span class="ipa">/bʊk/</span>, and <mark class="vocab" data-word="notebook">notebook</mark><span class="ipa">/ˈnoʊtˌbʊk/</span>.</span>
+            <span class="ex-vi">Trong đoạn A1 về School &amp; Education, hãy để ý lớp học, sinh viên, sách, và sổ tay.</span>
+          </p>
+          <p class="ex-sent" data-sent="3">
+            <span class="ex-en">In this A1 School & Education passage, notice <mark class="vocab" data-word="bag">bag</mark><span class="ipa">/bæɡ/</span>, <mark class="vocab" data-word="pen">pen</mark><span class="ipa">/pen/</span>, <mark class="vocab" data-word="pencil">pencil</mark><span class="ipa">/ˈpɛnsl/</span>, and <mark class="vocab" data-word="eraser">eraser</mark><span class="ipa">/ɪˈreɪsɚ/</span>.</span>
+            <span class="ex-vi">Trong đoạn A1 về School &amp; Education, hãy để ý túi, bút, bút chì, và cục tẩy.</span>
+          </p>
+          <p class="ex-sent" data-sent="4">
+            <span class="ex-en">In this A1 School & Education passage, notice <mark class="vocab" data-word="marker">marker</mark><span class="ipa">/ˈmɑːrkɚ/</span>, <mark class="vocab" data-word="homework">homework</mark><span class="ipa">/ˈhoʊmˌwɝːk/</span>, <mark class="vocab" data-word="history">history</mark><span class="ipa">/ˈhɪstɚi/ , /ˈhɪstri/</span>, and <mark class="vocab" data-word="language">language</mark><span class="ipa">/ˈlæŋɡwɪdʒ/</span>.</span>
+            <span class="ex-vi">Trong đoạn A1 về School &amp; Education, hãy để ý bút lông, bài tập về nhà, lịch sử, và ngôn ngữ.</span>
+          </p>
+          <p class="ex-sent" data-sent="5">
+            <span class="ex-en">In this A1 School & Education passage, notice <mark <mark class="vocab" data-word="class">class</mark><span class="ipa">/klæs/</span>="vocab" data-word="science">science</mark><span class="ipa">/ˈsaɪəns/</span>, and class.</span>
+            <span class="ex-vi">Trong đoạn A1 về School &amp; Education, hãy để ý khoa học, và lớp.</span>
+          </p>
+      </section>
+
+      <section class="ex-vocab">
+        <h2>Word checklist · 18</h2>
+        <ul class="ex-vocab-list">
+          <li><mark class="vocab">school</mark> <span class="ipa">/skuːl/</span> — trường học</li>
+          <li><mark class="vocab">college</mark> <span class="ipa">/ˈkɑːlɪdʒ/</span> — đại học</li>
+          <li><mark class="vocab">university</mark> <span class="ipa">/ˌjuːnɪˈvɝːsɪti/</span> — đại học</li>
+          <li><mark class="vocab">preschool</mark> <span class="ipa">/ˈpriːˌskuːl/</span> — trường mẫu giáo</li>
+          <li><mark class="vocab">classroom</mark> <span class="ipa">/ˈklæsˌruːm/</span> — lớp học</li>
+          <li><mark class="vocab">student</mark> <span class="ipa">/ˈstuːdnt/</span> — sinh viên</li>
+          <li><mark class="vocab">book</mark> <span class="ipa">/bʊk/</span> — sách</li>
+          <li><mark class="vocab">notebook</mark> <span class="ipa">/ˈnoʊtˌbʊk/</span> — sổ tay</li>
+          <li><mark class="vocab">bag</mark> <span class="ipa">/bæɡ/</span> — túi</li>
+          <li><mark class="vocab">pen</mark> <span class="ipa">/pen/</span> — bút</li>
+          <li><mark class="vocab">pencil</mark> <span class="ipa">/ˈpɛnsl/</span> — bút chì</li>
+          <li><mark class="vocab">eraser</mark> <span class="ipa">/ɪˈreɪsɚ/</span> — cục tẩy</li>
+          <li><mark class="vocab">marker</mark> <span class="ipa">/ˈmɑːrkɚ/</span> — bút lông</li>
+          <li><mark class="vocab">homework</mark> <span class="ipa">/ˈhoʊmˌwɝːk/</span> — bài tập về nhà</li>
+          <li><mark class="vocab">history</mark> <span class="ipa">/ˈhɪstɚi/ , /ˈhɪstri/</span> — lịch sử</li>
+          <li><mark class="vocab">language</mark> <span class="ipa">/ˈlæŋɡwɪdʒ/</span> — ngôn ngữ</li>
+          <li><mark class="vocab">science</mark> <span class="ipa">/ˈsaɪəns/</span> — khoa học</li>
+          <li><mark class="vocab">class</mark> <span class="ipa">/klæs/</span> — lớp</li>
+        </ul>
+      </section>
+
+      <div class="docs-pager">
+        <a href="../">← School &amp; Education</a>
+        <a href="../../">All topics →</a>
+      </div>
+    </article>
+  </div>
+  <script src="../../../../js/docs.js"></script>
+  <script src="../../../../js/exercise.js"></script>
+</body>
+</html>

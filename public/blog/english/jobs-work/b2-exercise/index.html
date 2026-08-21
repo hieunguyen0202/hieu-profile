@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>B2 Exercise · Jobs &amp; Work — The Quiet Corner</title>
+  <meta name="description" content="B2 reading exercise for Jobs &amp; Work vocabulary with IPA and bilingual sentences.">
+  <link rel="icon" href="../../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../../"><span>✦</span> The Quiet Corner <span>✦</span></a>
+    <nav class="docs-series">
+      <a href="../../../../blog/web-security/">DevSecOps</a>
+      <a href="../../../../blog/kubestronaut/">Kubestronaut</a>
+      <a class="active" href="../../">English</a>
+    </nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-nav="english" data-docs-root="../../" data-active="jobs-work">
+      <div class="docs-nav-label">English</div>
+      <ul class="docs-nav" id="docsNav">
+        <li><a href="../../">All topics</a></li>
+        <li><a href="../">Jobs &amp; Work</a></li>
+        <li><a class="active" href="./">B2 Exercise</a></li>
+      </ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../../">Home</a>
+        <span>›</span>
+        <a href="../../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../../">English</a>
+        <span>›</span>
+        <a href="../">Jobs &amp; Work</a>
+        <span>›</span>
+        <span>B2 Exercise</span>
+      </div>
+
+      <div class="vocab-topic-hero">
+        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 72 72' fill='none'%3E%3Crect width='72' height='72' rx='14' fill='%230b1220'/%3E%3Crect x='16' y='14' width='40' height='46' rx='6' stroke='%2322d3ee' stroke-width='2.5'/%3E%3Cpath d='M24 28h24M24 36h24M24 44h16' stroke='%23e4e4e7' stroke-width='2.5' stroke-linecap='round'/%3E%3Cpath d='M48 48l6 2-2 6-8-8 4 0z' fill='%2322d3ee'/%3E%3C/svg%3E" alt="" width="112" height="112">
+        <div>
+          <h1>B2 Exercise · Jobs &amp; Work</h1>
+          <p class="lede">Reading passage with every new word from this level’s LanGeek lessons — IPA, highlights, sentence translation, and free TTS.</p>
+          <div class="docs-meta">
+            <span><strong>Words:</strong> 114</span>
+            <span><strong>Lessons:</strong> Business and Office · Determination and Struggles · Jobs and Occupations</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="ex-toolbar" id="exToolbar">
+        <label class="ex-toggle"><input type="checkbox" id="togHighlight" checked> Highlights</label>
+        <label class="ex-toggle"><input type="checkbox" id="togIpa" checked> IPA</label>
+        <label class="ex-toggle"><input type="checkbox" id="togVi"> Dịch câu (VI)</label>
+        <span class="ex-sep"></span>
+        <label class="ex-voice">Voice
+          <select id="voiceSelect" aria-label="TTS voice"></select>
+        </label>
+        <label class="ex-voice">Speed
+          <input id="rateRange" type="range" min="0.7" max="1.15" step="0.05" value="0.95">
+          <span id="rateVal">0.95</span>
+        </label>
+        <button type="button" class="ex-btn primary" id="btnPlay">▶ Read passage</button>
+        <button type="button" class="ex-btn" id="btnStop">Stop</button>
+      </div>
+      
+      <section class="ex-passage" id="passage" data-tts-root>
+          <p class="ex-sent" data-sent="1">
+            <span class="ex-en">In this B2 Jobs & Work passage, notice <mark class="vocab" data-word="agency">agency</mark><span class="ipa">/ˈeɪdʒənsi/</span>, <mark class="vocab" data-word="corporation">corporation</mark><span class="ipa">/ˌkɔɹpɝˈeɪʃən/</span>, <mark class="vocab" data-word="board">board</mark><span class="ipa">/bɔːrd/</span>, and <mark class="vocab" data-word="chairman">chairman</mark><span class="ipa">/ˈtʃɛɹmən/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Jobs &amp; Work, hãy để ý cơ quan, công ty, hội đồng, và chủ tịch.</span>
+          </p>
+          <p class="ex-sent" data-sent="2">
+            <span class="ex-en">In this B2 Jobs & Work passage, notice <mark class="vocab" data-word="entrepreneur">entrepreneur</mark><span class="ipa">/ˌɑntɹəpɹəˈnɝ/, /ˌɑntɹəpɹəˈnʊɹ/</span>, <mark class="vocab" data-word="clerk">clerk</mark><span class="ipa">/ˈkɫɝk/</span>, <mark class="vocab" data-word="draft">draft</mark><span class="ipa">/ˈdɹæft/</span>, and <mark class="vocab" data-word="income">income</mark><span class="ipa">/ˈɪnˌkəm/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Jobs &amp; Work, hãy để ý doanh nhân, nhân viên văn phòng, hối phiếu, và thu nhập.</span>
+          </p>
+          <p class="ex-sent" data-sent="3">
+            <span class="ex-en">In this B2 Jobs & Work passage, notice <mark class="vocab" data-word="insurance">insurance</mark><span class="ipa">/ˌɪnˈʃʊɹəns/</span>, <mark class="vocab" data-word="market research">market research</mark><span class="ipa">/mˈɑːɹkɪt ɹɪsˈɜːtʃ/</span>, <mark class="vocab" data-word="to contract">contract</mark><span class="ipa">/ˈkɑnˌtrækt/</span>, and <mark class="vocab" data-word="to establish">establish</mark><span class="ipa">/ɪˈstæbɫɪʃ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Jobs &amp; Work, hãy để ý bảo hiểm, nghiên cứu thị trường, ký hợp đồng, và thành lập.</span>
+          </p>
+          <p class="ex-sent" data-sent="4">
+            <span class="ex-en">In this B2 Jobs & Work passage, notice <mark class="vocab" data-word="to found">found</mark><span class="ipa">/ˈfaʊnd/</span>, <mark class="vocab" data-word="to fund">fund</mark><span class="ipa">/ˈfənd/</span>, <mark class="vocab" data-word="to manufacture">manufacture</mark><span class="ipa">/ˌmænjəˈfæktʃɝ/</span>, and <mark class="vocab" data-word="to launch">launch</mark><span class="ipa">/ˈɫɔntʃ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Jobs &amp; Work, hãy để ý thành lập, tài trợ, sản xuất, và khởi động.</span>
+          </p>
+          <p class="ex-sent" data-sent="5">
+            <span class="ex-en">In this B2 Jobs & Work passage, notice <mark class="vocab" data-word="to ship">ship</mark><span class="ipa">/ʃɪp/</span>, <mark class="vocab" data-word="to sponsor">sponsor</mark><span class="ipa">/ˈspɑnsɝ/</span>, <mark class="vocab" data-word="strategy">strategy</mark><span class="ipa">/ˈstɹætədʒi/</span>, and <mark class="vocab" data-word="partnership">partnership</mark><span class="ipa">/ˈpɑɹtnɝˌʃɪp/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Jobs &amp; Work, hãy để ý gửi hàng, tài trợ, chiến lược, và quan hệ đối tác.</span>
+          </p>
+          <p class="ex-sent" data-sent="6">
+            <span class="ex-en">In this B2 Jobs & Work passage, notice <mark class="vocab" data-word="profit margin">profit margin</mark><span class="ipa">/pɹˈɑːfɪt mˈɑːɹdʒɪn/</span>, <mark class="vocab" data-word="stockholder">stockholder</mark><span class="ipa">/ˈstɑkˌhoʊɫdɝ/</span>, <mark class="vocab" data-word="union">union</mark><span class="ipa">/ˈjunjən/</span>, and <mark class="vocab" data-word="tax evasion">tax evasion</mark><span class="ipa">/tˈæks ɪvˈeɪʒən/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Jobs &amp; Work, hãy để ý tỷ suất lợi nhuận, cổ đông, công đoàn, và trốn thuế.</span>
+          </p>
+          <p class="ex-sent" data-sent="7">
+            <span class="ex-en">In this B2 Jobs & Work passage, notice <mark class="vocab" data-word="shipment">shipment</mark><span class="ipa">/ˈʃɪpmənt/</span>, <mark class="vocab" data-word="fortune">fortune</mark><span class="ipa">/ˈfɔɹtʃən/, /ˈfɔɹtʃun/</span>, <mark class="vocab" data-word="savings">savings</mark><span class="ipa">/ˈseɪvɪŋz/</span>, and <mark class="vocab" data-word="wealthy">wealthy</mark><span class="ipa">/ˈwɛɫθi/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Jobs &amp; Work, hãy để ý lô hàng, tài sản, tiết kiệm, và giàu có.</span>
+          </p>
+          <p class="ex-sent" data-sent="8">
+            <span class="ex-en">In this B2 Jobs & Work passage, notice <mark class="vocab" data-word="to come down">come down</mark><span class="ipa">/kˈʌm dˈaʊn/</span>, <mark class="vocab" data-word="to live on">live on</mark><span class="ipa">/lˈaɪv ˈɑːn/</span>, <mark class="vocab" data-word="to pay off">pay off</mark><span class="ipa">/peɪ af/</span>, and <mark class="vocab" data-word="to set aside">set aside</mark><span class="ipa">/sˈɛt ɐsˈaɪd/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Jobs &amp; Work, hãy để ý giảm, sống bằng, trả hết, và để dành.</span>
+          </p>
+          <p class="ex-sent" data-sent="9">
+            <span class="ex-en">In this B2 Jobs & Work passage, notice <mark class="vocab" data-word="discount">discount</mark><span class="ipa">/ˈdɪskaʊnt/</span>, <mark class="vocab" data-word="fee">fee</mark><span class="ipa">/ˈfi/</span>, <mark class="vocab" data-word="lending">lending</mark><span class="ipa">/ˈɫɛndɪŋ/</span>, and <mark class="vocab" data-word="senior">senior</mark><span class="ipa">/ˈsiːniɚ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Jobs &amp; Work, hãy để ý giảm giá, phí, cho vay, và cao cấp.</span>
+          </p>
+          <p class="ex-sent" data-sent="10">
+            <span class="ex-en">In this B2 Jobs & Work passage, notice <mark class="vocab" data-word="junior">junior</mark><span class="ipa">/ˈʤuːnjɚ/</span>, <mark class="vocab" data-word="to speak">speak</mark><span class="ipa">/spiːk/</span>, <mark class="vocab" data-word="chief executive officer">chief executive officer</mark><span class="ipa">/tʃˈiːf ɛɡzˈɛkjuːtˌɪv ˈɑːfɪsɚ/</span>, and <mark class="vocab" data-word="deed">deed</mark><span class="ipa">/ˈdid/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Jobs &amp; Work, hãy để ý cấp dưới, nói, giám đốc điều hành, và hành động.</span>
+          </p>
+          <p class="ex-sent" data-sent="11">
+            <span class="ex-en">In this B2 Jobs & Work passage, notice <mark class="vocab" data-word="attempted">attempted</mark><span class="ipa">/əˈtɛmptɪd/</span>, <mark class="vocab" data-word="big">big</mark><span class="ipa">/bɪɡ/</span>, <mark class="vocab" data-word="desperate">desperate</mark><span class="ipa">/ˈdɛspɝɪt/, /ˈdɛspɹɪt/</span>, and <mark class="vocab" data-word="failed">failed</mark><span class="ipa">/ˈfeɪɫd/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Jobs &amp; Work, hãy để ý cố gắng, quan trọng, tuyệt vọng, và thất bại.</span>
+          </p>
+          <p class="ex-sent" data-sent="12">
+            <span class="ex-en">In this B2 Jobs & Work passage, notice <mark class="vocab" data-word="fatal">fatal</mark><span class="ipa">/ˈfeɪtəl/</span>, <mark class="vocab" data-word="problematic">problematic</mark><span class="ipa">/ˌpɹɑbɫəˈmætɪk/</span>, <mark class="vocab" data-word="unambitious">unambitious</mark><span class="ipa">/ʌnæmbˈɪʃəs/</span>, and <mark class="vocab" data-word="badly">badly</mark><span class="ipa">/ˈbædli/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Jobs &amp; Work, hãy để ý chết người, có vấn đề, không tham vọng, và tồi tệ.</span>
+          </p>
+          <p class="ex-sent" data-sent="13">
+            <span class="ex-en">In this B2 Jobs & Work passage, notice <mark class="vocab" data-word="hopeless">hopeless</mark><span class="ipa">/ˈhoʊpɫəs/</span>, <mark class="vocab" data-word="loser">loser</mark><span class="ipa">/ˈluːzɚ/</span>, <mark class="vocab" data-word="to address">address</mark><span class="ipa">/ˈædˌrɛs/, /əˈdrɛs/</span>, and <mark class="vocab" data-word="to battle">battle</mark><span class="ipa">/ˈbætl/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Jobs &amp; Work, hãy để ý tuyệt vọng, kẻ thất bại, giải quyết, và chiến đấu.</span>
+          </p>
+          <p class="ex-sent" data-sent="14">
+            <span class="ex-en">In this B2 Jobs & Work passage, notice <mark class="vocab" data-word="to bear">bear</mark><span class="ipa">/bɛr/</span>, <mark class="vocab" data-word="to comfort">comfort</mark><span class="ipa">/ˈkəmfɝt/</span>, <mark class="vocab" data-word="to confront">confront</mark><span class="ipa">/kənˈfɹənt/</span>, and <mark class="vocab" data-word="loss">loss</mark><span class="ipa">/ˈɫɔs/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Jobs &amp; Work, hãy để ý chịu đựng, an ủi, đối mặt, và sự mất mát.</span>
+          </p>
+          <p class="ex-sent" data-sent="15">
+            <span class="ex-en">In this B2 Jobs & Work passage, notice <mark class="vocab" data-word="to fulfill">fulfill</mark><span class="ipa">/fʊɫˈfɪɫ/</span>, <mark class="vocab" data-word="to gain">gain</mark><span class="ipa">/ˈɡeɪn/</span>, <mark class="vocab" data-word="to handle">handle</mark><span class="ipa">/ˈhændəɫ/</span>, and <mark class="vocab" data-word="to obtain">obtain</mark><span class="ipa">/əbˈteɪn/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Jobs &amp; Work, hãy để ý hoàn thành, đạt được, xử lý, và đạt được.</span>
+          </p>
+          <p class="ex-sent" data-sent="16">
+            <span class="ex-en">In this B2 Jobs & Work passage, notice <mark class="vocab" data-word="to overcome">overcome</mark><span class="ipa">/ˌoʊvɚˈkʌm/</span>, <mark class="vocab" data-word="to ruin">ruin</mark><span class="ipa">/ˈɹuən/, /ˈɹuɪn/</span>, <mark class="vocab" data-word="optimism">optimism</mark><span class="ipa">/ˈɑptəˌmɪzəm/</span>, and <mark class="vocab" data-word="optimist">optimist</mark><span class="ipa">/ˈɑptəmɪst/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Jobs &amp; Work, hãy để ý đánh bại, phá hủy, lạc quan, và người lạc quan.</span>
+          </p>
+          <p class="ex-sent" data-sent="17">
+            <span class="ex-en">In this B2 Jobs & Work passage, notice <mark class="vocab" data-word="pessimism">pessimism</mark><span class="ipa">/ˈpɛsəˌmɪzəm/</span>, <mark class="vocab" data-word="pessimist">pessimist</mark><span class="ipa">/ˈpɛsəməst/</span>, <mark class="vocab" data-word="to reach">reach</mark><span class="ipa">/riːʧ/</span>, and <mark class="vocab" data-word="to resolve">resolve</mark><span class="ipa">/rɪˈzɑlv/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Jobs &amp; Work, hãy để ý chủ nghĩa bi quan, người bi quan, đạt được, và giải quyết.</span>
+          </p>
+          <p class="ex-sent" data-sent="18">
+            <span class="ex-en">In this B2 Jobs & Work passage, notice <mark class="vocab" data-word="<mark class="vocab" data-word="to struggle">struggle</mark><span class="ipa">/ˈstɹəɡəɫ/</span>">struggle</mark><span class="ipa">/ˈstɹəɡəɫ/</span>, struggle, <mark class="vocab" data-word="to let down">let down</mark><span class="ipa">/lˈɛt dˈaʊn/</span>, and <mark class="vocab" data-word="to [go|get] nowhere">[go|get] nowhere</mark><span class="ipa">/ɡɛt nˈoʊwɛɹ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Jobs &amp; Work, hãy để ý cuộc đấu tranh, đấu tranh, làm thất vọng, và chẳng đi đến đâu.</span>
+          </p>
+          <p class="ex-sent" data-sent="19">
+            <span class="ex-en">In this B2 Jobs & Work passage, notice <mark class="vocab" data-word="presentation">presentation</mark><span class="ipa">/ˌpɹɛzənˈteɪʃən/</span>, <mark class="vocab" data-word="chance">chance</mark><span class="ipa">/ˈtʃæns/</span>, <mark class="vocab" data-word="fault">fault</mark><span class="ipa">/fɑlt/</span>, and <mark class="vocab" data-word="duty">duty</mark><span class="ipa">/ˈdjuti/, /ˈduti/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Jobs &amp; Work, hãy để ý trao tặng, cơ hội, lỗi, và nhiệm vụ.</span>
+          </p>
+          <p class="ex-sent" data-sent="20">
+            <span class="ex-en">In this B2 Jobs & Work passage, notice <mark class="vocab" data-word="target">target</mark><span class="ipa">/ˈtɑrɡɪt/</span>, <mark class="vocab" data-word="determination">determination</mark><span class="ipa">/dɪˌtɝməˈneɪʃən/</span>, <mark class="vocab" data-word="to disappoint">disappoint</mark><span class="ipa">/ˌdɪsəˈpɔɪnt/</span>, and <mark class="vocab" data-word="to give up on">give up on</mark><span class="ipa">/ɡˈɪv ˌʌp ˈɑːn/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Jobs &amp; Work, hãy để ý mục tiêu, quyết tâm, làm thất vọng, và từ bỏ.</span>
+          </p>
+          <p class="ex-sent" data-sent="21">
+            <span class="ex-en">In this B2 Jobs & Work passage, notice <mark class="vocab" data-word="rewarding">rewarding</mark><span class="ipa">/ɹiˈwɔɹdɪŋ/, /ɹɪˈwɔɹdɪŋ/</span>, <mark class="vocab" data-word="weakness">weakness</mark><span class="ipa">/ˈwiknəs/</span>, <mark class="vocab" data-word="attorney">attorney</mark><span class="ipa">/əˈtɝni/</span>, and <mark class="vocab" data-word="bartender">bartender</mark><span class="ipa">/ˈbɑrˌˈtendər/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Jobs &amp; Work, hãy để ý bổ ích, điểm yếu, luật sư, và người pha chế rượu.</span>
+          </p>
+          <p class="ex-sent" data-sent="22">
+            <span class="ex-en">In this B2 Jobs & Work passage, notice <mark class="vocab" data-word="cab driver">cab driver</mark><span class="ipa">/kˈæb dɹˈaɪvɚ/</span>, <mark class="vocab" data-word="carpenter">carpenter</mark><span class="ipa">/ˈkɑɹpəntɝ/</span>, <mark class="vocab" data-word="cashier">cashier</mark><span class="ipa">/kæˈʃɪɹ/</span>, and <mark class="vocab" data-word="caterer">caterer</mark><span class="ipa">/ˈkeɪtɝɝ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Jobs &amp; Work, hãy để ý tài xế taxi, thợ mộc, nhân viên thu ngân, và nhà cung cấp dịch vụ ăn uống.</span>
+          </p>
+          <p class="ex-sent" data-sent="23">
+            <span class="ex-en">In this B2 Jobs & Work passage, notice <mark class="vocab" data-word="comedian">comedian</mark><span class="ipa">/kəˈmidiən/</span>, <mark class="vocab" data-word="economist">economist</mark><span class="ipa">/iˈkɑnəmɪst/, /ɪˈkɑnəmɪst/</span>, <mark class="vocab" data-word="electrician">electrician</mark><span class="ipa">/ɪɫɛkˈtɹɪʃən/</span>, and <mark class="vocab" data-word="fisherman">fisherman</mark><span class="ipa">/ˈfɪʃɝˌmæn/, /ˈfɪʃɝmən/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Jobs &amp; Work, hãy để ý nghệ sĩ hài, nhà kinh tế học, thợ điện, và ngư dân.</span>
+          </p>
+          <p class="ex-sent" data-sent="24">
+            <span class="ex-en">In this B2 Jobs & Work passage, notice <mark class="vocab" data-word="florist">florist</mark><span class="ipa">/ˈflɔrɪst/</span>, <mark class="vocab" data-word="health professional">health professional</mark><span class="ipa">/hˈɛlθ pɹəfˈɛʃənəl/</span>, <mark class="vocab" data-word="interpreter">interpreter</mark><span class="ipa">/ˌɪnˈtɝpɹətɝ/</span>, and <mark class="vocab" data-word="investigator">investigator</mark><span class="ipa">/ˌɪnˈvɛstəˌɡeɪtɝ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Jobs &amp; Work, hãy để ý người bán hoa, chuyên gia y tế, thông dịch viên, và điều tra viên.</span>
+          </p>
+          <p class="ex-sent" data-sent="25">
+            <span class="ex-en">In this B2 Jobs & Work passage, notice <mark class="vocab" data-word="librarian">librarian</mark><span class="ipa">/ɫaɪˈbɹɛˌɹiən/</span>, <mark class="vocab" data-word="plumber">plumber</mark><span class="ipa">/ˈpɫəmɝ/</span>, <mark class="vocab" data-word="psychologist">psychologist</mark><span class="ipa">/saɪˈkɑɫədʒəst/</span>, and <mark class="vocab" data-word="security guard">security guard</mark><span class="ipa">/sɪkjˈʊɹɪɾi ɡˈɑːɹd/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Jobs &amp; Work, hãy để ý thủ thư, thợ sửa ống nước, nhà tâm lý học, và bảo vệ.</span>
+          </p>
+          <p class="ex-sent" data-sent="26">
+            <span class="ex-en">In this B2 Jobs & Work passage, notice <mark class="vocab" data-word="sheriff">sheriff</mark><span class="ipa">/ˈʃɛɹəf/, /ˈʃɛɹɪf/</span>, <mark class="vocab" data-word="shopkeeper">shopkeeper</mark><span class="ipa">/ˈʃɑpˌkipɝ/</span>, <mark class="vocab" data-word="spy">spy</mark><span class="ipa">/spaɪ/</span>, and <mark class="vocab" data-word="stylist">stylist</mark><span class="ipa">/ˈstaɪɫɪst/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Jobs &amp; Work, hãy để ý cảnh sát trưởng, chủ cửa hàng, gián điệp, và nhà tạo mẫu.</span>
+          </p>
+          <p class="ex-sent" data-sent="27">
+            <span class="ex-en">In this B2 Jobs & Work passage, notice <mark class="vocab" data-word="real estate agent">real estate agent</mark><span class="ipa">/ɹˈiːəl ɪstˈeɪt ˈeɪdʒənt/</span>, <mark class="vocab" data-word="travel agent">travel agent</mark><span class="ipa">/tɹˈævəl ˈeɪdʒənt/</span>, <mark class="vocab" data-word="freelance">freelance</mark><span class="ipa">/ˈfɹiˌɫæns/</span>, and <mark class="vocab" data-word="permanent">permanent</mark><span class="ipa">/ˈpɝmənənt/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Jobs &amp; Work, hãy để ý nhân viên bất động sản, đại lý du lịch, tự do, và vĩnh viễn.</span>
+          </p>
+          <p class="ex-sent" data-sent="28">
+            <span class="ex-en">In this B2 Jobs & Work passage, notice <mark class="vocab" data-word="self-employed">self-employed</mark><span class="ipa">/sˈɛlfɛmplˈɔɪd/</span>, <mark class="vocab" data-word="temporary">temporary</mark><span class="ipa">/ˈtɛmpɝˌɛɹi/</span>, <mark class="vocab" data-word="voluntary">voluntary</mark><span class="ipa">/ˈvɑɫəntɛɹi/</span>, and <mark class="vocab" data-word="out of work">out of work</mark><span class="ipa">/ˌaʊɾəv wˈɜːk/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Jobs &amp; Work, hãy để ý tự làm chủ, tạm thời, tình nguyện, và out of work.</span>
+          </p>
+          <p class="ex-sent" data-sent="29">
+            <span class="ex-en">In this B2 Jobs & Work passage, notice <mark class="vocab" data-word="wage">wage</mark><span class="ipa">/ˈweɪdʒ/</span>, and <mark class="vocab" data-word="golden years">golden years</mark><span class="ipa">/ɡˈoʊldən jˈɪɹz/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Jobs &amp; Work, hãy để ý tiền lương, và những năm nghỉ hưu.</span>
+          </p>
+      </section>
+
+      <section class="ex-vocab">
+        <h2>Word checklist · 114</h2>
+        <ul class="ex-vocab-list">
+          <li><mark class="vocab">agency</mark> <span class="ipa">/ˈeɪdʒənsi/</span> — cơ quan</li>
+          <li><mark class="vocab">corporation</mark> <span class="ipa">/ˌkɔɹpɝˈeɪʃən/</span> — công ty</li>
+          <li><mark class="vocab">board</mark> <span class="ipa">/bɔːrd/</span> — hội đồng</li>
+          <li><mark class="vocab">chairman</mark> <span class="ipa">/ˈtʃɛɹmən/</span> — chủ tịch</li>
+          <li><mark class="vocab">entrepreneur</mark> <span class="ipa">/ˌɑntɹəpɹəˈnɝ/, /ˌɑntɹəpɹəˈnʊɹ/</span> — doanh nhân</li>
+          <li><mark class="vocab">clerk</mark> <span class="ipa">/ˈkɫɝk/</span> — nhân viên văn phòng</li>
+          <li><mark class="vocab">draft</mark> <span class="ipa">/ˈdɹæft/</span> — hối phiếu</li>
+          <li><mark class="vocab">income</mark> <span class="ipa">/ˈɪnˌkəm/</span> — thu nhập</li>
+          <li><mark class="vocab">insurance</mark> <span class="ipa">/ˌɪnˈʃʊɹəns/</span> — bảo hiểm</li>
+          <li><mark class="vocab">market research</mark> <span class="ipa">/mˈɑːɹkɪt ɹɪsˈɜːtʃ/</span> — nghiên cứu thị trường</li>
+          <li><mark class="vocab">contract</mark> <span class="ipa">/ˈkɑnˌtrækt/</span> — ký hợp đồng</li>
+          <li><mark class="vocab">establish</mark> <span class="ipa">/ɪˈstæbɫɪʃ/</span> — thành lập</li>
+          <li><mark class="vocab">found</mark> <span class="ipa">/ˈfaʊnd/</span> — thành lập</li>
+          <li><mark class="vocab">fund</mark> <span class="ipa">/ˈfənd/</span> — tài trợ</li>
+          <li><mark class="vocab">manufacture</mark> <span class="ipa">/ˌmænjəˈfæktʃɝ/</span> — sản xuất</li>
+          <li><mark class="vocab">launch</mark> <span class="ipa">/ˈɫɔntʃ/</span> — khởi động</li>
+          <li><mark class="vocab">ship</mark> <span class="ipa">/ʃɪp/</span> — gửi hàng</li>
+          <li><mark class="vocab">sponsor</mark> <span class="ipa">/ˈspɑnsɝ/</span> — tài trợ</li>
+          <li><mark class="vocab">strategy</mark> <span class="ipa">/ˈstɹætədʒi/</span> — chiến lược</li>
+          <li><mark class="vocab">partnership</mark> <span class="ipa">/ˈpɑɹtnɝˌʃɪp/</span> — quan hệ đối tác</li>
+          <li><mark class="vocab">profit margin</mark> <span class="ipa">/pɹˈɑːfɪt mˈɑːɹdʒɪn/</span> — tỷ suất lợi nhuận</li>
+          <li><mark class="vocab">stockholder</mark> <span class="ipa">/ˈstɑkˌhoʊɫdɝ/</span> — cổ đông</li>
+          <li><mark class="vocab">union</mark> <span class="ipa">/ˈjunjən/</span> — công đoàn</li>
+          <li><mark class="vocab">tax evasion</mark> <span class="ipa">/tˈæks ɪvˈeɪʒən/</span> — trốn thuế</li>
+          <li><mark class="vocab">shipment</mark> <span class="ipa">/ˈʃɪpmənt/</span> — lô hàng</li>
+          <li><mark class="vocab">fortune</mark> <span class="ipa">/ˈfɔɹtʃən/, /ˈfɔɹtʃun/</span> — tài sản</li>
+          <li><mark class="vocab">savings</mark> <span class="ipa">/ˈseɪvɪŋz/</span> — tiết kiệm</li>
+          <li><mark class="vocab">wealthy</mark> <span class="ipa">/ˈwɛɫθi/</span> — giàu có</li>
+          <li><mark class="vocab">come down</mark> <span class="ipa">/kˈʌm dˈaʊn/</span> — giảm</li>
+          <li><mark class="vocab">live on</mark> <span class="ipa">/lˈaɪv ˈɑːn/</span> — sống bằng</li>
+          <li><mark class="vocab">pay off</mark> <span class="ipa">/peɪ af/</span> — trả hết</li>
+          <li><mark class="vocab">set aside</mark> <span class="ipa">/sˈɛt ɐsˈaɪd/</span> — để dành</li>
+          <li><mark class="vocab">discount</mark> <span class="ipa">/ˈdɪskaʊnt/</span> — giảm giá</li>
+          <li><mark class="vocab">fee</mark> <span class="ipa">/ˈfi/</span> — phí</li>
+          <li><mark class="vocab">lending</mark> <span class="ipa">/ˈɫɛndɪŋ/</span> — cho vay</li>
+          <li><mark class="vocab">senior</mark> <span class="ipa">/ˈsiːniɚ/</span> — cao cấp</li>
+          <li><mark class="vocab">junior</mark> <span class="ipa">/ˈʤuːnjɚ/</span> — cấp dưới</li>
+          <li><mark class="vocab">speak</mark> <span class="ipa">/spiːk/</span> — nói</li>
+          <li><mark class="vocab">chief executive officer</mark> <span class="ipa">/tʃˈiːf ɛɡzˈɛkjuːtˌɪv ˈɑːfɪsɚ/</span> — giám đốc điều hành</li>
+          <li><mark class="vocab">deed</mark> <span class="ipa">/ˈdid/</span> — hành động</li>
+          <li><mark class="vocab">attempted</mark> <span class="ipa">/əˈtɛmptɪd/</span> — cố gắng</li>
+          <li><mark class="vocab">big</mark> <span class="ipa">/bɪɡ/</span> — quan trọng</li>
+          <li><mark class="vocab">desperate</mark> <span class="ipa">/ˈdɛspɝɪt/, /ˈdɛspɹɪt/</span> — tuyệt vọng</li>
+          <li><mark class="vocab">failed</mark> <span class="ipa">/ˈfeɪɫd/</span> — thất bại</li>
+          <li><mark class="vocab">fatal</mark> <span class="ipa">/ˈfeɪtəl/</span> — chết người</li>
+          <li><mark class="vocab">problematic</mark> <span class="ipa">/ˌpɹɑbɫəˈmætɪk/</span> — có vấn đề</li>
+          <li><mark class="vocab">unambitious</mark> <span class="ipa">/ʌnæmbˈɪʃəs/</span> — không tham vọng</li>
+          <li><mark class="vocab">badly</mark> <span class="ipa">/ˈbædli/</span> — tồi tệ</li>
+          <li><mark class="vocab">hopeless</mark> <span class="ipa">/ˈhoʊpɫəs/</span> — tuyệt vọng</li>
+          <li><mark class="vocab">loser</mark> <span class="ipa">/ˈluːzɚ/</span> — kẻ thất bại</li>
+          <li><mark class="vocab">address</mark> <span class="ipa">/ˈædˌrɛs/, /əˈdrɛs/</span> — giải quyết</li>
+          <li><mark class="vocab">battle</mark> <span class="ipa">/ˈbætl/</span> — chiến đấu</li>
+          <li><mark class="vocab">bear</mark> <span class="ipa">/bɛr/</span> — chịu đựng</li>
+          <li><mark class="vocab">comfort</mark> <span class="ipa">/ˈkəmfɝt/</span> — an ủi</li>
+          <li><mark class="vocab">confront</mark> <span class="ipa">/kənˈfɹənt/</span> — đối mặt</li>
+          <li><mark class="vocab">loss</mark> <span class="ipa">/ˈɫɔs/</span> — sự mất mát</li>
+          <li><mark class="vocab">fulfill</mark> <span class="ipa">/fʊɫˈfɪɫ/</span> — hoàn thành</li>
+          <li><mark class="vocab">gain</mark> <span class="ipa">/ˈɡeɪn/</span> — đạt được</li>
+          <li><mark class="vocab">handle</mark> <span class="ipa">/ˈhændəɫ/</span> — xử lý</li>
+          <li><mark class="vocab">obtain</mark> <span class="ipa">/əbˈteɪn/</span> — đạt được</li>
+          <li><mark class="vocab">overcome</mark> <span class="ipa">/ˌoʊvɚˈkʌm/</span> — đánh bại</li>
+          <li><mark class="vocab">ruin</mark> <span class="ipa">/ˈɹuən/, /ˈɹuɪn/</span> — phá hủy</li>
+          <li><mark class="vocab">optimism</mark> <span class="ipa">/ˈɑptəˌmɪzəm/</span> — lạc quan</li>
+          <li><mark class="vocab">optimist</mark> <span class="ipa">/ˈɑptəmɪst/</span> — người lạc quan</li>
+          <li><mark class="vocab">pessimism</mark> <span class="ipa">/ˈpɛsəˌmɪzəm/</span> — chủ nghĩa bi quan</li>
+          <li><mark class="vocab">pessimist</mark> <span class="ipa">/ˈpɛsəməst/</span> — người bi quan</li>
+          <li><mark class="vocab">reach</mark> <span class="ipa">/riːʧ/</span> — đạt được</li>
+          <li><mark class="vocab">resolve</mark> <span class="ipa">/rɪˈzɑlv/</span> — giải quyết</li>
+          <li><mark class="vocab">struggle</mark> <span class="ipa">/ˈstɹəɡəɫ/</span> — cuộc đấu tranh</li>
+          <li><mark class="vocab">struggle</mark> <span class="ipa">/ˈstɹəɡəɫ/</span> — đấu tranh</li>
+          <li><mark class="vocab">let down</mark> <span class="ipa">/lˈɛt dˈaʊn/</span> — làm thất vọng</li>
+          <li><mark class="vocab">[go|get] nowhere</mark> <span class="ipa">/ɡɛt nˈoʊwɛɹ/</span> — chẳng đi đến đâu</li>
+          <li><mark class="vocab">presentation</mark> <span class="ipa">/ˌpɹɛzənˈteɪʃən/</span> — trao tặng</li>
+          <li><mark class="vocab">chance</mark> <span class="ipa">/ˈtʃæns/</span> — cơ hội</li>
+          <li><mark class="vocab">fault</mark> <span class="ipa">/fɑlt/</span> — lỗi</li>
+          <li><mark class="vocab">duty</mark> <span class="ipa">/ˈdjuti/, /ˈduti/</span> — nhiệm vụ</li>
+          <li><mark class="vocab">target</mark> <span class="ipa">/ˈtɑrɡɪt/</span> — mục tiêu</li>
+          <li><mark class="vocab">determination</mark> <span class="ipa">/dɪˌtɝməˈneɪʃən/</span> — quyết tâm</li>
+          <li><mark class="vocab">disappoint</mark> <span class="ipa">/ˌdɪsəˈpɔɪnt/</span> — làm thất vọng</li>
+          <li><mark class="vocab">give up on</mark> <span class="ipa">/ɡˈɪv ˌʌp ˈɑːn/</span> — từ bỏ</li>
+          <li><mark class="vocab">rewarding</mark> <span class="ipa">/ɹiˈwɔɹdɪŋ/, /ɹɪˈwɔɹdɪŋ/</span> — bổ ích</li>
+          <li><mark class="vocab">weakness</mark> <span class="ipa">/ˈwiknəs/</span> — điểm yếu</li>
+          <li><mark class="vocab">attorney</mark> <span class="ipa">/əˈtɝni/</span> — luật sư</li>
+          <li><mark class="vocab">bartender</mark> <span class="ipa">/ˈbɑrˌˈtendər/</span> — người pha chế rượu</li>
+          <li><mark class="vocab">cab driver</mark> <span class="ipa">/kˈæb dɹˈaɪvɚ/</span> — tài xế taxi</li>
+          <li><mark class="vocab">carpenter</mark> <span class="ipa">/ˈkɑɹpəntɝ/</span> — thợ mộc</li>
+          <li><mark class="vocab">cashier</mark> <span class="ipa">/kæˈʃɪɹ/</span> — nhân viên thu ngân</li>
+          <li><mark class="vocab">caterer</mark> <span class="ipa">/ˈkeɪtɝɝ/</span> — nhà cung cấp dịch vụ ăn uống</li>
+          <li><mark class="vocab">comedian</mark> <span class="ipa">/kəˈmidiən/</span> — nghệ sĩ hài</li>
+          <li><mark class="vocab">economist</mark> <span class="ipa">/iˈkɑnəmɪst/, /ɪˈkɑnəmɪst/</span> — nhà kinh tế học</li>
+          <li><mark class="vocab">electrician</mark> <span class="ipa">/ɪɫɛkˈtɹɪʃən/</span> — thợ điện</li>
+          <li><mark class="vocab">fisherman</mark> <span class="ipa">/ˈfɪʃɝˌmæn/, /ˈfɪʃɝmən/</span> — ngư dân</li>
+          <li><mark class="vocab">florist</mark> <span class="ipa">/ˈflɔrɪst/</span> — người bán hoa</li>
+          <li><mark class="vocab">health professional</mark> <span class="ipa">/hˈɛlθ pɹəfˈɛʃənəl/</span> — chuyên gia y tế</li>
+          <li><mark class="vocab">interpreter</mark> <span class="ipa">/ˌɪnˈtɝpɹətɝ/</span> — thông dịch viên</li>
+          <li><mark class="vocab">investigator</mark> <span class="ipa">/ˌɪnˈvɛstəˌɡeɪtɝ/</span> — điều tra viên</li>
+          <li><mark class="vocab">librarian</mark> <span class="ipa">/ɫaɪˈbɹɛˌɹiən/</span> — thủ thư</li>
+          <li><mark class="vocab">plumber</mark> <span class="ipa">/ˈpɫəmɝ/</span> — thợ sửa ống nước</li>
+          <li><mark class="vocab">psychologist</mark> <span class="ipa">/saɪˈkɑɫədʒəst/</span> — nhà tâm lý học</li>
+          <li><mark class="vocab">security guard</mark> <span class="ipa">/sɪkjˈʊɹɪɾi ɡˈɑːɹd/</span> — bảo vệ</li>
+          <li><mark class="vocab">sheriff</mark> <span class="ipa">/ˈʃɛɹəf/, /ˈʃɛɹɪf/</span> — cảnh sát trưởng</li>
+          <li><mark class="vocab">shopkeeper</mark> <span class="ipa">/ˈʃɑpˌkipɝ/</span> — chủ cửa hàng</li>
+          <li><mark class="vocab">spy</mark> <span class="ipa">/spaɪ/</span> — gián điệp</li>
+          <li><mark class="vocab">stylist</mark> <span class="ipa">/ˈstaɪɫɪst/</span> — nhà tạo mẫu</li>
+          <li><mark class="vocab">real estate agent</mark> <span class="ipa">/ɹˈiːəl ɪstˈeɪt ˈeɪdʒənt/</span> — nhân viên bất động sản</li>
+          <li><mark class="vocab">travel agent</mark> <span class="ipa">/tɹˈævəl ˈeɪdʒənt/</span> — đại lý du lịch</li>
+          <li><mark class="vocab">freelance</mark> <span class="ipa">/ˈfɹiˌɫæns/</span> — tự do</li>
+          <li><mark class="vocab">permanent</mark> <span class="ipa">/ˈpɝmənənt/</span> — vĩnh viễn</li>
+          <li><mark class="vocab">self-employed</mark> <span class="ipa">/sˈɛlfɛmplˈɔɪd/</span> — tự làm chủ</li>
+          <li><mark class="vocab">temporary</mark> <span class="ipa">/ˈtɛmpɝˌɛɹi/</span> — tạm thời</li>
+          <li><mark class="vocab">voluntary</mark> <span class="ipa">/ˈvɑɫəntɛɹi/</span> — tình nguyện</li>
+          <li><mark class="vocab">out of work</mark> <span class="ipa">/ˌaʊɾəv wˈɜːk/</span></li>
+          <li><mark class="vocab">wage</mark> <span class="ipa">/ˈweɪdʒ/</span> — tiền lương</li>
+          <li><mark class="vocab">golden years</mark> <span class="ipa">/ɡˈoʊldən jˈɪɹz/</span> — những năm nghỉ hưu</li>
+        </ul>
+      </section>
+
+      <div class="docs-pager">
+        <a href="../">← Jobs &amp; Work</a>
+        <a href="../../">All topics →</a>
+      </div>
+    </article>
+  </div>
+  <script src="../../../../js/docs.js"></script>
+  <script src="../../../../js/exercise.js"></script>
+</body>
+</html>

@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>B1 Exercise · Tech &amp; Media — The Quiet Corner</title>
+  <meta name="description" content="B1 reading exercise for Tech &amp; Media vocabulary with IPA and bilingual sentences.">
+  <link rel="icon" href="../../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../../"><span>✦</span> The Quiet Corner <span>✦</span></a>
+    <nav class="docs-series">
+      <a href="../../../../blog/web-security/">DevSecOps</a>
+      <a href="../../../../blog/kubestronaut/">Kubestronaut</a>
+      <a class="active" href="../../">English</a>
+    </nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-nav="english" data-docs-root="../../" data-active="tech-media">
+      <div class="docs-nav-label">English</div>
+      <ul class="docs-nav" id="docsNav">
+        <li><a href="../../">All topics</a></li>
+        <li><a href="../">Tech &amp; Media</a></li>
+        <li><a class="active" href="./">B1 Exercise</a></li>
+      </ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../../">Home</a>
+        <span>›</span>
+        <a href="../../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../../">English</a>
+        <span>›</span>
+        <a href="../">Tech &amp; Media</a>
+        <span>›</span>
+        <span>B1 Exercise</span>
+      </div>
+
+      <div class="vocab-topic-hero">
+        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 72 72' fill='none'%3E%3Crect width='72' height='72' rx='14' fill='%230b1220'/%3E%3Crect x='16' y='14' width='40' height='46' rx='6' stroke='%2322d3ee' stroke-width='2.5'/%3E%3Cpath d='M24 28h24M24 36h24M24 44h16' stroke='%23e4e4e7' stroke-width='2.5' stroke-linecap='round'/%3E%3Cpath d='M48 48l6 2-2 6-8-8 4 0z' fill='%2322d3ee'/%3E%3C/svg%3E" alt="" width="112" height="112">
+        <div>
+          <h1>B1 Exercise · Tech &amp; Media</h1>
+          <p class="lede">Reading passage with every new word from this level’s LanGeek lessons — IPA, highlights, sentence translation, and free TTS.</p>
+          <div class="docs-meta">
+            <span><strong>Words:</strong> 95</span>
+            <span><strong>Lessons:</strong> Computer · Internet and Websites · Media and Journalism</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="ex-toolbar" id="exToolbar">
+        <label class="ex-toggle"><input type="checkbox" id="togHighlight" checked> Highlights</label>
+        <label class="ex-toggle"><input type="checkbox" id="togIpa" checked> IPA</label>
+        <label class="ex-toggle"><input type="checkbox" id="togVi"> Dịch câu (VI)</label>
+        <span class="ex-sep"></span>
+        <label class="ex-voice">Voice
+          <select id="voiceSelect" aria-label="TTS voice"></select>
+        </label>
+        <label class="ex-voice">Speed
+          <input id="rateRange" type="range" min="0.7" max="1.15" step="0.05" value="0.95">
+          <span id="rateVal">0.95</span>
+        </label>
+        <button type="button" class="ex-btn primary" id="btnPlay">▶ Read passage</button>
+        <button type="button" class="ex-btn" id="btnStop">Stop</button>
+      </div>
+      
+      <section class="ex-passage" id="passage" data-tts-root>
+          <p class="ex-sent" data-sent="1">
+            <span class="ex-en">In this B1 Tech & Media passage, notice <mark class="vocab" data-word="to access">access</mark><span class="ipa">/ˈæksɛs/</span>, <mark class="vocab" data-word="error">error</mark><span class="ipa">/ˈɛrɚ/</span>, <mark class="vocab" data-word="key">key</mark><span class="ipa">/ki/</span>, and <mark class="vocab" data-word="to log off">log off</mark><span class="ipa">/lɑɡ ˈɑːf/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về Tech &amp; Media, hãy để ý truy cập, lỗi, phím, và đăng xuất.</span>
+          </p>
+          <p class="ex-sent" data-sent="2">
+            <span class="ex-en">In this B1 Tech & Media passage, notice <mark class="vocab" data-word="program">program</mark><span class="ipa">/ˈproʊɡræm/</span>, <mark class="vocab" data-word="software">software</mark><span class="ipa">/ˈsɑːftˌwer/</span>, <mark class="vocab" data-word="operating system">operating system</mark><span class="ipa">/ˈɑpɚˌreɪtɪŋ ˈsɪstəm/</span>, and <mark class="vocab" data-word="to install">install</mark><span class="ipa">/ɪnˈstɑːl/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về Tech &amp; Media, hãy để ý chương trình, phần mềm, hệ điều hành, và cài đặt.</span>
+          </p>
+          <p class="ex-sent" data-sent="3">
+            <span class="ex-en">In this B1 Tech & Media passage, notice <mark class="vocab" data-word="hardware">hardware</mark><span class="ipa">/ˈhɑrdˌwɛr/</span>, <mark class="vocab" data-word="Wi-Fi">Wi-Fi</mark><span class="ipa">/ˈwaɪˌfaɪ/</span>, <mark class="vocab" data-word="to quit">quit</mark><span class="ipa">/kwɪt/</span>, and <mark class="vocab" data-word="system">system</mark><span class="ipa">/ˈsɪstəm/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về Tech &amp; Media, hãy để ý phần cứng, Wi-Fi, thoát, và hệ thống.</span>
+          </p>
+          <p class="ex-sent" data-sent="4">
+            <span class="ex-en">In this B1 Tech & Media passage, notice <mark class="vocab" data-word="click">click</mark><span class="ipa">/klɪk/</span>, <mark class="vocab" data-word="button">button</mark><span class="ipa">/ˈbʌtən/</span>, <mark class="vocab" data-word="to type">type</mark><span class="ipa">/taɪp/</span>, and <mark class="vocab" data-word="window">window</mark><span class="ipa">/ˈwɪndoʊ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về Tech &amp; Media, hãy để ý nhấp chuột, nút, đánh máy, và cửa sổ.</span>
+          </p>
+          <p class="ex-sent" data-sent="5">
+            <span class="ex-en">In this B1 Tech & Media passage, notice <mark class="vocab" <mark class="vocab" data-word="data">data</mark><span class="ipa">/ˈdeɪtə/ , /ˈdætə/</span>-word="wireless">wireless</mark><span class="ipa">/ˈwaɪrlɪs/</span>, <mark class="vocab" data-word="to connect">connect</mark><span class="ipa">/kəˈnɛkt/</span>, <mark class="vocab" data-word="connection">connection</mark><span class="ipa">/kəˈnɛkʃən/</span>, and data.</span>
+            <span class="ex-vi">Trong đoạn B1 về Tech &amp; Media, hãy để ý không dây, kết nối, kết nối, và dữ liệu.</span>
+          </p>
+          <p class="ex-sent" data-sent="6">
+            <span class="ex-en">In this B1 Tech & Media passage, notice <mark class="vocab" data-word="folder">folder</mark><span class="ipa">/ˈfoʊldər/</span>, <mark class="vocab" data-word="to delete">delete</mark><span class="ipa">/dɪˈliːt/</span>, <mark class="vocab" data-word="to drag">drag</mark><span class="ipa">/dræɡ/</span>, and <mark class="vocab" data-word="to scroll">scroll</mark><span class="ipa">/skroʊl/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về Tech &amp; Media, hãy để ý thư mục, xóa, kéo, và cuộn.</span>
+          </p>
+          <p class="ex-sent" data-sent="7">
+            <span class="ex-en">In this B1 Tech & Media passage, notice <mark class="vocab" data-word="to back up">back up</mark><span class="ipa">/bæk ˈʌp/</span>, <mark class="vocab" data-word="desktop">desktop</mark><span class="ipa">/ˈdɛskˌtɑp/</span>, <mark class="vocab" data-word="version">version</mark><span class="ipa">/ˈvɝʒən/</span>, and <mark class="vocab" data-word="application">application</mark><span class="ipa">/ˌæplɪˈkeɪʃən/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về Tech &amp; Media, hãy để ý sao lưu, màn hình nền, phiên bản, và ứng dụng.</span>
+          </p>
+          <p class="ex-sent" data-sent="8">
+            <span class="ex-en">In this B1 Tech & Media passage, notice <mark class="vocab" data-word="virus">virus</mark><span class="ipa">/ˈvaɪrəs/</span>, <mark class="vocab" data-word="account">account</mark><span class="ipa">/əˈkaʊnt/</span>, <mark class="vocab" data-word="address bar">address bar</mark><span class="ipa">/əˈdrɛs bɑr/</span>, and <mark class="vocab" data-word="to attach">attach</mark><span class="ipa">/əˈtæʧ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về Tech &amp; Media, hãy để ý vi-rút, tài khoản, thanh địa chỉ, và đính kèm.</span>
+          </p>
+          <p class="ex-sent" data-sent="9">
+            <span class="ex-en">In this B1 Tech & Media passage, notice <mark class="vocab" data-word="blog">blog</mark><span class="ipa">/blɑɡ/</span>, <mark class="vocab" data-word="blogger">blogger</mark><span class="ipa">/ˈblɑɡɚ/</span>, <mark class="vocab" data-word="blog post">blog post</mark><span class="ipa">/blɑɡ poʊst/</span>, and <mark class="vocab" data-word="bookmark">bookmark</mark><span class="ipa">/ˈbʊkˌmɑrk/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về Tech &amp; Media, hãy để ý blog, người viết blog, bài đăng blog, và dấu trang.</span>
+          </p>
+          <p class="ex-sent" data-sent="10">
+            <span class="ex-en">In this B1 Tech & Media passage, notice <mark class="vocab" data-word="browser">browser</mark><span class="ipa">/ˈbraʊzɚ/</span>, <mark class="vocab" data-word="to chat">chat</mark><span class="ipa">/tʃæt/</span>, <mark class="vocab" data-word="chat room">chat room</mark><span class="ipa">/ʧæt ruːm/</span>, and <mark class="vocab" data-word="DM">DM</mark><span class="ipa">/diː ɛm/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về Tech &amp; Media, hãy để ý trình duyệt, trò chuyện, phòng trò chuyện, và tin nhắn riêng tư.</span>
+          </p>
+          <p class="ex-sent" data-sent="11">
+            <span class="ex-en">In this B1 Tech & Media passage, notice <mark class="vocab" data-word="Facebook">Facebook</mark><span class="ipa">/ˈfeɪsˌbʊk/</span>, <mark class="vocab" data-word="to follow">follow</mark><span class="ipa">/ˈfɑloʊ/</span>, <mark class="vocab" data-word="to forward">forward</mark><span class="ipa">/ˈfɔrwɚd/</span>, and <mark class="vocab" data-word="Google">Google</mark><span class="ipa">/ˈɡuːɡəl/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về Tech &amp; Media, hãy để ý Facebook, theo dõi, chuyển tiếp, và Google.</span>
+          </p>
+          <p class="ex-sent" data-sent="12">
+            <span class="ex-en">In this B1 Tech & Media passage, notice <mark class="vocab" data-word="inbox">inbox</mark><span class="ipa">/ˈɪnˌbɑks/</span>, <mark class="vocab" data-word="to like">like</mark><span class="ipa">/laɪk/</span>, <mark class="vocab" data-word="to log in">log in</mark><span class="ipa">/lɑɡ ɪn/</span>, and <mark class="vocab" data-word="offline">offline</mark><span class="ipa">/ˈɑfˌlaɪn/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về Tech &amp; Media, hãy để ý hộp thư đến, thích, đăng nhập, và ngoại tuyến.</span>
+          </p>
+          <p class="ex-sent" data-sent="13">
+            <span class="ex-en">In this B1 Tech & Media passage, notice <mark class="vocab" data-word="outbox">outbox</mark><span class="ipa">/ˈaʊtˌbɑks/</span>, <mark class="vocab" data-word="page">page</mark><span class="ipa">/peɪdʒ/</span>, <mark class="vocab" data-word="server">server</mark><span class="ipa">/ˈsɝːvɚ/</span>, and <mark class="vocab" data-word="spam">spam</mark><span class="ipa">/spæm/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về Tech &amp; Media, hãy để ý hộp thư đi, trang, máy chủ, và thư rác.</span>
+          </p>
+          <p class="ex-sent" data-sent="14">
+            <span class="ex-en">In this B1 Tech & Media passage, notice <mark class="vocab" data-word="to surf">surf</mark><span class="ipa">/sɝːf/</span>, <mark class="vocab" data-word="to <mark class="vocab" data-word="tweet">tweet</mark><span class="ipa">/twiːt/</span>">tweet</mark><span class="ipa">/twiːt/</span>, tweet, and <mark class="vocab" data-word="URL">URL</mark><span class="ipa">/ˈjuː ɑr ɛl/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về Tech &amp; Media, hãy để ý lướt, đăng tweet, tweet, và URL.</span>
+          </p>
+          <p class="ex-sent" data-sent="15">
+            <span class="ex-en">In this B1 Tech & <mark class="vocab" data-word="media">media</mark><span class="ipa">/ˈmiːdiə/</span> passage, notice <mark class="vocab" data-word="to visit">visit</mark><span class="ipa">/ˈvɪzɪt/</span>, <mark class="vocab" data-word="YouTube">YouTube</mark><span class="ipa">/ˈjuːˌtuːb/</span>, media, and <mark class="vocab" data-word="advice column">advice column</mark><span class="ipa">/ədˈvaɪs ˈkɑːləm/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về Tech &amp; Media, hãy để ý truy cập, YouTube, truyền thông, và chuyên mục tư vấn.</span>
+          </p>
+          <p class="ex-sent" data-sent="16">
+            <span class="ex-en">In this B1 Tech & Media passage, notice <mark class="vocab" data-word="break">break</mark><span class="ipa">/breɪk/</span>, <mark class="vocab" data-word="to <mark class="vocab" data-word="broadcast">broadcast</mark><span class="ipa">/ˈbrɑːdˌkæst/</span>">broadcast</mark><span class="ipa">/ˈbrɑːdˌkæst/</span>, broadcast, and <mark class="vocab" data-word="channel">channel</mark><span class="ipa">/ˈʧænəl/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về Tech &amp; Media, hãy để ý quảng cáo giữa chương trình, phát sóng, chương trình phát sóng, và kênh.</span>
+          </p>
+          <p class="ex-sent" data-sent="17">
+            <span class="ex-en">In this B1 Tech & Media passage, notice <mark class="vocab" data-word="commercial">commercial</mark><span class="ipa">/kəˈmɝːʃəl/</span>, <mark class="vocab" data-word="edition">edition</mark><span class="ipa">/ɪˈdɪʃən/</span>, <mark class="vocab" data-word="to publish">publish</mark><span class="ipa">/ˈpʌblɪʃ/</span>, and <mark class="vocab" data-word="to edit">edit</mark><span class="ipa">/ˈɛdɪt/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về Tech &amp; Media, hãy để ý quảng cáo, ấn bản, xuất bản, và biên tập.</span>
+          </p>
+          <p class="ex-sent" data-sent="18">
+            <span class="ex-en">In this B1 Tech & Media passage, notice <mark class="vocab" data-word="episode">episode</mark><span class="ipa">/ˈɛpɪˌsoʊd/</span>, <mark class="vocab" data-word="front page">front page</mark><span class="ipa">/frʌnt peɪʤ/</span>, <mark class="vocab" data-word="to cover">cover</mark><span class="ipa">/ˈkʌvɚ/</span>, and <mark class="vocab" data-word="headline">headline</mark><span class="ipa">/ˈhɛdˌlaɪn/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về Tech &amp; Media, hãy để ý tập, trang nhất, đưa tin, và tiêu đề.</span>
+          </p>
+          <p class="ex-sent" data-sent="19">
+            <span class="ex-en">In this B1 Tech & Media passage, notice <mark class="vocab" data-word="host">host</mark><span class="ipa">/hoʊst/</span>, <mark class="vocab" data-word="to <mark class="vocab" data-word="interview">interview</mark><span class="ipa">/ˈɪntɚˌvjuː/</span>">interview</mark><span class="ipa">/ˈɪntɚˌvjuː/</span>, interview, and <mark class="vocab" data-word="to introduce">introduce</mark><span class="ipa">/ˌɪntrəˈduːs/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về Tech &amp; Media, hãy để ý người dẫn chương trình, phỏng vấn, phỏng vấn, và giới thiệu.</span>
+          </p>
+          <p class="ex-sent" data-sent="20">
+            <span class="ex-en">In this B1 Tech & Media passage, notice <mark class="vocab" data-word="item">item</mark><span class="ipa">/ˈaɪtəm/</span>, <mark class="vocab" data-word="journal">journal</mark><span class="ipa">/ˈʤɝːnəl/</span>, <mark class="vocab" data-word="listener">listener</mark><span class="ipa">/ˈlɪsənɚ/</span>, and <mark class="vocab" data-word="live">live</mark><span class="ipa">/lʌɪv/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về Tech &amp; Media, hãy để ý mục, tạp chí, người nghe, và trực tiếp.</span>
+          </p>
+          <p class="ex-sent" data-sent="21">
+            <span class="ex-en">In this B1 Tech & Media passage, notice <mark class="vocab" data-word="network">network</mark><span class="ipa">/ˈnɛtˌwɝːk/</span>, <mark class="vocab" data-word="station">station</mark><span class="ipa">/ˈsteɪʃən/</span>, <mark class="vocab" data-word="piece">piece</mark><span class="ipa">/piːs/</span>, and <mark class="vocab" data-word="podcast">podcast</mark><span class="ipa">/ˈpɑdˌkæst/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về Tech &amp; Media, hãy để ý mạng lưới, kênh, bài báo, và podcast.</span>
+          </p>
+          <p class="ex-sent" data-sent="22">
+            <span class="ex-en">In this B1 Tech & Media passage, notice <mark class="vocab" data-word="press">press</mark><span class="ipa">/prɛs/</span>, <mark class="vocab" data-word="reader">reader</mark><span class="ipa">/ˈriːdɚ/</span>, <mark class="vocab" data-word="to report">report</mark><span class="ipa">/rɪˈpɔrt/</span>, and <mark class="vocab" data-word="show">show</mark><span class="ipa">/ʃoʊ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về Tech &amp; Media, hãy để ý báo chí, độc giả, tường thuật, và chương trình.</span>
+          </p>
+          <p class="ex-sent" data-sent="23">
+            <span class="ex-en">In this B1 Tech & Media passage, notice <mark class="vocab" data-word="soap opera">soap opera</mark><span class="ipa">/ˈsoʊp ˌɑprə/</span>, <mark class="vocab" data-word="studio">studio</mark><span class="ipa">/ˈstuːdiˌoʊ/</span>, <mark class="vocab" data-word="to view">view</mark><span class="ipa">/vju/</span>, and <mark class="vocab" data-word="viewer">viewer</mark><span class="ipa">/ˈvjuːɚ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về Tech &amp; Media, hãy để ý phim truyền hình dài tập, studio, xem, và người xem.</span>
+          </p>
+          <p class="ex-sent" data-sent="24">
+            <span class="ex-en">In this B1 Tech & Media passage, notice <mark class="vocab" data-word="audience">audience</mark><span class="ipa">/ˈɑdiˌəns/</span>, <mark class="vocab" data-word="to subscribe">subscribe</mark><span class="ipa">/səbˈskraɪb/</span>, and <mark class="vocab" data-word="to advertise">advertise</mark><span class="ipa">/ˈædvɚˌtaɪz/</span>.</span>
+            <span class="ex-vi">Trong đoạn B1 về Tech &amp; Media, hãy để ý khán giả, đăng ký, và quảng cáo.</span>
+          </p>
+      </section>
+
+      <section class="ex-vocab">
+        <h2>Word checklist · 95</h2>
+        <ul class="ex-vocab-list">
+          <li><mark class="vocab">access</mark> <span class="ipa">/ˈæksɛs/</span> — truy cập</li>
+          <li><mark class="vocab">error</mark> <span class="ipa">/ˈɛrɚ/</span> — lỗi</li>
+          <li><mark class="vocab">key</mark> <span class="ipa">/ki/</span> — phím</li>
+          <li><mark class="vocab">log off</mark> <span class="ipa">/lɑɡ ˈɑːf/</span> — đăng xuất</li>
+          <li><mark class="vocab">program</mark> <span class="ipa">/ˈproʊɡræm/</span> — chương trình</li>
+          <li><mark class="vocab">software</mark> <span class="ipa">/ˈsɑːftˌwer/</span> — phần mềm</li>
+          <li><mark class="vocab">operating system</mark> <span class="ipa">/ˈɑpɚˌreɪtɪŋ ˈsɪstəm/</span> — hệ điều hành</li>
+          <li><mark class="vocab">install</mark> <span class="ipa">/ɪnˈstɑːl/</span> — cài đặt</li>
+          <li><mark class="vocab">hardware</mark> <span class="ipa">/ˈhɑrdˌwɛr/</span> — phần cứng</li>
+          <li><mark class="vocab">Wi-Fi</mark> <span class="ipa">/ˈwaɪˌfaɪ/</span> — Wi-Fi</li>
+          <li><mark class="vocab">quit</mark> <span class="ipa">/kwɪt/</span> — thoát</li>
+          <li><mark class="vocab">system</mark> <span class="ipa">/ˈsɪstəm/</span> — hệ thống</li>
+          <li><mark class="vocab">click</mark> <span class="ipa">/klɪk/</span> — nhấp chuột</li>
+          <li><mark class="vocab">button</mark> <span class="ipa">/ˈbʌtən/</span> — nút</li>
+          <li><mark class="vocab">type</mark> <span class="ipa">/taɪp/</span> — đánh máy</li>
+          <li><mark class="vocab">window</mark> <span class="ipa">/ˈwɪndoʊ/</span> — cửa sổ</li>
+          <li><mark class="vocab">wireless</mark> <span class="ipa">/ˈwaɪrlɪs/</span> — không dây</li>
+          <li><mark class="vocab">connect</mark> <span class="ipa">/kəˈnɛkt/</span> — kết nối</li>
+          <li><mark class="vocab">connection</mark> <span class="ipa">/kəˈnɛkʃən/</span> — kết nối</li>
+          <li><mark class="vocab">data</mark> <span class="ipa">/ˈdeɪtə/ , /ˈdætə/</span> — dữ liệu</li>
+          <li><mark class="vocab">folder</mark> <span class="ipa">/ˈfoʊldər/</span> — thư mục</li>
+          <li><mark class="vocab">delete</mark> <span class="ipa">/dɪˈliːt/</span> — xóa</li>
+          <li><mark class="vocab">drag</mark> <span class="ipa">/dræɡ/</span> — kéo</li>
+          <li><mark class="vocab">scroll</mark> <span class="ipa">/skroʊl/</span> — cuộn</li>
+          <li><mark class="vocab">back up</mark> <span class="ipa">/bæk ˈʌp/</span> — sao lưu</li>
+          <li><mark class="vocab">desktop</mark> <span class="ipa">/ˈdɛskˌtɑp/</span> — màn hình nền</li>
+          <li><mark class="vocab">version</mark> <span class="ipa">/ˈvɝʒən/</span> — phiên bản</li>
+          <li><mark class="vocab">application</mark> <span class="ipa">/ˌæplɪˈkeɪʃən/</span> — ứng dụng</li>
+          <li><mark class="vocab">virus</mark> <span class="ipa">/ˈvaɪrəs/</span> — vi-rút</li>
+          <li><mark class="vocab">account</mark> <span class="ipa">/əˈkaʊnt/</span> — tài khoản</li>
+          <li><mark class="vocab">address bar</mark> <span class="ipa">/əˈdrɛs bɑr/</span> — thanh địa chỉ</li>
+          <li><mark class="vocab">attach</mark> <span class="ipa">/əˈtæʧ/</span> — đính kèm</li>
+          <li><mark class="vocab">blog</mark> <span class="ipa">/blɑɡ/</span> — blog</li>
+          <li><mark class="vocab">blogger</mark> <span class="ipa">/ˈblɑɡɚ/</span> — người viết blog</li>
+          <li><mark class="vocab">blog post</mark> <span class="ipa">/blɑɡ poʊst/</span> — bài đăng blog</li>
+          <li><mark class="vocab">bookmark</mark> <span class="ipa">/ˈbʊkˌmɑrk/</span> — dấu trang</li>
+          <li><mark class="vocab">browser</mark> <span class="ipa">/ˈbraʊzɚ/</span> — trình duyệt</li>
+          <li><mark class="vocab">chat</mark> <span class="ipa">/tʃæt/</span> — trò chuyện</li>
+          <li><mark class="vocab">chat room</mark> <span class="ipa">/ʧæt ruːm/</span> — phòng trò chuyện</li>
+          <li><mark class="vocab">DM</mark> <span class="ipa">/diː ɛm/</span> — tin nhắn riêng tư</li>
+          <li><mark class="vocab">Facebook</mark> <span class="ipa">/ˈfeɪsˌbʊk/</span> — Facebook</li>
+          <li><mark class="vocab">follow</mark> <span class="ipa">/ˈfɑloʊ/</span> — theo dõi</li>
+          <li><mark class="vocab">forward</mark> <span class="ipa">/ˈfɔrwɚd/</span> — chuyển tiếp</li>
+          <li><mark class="vocab">Google</mark> <span class="ipa">/ˈɡuːɡəl/</span> — Google</li>
+          <li><mark class="vocab">inbox</mark> <span class="ipa">/ˈɪnˌbɑks/</span> — hộp thư đến</li>
+          <li><mark class="vocab">like</mark> <span class="ipa">/laɪk/</span> — thích</li>
+          <li><mark class="vocab">log in</mark> <span class="ipa">/lɑɡ ɪn/</span> — đăng nhập</li>
+          <li><mark class="vocab">offline</mark> <span class="ipa">/ˈɑfˌlaɪn/</span> — ngoại tuyến</li>
+          <li><mark class="vocab">outbox</mark> <span class="ipa">/ˈaʊtˌbɑks/</span> — hộp thư đi</li>
+          <li><mark class="vocab">page</mark> <span class="ipa">/peɪdʒ/</span> — trang</li>
+          <li><mark class="vocab">server</mark> <span class="ipa">/ˈsɝːvɚ/</span> — máy chủ</li>
+          <li><mark class="vocab">spam</mark> <span class="ipa">/spæm/</span> — thư rác</li>
+          <li><mark class="vocab">surf</mark> <span class="ipa">/sɝːf/</span> — lướt</li>
+          <li><mark class="vocab">tweet</mark> <span class="ipa">/twiːt/</span> — đăng tweet</li>
+          <li><mark class="vocab">tweet</mark> <span class="ipa">/twiːt/</span> — tweet</li>
+          <li><mark class="vocab">URL</mark> <span class="ipa">/ˈjuː ɑr ɛl/</span> — URL</li>
+          <li><mark class="vocab">visit</mark> <span class="ipa">/ˈvɪzɪt/</span> — truy cập</li>
+          <li><mark class="vocab">YouTube</mark> <span class="ipa">/ˈjuːˌtuːb/</span> — YouTube</li>
+          <li><mark class="vocab">media</mark> <span class="ipa">/ˈmiːdiə/</span> — truyền thông</li>
+          <li><mark class="vocab">advice column</mark> <span class="ipa">/ədˈvaɪs ˈkɑːləm/</span> — chuyên mục tư vấn</li>
+          <li><mark class="vocab">break</mark> <span class="ipa">/breɪk/</span> — quảng cáo giữa chương trình</li>
+          <li><mark class="vocab">broadcast</mark> <span class="ipa">/ˈbrɑːdˌkæst/</span> — phát sóng</li>
+          <li><mark class="vocab">broadcast</mark> <span class="ipa">/ˈbrɑːdˌkæst/</span> — chương trình phát sóng</li>
+          <li><mark class="vocab">channel</mark> <span class="ipa">/ˈʧænəl/</span> — kênh</li>
+          <li><mark class="vocab">commercial</mark> <span class="ipa">/kəˈmɝːʃəl/</span> — quảng cáo</li>
+          <li><mark class="vocab">edition</mark> <span class="ipa">/ɪˈdɪʃən/</span> — ấn bản</li>
+          <li><mark class="vocab">publish</mark> <span class="ipa">/ˈpʌblɪʃ/</span> — xuất bản</li>
+          <li><mark class="vocab">edit</mark> <span class="ipa">/ˈɛdɪt/</span> — biên tập</li>
+          <li><mark class="vocab">episode</mark> <span class="ipa">/ˈɛpɪˌsoʊd/</span> — tập</li>
+          <li><mark class="vocab">front page</mark> <span class="ipa">/frʌnt peɪʤ/</span> — trang nhất</li>
+          <li><mark class="vocab">cover</mark> <span class="ipa">/ˈkʌvɚ/</span> — đưa tin</li>
+          <li><mark class="vocab">headline</mark> <span class="ipa">/ˈhɛdˌlaɪn/</span> — tiêu đề</li>
+          <li><mark class="vocab">host</mark> <span class="ipa">/hoʊst/</span> — người dẫn chương trình</li>
+          <li><mark class="vocab">interview</mark> <span class="ipa">/ˈɪntɚˌvjuː/</span> — phỏng vấn</li>
+          <li><mark class="vocab">interview</mark> <span class="ipa">/ˈɪntɚˌvjuː/</span> — phỏng vấn</li>
+          <li><mark class="vocab">introduce</mark> <span class="ipa">/ˌɪntrəˈduːs/</span> — giới thiệu</li>
+          <li><mark class="vocab">item</mark> <span class="ipa">/ˈaɪtəm/</span> — mục</li>
+          <li><mark class="vocab">journal</mark> <span class="ipa">/ˈʤɝːnəl/</span> — tạp chí</li>
+          <li><mark class="vocab">listener</mark> <span class="ipa">/ˈlɪsənɚ/</span> — người nghe</li>
+          <li><mark class="vocab">live</mark> <span class="ipa">/lʌɪv/</span> — trực tiếp</li>
+          <li><mark class="vocab">network</mark> <span class="ipa">/ˈnɛtˌwɝːk/</span> — mạng lưới</li>
+          <li><mark class="vocab">station</mark> <span class="ipa">/ˈsteɪʃən/</span> — kênh</li>
+          <li><mark class="vocab">piece</mark> <span class="ipa">/piːs/</span> — bài báo</li>
+          <li><mark class="vocab">podcast</mark> <span class="ipa">/ˈpɑdˌkæst/</span> — podcast</li>
+          <li><mark class="vocab">press</mark> <span class="ipa">/prɛs/</span> — báo chí</li>
+          <li><mark class="vocab">reader</mark> <span class="ipa">/ˈriːdɚ/</span> — độc giả</li>
+          <li><mark class="vocab">report</mark> <span class="ipa">/rɪˈpɔrt/</span> — tường thuật</li>
+          <li><mark class="vocab">show</mark> <span class="ipa">/ʃoʊ/</span> — chương trình</li>
+          <li><mark class="vocab">soap opera</mark> <span class="ipa">/ˈsoʊp ˌɑprə/</span> — phim truyền hình dài tập</li>
+          <li><mark class="vocab">studio</mark> <span class="ipa">/ˈstuːdiˌoʊ/</span> — studio</li>
+          <li><mark class="vocab">view</mark> <span class="ipa">/vju/</span> — xem</li>
+          <li><mark class="vocab">viewer</mark> <span class="ipa">/ˈvjuːɚ/</span> — người xem</li>
+          <li><mark class="vocab">audience</mark> <span class="ipa">/ˈɑdiˌəns/</span> — khán giả</li>
+          <li><mark class="vocab">subscribe</mark> <span class="ipa">/səbˈskraɪb/</span> — đăng ký</li>
+          <li><mark class="vocab">advertise</mark> <span class="ipa">/ˈædvɚˌtaɪz/</span> — quảng cáo</li>
+        </ul>
+      </section>
+
+      <div class="docs-pager">
+        <a href="../">← Tech &amp; Media</a>
+        <a href="../../">All topics →</a>
+      </div>
+    </article>
+  </div>
+  <script src="../../../../js/docs.js"></script>
+  <script src="../../../../js/exercise.js"></script>
+</body>
+</html>

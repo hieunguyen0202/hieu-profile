@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>B2 Exercise · Animals — The Quiet Corner</title>
+  <meta name="description" content="B2 reading exercise for Animals vocabulary with IPA and bilingual sentences.">
+  <link rel="icon" href="../../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../../"><span>✦</span> The Quiet Corner <span>✦</span></a>
+    <nav class="docs-series">
+      <a href="../../../../blog/web-security/">DevSecOps</a>
+      <a href="../../../../blog/kubestronaut/">Kubestronaut</a>
+      <a class="active" href="../../">English</a>
+    </nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-nav="english" data-docs-root="../../" data-active="animals">
+      <div class="docs-nav-label">English</div>
+      <ul class="docs-nav" id="docsNav">
+        <li><a href="../../">All topics</a></li>
+        <li><a href="../">Animals</a></li>
+        <li><a class="active" href="./">B2 Exercise</a></li>
+      </ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../../">Home</a>
+        <span>›</span>
+        <a href="../../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../../">English</a>
+        <span>›</span>
+        <a href="../">Animals</a>
+        <span>›</span>
+        <span>B2 Exercise</span>
+      </div>
+
+      <div class="vocab-topic-hero">
+        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 72 72' fill='none'%3E%3Crect width='72' height='72' rx='14' fill='%230b1220'/%3E%3Crect x='16' y='14' width='40' height='46' rx='6' stroke='%2322d3ee' stroke-width='2.5'/%3E%3Cpath d='M24 28h24M24 36h24M24 44h16' stroke='%23e4e4e7' stroke-width='2.5' stroke-linecap='round'/%3E%3Cpath d='M48 48l6 2-2 6-8-8 4 0z' fill='%2322d3ee'/%3E%3C/svg%3E" alt="" width="112" height="112">
+        <div>
+          <h1>B2 Exercise · Animals</h1>
+          <p class="lede">Reading passage with every new word from this level’s LanGeek lessons — IPA, highlights, sentence translation, and free TTS.</p>
+          <div class="docs-meta">
+            <span><strong>Words:</strong> 28</span>
+            <span><strong>Lessons:</strong> Animals</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="ex-toolbar" id="exToolbar">
+        <label class="ex-toggle"><input type="checkbox" id="togHighlight" checked> Highlights</label>
+        <label class="ex-toggle"><input type="checkbox" id="togIpa" checked> IPA</label>
+        <label class="ex-toggle"><input type="checkbox" id="togVi"> Dịch câu (VI)</label>
+        <span class="ex-sep"></span>
+        <label class="ex-voice">Voice
+          <select id="voiceSelect" aria-label="TTS voice"></select>
+        </label>
+        <label class="ex-voice">Speed
+          <input id="rateRange" type="range" min="0.7" max="1.15" step="0.05" value="0.95">
+          <span id="rateVal">0.95</span>
+        </label>
+        <button type="button" class="ex-btn primary" id="btnPlay">▶ Read passage</button>
+        <button type="button" class="ex-btn" id="btnStop">Stop</button>
+      </div>
+      
+      <section class="ex-passage" id="passage" data-tts-root>
+          <p class="ex-sent" data-sent="1">
+            <span class="ex-en">In this B2 Animals passage, notice <mark class="vocab" data-word="<mark class="vocab" data-word="to breed">breed</mark><span class="ipa">/briːd/</span>">breed</mark><span class="ipa">/briːd/</span>, breed, <mark class="vocab" data-word="cage">cage</mark><span class="ipa">/keɪʤ/</span>, and <mark class="vocab" data-word="species">species</mark><span class="ipa">/ˈspiːʃiz/ , /ˈspiːsiz/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Animals, hãy để ý giống, nuôi, lồng, và loài.</span>
+          </p>
+          <p class="ex-sent" data-sent="2">
+            <span class="ex-en">In this B2 Animals passage, notice <mark class="vocab" data-word="territory">territory</mark><span class="ipa">/ˈtɛrɪˌtɔri/</span>, <mark class="vocab" data-word="polar bear">polar bear</mark><span class="ipa">/ˈpoʊlɚ bɛr/</span>, <mark class="vocab" data-word="owl">owl</mark><span class="ipa">/aʊl/</span>, and <mark class="vocab" data-word="ape">ape</mark><span class="ipa">/eɪp/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Animals, hãy để ý lãnh thổ, gấu Bắc Cực, cú, và khỉ không đuôi.</span>
+          </p>
+          <p class="ex-sent" data-sent="3">
+            <span class="ex-en">In this B2 Animals passage, notice <mark class="vocab" data-word="cheetah">cheetah</mark><span class="ipa">/ˈʧiːtə/</span>, <mark class="vocab" data-word="leopard">leopard</mark><span class="ipa">/ˈlɛpɚd/</span>, <mark class="vocab" data-word="puppy">puppy</mark><span class="ipa">/ˈpʌpi/</span>, and <mark class="vocab" data-word="reindeer">reindeer</mark><span class="ipa">/ˈreɪnˌdɪr/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Animals, hãy để ý báo săn, báo hoa mai, chó con, và tuần lộc.</span>
+          </p>
+          <p class="ex-sent" data-sent="4">
+            <span class="ex-en">In this B2 Animals passage, notice <mark class="vocab" data-word="squirrel">squirrel</mark><span class="ipa">/ˈskwɝːəl/</span>, <mark class="vocab" data-word="tortoise">tortoise</mark><span class="ipa">/ˈtɔrtəs/</span>, <mark class="vocab" data-word="feather">feather</mark><span class="ipa">/ˈfɛðɚ/</span>, and <mark class="vocab" data-word="paw">paw</mark><span class="ipa">/pɑ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Animals, hãy để ý sóc, rùa, lông vũ, và chân.</span>
+          </p>
+          <p class="ex-sent" data-sent="5">
+            <span class="ex-en">In this B2 Animals passage, notice <mark class="vocab" data-word="venom">venom</mark><span class="ipa">/ˈvɛnəm/</span>, <mark class="vocab" data-word="to bark">bark</mark><span class="ipa">/bɑrk/</span>, <mark class="vocab" data-word="to chain">chain</mark><span class="ipa">/tʃeɪn/</span>, and <mark class="vocab" data-word="to lay">lay</mark><span class="ipa">/leɪ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Animals, hãy để ý nọc độc, sủa, xích, và đẻ.</span>
+          </p>
+          <p class="ex-sent" data-sent="6">
+            <span class="ex-en">In this B2 Animals passage, notice <mark class="vocab" data-word="to mate">mate</mark><span class="ipa">/meɪt/</span>, <mark class="vocab" data-word="pack">pack</mark><span class="ipa">/pæk/</span>, <mark class="vocab" data-word="domestic">domestic</mark><span class="ipa">/dəˈmɛstɪk/</span>, and <mark class="vocab" data-word="extinct">extinct</mark><span class="ipa">/ɪkˈstɪŋkt/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Animals, hãy để ý giao phối, bầy, thuần hóa, và tuyệt chủng.</span>
+          </p>
+          <p class="ex-sent" data-sent="7">
+            <span class="ex-en">In this B2 Animals passage, notice <mark class="vocab" data-word="mammal">mammal</mark><span class="ipa">/ˈmæməl/</span>, <mark class="vocab" data-word="reptile">reptile</mark><span class="ipa">/ˈrɛptaɪl/</span>, <mark class="vocab" data-word="to trap">trap</mark><span class="ipa">/træp/</span>, and <mark class="vocab" data-word="wildlife">wildlife</mark><span class="ipa">/ˈwaɪldˌlaɪf/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Animals, hãy để ý động vật có vú, bò sát, bẫy, và động vật hoang dã.</span>
+          </p>
+      </section>
+
+      <section class="ex-vocab">
+        <h2>Word checklist · 28</h2>
+        <ul class="ex-vocab-list">
+          <li><mark class="vocab">breed</mark> <span class="ipa">/briːd/</span> — giống</li>
+          <li><mark class="vocab">breed</mark> <span class="ipa">/briːd/</span> — nuôi</li>
+          <li><mark class="vocab">cage</mark> <span class="ipa">/keɪʤ/</span> — lồng</li>
+          <li><mark class="vocab">species</mark> <span class="ipa">/ˈspiːʃiz/ , /ˈspiːsiz/</span> — loài</li>
+          <li><mark class="vocab">territory</mark> <span class="ipa">/ˈtɛrɪˌtɔri/</span> — lãnh thổ</li>
+          <li><mark class="vocab">polar bear</mark> <span class="ipa">/ˈpoʊlɚ bɛr/</span> — gấu Bắc Cực</li>
+          <li><mark class="vocab">owl</mark> <span class="ipa">/aʊl/</span> — cú</li>
+          <li><mark class="vocab">ape</mark> <span class="ipa">/eɪp/</span> — khỉ không đuôi</li>
+          <li><mark class="vocab">cheetah</mark> <span class="ipa">/ˈʧiːtə/</span> — báo săn</li>
+          <li><mark class="vocab">leopard</mark> <span class="ipa">/ˈlɛpɚd/</span> — báo hoa mai</li>
+          <li><mark class="vocab">puppy</mark> <span class="ipa">/ˈpʌpi/</span> — chó con</li>
+          <li><mark class="vocab">reindeer</mark> <span class="ipa">/ˈreɪnˌdɪr/</span> — tuần lộc</li>
+          <li><mark class="vocab">squirrel</mark> <span class="ipa">/ˈskwɝːəl/</span> — sóc</li>
+          <li><mark class="vocab">tortoise</mark> <span class="ipa">/ˈtɔrtəs/</span> — rùa</li>
+          <li><mark class="vocab">feather</mark> <span class="ipa">/ˈfɛðɚ/</span> — lông vũ</li>
+          <li><mark class="vocab">paw</mark> <span class="ipa">/pɑ/</span> — chân</li>
+          <li><mark class="vocab">venom</mark> <span class="ipa">/ˈvɛnəm/</span> — nọc độc</li>
+          <li><mark class="vocab">bark</mark> <span class="ipa">/bɑrk/</span> — sủa</li>
+          <li><mark class="vocab">chain</mark> <span class="ipa">/tʃeɪn/</span> — xích</li>
+          <li><mark class="vocab">lay</mark> <span class="ipa">/leɪ/</span> — đẻ</li>
+          <li><mark class="vocab">mate</mark> <span class="ipa">/meɪt/</span> — giao phối</li>
+          <li><mark class="vocab">pack</mark> <span class="ipa">/pæk/</span> — bầy</li>
+          <li><mark class="vocab">domestic</mark> <span class="ipa">/dəˈmɛstɪk/</span> — thuần hóa</li>
+          <li><mark class="vocab">extinct</mark> <span class="ipa">/ɪkˈstɪŋkt/</span> — tuyệt chủng</li>
+          <li><mark class="vocab">mammal</mark> <span class="ipa">/ˈmæməl/</span> — động vật có vú</li>
+          <li><mark class="vocab">reptile</mark> <span class="ipa">/ˈrɛptaɪl/</span> — bò sát</li>
+          <li><mark class="vocab">trap</mark> <span class="ipa">/træp/</span> — bẫy</li>
+          <li><mark class="vocab">wildlife</mark> <span class="ipa">/ˈwaɪldˌlaɪf/</span> — động vật hoang dã</li>
+        </ul>
+      </section>
+
+      <div class="docs-pager">
+        <a href="../">← Animals</a>
+        <a href="../../">All topics →</a>
+      </div>
+    </article>
+  </div>
+  <script src="../../../../js/docs.js"></script>
+  <script src="../../../../js/exercise.js"></script>
+</body>
+</html>

@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A2 Exercise · Tech &amp; Media — The Quiet Corner</title>
+  <meta name="description" content="A2 reading exercise for Tech &amp; Media vocabulary with IPA and bilingual sentences.">
+  <link rel="icon" href="../../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../../"><span>✦</span> The Quiet Corner <span>✦</span></a>
+    <nav class="docs-series">
+      <a href="../../../../blog/web-security/">DevSecOps</a>
+      <a href="../../../../blog/kubestronaut/">Kubestronaut</a>
+      <a class="active" href="../../">English</a>
+    </nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-nav="english" data-docs-root="../../" data-active="tech-media">
+      <div class="docs-nav-label">English</div>
+      <ul class="docs-nav" id="docsNav">
+        <li><a href="../../">All topics</a></li>
+        <li><a href="../">Tech &amp; Media</a></li>
+        <li><a class="active" href="./">A2 Exercise</a></li>
+      </ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../../">Home</a>
+        <span>›</span>
+        <a href="../../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../../">English</a>
+        <span>›</span>
+        <a href="../">Tech &amp; Media</a>
+        <span>›</span>
+        <span>A2 Exercise</span>
+      </div>
+
+      <div class="vocab-topic-hero">
+        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 72 72' fill='none'%3E%3Crect width='72' height='72' rx='14' fill='%230b1220'/%3E%3Crect x='16' y='14' width='40' height='46' rx='6' stroke='%2322d3ee' stroke-width='2.5'/%3E%3Cpath d='M24 28h24M24 36h24M24 44h16' stroke='%23e4e4e7' stroke-width='2.5' stroke-linecap='round'/%3E%3Cpath d='M48 48l6 2-2 6-8-8 4 0z' fill='%2322d3ee'/%3E%3C/svg%3E" alt="" width="112" height="112">
+        <div>
+          <h1>A2 Exercise · Tech &amp; Media</h1>
+          <p class="lede">Reading passage with every new word from this level’s LanGeek lessons — IPA, highlights, sentence translation, and free TTS.</p>
+          <div class="docs-meta">
+            <span><strong>Words:</strong> 80</span>
+            <span><strong>Lessons:</strong> Communication · Computer and Information</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="ex-toolbar" id="exToolbar">
+        <label class="ex-toggle"><input type="checkbox" id="togHighlight" checked> Highlights</label>
+        <label class="ex-toggle"><input type="checkbox" id="togIpa" checked> IPA</label>
+        <label class="ex-toggle"><input type="checkbox" id="togVi"> Dịch câu (VI)</label>
+        <span class="ex-sep"></span>
+        <label class="ex-voice">Voice
+          <select id="voiceSelect" aria-label="TTS voice"></select>
+        </label>
+        <label class="ex-voice">Speed
+          <input id="rateRange" type="range" min="0.7" max="1.15" step="0.05" value="0.95">
+          <span id="rateVal">0.95</span>
+        </label>
+        <button type="button" class="ex-btn primary" id="btnPlay">▶ Read passage</button>
+        <button type="button" class="ex-btn" id="btnStop">Stop</button>
+      </div>
+      
+      <section class="ex-passage" id="passage" data-tts-root>
+          <p class="ex-sent" data-sent="1">
+            <span class="ex-en">In this A2 Tech & Media passage, notice <mark class="vocab" data-word="communication">communication</mark><span class="ipa">/kəˌmjuːnɪˈkeɪʃən/</span>, <mark class="vocab" data-word="conversation">conversation</mark><span class="ipa">/ˌkɑːnvɚˈseɪʃən/</span>, <mark class="vocab" data-word="opinion">opinion</mark><span class="ipa">/əˈpɪnjən/</span>, and <mark class="vocab" data-word="talk">talk</mark><span class="ipa">/tɑːk/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Tech &amp; Media, hãy để ý giao tiếp, cuộc trò chuyện, ý kiến, và cuộc nói chuyện.</span>
+          </p>
+          <p class="ex-sent" data-sent="2">
+            <span class="ex-en">In this A2 Tech & Media passage, notice <mark class="vocab" data-word="call">call</mark><span class="ipa">/kɔːl/</span>, <mark class="vocab" data-word="cell phone">cell phone</mark><span class="ipa">/ˈsɛl ˌfoʊn/</span>, <mark class="vocab" data-word="argument">argument</mark><span class="ipa">/ˈɑːrɡjəmənt/</span>, and <mark class="vocab" data-word="discussion">discussion</mark><span class="ipa">/dɪˈskʌʃən/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Tech &amp; Media, hãy để ý cuộc gọi, điện thoại di động, luận điểm, và thảo luận.</span>
+          </p>
+          <p class="ex-sent" data-sent="3">
+            <span class="ex-en">In this A2 Tech & Media passage, notice <mark class="vocab" data-word="fight">fight</mark><span class="ipa">/faɪt/</span>, <mark class="vocab" data-word="letter">letter</mark><span class="ipa">/ˈlɛtɚ/</span>, <mark class="vocab" data-word="mail">mail</mark><span class="ipa">/meɪl/</span>, and <mark class="vocab" data-word="envelope">envelope</mark><span class="ipa">/ˈɛnvəˌloʊp/ , /ˈɑːnvəˌloʊp/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Tech &amp; Media, hãy để ý cuộc cãi nhau, thư, bưu điện, và phong bì.</span>
+          </p>
+          <p class="ex-sent" data-sent="4">
+            <span class="ex-en">In this A2 Tech & Media passage, notice <mark class="vocab" data-word="to say">say</mark><span class="ipa">/seɪ/</span>, <mark class="vocab" data-word="to tell">tell</mark><span class="ipa">/tɛl/</span>, <mark class="vocab" data-word="to discuss">discuss</mark><span class="ipa">/dɪˈskʌs/</span>, and <mark class="vocab" data-word="to visit">visit</mark><span class="ipa">/ˈvɪzɪt/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Tech &amp; Media, hãy để ý nói, nói, thảo luận, và thăm.</span>
+          </p>
+          <p class="ex-sent" data-sent="5">
+            <span class="ex-en">In this A2 Tech & Media passage, notice <mark class="vocab" data-word="to reply">reply</mark><span class="ipa">/rɪˈplaɪ/</span>, <mark class="vocab" data-word="to argue">argue</mark><span class="ipa">/ˈɑːrɡjuː/</span>, <mark class="vocab" data-word="to mail">mail</mark><span class="ipa">/meɪl/</span>, and <mark class="vocab" data-word="together">together</mark><span class="ipa">/təˈɡɛðɚ/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Tech &amp; Media, hãy để ý trả lời, tranh cãi, gửi, và cùng nhau.</span>
+          </p>
+          <p class="ex-sent" data-sent="6">
+            <span class="ex-en">In this A2 Tech & Media passage, notice <mark class="vocab" data-word="calmly">calmly</mark><span class="ipa">/ˈkɑːmli/</span>, <mark class="vocab" data-word="alone">alone</mark><span class="ipa">/əˈloʊn/</span>, <mark class="vocab" data-word="social">social</mark><span class="ipa">/ˈsoʊʃəl/</span>, and <mark class="vocab" data-word="to send">send</mark><span class="ipa">/sɛnd/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Tech &amp; Media, hãy để ý bình tĩnh, một mình, xã hội, và gửi.</span>
+          </p>
+          <p class="ex-sent" data-sent="7">
+            <span class="ex-en">In this A2 Tech & Media passage, notice <mark class="vocab" data-word="to receive">receive</mark><span class="ipa">/rɪˈsiːv/</span>, <mark class="vocab" data-word="to understand">understand</mark><span class="ipa">/ˌʌndɚˈstænd/</span>, <mark class="vocab" data-word="to misunderstand">misunderstand</mark><span class="ipa">/ˌmɪsʌndɚˈstænd/</span>, and <mark class="vocab" data-word="to agree">agree</mark><span class="ipa">/əˈɡriː/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Tech &amp; Media, hãy để ý nhận, hiểu, hiểu sai, và đồng ý.</span>
+          </p>
+          <p class="ex-sent" data-sent="8">
+            <span class="ex-en">In this A2 Tech & Media passage, notice <mark class="vocab" data-word="to disagree">disagree</mark><span class="ipa">/ˌdɪsəˈɡriː/</span>, <mark class="vocab" data-word="to accept">accept</mark><span class="ipa">/ækˈsɛpt/</span>, <mark class="vocab" data-word="to reject">reject</mark><span class="ipa">/rɪˈdʒɛkt/</span>, and <mark class="vocab" data-word="all right">all right</mark><span class="ipa">/ˌɔːl ˈraɪt/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Tech &amp; Media, hãy để ý không đồng ý, chấp nhận, từ chối, và Được rồi.</span>
+          </p>
+          <p class="ex-sent" data-sent="9">
+            <span class="ex-en">In this A2 Tech & Media passage, notice <mark class="vocab" data-word="statement">statement</mark><span class="ipa">/ˈsteɪtmənt/</span>, <mark class="vocab" data-word="wow">wow</mark><span class="ipa">/waʊ/</span>, <mark class="vocab" data-word="ah">ah</mark><span class="ipa">/ɑː/</span>, and <mark class="vocab" data-word="oh">oh</mark><span class="ipa">/ˈoʊ/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Tech &amp; Media, hãy để ý tuyên bố, wow, À, và Ồ.</span>
+          </p>
+          <p class="ex-sent" data-sent="10">
+            <span class="ex-en">In this A2 Tech & Media passage, notice <mark class="vocab" data-word="yeah">yeah</mark><span class="ipa">/jɛ/</span>, <mark class="vocab" data-word="hey">hey</mark><span class="ipa">/heɪ/</span>, <mark class="vocab" data-word="note">note</mark><span class="ipa">/noʊt/</span>, and <mark class="vocab" data-word="invitation">invitation</mark><span class="ipa">/ˌɪnvɪˈteɪʃən/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Tech &amp; Media, hãy để ý Ừ, Này, lời nhắn, và lời mời.</span>
+          </p>
+          <p class="ex-sent" data-sent="11">
+            <span class="ex-en">In this A2 Tech & Media passage, notice <mark class="vocab" data-word="to communicate">communicate</mark><span class="ipa">/kəˈmjuːnɪˌkeɪt/</span>, <mark class="vocab" data-word="to complain">complain</mark><span class="ipa">/kəmˈpleɪn/</span>, <mark class="vocab" data-word="to invite">invite</mark><span class="ipa">/ɪnˈvaɪt/</span>, and <mark class="vocab" data-word="to pronounce">pronounce</mark><span class="ipa">/prəˈnaʊns/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Tech &amp; Media, hãy để ý giao tiếp, phàn nàn, mời, và phát âm.</span>
+          </p>
+          <p class="ex-sent" data-sent="12">
+            <span class="ex-en">In this A2 Tech & Media passage, notice <mark class="vocab" data-word="computer">computer</mark><span class="ipa">/kəmˈpjuːtɚ/</span>, <mark class="vocab" data-word="information">information</mark><span class="ipa">/ˌɪnfɚˈmeɪʃən/</span>, <mark class="vocab" data-word="chat">chat</mark><span class="ipa">/tʃæt/</span>, and <mark class="vocab" data-word="laptop">laptop</mark><span class="ipa">/ˈlæpˌtɑːp/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Tech &amp; Media, hãy để ý máy tính, thông tin, trò chuyện, và máy tính xách tay.</span>
+          </p>
+          <p class="ex-sent" data-sent="13">
+            <span class="ex-en">In this A2 Tech & Media passage, notice <mark class="vocab" data-word="monitor">monitor</mark><span class="ipa">/ˈmɑnɪtər/</span>, <mark class="vocab" data-word="screen">screen</mark><span class="ipa">/skriːn/</span>, <mark class="vocab" data-word="keyboard">keyboard</mark><span class="ipa">/ˈkiˌbɔrd/</span>, and <mark class="vocab" data-word="mouse">mouse</mark><span class="ipa">/maʊs/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Tech &amp; Media, hãy để ý màn hình, màn hình, bàn phím, và chuột.</span>
+          </p>
+          <p class="ex-sent" data-sent="14">
+            <span class="ex-en">In this A2 Tech & Media passage, notice <mark class="vocab" data-word="printer">printer</mark><span class="ipa">/ˈprɪntɚ/</span>, <mark class="vocab" data-word="DVD">DVD</mark><span class="ipa">/ˌdiːˌviːˈdiː/</span>, <mark class="vocab" data-word="calculator">calculator</mark><span class="ipa">/ˈkælkjəˌleɪtɚ/</span>, and <mark class="vocab" data-word="username">username</mark><span class="ipa">/ˈjuːzɚˌneɪm/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Tech &amp; Media, hãy để ý máy in, DVD, máy tính, và tên người dùng.</span>
+          </p>
+          <p class="ex-sent" data-sent="15">
+            <span class="ex-en">In this A2 Tech & Media passage, notice <mark class="vocab" data-word="password">password</mark><span class="ipa">/ˈpæswɝːd/</span>, <mark class="vocab" data-word="the Internet">the Internet</mark><span class="ipa">/ˈɪntɚˌnɛt/</span>, <mark class="vocab" data-word="website">website</mark><span class="ipa">/ˈwɛbˌsaɪt/</span>, and <mark class="vocab" data-word="web page">web page</mark><span class="ipa">/ˈwɛb ˌpeɪdʒ/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Tech &amp; Media, hãy để ý mật khẩu, Internet, trang web, và trang web.</span>
+          </p>
+          <p class="ex-sent" data-sent="16">
+            <span class="ex-en">In this A2 Tech & Media passage, notice <mark class="vocab" data-word="online">online</mark><span class="ipa">/ˌɑːnˈlaɪn/</span>, <mark class="vocab" data-word="email">email</mark><span class="ipa">/ˈiːˌmeɪl/</span>, <mark class="vocab" data-word="message">message</mark><span class="ipa">/ˈmɛsɪdʒ/</span>, and <mark class="vocab" data-word="video">video</mark><span class="ipa">/ˈvɪdiˌoʊ/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Tech &amp; Media, hãy để ý trực tuyến, email, tin nhắn, và video.</span>
+          </p>
+          <p class="ex-sent" data-sent="17">
+            <span class="ex-en">In this A2 Tech & Media passage, notice <mark class="vocab" data-word="post">post</mark><span class="ipa">/poʊst/</span>, <mark class="vocab" data-word="comment">comment</mark><span class="ipa">/ˈkɑːmɛnt/</span>, <mark class="vocab" data-word="address">address</mark><span class="ipa">/ˈædˌrɛs/, /əˈdrɛs/</span>, and <mark class="vocab" data-word="file">file</mark><span class="ipa">/faɪl/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Tech &amp; Media, hãy để ý bài đăng, bình luận, địa chỉ, và tập tin.</span>
+          </p>
+          <p class="ex-sent" data-sent="18">
+            <span class="ex-en">In this A2 Tech & Media passage, notice <mark class="vocab" data-word="document">document</mark><span class="ipa">/ˈdɑːkjəmənt/</span>, <mark class="vocab" data-word="to download">download</mark><span class="ipa">/ˌdaʊnˈloʊd/</span>, <mark class="vocab" data-word="to upload">upload</mark><span class="ipa">/ˌʌpˈloʊd/</span>, and <mark class="vocab" data-word="to click">click</mark><span class="ipa">/klɪk/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Tech &amp; Media, hãy để ý tài liệu, tải xuống, tải lên, và nhấp.</span>
+          </p>
+          <p class="ex-sent" data-sent="19">
+            <span class="ex-en">In this A2 Tech & Media passage, notice <mark class="vocab" data-word="to email">email</mark><span class="ipa">/ˈiːˌmeɪl/</span>, <mark class="vocab" data-word="to google">google</mark><span class="ipa">/ˈɡuːɡəl/</span>, <mark class="vocab" data-word="to sign in">sign in</mark><span class="ipa">/ˌsaɪn ˈɪn/</span>, and <mark class="vocab" data-word="to sign out">sign out</mark><span class="ipa">/sˈaɪn ˈaʊt/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Tech &amp; Media, hãy để ý gửi email, tìm kiếm trên google, đăng nhập, và đăng xuất.</span>
+          </p>
+          <p class="ex-sent" data-sent="20">
+            <span class="ex-en">In this A2 Tech & Media passage, notice <mark class="vocab" data-word="digital">digital</mark><span class="ipa">/ˈdɪdʒɪtl/</span>, <mark class="vocab" data-word="news">news</mark><span class="ipa">/nuːz/ , /njuːz/</span>, <mark class="vocab" data-word="image">image</mark><span class="ipa">/ˈɪmɪdʒ/</span>, and <mark class="vocab" data-word="to copy">copy</mark><span class="ipa">/ˈkɑːpi/</span>.</span>
+            <span class="ex-vi">Trong đoạn A2 về Tech &amp; Media, hãy để ý kỹ thuật số, tin tức, hình ảnh, và sao chép.</span>
+          </p>
+      </section>
+
+      <section class="ex-vocab">
+        <h2>Word checklist · 80</h2>
+        <ul class="ex-vocab-list">
+          <li><mark class="vocab">communication</mark> <span class="ipa">/kəˌmjuːnɪˈkeɪʃən/</span> — giao tiếp</li>
+          <li><mark class="vocab">conversation</mark> <span class="ipa">/ˌkɑːnvɚˈseɪʃən/</span> — cuộc trò chuyện</li>
+          <li><mark class="vocab">opinion</mark> <span class="ipa">/əˈpɪnjən/</span> — ý kiến</li>
+          <li><mark class="vocab">talk</mark> <span class="ipa">/tɑːk/</span> — cuộc nói chuyện</li>
+          <li><mark class="vocab">call</mark> <span class="ipa">/kɔːl/</span> — cuộc gọi</li>
+          <li><mark class="vocab">cell phone</mark> <span class="ipa">/ˈsɛl ˌfoʊn/</span> — điện thoại di động</li>
+          <li><mark class="vocab">argument</mark> <span class="ipa">/ˈɑːrɡjəmənt/</span> — luận điểm</li>
+          <li><mark class="vocab">discussion</mark> <span class="ipa">/dɪˈskʌʃən/</span> — thảo luận</li>
+          <li><mark class="vocab">fight</mark> <span class="ipa">/faɪt/</span> — cuộc cãi nhau</li>
+          <li><mark class="vocab">letter</mark> <span class="ipa">/ˈlɛtɚ/</span> — thư</li>
+          <li><mark class="vocab">mail</mark> <span class="ipa">/meɪl/</span> — bưu điện</li>
+          <li><mark class="vocab">envelope</mark> <span class="ipa">/ˈɛnvəˌloʊp/ , /ˈɑːnvəˌloʊp/</span> — phong bì</li>
+          <li><mark class="vocab">say</mark> <span class="ipa">/seɪ/</span> — nói</li>
+          <li><mark class="vocab">tell</mark> <span class="ipa">/tɛl/</span> — nói</li>
+          <li><mark class="vocab">discuss</mark> <span class="ipa">/dɪˈskʌs/</span> — thảo luận</li>
+          <li><mark class="vocab">visit</mark> <span class="ipa">/ˈvɪzɪt/</span> — thăm</li>
+          <li><mark class="vocab">reply</mark> <span class="ipa">/rɪˈplaɪ/</span> — trả lời</li>
+          <li><mark class="vocab">argue</mark> <span class="ipa">/ˈɑːrɡjuː/</span> — tranh cãi</li>
+          <li><mark class="vocab">mail</mark> <span class="ipa">/meɪl/</span> — gửi</li>
+          <li><mark class="vocab">together</mark> <span class="ipa">/təˈɡɛðɚ/</span> — cùng nhau</li>
+          <li><mark class="vocab">calmly</mark> <span class="ipa">/ˈkɑːmli/</span> — bình tĩnh</li>
+          <li><mark class="vocab">alone</mark> <span class="ipa">/əˈloʊn/</span> — một mình</li>
+          <li><mark class="vocab">social</mark> <span class="ipa">/ˈsoʊʃəl/</span> — xã hội</li>
+          <li><mark class="vocab">send</mark> <span class="ipa">/sɛnd/</span> — gửi</li>
+          <li><mark class="vocab">receive</mark> <span class="ipa">/rɪˈsiːv/</span> — nhận</li>
+          <li><mark class="vocab">understand</mark> <span class="ipa">/ˌʌndɚˈstænd/</span> — hiểu</li>
+          <li><mark class="vocab">misunderstand</mark> <span class="ipa">/ˌmɪsʌndɚˈstænd/</span> — hiểu sai</li>
+          <li><mark class="vocab">agree</mark> <span class="ipa">/əˈɡriː/</span> — đồng ý</li>
+          <li><mark class="vocab">disagree</mark> <span class="ipa">/ˌdɪsəˈɡriː/</span> — không đồng ý</li>
+          <li><mark class="vocab">accept</mark> <span class="ipa">/ækˈsɛpt/</span> — chấp nhận</li>
+          <li><mark class="vocab">reject</mark> <span class="ipa">/rɪˈdʒɛkt/</span> — từ chối</li>
+          <li><mark class="vocab">all right</mark> <span class="ipa">/ˌɔːl ˈraɪt/</span> — Được rồi</li>
+          <li><mark class="vocab">statement</mark> <span class="ipa">/ˈsteɪtmənt/</span> — tuyên bố</li>
+          <li><mark class="vocab">wow</mark> <span class="ipa">/waʊ/</span> — wow</li>
+          <li><mark class="vocab">ah</mark> <span class="ipa">/ɑː/</span> — À</li>
+          <li><mark class="vocab">oh</mark> <span class="ipa">/ˈoʊ/</span> — Ồ</li>
+          <li><mark class="vocab">yeah</mark> <span class="ipa">/jɛ/</span> — Ừ</li>
+          <li><mark class="vocab">hey</mark> <span class="ipa">/heɪ/</span> — Này</li>
+          <li><mark class="vocab">note</mark> <span class="ipa">/noʊt/</span> — lời nhắn</li>
+          <li><mark class="vocab">invitation</mark> <span class="ipa">/ˌɪnvɪˈteɪʃən/</span> — lời mời</li>
+          <li><mark class="vocab">communicate</mark> <span class="ipa">/kəˈmjuːnɪˌkeɪt/</span> — giao tiếp</li>
+          <li><mark class="vocab">complain</mark> <span class="ipa">/kəmˈpleɪn/</span> — phàn nàn</li>
+          <li><mark class="vocab">invite</mark> <span class="ipa">/ɪnˈvaɪt/</span> — mời</li>
+          <li><mark class="vocab">pronounce</mark> <span class="ipa">/prəˈnaʊns/</span> — phát âm</li>
+          <li><mark class="vocab">computer</mark> <span class="ipa">/kəmˈpjuːtɚ/</span> — máy tính</li>
+          <li><mark class="vocab">information</mark> <span class="ipa">/ˌɪnfɚˈmeɪʃən/</span> — thông tin</li>
+          <li><mark class="vocab">chat</mark> <span class="ipa">/tʃæt/</span> — trò chuyện</li>
+          <li><mark class="vocab">laptop</mark> <span class="ipa">/ˈlæpˌtɑːp/</span> — máy tính xách tay</li>
+          <li><mark class="vocab">monitor</mark> <span class="ipa">/ˈmɑnɪtər/</span> — màn hình</li>
+          <li><mark class="vocab">screen</mark> <span class="ipa">/skriːn/</span> — màn hình</li>
+          <li><mark class="vocab">keyboard</mark> <span class="ipa">/ˈkiˌbɔrd/</span> — bàn phím</li>
+          <li><mark class="vocab">mouse</mark> <span class="ipa">/maʊs/</span> — chuột</li>
+          <li><mark class="vocab">printer</mark> <span class="ipa">/ˈprɪntɚ/</span> — máy in</li>
+          <li><mark class="vocab">DVD</mark> <span class="ipa">/ˌdiːˌviːˈdiː/</span> — DVD</li>
+          <li><mark class="vocab">calculator</mark> <span class="ipa">/ˈkælkjəˌleɪtɚ/</span> — máy tính</li>
+          <li><mark class="vocab">username</mark> <span class="ipa">/ˈjuːzɚˌneɪm/</span> — tên người dùng</li>
+          <li><mark class="vocab">password</mark> <span class="ipa">/ˈpæswɝːd/</span> — mật khẩu</li>
+          <li><mark class="vocab">the Internet</mark> <span class="ipa">/ˈɪntɚˌnɛt/</span> — Internet</li>
+          <li><mark class="vocab">website</mark> <span class="ipa">/ˈwɛbˌsaɪt/</span> — trang web</li>
+          <li><mark class="vocab">web page</mark> <span class="ipa">/ˈwɛb ˌpeɪdʒ/</span> — trang web</li>
+          <li><mark class="vocab">online</mark> <span class="ipa">/ˌɑːnˈlaɪn/</span> — trực tuyến</li>
+          <li><mark class="vocab">email</mark> <span class="ipa">/ˈiːˌmeɪl/</span> — email</li>
+          <li><mark class="vocab">message</mark> <span class="ipa">/ˈmɛsɪdʒ/</span> — tin nhắn</li>
+          <li><mark class="vocab">video</mark> <span class="ipa">/ˈvɪdiˌoʊ/</span> — video</li>
+          <li><mark class="vocab">post</mark> <span class="ipa">/poʊst/</span> — bài đăng</li>
+          <li><mark class="vocab">comment</mark> <span class="ipa">/ˈkɑːmɛnt/</span> — bình luận</li>
+          <li><mark class="vocab">address</mark> <span class="ipa">/ˈædˌrɛs/, /əˈdrɛs/</span> — địa chỉ</li>
+          <li><mark class="vocab">file</mark> <span class="ipa">/faɪl/</span> — tập tin</li>
+          <li><mark class="vocab">document</mark> <span class="ipa">/ˈdɑːkjəmənt/</span> — tài liệu</li>
+          <li><mark class="vocab">download</mark> <span class="ipa">/ˌdaʊnˈloʊd/</span> — tải xuống</li>
+          <li><mark class="vocab">upload</mark> <span class="ipa">/ˌʌpˈloʊd/</span> — tải lên</li>
+          <li><mark class="vocab">click</mark> <span class="ipa">/klɪk/</span> — nhấp</li>
+          <li><mark class="vocab">email</mark> <span class="ipa">/ˈiːˌmeɪl/</span> — gửi email</li>
+          <li><mark class="vocab">google</mark> <span class="ipa">/ˈɡuːɡəl/</span> — tìm kiếm trên google</li>
+          <li><mark class="vocab">sign in</mark> <span class="ipa">/ˌsaɪn ˈɪn/</span> — đăng nhập</li>
+          <li><mark class="vocab">sign out</mark> <span class="ipa">/sˈaɪn ˈaʊt/</span> — đăng xuất</li>
+          <li><mark class="vocab">digital</mark> <span class="ipa">/ˈdɪdʒɪtl/</span> — kỹ thuật số</li>
+          <li><mark class="vocab">news</mark> <span class="ipa">/nuːz/ , /njuːz/</span> — tin tức</li>
+          <li><mark class="vocab">image</mark> <span class="ipa">/ˈɪmɪdʒ/</span> — hình ảnh</li>
+          <li><mark class="vocab">copy</mark> <span class="ipa">/ˈkɑːpi/</span> — sao chép</li>
+        </ul>
+      </section>
+
+      <div class="docs-pager">
+        <a href="../">← Tech &amp; Media</a>
+        <a href="../../">All topics →</a>
+      </div>
+    </article>
+  </div>
+  <script src="../../../../js/docs.js"></script>
+  <script src="../../../../js/exercise.js"></script>
+</body>
+</html>

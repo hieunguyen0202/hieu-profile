@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>B2 Exercise · Health &amp; Sports — The Quiet Corner</title>
+  <meta name="description" content="B2 reading exercise for Health &amp; Sports vocabulary with IPA and bilingual sentences.">
+  <link rel="icon" href="../../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../../"><span>✦</span> The Quiet Corner <span>✦</span></a>
+    <nav class="docs-series">
+      <a href="../../../../blog/web-security/">DevSecOps</a>
+      <a href="../../../../blog/kubestronaut/">Kubestronaut</a>
+      <a class="active" href="../../">English</a>
+    </nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-nav="english" data-docs-root="../../" data-active="health-sports">
+      <div class="docs-nav-label">English</div>
+      <ul class="docs-nav" id="docsNav">
+        <li><a href="../../">All topics</a></li>
+        <li><a href="../">Health &amp; Sports</a></li>
+        <li><a class="active" href="./">B2 Exercise</a></li>
+      </ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../../">Home</a>
+        <span>›</span>
+        <a href="../../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../../">English</a>
+        <span>›</span>
+        <a href="../">Health &amp; Sports</a>
+        <span>›</span>
+        <span>B2 Exercise</span>
+      </div>
+
+      <div class="vocab-topic-hero">
+        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 72 72' fill='none'%3E%3Crect width='72' height='72' rx='14' fill='%230b1220'/%3E%3Crect x='16' y='14' width='40' height='46' rx='6' stroke='%2322d3ee' stroke-width='2.5'/%3E%3Cpath d='M24 28h24M24 36h24M24 44h16' stroke='%23e4e4e7' stroke-width='2.5' stroke-linecap='round'/%3E%3Cpath d='M48 48l6 2-2 6-8-8 4 0z' fill='%2322d3ee'/%3E%3C/svg%3E" alt="" width="112" height="112">
+        <div>
+          <h1>B2 Exercise · Health &amp; Sports</h1>
+          <p class="lede">Reading passage with every new word from this level’s LanGeek lessons — IPA, highlights, sentence translation, and free TTS.</p>
+          <div class="docs-meta">
+            <span><strong>Words:</strong> 71</span>
+            <span><strong>Lessons:</strong> Health and Sickness · Working Out</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="ex-toolbar" id="exToolbar">
+        <label class="ex-toggle"><input type="checkbox" id="togHighlight" checked> Highlights</label>
+        <label class="ex-toggle"><input type="checkbox" id="togIpa" checked> IPA</label>
+        <label class="ex-toggle"><input type="checkbox" id="togVi"> Dịch câu (VI)</label>
+        <span class="ex-sep"></span>
+        <label class="ex-voice">Voice
+          <select id="voiceSelect" aria-label="TTS voice"></select>
+        </label>
+        <label class="ex-voice">Speed
+          <input id="rateRange" type="range" min="0.7" max="1.15" step="0.05" value="0.95">
+          <span id="rateVal">0.95</span>
+        </label>
+        <button type="button" class="ex-btn primary" id="btnPlay">▶ Read passage</button>
+        <button type="button" class="ex-btn" id="btnStop">Stop</button>
+      </div>
+      
+      <section class="ex-passage" id="passage" data-tts-root>
+          <p class="ex-sent" data-sent="1">
+            <span class="ex-en">In this B2 Health & Sports passage, notice <mark class="vocab" data-word="acupuncture">acupuncture</mark><span class="ipa">/ˈækjuˌpəŋktʃɝ/</span>, <mark class="vocab" data-word="clinic">clinic</mark><span class="ipa">/ˈkɫɪnɪk/</span>, <mark class="vocab" data-word="ward">ward</mark><span class="ipa">/ˈwɔɹd/</span>, and <mark class="vocab" data-word="emergency room">emergency room</mark><span class="ipa">/ɪmˈɜːdʒənsi ɹˈuːm/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Health &amp; Sports, hãy để ý châm cứu, phòng khám, khoa, và phòng cấp cứu.</span>
+          </p>
+          <p class="ex-sent" data-sent="2">
+            <span class="ex-en">In this B2 Health & Sports passage, notice <mark class="vocab" data-word="ENT">ENT</mark><span class="ipa">/ˈɛnt/</span>, <mark class="vocab" data-word="pharmacy">pharmacy</mark><span class="ipa">/ˈfɑɹməsi/</span>, <mark class="vocab" data-word="inpatient">inpatient</mark><span class="ipa">/ˈɪnˌpeɪʃənt/</span>, and <mark class="vocab" data-word="outpatient">outpatient</mark><span class="ipa">/ˈaʊtˌpeɪʃənt/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Health &amp; Sports, hãy để ý TMH, hiệu thuốc, bệnh nhân nội trú, và bệnh nhân ngoại trú.</span>
+          </p>
+          <p class="ex-sent" data-sent="3">
+            <span class="ex-en">In this B2 Health & Sports passage, notice <mark class="vocab" data-word="mental health">mental health</mark><span class="ipa">/mˈɛntəl hˈɛlθ/</span>, <mark class="vocab" data-word="phobia">phobia</mark><span class="ipa">/ˈfoʊbiə/</span>, <mark class="vocab" data-word="specialist">specialist</mark><span class="ipa">/ˈspɛʃəɫəst/, /ˈspɛʃəɫɪst/</span>, and <mark class="vocab" data-word="orthodontist">orthodontist</mark><span class="ipa">/ˌɔɹθəˈdɑntəst/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Health &amp; Sports, hãy để ý sức khỏe tâm thần, nỗi ám ảnh, chuyên gia, và bác sĩ chỉnh nha.</span>
+          </p>
+          <p class="ex-sent" data-sent="4">
+            <span class="ex-en">In this B2 Health & Sports passage, notice <mark class="vocab" data-word="paramedic">paramedic</mark><span class="ipa">/ˌpɛɹəˈmɛdɪk/</span>, <mark class="vocab" data-word="pediatrician">pediatrician</mark><span class="ipa">/ˌpidiəˈtɹɪʃən/</span>, <mark class="vocab" data-word="surgeon">surgeon</mark><span class="ipa">/ˈsɝdʒən/, /ˈsɝdʒɪn/</span>, and <mark class="vocab" data-word="plastic surgeon">plastic surgeon</mark><span class="ipa">/plˈæstɪk sˈɜːdʒən/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Health &amp; Sports, hãy để ý nhân viên y tế khẩn cấp, bác sĩ nhi khoa, bác sĩ phẫu thuật, và bác sĩ phẫu thuật thẩm mỹ.</span>
+          </p>
+          <p class="ex-sent" data-sent="5">
+            <span class="ex-en">In this B2 Health & Sports passage, notice <mark class="vocab" data-word="therapist">therapist</mark><span class="ipa">/ˈθɛɹəpəst/, /ˈθɛɹəpɪst/</span>, <mark class="vocab" data-word="procedure">procedure</mark><span class="ipa">/pɹəˈsidʒɝ/, /pɹoʊˈsidʒɝ/</span>, <mark class="vocab" data-word="protection">protection</mark><span class="ipa">/pɹəˈtɛkʃən/</span>, and <mark class="vocab" data-word="transplant">transplant</mark><span class="ipa">/tɹænsˈpɫænt/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Health &amp; Sports, hãy để ý nhà trị liệu, thủ tục, sự bảo vệ, và cấy ghép.</span>
+          </p>
+          <p class="ex-sent" data-sent="6">
+            <span class="ex-en">In this B2 Health & Sports passage, notice <mark class="vocab" data-word="surgery">surgery</mark><span class="ipa">/ˈsɝdʒɝi/</span>, <mark class="vocab" data-word="dose">dose</mark><span class="ipa">/ˈdoʊs/</span>, <mark class="vocab" data-word="painkiller">painkiller</mark><span class="ipa">/ˈpeɪnˌkɪɫɝ/</span>, and <mark class="vocab" data-word="therapy">therapy</mark><span class="ipa">/ˈθɛɹəpi/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Health &amp; Sports, hãy để ý phẫu thuật, liều, thuốc giảm đau, và trị liệu.</span>
+          </p>
+          <p class="ex-sent" data-sent="7">
+            <span class="ex-en">In this B2 Health & Sports passage, notice <mark class="vocab" data-word="X-ray">X-ray</mark><span class="ipa">/ˈɛksɹˈeɪ/</span>, <mark class="vocab" data-word="breathing apparatus">breathing apparatus</mark><span class="ipa">/bɹˈiːðɪŋ ˌæpɚɹˈæɾəs/</span>, <mark class="vocab" data-word="clinical">clinical</mark><span class="ipa">/ˈkɫɪnəkəɫ/, /ˈkɫɪnɪkəɫ/</span>, and <mark class="vocab" data-word="to come down with">come down with</mark><span class="ipa">/kˈʌm dˈaʊn wɪð/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Health &amp; Sports, hãy để ý hình chụp X-quang, thiết bị hô hấp, lâm sàng, và mắc phải.</span>
+          </p>
+          <p class="ex-sent" data-sent="8">
+            <span class="ex-en">In this B2 Health & Sports passage, notice <mark class="vocab" data-word="to heal">heal</mark><span class="ipa">/hiːl/</span>, <mark class="vocab" data-word="to [hit] the hay">[hit] the hay</mark><span class="ipa">/hˈɪt ðə hˈeɪ/</span>, <mark class="vocab" data-word="to implant">implant</mark><span class="ipa">/ˈɪmˌpɫænt/, /ˌɪmˈpɫænt/</span>, and <mark class="vocab" data-word="to inject">inject</mark><span class="ipa">/ˌɪnˈdʒɛkt/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Health &amp; Sports, hãy để ý chữa lành, đi ngủ, cấy ghép, và tiêm.</span>
+          </p>
+          <p class="ex-sent" data-sent="9">
+            <span class="ex-en">In this B2 Health & Sports passage, notice <mark class="vocab" data-word="to pass out">pass out</mark><span class="ipa">/pˈæs ˈaʊt/</span>, <mark class="vocab" data-word="to relieve">relieve</mark><span class="ipa">/ɹiˈɫiv/, /ɹɪˈɫiv/</span>, <mark class="vocab" data-word="to scan">scan</mark><span class="ipa">/skæn/</span>, and <mark class="vocab" data-word="to shower">shower</mark><span class="ipa">/ˈʃaʊɚ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Health &amp; Sports, hãy để ý ngất, giảm bớt, quét, và tắm vòi sen.</span>
+          </p>
+          <p class="ex-sent" data-sent="10">
+            <span class="ex-en">In this B2 Health & Sports passage, notice <mark class="vocab" data-word="aerobics">aerobics</mark><span class="ipa">/ɝˈoʊbɪks/</span>, <mark class="vocab" data-word="athletic">athletic</mark><span class="ipa">/æθˈlɛtɪk/</span>, <mark class="vocab" data-word="locker room">locker room</mark><span class="ipa">/lˈɑːkɚ ɹˈuːm/</span>, and <mark class="vocab" data-word="barbell">barbell</mark><span class="ipa">/ˈbɑrˌbel/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Health &amp; Sports, hãy để ý thể dục nhịp điệu, thuộc điền kinh, phòng thay đồ, và thanh tạ.</span>
+          </p>
+          <p class="ex-sent" data-sent="11">
+            <span class="ex-en">In this B2 Health & Sports passage, notice <mark class="vocab" data-word="dumbbell">dumbbell</mark><span class="ipa">/ˈdəmˌbɛɫ/</span>, <mark class="vocab" data-word="cross trainer">cross trainer</mark><span class="ipa">/kɹˈɔs tɹˈeɪnɚ/</span>, <mark class="vocab" data-word="horizontal bar">horizontal bar</mark><span class="ipa">/hˌɔːɹɪzˈɑːntəl bˈɑːɹ/</span>, and <mark class="vocab" data-word="jump rope">jump rope</mark><span class="ipa">/dʒˈʌmp ɹˈoʊp/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Health &amp; Sports, hãy để ý tạ tay, máy tập thể dục elip, xà ngang, và dây nhảy.</span>
+          </p>
+          <p class="ex-sent" data-sent="12">
+            <span class="ex-en">In this B2 Health & Sports passage, notice <mark class="vocab" data-word="mat">mat</mark><span class="ipa">/ˈmæt/</span>, <mark class="vocab" data-word="multigym">multigym</mark><span class="ipa">/mˈʌltɪdʒˌɪm/</span>, <mark class="vocab" data-word="pommel horse">pommel horse</mark><span class="ipa">/pˈɑːməl hˈɔːɹs/</span>, and <mark class="vocab" data-word="rowing machine">rowing machine</mark><span class="ipa">/ɹˈoʊɪŋ məʃˈiːn/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Health &amp; Sports, hãy để ý thảm, máy tập đa năng, ngựa tay cầm, và máy chèo thuyền.</span>
+          </p>
+          <p class="ex-sent" data-sent="13">
+            <span class="ex-en">In this B2 Health & Sports passage, notice <mark class="vocab" data-word="punching bag">punching bag</mark><span class="ipa">/pˈʌntʃɪŋ bˈæɡ/</span>, <mark class="vocab" data-word="trampoline">trampoline</mark><span class="ipa">/ˌtɹæmpəˈɫin/</span>, <mark class="vocab" data-word="treadmill">treadmill</mark><span class="ipa">/ˈtɹɛdˌmɪɫ/</span>, and <mark class="vocab" data-word="to bounce">bounce</mark><span class="ipa">/ˈbaʊns/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Health &amp; Sports, hãy để ý túi đấm bốc, tấm bạt lò xo, máy chạy bộ, và nảy lên.</span>
+          </p>
+          <p class="ex-sent" data-sent="14">
+            <span class="ex-en">In this B2 Health & Sports passage, notice <mark class="vocab" data-word="to hop">hop</mark><span class="ipa">/ˈhɑp/</span>, <mark class="vocab" data-word="to stretch">stretch</mark><span class="ipa">/ˈstɹɛtʃ/</span>, <mark class="vocab" data-word="to strengthen">strengthen</mark><span class="ipa">/ˈstɹɛŋθən/</span>, and <mark class="vocab" data-word="to squat">squat</mark><span class="ipa">/ˈskwɑt/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Health &amp; Sports, hãy để ý nhảy lò cò, kéo dài, tăng cường, và ngồi xổm.</span>
+          </p>
+          <p class="ex-sent" data-sent="15">
+            <span class="ex-en">In this B2 Health & Sports passage, notice <mark class="vocab" data-word="to sweat">sweat</mark><span class="ipa">/ˈswɛt/</span>, <mark class="vocab" data-word="chin-up">chin-up</mark><span class="ipa">/tʃˈɪnˈʌp/</span>, <mark class="vocab" data-word="push-up">push-up</mark><span class="ipa">/ˈpʊˌʃəp/</span>, and <mark class="vocab" data-word="sit-up">sit-up</mark><span class="ipa">/sˈɪtˈʌp/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Health &amp; Sports, hãy để ý đổ mồ hôi, hít xà, chống đẩy, và gập bụng.</span>
+          </p>
+          <p class="ex-sent" data-sent="16">
+            <span class="ex-en">In this B2 Health & Sports passage, notice <mark class="vocab" data-word="jumping jack">jumping jack</mark><span class="ipa">/dʒˈʌmpɪŋ dʒˈæk/</span>, <mark class="vocab" data-word="to massage">massage</mark><span class="ipa">/məˈsɑʒ/</span>, <mark class="vocab" data-word="muscle memory">muscle memory</mark><span class="ipa">/mˈʌsəl mˈɛmɚɹi/</span>, and <mark class="vocab" data-word="six-pack">six-pack</mark><span class="ipa">/ˈsɪkˌspæk/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Health &amp; Sports, hãy để ý nhảy dang tay chân, xoa bóp, trí nhớ cơ bắp, và cơ bụng sáu múi.</span>
+          </p>
+          <p class="ex-sent" data-sent="17">
+            <span class="ex-en">In this B2 Health & Sports passage, notice <mark class="vocab" data-word="martial arts">martial arts</mark><span class="ipa">/mˈɑːɹʃəl ˈɑːɹt/</span>, <mark class="vocab" data-word="to weight-lift">weight-lift</mark><span class="ipa">/wˈeɪtlˈɪft/</span>, <mark class="vocab" data-word="to work out">work out</mark><span class="ipa">/wˈɜːk ˈaʊt/</span>, and <mark class="vocab" data-word="pace">pace</mark><span class="ipa">/ˈpeɪs/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Health &amp; Sports, hãy để ý võ thuật, nâng tạ, tập thể dục, và nhịp độ.</span>
+          </p>
+          <p class="ex-sent" data-sent="18">
+            <span class="ex-en">In this B2 Health & Sports passage, notice <mark class="vocab" data-word="to burn off">burn off</mark><span class="ipa">/bˈɜːn ˈɔf/</span>, <mark class="vocab" data-word="dressing room">dressing room</mark><span class="ipa">/ˈdrɛsɪŋ ˌrum/</span>, and <mark class="vocab" data-word="pound for pound">pound for pound</mark><span class="ipa">/pˈaʊnd fɔːɹ pˈaʊnd/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Health &amp; Sports, hãy để ý đốt cháy, phòng thay đồ, và pound for pound.</span>
+          </p>
+      </section>
+
+      <section class="ex-vocab">
+        <h2>Word checklist · 71</h2>
+        <ul class="ex-vocab-list">
+          <li><mark class="vocab">acupuncture</mark> <span class="ipa">/ˈækjuˌpəŋktʃɝ/</span> — châm cứu</li>
+          <li><mark class="vocab">clinic</mark> <span class="ipa">/ˈkɫɪnɪk/</span> — phòng khám</li>
+          <li><mark class="vocab">ward</mark> <span class="ipa">/ˈwɔɹd/</span> — khoa</li>
+          <li><mark class="vocab">emergency room</mark> <span class="ipa">/ɪmˈɜːdʒənsi ɹˈuːm/</span> — phòng cấp cứu</li>
+          <li><mark class="vocab">ENT</mark> <span class="ipa">/ˈɛnt/</span> — TMH</li>
+          <li><mark class="vocab">pharmacy</mark> <span class="ipa">/ˈfɑɹməsi/</span> — hiệu thuốc</li>
+          <li><mark class="vocab">inpatient</mark> <span class="ipa">/ˈɪnˌpeɪʃənt/</span> — bệnh nhân nội trú</li>
+          <li><mark class="vocab">outpatient</mark> <span class="ipa">/ˈaʊtˌpeɪʃənt/</span> — bệnh nhân ngoại trú</li>
+          <li><mark class="vocab">mental health</mark> <span class="ipa">/mˈɛntəl hˈɛlθ/</span> — sức khỏe tâm thần</li>
+          <li><mark class="vocab">phobia</mark> <span class="ipa">/ˈfoʊbiə/</span> — nỗi ám ảnh</li>
+          <li><mark class="vocab">specialist</mark> <span class="ipa">/ˈspɛʃəɫəst/, /ˈspɛʃəɫɪst/</span> — chuyên gia</li>
+          <li><mark class="vocab">orthodontist</mark> <span class="ipa">/ˌɔɹθəˈdɑntəst/</span> — bác sĩ chỉnh nha</li>
+          <li><mark class="vocab">paramedic</mark> <span class="ipa">/ˌpɛɹəˈmɛdɪk/</span> — nhân viên y tế khẩn cấp</li>
+          <li><mark class="vocab">pediatrician</mark> <span class="ipa">/ˌpidiəˈtɹɪʃən/</span> — bác sĩ nhi khoa</li>
+          <li><mark class="vocab">surgeon</mark> <span class="ipa">/ˈsɝdʒən/, /ˈsɝdʒɪn/</span> — bác sĩ phẫu thuật</li>
+          <li><mark class="vocab">plastic surgeon</mark> <span class="ipa">/plˈæstɪk sˈɜːdʒən/</span> — bác sĩ phẫu thuật thẩm mỹ</li>
+          <li><mark class="vocab">therapist</mark> <span class="ipa">/ˈθɛɹəpəst/, /ˈθɛɹəpɪst/</span> — nhà trị liệu</li>
+          <li><mark class="vocab">procedure</mark> <span class="ipa">/pɹəˈsidʒɝ/, /pɹoʊˈsidʒɝ/</span> — thủ tục</li>
+          <li><mark class="vocab">protection</mark> <span class="ipa">/pɹəˈtɛkʃən/</span> — sự bảo vệ</li>
+          <li><mark class="vocab">transplant</mark> <span class="ipa">/tɹænsˈpɫænt/</span> — cấy ghép</li>
+          <li><mark class="vocab">surgery</mark> <span class="ipa">/ˈsɝdʒɝi/</span> — phẫu thuật</li>
+          <li><mark class="vocab">dose</mark> <span class="ipa">/ˈdoʊs/</span> — liều</li>
+          <li><mark class="vocab">painkiller</mark> <span class="ipa">/ˈpeɪnˌkɪɫɝ/</span> — thuốc giảm đau</li>
+          <li><mark class="vocab">therapy</mark> <span class="ipa">/ˈθɛɹəpi/</span> — trị liệu</li>
+          <li><mark class="vocab">X-ray</mark> <span class="ipa">/ˈɛksɹˈeɪ/</span> — hình chụp X-quang</li>
+          <li><mark class="vocab">breathing apparatus</mark> <span class="ipa">/bɹˈiːðɪŋ ˌæpɚɹˈæɾəs/</span> — thiết bị hô hấp</li>
+          <li><mark class="vocab">clinical</mark> <span class="ipa">/ˈkɫɪnəkəɫ/, /ˈkɫɪnɪkəɫ/</span> — lâm sàng</li>
+          <li><mark class="vocab">come down with</mark> <span class="ipa">/kˈʌm dˈaʊn wɪð/</span> — mắc phải</li>
+          <li><mark class="vocab">heal</mark> <span class="ipa">/hiːl/</span> — chữa lành</li>
+          <li><mark class="vocab">[hit] the hay</mark> <span class="ipa">/hˈɪt ðə hˈeɪ/</span> — đi ngủ</li>
+          <li><mark class="vocab">implant</mark> <span class="ipa">/ˈɪmˌpɫænt/, /ˌɪmˈpɫænt/</span> — cấy ghép</li>
+          <li><mark class="vocab">inject</mark> <span class="ipa">/ˌɪnˈdʒɛkt/</span> — tiêm</li>
+          <li><mark class="vocab">pass out</mark> <span class="ipa">/pˈæs ˈaʊt/</span> — ngất</li>
+          <li><mark class="vocab">relieve</mark> <span class="ipa">/ɹiˈɫiv/, /ɹɪˈɫiv/</span> — giảm bớt</li>
+          <li><mark class="vocab">scan</mark> <span class="ipa">/skæn/</span> — quét</li>
+          <li><mark class="vocab">shower</mark> <span class="ipa">/ˈʃaʊɚ/</span> — tắm vòi sen</li>
+          <li><mark class="vocab">aerobics</mark> <span class="ipa">/ɝˈoʊbɪks/</span> — thể dục nhịp điệu</li>
+          <li><mark class="vocab">athletic</mark> <span class="ipa">/æθˈlɛtɪk/</span> — thuộc điền kinh</li>
+          <li><mark class="vocab">locker room</mark> <span class="ipa">/lˈɑːkɚ ɹˈuːm/</span> — phòng thay đồ</li>
+          <li><mark class="vocab">barbell</mark> <span class="ipa">/ˈbɑrˌbel/</span> — thanh tạ</li>
+          <li><mark class="vocab">dumbbell</mark> <span class="ipa">/ˈdəmˌbɛɫ/</span> — tạ tay</li>
+          <li><mark class="vocab">cross trainer</mark> <span class="ipa">/kɹˈɔs tɹˈeɪnɚ/</span> — máy tập thể dục elip</li>
+          <li><mark class="vocab">horizontal bar</mark> <span class="ipa">/hˌɔːɹɪzˈɑːntəl bˈɑːɹ/</span> — xà ngang</li>
+          <li><mark class="vocab">jump rope</mark> <span class="ipa">/dʒˈʌmp ɹˈoʊp/</span> — dây nhảy</li>
+          <li><mark class="vocab">mat</mark> <span class="ipa">/ˈmæt/</span> — thảm</li>
+          <li><mark class="vocab">multigym</mark> <span class="ipa">/mˈʌltɪdʒˌɪm/</span> — máy tập đa năng</li>
+          <li><mark class="vocab">pommel horse</mark> <span class="ipa">/pˈɑːməl hˈɔːɹs/</span> — ngựa tay cầm</li>
+          <li><mark class="vocab">rowing machine</mark> <span class="ipa">/ɹˈoʊɪŋ məʃˈiːn/</span> — máy chèo thuyền</li>
+          <li><mark class="vocab">punching bag</mark> <span class="ipa">/pˈʌntʃɪŋ bˈæɡ/</span> — túi đấm bốc</li>
+          <li><mark class="vocab">trampoline</mark> <span class="ipa">/ˌtɹæmpəˈɫin/</span> — tấm bạt lò xo</li>
+          <li><mark class="vocab">treadmill</mark> <span class="ipa">/ˈtɹɛdˌmɪɫ/</span> — máy chạy bộ</li>
+          <li><mark class="vocab">bounce</mark> <span class="ipa">/ˈbaʊns/</span> — nảy lên</li>
+          <li><mark class="vocab">hop</mark> <span class="ipa">/ˈhɑp/</span> — nhảy lò cò</li>
+          <li><mark class="vocab">stretch</mark> <span class="ipa">/ˈstɹɛtʃ/</span> — kéo dài</li>
+          <li><mark class="vocab">strengthen</mark> <span class="ipa">/ˈstɹɛŋθən/</span> — tăng cường</li>
+          <li><mark class="vocab">squat</mark> <span class="ipa">/ˈskwɑt/</span> — ngồi xổm</li>
+          <li><mark class="vocab">sweat</mark> <span class="ipa">/ˈswɛt/</span> — đổ mồ hôi</li>
+          <li><mark class="vocab">chin-up</mark> <span class="ipa">/tʃˈɪnˈʌp/</span> — hít xà</li>
+          <li><mark class="vocab">push-up</mark> <span class="ipa">/ˈpʊˌʃəp/</span> — chống đẩy</li>
+          <li><mark class="vocab">sit-up</mark> <span class="ipa">/sˈɪtˈʌp/</span> — gập bụng</li>
+          <li><mark class="vocab">jumping jack</mark> <span class="ipa">/dʒˈʌmpɪŋ dʒˈæk/</span> — nhảy dang tay chân</li>
+          <li><mark class="vocab">massage</mark> <span class="ipa">/məˈsɑʒ/</span> — xoa bóp</li>
+          <li><mark class="vocab">muscle memory</mark> <span class="ipa">/mˈʌsəl mˈɛmɚɹi/</span> — trí nhớ cơ bắp</li>
+          <li><mark class="vocab">six-pack</mark> <span class="ipa">/ˈsɪkˌspæk/</span> — cơ bụng sáu múi</li>
+          <li><mark class="vocab">martial arts</mark> <span class="ipa">/mˈɑːɹʃəl ˈɑːɹt/</span> — võ thuật</li>
+          <li><mark class="vocab">weight-lift</mark> <span class="ipa">/wˈeɪtlˈɪft/</span> — nâng tạ</li>
+          <li><mark class="vocab">work out</mark> <span class="ipa">/wˈɜːk ˈaʊt/</span> — tập thể dục</li>
+          <li><mark class="vocab">pace</mark> <span class="ipa">/ˈpeɪs/</span> — nhịp độ</li>
+          <li><mark class="vocab">burn off</mark> <span class="ipa">/bˈɜːn ˈɔf/</span> — đốt cháy</li>
+          <li><mark class="vocab">dressing room</mark> <span class="ipa">/ˈdrɛsɪŋ ˌrum/</span> — phòng thay đồ</li>
+          <li><mark class="vocab">pound for pound</mark> <span class="ipa">/pˈaʊnd fɔːɹ pˈaʊnd/</span></li>
+        </ul>
+      </section>
+
+      <div class="docs-pager">
+        <a href="../">← Health &amp; Sports</a>
+        <a href="../../">All topics →</a>
+      </div>
+    </article>
+  </div>
+  <script src="../../../../js/docs.js"></script>
+  <script src="../../../../js/exercise.js"></script>
+</body>
+</html>

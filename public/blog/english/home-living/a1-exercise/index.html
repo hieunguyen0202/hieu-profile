@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A1 Exercise · Home &amp; Living — The Quiet Corner</title>
+  <meta name="description" content="A1 reading exercise for Home &amp; Living vocabulary with IPA and bilingual sentences.">
+  <link rel="icon" href="../../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../../"><span>✦</span> The Quiet Corner <span>✦</span></a>
+    <nav class="docs-series">
+      <a href="../../../../blog/web-security/">DevSecOps</a>
+      <a href="../../../../blog/kubestronaut/">Kubestronaut</a>
+      <a class="active" href="../../">English</a>
+    </nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-nav="english" data-docs-root="../../" data-active="home-living">
+      <div class="docs-nav-label">English</div>
+      <ul class="docs-nav" id="docsNav">
+        <li><a href="../../">All topics</a></li>
+        <li><a href="../">Home &amp; Living</a></li>
+        <li><a class="active" href="./">A1 Exercise</a></li>
+      </ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../../">Home</a>
+        <span>›</span>
+        <a href="../../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../../">English</a>
+        <span>›</span>
+        <a href="../">Home &amp; Living</a>
+        <span>›</span>
+        <span>A1 Exercise</span>
+      </div>
+
+      <div class="vocab-topic-hero">
+        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 72 72' fill='none'%3E%3Crect width='72' height='72' rx='14' fill='%230b1220'/%3E%3Crect x='16' y='14' width='40' height='46' rx='6' stroke='%2322d3ee' stroke-width='2.5'/%3E%3Cpath d='M24 28h24M24 36h24M24 44h16' stroke='%23e4e4e7' stroke-width='2.5' stroke-linecap='round'/%3E%3Cpath d='M48 48l6 2-2 6-8-8 4 0z' fill='%2322d3ee'/%3E%3C/svg%3E" alt="" width="112" height="112">
+        <div>
+          <h1>A1 Exercise · Home &amp; Living</h1>
+          <p class="lede">Reading passage with every new word from this level’s LanGeek lessons — IPA, highlights, sentence translation, and free TTS.</p>
+          <div class="docs-meta">
+            <span><strong>Words:</strong> 49</span>
+            <span><strong>Lessons:</strong> Furniture and Home Appliances · House and Apartment · Household Items</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="ex-toolbar" id="exToolbar">
+        <label class="ex-toggle"><input type="checkbox" id="togHighlight" checked> Highlights</label>
+        <label class="ex-toggle"><input type="checkbox" id="togIpa" checked> IPA</label>
+        <label class="ex-toggle"><input type="checkbox" id="togVi"> Dịch câu (VI)</label>
+        <span class="ex-sep"></span>
+        <label class="ex-voice">Voice
+          <select id="voiceSelect" aria-label="TTS voice"></select>
+        </label>
+        <label class="ex-voice">Speed
+          <input id="rateRange" type="range" min="0.7" max="1.15" step="0.05" value="0.95">
+          <span id="rateVal">0.95</span>
+        </label>
+        <button type="button" class="ex-btn primary" id="btnPlay">▶ Read passage</button>
+        <button type="button" class="ex-btn" id="btnStop">Stop</button>
+      </div>
+      
+      <section class="ex-passage" id="passage" data-tts-root>
+          <p class="ex-sent" data-sent="1">
+            <span class="ex-en">In this A1 Home & Living passage, notice <mark class="vocab" data-word="desk">desk</mark><span class="ipa">/dɛsk/</span>, <mark class="vocab" data-word="chair">chair</mark><span class="ipa">/tʃɛr/</span>, <mark class="vocab" data-word="table">table</mark><span class="ipa">/ˈteɪbəl/</span>, and <mark class="vocab" data-word="sofa">sofa</mark><span class="ipa">/ˈsoʊfə/</span>.</span>
+            <span class="ex-vi">Trong đoạn A1 về Home &amp; Living, hãy để ý bàn làm việc, ghế, bàn, và ghế sofa.</span>
+          </p>
+          <p class="ex-sent" data-sent="2">
+            <span class="ex-en">In this A1 Home & Living passage, notice <mark class="vocab" data-word="bed">bed</mark><span class="ipa">/bɛd/</span>, <mark class="vocab" data-word="cabinet">cabinet</mark><span class="ipa">/ˈkæbənɪt/</span>, <mark class="vocab" data-word="refrigerator">refrigerator</mark><span class="ipa">/rɪˈfrɪdʒəˌreɪtɚ/</span>, and <mark class="vocab" data-word="television">television</mark><span class="ipa">/ˈtɛləˌvɪʒən/</span>.</span>
+            <span class="ex-vi">Trong đoạn A1 về Home &amp; Living, hãy để ý giường, tủ, tủ lạnh, và truyền hình.</span>
+          </p>
+          <p class="ex-sent" data-sent="3">
+            <span class="ex-en">In this A1 <mark class="vocab" data-word="home">home</mark><span class="ipa">/hoʊm/</span> & Living passage, notice <mark class="vocab" data-word="stove">stove</mark><span class="ipa">/stoʊv/</span>, <mark class="vocab" data-word="building">building</mark><span class="ipa">/ˈbɪldɪŋ/</span>, <mark class="vocab" data-word="house">house</mark><span class="ipa">/haʊs/</span>, and home.</span>
+            <span class="ex-vi">Trong đoạn A1 về Home &amp; Living, hãy để ý bếp, tòa nhà, nhà, và nhà.</span>
+          </p>
+          <p class="ex-sent" data-sent="4">
+            <span class="ex-en">In this A1 Home & Living passage, notice <mark class="vocab" data-word="apartment">apartment</mark><span class="ipa">/əˈpɑːrtmənt/</span>, <mark class="vocab" data-word="floor">floor</mark><span class="ipa">/flɔːr/</span>, <mark class="vocab" data-word="door">door</mark><span class="ipa">/dɔːr/</span>, and <mark class="vocab" data-word="window">window</mark><span class="ipa">/ˈwɪndoʊ/</span>.</span>
+            <span class="ex-vi">Trong đoạn A1 về Home &amp; Living, hãy để ý căn hộ, sàn, cửa,cánh cửa, và cửa sổ.</span>
+          </p>
+          <p class="ex-sent" data-sent="5">
+            <span class="ex-en">In this A1 Home & Living passage, notice <mark class="vocab" data-word="wall">wall</mark><span class="ipa">/wɔːl/</span>, <mark class="vocab" data-word="room">room</mark><span class="ipa">/ruːm/ , /rʊm/</span>, <mark class="vocab" data-word="roof">roof</mark><span class="ipa">/ruːf/ , /rʊf/</span>, and <mark class="vocab" data-word="ceiling">ceiling</mark><span class="ipa">/ˈsiːlɪŋ/</span>.</span>
+            <span class="ex-vi">Trong đoạn A1 về Home &amp; Living, hãy để ý tường, phòng, mái nhà, và trần nhà.</span>
+          </p>
+          <p class="ex-sent" data-sent="6">
+            <span class="ex-en">In this A1 Home & Living passage, notice <mark class="vocab" data-word="living room">living room</mark><span class="ipa">/ˈlɪvɪŋ ruːm/</span>, <mark class="vocab" data-word="dining room">dining room</mark><span class="ipa">/ˈdaɪnɪŋ ruːm/</span>, <mark class="vocab" data-word="kitchen">kitchen</mark><span class="ipa">/ˈkɪtʃən/</span>, and <mark class="vocab" data-word="bedroom">bedroom</mark><span class="ipa">/ˈbɛdruːm/</span>.</span>
+            <span class="ex-vi">Trong đoạn A1 về Home &amp; Living, hãy để ý phòng khách, phòng ăn, nhà bếp, và phòng ngủ.</span>
+          </p>
+          <p class="ex-sent" data-sent="7">
+            <span class="ex-en">In this A1 Home & Living passage, notice <mark class="vocab" data-word="bathroom">bathroom</mark><span class="ipa">/ˈbæθruːm/ , /ˈbæθrʊm/</span>, <mark class="vocab" data-word="garden">garden</mark><span class="ipa">/ˈɡɑːrdən/</span>, <mark class="vocab" data-word="upstairs">upstairs</mark><span class="ipa">/ˌʌpˈstɛrz/</span>, and <mark class="vocab" data-word="downstairs">downstairs</mark><span class="ipa">/ˌdaʊnˈstɛrz/</span>.</span>
+            <span class="ex-vi">Trong đoạn A1 về Home &amp; Living, hãy để ý phòng tắm, vườn, ở trên, và ở dưới.</span>
+          </p>
+          <p class="ex-sent" data-sent="8">
+            <span class="ex-en">In this A1 Home & Living passage, notice <mark class="vocab" data-word="closet">closet</mark><span class="ipa">/ˈklɑːzɪt/</span>, <mark class="vocab" data-word="part">part</mark><span class="ipa">/pɑːrt/</span>, <mark class="vocab" data-word="elevator">elevator</mark><span class="ipa">/ˈɛləˌveɪtɚ/</span>, and <mark class="vocab" data-word="yard">yard</mark><span class="ipa">/jɑrd/</span>.</span>
+            <span class="ex-vi">Trong đoạn A1 về Home &amp; Living, hãy để ý tủ quần áo, phần, thang máy, và sân vườn.</span>
+          </p>
+          <p class="ex-sent" data-sent="9">
+            <span class="ex-en">In this A1 Home & Living passage, notice <mark class="vocab" data-word="dish">dish</mark><span class="ipa">/dɪʃ/</span>, <mark class="vocab" data-word="spoon">spoon</mark><span class="ipa">/spuːn/</span>, <mark class="vocab" data-word="fork">fork</mark><span class="ipa">/fɔːrk/</span>, and <mark class="vocab" data-word="knife">knife</mark><span class="ipa">/naɪf/</span>.</span>
+            <span class="ex-vi">Trong đoạn A1 về Home &amp; Living, hãy để ý đĩa, muỗng, nĩa, và dao.</span>
+          </p>
+          <p class="ex-sent" data-sent="10">
+            <span class="ex-en">In this A1 Home & Living passage, notice <mark class="vocab" data-word="plate">plate</mark><span class="ipa">/pleɪt/</span>, <mark class="vocab" data-word="glass">glass</mark><span class="ipa">/ɡlæs/</span>, <mark class="vocab" data-word="bottle">bottle</mark><span class="ipa">/ˈbɑːtəl/</span>, and <mark class="vocab" data-word="cup">cup</mark><span class="ipa">/kʌp/</span>.</span>
+            <span class="ex-vi">Trong đoạn A1 về Home &amp; Living, hãy để ý đĩa, ly, chai, và tách.</span>
+          </p>
+          <p class="ex-sent" data-sent="11">
+            <span class="ex-en">In this A1 Home & Living passage, notice <mark class="vocab" data-word="soap">soap</mark><span class="ipa">/soʊp/</span>, <mark class="vocab" data-word="brush">brush</mark><span class="ipa">/brʌʃ/</span>, <mark class="vocab" data-word="toothbrush">toothbrush</mark><span class="ipa">/ˈtuːθˌbrʌʃ/</span>, and <mark class="vocab" data-word="pillow">pillow</mark><span class="ipa">/ˈpɪloʊ/</span>.</span>
+            <span class="ex-vi">Trong đoạn A1 về Home &amp; Living, hãy để ý xà phòng, bàn chải, bàn chải đánh răng, và gối.</span>
+          </p>
+          <p class="ex-sent" data-sent="12">
+            <span class="ex-en">In this A1 Home & Living passage, notice <mark class="vocab" data-word="trash can">trash can</mark><span class="ipa">/ˈtræʃ ˌkæn/</span>, <mark class="vocab" data-word="box">box</mark><span class="ipa">/bɑːks/</span>, <mark class="vocab" data-word="thing">thing</mark><span class="ipa">/θɪŋ/</span>, and <mark class="vocab" data-word="ball">ball</mark><span class="ipa">/bɔːl/</span>.</span>
+            <span class="ex-vi">Trong đoạn A1 về Home &amp; Living, hãy để ý thùng rác, hộp, thứ, và quả bóng.</span>
+          </p>
+          <p class="ex-sent" data-sent="13">
+            <span class="ex-en">In this A1 Home & Living passage, notice <mark class="vocab" data-word="doll">doll</mark><span class="ipa">/dɑːl/</span>.</span>
+            <span class="ex-vi">Trong đoạn A1 về Home &amp; Living, hãy để ý búp bê.</span>
+          </p>
+      </section>
+
+      <section class="ex-vocab">
+        <h2>Word checklist · 49</h2>
+        <ul class="ex-vocab-list">
+          <li><mark class="vocab">desk</mark> <span class="ipa">/dɛsk/</span> — bàn làm việc</li>
+          <li><mark class="vocab">chair</mark> <span class="ipa">/tʃɛr/</span> — ghế</li>
+          <li><mark class="vocab">table</mark> <span class="ipa">/ˈteɪbəl/</span> — bàn</li>
+          <li><mark class="vocab">sofa</mark> <span class="ipa">/ˈsoʊfə/</span> — ghế sofa</li>
+          <li><mark class="vocab">bed</mark> <span class="ipa">/bɛd/</span> — giường</li>
+          <li><mark class="vocab">cabinet</mark> <span class="ipa">/ˈkæbənɪt/</span> — tủ</li>
+          <li><mark class="vocab">refrigerator</mark> <span class="ipa">/rɪˈfrɪdʒəˌreɪtɚ/</span> — tủ lạnh</li>
+          <li><mark class="vocab">television</mark> <span class="ipa">/ˈtɛləˌvɪʒən/</span> — truyền hình</li>
+          <li><mark class="vocab">stove</mark> <span class="ipa">/stoʊv/</span> — bếp</li>
+          <li><mark class="vocab">building</mark> <span class="ipa">/ˈbɪldɪŋ/</span> — tòa nhà</li>
+          <li><mark class="vocab">house</mark> <span class="ipa">/haʊs/</span> — nhà</li>
+          <li><mark class="vocab">home</mark> <span class="ipa">/hoʊm/</span> — nhà</li>
+          <li><mark class="vocab">apartment</mark> <span class="ipa">/əˈpɑːrtmənt/</span> — căn hộ</li>
+          <li><mark class="vocab">floor</mark> <span class="ipa">/flɔːr/</span> — sàn</li>
+          <li><mark class="vocab">door</mark> <span class="ipa">/dɔːr/</span> — cửa,cánh cửa</li>
+          <li><mark class="vocab">window</mark> <span class="ipa">/ˈwɪndoʊ/</span> — cửa sổ</li>
+          <li><mark class="vocab">wall</mark> <span class="ipa">/wɔːl/</span> — tường</li>
+          <li><mark class="vocab">room</mark> <span class="ipa">/ruːm/ , /rʊm/</span> — phòng</li>
+          <li><mark class="vocab">roof</mark> <span class="ipa">/ruːf/ , /rʊf/</span> — mái nhà</li>
+          <li><mark class="vocab">ceiling</mark> <span class="ipa">/ˈsiːlɪŋ/</span> — trần nhà</li>
+          <li><mark class="vocab">living room</mark> <span class="ipa">/ˈlɪvɪŋ ruːm/</span> — phòng khách</li>
+          <li><mark class="vocab">dining room</mark> <span class="ipa">/ˈdaɪnɪŋ ruːm/</span> — phòng ăn</li>
+          <li><mark class="vocab">kitchen</mark> <span class="ipa">/ˈkɪtʃən/</span> — nhà bếp</li>
+          <li><mark class="vocab">bedroom</mark> <span class="ipa">/ˈbɛdruːm/</span> — phòng ngủ</li>
+          <li><mark class="vocab">bathroom</mark> <span class="ipa">/ˈbæθruːm/ , /ˈbæθrʊm/</span> — phòng tắm</li>
+          <li><mark class="vocab">garden</mark> <span class="ipa">/ˈɡɑːrdən/</span> — vườn</li>
+          <li><mark class="vocab">upstairs</mark> <span class="ipa">/ˌʌpˈstɛrz/</span> — ở trên</li>
+          <li><mark class="vocab">downstairs</mark> <span class="ipa">/ˌdaʊnˈstɛrz/</span> — ở dưới</li>
+          <li><mark class="vocab">closet</mark> <span class="ipa">/ˈklɑːzɪt/</span> — tủ quần áo</li>
+          <li><mark class="vocab">part</mark> <span class="ipa">/pɑːrt/</span> — phần</li>
+          <li><mark class="vocab">elevator</mark> <span class="ipa">/ˈɛləˌveɪtɚ/</span> — thang máy</li>
+          <li><mark class="vocab">yard</mark> <span class="ipa">/jɑrd/</span> — sân vườn</li>
+          <li><mark class="vocab">dish</mark> <span class="ipa">/dɪʃ/</span> — đĩa</li>
+          <li><mark class="vocab">spoon</mark> <span class="ipa">/spuːn/</span> — muỗng</li>
+          <li><mark class="vocab">fork</mark> <span class="ipa">/fɔːrk/</span> — nĩa</li>
+          <li><mark class="vocab">knife</mark> <span class="ipa">/naɪf/</span> — dao</li>
+          <li><mark class="vocab">plate</mark> <span class="ipa">/pleɪt/</span> — đĩa</li>
+          <li><mark class="vocab">glass</mark> <span class="ipa">/ɡlæs/</span> — ly</li>
+          <li><mark class="vocab">bottle</mark> <span class="ipa">/ˈbɑːtəl/</span> — chai</li>
+          <li><mark class="vocab">cup</mark> <span class="ipa">/kʌp/</span> — tách</li>
+          <li><mark class="vocab">soap</mark> <span class="ipa">/soʊp/</span> — xà phòng</li>
+          <li><mark class="vocab">brush</mark> <span class="ipa">/brʌʃ/</span> — bàn chải</li>
+          <li><mark class="vocab">toothbrush</mark> <span class="ipa">/ˈtuːθˌbrʌʃ/</span> — bàn chải đánh răng</li>
+          <li><mark class="vocab">pillow</mark> <span class="ipa">/ˈpɪloʊ/</span> — gối</li>
+          <li><mark class="vocab">trash can</mark> <span class="ipa">/ˈtræʃ ˌkæn/</span> — thùng rác</li>
+          <li><mark class="vocab">box</mark> <span class="ipa">/bɑːks/</span> — hộp</li>
+          <li><mark class="vocab">thing</mark> <span class="ipa">/θɪŋ/</span> — thứ</li>
+          <li><mark class="vocab">ball</mark> <span class="ipa">/bɔːl/</span> — quả bóng</li>
+          <li><mark class="vocab">doll</mark> <span class="ipa">/dɑːl/</span> — búp bê</li>
+        </ul>
+      </section>
+
+      <div class="docs-pager">
+        <a href="../">← Home &amp; Living</a>
+        <a href="../../">All topics →</a>
+      </div>
+    </article>
+  </div>
+  <script src="../../../../js/docs.js"></script>
+  <script src="../../../../js/exercise.js"></script>
+</body>
+</html>

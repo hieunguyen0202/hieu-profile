@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>B2 Exercise · Body &amp; Appearance — The Quiet Corner</title>
+  <meta name="description" content="B2 reading exercise for Body &amp; Appearance vocabulary with IPA and bilingual sentences.">
+  <link rel="icon" href="../../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../../"><span>✦</span> The Quiet Corner <span>✦</span></a>
+    <nav class="docs-series">
+      <a href="../../../../blog/web-security/">DevSecOps</a>
+      <a href="../../../../blog/kubestronaut/">Kubestronaut</a>
+      <a class="active" href="../../">English</a>
+    </nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-nav="english" data-docs-root="../../" data-active="body-appearance">
+      <div class="docs-nav-label">English</div>
+      <ul class="docs-nav" id="docsNav">
+        <li><a href="../../">All topics</a></li>
+        <li><a href="../">Body &amp; Appearance</a></li>
+        <li><a class="active" href="./">B2 Exercise</a></li>
+      </ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../../">Home</a>
+        <span>›</span>
+        <a href="../../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../../">English</a>
+        <span>›</span>
+        <a href="../">Body &amp; Appearance</a>
+        <span>›</span>
+        <span>B2 Exercise</span>
+      </div>
+
+      <div class="vocab-topic-hero">
+        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 72 72' fill='none'%3E%3Crect width='72' height='72' rx='14' fill='%230b1220'/%3E%3Crect x='16' y='14' width='40' height='46' rx='6' stroke='%2322d3ee' stroke-width='2.5'/%3E%3Cpath d='M24 28h24M24 36h24M24 44h16' stroke='%23e4e4e7' stroke-width='2.5' stroke-linecap='round'/%3E%3Cpath d='M48 48l6 2-2 6-8-8 4 0z' fill='%2322d3ee'/%3E%3C/svg%3E" alt="" width="112" height="112">
+        <div>
+          <h1>B2 Exercise · Body &amp; Appearance</h1>
+          <p class="lede">Reading passage with every new word from this level’s LanGeek lessons — IPA, highlights, sentence translation, and free TTS.</p>
+          <div class="docs-meta">
+            <span><strong>Words:</strong> 130</span>
+            <span><strong>Lessons:</strong> Bodily Actions · Personality · Self-care Products · The Human Body</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="ex-toolbar" id="exToolbar">
+        <label class="ex-toggle"><input type="checkbox" id="togHighlight" checked> Highlights</label>
+        <label class="ex-toggle"><input type="checkbox" id="togIpa" checked> IPA</label>
+        <label class="ex-toggle"><input type="checkbox" id="togVi"> Dịch câu (VI)</label>
+        <span class="ex-sep"></span>
+        <label class="ex-voice">Voice
+          <select id="voiceSelect" aria-label="TTS voice"></select>
+        </label>
+        <label class="ex-voice">Speed
+          <input id="rateRange" type="range" min="0.7" max="1.15" step="0.05" value="0.95">
+          <span id="rateVal">0.95</span>
+        </label>
+        <button type="button" class="ex-btn primary" id="btnPlay">▶ Read passage</button>
+        <button type="button" class="ex-btn" id="btnStop">Stop</button>
+      </div>
+      
+      <section class="ex-passage" id="passage" data-tts-root>
+          <p class="ex-sent" data-sent="1">
+            <span class="ex-en">In this B2 Body & Appearance passage, notice <mark class="vocab" data-word="to beat">beat</mark><span class="ipa">/biːt/</span>, <mark class="vocab" data-word="to clap">clap</mark><span class="ipa">/ˈkɫæp/</span>, <mark class="vocab" data-word="to drag">drag</mark><span class="ipa">/dræɡ/</span>, and <mark class="vocab" data-word="to grab">grab</mark><span class="ipa">/ˈɡɹæb/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Body &amp; Appearance, hãy để ý đánh, vỗ tay, kéo, và nắm lấy.</span>
+          </p>
+          <p class="ex-sent" data-sent="2">
+            <span class="ex-en">In this B2 Body & Appearance passage, notice <mark class="vocab" data-word="to punch">punch</mark><span class="ipa">/pʌntʃ/</span>, <mark class="vocab" data-word="to shake">shake</mark><span class="ipa">/ʃeɪk/</span>, <mark class="vocab" data-word="to bend">bend</mark><span class="ipa">/bɛnd/</span>, and <mark class="vocab" data-word="to bow">bow</mark><span class="ipa">/baʊ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Body &amp; Appearance, hãy để ý đấm, bắt tay, cúi xuống, và cúi chào.</span>
+          </p>
+          <p class="ex-sent" data-sent="3">
+            <span class="ex-en">In this B2 Body & Appearance passage, notice <mark class="vocab" data-word="to lean">lean</mark><span class="ipa">/ˈɫin/</span>, <mark class="vocab" data-word="to slouch">slouch</mark><span class="ipa">/ˈsɫaʊtʃ/</span>, <mark class="vocab" data-word="to kneel">kneel</mark><span class="ipa">/ˈniɫ/</span>, and <mark class="vocab" data-word="to leap">leap</mark><span class="ipa">/ˈɫip/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Body &amp; Appearance, hãy để ý tựa vào, ngồi khom lưng, quỳ xuống, và nhảy.</span>
+          </p>
+          <p class="ex-sent" data-sent="4">
+            <span class="ex-en">In this B2 Body & Appearance passage, notice <mark class="vocab" data-word="to tiptoe">tiptoe</mark><span class="ipa">/ˈtɪpˌtoʊ/</span>, <mark class="vocab" data-word="to crawl">crawl</mark><span class="ipa">/ˈkɹɔɫ/</span>, <mark class="vocab" data-word="to lie down">lie down</mark><span class="ipa">/lˈaɪ dˈaʊn/</span>, and <mark class="vocab" data-word="to blink">blink</mark><span class="ipa">/ˈbɫɪŋk/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Body &amp; Appearance, hãy để ý đi nhón chân, bò, nằm xuống, và nháy mắt.</span>
+          </p>
+          <p class="ex-sent" data-sent="5">
+            <span class="ex-en">In this B2 Body & Appearance passage, notice <mark class="vocab" data-word="to gaze">gaze</mark><span class="ipa">/ˈɡeɪz/</span>, <mark class="vocab" data-word="to squint">squint</mark><span class="ipa">/ˈskwɪnt/</span>, <mark class="vocab" data-word="to stare">stare</mark><span class="ipa">/ˈstɛɹ/</span>, and <mark class="vocab" data-word="to wink">wink</mark><span class="ipa">/ˈwɪŋk/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Body &amp; Appearance, hãy để ý nhìn chằm chằm, nheo mắt, nhìn chằm chằm, và nháy mắt.</span>
+          </p>
+          <p class="ex-sent" data-sent="6">
+            <span class="ex-en">In this B2 Body & Appearance passage, notice <mark class="vocab" data-word="to chuckle">chuckle</mark><span class="ipa">/ˈtʃəkəɫ/</span>, <mark class="vocab" data-word="to giggle">giggle</mark><span class="ipa">/ˈɡɪɡəɫ/</span>, <mark class="vocab" data-word="to smirk">smirk</mark><span class="ipa">/ˈsmɝk/</span>, and <mark class="vocab" data-word="to march">march</mark><span class="ipa">/mɑrtʃ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Body &amp; Appearance, hãy để ý cười khúc khích, cười khúc khích, cười nửa miệng, và đi đều.</span>
+          </p>
+          <p class="ex-sent" data-sent="7">
+            <span class="ex-en">In this B2 Body & Appearance passage, notice <mark class="vocab" data-word="to nod">nod</mark><span class="ipa">/ˈnɑd/</span>, <mark class="vocab" data-word="to pace">pace</mark><span class="ipa">/ˈpeɪs/</span>, <mark class="vocab" data-word="to trip">trip</mark><span class="ipa">/trɪp/</span>, and <mark class="vocab" data-word="to [give] {sb} bunny ears">[give] {sb} bunny ears</mark><span class="ipa">/ɡˈɪv ˌɛsbˈiː bˈʌni ˈɪɹz/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Body &amp; Appearance, hãy để ý gật đầu, đi tới đi lui, vấp, và làm tai thỏ sau đầu ai.</span>
+          </p>
+          <p class="ex-sent" data-sent="8">
+            <span class="ex-en">In this B2 Body & Appearance passage, notice <mark class="vocab" data-word="to crouch">crouch</mark><span class="ipa">/ˈkɹaʊtʃ/</span>, <mark class="vocab" data-word="to wake">wake</mark><span class="ipa">/ˈweɪk/</span>, <mark class="vocab" data-word="arrogant">arrogant</mark><span class="ipa">/ˈɛɹəɡənt/</span>, and <mark class="vocab" data-word="bold">bold</mark><span class="ipa">/ˈboʊɫd/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Body &amp; Appearance, hãy để ý ngồi xổm, tỉnh dậy, kiêu ngạo, và táo bạo.</span>
+          </p>
+          <p class="ex-sent" data-sent="9">
+            <span class="ex-en">In this B2 Body & Appearance passage, notice <mark class="vocab" data-word="caring">caring</mark><span class="ipa">/ˈkɛɹɪŋ/</span>, <mark class="vocab" data-word="decent">decent</mark><span class="ipa">/ˈdisənt/</span>, <mark class="vocab" data-word="dishonest">dishonest</mark><span class="ipa">/dɪˈsɑnəst/</span>, and <mark class="vocab" data-word="easy-going">easy-going</mark><span class="ipa">/ˈiːziɡˈoʊɪŋ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Body &amp; Appearance, hãy để ý chu đáo, đàng hoàng, không trung thực, và thoải mái.</span>
+          </p>
+          <p class="ex-sent" data-sent="10">
+            <span class="ex-en">In this B2 Body & Appearance passage, notice <mark class="vocab" data-word="energetic">energetic</mark><span class="ipa">/ˌɛnɝˈdʒɛtɪk/</span>, <mark class="vocab" data-word="enthusiastic">enthusiastic</mark><span class="ipa">/ɪnˌθuziˈæstɪk/</span>, <mark class="vocab" data-word="dynamic">dynamic</mark><span class="ipa">/daɪˈnæmɪk/</span>, and <mark class="vocab" data-word="forgetful">forgetful</mark><span class="ipa">/fɝˈɡɛtfəɫ/, /fɔɹˈɡɛtfəɫ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Body &amp; Appearance, hãy để ý năng động, nhiệt tình, năng động, và hay quên.</span>
+          </p>
+          <p class="ex-sent" data-sent="11">
+            <span class="ex-en">In this B2 Body & Appearance passage, notice <mark class="vocab" data-word="greedy">greedy</mark><span class="ipa">/ˈɡɹidi/</span>, <mark class="vocab" data-word="icy">icy</mark><span class="ipa">/ˈaɪsi/</span>, <mark class="vocab" data-word="impatient">impatient</mark><span class="ipa">/ˌɪmˈpeɪʃənt/</span>, and <mark class="vocab" data-word="lively">lively</mark><span class="ipa">/ˈɫaɪvɫi/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Body &amp; Appearance, hãy để ý tham lam, lạnh lùng, thiếu kiên nhẫn, và sôi nổi.</span>
+          </p>
+          <p class="ex-sent" data-sent="12">
+            <span class="ex-en">In this B2 Body & Appearance passage, notice <mark class="vocab" data-word="logical">logical</mark><span class="ipa">/ˈɫɑdʒɪkəɫ/</span>, <mark class="vocab" data-word="modest">modest</mark><span class="ipa">/mɑdəst/</span>, <mark class="vocab" data-word="moody">moody</mark><span class="ipa">/ˈmudi/</span>, and <mark class="vocab" data-word="moral">moral</mark><span class="ipa">/ˈmɔɹəɫ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Body &amp; Appearance, hãy để ý hợp lý, khiêm tốn, thất thường, và đạo đức.</span>
+          </p>
+          <p class="ex-sent" data-sent="13">
+            <span class="ex-en">In this B2 Body & Appearance passage, notice <mark class="vocab" data-word="nosy">nosy</mark><span class="ipa">/ˈnoʊzi/</span>, <mark class="vocab" data-word="optimistic">optimistic</mark><span class="ipa">/ˌɑptəˈmɪstɪk/</span>, <mark class="vocab" data-word="pessimistic">pessimistic</mark><span class="ipa">/ˌpɛsəˈmɪstɪk/</span>, and <mark class="vocab" data-word="passionate">passionate</mark><span class="ipa">/ˈpæʃənət/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Body &amp; Appearance, hãy để ý tò mò, lạc quan, bi quan, và đam mê.</span>
+          </p>
+          <p class="ex-sent" data-sent="14">
+            <span class="ex-en">In this B2 Body & Appearance passage, notice <mark class="vocab" data-word="practical">practical</mark><span class="ipa">/ˈpræktɪkəl/</span>, <mark class="vocab" data-word="reasonable">reasonable</mark><span class="ipa">/ˈɹizənəbəɫ/, /ˈɹiznəbəɫ/</span>, <mark class="vocab" data-word="respectable">respectable</mark><span class="ipa">/ɹiˈspɛktəbəɫ/, /ɹɪˈspɛktəbəɫ/</span>, and <mark class="vocab" data-word="self-confident">self-confident</mark><span class="ipa">/ˌsɛɫfˈkɑnfədənt/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Body &amp; Appearance, hãy để ý thực tế, hợp lý, đáng kính, và tự tin.</span>
+          </p>
+          <p class="ex-sent" data-sent="15">
+            <span class="ex-en">In this B2 Body & Appearance passage, notice <mark class="vocab" data-word="sensitive">sensitive</mark><span class="ipa">/ˈsɛnsətɪv/, /ˈsɛnsɪtɪv/</span>, <mark class="vocab" data-word="sincere">sincere</mark><span class="ipa">/sɪnˈsɪɹ/</span>, <mark class="vocab" data-word="strong-willed">strong-willed</mark><span class="ipa">/stɹˈɔŋwˈɪld/</span>, and <mark class="vocab" data-word="sympathetic">sympathetic</mark><span class="ipa">/ˌsɪmpəˈθɛtɪk/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Body &amp; Appearance, hãy để ý nhạy cảm, chân thành, kiên quyết, và thông cảm.</span>
+          </p>
+          <p class="ex-sent" data-sent="16">
+            <span class="ex-en">In this B2 Body & Appearance passage, notice <mark class="vocab" data-word="unreliable">unreliable</mark><span class="ipa">/ˌənɹiˈɫaɪəbəɫ/, /ˌənɹɪˈɫaɪəbəɫ/</span>, <mark class="vocab" data-word="unstable">unstable</mark><span class="ipa">/ənˈsteɪbəɫ/</span>, <mark class="vocab" data-word="unsure">unsure</mark><span class="ipa">/ʌnˈʃʊr/ , /ʌnˈʃɔːr/</span>, and <mark class="vocab" data-word="strict">strict</mark><span class="ipa">/ˈstɹɪkt/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Body &amp; Appearance, hãy để ý không đáng tin cậy, không ổn định, không chắc chắn, và nghiêm khắc.</span>
+          </p>
+          <p class="ex-sent" data-sent="17">
+            <span class="ex-en">In this B2 Body & Appearance passage, notice <mark class="vocab" data-word="violent">violent</mark><span class="ipa">/ˈvaɪəɫənt/, /ˈvaɪɫənt/</span>, <mark class="vocab" data-word="lenient">lenient</mark><span class="ipa">/ˈɫiniənt/, /ˈɫinjənt/</span>, <mark class="vocab" data-word="tough">tough</mark><span class="ipa">/tʌf/</span>, and <mark class="vocab" data-word="tight-fisted">tight-fisted</mark><span class="ipa">/ˈtaɪtˈfɪstɪd/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Body &amp; Appearance, hãy để ý bạo lực, khoan dung, cứng rắn, và keo kiệt.</span>
+          </p>
+          <p class="ex-sent" data-sent="18">
+            <span class="ex-en">In this B2 Body & Appearance passage, notice <mark class="vocab" data-word="electric razor">electric razor</mark><span class="ipa">/ɪlˈɛktɹɪk ɹˈeɪzɚ/</span>, <mark class="vocab" data-word="shaver">shaver</mark><span class="ipa">/ˈʃeɪvɝ/</span>, <mark class="vocab" data-word="sunscreen">sunscreen</mark><span class="ipa">/ˈsənskɹin/, /sənsˈkɹin/</span>, and <mark class="vocab" data-word="shampoo">shampoo</mark><span class="ipa">/ʃæmˈpu/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Body &amp; Appearance, hãy để ý dao cạo điện, dao cạo điện, kem chống nắng, và dầu gội.</span>
+          </p>
+          <p class="ex-sent" data-sent="19">
+            <span class="ex-en">In this B2 Body & Appearance passage, notice <mark class="vocab" data-word="conditioner">conditioner</mark><span class="ipa">/kənˈdɪʃənɝ/</span>, <mark class="vocab" data-word="balm">balm</mark><span class="ipa">/bɑːm/, /bɑːlm/</span>, <mark class="vocab" data-word="lotion">lotion</mark><span class="ipa">/ˈɫoʊʃən/</span>, and <mark class="vocab" data-word="cosmetics">cosmetics</mark><span class="ipa">/kɑzˈmɛtɪks/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Body &amp; Appearance, hãy để ý dầu xả, kem dưỡng, kem dưỡng da, và mỹ phẩm.</span>
+          </p>
+          <p class="ex-sent" data-sent="20">
+            <span class="ex-en">In this B2 Body & Appearance passage, notice <mark class="vocab" data-word="gel">gel</mark><span class="ipa">/ˈdʒɛɫ/</span>, <mark class="vocab" data-word="hairspray">hairspray</mark><span class="ipa">/hˈɛɹ spɹˈeɪ/</span>, <mark class="vocab" data-word="eyeliner">eyeliner</mark><span class="ipa">/ˈaɪˌɫaɪnɝ/</span>, and <mark class="vocab" data-word="eyeshadow">eyeshadow</mark><span class="ipa">/ˈaɪˈʃædoʊ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Body &amp; Appearance, hãy để ý gel, keo xịt tóc, eyeliner, và phấn mắt.</span>
+          </p>
+          <p class="ex-sent" data-sent="21">
+            <span class="ex-en">In this B2 Body & Appearance passage, notice <mark class="vocab" data-word="blush">blush</mark><span class="ipa">/ˈbɫəʃ/</span>, <mark class="vocab" data-word="concealer">concealer</mark><span class="ipa">/kənsˈiːlɚ/</span>, <mark class="vocab" data-word="face powder">face powder</mark><span class="ipa">/fˈeɪs pˈaʊdɚ/</span>, and <mark class="vocab" data-word="foundation">foundation</mark><span class="ipa">/faʊnˈdeɪʃən/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Body &amp; Appearance, hãy để ý phấn hồng, kem che khuyết điểm, phấn phủ mặt, và kem nền.</span>
+          </p>
+          <p class="ex-sent" data-sent="22">
+            <span class="ex-en">In this B2 Body & Appearance passage, notice <mark class="vocab" data-word="lip gloss">lip gloss</mark><span class="ipa">/lˈɪp ɡlˈɔs/</span>, <mark class="vocab" data-word="lipstick">lipstick</mark><span class="ipa">/ˈɫɪpˌstɪk/</span>, <mark class="vocab" data-word="mascara">mascara</mark><span class="ipa">/mæˈskɛɹə/</span>, and <mark class="vocab" data-word="nail polish">nail polish</mark><span class="ipa">/nˈeɪl pˈɑːlɪʃ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Body &amp; Appearance, hãy để ý son bóng, son môi, mascara, và sơn móng tay.</span>
+          </p>
+          <p class="ex-sent" data-sent="23">
+            <span class="ex-en">In this B2 Body & Appearance passage, notice <mark class="vocab" data-word="face mask">face mask</mark><span class="ipa">/fˈeɪs mˈæsk/</span>, <mark class="vocab" data-word="dye">dye</mark><span class="ipa">/ˈdaɪ/</span>, <mark class="vocab" data-word="tweezers">tweezers</mark><span class="ipa">/ˈtwizɝz/</span>, and <mark class="vocab" data-word="cologne">cologne</mark><span class="ipa">/kəˈɫoʊn/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Body &amp; Appearance, hãy để ý mặt nạ, thuốc nhuộm, nhíp, và nước hoa.</span>
+          </p>
+          <p class="ex-sent" data-sent="24">
+            <span class="ex-en">In this B2 Body & Appearance passage, notice <mark class="vocab" data-word="deodorant">deodorant</mark><span class="ipa">/diˈoʊdɝənt/</span>, <mark class="vocab" data-word="mouthwash">mouthwash</mark><span class="ipa">/ˈmaʊθˌwɑʃ/</span>, <mark class="vocab" data-word="dental floss">dental floss</mark><span class="ipa">/dˈɛntəl flˈɔs/</span>, and <mark class="vocab" data-word="nail file">nail file</mark><span class="ipa">/nˈeɪlfaɪl/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Body &amp; Appearance, hãy để ý chất khử mùi, nước súc miệng, chỉ nha khoa, và dũa móng tay.</span>
+          </p>
+          <p class="ex-sent" data-sent="25">
+            <span class="ex-en">In this B2 Body & Appearance passage, notice <mark class="vocab" data-word="cotton swab">cotton swab</mark><span class="ipa">/kˈɑːʔn̩ swˈɑːb/</span>, <mark class="vocab" data-word="makeup">makeup</mark><span class="ipa">/ˈmeɪˌkəp/</span>, <mark class="vocab" data-word="nail clippers">nail clippers</mark><span class="ipa">/neɪl klɪpɚz/</span>, and <mark class="vocab" data-word="tampon">tampon</mark><span class="ipa">/ˈtæmpɑn/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Body &amp; Appearance, hãy để ý tăm bông, trang điểm, kéo cắt móng tay, và tampon.</span>
+          </p>
+          <p class="ex-sent" data-sent="26">
+            <span class="ex-en">In this B2 Body & Appearance passage, notice <mark class="vocab" data-word="anatomy">anatomy</mark><span class="ipa">/əˈnætəmi/</span>, <mark class="vocab" data-word="organ">organ</mark><span class="ipa">/ˈɔɹɡən/</span>, <mark class="vocab" data-word="Adam&#x27;s apple">Adam&#x27;s apple</mark><span class="ipa">/ˈædəmz ˈæpəl/</span>, and <mark class="vocab" data-word="artery">artery</mark><span class="ipa">/ˈɑɹtɝi/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Body &amp; Appearance, hãy để ý giải phẫu, cơ quan, trái cổ, và động mạch.</span>
+          </p>
+          <p class="ex-sent" data-sent="27">
+            <span class="ex-en">In this B2 Body & Appearance passage, notice <mark class="vocab" data-word="blood vessel">blood vessel</mark><span class="ipa">/blˈʌd vˈɛsəl/</span>, <mark class="vocab" data-word="cell">cell</mark><span class="ipa">/ˈsɛɫ/</span>, <mark class="vocab" data-word="heartbeat">heartbeat</mark><span class="ipa">/ˈhɑɹtˌbit/</span>, and <mark class="vocab" data-word="scalp">scalp</mark><span class="ipa">/ˈskæɫp/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Body &amp; Appearance, hãy để ý mạch máu, tế bào, nhịp tim, và da đầu.</span>
+          </p>
+          <p class="ex-sent" data-sent="28">
+            <span class="ex-en">In this B2 Body & Appearance passage, notice <mark class="vocab" data-word="collarbone">collarbone</mark><span class="ipa">/ˈkɑɫɝˌboʊn/</span>, <mark class="vocab" data-word="breast">breast</mark><span class="ipa">/brɛst/</span>, <mark class="vocab" data-word="abdomen">abdomen</mark><span class="ipa">/ˈæbdəmən/, /æbˈdoʊmən/</span>, and <mark class="vocab" data-word="digestive system">digestive system</mark><span class="ipa">/daɪdʒˈɛstɪv sˈɪstəm/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Body &amp; Appearance, hãy để ý xương đòn, ngực, bụng, và hệ tiêu hóa.</span>
+          </p>
+          <p class="ex-sent" data-sent="29">
+            <span class="ex-en">In this B2 Body & Appearance passage, notice <mark class="vocab" data-word="immune system">immune system</mark><span class="ipa">/ɪmjˈuːn sˈɪstəm/</span>, <mark class="vocab" data-word="belly">belly</mark><span class="ipa">/ˈbeli/</span>, <mark class="vocab" data-word="belly button">belly button</mark><span class="ipa">/ˈbeliˌbʌtn/</span>, and <mark class="vocab" data-word="intestine">intestine</mark><span class="ipa">/ˌɪnˈtɛstən/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Body &amp; Appearance, hãy để ý hệ miễn dịch, bụng, rốn, và ruột.</span>
+          </p>
+          <p class="ex-sent" data-sent="30">
+            <span class="ex-en">In this B2 Body & Appearance passage, notice <mark class="vocab" data-word="gallbladder">gallbladder</mark><span class="ipa">/ˈɡɔɫˌbɫædɝ/</span>, <mark class="vocab" data-word="bladder">bladder</mark><span class="ipa">/ˈblædər/</span>, <mark class="vocab" data-word="buttock">buttock</mark><span class="ipa">/ˈbətək/</span>, and <mark class="vocab" data-word="spine">spine</mark><span class="ipa">/ˈspaɪn/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Body &amp; Appearance, hãy để ý túi mật, bàng quang, mông, và cột sống.</span>
+          </p>
+          <p class="ex-sent" data-sent="31">
+            <span class="ex-en">In this B2 Body & Appearance passage, notice <mark class="vocab" data-word="calf">calf</mark><span class="ipa">/ˈkæf/</span>, <mark class="vocab" data-word="shin">shin</mark><span class="ipa">/ˈʃɪn/</span>, <mark class="vocab" data-word="big toe">big toe</mark><span class="ipa">/bˈɪɡ tˈoʊ/</span>, and <mark class="vocab" data-word="pinky">pinky</mark><span class="ipa">/ˈpɪŋki/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Body &amp; Appearance, hãy để ý bắp chân, xương ống chân, ngón chân cái, và ngón tay út.</span>
+          </p>
+          <p class="ex-sent" data-sent="32">
+            <span class="ex-en">In this B2 Body & Appearance passage, notice <mark class="vocab" data-word="eyelid">eyelid</mark><span class="ipa">/ˈaɪˌɫɪd/</span>, <mark class="vocab" data-word="jaw">jaw</mark><span class="ipa">/ˈdʒɔ/</span>, <mark class="vocab" data-word="vein">vein</mark><span class="ipa">/ˈveɪn/</span>, and <mark class="vocab" data-word="nostril">nostril</mark><span class="ipa">/ˈnɑstɹɪɫ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Body &amp; Appearance, hãy để ý mí mắt, hàm, tĩnh mạch, và lỗ mũi.</span>
+          </p>
+          <p class="ex-sent" data-sent="33">
+            <span class="ex-en">In this B2 Body & Appearance passage, notice <mark class="vocab" data-word="eyebrow">eyebrow</mark><span class="ipa">/ˈaɪˌbɹaʊ/</span>, and <mark class="vocab" data-word="kidney stone">kidney stone</mark><span class="ipa">/kˈɪdni stˈoʊn/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Body &amp; Appearance, hãy để ý lông mày, và sỏi thận.</span>
+          </p>
+          <p class="ex-sent" data-sent="34">
+            <span class="ex-en">One more useful item is "<mark class="vocab" data-word="Adam&#x27;s apple">Adam&#x27;s apple</mark><span class="ipa">/ˈædəmz ˈæpəl/</span>" in this topic.</span>
+            <span class="ex-vi">Một mục hữu ích nữa là &quot;trái cổ&quot; trong chủ đề này.</span>
+          </p>
+          <p class="ex-sent" data-sent="35">
+            <span class="ex-en">Keep this form in mind: <mark class="vocab" data-word="Adam's apple">Adam's apple</mark><span class="ipa">/ˈædəmz ˈæpəl/</span>.</span>
+            <span class="ex-vi">Hãy nhớ dạng từ này: trái cổ.</span>
+          </p>
+      </section>
+
+      <section class="ex-vocab">
+        <h2>Word checklist · 130</h2>
+        <ul class="ex-vocab-list">
+          <li><mark class="vocab">beat</mark> <span class="ipa">/biːt/</span> — đánh</li>
+          <li><mark class="vocab">clap</mark> <span class="ipa">/ˈkɫæp/</span> — vỗ tay</li>
+          <li><mark class="vocab">drag</mark> <span class="ipa">/dræɡ/</span> — kéo</li>
+          <li><mark class="vocab">grab</mark> <span class="ipa">/ˈɡɹæb/</span> — nắm lấy</li>
+          <li><mark class="vocab">punch</mark> <span class="ipa">/pʌntʃ/</span> — đấm</li>
+          <li><mark class="vocab">shake</mark> <span class="ipa">/ʃeɪk/</span> — bắt tay</li>
+          <li><mark class="vocab">bend</mark> <span class="ipa">/bɛnd/</span> — cúi xuống</li>
+          <li><mark class="vocab">bow</mark> <span class="ipa">/baʊ/</span> — cúi chào</li>
+          <li><mark class="vocab">lean</mark> <span class="ipa">/ˈɫin/</span> — tựa vào</li>
+          <li><mark class="vocab">slouch</mark> <span class="ipa">/ˈsɫaʊtʃ/</span> — ngồi khom lưng</li>
+          <li><mark class="vocab">kneel</mark> <span class="ipa">/ˈniɫ/</span> — quỳ xuống</li>
+          <li><mark class="vocab">leap</mark> <span class="ipa">/ˈɫip/</span> — nhảy</li>
+          <li><mark class="vocab">tiptoe</mark> <span class="ipa">/ˈtɪpˌtoʊ/</span> — đi nhón chân</li>
+          <li><mark class="vocab">crawl</mark> <span class="ipa">/ˈkɹɔɫ/</span> — bò</li>
+          <li><mark class="vocab">lie down</mark> <span class="ipa">/lˈaɪ dˈaʊn/</span> — nằm xuống</li>
+          <li><mark class="vocab">blink</mark> <span class="ipa">/ˈbɫɪŋk/</span> — nháy mắt</li>
+          <li><mark class="vocab">gaze</mark> <span class="ipa">/ˈɡeɪz/</span> — nhìn chằm chằm</li>
+          <li><mark class="vocab">squint</mark> <span class="ipa">/ˈskwɪnt/</span> — nheo mắt</li>
+          <li><mark class="vocab">stare</mark> <span class="ipa">/ˈstɛɹ/</span> — nhìn chằm chằm</li>
+          <li><mark class="vocab">wink</mark> <span class="ipa">/ˈwɪŋk/</span> — nháy mắt</li>
+          <li><mark class="vocab">chuckle</mark> <span class="ipa">/ˈtʃəkəɫ/</span> — cười khúc khích</li>
+          <li><mark class="vocab">giggle</mark> <span class="ipa">/ˈɡɪɡəɫ/</span> — cười khúc khích</li>
+          <li><mark class="vocab">smirk</mark> <span class="ipa">/ˈsmɝk/</span> — cười nửa miệng</li>
+          <li><mark class="vocab">march</mark> <span class="ipa">/mɑrtʃ/</span> — đi đều</li>
+          <li><mark class="vocab">nod</mark> <span class="ipa">/ˈnɑd/</span> — gật đầu</li>
+          <li><mark class="vocab">pace</mark> <span class="ipa">/ˈpeɪs/</span> — đi tới đi lui</li>
+          <li><mark class="vocab">trip</mark> <span class="ipa">/trɪp/</span> — vấp</li>
+          <li><mark class="vocab">[give] {sb} bunny ears</mark> <span class="ipa">/ɡˈɪv ˌɛsbˈiː bˈʌni ˈɪɹz/</span> — làm tai thỏ sau đầu ai</li>
+          <li><mark class="vocab">crouch</mark> <span class="ipa">/ˈkɹaʊtʃ/</span> — ngồi xổm</li>
+          <li><mark class="vocab">wake</mark> <span class="ipa">/ˈweɪk/</span> — tỉnh dậy</li>
+          <li><mark class="vocab">arrogant</mark> <span class="ipa">/ˈɛɹəɡənt/</span> — kiêu ngạo</li>
+          <li><mark class="vocab">bold</mark> <span class="ipa">/ˈboʊɫd/</span> — táo bạo</li>
+          <li><mark class="vocab">caring</mark> <span class="ipa">/ˈkɛɹɪŋ/</span> — chu đáo</li>
+          <li><mark class="vocab">decent</mark> <span class="ipa">/ˈdisənt/</span> — đàng hoàng</li>
+          <li><mark class="vocab">dishonest</mark> <span class="ipa">/dɪˈsɑnəst/</span> — không trung thực</li>
+          <li><mark class="vocab">easy-going</mark> <span class="ipa">/ˈiːziɡˈoʊɪŋ/</span> — thoải mái</li>
+          <li><mark class="vocab">energetic</mark> <span class="ipa">/ˌɛnɝˈdʒɛtɪk/</span> — năng động</li>
+          <li><mark class="vocab">enthusiastic</mark> <span class="ipa">/ɪnˌθuziˈæstɪk/</span> — nhiệt tình</li>
+          <li><mark class="vocab">dynamic</mark> <span class="ipa">/daɪˈnæmɪk/</span> — năng động</li>
+          <li><mark class="vocab">forgetful</mark> <span class="ipa">/fɝˈɡɛtfəɫ/, /fɔɹˈɡɛtfəɫ/</span> — hay quên</li>
+          <li><mark class="vocab">greedy</mark> <span class="ipa">/ˈɡɹidi/</span> — tham lam</li>
+          <li><mark class="vocab">icy</mark> <span class="ipa">/ˈaɪsi/</span> — lạnh lùng</li>
+          <li><mark class="vocab">impatient</mark> <span class="ipa">/ˌɪmˈpeɪʃənt/</span> — thiếu kiên nhẫn</li>
+          <li><mark class="vocab">lively</mark> <span class="ipa">/ˈɫaɪvɫi/</span> — sôi nổi</li>
+          <li><mark class="vocab">logical</mark> <span class="ipa">/ˈɫɑdʒɪkəɫ/</span> — hợp lý</li>
+          <li><mark class="vocab">modest</mark> <span class="ipa">/mɑdəst/</span> — khiêm tốn</li>
+          <li><mark class="vocab">moody</mark> <span class="ipa">/ˈmudi/</span> — thất thường</li>
+          <li><mark class="vocab">moral</mark> <span class="ipa">/ˈmɔɹəɫ/</span> — đạo đức</li>
+          <li><mark class="vocab">nosy</mark> <span class="ipa">/ˈnoʊzi/</span> — tò mò</li>
+          <li><mark class="vocab">optimistic</mark> <span class="ipa">/ˌɑptəˈmɪstɪk/</span> — lạc quan</li>
+          <li><mark class="vocab">pessimistic</mark> <span class="ipa">/ˌpɛsəˈmɪstɪk/</span> — bi quan</li>
+          <li><mark class="vocab">passionate</mark> <span class="ipa">/ˈpæʃənət/</span> — đam mê</li>
+          <li><mark class="vocab">practical</mark> <span class="ipa">/ˈpræktɪkəl/</span> — thực tế</li>
+          <li><mark class="vocab">reasonable</mark> <span class="ipa">/ˈɹizənəbəɫ/, /ˈɹiznəbəɫ/</span> — hợp lý</li>
+          <li><mark class="vocab">respectable</mark> <span class="ipa">/ɹiˈspɛktəbəɫ/, /ɹɪˈspɛktəbəɫ/</span> — đáng kính</li>
+          <li><mark class="vocab">self-confident</mark> <span class="ipa">/ˌsɛɫfˈkɑnfədənt/</span> — tự tin</li>
+          <li><mark class="vocab">sensitive</mark> <span class="ipa">/ˈsɛnsətɪv/, /ˈsɛnsɪtɪv/</span> — nhạy cảm</li>
+          <li><mark class="vocab">sincere</mark> <span class="ipa">/sɪnˈsɪɹ/</span> — chân thành</li>
+          <li><mark class="vocab">strong-willed</mark> <span class="ipa">/stɹˈɔŋwˈɪld/</span> — kiên quyết</li>
+          <li><mark class="vocab">sympathetic</mark> <span class="ipa">/ˌsɪmpəˈθɛtɪk/</span> — thông cảm</li>
+          <li><mark class="vocab">unreliable</mark> <span class="ipa">/ˌənɹiˈɫaɪəbəɫ/, /ˌənɹɪˈɫaɪəbəɫ/</span> — không đáng tin cậy</li>
+          <li><mark class="vocab">unstable</mark> <span class="ipa">/ənˈsteɪbəɫ/</span> — không ổn định</li>
+          <li><mark class="vocab">unsure</mark> <span class="ipa">/ʌnˈʃʊr/ , /ʌnˈʃɔːr/</span> — không chắc chắn</li>
+          <li><mark class="vocab">strict</mark> <span class="ipa">/ˈstɹɪkt/</span> — nghiêm khắc</li>
+          <li><mark class="vocab">violent</mark> <span class="ipa">/ˈvaɪəɫənt/, /ˈvaɪɫənt/</span> — bạo lực</li>
+          <li><mark class="vocab">lenient</mark> <span class="ipa">/ˈɫiniənt/, /ˈɫinjənt/</span> — khoan dung</li>
+          <li><mark class="vocab">tough</mark> <span class="ipa">/tʌf/</span> — cứng rắn</li>
+          <li><mark class="vocab">tight-fisted</mark> <span class="ipa">/ˈtaɪtˈfɪstɪd/</span> — keo kiệt</li>
+          <li><mark class="vocab">electric razor</mark> <span class="ipa">/ɪlˈɛktɹɪk ɹˈeɪzɚ/</span> — dao cạo điện</li>
+          <li><mark class="vocab">shaver</mark> <span class="ipa">/ˈʃeɪvɝ/</span> — dao cạo điện</li>
+          <li><mark class="vocab">sunscreen</mark> <span class="ipa">/ˈsənskɹin/, /sənsˈkɹin/</span> — kem chống nắng</li>
+          <li><mark class="vocab">shampoo</mark> <span class="ipa">/ʃæmˈpu/</span> — dầu gội</li>
+          <li><mark class="vocab">conditioner</mark> <span class="ipa">/kənˈdɪʃənɝ/</span> — dầu xả</li>
+          <li><mark class="vocab">balm</mark> <span class="ipa">/bɑːm/, /bɑːlm/</span> — kem dưỡng</li>
+          <li><mark class="vocab">lotion</mark> <span class="ipa">/ˈɫoʊʃən/</span> — kem dưỡng da</li>
+          <li><mark class="vocab">cosmetics</mark> <span class="ipa">/kɑzˈmɛtɪks/</span> — mỹ phẩm</li>
+          <li><mark class="vocab">gel</mark> <span class="ipa">/ˈdʒɛɫ/</span> — gel</li>
+          <li><mark class="vocab">hairspray</mark> <span class="ipa">/hˈɛɹ spɹˈeɪ/</span> — keo xịt tóc</li>
+          <li><mark class="vocab">eyeliner</mark> <span class="ipa">/ˈaɪˌɫaɪnɝ/</span> — eyeliner</li>
+          <li><mark class="vocab">eyeshadow</mark> <span class="ipa">/ˈaɪˈʃædoʊ/</span> — phấn mắt</li>
+          <li><mark class="vocab">blush</mark> <span class="ipa">/ˈbɫəʃ/</span> — phấn hồng</li>
+          <li><mark class="vocab">concealer</mark> <span class="ipa">/kənsˈiːlɚ/</span> — kem che khuyết điểm</li>
+          <li><mark class="vocab">face powder</mark> <span class="ipa">/fˈeɪs pˈaʊdɚ/</span> — phấn phủ mặt</li>
+          <li><mark class="vocab">foundation</mark> <span class="ipa">/faʊnˈdeɪʃən/</span> — kem nền</li>
+          <li><mark class="vocab">lip gloss</mark> <span class="ipa">/lˈɪp ɡlˈɔs/</span> — son bóng</li>
+          <li><mark class="vocab">lipstick</mark> <span class="ipa">/ˈɫɪpˌstɪk/</span> — son môi</li>
+          <li><mark class="vocab">mascara</mark> <span class="ipa">/mæˈskɛɹə/</span> — mascara</li>
+          <li><mark class="vocab">nail polish</mark> <span class="ipa">/nˈeɪl pˈɑːlɪʃ/</span> — sơn móng tay</li>
+          <li><mark class="vocab">face mask</mark> <span class="ipa">/fˈeɪs mˈæsk/</span> — mặt nạ</li>
+          <li><mark class="vocab">dye</mark> <span class="ipa">/ˈdaɪ/</span> — thuốc nhuộm</li>
+          <li><mark class="vocab">tweezers</mark> <span class="ipa">/ˈtwizɝz/</span> — nhíp</li>
+          <li><mark class="vocab">cologne</mark> <span class="ipa">/kəˈɫoʊn/</span> — nước hoa</li>
+          <li><mark class="vocab">deodorant</mark> <span class="ipa">/diˈoʊdɝənt/</span> — chất khử mùi</li>
+          <li><mark class="vocab">mouthwash</mark> <span class="ipa">/ˈmaʊθˌwɑʃ/</span> — nước súc miệng</li>
+          <li><mark class="vocab">dental floss</mark> <span class="ipa">/dˈɛntəl flˈɔs/</span> — chỉ nha khoa</li>
+          <li><mark class="vocab">nail file</mark> <span class="ipa">/nˈeɪlfaɪl/</span> — dũa móng tay</li>
+          <li><mark class="vocab">cotton swab</mark> <span class="ipa">/kˈɑːʔn̩ swˈɑːb/</span> — tăm bông</li>
+          <li><mark class="vocab">makeup</mark> <span class="ipa">/ˈmeɪˌkəp/</span> — trang điểm</li>
+          <li><mark class="vocab">nail clippers</mark> <span class="ipa">/neɪl klɪpɚz/</span> — kéo cắt móng tay</li>
+          <li><mark class="vocab">tampon</mark> <span class="ipa">/ˈtæmpɑn/</span> — tampon</li>
+          <li><mark class="vocab">anatomy</mark> <span class="ipa">/əˈnætəmi/</span> — giải phẫu</li>
+          <li><mark class="vocab">organ</mark> <span class="ipa">/ˈɔɹɡən/</span> — cơ quan</li>
+          <li><mark class="vocab">Adam&#x27;s apple</mark> <span class="ipa">/ˈædəmz ˈæpəl/</span> — trái cổ</li>
+          <li><mark class="vocab">artery</mark> <span class="ipa">/ˈɑɹtɝi/</span> — động mạch</li>
+          <li><mark class="vocab">blood vessel</mark> <span class="ipa">/blˈʌd vˈɛsəl/</span> — mạch máu</li>
+          <li><mark class="vocab">cell</mark> <span class="ipa">/ˈsɛɫ/</span> — tế bào</li>
+          <li><mark class="vocab">heartbeat</mark> <span class="ipa">/ˈhɑɹtˌbit/</span> — nhịp tim</li>
+          <li><mark class="vocab">scalp</mark> <span class="ipa">/ˈskæɫp/</span> — da đầu</li>
+          <li><mark class="vocab">collarbone</mark> <span class="ipa">/ˈkɑɫɝˌboʊn/</span> — xương đòn</li>
+          <li><mark class="vocab">breast</mark> <span class="ipa">/brɛst/</span> — ngực</li>
+          <li><mark class="vocab">abdomen</mark> <span class="ipa">/ˈæbdəmən/, /æbˈdoʊmən/</span> — bụng</li>
+          <li><mark class="vocab">digestive system</mark> <span class="ipa">/daɪdʒˈɛstɪv sˈɪstəm/</span> — hệ tiêu hóa</li>
+          <li><mark class="vocab">immune system</mark> <span class="ipa">/ɪmjˈuːn sˈɪstəm/</span> — hệ miễn dịch</li>
+          <li><mark class="vocab">belly</mark> <span class="ipa">/ˈbeli/</span> — bụng</li>
+          <li><mark class="vocab">belly button</mark> <span class="ipa">/ˈbeliˌbʌtn/</span> — rốn</li>
+          <li><mark class="vocab">intestine</mark> <span class="ipa">/ˌɪnˈtɛstən/</span> — ruột</li>
+          <li><mark class="vocab">gallbladder</mark> <span class="ipa">/ˈɡɔɫˌbɫædɝ/</span> — túi mật</li>
+          <li><mark class="vocab">bladder</mark> <span class="ipa">/ˈblædər/</span> — bàng quang</li>
+          <li><mark class="vocab">buttock</mark> <span class="ipa">/ˈbətək/</span> — mông</li>
+          <li><mark class="vocab">spine</mark> <span class="ipa">/ˈspaɪn/</span> — cột sống</li>
+          <li><mark class="vocab">calf</mark> <span class="ipa">/ˈkæf/</span> — bắp chân</li>
+          <li><mark class="vocab">shin</mark> <span class="ipa">/ˈʃɪn/</span> — xương ống chân</li>
+          <li><mark class="vocab">big toe</mark> <span class="ipa">/bˈɪɡ tˈoʊ/</span> — ngón chân cái</li>
+          <li><mark class="vocab">pinky</mark> <span class="ipa">/ˈpɪŋki/</span> — ngón tay út</li>
+          <li><mark class="vocab">eyelid</mark> <span class="ipa">/ˈaɪˌɫɪd/</span> — mí mắt</li>
+          <li><mark class="vocab">jaw</mark> <span class="ipa">/ˈdʒɔ/</span> — hàm</li>
+          <li><mark class="vocab">vein</mark> <span class="ipa">/ˈveɪn/</span> — tĩnh mạch</li>
+          <li><mark class="vocab">nostril</mark> <span class="ipa">/ˈnɑstɹɪɫ/</span> — lỗ mũi</li>
+          <li><mark class="vocab">eyebrow</mark> <span class="ipa">/ˈaɪˌbɹaʊ/</span> — lông mày</li>
+          <li><mark class="vocab">kidney stone</mark> <span class="ipa">/kˈɪdni stˈoʊn/</span> — sỏi thận</li>
+        </ul>
+      </section>
+
+      <div class="docs-pager">
+        <a href="../">← Body &amp; Appearance</a>
+        <a href="../../">All topics →</a>
+      </div>
+    </article>
+  </div>
+  <script src="../../../../js/docs.js"></script>
+  <script src="../../../../js/exercise.js"></script>
+</body>
+</html>

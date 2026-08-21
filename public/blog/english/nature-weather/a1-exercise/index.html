@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A1 Exercise · Nature &amp; Weather — The Quiet Corner</title>
+  <meta name="description" content="A1 reading exercise for Nature &amp; Weather vocabulary with IPA and bilingual sentences.">
+  <link rel="icon" href="../../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../../"><span>✦</span> The Quiet Corner <span>✦</span></a>
+    <nav class="docs-series">
+      <a href="../../../../blog/web-security/">DevSecOps</a>
+      <a href="../../../../blog/kubestronaut/">Kubestronaut</a>
+      <a class="active" href="../../">English</a>
+    </nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-nav="english" data-docs-root="../../" data-active="nature-weather">
+      <div class="docs-nav-label">English</div>
+      <ul class="docs-nav" id="docsNav">
+        <li><a href="../../">All topics</a></li>
+        <li><a href="../">Nature &amp; Weather</a></li>
+        <li><a class="active" href="./">A1 Exercise</a></li>
+      </ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../../">Home</a>
+        <span>›</span>
+        <a href="../../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../../">English</a>
+        <span>›</span>
+        <a href="../">Nature &amp; Weather</a>
+        <span>›</span>
+        <span>A1 Exercise</span>
+      </div>
+
+      <div class="vocab-topic-hero">
+        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 72 72' fill='none'%3E%3Crect width='72' height='72' rx='14' fill='%230b1220'/%3E%3Crect x='16' y='14' width='40' height='46' rx='6' stroke='%2322d3ee' stroke-width='2.5'/%3E%3Cpath d='M24 28h24M24 36h24M24 44h16' stroke='%23e4e4e7' stroke-width='2.5' stroke-linecap='round'/%3E%3Cpath d='M48 48l6 2-2 6-8-8 4 0z' fill='%2322d3ee'/%3E%3C/svg%3E" alt="" width="112" height="112">
+        <div>
+          <h1>A1 Exercise · Nature &amp; Weather</h1>
+          <p class="lede">Reading passage with every new word from this level’s LanGeek lessons — IPA, highlights, sentence translation, and free TTS.</p>
+          <div class="docs-meta">
+            <span><strong>Words:</strong> 25</span>
+            <span><strong>Lessons:</strong> The Weather and Nature</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="ex-toolbar" id="exToolbar">
+        <label class="ex-toggle"><input type="checkbox" id="togHighlight" checked> Highlights</label>
+        <label class="ex-toggle"><input type="checkbox" id="togIpa" checked> IPA</label>
+        <label class="ex-toggle"><input type="checkbox" id="togVi"> Dịch câu (VI)</label>
+        <span class="ex-sep"></span>
+        <label class="ex-voice">Voice
+          <select id="voiceSelect" aria-label="TTS voice"></select>
+        </label>
+        <label class="ex-voice">Speed
+          <input id="rateRange" type="range" min="0.7" max="1.15" step="0.05" value="0.95">
+          <span id="rateVal">0.95</span>
+        </label>
+        <button type="button" class="ex-btn primary" id="btnPlay">▶ Read passage</button>
+        <button type="button" class="ex-btn" id="btnStop">Stop</button>
+      </div>
+      
+      <section class="ex-passage" id="passage" data-tts-root>
+          <p class="ex-sent" data-sent="1">
+            <span class="ex-en">In this A1 Nature & <mark class="vocab" data-word="weather">weather</mark><span class="ipa">/ˈwɛðɚ/</span> passage, notice weather, <mark class="vocab" data-word="fire">fire</mark><span class="ipa">/ˈfaɪɚ/</span>, <mark class="vocab" data-word="hot">hot</mark><span class="ipa">/hɑːt/</span>, and <mark class="vocab" data-word="cold">cold</mark><span class="ipa">/koʊld/</span>.</span>
+            <span class="ex-vi">Trong đoạn A1 về Nature &amp; Weather, hãy để ý thời tiết, lửa, nóng, và lạnh.</span>
+          </p>
+          <p class="ex-sent" data-sent="2">
+            <span class="ex-en">In this A1 Nature & Weather passage, notice <mark class="vocab" data-word="sunny">sunny</mark><span class="ipa">/ˈsʌni/</span>, <mark class="vocab" data-word="cloud">cloud</mark><span class="ipa">/klaʊd/</span>, <mark class="vocab" data-word="cloudy">cloudy</mark><span class="ipa">/ˈklaʊdi/</span>, and <mark class="vocab" data-word="rain">rain</mark><span class="ipa">/reɪn/</span>.</span>
+            <span class="ex-vi">Trong đoạn A1 về Nature &amp; Weather, hãy để ý nắng, mây, có mây, và mưa.</span>
+          </p>
+          <p class="ex-sent" data-sent="3">
+            <span class="ex-en">In this A1 <mark class="vocab" data-word="nature">nature</mark><span class="ipa">/ˈneɪtʃɚ/</span> & Weather passage, notice <mark class="vocab" data-word="rainy">rainy</mark><span class="ipa">/ˈreɪni/</span>, <mark class="vocab" data-word="snowy">snowy</mark><span class="ipa">/ˈsnoʊi/</span>, <mark class="vocab" data-word="ice">ice</mark><span class="ipa">/aɪs/</span>, and nature.</span>
+            <span class="ex-vi">Trong đoạn A1 về Nature &amp; Weather, hãy để ý có mưa, có tuyết, đá, và thiên nhiên.</span>
+          </p>
+          <p class="ex-sent" data-sent="4">
+            <span class="ex-en">In this A1 Nature & Weather passage, notice <mark class="vocab" data-word="sun">sun</mark><span class="ipa">/sʌn/</span>, <mark class="vocab" data-word="moon">moon</mark><span class="ipa">/muːn/</span>, <mark class="vocab" data-word="Earth">Earth</mark><span class="ipa">/ɝːθ/</span>, and <mark class="vocab" data-word="sky">sky</mark><span class="ipa">/skaɪ/</span>.</span>
+            <span class="ex-vi">Trong đoạn A1 về Nature &amp; Weather, hãy để ý mặt trời, mặt trăng, Trái Đất, và bầu trời.</span>
+          </p>
+          <p class="ex-sent" data-sent="5">
+            <span class="ex-en">In this A1 Nature & Weather passage, notice <mark class="vocab" data-word="river">river</mark><span class="ipa">/ˈrɪvɚ/</span>, <mark class="vocab" data-word="sea">sea</mark><span class="ipa">/siː/</span>, <mark class="vocab" data-word="mountain">mountain</mark><span class="ipa">/ˈmaʊntn/</span>, and <mark class="vocab" data-word="beach">beach</mark><span class="ipa">/biːtʃ/</span>.</span>
+            <span class="ex-vi">Trong đoạn A1 về Nature &amp; Weather, hãy để ý sông, biển, núi, và bãi biển.</span>
+          </p>
+          <p class="ex-sent" data-sent="6">
+            <span class="ex-en">In this A1 Nature & Weather passage, notice <mark class="vocab" data-word="forest">forest</mark><span class="ipa">/ˈfɔːrɪst/</span>, <mark class="vocab" data-word="island">island</mark><span class="ipa">/ˈaɪlənd/</span>, <mark class="vocab" data-word="star">star</mark><span class="ipa">/stɑr/</span>, and <mark class="vocab" data-word="tree">tree</mark><span class="ipa">/triː/</span>.</span>
+            <span class="ex-vi">Trong đoạn A1 về Nature &amp; Weather, hãy để ý rừng, đảo, ngôi sao, và cây.</span>
+          </p>
+          <p class="ex-sent" data-sent="7">
+            <span class="ex-en">In this A1 Nature & Weather passage, notice <mark class="vocab" data-word="flower">flower</mark><span class="ipa">/ˈflaʊɚ/</span>.</span>
+            <span class="ex-vi">Trong đoạn A1 về Nature &amp; Weather, hãy để ý hoa.</span>
+          </p>
+      </section>
+
+      <section class="ex-vocab">
+        <h2>Word checklist · 25</h2>
+        <ul class="ex-vocab-list">
+          <li><mark class="vocab">weather</mark> <span class="ipa">/ˈwɛðɚ/</span> — thời tiết</li>
+          <li><mark class="vocab">fire</mark> <span class="ipa">/ˈfaɪɚ/</span> — lửa</li>
+          <li><mark class="vocab">hot</mark> <span class="ipa">/hɑːt/</span> — nóng</li>
+          <li><mark class="vocab">cold</mark> <span class="ipa">/koʊld/</span> — lạnh</li>
+          <li><mark class="vocab">sunny</mark> <span class="ipa">/ˈsʌni/</span> — nắng</li>
+          <li><mark class="vocab">cloud</mark> <span class="ipa">/klaʊd/</span> — mây</li>
+          <li><mark class="vocab">cloudy</mark> <span class="ipa">/ˈklaʊdi/</span> — có mây</li>
+          <li><mark class="vocab">rain</mark> <span class="ipa">/reɪn/</span> — mưa</li>
+          <li><mark class="vocab">rainy</mark> <span class="ipa">/ˈreɪni/</span> — có mưa</li>
+          <li><mark class="vocab">snowy</mark> <span class="ipa">/ˈsnoʊi/</span> — có tuyết</li>
+          <li><mark class="vocab">ice</mark> <span class="ipa">/aɪs/</span> — đá</li>
+          <li><mark class="vocab">nature</mark> <span class="ipa">/ˈneɪtʃɚ/</span> — thiên nhiên</li>
+          <li><mark class="vocab">sun</mark> <span class="ipa">/sʌn/</span> — mặt trời</li>
+          <li><mark class="vocab">moon</mark> <span class="ipa">/muːn/</span> — mặt trăng</li>
+          <li><mark class="vocab">Earth</mark> <span class="ipa">/ɝːθ/</span> — Trái Đất</li>
+          <li><mark class="vocab">sky</mark> <span class="ipa">/skaɪ/</span> — bầu trời</li>
+          <li><mark class="vocab">river</mark> <span class="ipa">/ˈrɪvɚ/</span> — sông</li>
+          <li><mark class="vocab">sea</mark> <span class="ipa">/siː/</span> — biển</li>
+          <li><mark class="vocab">mountain</mark> <span class="ipa">/ˈmaʊntn/</span> — núi</li>
+          <li><mark class="vocab">beach</mark> <span class="ipa">/biːtʃ/</span> — bãi biển</li>
+          <li><mark class="vocab">forest</mark> <span class="ipa">/ˈfɔːrɪst/</span> — rừng</li>
+          <li><mark class="vocab">island</mark> <span class="ipa">/ˈaɪlənd/</span> — đảo</li>
+          <li><mark class="vocab">star</mark> <span class="ipa">/stɑr/</span> — ngôi sao</li>
+          <li><mark class="vocab">tree</mark> <span class="ipa">/triː/</span> — cây</li>
+          <li><mark class="vocab">flower</mark> <span class="ipa">/ˈflaʊɚ/</span> — hoa</li>
+        </ul>
+      </section>
+
+      <div class="docs-pager">
+        <a href="../">← Nature &amp; Weather</a>
+        <a href="../../">All topics →</a>
+      </div>
+    </article>
+  </div>
+  <script src="../../../../js/docs.js"></script>
+  <script src="../../../../js/exercise.js"></script>
+</body>
+</html>

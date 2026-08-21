@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A1 Exercise · City &amp; Places — The Quiet Corner</title>
+  <meta name="description" content="A1 reading exercise for City &amp; Places vocabulary with IPA and bilingual sentences.">
+  <link rel="icon" href="../../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../../"><span>✦</span> The Quiet Corner <span>✦</span></a>
+    <nav class="docs-series">
+      <a href="../../../../blog/web-security/">DevSecOps</a>
+      <a href="../../../../blog/kubestronaut/">Kubestronaut</a>
+      <a class="active" href="../../">English</a>
+    </nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-nav="english" data-docs-root="../../" data-active="city-places">
+      <div class="docs-nav-label">English</div>
+      <ul class="docs-nav" id="docsNav">
+        <li><a href="../../">All topics</a></li>
+        <li><a href="../">City &amp; Places</a></li>
+        <li><a class="active" href="./">A1 Exercise</a></li>
+      </ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../../">Home</a>
+        <span>›</span>
+        <a href="../../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../../">English</a>
+        <span>›</span>
+        <a href="../">City &amp; Places</a>
+        <span>›</span>
+        <span>A1 Exercise</span>
+      </div>
+
+      <div class="vocab-topic-hero">
+        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 72 72' fill='none'%3E%3Crect width='72' height='72' rx='14' fill='%230b1220'/%3E%3Crect x='16' y='14' width='40' height='46' rx='6' stroke='%2322d3ee' stroke-width='2.5'/%3E%3Cpath d='M24 28h24M24 36h24M24 44h16' stroke='%23e4e4e7' stroke-width='2.5' stroke-linecap='round'/%3E%3Cpath d='M48 48l6 2-2 6-8-8 4 0z' fill='%2322d3ee'/%3E%3C/svg%3E" alt="" width="112" height="112">
+        <div>
+          <h1>A1 Exercise · City &amp; Places</h1>
+          <p class="lede">Reading passage with every new word from this level’s LanGeek lessons — IPA, highlights, sentence translation, and free TTS.</p>
+          <div class="docs-meta">
+            <span><strong>Words:</strong> 31</span>
+            <span><strong>Lessons:</strong> City · Directions and Continents</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="ex-toolbar" id="exToolbar">
+        <label class="ex-toggle"><input type="checkbox" id="togHighlight" checked> Highlights</label>
+        <label class="ex-toggle"><input type="checkbox" id="togIpa" checked> IPA</label>
+        <label class="ex-toggle"><input type="checkbox" id="togVi"> Dịch câu (VI)</label>
+        <span class="ex-sep"></span>
+        <label class="ex-voice">Voice
+          <select id="voiceSelect" aria-label="TTS voice"></select>
+        </label>
+        <label class="ex-voice">Speed
+          <input id="rateRange" type="range" min="0.7" max="1.15" step="0.05" value="0.95">
+          <span id="rateVal">0.95</span>
+        </label>
+        <button type="button" class="ex-btn primary" id="btnPlay">▶ Read passage</button>
+        <button type="button" class="ex-btn" id="btnStop">Stop</button>
+      </div>
+      
+      <section class="ex-passage" id="passage" data-tts-root>
+          <p class="ex-sent" data-sent="1">
+            <span class="ex-en">In this A1 <mark class="vocab" data-word="city">city</mark><span class="ipa">/ˈsɪti/</span> & Places passage, notice city, <mark class="vocab" data-word="town">town</mark><span class="ipa">/taʊn/</span>, <mark class="vocab" data-word="street">street</mark><span class="ipa">/striːt/</span>, and <mark class="vocab" data-word="bank">bank</mark><span class="ipa">/bænk/</span>.</span>
+            <span class="ex-vi">Trong đoạn A1 về City &amp; Places, hãy để ý thành phố, thị trấn, đường phố, và ngân hàng.</span>
+          </p>
+          <p class="ex-sent" data-sent="2">
+            <span class="ex-en">In this A1 City & Places passage, notice <mark class="vocab" data-word="hospital">hospital</mark><span class="ipa">/ˈhɑːspɪtl/</span>, <mark class="vocab" data-word="restaurant">restaurant</mark><span class="ipa">/ˈrɛstərɑːnt/</span>, <mark class="vocab" data-word="movie theater">movie theater</mark><span class="ipa">/ˈmuːvi ˈθiːətɚ/</span>, and <mark class="vocab" data-word="supermarket">supermarket</mark><span class="ipa">/ˈsuːpɚˌmɑːrkɪt/</span>.</span>
+            <span class="ex-vi">Trong đoạn A1 về City &amp; Places, hãy để ý bệnh viện, nhà hàng, rạp chiếu phim, và siêu thị.</span>
+          </p>
+          <p class="ex-sent" data-sent="3">
+            <span class="ex-en">In this A1 City & Places passage, notice <mark class="vocab" data-word="post office">post office</mark><span class="ipa">/ˈpoʊst ˈɒfɪs/</span>, <mark class="vocab" data-word="bench">bench</mark><span class="ipa">/bɛnʧ/</span>, <mark class="vocab" data-word="museum">museum</mark><span class="ipa">/mjuˈziːəm/</span>, and <mark class="vocab" data-word="park">park</mark><span class="ipa">/pɑrk/</span>.</span>
+            <span class="ex-vi">Trong đoạn A1 về City &amp; Places, hãy để ý bưu điện, ghế dài, bảo tàng, và công viên.</span>
+          </p>
+          <p class="ex-sent" data-sent="4">
+            <span class="ex-en">In this A1 City & Places passage, notice <mark class="vocab" data-word="hotel">hotel</mark><span class="ipa">/hoʊˈtɛl/</span>, <mark class="vocab" data-word="police">police</mark><span class="ipa">/pəˈliːs/</span>, <mark class="vocab" data-word="map">map</mark><span class="ipa">/mæp/</span>, and <mark class="vocab" data-word="place">place</mark><span class="ipa">/pleɪs/</span>.</span>
+            <span class="ex-vi">Trong đoạn A1 về City &amp; Places, hãy để ý khách sạn, cảnh sát, bản đồ, và nơi,chỗ.</span>
+          </p>
+          <p class="ex-sent" data-sent="5">
+            <span class="ex-en">In this A1 City & Places passage, notice <mark class="vocab" data-word="north">north</mark><span class="ipa">/nɔːrθ/</span>, <mark class="vocab" data-word="south">south</mark><span class="ipa">/saʊθ/</span>, <mark class="vocab" data-word="east">east</mark><span class="ipa">/iːst/</span>, and <mark class="vocab" data-word="west">west</mark><span class="ipa">/wɛst/</span>.</span>
+            <span class="ex-vi">Trong đoạn A1 về City &amp; Places, hãy để ý bắc,phương bắc, nam,buổi trưa, đông,hướng đông, và tây,phương tây.</span>
+          </p>
+          <p class="ex-sent" data-sent="6">
+            <span class="ex-en">In this A1 City & Places passage, notice <mark class="vocab" data-word="back">back</mark><span class="ipa">/bæk/</span>, <mark class="vocab" data-word="right">right</mark><span class="ipa">/raɪt/</span>, <mark class="vocab" data-word="left">left</mark><span class="ipa">/ˈɫɛft/</span>, and <mark class="vocab" data-word="far">far</mark><span class="ipa">/fɑr/</span>.</span>
+            <span class="ex-vi">Trong đoạn A1 về City &amp; Places, hãy để ý lùi lại,về phía sau, phải, trái, và xa.</span>
+          </p>
+          <p class="ex-sent" data-sent="7">
+            <span class="ex-en">In this A1 City & Places passage, notice <mark class="vocab" data-word="continent">continent</mark><span class="ipa">/ˈkɑːntɪnənt/</span>, <mark class="vocab" data-word="Asia">Asia</mark><span class="ipa">/ˈeɪʒə/</span>, <mark class="vocab" data-word="Asian">Asian</mark><span class="ipa">/ˈeɪʒən/</span>, and <mark class="vocab" data-word="Europe">Europe</mark><span class="ipa">/ˈjʊrəp/</span>.</span>
+            <span class="ex-vi">Trong đoạn A1 về City &amp; Places, hãy để ý lục địa, Châu Á, châu Á, và Châu Âu.</span>
+          </p>
+          <p class="ex-sent" data-sent="8">
+            <span class="ex-en">In this A1 City & Places passage, notice <mark class="vocab" data-word="European">European</mark><span class="ipa">/ˌjʊrəˈpiːən/</span>, <mark class="vocab" data-word="Africa">Africa</mark><span class="ipa">/ˈæfrɪkə/</span>, and <mark class="vocab" data-word="African">African</mark><span class="ipa">/ˈæfrɪkən/</span>.</span>
+            <span class="ex-vi">Trong đoạn A1 về City &amp; Places, hãy để ý châu Âu, Châu Phi, và châu Phi.</span>
+          </p>
+      </section>
+
+      <section class="ex-vocab">
+        <h2>Word checklist · 31</h2>
+        <ul class="ex-vocab-list">
+          <li><mark class="vocab">city</mark> <span class="ipa">/ˈsɪti/</span> — thành phố</li>
+          <li><mark class="vocab">town</mark> <span class="ipa">/taʊn/</span> — thị trấn</li>
+          <li><mark class="vocab">street</mark> <span class="ipa">/striːt/</span> — đường phố</li>
+          <li><mark class="vocab">bank</mark> <span class="ipa">/bænk/</span> — ngân hàng</li>
+          <li><mark class="vocab">hospital</mark> <span class="ipa">/ˈhɑːspɪtl/</span> — bệnh viện</li>
+          <li><mark class="vocab">restaurant</mark> <span class="ipa">/ˈrɛstərɑːnt/</span> — nhà hàng</li>
+          <li><mark class="vocab">movie theater</mark> <span class="ipa">/ˈmuːvi ˈθiːətɚ/</span> — rạp chiếu phim</li>
+          <li><mark class="vocab">supermarket</mark> <span class="ipa">/ˈsuːpɚˌmɑːrkɪt/</span> — siêu thị</li>
+          <li><mark class="vocab">post office</mark> <span class="ipa">/ˈpoʊst ˈɒfɪs/</span> — bưu điện</li>
+          <li><mark class="vocab">bench</mark> <span class="ipa">/bɛnʧ/</span> — ghế dài</li>
+          <li><mark class="vocab">museum</mark> <span class="ipa">/mjuˈziːəm/</span> — bảo tàng</li>
+          <li><mark class="vocab">park</mark> <span class="ipa">/pɑrk/</span> — công viên</li>
+          <li><mark class="vocab">hotel</mark> <span class="ipa">/hoʊˈtɛl/</span> — khách sạn</li>
+          <li><mark class="vocab">police</mark> <span class="ipa">/pəˈliːs/</span> — cảnh sát</li>
+          <li><mark class="vocab">map</mark> <span class="ipa">/mæp/</span> — bản đồ</li>
+          <li><mark class="vocab">place</mark> <span class="ipa">/pleɪs/</span> — nơi,chỗ</li>
+          <li><mark class="vocab">north</mark> <span class="ipa">/nɔːrθ/</span> — bắc,phương bắc</li>
+          <li><mark class="vocab">south</mark> <span class="ipa">/saʊθ/</span> — nam,buổi trưa</li>
+          <li><mark class="vocab">east</mark> <span class="ipa">/iːst/</span> — đông,hướng đông</li>
+          <li><mark class="vocab">west</mark> <span class="ipa">/wɛst/</span> — tây,phương tây</li>
+          <li><mark class="vocab">back</mark> <span class="ipa">/bæk/</span> — lùi lại,về phía sau</li>
+          <li><mark class="vocab">right</mark> <span class="ipa">/raɪt/</span> — phải</li>
+          <li><mark class="vocab">left</mark> <span class="ipa">/ˈɫɛft/</span> — trái</li>
+          <li><mark class="vocab">far</mark> <span class="ipa">/fɑr/</span> — xa</li>
+          <li><mark class="vocab">continent</mark> <span class="ipa">/ˈkɑːntɪnənt/</span> — lục địa</li>
+          <li><mark class="vocab">Asia</mark> <span class="ipa">/ˈeɪʒə/</span> — Châu Á</li>
+          <li><mark class="vocab">Asian</mark> <span class="ipa">/ˈeɪʒən/</span> — châu Á</li>
+          <li><mark class="vocab">Europe</mark> <span class="ipa">/ˈjʊrəp/</span> — Châu Âu</li>
+          <li><mark class="vocab">European</mark> <span class="ipa">/ˌjʊrəˈpiːən/</span> — châu Âu</li>
+          <li><mark class="vocab">Africa</mark> <span class="ipa">/ˈæfrɪkə/</span> — Châu Phi</li>
+          <li><mark class="vocab">African</mark> <span class="ipa">/ˈæfrɪkən/</span> — châu Phi</li>
+        </ul>
+      </section>
+
+      <div class="docs-pager">
+        <a href="../">← City &amp; Places</a>
+        <a href="../../">All topics →</a>
+      </div>
+    </article>
+  </div>
+  <script src="../../../../js/docs.js"></script>
+  <script src="../../../../js/exercise.js"></script>
+</body>
+</html>

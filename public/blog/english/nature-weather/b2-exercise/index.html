@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>B2 Exercise · Nature &amp; Weather — The Quiet Corner</title>
+  <meta name="description" content="B2 reading exercise for Nature &amp; Weather vocabulary with IPA and bilingual sentences.">
+  <link rel="icon" href="../../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../../"><span>✦</span> The Quiet Corner <span>✦</span></a>
+    <nav class="docs-series">
+      <a href="../../../../blog/web-security/">DevSecOps</a>
+      <a href="../../../../blog/kubestronaut/">Kubestronaut</a>
+      <a class="active" href="../../">English</a>
+    </nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-nav="english" data-docs-root="../../" data-active="nature-weather">
+      <div class="docs-nav-label">English</div>
+      <ul class="docs-nav" id="docsNav">
+        <li><a href="../../">All topics</a></li>
+        <li><a href="../">Nature &amp; Weather</a></li>
+        <li><a class="active" href="./">B2 Exercise</a></li>
+      </ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../../">Home</a>
+        <span>›</span>
+        <a href="../../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../../">English</a>
+        <span>›</span>
+        <a href="../">Nature &amp; Weather</a>
+        <span>›</span>
+        <span>B2 Exercise</span>
+      </div>
+
+      <div class="vocab-topic-hero">
+        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 72 72' fill='none'%3E%3Crect width='72' height='72' rx='14' fill='%230b1220'/%3E%3Crect x='16' y='14' width='40' height='46' rx='6' stroke='%2322d3ee' stroke-width='2.5'/%3E%3Cpath d='M24 28h24M24 36h24M24 44h16' stroke='%23e4e4e7' stroke-width='2.5' stroke-linecap='round'/%3E%3Cpath d='M48 48l6 2-2 6-8-8 4 0z' fill='%2322d3ee'/%3E%3C/svg%3E" alt="" width="112" height="112">
+        <div>
+          <h1>B2 Exercise · Nature &amp; Weather</h1>
+          <p class="lede">Reading passage with every new word from this level’s LanGeek lessons — IPA, highlights, sentence translation, and free TTS.</p>
+          <div class="docs-meta">
+            <span><strong>Words:</strong> 156</span>
+            <span><strong>Lessons:</strong> Farming · Nature · Outer Space · Plants · The Weather</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="ex-toolbar" id="exToolbar">
+        <label class="ex-toggle"><input type="checkbox" id="togHighlight" checked> Highlights</label>
+        <label class="ex-toggle"><input type="checkbox" id="togIpa" checked> IPA</label>
+        <label class="ex-toggle"><input type="checkbox" id="togVi"> Dịch câu (VI)</label>
+        <span class="ex-sep"></span>
+        <label class="ex-voice">Voice
+          <select id="voiceSelect" aria-label="TTS voice"></select>
+        </label>
+        <label class="ex-voice">Speed
+          <input id="rateRange" type="range" min="0.7" max="1.15" step="0.05" value="0.95">
+          <span id="rateVal">0.95</span>
+        </label>
+        <button type="button" class="ex-btn primary" id="btnPlay">▶ Read passage</button>
+        <button type="button" class="ex-btn" id="btnStop">Stop</button>
+      </div>
+      
+      <section class="ex-passage" id="passage" data-tts-root>
+          <p class="ex-sent" data-sent="1">
+            <span class="ex-en">In this B2 Nature & Weather passage, notice <mark class="vocab" data-word="cornfield">cornfield</mark><span class="ipa">/ˈkɔɹnˌfiɫd/</span>, <mark class="vocab" data-word="plantation">plantation</mark><span class="ipa">/ˌpɫænˈteɪʃən/</span>, <mark class="vocab" data-word="cowboy">cowboy</mark><span class="ipa">/ˈkaʊˌbɔɪ/</span>, and <mark class="vocab" data-word="crop">crop</mark><span class="ipa">/krɑp/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Nature &amp; Weather, hãy để ý cánh đồng ngô, đồn điền, cao bồi, và vụ thu hoạch.</span>
+          </p>
+          <p class="ex-sent" data-sent="2">
+            <span class="ex-en">In this B2 Nature & Weather passage, notice <mark class="vocab" data-word="groundwater">groundwater</mark><span class="ipa">/ɡɹˈaʊnd wˈɔːɾɚ/</span>, <mark class="vocab" data-word="erosion">erosion</mark><span class="ipa">/ɪˈɹoʊʒən/</span>, <mark class="vocab" data-word="pesticide">pesticide</mark><span class="ipa">/ˈpɛstəˌsaɪd/</span>, and <mark class="vocab" data-word="agricultural">agricultural</mark><span class="ipa">/ˌæɡɹəˈkəɫtʃɝəɫ/, /ˌæɡɹɪˈkəɫtʃɝəɫ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Nature &amp; Weather, hãy để ý nước ngầm, xói mòn, thuốc trừ sâu, và nông nghiệp.</span>
+          </p>
+          <p class="ex-sent" data-sent="3">
+            <span class="ex-en">In this B2 Nature & Weather passage, notice <mark class="vocab" data-word="edible">edible</mark><span class="ipa">/ˈɛdəbəɫ/</span>, <mark class="vocab" data-word="fertile">fertile</mark><span class="ipa">/ˈfɜrtəl/</span>, <mark class="vocab" data-word="produce">produce</mark><span class="ipa">/prəˈdus/</span>, and <mark class="vocab" data-word="barley">barley</mark><span class="ipa">/ˈbɑɹɫi/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Nature &amp; Weather, hãy để ý ăn được, màu mỡ, nông sản, và một hạt lúa mạch.</span>
+          </p>
+          <p class="ex-sent" data-sent="4">
+            <span class="ex-en">In this B2 Nature & Weather passage, notice <mark class="vocab" data-word="legume">legume</mark><span class="ipa">/ˈɫɛɡˌjum/</span>, <mark class="vocab" data-word="hay">hay</mark><span class="ipa">/ˈheɪ/</span>, <mark class="vocab" data-word="soy">soy</mark><span class="ipa">/ˈsɔɪ/</span>, and <mark class="vocab" data-word="sugar cane">sugar cane</mark><span class="ipa">/ʃˈʊɡɚ kˈeɪn/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Nature &amp; Weather, hãy để ý cây họ đậu, cỏ khô, đậu nành, và mía đường.</span>
+          </p>
+          <p class="ex-sent" data-sent="5">
+            <span class="ex-en">In this B2 Nature & Weather passage, notice <mark class="vocab" data-word="to dig">dig</mark><span class="ipa">/ˈdɪɡ/</span>, <mark class="vocab" data-word="to harness">harness</mark><span class="ipa">/ˈhɑɹnəs/, /ˈhɑɹnɪs/</span>, <mark class="vocab" data-word="to harvest">harvest</mark><span class="ipa">/ˈhɑrvɪst/</span>, and <mark class="vocab" data-word="to keep">keep</mark><span class="ipa">/kiːp/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Nature &amp; Weather, hãy để ý đào, thắng, thu hoạch, và giữ.</span>
+          </p>
+          <p class="ex-sent" data-sent="6">
+            <span class="ex-en">In this B2 Nature & Weather passage, notice <mark class="vocab" data-word="to load">load</mark><span class="ipa">/loʊd/</span>, <mark class="vocab" data-word="to package">package</mark><span class="ipa">/ˈpækɪdʒ/</span>, <mark class="vocab" data-word="to pile">pile</mark><span class="ipa">/paɪl/</span>, and <mark class="vocab" data-word="to uproot">uproot</mark><span class="ipa">/əˈpɹut/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Nature &amp; Weather, hãy để ý chất hàng, đóng gói, chất đống, và nhổ bật gốc.</span>
+          </p>
+          <p class="ex-sent" data-sent="7">
+            <span class="ex-en">In this B2 Nature & Weather passage, notice <mark class="vocab" data-word="livestock">livestock</mark><span class="ipa">/ˈɫaɪvˌstɑk/</span>, <mark class="vocab" data-word="boar">boar</mark><span class="ipa">/ˈbɔɹ/</span>, <mark class="vocab" data-word="calf">calf</mark><span class="ipa">/ˈkæf/</span>, and <mark class="vocab" data-word="hog">hog</mark><span class="ipa">/ˈhɑɡ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Nature &amp; Weather, hãy để ý gia súc, lợn đực, bê con, và lợn.</span>
+          </p>
+          <p class="ex-sent" data-sent="8">
+            <span class="ex-en">In this B2 Nature & Weather passage, notice <mark class="vocab" data-word="mule">mule</mark><span class="ipa">/ˈmjuɫ/</span>, <mark class="vocab" data-word="pony">pony</mark><span class="ipa">/ˈpoʊˌni/</span>, <mark class="vocab" data-word="honeycomb">honeycomb</mark><span class="ipa">/ˈhəniˌkoʊm/</span>, and <mark class="vocab" data-word="poultry">poultry</mark><span class="ipa">/ˈpoʊltri/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Nature &amp; Weather, hãy để ý con la, ngựa con, tổ ong, và gia cầm.</span>
+          </p>
+          <p class="ex-sent" data-sent="9">
+            <span class="ex-en">In this B2 Nature & Weather passage, notice <mark class="vocab" data-word="ostrich">ostrich</mark><span class="ipa">/ˈɔstɹɪtʃ/</span>, <mark class="vocab" data-word="biodiversity">biodiversity</mark><span class="ipa">/ˌbaɪoʊdaɪˈvɝsəti/</span>, <mark class="vocab" data-word="environmentalist">environmentalist</mark><span class="ipa">/ɪnˌvaɪɹənˈmɛnəɫɪst/, /ɪnˌvaɪɹənˈmɛntəɫɪst/</span>, and <mark class="vocab" data-word="conservation">conservation</mark><span class="ipa">/ˌkɑnsɝˈveɪʃən/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Nature &amp; Weather, hãy để ý đà điểu, đa dạng sinh học, nhà môi trường học, và bảo tồn.</span>
+          </p>
+          <p class="ex-sent" data-sent="10">
+            <span class="ex-en">In this B2 Nature & Weather passage, notice <mark class="vocab" data-word="deforestation">deforestation</mark><span class="ipa">/dɪˌfɔɹɪˈsteɪʃən/</span>, <mark class="vocab" data-word="eclipse">eclipse</mark><span class="ipa">/əˈkɫɪps/, /iˈkɫɪps/, /ɪˈkɫɪps/</span>, <mark class="vocab" data-word="solar">solar</mark><span class="ipa">/ˈsoʊɫɝ/</span>, and <mark class="vocab" data-word="lunar">lunar</mark><span class="ipa">/ˈɫunɝ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Nature &amp; Weather, hãy để ý sự phá rừng, nhật thực, mặt trời, và thuộc mặt trăng.</span>
+          </p>
+          <p class="ex-sent" data-sent="11">
+            <span class="ex-en">In this B2 Nature & Weather passage, notice <mark class="vocab" data-word="moonlight">moonlight</mark><span class="ipa">/ˈmunˌɫaɪt/</span>, <mark class="vocab" data-word="northern lights">northern lights</mark><span class="ipa">/nˈɔːɹðɚn lˈaɪts/</span>, <mark class="vocab" data-word="to float">float</mark><span class="ipa">/ˈfɫoʊt/</span>, and <mark class="vocab" data-word="tide">tide</mark><span class="ipa">/ˈtaɪd/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Nature &amp; Weather, hãy để ý ánh trăng, cực quang, nổi, và thủy triều.</span>
+          </p>
+          <p class="ex-sent" data-sent="12">
+            <span class="ex-en">In this B2 Nature & Weather passage, notice <mark class="vocab" data-word="steam">steam</mark><span class="ipa">/ˈstim/</span>, <mark class="vocab" data-word="sunlight">sunlight</mark><span class="ipa">/ˈsənˌɫaɪt/</span>, <mark class="vocab" data-word="dawn">dawn</mark><span class="ipa">/ˈdɔn/</span>, and <mark class="vocab" data-word="eruption">eruption</mark><span class="ipa">/ˌiˈɹəpʃən/, /ˌɪˈɹəpʃən/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Nature &amp; Weather, hãy để ý hơi nước, ánh sáng mặt trời, bình minh, và phun trào.</span>
+          </p>
+          <p class="ex-sent" data-sent="13">
+            <span class="ex-en">In this B2 Nature & Weather passage, notice <mark class="vocab" data-word="volcanic">volcanic</mark><span class="ipa">/vɑɫˈkænɪk/</span>, <mark class="vocab" data-word="lava">lava</mark><span class="ipa">/ˈɫɑvə/</span>, <mark class="vocab" data-word="landslide">landslide</mark><span class="ipa">/ˈɫænˌsɫaɪd/, /ˈɫændˌsɫaɪd/</span>, and <mark class="vocab" data-word="ecology">ecology</mark><span class="ipa">/iˈkɑɫədʒi/, /ɪˈkɑɫədʒi/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Nature &amp; Weather, hãy để ý núi lửa, nham thạch, lở đất, và sinh thái học.</span>
+          </p>
+          <p class="ex-sent" data-sent="14">
+            <span class="ex-en">In this B2 Nature & Weather passage, notice <mark class="vocab" data-word="ecosystem">ecosystem</mark><span class="ipa">/ˈikoʊˌsɪstəm/</span>, <mark class="vocab" data-word="nonrenewable">nonrenewable</mark><span class="ipa">/nɑnɹiˈnuəbəɫ/</span>, <mark class="vocab" data-word="hydroelectric">hydroelectric</mark><span class="ipa">/ˌhaɪdɹoʊɪˈɫɛktɹɪk/</span>, and <mark class="vocab" data-word="turbine">turbine</mark><span class="ipa">/ˈtɝbaɪn/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Nature &amp; Weather, hãy để ý hệ sinh thái, không tái tạo được, thủy điện, và tuabin.</span>
+          </p>
+          <p class="ex-sent" data-sent="15">
+            <span class="ex-en">In this B2 Nature & Weather passage, notice <mark class="vocab" data-word="alternative energy">alternative energy</mark><span class="ipa">/ɔːltˈɜːnətˌɪv ˈɛnɚdʒi/</span>, <mark class="vocab" data-word="fume">fume</mark><span class="ipa">/ˈfjum/</span>, <mark class="vocab" data-word="to preserve">preserve</mark><span class="ipa">/pɹəˈzɝv/, /pɹiˈzɝv/, /pɹɪˈzɝv/</span>, and <mark class="vocab" data-word="slope">slope</mark><span class="ipa">/ˈsɫoʊp/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Nature &amp; Weather, hãy để ý năng lượng thay thế, khói, bảo tồn, và dốc.</span>
+          </p>
+          <p class="ex-sent" data-sent="16">
+            <span class="ex-en">In this B2 Nature & Weather passage, notice <mark class="vocab" data-word="pitch-black">pitch-black</mark><span class="ipa">/pˈɪtʃblˈæk/</span>, <mark class="vocab" data-word="sub-zero">sub-zero</mark><span class="ipa">/sˈʌbzˈiəɹoʊ/</span>, <mark class="vocab" data-word="alien">alien</mark><span class="ipa">/ˈeɪliən/</span>, and <mark class="vocab" data-word="space">space</mark><span class="ipa">/ˈspeɪs/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Nature &amp; Weather, hãy để ý đen như mực, dưới không, người ngoài hành tinh, và không gian.</span>
+          </p>
+          <p class="ex-sent" data-sent="17">
+            <span class="ex-en">In this B2 Nature & Weather passage, notice <mark class="vocab" data-word="outer space">outer space</mark><span class="ipa">/ˈaʊɾɚ spˈeɪs/</span>, <mark class="vocab" data-word="universe">universe</mark><span class="ipa">/ˈjunəˌvɝs/</span>, <mark class="vocab" data-word="asteroid">asteroid</mark><span class="ipa">/ˈæstɝˌɔɪd/</span>, and <mark class="vocab" data-word="black hole">black hole</mark><span class="ipa">/blˈæk hˈoʊl/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Nature &amp; Weather, hãy để ý không gian vũ trụ, vũ trụ, tiểu hành tinh, và hố đen.</span>
+          </p>
+          <p class="ex-sent" data-sent="18">
+            <span class="ex-en">In this B2 Nature & Weather passage, notice <mark class="vocab" data-word="galaxy">galaxy</mark><span class="ipa">/ˈɡæɫəksi/</span>, <mark class="vocab" data-word="solar system">solar system</mark><span class="ipa">/sˈoʊlɚ sˈɪstəm/</span>, <mark class="vocab" data-word="Mercury">Mercury</mark><span class="ipa">/ˈmɝkjɝi/</span>, and <mark class="vocab" data-word="Venus">Venus</mark><span class="ipa">/vˈiːnəs/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Nature &amp; Weather, hãy để ý thiên hà, hệ mặt trời, Sao Thủy, và Sao Kim.</span>
+          </p>
+          <p class="ex-sent" data-sent="19">
+            <span class="ex-en">In this B2 Nature & Weather passage, notice <mark class="vocab" data-word="Mars">Mars</mark><span class="ipa">/mˈɑːɹz/</span>, <mark class="vocab" data-word="Jupiter">Jupiter</mark><span class="ipa">/dʒˈuːpɪɾɚ/</span>, <mark class="vocab" data-word="Saturn">Saturn</mark><span class="ipa">/sˈæɾɜːn/</span>, and <mark class="vocab" data-word="Uranus">Uranus</mark><span class="ipa">/jˈʊɹænəs/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Nature &amp; Weather, hãy để ý Sao Hỏa, Sao Mộc là hành tinh thứ năm và lớn nhất trong hệ mặt trời, Sao Thổ, và Sao Thiên Vương.</span>
+          </p>
+          <p class="ex-sent" data-sent="20">
+            <span class="ex-en">In this B2 Nature & Weather passage, notice <mark class="vocab" data-word="Neptune">Neptune</mark><span class="ipa">/nˈɛptuːn/</span>, <mark class="vocab" data-word="astronomy">astronomy</mark><span class="ipa">/əˈstɹɑnəmi/</span>, <mark class="vocab" data-word="astronomer">astronomer</mark><span class="ipa">/əˈstɹɑnəmɝ/</span>, and <mark class="vocab" data-word="landing">landing</mark><span class="ipa">/ˈɫændɪŋ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Nature &amp; Weather, hãy để ý Sao Hải Vương, thiên văn học, nhà thiên văn học, và hạ cánh.</span>
+          </p>
+          <p class="ex-sent" data-sent="21">
+            <span class="ex-en">In this B2 Nature & Weather passage, notice <mark class="vocab" data-word="outer">outer</mark><span class="ipa">/ˈaʊtɝ/</span>, <mark class="vocab" data-word="<mark class="vocab" data-word="to orbit">orbit</mark><span class="ipa">/ˈɔɹbət/</span>">orbit</mark><span class="ipa">/ˈɔɹbət/</span>, orbit, and <mark class="vocab" data-word="rocket">rocket</mark><span class="ipa">/ˈɹɑkət/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Nature &amp; Weather, hãy để ý bên ngoài, quỹ đạo, quay quanh, và tên lửa.</span>
+          </p>
+          <p class="ex-sent" data-sent="22">
+            <span class="ex-en">In this B2 Nature & Weather passage, notice <mark class="vocab" data-word="satellite">satellite</mark><span class="ipa">/ˈsætəˌɫaɪt/</span>, <mark class="vocab" data-word="to launch">launch</mark><span class="ipa">/ˈɫɔntʃ/</span>, <mark class="vocab" data-word="takeoff">takeoff</mark><span class="ipa">/ˈteɪˌkɔf/</span>, and <mark class="vocab" data-word="spacecraft">spacecraft</mark><span class="ipa">/ˈspeɪsˌkɹæft/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Nature &amp; Weather, hãy để ý vệ tinh, phóng, cất cánh, và tàu vũ trụ.</span>
+          </p>
+          <p class="ex-sent" data-sent="23">
+            <span class="ex-en">In this B2 Nature & Weather passage, notice <mark class="vocab" data-word="spaceman">spaceman</mark><span class="ipa">/spˈeɪsmən/</span>, <mark class="vocab" data-word="spaceship">spaceship</mark><span class="ipa">/ˈspeɪsˌʃɪp/</span>, <mark class="vocab" data-word="space station">space station</mark><span class="ipa">/spˈeɪs stˈeɪʃən/</span>, and <mark class="vocab" data-word="spacesuit">spacesuit</mark><span class="ipa">/ˈspeɪˌsut/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Nature &amp; Weather, hãy để ý phi hành gia, tàu vũ trụ, trạm vũ trụ, và bộ đồ vũ trụ.</span>
+          </p>
+          <p class="ex-sent" data-sent="24">
+            <span class="ex-en">In this B2 Nature & Weather passage, notice <mark class="vocab" data-word="spacewalk">spacewalk</mark><span class="ipa">/ˈspeɪˌswɑk/</span>, <mark class="vocab" data-word="telescope">telescope</mark><span class="ipa">/ˈtɛɫəˌskoʊp/</span>, <mark class="vocab" data-word="voyage">voyage</mark><span class="ipa">/ˈvɔɪədʒ/, /ˈvɔɪɪdʒ/</span>, and <mark class="vocab" data-word="branch">branch</mark><span class="ipa">/bræntʃ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Nature &amp; Weather, hãy để ý đi bộ ngoài không gian, kính thiên văn, hành trình, và cành.</span>
+          </p>
+          <p class="ex-sent" data-sent="25">
+            <span class="ex-en">In this B2 Nature & Weather passage, notice <mark class="vocab" data-word="root">root</mark><span class="ipa">/ˈɹut/</span>, <mark class="vocab" data-word="trunk">trunk</mark><span class="ipa">/trʌŋk/</span>, <mark class="vocab" data-word="twig">twig</mark><span class="ipa">/ˈtwɪɡ/</span>, and <mark class="vocab" data-word="bush">bush</mark><span class="ipa">/ˈbʊʃ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Nature &amp; Weather, hãy để ý rễ, thân cây, cành nhỏ, và bụi cây.</span>
+          </p>
+          <p class="ex-sent" data-sent="26">
+            <span class="ex-en">In this B2 Nature & Weather passage, notice <mark class="vocab" data-word="ash">ash</mark><span class="ipa">/ˈæʃ/</span>, <mark class="vocab" data-word="bamboo">bamboo</mark><span class="ipa">/bæmˈbu/</span>, <mark class="vocab" data-word="eucalyptus">eucalyptus</mark><span class="ipa">/ˌjukəˈɫɪptəs/</span>, and <mark class="vocab" data-word="evergreen">evergreen</mark><span class="ipa">/ˈɛvɝˌɡɹin/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Nature &amp; Weather, hãy để ý cây tần bì, tre, bạch đàn, và cây thường xanh.</span>
+          </p>
+          <p class="ex-sent" data-sent="27">
+            <span class="ex-en">In this B2 Nature & Weather passage, notice <mark class="vocab" data-word="fir">fir</mark><span class="ipa">/ˈfɝ/</span>, <mark class="vocab" data-word="ivy">ivy</mark><span class="ipa">/ˈaɪvi/</span>, <mark class="vocab" data-word="oak">oak</mark><span class="ipa">/ˈoʊk/</span>, and <mark class="vocab" data-word="palm">palm</mark><span class="ipa">/pɑːm/ , /pɑlm/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Nature &amp; Weather, hãy để ý cây linh sam, cây thường xuân, cây sồi, và cây cọ.</span>
+          </p>
+          <p class="ex-sent" data-sent="28">
+            <span class="ex-en">In this B2 Nature & Weather passage, notice <mark class="vocab" data-word="pine">pine</mark><span class="ipa">/ˈpaɪn/</span>, <mark class="vocab" data-word="vine">vine</mark><span class="ipa">/ˈvaɪn/</span>, <mark class="vocab" data-word="willow">willow</mark><span class="ipa">/ˈwɪˌɫoʊ/</span>, and <mark class="vocab" data-word="weeping willow">weeping willow</mark><span class="ipa">/wˈiːpɪŋ wˈɪloʊ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Nature &amp; Weather, hãy để ý thông, cây nho, cây liễu, và liễu rủ.</span>
+          </p>
+          <p class="ex-sent" data-sent="29">
+            <span class="ex-en">In this B2 Nature & Weather passage, notice <mark class="vocab" data-word="to bloom">bloom</mark><span class="ipa">/ˈbɫum/</span>, <mark class="vocab" data-word="to blossom">blossom</mark><span class="ipa">/ˈblɑsəm/</span>, <mark class="vocab" data-word="bud">bud</mark><span class="ipa">/ˈbəd/</span>, and <mark class="vocab" data-word="leaf">leaf</mark><span class="ipa">/ˈɫif/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Nature &amp; Weather, hãy để ý nở hoa, nở hoa, chồi, và lá.</span>
+          </p>
+          <p class="ex-sent" data-sent="30">
+            <span class="ex-en">In this B2 Nature & Weather passage, notice <mark class="vocab" data-word="stem">stem</mark><span class="ipa">/ˈstem/</span>, <mark class="vocab" data-word="thorn">thorn</mark><span class="ipa">/ˈθɔɹn/</span>, <mark class="vocab" data-word="daffodil">daffodil</mark><span class="ipa">/ˈdæfəˌdɪɫ/</span>, and <mark class="vocab" data-word="daisy">daisy</mark><span class="ipa">/ˈdeɪzi/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Nature &amp; Weather, hãy để ý thân cây, gai, thủy tiên vàng, và hoa cúc.</span>
+          </p>
+          <p class="ex-sent" data-sent="31">
+            <span class="ex-en">In this B2 Nature & Weather passage, notice <mark class="vocab" data-word="lotus">lotus</mark><span class="ipa">/ˈɫoʊtəs/</span>, <mark class="vocab" data-word="tulip">tulip</mark><span class="ipa">/ˈtuɫəp/</span>, <mark class="vocab" data-word="violet">violet</mark><span class="ipa">/ˈvaɪəɫɪt/, /ˈvaɪɫɪt/</span>, and <mark class="vocab" data-word="lavender">lavender</mark><span class="ipa">/ˈɫævəndɝ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Nature &amp; Weather, hãy để ý sen, hoa tulip, hoa tím, và hoa oải hương.</span>
+          </p>
+          <p class="ex-sent" data-sent="32">
+            <span class="ex-en">In this B2 Nature & Weather passage, notice <mark class="vocab" data-word="weed">weed</mark><span class="ipa">/ˈwid/</span>, <mark class="vocab" data-word="to flash">flash</mark><span class="ipa">/ˈfɫæʃ/</span>, <mark class="vocab" data-word="humidity">humidity</mark><span class="ipa">/hjuˈmɪdəti/</span>, and <mark class="vocab" data-word="airless">airless</mark><span class="ipa">/ˈɛɹɫəs/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Nature &amp; Weather, hãy để ý cỏ dại, lóe lên, độ ẩm, và thiếu không khí.</span>
+          </p>
+          <p class="ex-sent" data-sent="33">
+            <span class="ex-en">In this B2 Nature & Weather passage, notice <mark class="vocab" data-word="seasonal">seasonal</mark><span class="ipa">/ˈsizənəɫ/</span>, <mark class="vocab" data-word="falling">falling</mark><span class="ipa">/ˈfɑɫɪŋ/</span>, <mark class="vocab" data-word="rising">rising</mark><span class="ipa">/ˈɹaɪzɪŋ/</span>, and <mark class="vocab" data-word="changeable">changeable</mark><span class="ipa">/ˈtʃeɪndʒəbəɫ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Nature &amp; Weather, hãy để ý theo mùa, giảm, tăng, và thay đổi.</span>
+          </p>
+          <p class="ex-sent" data-sent="34">
+            <span class="ex-en">In this B2 Nature & Weather passage, notice <mark class="vocab" data-word="cloudless">cloudless</mark><span class="ipa">/ˈkɫaʊdɫəs/</span>, <mark class="vocab" data-word="heavy">heavy</mark><span class="ipa">/ˈhɛvi/</span>, <mark class="vocab" data-word="regional">regional</mark><span class="ipa">/ˈɹidʒənəɫ/</span>, and <mark class="vocab" data-word="stable">stable</mark><span class="ipa">/ˈsteɪbəl/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Nature &amp; Weather, hãy để ý không có mây, nặng nề, khu vực, và ổn định.</span>
+          </p>
+          <p class="ex-sent" data-sent="35">
+            <span class="ex-en">In this B2 Nature & Weather passage, notice <mark class="vocab" data-word="steady">steady</mark><span class="ipa">/ˈstɛdi/</span>, <mark class="vocab" data-word="tropical">tropical</mark><span class="ipa">/ˈtɹɑpɪkəɫ/</span>, <mark class="vocab" data-word="windless">windless</mark><span class="ipa">/wˈɪndləs/</span>, and <mark class="vocab" data-word="chill">chill</mark><span class="ipa">/ˈtʃɪɫ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Nature &amp; Weather, hãy để ý ổn định, nhiệt đới, không có gió, và lạnh.</span>
+          </p>
+          <p class="ex-sent" data-sent="36">
+            <span class="ex-en">In this B2 Nature & Weather passage, notice <mark class="vocab" data-word="warmth">warmth</mark><span class="ipa">/ˈwɔɹmθ/</span>, <mark class="vocab" data-word="frostbite">frostbite</mark><span class="ipa">/ˈfɹɔstˌbaɪt/</span>, <mark class="vocab" data-word="frosty">frosty</mark><span class="ipa">/ˈfɹɔsti/</span>, and <mark class="vocab" data-word="heatstroke">heatstroke</mark><span class="ipa">/hˈiːtstɹoʊk/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Nature &amp; Weather, hãy để ý hơi ấm, tê cóng, lạnh giá, và say nắng.</span>
+          </p>
+          <p class="ex-sent" data-sent="37">
+            <span class="ex-en">In this B2 Nature & Weather passage, notice <mark class="vocab" data-word="dry season">dry season</mark><span class="ipa">/dɹˈaɪ sˈiːzən/</span>, <mark class="vocab" data-word="dust storm">dust storm</mark><span class="ipa">/dˈʌst stˈoːɹm/</span>, <mark class="vocab" data-word="flooding">flooding</mark><span class="ipa">/ˈfɫədɪŋ/</span>, and <mark class="vocab" data-word="frost">frost</mark><span class="ipa">/ˈfɹɔst/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Nature &amp; Weather, hãy để ý mùa khô, bão bụi, lũ lụt, và sương giá.</span>
+          </p>
+          <p class="ex-sent" data-sent="38">
+            <span class="ex-en">In this B2 Nature & Weather passage, notice <mark class="vocab" data-word="mist">mist</mark><span class="ipa">/ˈmɪst/</span>, <mark class="vocab" data-word="rainbow">rainbow</mark><span class="ipa">/ˈɹeɪnˌboʊ/</span>, <mark class="vocab" data-word="tsunami">tsunami</mark><span class="ipa">/suˈnɑmi/, /tsuˈnɑmi/</span>, and <mark class="vocab" data-word="typhoon">typhoon</mark><span class="ipa">/ˌtaɪˈfun/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Nature &amp; Weather, hãy để ý sương mù, cầu vồng, sóng thần, và bão.</span>
+          </p>
+          <p class="ex-sent" data-sent="39">
+            <span class="ex-en">In this B2 Nature & Weather passage, notice <mark class="vocab" data-word="to [rain] cats and dogs">[rain] cats and dogs</mark><span class="ipa">/ɹˈeɪn kˈæts ænd dˈɑːɡz/</span>, <mark class="vocab" data-word="shadow">shadow</mark><span class="ipa">/ˈʃæˌdoʊ/</span>, <mark class="vocab" data-word="overcast">overcast</mark><span class="ipa">/ˈoʊvɝˌkæst/</span>, and <mark class="vocab" data-word="thunderbolt">thunderbolt</mark><span class="ipa">/ˈθəndɝˌbɔɫt/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Nature &amp; Weather, hãy để ý mưa như trút nước, bóng, u ám, và tia chớp.</span>
+          </p>
+      </section>
+
+      <section class="ex-vocab">
+        <h2>Word checklist · 156</h2>
+        <ul class="ex-vocab-list">
+          <li><mark class="vocab">cornfield</mark> <span class="ipa">/ˈkɔɹnˌfiɫd/</span> — cánh đồng ngô</li>
+          <li><mark class="vocab">plantation</mark> <span class="ipa">/ˌpɫænˈteɪʃən/</span> — đồn điền</li>
+          <li><mark class="vocab">cowboy</mark> <span class="ipa">/ˈkaʊˌbɔɪ/</span> — cao bồi</li>
+          <li><mark class="vocab">crop</mark> <span class="ipa">/krɑp/</span> — vụ thu hoạch</li>
+          <li><mark class="vocab">groundwater</mark> <span class="ipa">/ɡɹˈaʊnd wˈɔːɾɚ/</span> — nước ngầm</li>
+          <li><mark class="vocab">erosion</mark> <span class="ipa">/ɪˈɹoʊʒən/</span> — xói mòn</li>
+          <li><mark class="vocab">pesticide</mark> <span class="ipa">/ˈpɛstəˌsaɪd/</span> — thuốc trừ sâu</li>
+          <li><mark class="vocab">agricultural</mark> <span class="ipa">/ˌæɡɹəˈkəɫtʃɝəɫ/, /ˌæɡɹɪˈkəɫtʃɝəɫ/</span> — nông nghiệp</li>
+          <li><mark class="vocab">edible</mark> <span class="ipa">/ˈɛdəbəɫ/</span> — ăn được</li>
+          <li><mark class="vocab">fertile</mark> <span class="ipa">/ˈfɜrtəl/</span> — màu mỡ</li>
+          <li><mark class="vocab">produce</mark> <span class="ipa">/prəˈdus/</span> — nông sản</li>
+          <li><mark class="vocab">barley</mark> <span class="ipa">/ˈbɑɹɫi/</span> — một hạt lúa mạch</li>
+          <li><mark class="vocab">legume</mark> <span class="ipa">/ˈɫɛɡˌjum/</span> — cây họ đậu</li>
+          <li><mark class="vocab">hay</mark> <span class="ipa">/ˈheɪ/</span> — cỏ khô</li>
+          <li><mark class="vocab">soy</mark> <span class="ipa">/ˈsɔɪ/</span> — đậu nành</li>
+          <li><mark class="vocab">sugar cane</mark> <span class="ipa">/ʃˈʊɡɚ kˈeɪn/</span> — mía đường</li>
+          <li><mark class="vocab">dig</mark> <span class="ipa">/ˈdɪɡ/</span> — đào</li>
+          <li><mark class="vocab">harness</mark> <span class="ipa">/ˈhɑɹnəs/, /ˈhɑɹnɪs/</span> — thắng</li>
+          <li><mark class="vocab">harvest</mark> <span class="ipa">/ˈhɑrvɪst/</span> — thu hoạch</li>
+          <li><mark class="vocab">keep</mark> <span class="ipa">/kiːp/</span> — giữ</li>
+          <li><mark class="vocab">load</mark> <span class="ipa">/loʊd/</span> — chất hàng</li>
+          <li><mark class="vocab">package</mark> <span class="ipa">/ˈpækɪdʒ/</span> — đóng gói</li>
+          <li><mark class="vocab">pile</mark> <span class="ipa">/paɪl/</span> — chất đống</li>
+          <li><mark class="vocab">uproot</mark> <span class="ipa">/əˈpɹut/</span> — nhổ bật gốc</li>
+          <li><mark class="vocab">livestock</mark> <span class="ipa">/ˈɫaɪvˌstɑk/</span> — gia súc</li>
+          <li><mark class="vocab">boar</mark> <span class="ipa">/ˈbɔɹ/</span> — lợn đực</li>
+          <li><mark class="vocab">calf</mark> <span class="ipa">/ˈkæf/</span> — bê con</li>
+          <li><mark class="vocab">hog</mark> <span class="ipa">/ˈhɑɡ/</span> — lợn</li>
+          <li><mark class="vocab">mule</mark> <span class="ipa">/ˈmjuɫ/</span> — con la</li>
+          <li><mark class="vocab">pony</mark> <span class="ipa">/ˈpoʊˌni/</span> — ngựa con</li>
+          <li><mark class="vocab">honeycomb</mark> <span class="ipa">/ˈhəniˌkoʊm/</span> — tổ ong</li>
+          <li><mark class="vocab">poultry</mark> <span class="ipa">/ˈpoʊltri/</span> — gia cầm</li>
+          <li><mark class="vocab">ostrich</mark> <span class="ipa">/ˈɔstɹɪtʃ/</span> — đà điểu</li>
+          <li><mark class="vocab">biodiversity</mark> <span class="ipa">/ˌbaɪoʊdaɪˈvɝsəti/</span> — đa dạng sinh học</li>
+          <li><mark class="vocab">environmentalist</mark> <span class="ipa">/ɪnˌvaɪɹənˈmɛnəɫɪst/, /ɪnˌvaɪɹənˈmɛntəɫɪst/</span> — nhà môi trường học</li>
+          <li><mark class="vocab">conservation</mark> <span class="ipa">/ˌkɑnsɝˈveɪʃən/</span> — bảo tồn</li>
+          <li><mark class="vocab">deforestation</mark> <span class="ipa">/dɪˌfɔɹɪˈsteɪʃən/</span> — sự phá rừng</li>
+          <li><mark class="vocab">eclipse</mark> <span class="ipa">/əˈkɫɪps/, /iˈkɫɪps/, /ɪˈkɫɪps/</span> — nhật thực</li>
+          <li><mark class="vocab">solar</mark> <span class="ipa">/ˈsoʊɫɝ/</span> — mặt trời</li>
+          <li><mark class="vocab">lunar</mark> <span class="ipa">/ˈɫunɝ/</span> — thuộc mặt trăng</li>
+          <li><mark class="vocab">moonlight</mark> <span class="ipa">/ˈmunˌɫaɪt/</span> — ánh trăng</li>
+          <li><mark class="vocab">northern lights</mark> <span class="ipa">/nˈɔːɹðɚn lˈaɪts/</span> — cực quang</li>
+          <li><mark class="vocab">float</mark> <span class="ipa">/ˈfɫoʊt/</span> — nổi</li>
+          <li><mark class="vocab">tide</mark> <span class="ipa">/ˈtaɪd/</span> — thủy triều</li>
+          <li><mark class="vocab">steam</mark> <span class="ipa">/ˈstim/</span> — hơi nước</li>
+          <li><mark class="vocab">sunlight</mark> <span class="ipa">/ˈsənˌɫaɪt/</span> — ánh sáng mặt trời</li>
+          <li><mark class="vocab">dawn</mark> <span class="ipa">/ˈdɔn/</span> — bình minh</li>
+          <li><mark class="vocab">eruption</mark> <span class="ipa">/ˌiˈɹəpʃən/, /ˌɪˈɹəpʃən/</span> — phun trào</li>
+          <li><mark class="vocab">volcanic</mark> <span class="ipa">/vɑɫˈkænɪk/</span> — núi lửa</li>
+          <li><mark class="vocab">lava</mark> <span class="ipa">/ˈɫɑvə/</span> — nham thạch</li>
+          <li><mark class="vocab">landslide</mark> <span class="ipa">/ˈɫænˌsɫaɪd/, /ˈɫændˌsɫaɪd/</span> — lở đất</li>
+          <li><mark class="vocab">ecology</mark> <span class="ipa">/iˈkɑɫədʒi/, /ɪˈkɑɫədʒi/</span> — sinh thái học</li>
+          <li><mark class="vocab">ecosystem</mark> <span class="ipa">/ˈikoʊˌsɪstəm/</span> — hệ sinh thái</li>
+          <li><mark class="vocab">nonrenewable</mark> <span class="ipa">/nɑnɹiˈnuəbəɫ/</span> — không tái tạo được</li>
+          <li><mark class="vocab">hydroelectric</mark> <span class="ipa">/ˌhaɪdɹoʊɪˈɫɛktɹɪk/</span> — thủy điện</li>
+          <li><mark class="vocab">turbine</mark> <span class="ipa">/ˈtɝbaɪn/</span> — tuabin</li>
+          <li><mark class="vocab">alternative energy</mark> <span class="ipa">/ɔːltˈɜːnətˌɪv ˈɛnɚdʒi/</span> — năng lượng thay thế</li>
+          <li><mark class="vocab">fume</mark> <span class="ipa">/ˈfjum/</span> — khói</li>
+          <li><mark class="vocab">preserve</mark> <span class="ipa">/pɹəˈzɝv/, /pɹiˈzɝv/, /pɹɪˈzɝv/</span> — bảo tồn</li>
+          <li><mark class="vocab">slope</mark> <span class="ipa">/ˈsɫoʊp/</span> — dốc</li>
+          <li><mark class="vocab">pitch-black</mark> <span class="ipa">/pˈɪtʃblˈæk/</span> — đen như mực</li>
+          <li><mark class="vocab">sub-zero</mark> <span class="ipa">/sˈʌbzˈiəɹoʊ/</span> — dưới không</li>
+          <li><mark class="vocab">alien</mark> <span class="ipa">/ˈeɪliən/</span> — người ngoài hành tinh</li>
+          <li><mark class="vocab">space</mark> <span class="ipa">/ˈspeɪs/</span> — không gian</li>
+          <li><mark class="vocab">outer space</mark> <span class="ipa">/ˈaʊɾɚ spˈeɪs/</span> — không gian vũ trụ</li>
+          <li><mark class="vocab">universe</mark> <span class="ipa">/ˈjunəˌvɝs/</span> — vũ trụ</li>
+          <li><mark class="vocab">asteroid</mark> <span class="ipa">/ˈæstɝˌɔɪd/</span> — tiểu hành tinh</li>
+          <li><mark class="vocab">black hole</mark> <span class="ipa">/blˈæk hˈoʊl/</span> — hố đen</li>
+          <li><mark class="vocab">galaxy</mark> <span class="ipa">/ˈɡæɫəksi/</span> — thiên hà</li>
+          <li><mark class="vocab">solar system</mark> <span class="ipa">/sˈoʊlɚ sˈɪstəm/</span> — hệ mặt trời</li>
+          <li><mark class="vocab">Mercury</mark> <span class="ipa">/ˈmɝkjɝi/</span> — Sao Thủy</li>
+          <li><mark class="vocab">Venus</mark> <span class="ipa">/vˈiːnəs/</span> — Sao Kim</li>
+          <li><mark class="vocab">Mars</mark> <span class="ipa">/mˈɑːɹz/</span> — Sao Hỏa</li>
+          <li><mark class="vocab">Jupiter</mark> <span class="ipa">/dʒˈuːpɪɾɚ/</span> — Sao Mộc là hành tinh thứ năm và lớn nhất trong hệ mặt trời</li>
+          <li><mark class="vocab">Saturn</mark> <span class="ipa">/sˈæɾɜːn/</span> — Sao Thổ</li>
+          <li><mark class="vocab">Uranus</mark> <span class="ipa">/jˈʊɹænəs/</span> — Sao Thiên Vương</li>
+          <li><mark class="vocab">Neptune</mark> <span class="ipa">/nˈɛptuːn/</span> — Sao Hải Vương</li>
+          <li><mark class="vocab">astronomy</mark> <span class="ipa">/əˈstɹɑnəmi/</span> — thiên văn học</li>
+          <li><mark class="vocab">astronomer</mark> <span class="ipa">/əˈstɹɑnəmɝ/</span> — nhà thiên văn học</li>
+          <li><mark class="vocab">landing</mark> <span class="ipa">/ˈɫændɪŋ/</span> — hạ cánh</li>
+          <li><mark class="vocab">outer</mark> <span class="ipa">/ˈaʊtɝ/</span> — bên ngoài</li>
+          <li><mark class="vocab">orbit</mark> <span class="ipa">/ˈɔɹbət/</span> — quỹ đạo</li>
+          <li><mark class="vocab">orbit</mark> <span class="ipa">/ˈɔɹbət/</span> — quay quanh</li>
+          <li><mark class="vocab">rocket</mark> <span class="ipa">/ˈɹɑkət/</span> — tên lửa</li>
+          <li><mark class="vocab">satellite</mark> <span class="ipa">/ˈsætəˌɫaɪt/</span> — vệ tinh</li>
+          <li><mark class="vocab">launch</mark> <span class="ipa">/ˈɫɔntʃ/</span> — phóng</li>
+          <li><mark class="vocab">takeoff</mark> <span class="ipa">/ˈteɪˌkɔf/</span> — cất cánh</li>
+          <li><mark class="vocab">spacecraft</mark> <span class="ipa">/ˈspeɪsˌkɹæft/</span> — tàu vũ trụ</li>
+          <li><mark class="vocab">spaceman</mark> <span class="ipa">/spˈeɪsmən/</span> — phi hành gia</li>
+          <li><mark class="vocab">spaceship</mark> <span class="ipa">/ˈspeɪsˌʃɪp/</span> — tàu vũ trụ</li>
+          <li><mark class="vocab">space station</mark> <span class="ipa">/spˈeɪs stˈeɪʃən/</span> — trạm vũ trụ</li>
+          <li><mark class="vocab">spacesuit</mark> <span class="ipa">/ˈspeɪˌsut/</span> — bộ đồ vũ trụ</li>
+          <li><mark class="vocab">spacewalk</mark> <span class="ipa">/ˈspeɪˌswɑk/</span> — đi bộ ngoài không gian</li>
+          <li><mark class="vocab">telescope</mark> <span class="ipa">/ˈtɛɫəˌskoʊp/</span> — kính thiên văn</li>
+          <li><mark class="vocab">voyage</mark> <span class="ipa">/ˈvɔɪədʒ/, /ˈvɔɪɪdʒ/</span> — hành trình</li>
+          <li><mark class="vocab">branch</mark> <span class="ipa">/bræntʃ/</span> — cành</li>
+          <li><mark class="vocab">root</mark> <span class="ipa">/ˈɹut/</span> — rễ</li>
+          <li><mark class="vocab">trunk</mark> <span class="ipa">/trʌŋk/</span> — thân cây</li>
+          <li><mark class="vocab">twig</mark> <span class="ipa">/ˈtwɪɡ/</span> — cành nhỏ</li>
+          <li><mark class="vocab">bush</mark> <span class="ipa">/ˈbʊʃ/</span> — bụi cây</li>
+          <li><mark class="vocab">ash</mark> <span class="ipa">/ˈæʃ/</span> — cây tần bì</li>
+          <li><mark class="vocab">bamboo</mark> <span class="ipa">/bæmˈbu/</span> — tre</li>
+          <li><mark class="vocab">eucalyptus</mark> <span class="ipa">/ˌjukəˈɫɪptəs/</span> — bạch đàn</li>
+          <li><mark class="vocab">evergreen</mark> <span class="ipa">/ˈɛvɝˌɡɹin/</span> — cây thường xanh</li>
+          <li><mark class="vocab">fir</mark> <span class="ipa">/ˈfɝ/</span> — cây linh sam</li>
+          <li><mark class="vocab">ivy</mark> <span class="ipa">/ˈaɪvi/</span> — cây thường xuân</li>
+          <li><mark class="vocab">oak</mark> <span class="ipa">/ˈoʊk/</span> — cây sồi</li>
+          <li><mark class="vocab">palm</mark> <span class="ipa">/pɑːm/ , /pɑlm/</span> — cây cọ</li>
+          <li><mark class="vocab">pine</mark> <span class="ipa">/ˈpaɪn/</span> — thông</li>
+          <li><mark class="vocab">vine</mark> <span class="ipa">/ˈvaɪn/</span> — cây nho</li>
+          <li><mark class="vocab">willow</mark> <span class="ipa">/ˈwɪˌɫoʊ/</span> — cây liễu</li>
+          <li><mark class="vocab">weeping willow</mark> <span class="ipa">/wˈiːpɪŋ wˈɪloʊ/</span> — liễu rủ</li>
+          <li><mark class="vocab">bloom</mark> <span class="ipa">/ˈbɫum/</span> — nở hoa</li>
+          <li><mark class="vocab">blossom</mark> <span class="ipa">/ˈblɑsəm/</span> — nở hoa</li>
+          <li><mark class="vocab">bud</mark> <span class="ipa">/ˈbəd/</span> — chồi</li>
+          <li><mark class="vocab">leaf</mark> <span class="ipa">/ˈɫif/</span> — lá</li>
+          <li><mark class="vocab">stem</mark> <span class="ipa">/ˈstem/</span> — thân cây</li>
+          <li><mark class="vocab">thorn</mark> <span class="ipa">/ˈθɔɹn/</span> — gai</li>
+          <li><mark class="vocab">daffodil</mark> <span class="ipa">/ˈdæfəˌdɪɫ/</span> — thủy tiên vàng</li>
+          <li><mark class="vocab">daisy</mark> <span class="ipa">/ˈdeɪzi/</span> — hoa cúc</li>
+          <li><mark class="vocab">lotus</mark> <span class="ipa">/ˈɫoʊtəs/</span> — sen</li>
+          <li><mark class="vocab">tulip</mark> <span class="ipa">/ˈtuɫəp/</span> — hoa tulip</li>
+          <li><mark class="vocab">violet</mark> <span class="ipa">/ˈvaɪəɫɪt/, /ˈvaɪɫɪt/</span> — hoa tím</li>
+          <li><mark class="vocab">lavender</mark> <span class="ipa">/ˈɫævəndɝ/</span> — hoa oải hương</li>
+          <li><mark class="vocab">weed</mark> <span class="ipa">/ˈwid/</span> — cỏ dại</li>
+          <li><mark class="vocab">flash</mark> <span class="ipa">/ˈfɫæʃ/</span> — lóe lên</li>
+          <li><mark class="vocab">humidity</mark> <span class="ipa">/hjuˈmɪdəti/</span> — độ ẩm</li>
+          <li><mark class="vocab">airless</mark> <span class="ipa">/ˈɛɹɫəs/</span> — thiếu không khí</li>
+          <li><mark class="vocab">seasonal</mark> <span class="ipa">/ˈsizənəɫ/</span> — theo mùa</li>
+          <li><mark class="vocab">falling</mark> <span class="ipa">/ˈfɑɫɪŋ/</span> — giảm</li>
+          <li><mark class="vocab">rising</mark> <span class="ipa">/ˈɹaɪzɪŋ/</span> — tăng</li>
+          <li><mark class="vocab">changeable</mark> <span class="ipa">/ˈtʃeɪndʒəbəɫ/</span> — thay đổi</li>
+          <li><mark class="vocab">cloudless</mark> <span class="ipa">/ˈkɫaʊdɫəs/</span> — không có mây</li>
+          <li><mark class="vocab">heavy</mark> <span class="ipa">/ˈhɛvi/</span> — nặng nề</li>
+          <li><mark class="vocab">regional</mark> <span class="ipa">/ˈɹidʒənəɫ/</span> — khu vực</li>
+          <li><mark class="vocab">stable</mark> <span class="ipa">/ˈsteɪbəl/</span> — ổn định</li>
+          <li><mark class="vocab">steady</mark> <span class="ipa">/ˈstɛdi/</span> — ổn định</li>
+          <li><mark class="vocab">tropical</mark> <span class="ipa">/ˈtɹɑpɪkəɫ/</span> — nhiệt đới</li>
+          <li><mark class="vocab">windless</mark> <span class="ipa">/wˈɪndləs/</span> — không có gió</li>
+          <li><mark class="vocab">chill</mark> <span class="ipa">/ˈtʃɪɫ/</span> — lạnh</li>
+          <li><mark class="vocab">warmth</mark> <span class="ipa">/ˈwɔɹmθ/</span> — hơi ấm</li>
+          <li><mark class="vocab">frostbite</mark> <span class="ipa">/ˈfɹɔstˌbaɪt/</span> — tê cóng</li>
+          <li><mark class="vocab">frosty</mark> <span class="ipa">/ˈfɹɔsti/</span> — lạnh giá</li>
+          <li><mark class="vocab">heatstroke</mark> <span class="ipa">/hˈiːtstɹoʊk/</span> — say nắng</li>
+          <li><mark class="vocab">dry season</mark> <span class="ipa">/dɹˈaɪ sˈiːzən/</span> — mùa khô</li>
+          <li><mark class="vocab">dust storm</mark> <span class="ipa">/dˈʌst stˈoːɹm/</span> — bão bụi</li>
+          <li><mark class="vocab">flooding</mark> <span class="ipa">/ˈfɫədɪŋ/</span> — lũ lụt</li>
+          <li><mark class="vocab">frost</mark> <span class="ipa">/ˈfɹɔst/</span> — sương giá</li>
+          <li><mark class="vocab">mist</mark> <span class="ipa">/ˈmɪst/</span> — sương mù</li>
+          <li><mark class="vocab">rainbow</mark> <span class="ipa">/ˈɹeɪnˌboʊ/</span> — cầu vồng</li>
+          <li><mark class="vocab">tsunami</mark> <span class="ipa">/suˈnɑmi/, /tsuˈnɑmi/</span> — sóng thần</li>
+          <li><mark class="vocab">typhoon</mark> <span class="ipa">/ˌtaɪˈfun/</span> — bão</li>
+          <li><mark class="vocab">[rain] cats and dogs</mark> <span class="ipa">/ɹˈeɪn kˈæts ænd dˈɑːɡz/</span> — mưa như trút nước</li>
+          <li><mark class="vocab">shadow</mark> <span class="ipa">/ˈʃæˌdoʊ/</span> — bóng</li>
+          <li><mark class="vocab">overcast</mark> <span class="ipa">/ˈoʊvɝˌkæst/</span> — u ám</li>
+          <li><mark class="vocab">thunderbolt</mark> <span class="ipa">/ˈθəndɝˌbɔɫt/</span> — tia chớp</li>
+        </ul>
+      </section>
+
+      <div class="docs-pager">
+        <a href="../">← Nature &amp; Weather</a>
+        <a href="../../">All topics →</a>
+      </div>
+    </article>
+  </div>
+  <script src="../../../../js/docs.js"></script>
+  <script src="../../../../js/exercise.js"></script>
+</body>
+</html>

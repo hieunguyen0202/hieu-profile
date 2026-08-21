@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>B2 Exercise · Travel &amp; Transport — The Quiet Corner</title>
+  <meta name="description" content="B2 reading exercise for Travel &amp; Transport vocabulary with IPA and bilingual sentences.">
+  <link rel="icon" href="../../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../../"><span>✦</span> The Quiet Corner <span>✦</span></a>
+    <nav class="docs-series">
+      <a href="../../../../blog/web-security/">DevSecOps</a>
+      <a href="../../../../blog/kubestronaut/">Kubestronaut</a>
+      <a class="active" href="../../">English</a>
+    </nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-nav="english" data-docs-root="../../" data-active="travel-transport">
+      <div class="docs-nav-label">English</div>
+      <ul class="docs-nav" id="docsNav">
+        <li><a href="../../">All topics</a></li>
+        <li><a href="../">Travel &amp; Transport</a></li>
+        <li><a class="active" href="./">B2 Exercise</a></li>
+      </ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../../">Home</a>
+        <span>›</span>
+        <a href="../../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../../">English</a>
+        <span>›</span>
+        <a href="../">Travel &amp; Transport</a>
+        <span>›</span>
+        <span>B2 Exercise</span>
+      </div>
+
+      <div class="vocab-topic-hero">
+        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 72 72' fill='none'%3E%3Crect width='72' height='72' rx='14' fill='%230b1220'/%3E%3Crect x='16' y='14' width='40' height='46' rx='6' stroke='%2322d3ee' stroke-width='2.5'/%3E%3Cpath d='M24 28h24M24 36h24M24 44h16' stroke='%23e4e4e7' stroke-width='2.5' stroke-linecap='round'/%3E%3Cpath d='M48 48l6 2-2 6-8-8 4 0z' fill='%2322d3ee'/%3E%3C/svg%3E" alt="" width="112" height="112">
+        <div>
+          <h1>B2 Exercise · Travel &amp; Transport</h1>
+          <p class="lede">Reading passage with every new word from this level’s LanGeek lessons — IPA, highlights, sentence translation, and free TTS.</p>
+          <div class="docs-meta">
+            <span><strong>Words:</strong> 73</span>
+            <span><strong>Lessons:</strong> Driving · Traveling</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="ex-toolbar" id="exToolbar">
+        <label class="ex-toggle"><input type="checkbox" id="togHighlight" checked> Highlights</label>
+        <label class="ex-toggle"><input type="checkbox" id="togIpa" checked> IPA</label>
+        <label class="ex-toggle"><input type="checkbox" id="togVi"> Dịch câu (VI)</label>
+        <span class="ex-sep"></span>
+        <label class="ex-voice">Voice
+          <select id="voiceSelect" aria-label="TTS voice"></select>
+        </label>
+        <label class="ex-voice">Speed
+          <input id="rateRange" type="range" min="0.7" max="1.15" step="0.05" value="0.95">
+          <span id="rateVal">0.95</span>
+        </label>
+        <button type="button" class="ex-btn primary" id="btnPlay">▶ Read passage</button>
+        <button type="button" class="ex-btn" id="btnStop">Stop</button>
+      </div>
+      
+      <section class="ex-passage" id="passage" data-tts-root>
+          <p class="ex-sent" data-sent="1">
+            <span class="ex-en">In this B2 Travel & Transport passage, notice <mark class="vocab" data-word="driving school">driving school</mark><span class="ipa">/dɹˈaɪvɪŋ skˈuːl/</span>, <mark class="vocab" data-word="license number">license number</mark><span class="ipa">/lˈaɪsəns nˈʌmbɚ/</span>, <mark class="vocab" data-word="motor vehicle">motor vehicle</mark><span class="ipa">/mˈoʊɾɚ vˈiəkəl/</span>, and <mark class="vocab" data-word="bumper">bumper</mark><span class="ipa">/ˈbəmpɝ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Travel &amp; Transport, hãy để ý trường dạy lái xe, số biển xe, xe cơ giới, và cản xe.</span>
+          </p>
+          <p class="ex-sent" data-sent="2">
+            <span class="ex-en">In this B2 Travel & Transport passage, notice <mark class="vocab" data-word="emergency brake">emergency brake</mark><span class="ipa">/ɪmˈɜːdʒənsi bɹˈeɪk/</span>, <mark class="vocab" data-word="hood">hood</mark><span class="ipa">/hʊd/</span>, <mark class="vocab" data-word="plate">plate</mark><span class="ipa">/pleɪt/</span>, and <mark class="vocab" data-word="safety belt">safety belt</mark><span class="ipa">/sˈeɪfti bˈɛlt/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Travel &amp; Transport, hãy để ý phanh tay, nắp ca-pô, biển số xe, và dây an toàn.</span>
+          </p>
+          <p class="ex-sent" data-sent="3">
+            <span class="ex-en">In this B2 Travel & Transport passage, notice <mark class="vocab" data-word="tailpipe">tailpipe</mark><span class="ipa">/ˈteɪɫˌpaɪp/</span>, <mark class="vocab" data-word="tank">tank</mark><span class="ipa">/ˈtæŋk/</span>, <mark class="vocab" data-word="tire">tire</mark><span class="ipa">/ˈtaɪɝ/</span>, and <mark class="vocab" data-word="trunk">trunk</mark><span class="ipa">/trʌŋk/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Travel &amp; Transport, hãy để ý ống xả, bình xăng, lốp xe, và cốp xe.</span>
+          </p>
+          <p class="ex-sent" data-sent="4">
+            <span class="ex-en">In this B2 Travel & Transport passage, notice <mark class="vocab" data-word="turn signal">turn signal</mark><span class="ipa">/ˈtɝn sˈɪɡnəl/</span>, <mark class="vocab" data-word="windshield">windshield</mark><span class="ipa">/ˈwɪndˌʃiɫd/</span>, <mark class="vocab" data-word="windshield wiper">windshield wiper</mark><span class="ipa">/wˈɪndʃiːld wˈaɪpɚ/</span>, and <mark class="vocab" data-word="crash">crash</mark><span class="ipa">/ˈkɹæʃ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Travel &amp; Transport, hãy để ý đèn xi nhan, kính chắn gió, cần gạt nước, và tai nạn.</span>
+          </p>
+          <p class="ex-sent" data-sent="5">
+            <span class="ex-en">In this B2 Travel & Transport passage, notice <mark class="vocab" data-word="bend">bend</mark><span class="ipa">/bɛnd/</span>, <mark class="vocab" data-word="crossing">crossing</mark><span class="ipa">/ˈkɹɔsɪŋ/</span>, <mark class="vocab" data-word="intersection">intersection</mark><span class="ipa">/ˌɪntɝˈsɛkʃən/</span>, and <mark class="vocab" data-word="U-turn">U-turn</mark><span class="ipa">/ˈjuˌtɝn/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Travel &amp; Transport, hãy để ý khúc cua, ngã tư, ngã tư, và quay đầu.</span>
+          </p>
+          <p class="ex-sent" data-sent="6">
+            <span class="ex-en">In this B2 Travel & Transport passage, notice <mark class="vocab" data-word="global positioning system">global positioning system</mark><span class="ipa">/ɡlˈoʊbəl pəzˈɪʃənɪŋ sˈɪstəm/</span>, <mark class="vocab" data-word="rush hour">rush hour</mark><span class="ipa">/ɹˈʌʃ ˈaɪʊɹ/</span>, <mark class="vocab" data-word="speeding">speeding</mark><span class="ipa">/ˈspidɪŋ/</span>, and <mark class="vocab" data-word="to brake">brake</mark><span class="ipa">/ˈbɹeɪk/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Travel &amp; Transport, hãy để ý global positioning system, giờ cao điểm, vượt quá tốc độ, và phanh.</span>
+          </p>
+          <p class="ex-sent" data-sent="7">
+            <span class="ex-en">In this B2 Travel & Transport passage, notice <mark class="vocab" data-word="to exit">exit</mark><span class="ipa">/ˈɛɡzɪt/, /ˈɛksət/</span>, <mark class="vocab" data-word="to pull up">pull up</mark><span class="ipa">/pˈʊl ˈʌp/</span>, <mark class="vocab" data-word="to navigate">navigate</mark><span class="ipa">/ˈnævɪˌɡeɪt/</span>, and <mark class="vocab" data-word="to rush">rush</mark><span class="ipa">/rʌʃ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Travel &amp; Transport, hãy để ý rời khỏi, dừng lại, điều hướng, và vội vã.</span>
+          </p>
+          <p class="ex-sent" data-sent="8">
+            <span class="ex-en">In this B2 Travel & Transport passage, notice <mark class="vocab" data-word="to slow">slow</mark><span class="ipa">/sloʊ/</span>, <mark class="vocab" data-word="to fuel">fuel</mark><span class="ipa">/ˈfjuːəl/</span>, <mark class="vocab" data-word="progress">progress</mark><span class="ipa">/ˈprɑːɡrɛs/ , /ˈproʊɡrɛs/</span>, and <mark class="vocab" data-word="steering wheel">steering wheel</mark><span class="ipa">/stˈɪɹɪŋ wˈiːl/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Travel &amp; Transport, hãy để ý giảm tốc độ, tiếp nhiên liệu, tiến bộ, và vô lăng.</span>
+          </p>
+          <p class="ex-sent" data-sent="9">
+            <span class="ex-en">In this B2 Travel & Transport passage, notice <mark class="vocab" data-word="handlebar">handlebar</mark><span class="ipa">/ˈhændəɫˌbɑɹ/</span>, <mark class="vocab" data-word="zebra crossing">zebra crossing</mark><span class="ipa">/zˈiːbɹə kɹˈɔsɪŋ/</span>, <mark class="vocab" data-word="gearshift">gearshift</mark><span class="ipa">/ɡˈɪɹʃɪft/</span>, and <mark class="vocab" data-word="stoplight">stoplight</mark><span class="ipa">/ˈstɑˌpɫaɪt/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Travel &amp; Transport, hãy để ý tay lái, vạch sang đường, cần số, và đèn dừng.</span>
+          </p>
+          <p class="ex-sent" data-sent="10">
+            <span class="ex-en">In this B2 Travel & Transport passage, notice <mark class="vocab" data-word="road rage">road rage</mark><span class="ipa">/ɹˈoʊd ɹˈeɪdʒ/</span>, <mark class="vocab" data-word="budget">budget</mark><span class="ipa">/ˈbʌdʒɪt/</span>, <mark class="vocab" data-word="resort">resort</mark><span class="ipa">/ɹiˈsɔɹt/, /ɹiˈzɔɹt/, /ɹɪˈzɔɹt/</span>, and <mark class="vocab" data-word="lodging">lodging</mark><span class="ipa">/ˈɫɑdʒɪŋ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Travel &amp; Transport, hãy để ý cơn thịnh nộ trên đường, tiết kiệm, khu nghỉ dưỡng, và chỗ ở.</span>
+          </p>
+          <p class="ex-sent" data-sent="11">
+            <span class="ex-en">In this B2 Travel & Transport passage, notice <mark class="vocab" data-word="lounge">lounge</mark><span class="ipa">/ˈɫaʊndʒ/</span>, <mark class="vocab" data-word="checkout">checkout</mark><span class="ipa">/ˈʧɛkˌaʊt/</span>, <mark class="vocab" data-word="resident">resident</mark><span class="ipa">/ˈrɛzɪdənt/</span>, and <mark class="vocab" data-word="room service">room service</mark><span class="ipa">/ɹˈuːm sˈɜːvɪs/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Travel &amp; Transport, hãy để ý phòng chờ, trả phòng, cư dân, và dịch vụ phòng.</span>
+          </p>
+          <p class="ex-sent" data-sent="12">
+            <span class="ex-en">In this B2 Travel & Transport passage, notice <mark class="vocab" data-word="travel agency">travel agency</mark><span class="ipa">/tɹˈævəl ˈeɪdʒənsi/</span>, <mark class="vocab" data-word="E-ticket">E-ticket</mark><span class="ipa">/ˈiːtˈɪkɪt/</span>, <mark class="vocab" data-word="vacationer">vacationer</mark><span class="ipa">/veɪˈkeɪʃənɝ/</span>, and <mark class="vocab" data-word="excursion">excursion</mark><span class="ipa">/ɪkˈskɝʒən/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Travel &amp; Transport, hãy để ý công ty du lịch, vé điện tử, người đi nghỉ, và chuyến tham quan.</span>
+          </p>
+          <p class="ex-sent" data-sent="13">
+            <span class="ex-en">In this B2 Travel & Transport passage, notice <mark class="vocab" data-word="package tour">package tour</mark><span class="ipa">/pˈækɪdʒ tˈʊɹ/</span>, <mark class="vocab" data-word="to get away">get away</mark><span class="ipa">/ɡɛt ɐwˈeɪ/</span>, <mark class="vocab" data-word="to trek">trek</mark><span class="ipa">/ˈtɹɛk/</span>, and <mark class="vocab" data-word="aisle">aisle</mark><span class="ipa">/ˈaɪəɫ/, /ˈaɪɫ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Travel &amp; Transport, hãy để ý tour trọn gói, đi xa, đi bộ đường dài, và lối đi.</span>
+          </p>
+          <p class="ex-sent" data-sent="14">
+            <span class="ex-en">In this B2 Travel & Transport passage, notice <mark class="vocab" data-word="cabin">cabin</mark><span class="ipa">/ˈkæbɪn/</span>, <mark class="vocab" data-word="cabin crew">cabin crew</mark><span class="ipa">/kˈæbɪn kɹˈuː/</span>, <mark class="vocab" data-word="baggage claim">baggage claim</mark><span class="ipa">/bˈæɡɪdʒ klˈeɪm/</span>, and <mark class="vocab" data-word="jet lag">jet lag</mark><span class="ipa">/dʒˈɛt lˈæɡ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Travel &amp; Transport, hãy để ý khoang hành khách, tiếp viên hàng không, khu vực nhận hành lý, và lệch múi giờ.</span>
+          </p>
+          <p class="ex-sent" data-sent="15">
+            <span class="ex-en">In this B2 Travel & Transport passage, notice <mark class="vocab" data-word="terminal">terminal</mark><span class="ipa">/ˈtɜrmənəl/</span>, <mark class="vocab" data-word="main line">main line</mark><span class="ipa">/mˈeɪn lˈaɪn/</span>, <mark class="vocab" data-word="to cruise">cruise</mark><span class="ipa">/kruːz/</span>, and <mark class="vocab" data-word="to delay">delay</mark><span class="ipa">/dɪˈɫeɪ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Travel &amp; Transport, hãy để ý nhà ga, đường chính, du lịch, và trì hoãn.</span>
+          </p>
+          <p class="ex-sent" data-sent="16">
+            <span class="ex-en">In this B2 Travel & Transport passage, notice <mark class="vocab" data-word="caravan">caravan</mark><span class="ipa">/ˈkæɹəˌvæn/, /ˈkɛɹəˌvæn/</span>, <mark class="vocab" data-word="railroad crossing">railroad crossing</mark><span class="ipa">/ɹˈeɪlɹoʊd kɹˈɔsɪŋ/</span>, <mark class="vocab" data-word="compartment">compartment</mark><span class="ipa">/kəmˈpɑɹtmənt/</span>, and <mark class="vocab" data-word="rest stop">rest stop</mark><span class="ipa">/ɹˈɛst stˈɑːp/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Travel &amp; Transport, hãy để ý xe kéo, đường ngang, khoang, và khu vực nghỉ ngơi.</span>
+          </p>
+          <p class="ex-sent" data-sent="17">
+            <span class="ex-en">In this B2 Travel & Transport passage, notice <mark class="vocab" data-word="gift shop">gift shop</mark><span class="ipa">/ɡˈɪft ʃˈɑːp/</span>, <mark class="vocab" data-word="hot-air balloon">hot-air balloon</mark><span class="ipa">/hˈɑːtˈɛɹ bəlˈuːn/</span>, <mark class="vocab" data-word="April Fools&#x27; Day">April Fools&#x27; Day</mark><span class="ipa">/ˈeɪpɹəl fˈuːlz dˈeɪ/</span>, and <mark class="vocab" data-word="Independence Day">Independence Day</mark><span class="ipa">/ˌɪndɪpˈɛndəns dˈeɪ/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Travel &amp; Transport, hãy để ý cửa hàng quà tặng, khinh khí cầu, Ngày Cá tháng Tư, và Ngày Độc lập.</span>
+          </p>
+          <p class="ex-sent" data-sent="18">
+            <span class="ex-en">In this B2 Travel & Transport passage, notice <mark class="vocab" data-word="New Year&#x27;s Eve">New Year&#x27;s Eve</mark><span class="ipa">/nˈuː jˈɪɹz ˈiːv/</span>, <mark class="vocab" data-word="St. Patrick&#x27;s Day">St. Patrick&#x27;s Day</mark><span class="ipa">/sənt pˈætɹɪks dˈeɪ/</span>, <mark class="vocab" data-word="Black Friday">Black Friday</mark><span class="ipa">/blˈæk fɹˈaɪdeɪ/</span>, and <mark class="vocab" data-word="Mardi Gras">Mardi Gras</mark><span class="ipa">/mˈɑːɹdi ɡɹˈɑːz/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Travel &amp; Transport, hãy để ý New Year&#x27;s Eve, Ngày Thánh Patrick, Thứ Sáu Đen, và Mardi Gras.</span>
+          </p>
+          <p class="ex-sent" data-sent="19">
+            <span class="ex-en">In this B2 Travel & Transport passage, notice <mark class="vocab" data-word="transportation">transportation</mark><span class="ipa">/ˌtrænspɚˈteɪʃən/</span>.</span>
+            <span class="ex-vi">Trong đoạn B2 về Travel &amp; Transport, hãy để ý vận tải.</span>
+          </p>
+          <p class="ex-sent" data-sent="20">
+            <span class="ex-en">One more useful item is "<mark class="vocab" data-word="April Fools&#x27; Day">April Fools&#x27; Day</mark><span class="ipa">/ˈeɪpɹəl fˈuːlz dˈeɪ/</span>" in this topic.</span>
+            <span class="ex-vi">Một mục hữu ích nữa là &quot;Ngày Cá tháng Tư&quot; trong chủ đề này.</span>
+          </p>
+          <p class="ex-sent" data-sent="21">
+            <span class="ex-en">One more useful item is "<mark class="vocab" data-word="New Year&#x27;s Eve">New Year&#x27;s Eve</mark><span class="ipa">/nˈuː jˈɪɹz ˈiːv/</span>" in this topic.</span>
+            <span class="ex-vi">Một mục hữu ích nữa là &quot;New Year&#x27;s Eve&quot; trong chủ đề này.</span>
+          </p>
+          <p class="ex-sent" data-sent="22">
+            <span class="ex-en">One more useful item is "<mark class="vocab" data-word="St. Patrick&#x27;s Day">St. Patrick&#x27;s Day</mark><span class="ipa">/sənt pˈætɹɪks dˈeɪ/</span>" in this topic.</span>
+            <span class="ex-vi">Một mục hữu ích nữa là &quot;Ngày Thánh Patrick&quot; trong chủ đề này.</span>
+          </p>
+          <p class="ex-sent" data-sent="23">
+            <span class="ex-en">Keep this form in mind: <mark class="vocab" data-word="April Fools' Day">April Fools' Day</mark><span class="ipa">/ˈeɪpɹəl fˈuːlz dˈeɪ/</span>.</span>
+            <span class="ex-vi">Hãy nhớ dạng từ này: Ngày Cá tháng Tư.</span>
+          </p>
+          <p class="ex-sent" data-sent="24">
+            <span class="ex-en">Keep this form in mind: <mark class="vocab" data-word="New Year's Eve">New Year's Eve</mark><span class="ipa">/nˈuː jˈɪɹz ˈiːv/</span>.</span>
+            <span class="ex-vi">Hãy nhớ dạng từ này: New Year&#x27;s Eve.</span>
+          </p>
+          <p class="ex-sent" data-sent="25">
+            <span class="ex-en">Keep this form in mind: <mark class="vocab" data-word="St. Patrick's Day">St. Patrick's Day</mark><span class="ipa">/sənt pˈætɹɪks dˈeɪ/</span>.</span>
+            <span class="ex-vi">Hãy nhớ dạng từ này: Ngày Thánh Patrick.</span>
+          </p>
+      </section>
+
+      <section class="ex-vocab">
+        <h2>Word checklist · 73</h2>
+        <ul class="ex-vocab-list">
+          <li><mark class="vocab">driving school</mark> <span class="ipa">/dɹˈaɪvɪŋ skˈuːl/</span> — trường dạy lái xe</li>
+          <li><mark class="vocab">license number</mark> <span class="ipa">/lˈaɪsəns nˈʌmbɚ/</span> — số biển xe</li>
+          <li><mark class="vocab">motor vehicle</mark> <span class="ipa">/mˈoʊɾɚ vˈiəkəl/</span> — xe cơ giới</li>
+          <li><mark class="vocab">bumper</mark> <span class="ipa">/ˈbəmpɝ/</span> — cản xe</li>
+          <li><mark class="vocab">emergency brake</mark> <span class="ipa">/ɪmˈɜːdʒənsi bɹˈeɪk/</span> — phanh tay</li>
+          <li><mark class="vocab">hood</mark> <span class="ipa">/hʊd/</span> — nắp ca-pô</li>
+          <li><mark class="vocab">plate</mark> <span class="ipa">/pleɪt/</span> — biển số xe</li>
+          <li><mark class="vocab">safety belt</mark> <span class="ipa">/sˈeɪfti bˈɛlt/</span> — dây an toàn</li>
+          <li><mark class="vocab">tailpipe</mark> <span class="ipa">/ˈteɪɫˌpaɪp/</span> — ống xả</li>
+          <li><mark class="vocab">tank</mark> <span class="ipa">/ˈtæŋk/</span> — bình xăng</li>
+          <li><mark class="vocab">tire</mark> <span class="ipa">/ˈtaɪɝ/</span> — lốp xe</li>
+          <li><mark class="vocab">trunk</mark> <span class="ipa">/trʌŋk/</span> — cốp xe</li>
+          <li><mark class="vocab">turn signal</mark> <span class="ipa">/ˈtɝn sˈɪɡnəl/</span> — đèn xi nhan</li>
+          <li><mark class="vocab">windshield</mark> <span class="ipa">/ˈwɪndˌʃiɫd/</span> — kính chắn gió</li>
+          <li><mark class="vocab">windshield wiper</mark> <span class="ipa">/wˈɪndʃiːld wˈaɪpɚ/</span> — cần gạt nước</li>
+          <li><mark class="vocab">crash</mark> <span class="ipa">/ˈkɹæʃ/</span> — tai nạn</li>
+          <li><mark class="vocab">bend</mark> <span class="ipa">/bɛnd/</span> — khúc cua</li>
+          <li><mark class="vocab">crossing</mark> <span class="ipa">/ˈkɹɔsɪŋ/</span> — ngã tư</li>
+          <li><mark class="vocab">intersection</mark> <span class="ipa">/ˌɪntɝˈsɛkʃən/</span> — ngã tư</li>
+          <li><mark class="vocab">U-turn</mark> <span class="ipa">/ˈjuˌtɝn/</span> — quay đầu</li>
+          <li><mark class="vocab">global positioning system</mark> <span class="ipa">/ɡlˈoʊbəl pəzˈɪʃənɪŋ sˈɪstəm/</span></li>
+          <li><mark class="vocab">rush hour</mark> <span class="ipa">/ɹˈʌʃ ˈaɪʊɹ/</span> — giờ cao điểm</li>
+          <li><mark class="vocab">speeding</mark> <span class="ipa">/ˈspidɪŋ/</span> — vượt quá tốc độ</li>
+          <li><mark class="vocab">brake</mark> <span class="ipa">/ˈbɹeɪk/</span> — phanh</li>
+          <li><mark class="vocab">exit</mark> <span class="ipa">/ˈɛɡzɪt/, /ˈɛksət/</span> — rời khỏi</li>
+          <li><mark class="vocab">pull up</mark> <span class="ipa">/pˈʊl ˈʌp/</span> — dừng lại</li>
+          <li><mark class="vocab">navigate</mark> <span class="ipa">/ˈnævɪˌɡeɪt/</span> — điều hướng</li>
+          <li><mark class="vocab">rush</mark> <span class="ipa">/rʌʃ/</span> — vội vã</li>
+          <li><mark class="vocab">slow</mark> <span class="ipa">/sloʊ/</span> — giảm tốc độ</li>
+          <li><mark class="vocab">fuel</mark> <span class="ipa">/ˈfjuːəl/</span> — tiếp nhiên liệu</li>
+          <li><mark class="vocab">progress</mark> <span class="ipa">/ˈprɑːɡrɛs/ , /ˈproʊɡrɛs/</span> — tiến bộ</li>
+          <li><mark class="vocab">steering wheel</mark> <span class="ipa">/stˈɪɹɪŋ wˈiːl/</span> — vô lăng</li>
+          <li><mark class="vocab">handlebar</mark> <span class="ipa">/ˈhændəɫˌbɑɹ/</span> — tay lái</li>
+          <li><mark class="vocab">zebra crossing</mark> <span class="ipa">/zˈiːbɹə kɹˈɔsɪŋ/</span> — vạch sang đường</li>
+          <li><mark class="vocab">gearshift</mark> <span class="ipa">/ɡˈɪɹʃɪft/</span> — cần số</li>
+          <li><mark class="vocab">stoplight</mark> <span class="ipa">/ˈstɑˌpɫaɪt/</span> — đèn dừng</li>
+          <li><mark class="vocab">road rage</mark> <span class="ipa">/ɹˈoʊd ɹˈeɪdʒ/</span> — cơn thịnh nộ trên đường</li>
+          <li><mark class="vocab">budget</mark> <span class="ipa">/ˈbʌdʒɪt/</span> — tiết kiệm</li>
+          <li><mark class="vocab">resort</mark> <span class="ipa">/ɹiˈsɔɹt/, /ɹiˈzɔɹt/, /ɹɪˈzɔɹt/</span> — khu nghỉ dưỡng</li>
+          <li><mark class="vocab">lodging</mark> <span class="ipa">/ˈɫɑdʒɪŋ/</span> — chỗ ở</li>
+          <li><mark class="vocab">lounge</mark> <span class="ipa">/ˈɫaʊndʒ/</span> — phòng chờ</li>
+          <li><mark class="vocab">checkout</mark> <span class="ipa">/ˈʧɛkˌaʊt/</span> — trả phòng</li>
+          <li><mark class="vocab">resident</mark> <span class="ipa">/ˈrɛzɪdənt/</span> — cư dân</li>
+          <li><mark class="vocab">room service</mark> <span class="ipa">/ɹˈuːm sˈɜːvɪs/</span> — dịch vụ phòng</li>
+          <li><mark class="vocab">travel agency</mark> <span class="ipa">/tɹˈævəl ˈeɪdʒənsi/</span> — công ty du lịch</li>
+          <li><mark class="vocab">E-ticket</mark> <span class="ipa">/ˈiːtˈɪkɪt/</span> — vé điện tử</li>
+          <li><mark class="vocab">vacationer</mark> <span class="ipa">/veɪˈkeɪʃənɝ/</span> — người đi nghỉ</li>
+          <li><mark class="vocab">excursion</mark> <span class="ipa">/ɪkˈskɝʒən/</span> — chuyến tham quan</li>
+          <li><mark class="vocab">package tour</mark> <span class="ipa">/pˈækɪdʒ tˈʊɹ/</span> — tour trọn gói</li>
+          <li><mark class="vocab">get away</mark> <span class="ipa">/ɡɛt ɐwˈeɪ/</span> — đi xa</li>
+          <li><mark class="vocab">trek</mark> <span class="ipa">/ˈtɹɛk/</span> — đi bộ đường dài</li>
+          <li><mark class="vocab">aisle</mark> <span class="ipa">/ˈaɪəɫ/, /ˈaɪɫ/</span> — lối đi</li>
+          <li><mark class="vocab">cabin</mark> <span class="ipa">/ˈkæbɪn/</span> — khoang hành khách</li>
+          <li><mark class="vocab">cabin crew</mark> <span class="ipa">/kˈæbɪn kɹˈuː/</span> — tiếp viên hàng không</li>
+          <li><mark class="vocab">baggage claim</mark> <span class="ipa">/bˈæɡɪdʒ klˈeɪm/</span> — khu vực nhận hành lý</li>
+          <li><mark class="vocab">jet lag</mark> <span class="ipa">/dʒˈɛt lˈæɡ/</span> — lệch múi giờ</li>
+          <li><mark class="vocab">terminal</mark> <span class="ipa">/ˈtɜrmənəl/</span> — nhà ga</li>
+          <li><mark class="vocab">main line</mark> <span class="ipa">/mˈeɪn lˈaɪn/</span> — đường chính</li>
+          <li><mark class="vocab">cruise</mark> <span class="ipa">/kruːz/</span> — du lịch</li>
+          <li><mark class="vocab">delay</mark> <span class="ipa">/dɪˈɫeɪ/</span> — trì hoãn</li>
+          <li><mark class="vocab">caravan</mark> <span class="ipa">/ˈkæɹəˌvæn/, /ˈkɛɹəˌvæn/</span> — xe kéo</li>
+          <li><mark class="vocab">railroad crossing</mark> <span class="ipa">/ɹˈeɪlɹoʊd kɹˈɔsɪŋ/</span> — đường ngang</li>
+          <li><mark class="vocab">compartment</mark> <span class="ipa">/kəmˈpɑɹtmənt/</span> — khoang</li>
+          <li><mark class="vocab">rest stop</mark> <span class="ipa">/ɹˈɛst stˈɑːp/</span> — khu vực nghỉ ngơi</li>
+          <li><mark class="vocab">gift shop</mark> <span class="ipa">/ɡˈɪft ʃˈɑːp/</span> — cửa hàng quà tặng</li>
+          <li><mark class="vocab">hot-air balloon</mark> <span class="ipa">/hˈɑːtˈɛɹ bəlˈuːn/</span> — khinh khí cầu</li>
+          <li><mark class="vocab">April Fools&#x27; Day</mark> <span class="ipa">/ˈeɪpɹəl fˈuːlz dˈeɪ/</span> — Ngày Cá tháng Tư</li>
+          <li><mark class="vocab">Independence Day</mark> <span class="ipa">/ˌɪndɪpˈɛndəns dˈeɪ/</span> — Ngày Độc lập</li>
+          <li><mark class="vocab">New Year&#x27;s Eve</mark> <span class="ipa">/nˈuː jˈɪɹz ˈiːv/</span></li>
+          <li><mark class="vocab">St. Patrick&#x27;s Day</mark> <span class="ipa">/sənt pˈætɹɪks dˈeɪ/</span> — Ngày Thánh Patrick</li>
+          <li><mark class="vocab">Black Friday</mark> <span class="ipa">/blˈæk fɹˈaɪdeɪ/</span> — Thứ Sáu Đen</li>
+          <li><mark class="vocab">Mardi Gras</mark> <span class="ipa">/mˈɑːɹdi ɡɹˈɑːz/</span> — Mardi Gras</li>
+          <li><mark class="vocab">transportation</mark> <span class="ipa">/ˌtrænspɚˈteɪʃən/</span> — vận tải</li>
+        </ul>
+      </section>
+
+      <div class="docs-pager">
+        <a href="../">← Travel &amp; Transport</a>
+        <a href="../../">All topics →</a>
+      </div>
+    </article>
+  </div>
+  <script src="../../../../js/docs.js"></script>
+  <script src="../../../../js/exercise.js"></script>
+</body>
+</html>

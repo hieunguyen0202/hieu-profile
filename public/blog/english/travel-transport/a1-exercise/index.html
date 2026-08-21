@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A1 Exercise · Travel &amp; Transport — The Quiet Corner</title>
+  <meta name="description" content="A1 reading exercise for Travel &amp; Transport vocabulary with IPA and bilingual sentences.">
+  <link rel="icon" href="../../../../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../../css/docs.css">
+</head>
+<body class="docs">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="grid-bg"></div>
+  <header class="docs-topbar">
+    <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
+    <a class="docs-brand" href="../../../../"><span>✦</span> The Quiet Corner <span>✦</span></a>
+    <nav class="docs-series">
+      <a href="../../../../blog/web-security/">DevSecOps</a>
+      <a href="../../../../blog/kubestronaut/">Kubestronaut</a>
+      <a class="active" href="../../">English</a>
+    </nav>
+    <span class="docs-topbar-spacer"></span>
+    <a class="docs-top-link" href="../../../../#blogs">blogs</a>
+  </header>
+  <div class="docs-shell">
+    <aside class="docs-sidebar" id="docsSidebar" data-nav="english" data-docs-root="../../" data-active="travel-transport">
+      <div class="docs-nav-label">English</div>
+      <ul class="docs-nav" id="docsNav">
+        <li><a href="../../">All topics</a></li>
+        <li><a href="../">Travel &amp; Transport</a></li>
+        <li><a class="active" href="./">A1 Exercise</a></li>
+      </ul>
+    </aside>
+    <article class="docs-main">
+      <div class="docs-breadcrumb">
+        <a href="../../../../">Home</a>
+        <span>›</span>
+        <a href="../../../../#blogs">Blogs</a>
+        <span>›</span>
+        <a href="../../">English</a>
+        <span>›</span>
+        <a href="../">Travel &amp; Transport</a>
+        <span>›</span>
+        <span>A1 Exercise</span>
+      </div>
+
+      <div class="vocab-topic-hero">
+        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 72 72' fill='none'%3E%3Crect width='72' height='72' rx='14' fill='%230b1220'/%3E%3Crect x='16' y='14' width='40' height='46' rx='6' stroke='%2322d3ee' stroke-width='2.5'/%3E%3Cpath d='M24 28h24M24 36h24M24 44h16' stroke='%23e4e4e7' stroke-width='2.5' stroke-linecap='round'/%3E%3Cpath d='M48 48l6 2-2 6-8-8 4 0z' fill='%2322d3ee'/%3E%3C/svg%3E" alt="" width="112" height="112">
+        <div>
+          <h1>A1 Exercise · Travel &amp; Transport</h1>
+          <p class="lede">Reading passage with every new word from this level’s LanGeek lessons — IPA, highlights, sentence translation, and free TTS.</p>
+          <div class="docs-meta">
+            <span><strong>Words:</strong> 16</span>
+            <span><strong>Lessons:</strong> Transportation</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="ex-toolbar" id="exToolbar">
+        <label class="ex-toggle"><input type="checkbox" id="togHighlight" checked> Highlights</label>
+        <label class="ex-toggle"><input type="checkbox" id="togIpa" checked> IPA</label>
+        <label class="ex-toggle"><input type="checkbox" id="togVi"> Dịch câu (VI)</label>
+        <span class="ex-sep"></span>
+        <label class="ex-voice">Voice
+          <select id="voiceSelect" aria-label="TTS voice"></select>
+        </label>
+        <label class="ex-voice">Speed
+          <input id="rateRange" type="range" min="0.7" max="1.15" step="0.05" value="0.95">
+          <span id="rateVal">0.95</span>
+        </label>
+        <button type="button" class="ex-btn primary" id="btnPlay">▶ Read passage</button>
+        <button type="button" class="ex-btn" id="btnStop">Stop</button>
+      </div>
+      
+      <section class="ex-passage" id="passage" data-tts-root>
+          <p class="ex-sent" data-sent="1">
+            <span class="ex-en">In this A1 Travel & Transport passage, notice <mark class="vocab" data-word="car">car</mark><span class="ipa">/kɑːr/</span>, <mark class="vocab" data-word="motorcycle">motorcycle</mark><span class="ipa">/ˈmoʊtɚˌsaɪkl/</span>, <mark class="vocab" data-word="bus">bus</mark><span class="ipa">/bʌs/</span>, and <mark class="vocab" data-word="truck">truck</mark><span class="ipa">/trʌk/</span>.</span>
+            <span class="ex-vi">Trong đoạn A1 về Travel &amp; Transport, hãy để ý xe hơi, xe máy, xe buýt, và xe tải.</span>
+          </p>
+          <p class="ex-sent" data-sent="2">
+            <span class="ex-en">In this A1 Travel & Transport passage, notice <mark class="vocab" data-word="train">train</mark><span class="ipa">/treɪn/</span>, <mark class="vocab" data-word="taxi">taxi</mark><span class="ipa">/ˈtæksi/</span>, <mark class="vocab" data-word="subway">subway</mark><span class="ipa">/ˈsʌbˌweɪ/</span>, and <mark class="vocab" data-word="airplane">airplane</mark><span class="ipa">/ˈɛrˌpleɪn/</span>.</span>
+            <span class="ex-vi">Trong đoạn A1 về Travel &amp; Transport, hãy để ý tàu hỏa, taxi, tàu điện ngầm, và máy bay.</span>
+          </p>
+          <p class="ex-sent" data-sent="3">
+            <span class="ex-en">In this A1 Travel & Transport passage, notice <mark class="vocab" data-word="helicopter">helicopter</mark><span class="ipa">/ˈhɛlɪˌkɑːptɚ/</span>, <mark class="vocab" data-word="ship">ship</mark><span class="ipa">/ʃɪp/</span>, <mark class="vocab" data-word="boat">boat</mark><span class="ipa">/boʊt/</span>, and <mark class="vocab" data-word="ticket">ticket</mark><span class="ipa">/ˈtɪkɪt/</span>.</span>
+            <span class="ex-vi">Trong đoạn A1 về Travel &amp; Transport, hãy để ý máy bay trực thăng, tàu, thuyền, và vé.</span>
+          </p>
+          <p class="ex-sent" data-sent="4">
+            <span class="ex-en">In this A1 Travel & Transport passage, notice <mark class="vocab" data-word="van">van</mark><span class="ipa">/væn/</span>, <mark class="vocab" data-word="station">station</mark><span class="ipa">/ˈsteɪʃən/</span>, <mark class="vocab" data-word="airport">airport</mark><span class="ipa">/ˈɛrˌpɔːrt/</span>, and <mark class="vocab" data-word="train station">train station</mark><span class="ipa">/ˈtreɪn ˈsteɪʃən/</span>.</span>
+            <span class="ex-vi">Trong đoạn A1 về Travel &amp; Transport, hãy để ý xe tải nhỏ, nhà ga, sân bay, và nhà ga.</span>
+          </p>
+      </section>
+
+      <section class="ex-vocab">
+        <h2>Word checklist · 16</h2>
+        <ul class="ex-vocab-list">
+          <li><mark class="vocab">car</mark> <span class="ipa">/kɑːr/</span> — xe hơi</li>
+          <li><mark class="vocab">motorcycle</mark> <span class="ipa">/ˈmoʊtɚˌsaɪkl/</span> — xe máy</li>
+          <li><mark class="vocab">bus</mark> <span class="ipa">/bʌs/</span> — xe buýt</li>
+          <li><mark class="vocab">truck</mark> <span class="ipa">/trʌk/</span> — xe tải</li>
+          <li><mark class="vocab">train</mark> <span class="ipa">/treɪn/</span> — tàu hỏa</li>
+          <li><mark class="vocab">taxi</mark> <span class="ipa">/ˈtæksi/</span> — taxi</li>
+          <li><mark class="vocab">subway</mark> <span class="ipa">/ˈsʌbˌweɪ/</span> — tàu điện ngầm</li>
+          <li><mark class="vocab">airplane</mark> <span class="ipa">/ˈɛrˌpleɪn/</span> — máy bay</li>
+          <li><mark class="vocab">helicopter</mark> <span class="ipa">/ˈhɛlɪˌkɑːptɚ/</span> — máy bay trực thăng</li>
+          <li><mark class="vocab">ship</mark> <span class="ipa">/ʃɪp/</span> — tàu</li>
+          <li><mark class="vocab">boat</mark> <span class="ipa">/boʊt/</span> — thuyền</li>
+          <li><mark class="vocab">ticket</mark> <span class="ipa">/ˈtɪkɪt/</span> — vé</li>
+          <li><mark class="vocab">van</mark> <span class="ipa">/væn/</span> — xe tải nhỏ</li>
+          <li><mark class="vocab">station</mark> <span class="ipa">/ˈsteɪʃən/</span> — nhà ga</li>
+          <li><mark class="vocab">airport</mark> <span class="ipa">/ˈɛrˌpɔːrt/</span> — sân bay</li>
+          <li><mark class="vocab">train station</mark> <span class="ipa">/ˈtreɪn ˈsteɪʃən/</span> — nhà ga</li>
+        </ul>
+      </section>
+
+      <div class="docs-pager">
+        <a href="../">← Travel &amp; Transport</a>
+        <a href="../../">All topics →</a>
+      </div>
+    </article>
+  </div>
+  <script src="../../../../js/docs.js"></script>
+  <script src="../../../../js/exercise.js"></script>
+</body>
+</html>
