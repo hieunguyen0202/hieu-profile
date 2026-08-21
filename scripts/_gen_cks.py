@@ -197,6 +197,7 @@ def wrap(slug: str, title: str, body: str) -> str:
     <nav class="docs-series">
       <a href="{home}blog/web-security/">DevSecOps</a>
       <a class="active" href="{roadmap}">Kubestronaut</a>
+      <a href="{home}blog/english/">English</a>
     </nav>
     <nav class="docs-cert-tabs">{tab_html}</nav>
     <span class="docs-topbar-spacer"></span>

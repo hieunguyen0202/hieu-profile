@@ -1,0 +1,1745 @@
+{
+  "topics": [
+    {
+      "slug": "food-drink",
+      "name": "Food & Drink",
+      "desc": "Eat, cook, restaurants, and drinks — A1 to B2.",
+      "cover": "https://cdn.langeek.co/photo/57056/thumb/lesson-20?type=png",
+      "count": 12,
+      "levels": [
+        "A1",
+        "A2",
+        "B1",
+        "B2"
+      ],
+      "lessons": [
+        {
+          "id": 22,
+          "title": "Food and Drinks",
+          "level": "A1",
+          "photo": "https://cdn.langeek.co/photo/57056/thumb/lesson-20?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/22/learn"
+        },
+        {
+          "id": 21,
+          "title": "Food and Ingredients",
+          "level": "A1",
+          "photo": "https://cdn.langeek.co/photo/57055/thumb/lesson-19?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/21/learn"
+        },
+        {
+          "id": 509,
+          "title": "Flowers, Fruits, and Nuts",
+          "level": "A2",
+          "photo": "https://cdn.langeek.co/photo/57097/thumb/lesson-30?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/509/learn"
+        },
+        {
+          "id": 512,
+          "title": "Food",
+          "level": "A2",
+          "photo": "https://cdn.langeek.co/photo/68133/thumb/lesson-32?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/512/learn"
+        },
+        {
+          "id": 126,
+          "title": "Restaurants and Food",
+          "level": "A2",
+          "photo": "https://cdn.langeek.co/photo/68127/thumb/lesson-14?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/126/learn"
+        },
+        {
+          "id": 146,
+          "title": "Drinks",
+          "level": "B1",
+          "photo": "https://cdn.langeek.co/photo/57124/thumb/lesson-9?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/146/learn"
+        },
+        {
+          "id": 828,
+          "title": "Food and Diet",
+          "level": "B1",
+          "photo": "https://cdn.langeek.co/photo/57164/thumb/lesson-57?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/828/learn"
+        },
+        {
+          "id": 145,
+          "title": "Fruits and Nuts",
+          "level": "B1",
+          "photo": "https://cdn.langeek.co/photo/57123/thumb/lesson-8?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/145/learn"
+        },
+        {
+          "id": 144,
+          "title": "Meat and Dairy",
+          "level": "B1",
+          "photo": "https://cdn.langeek.co/photo/57479/thumb/lesson-7?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/144/learn"
+        },
+        {
+          "id": 180,
+          "title": "Cooking",
+          "level": "B2",
+          "photo": "https://cdn.langeek.co/photo/57176/thumb/lesson-13?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/180/learn"
+        },
+        {
+          "id": 191,
+          "title": "Drinks",
+          "level": "B2",
+          "photo": "https://cdn.langeek.co/photo/57185/thumb/lesson-24?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/191/learn"
+        },
+        {
+          "id": 189,
+          "title": "Foods",
+          "level": "B2",
+          "photo": "https://cdn.langeek.co/photo/57183/thumb/lesson-22?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/189/learn"
+        }
+      ]
+    },
+    {
+      "slug": "people-family",
+      "name": "People & Family",
+      "desc": "Greetings, family, relationships, and identity.",
+      "cover": "https://cdn.langeek.co/photo/57062/thumb/lesson-26?type=png",
+      "count": 16,
+      "levels": [
+        "A1",
+        "A2",
+        "B1",
+        "B2"
+      ],
+      "lessons": [
+        {
+          "id": 498,
+          "title": "Countries and Nationalities",
+          "level": "A1",
+          "photo": "https://cdn.langeek.co/photo/57062/thumb/lesson-26?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/498/learn"
+        },
+        {
+          "id": 745,
+          "title": "Describing People",
+          "level": "A1",
+          "photo": "https://cdn.langeek.co/photo/68125/thumb/lesson-32?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/745/learn"
+        },
+        {
+          "id": 3,
+          "title": "Family",
+          "level": "A1",
+          "photo": "https://cdn.langeek.co/photo/68118/thumb/lesson-4?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/3/learn"
+        },
+        {
+          "id": 1,
+          "title": "Hello and Goodbye",
+          "level": "A1",
+          "photo": "https://cdn.langeek.co/photo/57036/thumb/lesson-1?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/1/learn"
+        },
+        {
+          "id": 19,
+          "title": "People",
+          "level": "A1",
+          "photo": "https://cdn.langeek.co/photo/57040/thumb/lesson-2?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/19/learn"
+        },
+        {
+          "id": 500,
+          "title": "Personal Information",
+          "level": "A1",
+          "photo": "https://cdn.langeek.co/photo/57044/thumb/lesson-8?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/500/learn"
+        },
+        {
+          "id": 505,
+          "title": "Countries and Nationalities",
+          "level": "A2",
+          "photo": "https://cdn.langeek.co/photo/57094/thumb/lesson-27?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/505/learn"
+        },
+        {
+          "id": 125,
+          "title": "Family and Friends",
+          "level": "A2",
+          "photo": "https://cdn.langeek.co/photo/57080/thumb/lesson-13?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/125/learn"
+        },
+        {
+          "id": 138,
+          "title": "Family and Relationships",
+          "level": "B1",
+          "photo": "https://cdn.langeek.co/photo/57117/thumb/lesson-1?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/138/learn"
+        },
+        {
+          "id": 167,
+          "title": "Languages and Nationalities",
+          "level": "B1",
+          "photo": "https://cdn.langeek.co/photo/57144/thumb/lesson-30?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/167/learn"
+        },
+        {
+          "id": 799,
+          "title": "People and Stages of Life",
+          "level": "B1",
+          "photo": "https://cdn.langeek.co/photo/57146/thumb/lesson-33?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/799/learn"
+        },
+        {
+          "id": 797,
+          "title": "Romance",
+          "level": "B1",
+          "photo": "https://cdn.langeek.co/photo/57495/thumb/lesson-31?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/797/learn"
+        },
+        {
+          "id": 171,
+          "title": "Family and Relationships",
+          "level": "B2",
+          "photo": "https://cdn.langeek.co/photo/57169/thumb/lesson-4?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/171/learn"
+        },
+        {
+          "id": 184,
+          "title": "Love and Romance",
+          "level": "B2",
+          "photo": "https://cdn.langeek.co/photo/57507/thumb/lesson-17?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/184/learn"
+        },
+        {
+          "id": 840,
+          "title": "People and Society",
+          "level": "B2",
+          "photo": "https://cdn.langeek.co/photo/57195/thumb/lesson-39?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/840/learn"
+        },
+        {
+          "id": 196,
+          "title": "Wedding Ceremony",
+          "level": "B2",
+          "photo": "https://cdn.langeek.co/photo/57510/thumb/lesson-29?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/196/learn"
+        }
+      ]
+    },
+    {
+      "slug": "body-appearance",
+      "name": "Body & Appearance",
+      "desc": "Body parts, looks, personality, and self-care.",
+      "cover": "https://cdn.langeek.co/photo/57045/thumb/lesson-9?type=png",
+      "count": 13,
+      "levels": [
+        "A1",
+        "A2",
+        "B1",
+        "B2"
+      ],
+      "lessons": [
+        {
+          "id": 8,
+          "title": "The Body",
+          "level": "A1",
+          "photo": "https://cdn.langeek.co/photo/57045/thumb/lesson-9?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/8/learn"
+        },
+        {
+          "id": 9,
+          "title": "The Head and Face",
+          "level": "A1",
+          "photo": "https://cdn.langeek.co/photo/57046/thumb/lesson-10?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/9/learn"
+        },
+        {
+          "id": 119,
+          "title": "Appearance",
+          "level": "A2",
+          "photo": "https://cdn.langeek.co/photo/57075/thumb/lesson-7?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/119/learn"
+        },
+        {
+          "id": 511,
+          "title": "Personality and Behavior",
+          "level": "A2",
+          "photo": "https://cdn.langeek.co/photo/57098/thumb/lesson-31?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/511/learn"
+        },
+        {
+          "id": 120,
+          "title": "The Human Body",
+          "level": "A2",
+          "photo": "https://cdn.langeek.co/photo/57076/thumb/lesson-8?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/120/learn"
+        },
+        {
+          "id": 155,
+          "title": "Appearance",
+          "level": "B1",
+          "photo": "https://cdn.langeek.co/photo/57133/thumb/lesson-18?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/155/learn"
+        },
+        {
+          "id": 147,
+          "title": "Human Characteristics",
+          "level": "B1",
+          "photo": "https://cdn.langeek.co/photo/57125/thumb/lesson-10?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/147/learn"
+        },
+        {
+          "id": 816,
+          "title": "Personal Characteristics",
+          "level": "B1",
+          "photo": "https://cdn.langeek.co/photo/68150/thumb/lesson-48?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/816/learn"
+        },
+        {
+          "id": 157,
+          "title": "The Human Body",
+          "level": "B1",
+          "photo": "https://cdn.langeek.co/photo/57136/thumb/lesson-20?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/157/learn"
+        },
+        {
+          "id": 844,
+          "title": "Bodily Actions",
+          "level": "B2",
+          "photo": "https://cdn.langeek.co/photo/57198/thumb/lesson-42?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/844/learn"
+        },
+        {
+          "id": 183,
+          "title": "Personality",
+          "level": "B2",
+          "photo": "https://cdn.langeek.co/photo/57179/thumb/lesson-16?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/183/learn"
+        },
+        {
+          "id": 843,
+          "title": "Self-care Products",
+          "level": "B2",
+          "photo": "https://cdn.langeek.co/photo/57197/thumb/lesson-41?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/843/learn"
+        },
+        {
+          "id": 173,
+          "title": "The Human Body",
+          "level": "B2",
+          "photo": "https://cdn.langeek.co/photo/57171/thumb/lesson-6?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/173/learn"
+        }
+      ]
+    },
+    {
+      "slug": "home-living",
+      "name": "Home & Living",
+      "desc": "Houses, furniture, appliances, and everyday objects.",
+      "cover": "https://cdn.langeek.co/photo/57049/thumb/lesson-13?type=png",
+      "count": 11,
+      "levels": [
+        "A1",
+        "A2",
+        "B1",
+        "B2"
+      ],
+      "lessons": [
+        {
+          "id": 13,
+          "title": "Furniture and Home Appliances",
+          "level": "A1",
+          "photo": "https://cdn.langeek.co/photo/57049/thumb/lesson-13?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/13/learn"
+        },
+        {
+          "id": 12,
+          "title": "House and Apartment",
+          "level": "A1",
+          "photo": "https://cdn.langeek.co/photo/57048/thumb/lesson-12?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/12/learn"
+        },
+        {
+          "id": 20,
+          "title": "Household Items",
+          "level": "A1",
+          "photo": "https://cdn.langeek.co/photo/57054/thumb/lesson-18?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/20/learn"
+        },
+        {
+          "id": 517,
+          "title": "Furniture and Household Items",
+          "level": "A2",
+          "photo": "https://cdn.langeek.co/photo/68135/thumb/lesson-37?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/517/learn"
+        },
+        {
+          "id": 129,
+          "title": "Home",
+          "level": "A2",
+          "photo": "https://cdn.langeek.co/photo/57084/thumb/lesson-17?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/129/learn"
+        },
+        {
+          "id": 113,
+          "title": "Home Appliances and Devices",
+          "level": "A2",
+          "photo": "https://cdn.langeek.co/photo/57069/thumb/lesson-1?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/113/learn"
+        },
+        {
+          "id": 805,
+          "title": "Home Appliances and Furniture",
+          "level": "B1",
+          "photo": "https://cdn.langeek.co/photo/57148/thumb/lesson-38?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/805/learn"
+        },
+        {
+          "id": 140,
+          "title": "Houses and Buildings",
+          "level": "B1",
+          "photo": "https://cdn.langeek.co/photo/57119/thumb/lesson-3?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/140/learn"
+        },
+        {
+          "id": 182,
+          "title": "Buildings and Structures",
+          "level": "B2",
+          "photo": "https://cdn.langeek.co/photo/57178/thumb/lesson-15?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/182/learn"
+        },
+        {
+          "id": 878,
+          "title": "City Structures",
+          "level": "B2",
+          "photo": "https://cdn.langeek.co/photo/57209/thumb/lesson-58?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/878/learn"
+        },
+        {
+          "id": 845,
+          "title": "Tools",
+          "level": "B2",
+          "photo": "https://cdn.langeek.co/photo/68165/thumb/lesson-43?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/845/learn"
+        }
+      ]
+    },
+    {
+      "slug": "clothes-fashion",
+      "name": "Clothes & Fashion",
+      "desc": "Clothes, shoes, accessories, and style.",
+      "cover": "https://cdn.langeek.co/photo/57051/thumb/lesson-15?type=png",
+      "count": 4,
+      "levels": [
+        "A1",
+        "A2",
+        "B1",
+        "B2"
+      ],
+      "lessons": [
+        {
+          "id": 15,
+          "title": "Clothes and Shoes",
+          "level": "A1",
+          "photo": "https://cdn.langeek.co/photo/57051/thumb/lesson-15?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/15/learn"
+        },
+        {
+          "id": 114,
+          "title": "Clothes and Accessories",
+          "level": "A2",
+          "photo": "https://cdn.langeek.co/photo/57070/thumb/lesson-2?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/114/learn"
+        },
+        {
+          "id": 151,
+          "title": "Fashion",
+          "level": "B1",
+          "photo": "https://cdn.langeek.co/photo/57129/thumb/lesson-14?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/151/learn"
+        },
+        {
+          "id": 170,
+          "title": "Clothes and Fashion",
+          "level": "B2",
+          "photo": "https://cdn.langeek.co/photo/57168/thumb/lesson-3?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/170/learn"
+        }
+      ]
+    },
+    {
+      "slug": "animals",
+      "name": "Animals",
+      "desc": "Pets, wildlife, and the animal kingdom.",
+      "cover": "https://cdn.langeek.co/photo/57052/thumb/lesson-16?type=png",
+      "count": 4,
+      "levels": [
+        "A1",
+        "A2",
+        "B1",
+        "B2"
+      ],
+      "lessons": [
+        {
+          "id": 16,
+          "title": "Animals",
+          "level": "A1",
+          "photo": "https://cdn.langeek.co/photo/57052/thumb/lesson-16?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/16/learn"
+        },
+        {
+          "id": 118,
+          "title": "Animals",
+          "level": "A2",
+          "photo": "https://cdn.langeek.co/photo/57073/thumb/lesson-6?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/118/learn"
+        },
+        {
+          "id": 139,
+          "title": "The Animal Kingdom",
+          "level": "B1",
+          "photo": "https://cdn.langeek.co/photo/57118/thumb/lesson-2?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/139/learn"
+        },
+        {
+          "id": 169,
+          "title": "Animals",
+          "level": "B2",
+          "photo": "https://cdn.langeek.co/photo/57167/thumb/lesson-2?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/169/learn"
+        }
+      ]
+    },
+    {
+      "slug": "nature-weather",
+      "name": "Nature & Weather",
+      "desc": "Weather, environment, plants, farming, and space.",
+      "cover": "https://cdn.langeek.co/photo/57057/thumb/lesson-21?type=png",
+      "count": 12,
+      "levels": [
+        "A1",
+        "A2",
+        "B1",
+        "B2"
+      ],
+      "lessons": [
+        {
+          "id": 23,
+          "title": "The Weather and Nature",
+          "level": "A1",
+          "photo": "https://cdn.langeek.co/photo/57057/thumb/lesson-21?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/23/learn"
+        },
+        {
+          "id": 132,
+          "title": "Nature and Natural Disasters",
+          "level": "A2",
+          "photo": "https://cdn.langeek.co/photo/57087/thumb/lesson-20?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/132/learn"
+        },
+        {
+          "id": 137,
+          "title": "The Weather",
+          "level": "A2",
+          "photo": "https://cdn.langeek.co/photo/57092/thumb/lesson-25?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/137/learn"
+        },
+        {
+          "id": 803,
+          "title": "Farming",
+          "level": "B1",
+          "photo": "https://cdn.langeek.co/photo/68147/thumb/lesson-37?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/803/learn"
+        },
+        {
+          "id": 161,
+          "title": "Nature and Regions",
+          "level": "B1",
+          "photo": "https://cdn.langeek.co/photo/57140/thumb/lesson-24?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/161/learn"
+        },
+        {
+          "id": 801,
+          "title": "The Environment and Energy",
+          "level": "B1",
+          "photo": "https://cdn.langeek.co/photo/57496/thumb/lesson-35?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/801/learn"
+        },
+        {
+          "id": 154,
+          "title": "The Weather",
+          "level": "B1",
+          "photo": "https://cdn.langeek.co/photo/57132/thumb/lesson-17?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/154/learn"
+        },
+        {
+          "id": 865,
+          "title": "Farming",
+          "level": "B2",
+          "photo": "https://cdn.langeek.co/photo/57516/thumb/lesson-52?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/865/learn"
+        },
+        {
+          "id": 177,
+          "title": "Nature",
+          "level": "B2",
+          "photo": "https://cdn.langeek.co/photo/57173/thumb/lesson-10?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/177/learn"
+        },
+        {
+          "id": 195,
+          "title": "Outer Space",
+          "level": "B2",
+          "photo": "https://cdn.langeek.co/photo/68161/thumb/lesson-28?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/195/learn"
+        },
+        {
+          "id": 197,
+          "title": "Plants",
+          "level": "B2",
+          "photo": "https://cdn.langeek.co/photo/57188/thumb/lesson-30?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/197/learn"
+        },
+        {
+          "id": 863,
+          "title": "The Weather",
+          "level": "B2",
+          "photo": "https://cdn.langeek.co/photo/57204/thumb/lesson-51?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/863/learn"
+        }
+      ]
+    },
+    {
+      "slug": "jobs-work",
+      "name": "Jobs & Work",
+      "desc": "Jobs, business, ambition, and the workplace.",
+      "cover": "https://cdn.langeek.co/photo/57050/thumb/lesson-14?type=png",
+      "count": 10,
+      "levels": [
+        "A1",
+        "A2",
+        "B1",
+        "B2"
+      ],
+      "lessons": [
+        {
+          "id": 14,
+          "title": "Jobs",
+          "level": "A1",
+          "photo": "https://cdn.langeek.co/photo/57050/thumb/lesson-14?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/14/learn"
+        },
+        {
+          "id": 514,
+          "title": "Employment and Occupations",
+          "level": "A2",
+          "photo": "https://cdn.langeek.co/photo/57101/thumb/lesson-34?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/514/learn"
+        },
+        {
+          "id": 134,
+          "title": "Jobs and Work",
+          "level": "A2",
+          "photo": "https://cdn.langeek.co/photo/57089/thumb/lesson-22?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/134/learn"
+        },
+        {
+          "id": 814,
+          "title": "Ambition and Achievement",
+          "level": "B1",
+          "photo": "https://cdn.langeek.co/photo/68149/thumb/lesson-46?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/814/learn"
+        },
+        {
+          "id": 141,
+          "title": "Business and Workplace",
+          "level": "B1",
+          "photo": "https://cdn.langeek.co/photo/57120/thumb/lesson-4?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/141/learn"
+        },
+        {
+          "id": 142,
+          "title": "Occupations",
+          "level": "B1",
+          "photo": "https://cdn.langeek.co/photo/57121/thumb/lesson-5?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/142/learn"
+        },
+        {
+          "id": 808,
+          "title": "Success and Failure",
+          "level": "B1",
+          "photo": "https://cdn.langeek.co/photo/57150/thumb/lesson-41?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/808/learn"
+        },
+        {
+          "id": 174,
+          "title": "Business and Office",
+          "level": "B2",
+          "photo": "https://cdn.langeek.co/photo/57172/thumb/lesson-7?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/174/learn"
+        },
+        {
+          "id": 841,
+          "title": "Determination and Struggles",
+          "level": "B2",
+          "photo": "https://cdn.langeek.co/photo/57196/thumb/lesson-40?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/841/learn"
+        },
+        {
+          "id": 186,
+          "title": "Jobs and Occupations",
+          "level": "B2",
+          "photo": "https://cdn.langeek.co/photo/57180/thumb/lesson-19?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/186/learn"
+        }
+      ]
+    },
+    {
+      "slug": "school-education",
+      "name": "School & Education",
+      "desc": "School, study fields, science, and languages.",
+      "cover": "https://cdn.langeek.co/photo/57059/thumb/lesson-23?type=png",
+      "count": 11,
+      "levels": [
+        "A1",
+        "A2",
+        "B1",
+        "B2"
+      ],
+      "lessons": [
+        {
+          "id": 26,
+          "title": "School",
+          "level": "A1",
+          "photo": "https://cdn.langeek.co/photo/57059/thumb/lesson-23?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/26/learn"
+        },
+        {
+          "id": 506,
+          "title": "Languages and Grammar",
+          "level": "A2",
+          "photo": "https://cdn.langeek.co/photo/68131/thumb/lesson-28?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/506/learn"
+        },
+        {
+          "id": 795,
+          "title": "Mathematics",
+          "level": "A2",
+          "photo": "https://cdn.langeek.co/photo/57401/thumb/lesson-45?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/795/learn"
+        },
+        {
+          "id": 117,
+          "title": "School and Education",
+          "level": "A2",
+          "photo": "https://cdn.langeek.co/photo/68126/thumb/lesson-5?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/117/learn"
+        },
+        {
+          "id": 796,
+          "title": "Science and the Natural World",
+          "level": "A2",
+          "photo": "https://cdn.langeek.co/photo/57477/thumb/lesson-46?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/796/learn"
+        },
+        {
+          "id": 149,
+          "title": "Education",
+          "level": "B1",
+          "photo": "https://cdn.langeek.co/photo/57127/thumb/lesson-12?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/149/learn"
+        },
+        {
+          "id": 813,
+          "title": "Fields of Study",
+          "level": "B1",
+          "photo": "https://cdn.langeek.co/photo/68148/thumb/lesson-45?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/813/learn"
+        },
+        {
+          "id": 192,
+          "title": "Grammar",
+          "level": "B2",
+          "photo": "https://cdn.langeek.co/photo/68160/thumb/lesson-25?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/192/learn"
+        },
+        {
+          "id": 181,
+          "title": "School and Education",
+          "level": "B2",
+          "photo": "https://cdn.langeek.co/photo/57177/thumb/lesson-14?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/181/learn"
+        },
+        {
+          "id": 835,
+          "title": "Scientific Research",
+          "level": "B2",
+          "photo": "https://cdn.langeek.co/photo/57192/thumb/lesson-35?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/835/learn"
+        },
+        {
+          "id": 885,
+          "title": "World of Science",
+          "level": "B2",
+          "photo": "https://cdn.langeek.co/photo/57518/thumb/lesson-59?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/885/learn"
+        }
+      ]
+    },
+    {
+      "slug": "city-places",
+      "name": "City & Places",
+      "desc": "Cities, countryside, directions, and structures.",
+      "cover": "https://cdn.langeek.co/photo/57060/thumb/lesson-24?type=png",
+      "count": 4,
+      "levels": [
+        "A1",
+        "A2",
+        "B1"
+      ],
+      "lessons": [
+        {
+          "id": 27,
+          "title": "City",
+          "level": "A1",
+          "photo": "https://cdn.langeek.co/photo/57060/thumb/lesson-24?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/27/learn"
+        },
+        {
+          "id": 502,
+          "title": "Directions and Continents",
+          "level": "A1",
+          "photo": "https://cdn.langeek.co/photo/57065/thumb/lesson-29?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/502/learn"
+        },
+        {
+          "id": 518,
+          "title": "City and the Countryside",
+          "level": "A2",
+          "photo": "https://cdn.langeek.co/photo/57105/thumb/lesson-38?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/518/learn"
+        },
+        {
+          "id": 162,
+          "title": "City and the Countryside",
+          "level": "B1",
+          "photo": "https://cdn.langeek.co/photo/57141/thumb/lesson-25?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/162/learn"
+        }
+      ]
+    },
+    {
+      "slug": "travel-transport",
+      "name": "Travel & Transport",
+      "desc": "Transport, tourism, driving, and trips.",
+      "cover": "https://cdn.langeek.co/photo/57064/thumb/lesson-28?type=png",
+      "count": 7,
+      "levels": [
+        "A1",
+        "A2",
+        "B1",
+        "B2"
+      ],
+      "lessons": [
+        {
+          "id": 501,
+          "title": "Transportation",
+          "level": "A1",
+          "photo": "https://cdn.langeek.co/photo/57064/thumb/lesson-28?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/501/learn"
+        },
+        {
+          "id": 136,
+          "title": "Tourism",
+          "level": "A2",
+          "photo": "https://cdn.langeek.co/photo/57091/thumb/lesson-24?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/136/learn"
+        },
+        {
+          "id": 516,
+          "title": "Travelling",
+          "level": "A2",
+          "photo": "https://cdn.langeek.co/photo/68134/thumb/lesson-36?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/516/learn"
+        },
+        {
+          "id": 153,
+          "title": "Transportation",
+          "level": "B1",
+          "photo": "https://cdn.langeek.co/photo/57131/thumb/lesson-16?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/153/learn"
+        },
+        {
+          "id": 819,
+          "title": "Travel and Vacation",
+          "level": "B1",
+          "photo": "https://cdn.langeek.co/photo/57158/thumb/lesson-51?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/819/learn"
+        },
+        {
+          "id": 190,
+          "title": "Driving",
+          "level": "B2",
+          "photo": "https://cdn.langeek.co/photo/57184/thumb/lesson-23?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/190/learn"
+        },
+        {
+          "id": 852,
+          "title": "Traveling",
+          "level": "B2",
+          "photo": "https://cdn.langeek.co/photo/57202/thumb/lesson-48?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/852/learn"
+        }
+      ]
+    },
+    {
+      "slug": "health-sports",
+      "name": "Health & Sports",
+      "desc": "Health, illness, sports, and fitness.",
+      "cover": "https://cdn.langeek.co/photo/57102/thumb/lesson-35?type=png",
+      "count": 8,
+      "levels": [
+        "A2",
+        "B1",
+        "B2"
+      ],
+      "lessons": [
+        {
+          "id": 515,
+          "title": "Exercise and Matches",
+          "level": "A2",
+          "photo": "https://cdn.langeek.co/photo/57102/thumb/lesson-35?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/515/learn"
+        },
+        {
+          "id": 127,
+          "title": "Health and Sickness",
+          "level": "A2",
+          "photo": "https://cdn.langeek.co/photo/68128/thumb/lesson-15?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/127/learn"
+        },
+        {
+          "id": 513,
+          "title": "Injuries and Sickness",
+          "level": "A2",
+          "photo": "https://cdn.langeek.co/photo/57100/thumb/lesson-33?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/513/learn"
+        },
+        {
+          "id": 135,
+          "title": "Sports",
+          "level": "A2",
+          "photo": "https://cdn.langeek.co/photo/57090/thumb/lesson-23?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/135/learn"
+        },
+        {
+          "id": 160,
+          "title": "Health and Sickness",
+          "level": "B1",
+          "photo": "https://cdn.langeek.co/photo/57139/thumb/lesson-23?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/160/learn"
+        },
+        {
+          "id": 152,
+          "title": "Sports and Players",
+          "level": "B1",
+          "photo": "https://cdn.langeek.co/photo/57130/thumb/lesson-15?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/152/learn"
+        },
+        {
+          "id": 188,
+          "title": "Health and Sickness",
+          "level": "B2",
+          "photo": "https://cdn.langeek.co/photo/57182/thumb/lesson-21?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/188/learn"
+        },
+        {
+          "id": 831,
+          "title": "Working Out",
+          "level": "B2",
+          "photo": "https://cdn.langeek.co/photo/57189/thumb/lesson-31?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/831/learn"
+        }
+      ]
+    },
+    {
+      "slug": "hobbies-leisure",
+      "name": "Hobbies & Leisure",
+      "desc": "Free time, hobbies, and games.",
+      "cover": "https://cdn.langeek.co/photo/68122/thumb/lesson-25?type=png",
+      "count": 5,
+      "levels": [
+        "A1",
+        "A2",
+        "B1",
+        "B2"
+      ],
+      "lessons": [
+        {
+          "id": 28,
+          "title": "Free Time Activities",
+          "level": "A1",
+          "photo": "https://cdn.langeek.co/photo/68122/thumb/lesson-25?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/28/learn"
+        },
+        {
+          "id": 128,
+          "title": "Hobbies and Daily Activities",
+          "level": "A2",
+          "photo": "https://cdn.langeek.co/photo/68129/thumb/lesson-16?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/128/learn"
+        },
+        {
+          "id": 158,
+          "title": "Games and Toys",
+          "level": "B1",
+          "photo": "https://cdn.langeek.co/photo/68142/thumb/lesson-21?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/158/learn"
+        },
+        {
+          "id": 800,
+          "title": "Hobbies",
+          "level": "B1",
+          "photo": "https://cdn.langeek.co/photo/68146/thumb/lesson-34?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/800/learn"
+        },
+        {
+          "id": 871,
+          "title": "Games",
+          "level": "B2",
+          "photo": "https://cdn.langeek.co/photo/57517/thumb/lesson-56?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/871/learn"
+        }
+      ]
+    },
+    {
+      "slug": "money-shopping",
+      "name": "Money & Shopping",
+      "desc": "Money, shopping, and quantities of goods.",
+      "cover": "https://cdn.langeek.co/photo/57088/thumb/lesson-21?type=png",
+      "count": 3,
+      "levels": [
+        "A2",
+        "B1",
+        "B2"
+      ],
+      "lessons": [
+        {
+          "id": 133,
+          "title": "Money and Shopping",
+          "level": "A2",
+          "photo": "https://cdn.langeek.co/photo/57088/thumb/lesson-21?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/133/learn"
+        },
+        {
+          "id": 150,
+          "title": "Money and Shopping",
+          "level": "B1",
+          "photo": "https://cdn.langeek.co/photo/57128/thumb/lesson-13?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/150/learn"
+        },
+        {
+          "id": 179,
+          "title": "Money",
+          "level": "B2",
+          "photo": "https://cdn.langeek.co/photo/57175/thumb/lesson-12?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/179/learn"
+        }
+      ]
+    },
+    {
+      "slug": "time-numbers",
+      "name": "Time & Numbers",
+      "desc": "Numbers, time, dates, quantity, and measurement.",
+      "cover": "https://cdn.langeek.co/photo/57042/thumb/lesson-6?type=png",
+      "count": 10,
+      "levels": [
+        "A1",
+        "A2",
+        "B1",
+        "B2"
+      ],
+      "lessons": [
+        {
+          "id": 5,
+          "title": "Months and Seasons",
+          "level": "A1",
+          "photo": "https://cdn.langeek.co/photo/57042/thumb/lesson-6?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/5/learn"
+        },
+        {
+          "id": 2,
+          "title": "Numbers 0 to 100",
+          "level": "A1",
+          "photo": "https://cdn.langeek.co/photo/57038/thumb/lesson-3?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/2/learn"
+        },
+        {
+          "id": 6,
+          "title": "Time and Date",
+          "level": "A1",
+          "photo": "https://cdn.langeek.co/photo/57043/thumb/lesson-7?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/6/learn"
+        },
+        {
+          "id": 519,
+          "title": "Measurement",
+          "level": "A2",
+          "photo": "https://cdn.langeek.co/photo/57106/thumb/lesson-39?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/519/learn"
+        },
+        {
+          "id": 504,
+          "title": "Quantity",
+          "level": "A2",
+          "photo": "https://cdn.langeek.co/photo/57093/thumb/lesson-26?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/504/learn"
+        },
+        {
+          "id": 130,
+          "title": "Time and Date",
+          "level": "A2",
+          "photo": "https://cdn.langeek.co/photo/57085/thumb/lesson-18?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/130/learn"
+        },
+        {
+          "id": 166,
+          "title": "Quantities and Containers",
+          "level": "B1",
+          "photo": "https://cdn.langeek.co/photo/68145/thumb/lesson-29?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/166/learn"
+        },
+        {
+          "id": 156,
+          "title": "Time",
+          "level": "B1",
+          "photo": "https://cdn.langeek.co/photo/57134/thumb/lesson-19?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/156/learn"
+        },
+        {
+          "id": 886,
+          "title": "Measurement",
+          "level": "B2",
+          "photo": "https://cdn.langeek.co/photo/57211/thumb/lesson-60?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/886/learn"
+        },
+        {
+          "id": 187,
+          "title": "Time",
+          "level": "B2",
+          "photo": "https://cdn.langeek.co/photo/57181/thumb/lesson-20?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/187/learn"
+        }
+      ]
+    },
+    {
+      "slug": "colors-shapes",
+      "name": "Colors & Shapes",
+      "desc": "Colors, shapes, and visual basics.",
+      "cover": "https://cdn.langeek.co/photo/57041/thumb/lesson-5?type=png",
+      "count": 3,
+      "levels": [
+        "A1",
+        "A2",
+        "B2"
+      ],
+      "lessons": [
+        {
+          "id": 4,
+          "title": "Colors",
+          "level": "A1",
+          "photo": "https://cdn.langeek.co/photo/57041/thumb/lesson-5?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/4/learn"
+        },
+        {
+          "id": 115,
+          "title": "Colors and Shapes",
+          "level": "A2",
+          "photo": "https://cdn.langeek.co/photo/57074/thumb?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/115/learn"
+        },
+        {
+          "id": 849,
+          "title": "Shapes and Colors",
+          "level": "B2",
+          "photo": "https://cdn.langeek.co/photo/57201/thumb/lesson-47?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/849/learn"
+        }
+      ]
+    },
+    {
+      "slug": "feelings-mind",
+      "name": "Feelings & Mind",
+      "desc": "Emotions, opinions, and abstract ideas.",
+      "cover": "https://cdn.langeek.co/photo/57110/thumb/lesson-43?type=png",
+      "count": 10,
+      "levels": [
+        "A2",
+        "B1",
+        "B2"
+      ],
+      "lessons": [
+        {
+          "id": 523,
+          "title": "Emotions",
+          "level": "A2",
+          "photo": "https://cdn.langeek.co/photo/57110/thumb/lesson-43?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/523/learn"
+        },
+        {
+          "id": 520,
+          "title": "The Mind",
+          "level": "A2",
+          "photo": "https://cdn.langeek.co/photo/57107/thumb/lesson-40?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/520/learn"
+        },
+        {
+          "id": 829,
+          "title": "Abstract Concepts",
+          "level": "B1",
+          "photo": "https://cdn.langeek.co/photo/68157/thumb/lesson-58?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/829/learn"
+        },
+        {
+          "id": 798,
+          "title": "Feelings and Emotions",
+          "level": "B1",
+          "photo": "https://cdn.langeek.co/photo/57145/thumb/lesson-32?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/798/learn"
+        },
+        {
+          "id": 847,
+          "title": "Assessment and Discourse",
+          "level": "B2",
+          "photo": "https://cdn.langeek.co/photo/57200/thumb/lesson-45?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/847/learn"
+        },
+        {
+          "id": 834,
+          "title": "Certainty and Doubt",
+          "level": "B2",
+          "photo": "https://cdn.langeek.co/photo/57191/thumb/lesson-34?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/834/learn"
+        },
+        {
+          "id": 857,
+          "title": "Change",
+          "level": "B2",
+          "photo": "https://cdn.langeek.co/photo/68166/thumb/lesson-50?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/857/learn"
+        },
+        {
+          "id": 846,
+          "title": "Evaluation and Opinion",
+          "level": "B2",
+          "photo": "https://cdn.langeek.co/photo/57199/thumb/lesson-44?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/846/learn"
+        },
+        {
+          "id": 870,
+          "title": "Feelings or States of Being",
+          "level": "B2",
+          "photo": "https://cdn.langeek.co/photo/57207/thumb/lesson-55?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/870/learn"
+        },
+        {
+          "id": 866,
+          "title": "Preference",
+          "level": "B2",
+          "photo": "https://cdn.langeek.co/photo/57205/thumb/lesson-53?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/866/learn"
+        }
+      ]
+    },
+    {
+      "slug": "tech-media",
+      "name": "Tech & Media",
+      "desc": "Computers, internet, news, and communication.",
+      "cover": "https://cdn.langeek.co/photo/57078/thumb/lesson-10?type=png",
+      "count": 9,
+      "levels": [
+        "A2",
+        "B1",
+        "B2"
+      ],
+      "lessons": [
+        {
+          "id": 122,
+          "title": "Communication",
+          "level": "A2",
+          "photo": "https://cdn.langeek.co/photo/57078/thumb/lesson-10?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/122/learn"
+        },
+        {
+          "id": 116,
+          "title": "Computer and Information",
+          "level": "A2",
+          "photo": "https://cdn.langeek.co/photo/57072/thumb/lesson-4?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/116/learn"
+        },
+        {
+          "id": 159,
+          "title": "Computer",
+          "level": "B1",
+          "photo": "https://cdn.langeek.co/photo/57138/thumb/lesson-22?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/159/learn"
+        },
+        {
+          "id": 830,
+          "title": "Internet and Websites",
+          "level": "B1",
+          "photo": "https://cdn.langeek.co/photo/57152/thumb/lesson-44?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/830/learn"
+        },
+        {
+          "id": 806,
+          "title": "Media and Journalism",
+          "level": "B1",
+          "photo": "https://cdn.langeek.co/photo/57502/thumb/lesson-39?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/806/learn"
+        },
+        {
+          "id": 838,
+          "title": "Communication",
+          "level": "B2",
+          "photo": "https://cdn.langeek.co/photo/57194/thumb/lesson-38?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/838/learn"
+        },
+        {
+          "id": 194,
+          "title": "Computers and Networks",
+          "level": "B2",
+          "photo": "https://cdn.langeek.co/photo/57187/thumb/lesson-27?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/194/learn"
+        },
+        {
+          "id": 168,
+          "title": "Electronic Devices",
+          "level": "B2",
+          "photo": "https://cdn.langeek.co/photo/57166/thumb/lesson-1?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/168/learn"
+        },
+        {
+          "id": 836,
+          "title": "News and Journalism",
+          "level": "B2",
+          "photo": "https://cdn.langeek.co/photo/57512/thumb/lesson-36?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/836/learn"
+        }
+      ]
+    },
+    {
+      "slug": "arts-entertainment",
+      "name": "Arts & Entertainment",
+      "desc": "Music, cinema, literature, and art.",
+      "cover": "https://cdn.langeek.co/photo/57471/thumb/lesson-11?type=png",
+      "count": 10,
+      "levels": [
+        "A2",
+        "B1",
+        "B2"
+      ],
+      "lessons": [
+        {
+          "id": 123,
+          "title": "Cinema and Theater",
+          "level": "A2",
+          "photo": "https://cdn.langeek.co/photo/57471/thumb/lesson-11?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/123/learn"
+        },
+        {
+          "id": 124,
+          "title": "Music and Literature",
+          "level": "A2",
+          "photo": "https://cdn.langeek.co/photo/57079/thumb/lesson-12?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/124/learn"
+        },
+        {
+          "id": 809,
+          "title": "Art",
+          "level": "B1",
+          "photo": "https://cdn.langeek.co/photo/57151/thumb/lesson-42?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/809/learn"
+        },
+        {
+          "id": 810,
+          "title": "Literature",
+          "level": "B1",
+          "photo": "https://cdn.langeek.co/photo/57503/thumb/lesson-43?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/810/learn"
+        },
+        {
+          "id": 815,
+          "title": "Movie and Theater",
+          "level": "B1",
+          "photo": "https://cdn.langeek.co/photo/57504/thumb/lesson-47?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/815/learn"
+        },
+        {
+          "id": 143,
+          "title": "Music",
+          "level": "B1",
+          "photo": "https://cdn.langeek.co/photo/57478/thumb/lesson-6?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/143/learn"
+        },
+        {
+          "id": 172,
+          "title": "Art",
+          "level": "B2",
+          "photo": "https://cdn.langeek.co/photo/57170/thumb/lesson-5?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/172/learn"
+        },
+        {
+          "id": 833,
+          "title": "Fairy Tales",
+          "level": "B2",
+          "photo": "https://cdn.langeek.co/photo/68163/thumb/lesson-33?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/833/learn"
+        },
+        {
+          "id": 185,
+          "title": "Music",
+          "level": "B2",
+          "photo": "https://cdn.langeek.co/photo/57508/thumb/lesson-18?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/185/learn"
+        },
+        {
+          "id": 853,
+          "title": "The Cinema",
+          "level": "B2",
+          "photo": "https://cdn.langeek.co/photo/57515/thumb/lesson-49?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/853/learn"
+        }
+      ]
+    },
+    {
+      "slug": "society-politics",
+      "name": "Society & Politics",
+      "desc": "Law, politics, religion, war, and society.",
+      "cover": "https://cdn.langeek.co/photo/57500/thumb/lesson-36?type=png",
+      "count": 13,
+      "levels": [
+        "B1",
+        "B2"
+      ],
+      "lessons": [
+        {
+          "id": 802,
+          "title": "Law and Politics",
+          "level": "B1",
+          "photo": "https://cdn.langeek.co/photo/57500/thumb/lesson-36?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/802/learn"
+        },
+        {
+          "id": 163,
+          "title": "Religion and Festivals",
+          "level": "B1",
+          "photo": "https://cdn.langeek.co/photo/68143/thumb/lesson-26?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/163/learn"
+        },
+        {
+          "id": 807,
+          "title": "Social Issues",
+          "level": "B1",
+          "photo": "https://cdn.langeek.co/photo/57149/thumb/lesson-40?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/807/learn"
+        },
+        {
+          "id": 164,
+          "title": "Special Occasions",
+          "level": "B1",
+          "photo": "https://cdn.langeek.co/photo/68144/thumb/lesson-27?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/164/learn"
+        },
+        {
+          "id": 165,
+          "title": "War and Peace",
+          "level": "B1",
+          "photo": "https://cdn.langeek.co/photo/57142/thumb/lesson-28?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/165/learn"
+        },
+        {
+          "id": 175,
+          "title": "Crime and Violence",
+          "level": "B2",
+          "photo": "https://cdn.langeek.co/photo/68158/thumb/lesson-8?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/175/learn"
+        },
+        {
+          "id": 176,
+          "title": "Law",
+          "level": "B2",
+          "photo": "https://cdn.langeek.co/photo/68159/thumb/lesson-9?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/176/learn"
+        },
+        {
+          "id": 193,
+          "title": "Monarchy",
+          "level": "B2",
+          "photo": "https://cdn.langeek.co/photo/57559/thumb/lesson-26?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/193/learn"
+        },
+        {
+          "id": 178,
+          "title": "Politics",
+          "level": "B2",
+          "photo": "https://cdn.langeek.co/photo/57174/thumb/lesson-11?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/178/learn"
+        },
+        {
+          "id": 832,
+          "title": "Regulations and Requirements",
+          "level": "B2",
+          "photo": "https://cdn.langeek.co/photo/68162/thumb/lesson-32?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/832/learn"
+        },
+        {
+          "id": 848,
+          "title": "Religion",
+          "level": "B2",
+          "photo": "https://cdn.langeek.co/photo/57514/thumb/lesson-46?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/848/learn"
+        },
+        {
+          "id": 837,
+          "title": "Threats and Danger",
+          "level": "B2",
+          "photo": "https://cdn.langeek.co/photo/68164/thumb/lesson-37?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/837/learn"
+        },
+        {
+          "id": 876,
+          "title": "War and Peace",
+          "level": "B2",
+          "photo": "https://cdn.langeek.co/photo/57519/thumb/lesson-57?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/876/learn"
+        }
+      ]
+    },
+    {
+      "slug": "grammar-verbs",
+      "name": "Grammar & Verbs",
+      "desc": "Verbs, adjectives, adverbs, and function words.",
+      "cover": "https://cdn.langeek.co/photo/68124/thumb/lesson-30?type=png",
+      "count": 29,
+      "levels": [
+        "A1",
+        "A2",
+        "B1",
+        "B2"
+      ],
+      "lessons": [
+        {
+          "id": 503,
+          "title": "Adverbs and Pronouns",
+          "level": "A1",
+          "photo": "https://cdn.langeek.co/photo/68124/thumb/lesson-30?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/503/learn"
+        },
+        {
+          "id": 7,
+          "title": "Basic Verbs",
+          "level": "A1",
+          "photo": "https://cdn.langeek.co/photo/68120/thumb/lesson-17?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/7/learn"
+        },
+        {
+          "id": 11,
+          "title": "Opposite Adjectives",
+          "level": "A1",
+          "photo": "https://cdn.langeek.co/photo/68119/thumb/lesson-11?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/11/learn"
+        },
+        {
+          "id": 743,
+          "title": "Prepositions and Determiners",
+          "level": "A1",
+          "photo": "https://cdn.langeek.co/photo/57067/thumb/lesson-31?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/743/learn"
+        },
+        {
+          "id": 18,
+          "title": "Simple Verbs",
+          "level": "A1",
+          "photo": "https://cdn.langeek.co/photo/68123/thumb/lesson-27?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/18/learn"
+        },
+        {
+          "id": 17,
+          "title": "Useful Verbs",
+          "level": "A1",
+          "photo": "https://cdn.langeek.co/photo/68121/thumb/lesson-22?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/17/learn"
+        },
+        {
+          "id": 507,
+          "title": "Basic Phrasal Verbs",
+          "level": "A2",
+          "photo": "https://cdn.langeek.co/photo/68132/thumb/lesson-29?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/507/learn"
+        },
+        {
+          "id": 822,
+          "title": "Common Verbs",
+          "level": "A2",
+          "photo": "https://cdn.langeek.co/photo/68139/thumb/lesson-48?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/822/learn"
+        },
+        {
+          "id": 121,
+          "title": "Conjunctions and Prepositions",
+          "level": "A2",
+          "photo": "https://cdn.langeek.co/photo/57077/thumb/lesson-9?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/121/learn"
+        },
+        {
+          "id": 521,
+          "title": "Essential Adverbs",
+          "level": "A2",
+          "photo": "https://cdn.langeek.co/photo/57108/thumb/lesson-41?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/521/learn"
+        },
+        {
+          "id": 522,
+          "title": "Essential Opposite Adjectives",
+          "level": "A2",
+          "photo": "https://cdn.langeek.co/photo/68136/thumb/lesson-42?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/522/learn"
+        },
+        {
+          "id": 821,
+          "title": "Essential Verbs",
+          "level": "A2",
+          "photo": "https://cdn.langeek.co/photo/68140/thumb/lesson-49?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/821/learn"
+        },
+        {
+          "id": 524,
+          "title": "Modal and Other Verbs",
+          "level": "A2",
+          "photo": "https://cdn.langeek.co/photo/68137/thumb/lesson-44?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/524/learn"
+        },
+        {
+          "id": 131,
+          "title": "Necessary Opposite Adjectives",
+          "level": "A2",
+          "photo": "https://cdn.langeek.co/photo/68130/thumb/lesson-19?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/131/learn"
+        },
+        {
+          "id": 820,
+          "title": "Necessary Verbs",
+          "level": "A2",
+          "photo": "https://cdn.langeek.co/photo/68138/thumb/lesson-47?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/820/learn"
+        },
+        {
+          "id": 1013,
+          "title": "Pronouns and Determiners",
+          "level": "A2",
+          "photo": "https://cdn.langeek.co/photo/68141/thumb/lesson-50?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/1013/learn"
+        },
+        {
+          "id": 148,
+          "title": "Adverbs and Prepositions",
+          "level": "B1",
+          "photo": "https://cdn.langeek.co/photo/57126/thumb/lesson-11?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/148/learn"
+        },
+        {
+          "id": 817,
+          "title": "Common Adverbs",
+          "level": "B1",
+          "photo": "https://cdn.langeek.co/photo/57156/thumb/lesson-49?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/817/learn"
+        },
+        {
+          "id": 825,
+          "title": "Common Verbs",
+          "level": "B1",
+          "photo": "https://cdn.langeek.co/photo/68154/thumb/lesson-54?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/825/learn"
+        },
+        {
+          "id": 826,
+          "title": "Essential Adjectives",
+          "level": "B1",
+          "photo": "https://cdn.langeek.co/photo/68155/thumb/lesson-55?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/826/learn"
+        },
+        {
+          "id": 818,
+          "title": "Essential Adverbs",
+          "level": "B1",
+          "photo": "https://cdn.langeek.co/photo/68151/thumb/lesson-50?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/818/learn"
+        },
+        {
+          "id": 823,
+          "title": "Essential Verbs",
+          "level": "B1",
+          "photo": "https://cdn.langeek.co/photo/68152/thumb/lesson-52?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/823/learn"
+        },
+        {
+          "id": 827,
+          "title": "Necessary Adjectives",
+          "level": "B1",
+          "photo": "https://cdn.langeek.co/photo/68156/thumb/lesson-56?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/827/learn"
+        },
+        {
+          "id": 824,
+          "title": "Necessary Verbs",
+          "level": "B1",
+          "photo": "https://cdn.langeek.co/photo/68153/thumb/lesson-53?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/824/learn"
+        },
+        {
+          "id": 891,
+          "title": "Common Verbs",
+          "level": "B2",
+          "photo": "https://cdn.langeek.co/photo/68168/thumb/lesson-61?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/891/learn"
+        },
+        {
+          "id": 897,
+          "title": "General Adjectives",
+          "level": "B2",
+          "photo": "https://cdn.langeek.co/photo/68170/thumb/lesson-64?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/897/learn"
+        },
+        {
+          "id": 893,
+          "title": "General Adverbs",
+          "level": "B2",
+          "photo": "https://cdn.langeek.co/photo/57213/thumb/lesson-62?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/893/learn"
+        },
+        {
+          "id": 868,
+          "title": "Phrasal Verbs",
+          "level": "B2",
+          "photo": "https://cdn.langeek.co/photo/68167/thumb/lesson-54?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/868/learn"
+        },
+        {
+          "id": 895,
+          "title": "Useful Adjectives",
+          "level": "B2",
+          "photo": "https://cdn.langeek.co/photo/68169/thumb/lesson-63?type=png",
+          "url": "https://langeek.co/en/vocab/subcategory/895/learn"
+        }
+      ]
+    }
+  ],
+  "source": "https://langeek.co/en/vocab/level-based",
+  "levels": [
+    "A1",
+    "A2",
+    "B1",
+    "B2"
+  ]
+}

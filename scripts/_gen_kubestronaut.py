@@ -364,6 +364,7 @@ def wrap(cert: str, local_path: str, title: str, crumb: str, body: str, active_s
     <nav class="docs-series">
       <a href="{home}blog/web-security/">DevSecOps</a>
       <a class="active" href="{roadmap_href}">Kubestronaut</a>
+      <a href="{home}blog/english/">English</a>
     </nav>
     <nav class="docs-cert-tabs">{tab_html}</nav>
     <span class="docs-topbar-spacer"></span>
@@ -498,6 +499,7 @@ def write_hub() -> None:
     <nav class="docs-series">
       <a href="../web-security/">DevSecOps</a>
       <a class="active" href="./">Kubestronaut</a>
+      <a href="../english/">English</a>
     </nav>
     <span class="docs-topbar-spacer"></span>
     <a class="docs-top-link" href="../../#blogs">blogs</a>

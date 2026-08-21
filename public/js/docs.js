@@ -298,6 +298,8 @@
     const label = cert === "cka" ? "CKA" : cert === "ckad" ? "CKAD" : "CKS";
     sidebar.querySelector(".docs-nav-label").textContent = label;
     navEl.innerHTML = cert === "cka" ? ckaNav() : cert === "ckad" ? ckadNav() : cksNav();
+  } else if (navEl && sidebar?.dataset.nav === "english") {
+    // Topic sidebar is rendered in HTML by _gen_english_vocab.py
   } else if (navEl) {
     navEl.innerHTML = [
       item("overview", "Overview"),
