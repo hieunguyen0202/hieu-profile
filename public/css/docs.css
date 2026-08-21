@@ -185,15 +185,19 @@ body.docs::before {
 .docs-brand {
   font-weight: 700;
   font-size: 15px;
-  color: var(--accent);
+  color: var(--text);
   letter-spacing: -0.02em;
 }
 
 .docs-brand span {
-  color: var(--muted);
+  color: var(--accent);
 }
 
 .docs-brand:hover {
+  color: #fff;
+}
+
+.docs-brand:hover span {
   color: var(--accent);
 }
 

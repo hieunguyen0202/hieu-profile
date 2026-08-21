@@ -405,7 +405,7 @@ def wrap(
   <div class="grid-bg"></div>
   <header class="docs-topbar">
     <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
-    <a class="docs-brand" href="{home}">i'm<span>.hieu</span></a>
+    <a class="docs-brand" href="{home}"><span>✦</span> The Quiet Corner <span>✦</span></a>
     <nav class="docs-series">
       <a href="{home}blog/web-security/">DevSecOps</a>
       <a class="active" href="{roadmap_href}">Kubestronaut</a>
@@ -542,7 +542,7 @@ def write_hub() -> None:
   <div class="grid-bg"></div>
   <header class="docs-topbar">
     <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
-    <a class="docs-brand" href="../../">i'm<span>.hieu</span></a>
+    <a class="docs-brand" href="../../"><span>✦</span> The Quiet Corner <span>✦</span></a>
     <nav class="docs-series">
       <a href="../web-security/">DevSecOps</a>
       <a class="active" href="./">Kubestronaut</a>

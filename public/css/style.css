@@ -245,7 +245,7 @@ nav {
 }
 
 .nav-brand {
-  color: var(--accent);
+  color: var(--text);
   font-weight: 700;
   font-size: 15px;
   letter-spacing: -0.02em;
@@ -253,7 +253,15 @@ nav {
 }
 
 .nav-brand span {
-  color: var(--muted);
+  color: var(--accent);
+}
+
+.nav-brand:hover {
+  color: #fff;
+}
+
+.nav-brand:hover span {
+  color: var(--accent);
 }
 
 .nav-links {

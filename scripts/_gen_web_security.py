@@ -193,7 +193,7 @@ def wrap(slug: str, crumb: str, title: str, body: str) -> str:
   <div class="grid-bg"></div>
   <header class="docs-topbar">
     <button class="docs-menu-btn" id="docsMenuBtn" type="button">menu</button>
-    <a class="docs-brand" href="{home}">i'm<span>.hieu</span></a>
+    <a class="docs-brand" href="{home}"><span>✦</span> The Quiet Corner <span>✦</span></a>
     <nav class="docs-series">
       <a class="active" href="{href("overview")}">DevSecOps</a>
       <a href="{'../../kubestronaut/' if nested else '../kubestronaut/'}">Kubestronaut</a>
