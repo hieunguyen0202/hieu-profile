@@ -1,6 +1,5 @@
 # Hieu Nguyen — Portfolio
 
-Terminal-style DevOps portfolio (layout inspired by [hangnt1001.github.io](https://hangnt1001.github.io/#experience), cyan/blue palette from [ducdinh.com](https://ducdinh.com/#contact)).
 
 Built with **Node.js + Express**. Content is taken from `NguyenXuanHieu-CV-DevOpsEngineer.pdf`. Credly badges are linked and served locally.
 
