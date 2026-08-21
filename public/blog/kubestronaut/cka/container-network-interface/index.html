@@ -62,8 +62,8 @@
 <p>CNI includes a set of supported plugins, such as Bridge, VLAN, IP VLAN, MAC VLAN, WINDOWS, Host Local and DHCP. Additionally, there are other third-party plugins available, such as Weave, Flannel, Cilium, VMware NXC, Calico, among others. All of these implement CNI standards, allowing any container runtime to work with any of these plugins.</p>
 <p>However, Docker does not implement CNI, but rather CNM (Container Network Model), which represents the container network model. CNM is another standard that aims to solve container networking challenges similar to CNI, but with some differences. Due to these differences, CNI plugins don&#x27;t integrate natively with Docker. This means you can&#x27;t run a Docker container and specify the network plugin to use a CNI and specify one of these plugins. But this doesn&#x27;t mean you can&#x27;t use Docker with CNI at all. Just work around it, like creating a Docker container without any network configuration and then manually invoking the bridge plugin. This is practically what Kubernetes does when it creates Docker containers: it creates them without networking and then invokes the configured CNI plugins that take care of the rest of the configuration.</p>
       <div class="docs-pager">
-        <a href="../../../../#blogs">All blogs</a>
-        <a href="../">Back to CKA</a>
+        <a href="../pod-network-interface/">Previous · Pod Networking</a>
+        <a href="../coredns/">Next · CoreDNS</a>
       </div>
     </article>
     <aside class="docs-toc">

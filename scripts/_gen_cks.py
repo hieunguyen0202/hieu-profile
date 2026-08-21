@@ -45,6 +45,7 @@ ORDER = [
     "kubernetes-auditing",
     "solved-questions",
     "tips",
+    "real-world-exam",
 ]
 
 CRUMB = {
@@ -83,6 +84,7 @@ CRUMB = {
     "kubernetes-auditing": "Auditing",
     "solved-questions": "Solved questions",
     "tips": "CKS Tips",
+    "real-world-exam": "CKS Real World exam",
 }
 
 ASSET = "https://devsecops.puziol.com.br"
@@ -162,11 +164,16 @@ def wrap(slug: str, title: str, body: str) -> str:
             return "./" if other == "exam" else f"{other}/"
         return "../" if other == "exam" else f"../{other}/"
 
-    pager_l = f'<a href="{href(prev)}">Previous · {CRUMB[prev]}</a>' if prev else f'<a href="{home}#blogs">All blogs</a>'
-    if slug == "tips":
-        pager_r = f'<a href="{href("real-world-exam")}">Next · CKS Real World exam</a>'
-    else:
-        pager_r = f'<a href="{href(nxt)}">Next · {CRUMB[nxt]}</a>' if nxt else f'<a href="{home}#blogs">All blogs</a>'
+    pager_l = (
+        f'<a href="{href(prev)}">Previous · {CRUMB[prev]}</a>'
+        if prev
+        else '<a href="../">← Kubestronaut</a>'
+    )
+    pager_r = (
+        f'<a href="{href(nxt)}">Next · {CRUMB[nxt]}</a>'
+        if nxt
+        else '<a href="../">Kubestronaut →</a>'
+    )
     crumb = CRUMB[slug]
     body = f'<div id="top"></div>\n{body}'
     tabs = [("cka", "CKA"), ("ckad", "CKAD"), ("cks", "CKS")]

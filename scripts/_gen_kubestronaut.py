@@ -324,7 +324,52 @@ def sibling_cert_href(local_path: str, target: str) -> str:
     return "../" * (depth + 1) + target + "/"
 
 
-def wrap(cert: str, local_path: str, title: str, crumb: str, body: str, active_slug: str) -> str:
+def page_href(from_path: str, to_path: str) -> str:
+    """Relative href between two pages under the same cert root."""
+    import os
+
+    cur = from_path if from_path else "."
+    tgt = to_path if to_path else "."
+    rel = os.path.relpath(tgt, start=cur).replace("\\", "/")
+    if rel == ".":
+        return "./"
+    return rel + "/"
+
+
+def pager_links(cert: str, local_path: str, pages: list[tuple[str, str]], titles: dict[str, str]) -> tuple[str, str]:
+    order = [p for p, _ in pages]
+    i = order.index(local_path)
+    prev = order[i - 1] if i else None
+    nxt = order[i + 1] if i < len(order) - 1 else None
+
+    def label(path: str) -> str:
+        t = titles.get(path) or (path.split("/")[-1].replace("-", " ").title() if path else f"{cert.upper()} Exam")
+        if len(t) > 42:
+            t = path.split("/")[-1].replace("-", " ").title() if path else f"{cert.upper()} Exam"
+        return htmlmod.escape(t)
+
+    if prev is None:
+        left = f'<a href="{page_href(local_path, "")}">← {cert.upper()} Exam</a>' if local_path else f'<a href="../">← Kubestronaut</a>'
+    else:
+        left = f'<a href="{page_href(local_path, prev)}">Previous · {label(prev)}</a>'
+
+    if nxt is None:
+        right = f'<a href="../">Kubestronaut →</a>'
+    else:
+        right = f'<a href="{page_href(local_path, nxt)}">Next · {label(nxt)}</a>'
+    return left, right
+
+
+def wrap(
+    cert: str,
+    local_path: str,
+    title: str,
+    crumb: str,
+    body: str,
+    active_slug: str,
+    pager_l: str = "",
+    pager_r: str = "",
+) -> str:
     home = home_prefix(local_path)
     depth = len(local_path.split("/")) if local_path else 0
     css = f"{home}css/docs.css"
@@ -389,8 +434,8 @@ def wrap(cert: str, local_path: str, title: str, crumb: str, body: str, active_s
       </div>
       {body}
       <div class="docs-pager">
-        <a href="{home}#blogs">All blogs</a>
-        <a href="{cert_prefix(local_path)}">Back to {cert_name}</a>
+        {pager_l}
+        {pager_r}
       </div>
     </article>
     <aside class="docs-toc">
@@ -457,6 +502,7 @@ def crumb_from_src(src: str) -> str:
 def build_cert(cert: str, pages: list[tuple[str, str]]) -> None:
     cache = Path(f"/tmp/{cert}-src")
     meta = {m["local_path"]: m for m in json.loads((cache / "meta.json").read_text())}
+    titles = {lp: meta[lp]["title"] for lp in meta}
     dst_root = ROOT / cert
     for local_path, src in pages:
         if local_path not in meta:
@@ -468,7 +514,8 @@ def build_cert(cert: str, pages: list[tuple[str, str]]) -> None:
         title = meta[local_path]["title"]
         crumb = title if len(title) < 48 else (local_path.split("/")[-1] if local_path else "Exam")
         active_slug = local_path or "exam"
-        page = wrap(cert, local_path, title, crumb, body, active_slug)
+        pager_l, pager_r = pager_links(cert, local_path, pages, titles)
+        page = wrap(cert, local_path, title, crumb, body, active_slug, pager_l, pager_r)
         out = dst_root / local_path if local_path else dst_root
         out.mkdir(parents=True, exist_ok=True)
         (out / "index.html").write_text(page, encoding="utf-8")
