@@ -362,6 +362,27 @@ def wrap_exercise(topic: dict, level: str, words: list[dict], sentences: list[di
       </section>
       <!-- Continuous paragraph (no IPA) is filled by public/js/exercise.js for NaturalReader paste -->
 
+      <section class="ex-match" id="exMatch" aria-label="Vocabulary match quiz">
+        <div class="ex-match-head">
+          <div>
+            <h2>Match quiz</h2>
+            <p class="ex-match-hint">Ghép từ (EN + IPA) với nghĩa tiếng Việt — mỗi ván 6 cặp. Tính điểm, có thể Reset / New round.</p>
+          </div>
+          <div class="ex-match-controls">
+            <div class="ex-match-stats" aria-live="polite">
+              <span>Score <strong id="matchScore">0</strong></span>
+              <span>Matched <strong id="matchDone">0</strong>/<strong id="matchTotal">0</strong></span>
+              <span>Misses <strong id="matchMiss">0</strong></span>
+            </div>
+            <button type="button" class="ex-btn" id="btnMatchReset">Reset</button>
+            <button type="button" class="ex-btn primary" id="btnMatchNew">New round</button>
+          </div>
+        </div>
+        <div class="ex-match-grid" id="matchGrid"></div>
+        <p class="ex-match-msg" id="matchMsg" hidden></p>
+      </section>
+      <script type="application/json" id="exVocabData">{json.dumps([{"id": i, "form": w["form"], "word": w["word"], "ipa": w["ipa"], "vi": w["vi"], "pos": w.get("pos") or ""} for i, w in enumerate(words)], ensure_ascii=False)}</script>
+
       <section class="ex-vocab">
         <h2>Word checklist · {len(words)}</h2>
         <ul class="ex-vocab-list">
