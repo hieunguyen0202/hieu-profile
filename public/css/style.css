@@ -668,12 +668,17 @@ section {
 
 .meta-val .edu-icon {
   display: inline-block;
-  width: 18px;
-  height: 18px;
-  margin-left: 6px;
-  vertical-align: -4px;
-  border-radius: 2px;
+  width: 28px;
+  height: 28px;
+  margin-left: 8px;
+  vertical-align: -7px;
+  border-radius: 6px;
   object-fit: contain;
+  background: rgba(255, 255, 255, 0.96);
+  padding: 3px;
+  box-shadow:
+    0 0 0 1px rgba(34, 211, 238, 0.35),
+    0 0 14px rgba(20, 139, 219, 0.35);
 }
 
 .about-content h2 {
