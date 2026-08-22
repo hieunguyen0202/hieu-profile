@@ -1,4 +1,4 @@
-# Hieu Nguyen — Portfolio
+# HN
 
 
 Built with **Node.js + Express**. Content is taken from `resume-coming-soon.png` (CV placeholder). Credly badges are linked and served locally.
