@@ -69,7 +69,66 @@ def collect_words(lesson_ids: list[int]) -> list[dict]:
 
 
 def mark_sentence(en: str, used: list[dict]) -> str:
-    """Wrap vocabulary forms in mark+ipa, longest forms first."""
+    """Wrap vocabulary forms in mark+ipa, longest forms first.
+
+    Skips matches inside an existing <mark>...</mark>.
+    Also accepts light inflections (plural / -ed / -ing) so blog prose can stay natural.
+    """
+
+    def safe_subn(pattern: re.Pattern, repl, text: str, count: int = 1) -> tuple[str, int]:
+        out: list[str] = []
+        last = 0
+        n = 0
+        for m in pattern.finditer(text):
+            if n >= count:
+                break
+            before = text[: m.start()]
+            if before.rfind("<mark") > before.rfind("</mark>"):
+                continue
+            lt = before.rfind("<")
+            gt = before.rfind(">")
+            if lt > gt:
+                continue
+            piece = repl(m) if callable(repl) else repl
+            out.append(text[last : m.start()])
+            out.append(piece)
+            last = m.end()
+            n += 1
+        out.append(text[last:])
+        return "".join(out), n
+
+    def patterns_for(form: str, word: str) -> list[re.Pattern]:
+        f = form
+        fl = form.lower()
+        variants = [f]
+        # Plural -s (avoid treating short words like "wing" as already "-ing")
+        if not fl.endswith("s"):
+            variants.append(f + "s")
+            if fl.endswith(("ch", "sh", "x", "z", "o")):
+                variants.append(f + "es")
+            elif fl.endswith("y") and len(f) > 1 and fl[-2] not in "aeiou":
+                variants.append(f[:-1] + "ies")
+        # Past / gerund only for longer bases (so wing/ring/king still get plurals)
+        if len(fl) >= 5 and not fl.endswith("ed"):
+            variants.append(f + "ed")
+            if fl.endswith("e"):
+                variants.append(f + "d")
+        if len(fl) >= 6 and not fl.endswith("ing"):
+            variants.append(f + "ing")
+        # original lemma with leading "to "
+        if word.lower().startswith("to ") and word.lower() != fl:
+            variants.append(word)
+        # unique, longest first
+        seen: set[str] = set()
+        ordered: list[str] = []
+        for v in sorted(variants, key=len, reverse=True):
+            key = v.lower()
+            if key in seen or not v:
+                continue
+            seen.add(key)
+            ordered.append(v)
+        return [re.compile(rf"(?<![A-Za-z]){re.escape(v)}(?![A-Za-z])", re.I) for v in ordered]
+
     result = en
     for item in sorted(used, key=lambda x: len(x["form"]), reverse=True):
         form = item["form"]
@@ -77,21 +136,15 @@ def mark_sentence(en: str, used: list[dict]) -> str:
             continue
         ipa = item["ipa"]
         ipa_html = f'<span class="ipa" aria-hidden="true">/{esc(ipa)}/</span>' if ipa else ""
-        mark = f'<mark class="vocab" data-word="{esc(item["word"])}">{esc(form)}</mark>{ipa_html}'
 
-        def repl(m, _mark=mark):
-            return _mark
+        def repl(m, _w=item["word"], _ipa=ipa_html):
+            return f'<mark class="vocab" data-word="{esc(_w)}">{esc(m.group(0))}</mark>{_ipa}'
 
-        pattern = re.compile(rf"(?<![A-Za-z]){re.escape(form)}(?![A-Za-z])", re.I)
-        result, n = pattern.subn(repl, result, count=1)
-        if n == 0:
-            # try original lemma with "to "
-            pattern2 = re.compile(rf"(?<![A-Za-z]){re.escape(item['word'])}(?![A-Za-z])", re.I)
-            result, n = pattern2.subn(
-                lambda m: f'<mark class="vocab" data-word="{esc(item["word"])}">{esc(m.group(0))}</mark>{ipa_html}',
-                result,
-                count=1,
-            )
+        n = 0
+        for pattern in patterns_for(form, item["word"]):
+            result, n = safe_subn(pattern, repl, result, count=1)
+            if n:
+                break
     return result
 
 
