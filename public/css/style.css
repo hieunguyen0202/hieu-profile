@@ -666,6 +666,15 @@ section {
   color: var(--white);
 }
 
+.meta-val .edu-icon {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  margin-left: 6px;
+  vertical-align: -3px;
+  border-radius: 50%;
+}
+
 .about-content h2 {
   font-family: var(--sans);
   font-size: 1.7rem;
