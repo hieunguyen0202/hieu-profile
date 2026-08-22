@@ -76,7 +76,7 @@ def mark_sentence(en: str, used: list[dict]) -> str:
         if not form:
             continue
         ipa = item["ipa"]
-        ipa_html = f'<span class="ipa">/{esc(ipa)}/</span>' if ipa else ""
+        ipa_html = f'<span class="ipa" aria-hidden="true">/{esc(ipa)}/</span>' if ipa else ""
         mark = f'<mark class="vocab" data-word="{esc(item["word"])}">{esc(form)}</mark>{ipa_html}'
 
         def repl(m, _mark=mark):
@@ -307,6 +307,7 @@ def wrap_exercise(topic: dict, level: str, words: list[dict], sentences: list[di
       <section class="ex-passage" id="passage" data-tts-root>
 {chr(10).join(sent_html)}
       </section>
+      <!-- Continuous paragraph (no IPA) is filled by public/js/exercise.js for NaturalReader paste -->
 
       <section class="ex-vocab">
         <h2>Word checklist · {len(words)}</h2>

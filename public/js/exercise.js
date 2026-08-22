@@ -20,6 +20,62 @@
   [togHighlight, togIpa, togVi].forEach((el) => el && el.addEventListener("change", applyToggles));
   applyToggles();
 
+  /** Plain English from a sentence node — IPA is display-only, never spoken/copied. */
+  const plainFromEn = (el) => {
+    const clone = el.cloneNode(true);
+    clone.querySelectorAll(".ipa").forEach((n) => n.remove());
+    return clone.textContent.replace(/\s+/g, " ").trim();
+  };
+
+  const sentenceTexts = () =>
+    [...root.querySelectorAll(".ex-en")].map(plainFromEn).filter(Boolean);
+
+  const passageText = () => sentenceTexts().join(" ");
+
+  /** One continuous paragraph for NaturalReader / external TTS paste. */
+  const ensureContinuousBlock = () => {
+    let section = document.getElementById("exContinuous");
+    if (!section) {
+      section = document.createElement("section");
+      section.className = "ex-continuous";
+      section.id = "exContinuous";
+      section.innerHTML = `
+        <div class="ex-continuous-head">
+          <h2>Continuous paragraph</h2>
+          <button type="button" class="ex-btn primary" id="btnCopyPara">Copy</button>
+        </div>
+        <p class="ex-continuous-hint">Plain English only (no IPA) — copy and paste into <a href="https://www.naturalreaders.com/online/" target="_blank" rel="noopener noreferrer">NaturalReader</a> or any TTS.</p>
+        <textarea id="exParaText" class="ex-para" readonly rows="8" aria-label="Continuous paragraph for external TTS"></textarea>
+      `;
+      root.insertAdjacentElement("afterend", section);
+    }
+    const ta = document.getElementById("exParaText");
+    if (ta) ta.value = passageText();
+
+    const btn = document.getElementById("btnCopyPara");
+    if (btn && !btn.dataset.bound) {
+      btn.dataset.bound = "1";
+      btn.addEventListener("click", async () => {
+        const text = (ta && ta.value) || passageText();
+        if (!text) return;
+        try {
+          await navigator.clipboard.writeText(text);
+          const prev = btn.textContent;
+          btn.textContent = "Copied";
+          setTimeout(() => {
+            btn.textContent = prev;
+          }, 1400);
+        } catch {
+          if (ta) {
+            ta.focus();
+            ta.select();
+          }
+        }
+      });
+    }
+  };
+  ensureContinuousBlock();
+
   if (!window.speechSynthesis) return;
 
   let voices = [];
@@ -65,13 +121,6 @@
       rateVal.textContent = Number(rateRange.value).toFixed(2);
     });
   }
-
-  const passageText = () => {
-    return [...root.querySelectorAll(".ex-en")]
-      .map((el) => el.textContent.replace(/\s+/g, " ").trim())
-      .filter(Boolean)
-      .join(" ");
-  };
 
   const stop = () => speechSynthesis.cancel();
   btnStop && btnStop.addEventListener("click", stop);
