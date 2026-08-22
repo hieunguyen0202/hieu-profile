@@ -1,7 +1,7 @@
 # Hieu Nguyen — Portfolio
 
 
-Built with **Node.js + Express**. Content is taken from `NguyenXuanHieu-CV-DevOpsEngineer.pdf`. Credly badges are linked and served locally.
+Built with **Node.js + Express**. Content is taken from `resume-coming-soon.png` (CV placeholder). Credly badges are linked and served locally.
 
 ## Run with Docker Compose
 
@@ -38,7 +38,7 @@ npm run dev
 | Path | Description |
 | --- | --- |
 | `/` | Portfolio |
-| `/cv/NguyenXuanHieu-CV-DevOpsEngineer.pdf` | Resume download |
+| `/cv/resume-coming-soon.png` | Resume placeholder (coming soon) |
 | `/api/health` | Health check |
 | `/api/profile` | Profile JSON |
 | `POST /api/contact` | Contact form (logged to container stdout) |
