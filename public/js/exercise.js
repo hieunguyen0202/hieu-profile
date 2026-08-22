@@ -247,7 +247,14 @@
         if (html) blocks.push(`<p class="scroll-line">${html}</p>`);
       });
       track.innerHTML =
-        `<div class="scroll-pad"></div>${blocks.join("")}<div class="scroll-pad"></div>`;
+        `<div class="scroll-pad scroll-pad--top"></div>${blocks.join("")}<div class="scroll-pad scroll-pad--bottom"></div>`;
+      // Lead-in must be in px — % height on track children is unreliable.
+      // Top pad ~75% viewport so text starts below the focus line and you have time to prepare.
+      const viewH = viewport.clientHeight || 420;
+      const topPad = track.querySelector(".scroll-pad--top");
+      const bottomPad = track.querySelector(".scroll-pad--bottom");
+      if (topPad) topPad.style.height = `${Math.round(viewH * 0.78)}px`;
+      if (bottomPad) bottomPad.style.height = `${Math.round(viewH * 0.55)}px`;
     };
 
     const applyTransform = () => {

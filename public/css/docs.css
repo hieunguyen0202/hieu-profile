@@ -1478,7 +1478,9 @@ body.docs::before {
 }
 
 .scroll-pad {
-  height: 42%;
+  flex-shrink: 0;
+  height: 320px; /* fallback; JS sets exact lead-in from viewport */
+  min-height: 280px;
 }
 
 .scroll-line {
