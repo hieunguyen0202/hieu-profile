@@ -696,6 +696,26 @@ section {
   font-style: normal;
 }
 
+.about-content h2 .kubestronaut-link {
+  color: inherit;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(34, 211, 238, 0.35);
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.about-content h2 .kubestronaut-link:hover {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+
+.about-content h2 .kubestronaut-link .ext {
+  font-size: 0.72em;
+  margin-left: 4px;
+  color: var(--accent);
+  opacity: 0.85;
+  vertical-align: 0.15em;
+}
+
 .about-content p {
   color: var(--muted);
   font-size: 13px;
