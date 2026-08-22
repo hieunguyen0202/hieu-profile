@@ -76,9 +76,6 @@
   };
   ensureContinuousBlock();
 
-  /* ── Match quiz (word ↔ nghĩa) ─────────────────────────────────────── */
-  const PAIR_COUNT = 6;
-
   const shuffle = (arr) => {
     const a = arr.slice();
     for (let i = a.length - 1; i > 0; i--) {
@@ -93,7 +90,7 @@
     if (raw && raw.textContent.trim()) {
       try {
         const data = JSON.parse(raw.textContent);
-        return data.filter((w) => w.form && (w.vi || w.word));
+        return data.filter((w) => w.form && (w.vi || w.word || w.ipa));
       } catch {
         /* fall through */
       }
@@ -107,8 +104,231 @@
         const vi = parts.length > 1 ? parts.slice(1).join("—").trim() : "";
         return { id: i, form: form.trim(), word: form.trim(), ipa, vi, pos: "" };
       })
-      .filter((w) => w.form && w.vi);
+      .filter((w) => w.form);
   };
+
+  const escapeHtml = (s) =>
+    String(s)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
+
+  /* ── Scroll read (VOA-style teleprompter + cloze vocab) ───────────── */
+  const initScrollRead = () => {
+    const vocab = loadVocab();
+    const byKey = new Map();
+    vocab.forEach((w) => {
+      byKey.set(String(w.word || "").toLowerCase(), w);
+      byKey.set(String(w.form || "").toLowerCase(), w);
+    });
+
+    let section = document.getElementById("exScroll");
+    if (!section) {
+      section = document.createElement("section");
+      section.className = "ex-scroll";
+      section.id = "exScroll";
+      section.setAttribute("aria-label", "Scroll reading teleprompter");
+      section.innerHTML = `
+        <div class="ex-scroll-head">
+          <div>
+            <h2>Scroll read · speaking</h2>
+            <p class="ex-scroll-hint">Đọc theo chữ cuộn kiểu teleprompter (VOA-style). Từ mới bị ẩn — hiện nghĩa VI hoặc IPA để bạn tự nhớ và nói ra tiếng Anh.</p>
+          </div>
+        </div>
+        <div class="ex-scroll-toolbar">
+          <button type="button" class="ex-btn primary" id="btnScrollPlay">▶ Play</button>
+          <button type="button" class="ex-btn" id="btnScrollPause">Pause</button>
+          <button type="button" class="ex-btn" id="btnScrollRestart">⟲ Restart</button>
+          <label class="ex-voice">Speed
+            <input id="scrollSpeed" type="range" min="12" max="90" step="1" value="32">
+            <span id="scrollSpeedVal">32</span> px/s
+          </label>
+          <label class="ex-voice">Hint
+            <select id="scrollHintMode" aria-label="Hint mode for hidden words">
+              <option value="vi" selected>Nghĩa VI</option>
+              <option value="ipa">IPA</option>
+              <option value="both">VI + IPA</option>
+            </select>
+          </label>
+          <label class="ex-toggle"><input type="checkbox" id="scrollReveal"> Hiện từ EN</label>
+        </div>
+        <div class="ex-scroll-stage">
+          <div class="ex-scroll-focus" aria-hidden="true"></div>
+          <div class="ex-scroll-viewport" id="scrollViewport">
+            <div class="ex-scroll-track" id="scrollTrack"></div>
+          </div>
+        </div>
+      `;
+      const continuous = document.getElementById("exContinuous");
+      const match = document.getElementById("exMatch");
+      if (continuous) continuous.insertAdjacentElement("afterend", section);
+      else if (match) match.insertAdjacentElement("beforebegin", section);
+      else root.insertAdjacentElement("afterend", section);
+    }
+
+    const track = document.getElementById("scrollTrack");
+    const viewport = document.getElementById("scrollViewport");
+    const speedRange = document.getElementById("scrollSpeed");
+    const speedVal = document.getElementById("scrollSpeedVal");
+    const hintMode = document.getElementById("scrollHintMode");
+    const revealTog = document.getElementById("scrollReveal");
+    const btnPlay = document.getElementById("btnScrollPlay");
+    const btnPause = document.getElementById("btnScrollPause");
+    const btnRestart = document.getElementById("btnScrollRestart");
+    if (!track || !viewport) return;
+
+    let playing = false;
+    let offset = 0;
+    let raf = 0;
+    let lastTs = 0;
+    let pxPerSec = speedRange ? Number(speedRange.value) : 32;
+
+    const hintFor = (meta, mode) => {
+      const vi = (meta && meta.vi) || "";
+      const ipa = (meta && meta.ipa) || "";
+      if (mode === "ipa") return ipa ? `/${ipa}/` : "????";
+      if (mode === "both") {
+        if (vi && ipa) return `${vi} · /${ipa}/`;
+        return vi || (ipa ? `/${ipa}/` : "????");
+      }
+      return vi || (ipa ? `/${ipa}/` : "????");
+    };
+
+    const buildTrack = () => {
+      const mode = hintMode ? hintMode.value : "vi";
+      const reveal = !!(revealTog && revealTog.checked);
+      const blocks = [];
+      root.querySelectorAll(".ex-en").forEach((el) => {
+        const clone = el.cloneNode(true);
+        clone.querySelectorAll("mark.vocab").forEach((mark) => {
+          const form = mark.textContent.trim();
+          const wordKey = (mark.getAttribute("data-word") || form).toLowerCase();
+          let ipa = "";
+          const next = mark.nextElementSibling;
+          if (next && next.classList && next.classList.contains("ipa")) {
+            ipa = next.textContent.replace(/\//g, "").trim();
+            next.remove();
+          }
+          const meta =
+            byKey.get(wordKey) ||
+            byKey.get(form.toLowerCase()) ||
+            { form, vi: "", ipa };
+          if (!meta.ipa && ipa) meta.ipa = ipa;
+
+          const blank = document.createElement("span");
+          blank.className = "scroll-blank";
+          blank.dataset.answer = form;
+          blank.title = "Click to peek answer";
+          if (reveal) {
+            blank.classList.add("is-revealed");
+            blank.innerHTML = `<span class="scroll-blank-answer">${escapeHtml(form)}</span>`;
+          } else {
+            blank.innerHTML = `<span class="scroll-blank-gap">______</span><span class="scroll-blank-hint">${escapeHtml(
+              hintFor(meta, mode)
+            )}</span>`;
+          }
+          blank.addEventListener("click", (e) => {
+            e.preventDefault();
+            if (blank.classList.contains("is-revealed")) {
+              blank.classList.remove("is-revealed");
+              blank.innerHTML = `<span class="scroll-blank-gap">______</span><span class="scroll-blank-hint">${escapeHtml(
+                hintFor(meta, mode)
+              )}</span>`;
+            } else {
+              blank.classList.add("is-revealed");
+              blank.innerHTML = `<span class="scroll-blank-answer">${escapeHtml(form)}</span>`;
+            }
+          });
+          mark.replaceWith(blank);
+        });
+        clone.querySelectorAll(".ipa").forEach((n) => n.remove());
+        const html = clone.innerHTML.replace(/\s+/g, " ").trim();
+        if (html) blocks.push(`<p class="scroll-line">${html}</p>`);
+      });
+      track.innerHTML =
+        `<div class="scroll-pad"></div>${blocks.join("")}<div class="scroll-pad"></div>`;
+    };
+
+    const applyTransform = () => {
+      track.style.transform = `translate3d(0, ${-offset}px, 0)`;
+    };
+
+    const maxOffset = () => {
+      const trackH = track.scrollHeight;
+      const viewH = viewport.clientHeight;
+      return Math.max(0, trackH - viewH);
+    };
+
+    const tick = (ts) => {
+      if (!playing) return;
+      if (!lastTs) lastTs = ts;
+      const dt = (ts - lastTs) / 1000;
+      lastTs = ts;
+      offset += pxPerSec * dt;
+      const max = maxOffset();
+      if (offset >= max) {
+        offset = max;
+        playing = false;
+        lastTs = 0;
+        if (btnPlay) btnPlay.textContent = "▶ Play";
+        applyTransform();
+        return;
+      }
+      applyTransform();
+      raf = requestAnimationFrame(tick);
+    };
+
+    const play = () => {
+      if (playing) return;
+      if (offset >= maxOffset() - 1) offset = 0;
+      playing = true;
+      lastTs = 0;
+      if (btnPlay) btnPlay.textContent = "▶ Playing…";
+      raf = requestAnimationFrame(tick);
+    };
+
+    const pause = () => {
+      playing = false;
+      lastTs = 0;
+      if (raf) cancelAnimationFrame(raf);
+      if (btnPlay) btnPlay.textContent = "▶ Play";
+    };
+
+    const restart = () => {
+      pause();
+      offset = 0;
+      applyTransform();
+    };
+
+    const rebuild = () => {
+      const wasPlaying = playing;
+      pause();
+      buildTrack();
+      offset = Math.min(offset, maxOffset());
+      applyTransform();
+      if (wasPlaying) play();
+    };
+
+    buildTrack();
+    applyTransform();
+
+    btnPlay && btnPlay.addEventListener("click", play);
+    btnPause && btnPause.addEventListener("click", pause);
+    btnRestart && btnRestart.addEventListener("click", restart);
+    if (speedRange && speedVal) {
+      speedRange.addEventListener("input", () => {
+        pxPerSec = Number(speedRange.value);
+        speedVal.textContent = String(pxPerSec);
+      });
+    }
+    hintMode && hintMode.addEventListener("change", rebuild);
+    revealTog && revealTog.addEventListener("change", rebuild);
+  };
+  initScrollRead();
+
+  /* ── Match quiz (word ↔ nghĩa) ─────────────────────────────────────── */
+  const PAIR_COUNT = 6;
 
   const initMatchGame = () => {
     const vocab = loadVocab();
@@ -142,9 +362,11 @@
         <div class="ex-match-grid" id="matchGrid"></div>
         <p class="ex-match-msg" id="matchMsg" hidden></p>
       `;
+      const scroll = document.getElementById("exScroll");
       const continuous = document.getElementById("exContinuous");
       const vocabSec = document.querySelector(".ex-vocab");
-      if (continuous) continuous.insertAdjacentElement("afterend", section);
+      if (scroll) scroll.insertAdjacentElement("afterend", section);
+      else if (continuous) continuous.insertAdjacentElement("afterend", section);
       else if (vocabSec) vocabSec.insertAdjacentElement("beforebegin", section);
       else root.insertAdjacentElement("afterend", section);
     }
@@ -181,13 +403,6 @@
       elMsg.textContent = text || "";
       elMsg.classList.toggle("ok", !!ok);
     };
-
-    const escapeHtml = (s) =>
-      String(s)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;");
 
     const pickRound = (freshPool) => {
       const pool = freshPool

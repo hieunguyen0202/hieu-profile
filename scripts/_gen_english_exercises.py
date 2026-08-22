@@ -362,6 +362,38 @@ def wrap_exercise(topic: dict, level: str, words: list[dict], sentences: list[di
       </section>
       <!-- Continuous paragraph (no IPA) is filled by public/js/exercise.js for NaturalReader paste -->
 
+      <section class="ex-scroll" id="exScroll" aria-label="Scroll reading teleprompter">
+        <div class="ex-scroll-head">
+          <div>
+            <h2>Scroll read · speaking</h2>
+            <p class="ex-scroll-hint">Đọc theo chữ cuộn kiểu teleprompter (VOA-style). Từ mới bị ẩn — hiện nghĩa VI hoặc IPA để bạn tự nhớ và nói ra tiếng Anh.</p>
+          </div>
+        </div>
+        <div class="ex-scroll-toolbar">
+          <button type="button" class="ex-btn primary" id="btnScrollPlay">▶ Play</button>
+          <button type="button" class="ex-btn" id="btnScrollPause">Pause</button>
+          <button type="button" class="ex-btn" id="btnScrollRestart">⟲ Restart</button>
+          <label class="ex-voice">Speed
+            <input id="scrollSpeed" type="range" min="12" max="90" step="1" value="32">
+            <span id="scrollSpeedVal">32</span> px/s
+          </label>
+          <label class="ex-voice">Hint
+            <select id="scrollHintMode" aria-label="Hint mode for hidden words">
+              <option value="vi" selected>Nghĩa VI</option>
+              <option value="ipa">IPA</option>
+              <option value="both">VI + IPA</option>
+            </select>
+          </label>
+          <label class="ex-toggle"><input type="checkbox" id="scrollReveal"> Hiện từ EN</label>
+        </div>
+        <div class="ex-scroll-stage">
+          <div class="ex-scroll-focus" aria-hidden="true"></div>
+          <div class="ex-scroll-viewport" id="scrollViewport">
+            <div class="ex-scroll-track" id="scrollTrack"></div>
+          </div>
+        </div>
+      </section>
+
       <section class="ex-match" id="exMatch" aria-label="Vocabulary match quiz">
         <div class="ex-match-head">
           <div>

@@ -1408,6 +1408,123 @@ body.docs::before {
   color: var(--accent);
 }
 
+.ex-scroll {
+  margin-bottom: 36px;
+  padding: 16px 18px 18px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.ex-scroll-head h2 {
+  margin: 0 0 4px;
+  font-size: 1.05rem;
+}
+
+.ex-scroll-hint {
+  margin: 0 0 12px;
+  max-width: 48rem;
+  font-size: 0.88rem;
+  color: rgba(226, 232, 240, 0.65);
+  font-family: "Outfit", sans-serif;
+}
+
+.ex-scroll-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 10px;
+  margin-bottom: 12px;
+}
+
+.ex-scroll-stage {
+  position: relative;
+  border: 1px solid rgba(34, 211, 238, 0.22);
+  border-radius: 14px;
+  background:
+    linear-gradient(180deg, rgba(2, 6, 23, 0.92), rgba(2, 6, 23, 0.55) 18%, rgba(2, 6, 23, 0.2) 45%, rgba(2, 6, 23, 0.55) 82%, rgba(2, 6, 23, 0.92)),
+    rgba(11, 18, 32, 0.95);
+  overflow: hidden;
+}
+
+.ex-scroll-viewport {
+  height: min(420px, 58vh);
+  overflow: hidden;
+  position: relative;
+}
+
+.ex-scroll-focus {
+  pointer-events: none;
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  top: 50%;
+  height: 3.1em;
+  transform: translateY(-50%);
+  border-top: 1px solid rgba(34, 211, 238, 0.45);
+  border-bottom: 1px solid rgba(34, 211, 238, 0.45);
+  background: rgba(34, 211, 238, 0.06);
+  z-index: 2;
+  border-radius: 6px;
+}
+
+.ex-scroll-track {
+  padding: 0 22px;
+  will-change: transform;
+  font-family: "Outfit", sans-serif;
+  font-size: clamp(1.15rem, 2.2vw, 1.45rem);
+  line-height: 1.85;
+  color: rgba(226, 232, 240, 0.92);
+}
+
+.scroll-pad {
+  height: 42%;
+}
+
+.scroll-line {
+  margin: 0 0 1.1em;
+}
+
+.scroll-blank {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  vertical-align: baseline;
+  margin: 0 0.15em;
+  padding: 0.05em 0.35em 0.15em;
+  border-bottom: 2px dashed rgba(34, 211, 238, 0.55);
+  cursor: pointer;
+  min-width: 4.5em;
+}
+
+.scroll-blank-gap {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.85em;
+  letter-spacing: 0.08em;
+  color: rgba(226, 232, 240, 0.45);
+  line-height: 1;
+}
+
+.scroll-blank-hint {
+  font-size: 0.62em;
+  line-height: 1.2;
+  color: var(--accent);
+  font-family: "JetBrains Mono", monospace;
+  max-width: 12em;
+  text-align: center;
+  white-space: normal;
+}
+
+.scroll-blank-answer {
+  color: #fef3c7;
+  font-weight: 650;
+  font-size: 0.95em;
+}
+
+.scroll-blank.is-revealed {
+  border-bottom-color: rgba(250, 204, 21, 0.55);
+}
+
 .ex-sent {
   margin: 0;
   padding: 14px 16px;
